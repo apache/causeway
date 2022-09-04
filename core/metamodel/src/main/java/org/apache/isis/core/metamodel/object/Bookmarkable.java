@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.object;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
@@ -40,15 +41,10 @@ public interface Bookmarkable {
 
     boolean isBookmarkMemoized();
 
-    /**
-     * Similar to {@link #getBookmark()}, but invalidates any memoized {@link Bookmark}
-     * such that the {@link Bookmark} returned is recreated, reflecting the object's current state.
-     * @implNote
-     * As this is not required, in fact not recommended for entities,
-     * (but might be necessary for viewmodels, when their state has changed),
-     * we silently ignore bookmark invalidation attempts for entities.
-     */
-    Optional<Bookmark> getBookmarkRefreshed();
+    default void invalidateBookmark() {
+        _Casts.castTo(BookmarkRefreshable.class, this)
+            .ifPresent(Bookmarkable.BookmarkRefreshable::invalidateBookmark);
+    }
 
     /**
      * Implements {@link Bookmarkable} reflecting
@@ -57,8 +53,18 @@ public interface Bookmarkable {
     static interface NoBookmark extends Bookmarkable {
         @Override default boolean isBookmarkSupported() { return false; }
         @Override default Optional<Bookmark> getBookmark() { return Optional.empty(); }
-        @Override default Optional<Bookmark> getBookmarkRefreshed() { return Optional.empty(); }
         @Override default boolean isBookmarkMemoized() { return false; }
+    }
+
+    static interface BookmarkRefreshable extends Bookmarkable {
+        /**
+         * Invalidates any memoized {@link Bookmark} for (lazy) recreation,
+         * reflecting the object's current state.
+         * @apiNote only makes sense in the context of mutable viewmodels
+         */
+        @Override
+        void invalidateBookmark();
+
     }
 
 }

@@ -40,14 +40,14 @@ import lombok.extern.log4j.Log4j2;
  * @see ManagedObject.Specialization#ENTITY
  */
 @Log4j2
-final class _ManagedObjectEntityAttached
+final class _ManagedObjectEntityBookmarked
 extends _ManagedObjectSpecified
 implements _Refetchable {
 
     private /*final*/ @Nullable Object pojo;
     private final @NonNull Bookmark bookmark;
 
-    _ManagedObjectEntityAttached(
+    _ManagedObjectEntityBookmarked(
             final ObjectSpecification spec,
             final Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
@@ -60,11 +60,6 @@ implements _Refetchable {
     @Override
     public Optional<Bookmark> getBookmark() {
         return Optional.of(bookmark);
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark(); // no-op for entities
     }
 
     @Override

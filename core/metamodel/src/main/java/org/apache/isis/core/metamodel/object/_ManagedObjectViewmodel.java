@@ -43,7 +43,9 @@ import lombok.val;
  */
 final class _ManagedObjectViewmodel
 extends _ManagedObjectSpecified
-implements _RefreshableViewmodel {
+implements
+    Bookmarkable.BookmarkRefreshable,
+    _RefreshableViewmodel {
 
     @Getter(onMethod_ = {@Override})
     @Nullable private /*final*/ Object pojo;
@@ -74,9 +76,8 @@ implements _RefreshableViewmodel {
     }
 
     @Override
-    public final Optional<Bookmark> getBookmarkRefreshed() {
+    public void invalidateBookmark() {
         bookmarkLazy.clear();
-        return getBookmark();
     }
 
     private void replaceBookmark(final UnaryOperator<Bookmark> replacer) {

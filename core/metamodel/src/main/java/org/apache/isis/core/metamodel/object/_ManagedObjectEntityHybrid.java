@@ -42,25 +42,25 @@ extends _ManagedObjectSpecified
 implements _Refetchable {
 
     /**
-     * dynamically mutates from one to the other based on pojos persistent state;
-     * however the pojo reference must be kept identical
+     * dynamically mutates from one to the other based on pojo's persistent state;
+     * however, the pojo reference must be kept identical
      */
-    private @NonNull Either<_ManagedObjectEntityDetached, _ManagedObjectEntityAttached>
-        eitherDetachedOrAttached;
+    private @NonNull Either<_ManagedObjectEntityDetached, _ManagedObjectEntityBookmarked>
+        eitherDetachedOrBookmarked;
 
     private EntityState entityState;
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityDetached detached) {
         super(ManagedObject.Specialization.ENTITY, detached.getSpecification());
-        this.eitherDetachedOrAttached = Either.left(detached);
+        this.eitherDetachedOrBookmarked = Either.left(detached);
         this.entityState = EntityState.PERSISTABLE_DETACHED;
     }
 
     _ManagedObjectEntityHybrid(
-            final @NonNull _ManagedObjectEntityAttached attached) {
+            final @NonNull _ManagedObjectEntityBookmarked attached) {
         super(ManagedObject.Specialization.ENTITY, attached.getSpecification());
-        this.eitherDetachedOrAttached = Either.right(attached);
+        this.eitherDetachedOrBookmarked = Either.right(attached);
         this.entityState = EntityState.PERSISTABLE_ATTACHED;
         this.bookmarkRef.set(attached.getBookmark().orElseThrow());
     }
@@ -74,11 +74,6 @@ implements _Refetchable {
     }
 
     @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark(); // identity op
-    }
-
-    @Override
     public boolean isBookmarkMemoized() {
         return bookmarkRef.get()!=null;
     }
@@ -86,7 +81,7 @@ implements _Refetchable {
     @Override
     public @NonNull EntityState getEntityState() {
 
-        val entityState = eitherDetachedOrAttached
+        val entityState = eitherDetachedOrBookmarked
                 .fold(ManagedObject::getEntityState, ManagedObject::getEntityState);
 
         if(this.entityState!=entityState) {
@@ -105,7 +100,7 @@ implements _Refetchable {
 
     @Override
     public Object getPojo() {
-        val pojo = eitherDetachedOrAttached
+        val pojo = eitherDetachedOrBookmarked
                 .fold(ManagedObject::getPojo, ManagedObject::getPojo);
 
         triggerReassessment();
@@ -115,7 +110,7 @@ implements _Refetchable {
 
     @Override
     public Object peekAtPojo() {
-        return eitherDetachedOrAttached
+        return eitherDetachedOrBookmarked
             .fold(_Refetchable::peekAtPojo, _Refetchable::peekAtPojo);
     }
 
@@ -136,11 +131,11 @@ implements _Refetchable {
     private final AtomicReference<Bookmark> bookmarkRef = new AtomicReference<Bookmark>();
 
     private boolean isVariantAttached() {
-        return eitherDetachedOrAttached.isRight();
+        return eitherDetachedOrBookmarked.isRight();
     }
 
     private boolean isVariantDetached() {
-        return eitherDetachedOrAttached.isLeft();
+        return eitherDetachedOrBookmarked.isLeft();
     }
 
     @Synchronized
@@ -161,15 +156,15 @@ implements _Refetchable {
         val bookmark = isBookmarkMemoized()
                 ? Optional.ofNullable(bookmarkRef.get())
                 : getSpecification().entityFacetElseFail().bookmarkFor(pojo);
-        val attached = new _ManagedObjectEntityAttached(getSpecification(), pojo, bookmark);
-        eitherDetachedOrAttached = Either.right(attached);
+        val attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, bookmark);
+        eitherDetachedOrBookmarked = Either.right(attached);
         // set in any case
         bookmarkRef.set(attached.getBookmark().orElseThrow());
     }
 
     // morph into detached
     private void detach(final Object pojo) {
-        eitherDetachedOrAttached = Either.left(
+        eitherDetachedOrBookmarked = Either.left(
                 new _ManagedObjectEntityDetached(getSpecification(), pojo));
     }
 

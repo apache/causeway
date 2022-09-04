@@ -460,7 +460,7 @@ extends
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
         return new _ManagedObjectEntityHybrid(
-                        new _ManagedObjectEntityAttached(spec, pojo, bookmarkIfKnown));
+                        new _ManagedObjectEntityBookmarked(spec, pojo, bookmarkIfKnown));
     }
     //FIXME java-doc
     static ManagedObject entityDetached(
@@ -631,5 +631,6 @@ extends
         MmAssertionUtil.assertPojoNotWrapped(pojo);
         return ManagedObject.identified(spec, pojo, bookmark);
     }
+
 
 }
