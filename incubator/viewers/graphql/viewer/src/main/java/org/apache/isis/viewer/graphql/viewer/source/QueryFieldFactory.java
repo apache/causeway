@@ -131,10 +131,7 @@ public class QueryFieldFactory {
                                 Can<ObjectActionParameter> parameters = objectAction.getParameters();
                                 Can<ManagedObject> canOfParams = parameters.stream().map(oap -> {
                                     Object argumentValue = arguments.get(oap.getId());
-                                    ObjectSpecification elementType = oap.getElementType();
-
-                                    return ManagedObject.of(elementType, argumentValue);
-
+                                    return ManagedObject.adaptParameter(oap, argumentValue);
                                 }).collect(Can.toCan());
 
                                     ManagedObject managedObject = objectAction

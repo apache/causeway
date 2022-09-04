@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.spec.HasObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -497,7 +498,7 @@ extends
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
      */
-    static ManagedObject other(
+    private static ManagedObject other(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
@@ -592,6 +593,17 @@ extends
         throw _Exceptions.unmatchedCase(specialization);
     }
 
+    static ManagedObject adaptParameter(
+            final @NonNull ObjectActionParameter param,
+            final @Nullable Object paramValue) {
+
+        return param.isScalar()
+                ? adaptScalar(param.getElementType(), paramValue)
+                // else adopt each element pojo then pack
+                : packed(param.getElementType(),
+                        ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
+    }
+
     // -- FACTORIES LEGACY
 
     /**
@@ -599,20 +611,32 @@ extends
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      * @param spec
      * @param pojo - might also be a collection of pojos (null-able)
+     * @deprecated use any 'adaptScalar' or {@link #packed(ObjectSpecification, Can)} instead
      */
     @Deprecated
     static ManagedObject of(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
+        MmAssertionUtil.assertPojoNotWrapped(pojo);
 
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
-        val adapter = spec.getMetaModelContext().getObjectManager().adapt(pojo, spec);
+        if(pojo==null) {
+            return ManagedObject.empty(spec);
+        }
+        spec.assertPojoCompatible(pojo);
+
+        final ManagedObject adapter =
+        (spec.isValue()
+                || pojo.getClass().equals(spec.getCorrespondingClass()))
+            // if actual type matches spec's, we assume, that we don't need to reload,
+            // so this is a shortcut for performance reasons
+            ? ManagedObject.adaptScalar(spec, pojo)
+            // fallback, ignoring proposedSpec
+            : spec.getObjectManager().adapt(pojo);
         return adapter;
     }
+
 
 }

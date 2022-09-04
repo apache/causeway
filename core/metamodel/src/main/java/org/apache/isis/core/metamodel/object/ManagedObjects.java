@@ -320,7 +320,7 @@ public final class ManagedObjects {
             final @Nullable ManagedObject adapter,
             final @NonNull Supplier<Object> pojoDefaultSupplier) {
         return isNullOrUnspecifiedOrEmpty(adapter)
-            ? ManagedObject.of(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
+            ? ManagedObject.adaptScalar(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
             : adapter;
     }
 
@@ -341,10 +341,10 @@ public final class ManagedObjects {
 
         val expectedType = elementSpec.getCorrespondingClass();
         if(expectedType.isPrimitive()) {
-            return ManagedObject.of(elementSpec, ClassExtensions.toDefault(expectedType));
+            return ManagedObject.value(elementSpec, ClassExtensions.toDefault(expectedType));
         }
         if(Boolean.class.equals(expectedType) && mandatory) {
-            return ManagedObject.of(elementSpec, Boolean.FALSE);
+            return ManagedObject.value(elementSpec, Boolean.FALSE);
         }
 
         return input;
@@ -376,30 +376,27 @@ public final class ManagedObjects {
     // -- ADABT UTILITIES
 
     public static Can<ManagedObject> adaptMultipleOfType(
-            @NonNull  final ObjectSpecification elementSpec,
+            final @NonNull ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
-        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+        .map(pojo->ManagedObject.adaptScalar(elementSpec, pojo)) // pojo is nullable here
         .collect(Can.toCan());
     }
 
     /**
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
-    public static Can<ManagedObject> adaptMultipleOfTypeThenRefetchThenFilterByVisibility(
+    public static Can<ManagedObject> adaptMultipleOfTypeThenFilterByVisibility(
             final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
             final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
-        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-        .peek(MmEntityUtil::refetch)
+        .map(pojo->ManagedObject.adaptScalar(elementSpec, pojo)) // pojo is nullable here
         .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
-
-
 
     // -- IMPERATIVE TEXT UTILITY
 
@@ -434,26 +431,6 @@ public final class ManagedObjects {
         }
 
         return result;
-    }
-
-    // -- SPECIFICATION UTILITIES
-
-    /**
-     * @deprecated introduced for debugging
-     */
-    @Deprecated(forRemoval = false)
-    public static ManagedObject resolveActualSpecification(final @Nullable ManagedObject adapter) {
-        if(isNullOrUnspecifiedOrEmpty(adapter)) {
-            return adapter; // no pojo, no deal
-        }
-        if(adapter instanceof PackedManagedObject) {
-            return adapter; // don't process non-scalars
-        }
-        val pojo = adapter.getPojo();
-        val actualSpec = adapter.getSpecification().getSpecificationLoader().loadSpecification(pojo.getClass());
-        return adapter.isBookmarkMemoized()
-            ? ManagedObject.bookmarked(actualSpec, pojo, adapter.getBookmark().get())
-            : ManagedObject.of(actualSpec, pojo);
     }
 
     // -- VIEWMODEL UTILITIES

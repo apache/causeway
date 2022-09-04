@@ -142,7 +142,7 @@ extends CssClassFaImperativeFacetAbstract {
             return ManagedObject.empty(objectSpecification);
         }
         return objectSpecification.isMixin()
-                ? ManagedObject.of(
+                ? ManagedObject.mixin(
                         objectSpecification,
                         objectSpecification
                             .getFactoryService()

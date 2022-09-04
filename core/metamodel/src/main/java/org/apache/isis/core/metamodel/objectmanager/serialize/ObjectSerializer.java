@@ -98,10 +98,11 @@ public interface ObjectSerializer {
 
         @Override
         default BiForm handle(final BiForm request) {
-            val spec = request.getSpecification();
+            val spec = request.getSpecification(); // can only be a scalar
             if(request.isSerialized()) {
                 val serializedObjectBytes = request.getSerializedObject().getSerializedObjectBytes();
-                return BiForm.deSerializationResponse(ManagedObject.of(spec, deserialize(spec, serializedObjectBytes)));
+                return BiForm.deSerializationResponse(
+                        ManagedObject.adaptScalar(spec, deserialize(spec, serializedObjectBytes)));
             } else {
                 val serializedObjectBytes = serialize(request.getObject());
                 return BiForm.serializationResponse(SerializedObject.of(spec, serializedObjectBytes));

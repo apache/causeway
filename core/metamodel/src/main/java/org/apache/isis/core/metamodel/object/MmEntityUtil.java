@@ -105,11 +105,6 @@ public final class MmEntityUtil {
         return managedObject;
     }
 
-    @Deprecated
-    public static ManagedObject refetch(final @Nullable ManagedObject managedObject) {
-        return managedObject;
-    }
-
     public static void requiresWhenFirstIsBookmarkableSecondIsAlso(
             final ManagedObject first,
             final ManagedObject second) {

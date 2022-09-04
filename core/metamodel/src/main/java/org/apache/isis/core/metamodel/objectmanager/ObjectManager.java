@@ -186,34 +186,5 @@ public interface ObjectManager {
                         .collect(Can.toCan()));
     }
 
-    /**
-     * Not suitable for adapting a non-scalar. Auto-memoizes the ManagedObject's bookmark, if applicable.
-     * Optimized, for cases when the adpater's {@link ObjectSpecification} is known in advance.
-     * If {@code pojo} is an entity, automatically memoizes its bookmark.
-     */
-    public default ManagedObject adapt(
-            final @Nullable Object pojo,
-            final @Nullable ObjectSpecification proposedSpec) {
-
-        if(proposedSpec==null) {
-            return adapt(pojo);
-        }
-        if(pojo==null) {
-            return ManagedObject.empty(proposedSpec);
-        }
-
-        proposedSpec.assertPojoCompatible(pojo);
-
-        final ManagedObject adapter =
-        (proposedSpec.isValue()
-                || pojo.getClass().equals(proposedSpec.getCorrespondingClass()))
-            // if actual type matches spec's, we assume, that we don't need to reload,
-            // so this is a shortcut for performance reasons
-            ? ManagedObject.adaptScalar(proposedSpec, pojo)
-            // fallback, ignoring proposedSpec
-            : adapt(pojo);
-        return adapter;
-    }
-
 
 }

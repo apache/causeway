@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
@@ -147,7 +147,7 @@ class _BindingUtil {
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,
             final @NonNull Either<Renderer, Parser> eitherRendererOrParser,
-            final @NonNull Context context) {
+            final @NonNull ValueSemanticsProvider.Context context) {
 
         switch (format) {
         case TITLE: {
@@ -176,7 +176,7 @@ class _BindingUtil {
                         return text;
                     },
                     text->{
-                        val value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
+                        val value = ManagedObject.value(spec, parser.parseTextRepresentation(context, text));
                         //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
                         return value;
                     });
