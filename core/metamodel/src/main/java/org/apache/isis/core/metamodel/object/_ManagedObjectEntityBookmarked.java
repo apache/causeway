@@ -102,8 +102,6 @@ implements _Refetchable {
             throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
-        System.err.printf("[%d]reattached%n", reattachedPojo.hashCode());
-
         return this.pojo = assertCompliance(reattachedPojo);
     }
 

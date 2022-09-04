@@ -264,6 +264,7 @@ public class JpaEntityFacet
                 return EntityState.PERSISTABLE_DETACHED;
             } else {
                 // detect shallow primary key
+                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
                 return primaryKeyType.isValid(primaryKey)
                     ? EntityState.PERSISTABLE_DETACHED_WITH_OID
                     : EntityState.PERSISTABLE_DETACHED;

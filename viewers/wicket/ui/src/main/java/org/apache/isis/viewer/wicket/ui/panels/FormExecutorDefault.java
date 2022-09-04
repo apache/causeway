@@ -174,12 +174,6 @@ implements FormExecutor {
 
             // redirect using associated strategy
             // XXX note: on property edit, triggers SQL update (on JPA)
-            System.err.println("-- before handle results");
-
-            System.err.printf("entity state %s%n",
-                resultAdapter.getSpecification().entityFacetElseFail()
-                .getEntityState(resultAdapter.getPojo()) );
-
             resultResponse
                 .getHandlingStrategy()
                 .handleResults(getCommonContext(), resultResponse);
@@ -189,7 +183,6 @@ implements FormExecutor {
                         + " - %s\n",
                         resultResponse.toStringMultiline());
             });
-            System.err.println("-- after handle results");
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 
