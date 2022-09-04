@@ -71,8 +71,7 @@ implements ViewModelFacet {
                 .orElse(false);
 
         val viewModel = !isBookmarkAvailable
-                ? ManagedObject.viewmodel(spec,
-                        ClassExtensions.newInstance(spec.getCorrespondingClass()), Optional.empty())
+                ? createViewmodel(spec)
                 : createViewmodel(spec, bookmark);
 
         getServiceInjector().injectServicesInto(viewModel.getPojo());
