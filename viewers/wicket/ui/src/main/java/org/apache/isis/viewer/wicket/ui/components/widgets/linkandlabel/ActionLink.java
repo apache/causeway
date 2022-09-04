@@ -199,7 +199,10 @@ extends IndicatingAjaxLink<ManagedObject> {
             // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
             // an error page, but is probably 'good enough').
             val targetAdapter = actionModel.getParentObject();
-            val bookmark = targetAdapter.getBookmarkRefreshed().orElseThrow();
+
+            targetAdapter.invalidateBookmark();
+
+            val bookmark = targetAdapter.getBookmark().orElseThrow();
             getCommonContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"

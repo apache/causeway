@@ -37,6 +37,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -95,6 +96,12 @@ public class JpaEntityFacet
         return Optional.ofNullable(primaryKeyIfAny)
                 .map(primaryKey->
                     primaryKeyType.enstringWithCast(primaryKey));
+    }
+
+    @Override
+    public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
+        _Assert.assertNotNull(primaryKeyType.destring(bookmark.getIdentifier()));
+        return bookmark;
     }
 
     @Override
@@ -257,6 +264,7 @@ public class JpaEntityFacet
                 return EntityState.PERSISTABLE_DETACHED;
             } else {
                 // detect shallow primary key
+                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
                 return primaryKeyType.isValid(primaryKey)
                     ? EntityState.PERSISTABLE_DETACHED_WITH_OID
                     : EntityState.PERSISTABLE_DETACHED;

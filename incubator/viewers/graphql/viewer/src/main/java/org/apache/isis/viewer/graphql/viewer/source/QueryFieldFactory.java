@@ -129,16 +129,14 @@ public class QueryFieldFactory {
 
                                 Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
                                 Can<ObjectActionParameter> parameters = objectAction.getParameters();
-                                Can<ManagedObject> canOfParams = parameters.stream().map(oap -> {
-                                    Object argumentValue = arguments.get(oap.getId());
-                                    ObjectSpecification elementType = oap.getElementType();
+                                Can<ManagedObject> canOfParams = parameters
+                                        .map(oap -> {
+                                            Object argumentValue = arguments.get(oap.getId());
+                                            return ManagedObject.adaptParameter(oap, argumentValue);
+                                        });
 
-                                    return ManagedObject.of(elementType, argumentValue);
-
-                                }).collect(Can.toCan());
-
-                                    ManagedObject managedObject = objectAction
-                                            .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
+                                ManagedObject managedObject = objectAction
+                                        .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
 
                                 return managedObject.getPojo();
                             }

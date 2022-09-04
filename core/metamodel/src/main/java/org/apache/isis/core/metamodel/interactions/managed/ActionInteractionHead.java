@@ -101,7 +101,7 @@ implements HasMetaModel<ObjectAction> {
         }
 
         return params.zipMap(pojoArgList, (objectActionParameter, argPojo)->
-            ManagedObject.of(objectActionParameter.getElementType(), argPojo));
+            ManagedObject.adaptParameter(objectActionParameter, argPojo));
     }
 
     public ParameterNegotiationModel emptyModel(final ManagedAction managedAction) {

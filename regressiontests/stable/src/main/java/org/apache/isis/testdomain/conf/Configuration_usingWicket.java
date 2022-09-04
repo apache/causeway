@@ -45,7 +45,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -57,6 +57,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.dto.IBook;
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -73,6 +74,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -81,12 +83,25 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 @Configuration
 @Import({
     IsisModuleViewerWicketViewer.class,
+    Configuration_usingWicket.WicketViewerOutputMarkupContainerClassNameEnable.class
 })
 public class Configuration_usingWicket {
 
     @Bean @Singleton @Inject
     public IsisAppCommonContext commonContext(final MetaModelContext mmc) {
         return IsisAppCommonContext.of(mmc);
+    }
+
+    @Configuration
+    public class WicketViewerOutputMarkupContainerClassNameEnable
+    implements WicketApplicationInitializer {
+
+        @Override
+        public void init(final WebApplication webApplication) {
+            webApplication.getDebugSettings()
+                .setComponentPathAttributeName("wicket-tester-path")
+                .setOutputMarkupContainerClassName(true);
+        }
     }
 
     public static class EntityPageTester extends WicketTester {
@@ -120,33 +135,55 @@ public class Configuration_usingWicket {
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
                 + ":entityTitle";
 
-        public static final String INVENTORY_NAME_PROPERTY = "theme:entityPageContainer:entity:rows:2"
-                + ":rowContents:1"
-                + ":col:fieldSets:1"
-                + ":memberGroup:properties:1"
-                + ":property";
+        @RequiredArgsConstructor
+        public static enum SimulatedProperties implements SimulatedProperty {
+            INVENTORY_NAME("theme:entityPageContainer:entity:rows:2"
+                    + ":rowContents:1"
+                    + ":col:fieldSets:1"
+                    + ":memberGroup:properties:1"
+                    + ":property"),
+            JDO_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+                    + ":rowContents:1:col:rows:1:rowContents:1"
+                    + ":col:tabGroups:1:panel:tabPanel:rows:1:rowContents:1:col"
+                    + ":fieldSets:1"
+                    + ":memberGroup:properties:3"
+                    + ":property"),
+            JPA_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+                    + ":rowContents:1:col:rows:1:rowContents:1"
+                    + ":col:tabGroups:1:1"
+                    + ":rowContents:1:col"
+                    + ":fieldSets:1"
+                    + ":memberGroup:properties:4"
+                    + ":property"
+                    );
+            @Getter @Accessors(fluent=true) final String id;
+        }
 
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegular:container-fieldFrame:scalarValueInlinePromptLink";
-
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
-
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM_TEXTFIELD = INVENTORY_NAME_PROPERTY
-                + ":property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.FIELD.getContainerId() + ":"
-                + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
-
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
-
-        public static final String INLINE_PROMPT_FORM_FIELD = ""
-                + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.FIELD.getContainerId() + ":"
-                + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
-
-        public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
-                + ":okButton";
+        public static interface SimulatedProperty {
+            String id();
+            default String editLink() {
+                return id() + ":scalarTypeContainer:scalarIfRegular:container-fieldFrame"
+                        + ":scalarValueInlinePromptLink";
+            }
+            default String editInlineForm() {
+                return id() + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
+            }
+            default String scalarField() {
+                return "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
+                    + RegularFrame.FIELD.getContainerId() + ":"
+                    + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
+            }
+            default String editInlineFormTextField() {
+                return id() + ":" + scalarField();
+            }
+            default String editInlinePromptForm() {
+                return editInlineForm();
+                //return id() + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
+            }
+            default String editInlinePromptFormOk() {
+                return editInlinePromptForm() + ":okButton";
+            }
+        }
 
         // --
 
@@ -193,7 +230,7 @@ public class Configuration_usingWicket {
         }
 
         public void assertInventoryNameIs(final String expectedName) {
-            assertPropertyValue(INVENTORY_NAME_PROPERTY, adapter->{
+            assertPropertyValue(SimulatedProperties.INVENTORY_NAME.id(), adapter->{
                 assertEquals(expectedName, adapter.getPojo());
             });
         }

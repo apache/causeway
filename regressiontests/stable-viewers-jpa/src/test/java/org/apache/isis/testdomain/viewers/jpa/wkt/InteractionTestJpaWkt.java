@@ -28,23 +28,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.internal.debug._Debug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester;
+import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperties;
+import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperty;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_FIELD;
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_OK;
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM;
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INVENTORY_NAME_PROPERTY_EDIT_LINK;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 
@@ -56,6 +57,8 @@ import lombok.val;
                 Configuration_usingWicket.class
         },
         properties = {
+                "spring.jpa.show-sql=true",
+                "logging.level.org.springframework.orm.jpa=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.SilenceMetaModel,
@@ -132,11 +135,13 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
             wktTester.assertInventoryNameIs("Bookstore");
         });
 
+        SimulatedProperty inventoryName = SimulatedProperties.INVENTORY_NAME;
+
         // simulate click on editable property -> should bring up the corresponding inline edit dialog
         run(()->{
-            wktTester.assertBehavior(INVENTORY_NAME_PROPERTY_EDIT_LINK, AjaxEventBehavior.class);
-            wktTester.executeAjaxEvent(INVENTORY_NAME_PROPERTY_EDIT_LINK, "click");
-            wktTester.assertComponent(INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM, PromptFormAbstract.class);
+            wktTester.assertBehavior(inventoryName.editLink(), AjaxEventBehavior.class);
+            wktTester.executeAjaxEvent(inventoryName.editLink(), "click");
+            wktTester.assertComponent(inventoryName.editInlinePromptForm(), PromptFormAbstract.class);
 
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("JpaInventoryJaxbVm; Bookstore; 3 products");
@@ -146,19 +151,15 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
 
         // simulate change of a String property Name from 'Bookstore' -> 'Bookstore2'
         run(()->{
-            val form = wktTester.newFormTester(INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM);
-            form.setValue(INLINE_PROMPT_FORM_FIELD, "Bookstore2");
+            val form = wktTester.newFormTester(inventoryName.editInlinePromptForm());
+            form.setValue(inventoryName.scalarField(), "Bookstore2");
             form.submit();
         });
 
         // simulate click on form OK button -> expected to trigger the framework's property change execution
         run(()->{
-            wktTester.assertComponent(INLINE_PROMPT_FORM_OK, IndicatingAjaxButton.class);
-            wktTester.executeAjaxEvent(INLINE_PROMPT_FORM_OK, "click");
-        });
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[TEST] form submitted");
+            wktTester.assertComponent(inventoryName.editInlinePromptFormOk(), IndicatingAjaxButton.class);
+            wktTester.executeAjaxEvent(inventoryName.editInlinePromptFormOk(), "click");
         });
 
         // ... should yield a new Title containing 'Bookstore2'
@@ -170,6 +171,87 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
         });
 
         //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
+
+    }
+
+    private ManagedObject bookAdapter;
+
+    @Test
+    void loadBookPage_Dune_then_change_Isbn() {
+
+        val pageParameters = call(()->{
+
+            val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
+            .filter(book->"Dune".equals(book.getName()))
+            .findFirst()
+            .orElseThrow();
+
+            System.err.printf("--- adapt %n");
+            bookAdapter = super.objectManager.adapt(jpaBook);
+
+            return wktTester.createPageParameters(jpaBook);
+        });
+
+        //System.err.printf("pageParameters %s%n", pageParameters);
+
+        assertEquals(ManagedObject.Specialization.ENTITY, bookAdapter.getSpecialization());
+        assertTrue(bookAdapter.isBookmarkMemoized(), "bookAdapter should be bookmarked");
+
+        // open Dune page
+        run(()->{
+            wktTester.startEntityPage(pageParameters);
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("Dune [ISBN-A]");
+        });
+
+        SimulatedProperty bookIsbn = SimulatedProperties.JPA_BOOK_ISBN;
+
+        // simulate click on editable property -> should bring up the corresponding inline edit dialog
+        run(()->{
+            wktTester.assertBehavior(bookIsbn.editLink(), AjaxEventBehavior.class);
+            wktTester.executeAjaxEvent(bookIsbn.editLink(), "click");
+            wktTester.assertComponent(bookIsbn.editInlinePromptForm(), PromptFormAbstract.class);
+
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("Dune [ISBN-A]");
+        });
+
+        // simulate change of a String property Name from 'ISBN-A' -> 'ISBN-XXXX'
+        run(()->{
+            val form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
+            form.setValue(bookIsbn.scalarField(), "ISBN-XXXX");
+            form.submit();
+
+            val jpaBook = (JpaBook)bookAdapter.getPojo();
+            assertEquals("ISBN-A", jpaBook.getIsbn());
+        });
+
+        // simulate click on form OK button -> expected to trigger the framework's property change execution
+        run(()->{
+            wktTester.assertComponent(bookIsbn.editInlinePromptFormOk(), IndicatingAjaxButton.class);
+            wktTester.executeAjaxEvent(bookIsbn.editInlinePromptFormOk(), "click");
+
+            System.err.printf("bookAdapter state %s%n", bookAdapter.getEntityState());
+
+            System.err.printf("--- verify %n");
+            val jpaBook = (JpaBook)bookAdapter.getPojo();
+            assertEquals("ISBN-XXXX", jpaBook.getIsbn());
+        });
+
+        // ... should yield a new Title containing 'Dune [ISBN-XXXX]'
+        run(()->{
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("Dune [ISBN-XXXX]");
+        });
+
+        run(()->{
+            // reset
+            val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
+                    .filter(book->"Dune".equals(book.getName()))
+                    .findFirst()
+                    .orElseThrow();
+            jpaBook.setIsbn("ISBN-A");
+        });
 
     }
 

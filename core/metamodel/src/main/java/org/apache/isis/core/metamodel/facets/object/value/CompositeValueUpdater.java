@@ -86,7 +86,7 @@ public abstract class CompositeValueUpdater {
         val resultPojo = CanonicalInvoker
                 .invoke(method, targetPojo, executionParameters);
 
-        return ManagedObject.of(delegate.getReturnType(), resultPojo);
+        return ManagedObject.value(delegate.getReturnType(), resultPojo);
     }
 
 }

@@ -40,31 +40,27 @@ import lombok.extern.log4j.Log4j2;
  * @see ManagedObject.Specialization#ENTITY
  */
 @Log4j2
-final class _ManagedObjectEntityAttached
+final class _ManagedObjectEntityBookmarked
 extends _ManagedObjectSpecified
 implements _Refetchable {
 
     private /*final*/ @Nullable Object pojo;
     private final @NonNull Bookmark bookmark;
 
-    _ManagedObjectEntityAttached(
+    _ManagedObjectEntityBookmarked(
             final ObjectSpecification spec,
             final Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
         super(ManagedObject.Specialization.ENTITY, spec);
         this.pojo = assertCompliance(pojo);
-        this.bookmark = bookmarkIfKnown
-                .orElseGet(this::createBookmark);
+        //sanity check bookmark
+        this.bookmark = entityFacet().validateBookmark(bookmarkIfKnown
+                .orElseGet(this::createBookmark));
     }
 
     @Override
     public Optional<Bookmark> getBookmark() {
         return Optional.of(bookmark);
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark(); // no-op for entities
     }
 
     @Override
@@ -88,20 +84,25 @@ implements _Refetchable {
         if(!entityState.isPersistable()) {
             throw _Exceptions.illegalState("not persistable %s", getSpecification());
         }
-        if(!entityState.isDetached()) {
+        if(entityState.isAttached()) {
             return pojo; // is attached
         }
 
+        if(entityState.isSpecicalJpaDetachedWithOid()) {
+            return entityFacet.fetchByBookmark(bookmark)
+                    .orElse(pojo);
+        }
+
         // throws on deleted entity
-        val reattached = entityFacet.fetchByBookmark(bookmark)
+        val reattachedPojo = entityFacet.fetchByBookmark(bookmark)
                 .orElseThrow(()->{
                     return new ObjectNotFoundException(""+bookmark);});
 
-        if(!entityFacet.getEntityState(reattached).hasOid()) {
+        if(!entityFacet.getEntityState(reattachedPojo).hasOid()) {
             throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
-        return this.pojo = assertCompliance(reattached);
+        return this.pojo = assertCompliance(reattachedPojo);
     }
 
     @Override

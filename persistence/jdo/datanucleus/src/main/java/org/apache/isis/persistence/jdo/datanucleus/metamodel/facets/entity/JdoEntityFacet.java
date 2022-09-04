@@ -151,6 +151,12 @@ implements EntityFacet {
     }
 
     @Override
+    public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
+        _Assert.assertNotNull(primaryKeyTypeForDecoding().destring(bookmark.getIdentifier()));
+        return bookmark;
+    }
+
+    @Override
     public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
 
         log.debug("fetchEntity; bookmark={}", bookmark);

@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -198,7 +199,10 @@ implements ImperativeFacet {
                     null);
 
             // the event handlers may have updated the argument themselves
-            val argsAfterEventPolling = updateArguments(initialArgs, actionDomainEvent.getArguments());
+            val argsAfterEventPolling = updateArguments(
+                    owningAction.getParameters(),
+                    initialArgs,
+                    actionDomainEvent.getArguments());
 
             // set event onto the execution
             currentExecution.setEvent(actionDomainEvent);
@@ -225,16 +229,19 @@ implements ImperativeFacet {
     }
 
     private static Can<ManagedObject> updateArguments(
+            final @NonNull Can<ObjectActionParameter> params,
             final @NonNull Can<ManagedObject> argumentAdapters,
             final @NonNull List<Object> newArgumentPojos) {
 
         // zip in the newArgumentPojos from right
         // element wise: update adapter if new-argument pojo differs from original adapter pojo
-        return argumentAdapters.zipMap(newArgumentPojos, (leftAdapter, rightPojo)->{
-            val leftPojo = leftAdapter.getPojo(); // the original
-            return Objects.equals(leftPojo, rightPojo)
-                    ? leftAdapter
-                    : ManagedObject.of(leftAdapter.getSpecification(), rightPojo);
+        return params.zipMap(newArgumentPojos, (param, newPojo)->{
+            final int paramIndex = param.getParameterIndex();
+            val originalAdapter = argumentAdapters.getElseFail(paramIndex);
+            val originalPojo = originalAdapter.getPojo(); // the original
+            return Objects.equals(originalPojo, newPojo)
+                    ? originalAdapter
+                    : ManagedObject.adaptParameter(param, newPojo);
         });
     }
 

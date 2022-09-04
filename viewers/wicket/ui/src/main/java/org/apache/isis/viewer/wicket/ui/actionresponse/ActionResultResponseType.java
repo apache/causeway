@@ -233,7 +233,8 @@ public enum ActionResultResponseType {
     }
 
     public static ActionResultResponse toEntityPage(final ManagedObject entityOrViewmodel) {
-        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmarkRefreshed().orElseThrow());
+        entityOrViewmodel.invalidateBookmark();
+        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmark().orElseThrow());
     }
 
     // -- HELPER

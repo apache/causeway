@@ -283,7 +283,7 @@ implements
         }
 
         val mixinPojo = getMetaModelContext().getFactoryService().mixin(mixinType, mixee.getPojo());
-        return ManagedObject.of(mixinSpec, mixinPojo);
+        return ManagedObject.mixin(mixinSpec, mixinPojo);
     }
 
     // -- OBJECT CONTRACT

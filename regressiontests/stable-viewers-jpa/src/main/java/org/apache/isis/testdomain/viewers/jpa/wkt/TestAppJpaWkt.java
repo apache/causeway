@@ -34,7 +34,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.commons.internal.os._OsUtil;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
@@ -56,7 +55,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
     IsisModuleViewerWicketViewer.class,
     //IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
-    XrayEnable.class // for debugging only
+    //XrayEnable.class // for debugging only
 })
 public class TestAppJpaWkt extends SpringBootServletInitializer {
 

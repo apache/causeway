@@ -69,9 +69,8 @@ final class ObjectCreator_builtinHandlers {
                 log.debug("creating instance of {}", spec);
             }
 
-            val pojo = metaModelContext.getServiceInjector()
-                    .injectServicesInto(instantiate(spec));
-            val domainObject = ManagedObject.of(spec, pojo);
+            val pojo = instantiate(spec); // can only be a scalar
+            val domainObject = ManagedObject.adaptScalar(spec, pojo);
 
             // initialize new object
             domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)

@@ -66,11 +66,12 @@ implements ViewModelFacet {
             final Optional<Bookmark> bookmarkIfAny) {
 
         val bookmark = bookmarkIfAny.orElse(null);
-        val memento = bookmarkIfAny.map(Bookmark::getIdentifier).orElse(null);
+        val isBookmarkAvailable = bookmarkIfAny.map(Bookmark::getIdentifier)
+                .map(_Strings::isNotEmpty)
+                .orElse(false);
 
-        val viewModel = bookmarkIfAny.isEmpty()
-                    || _Strings.isNullOrEmpty(memento)
-                ? ManagedObject.of(spec, ClassExtensions.newInstance(spec.getCorrespondingClass()))
+        val viewModel = !isBookmarkAvailable
+                ? createViewmodel(spec)
                 : createViewmodel(spec, bookmark);
 
         getServiceInjector().injectServicesInto(viewModel.getPojo());
@@ -82,7 +83,8 @@ implements ViewModelFacet {
      * Create default viewmodel instance (without any {@link Bookmark} available).
      */
     protected ManagedObject createViewmodel(final @NonNull ObjectSpecification spec) {
-        return ManagedObject.of(spec, ClassExtensions.newInstance(spec.getCorrespondingClass()));
+        return ManagedObject.viewmodel(spec, ClassExtensions.newInstance(spec.getCorrespondingClass()),
+                Optional.empty());
     }
 
     /**

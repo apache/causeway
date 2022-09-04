@@ -62,11 +62,6 @@ extends _ManagedObjectSpecified {
     }
 
     @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark(); // no-op for services
-    }
-
-    @Override
     public boolean isBookmarkMemoized() {
         return bookmarkLazy.isMemoized();
     }

@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmAssertionUtil;
-import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -227,7 +226,6 @@ public class ParameterNegotiationModel {
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
             clearParamValue(paramIndex);
         } else {
-            //EntityUtil.assertAttachedWhenEntity(newParamValue);
             paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(newParamValue);
         }
     }
@@ -237,13 +235,10 @@ public class ParameterNegotiationModel {
         paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
-    @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
-        val paramMeta = getParamMetamodel(paramNr);
-        val paramSpec = paramMeta.getElementType();
-        val paramValue = newParamValuePojo!=null
-                ? ManagedObject.of(paramSpec, newParamValuePojo)
-                : ManagedObject.empty(paramSpec);
-        return paramValue;
+    @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,
+            final @Nullable Object newParamValuePojo) {
+        val paramMeta = getParamMetamodel(paramIndex);
+        return ManagedObject.adaptParameter(paramMeta, newParamValuePojo);
     }
 
     /**
@@ -260,7 +255,8 @@ public class ParameterNegotiationModel {
 
     private String actionValidationMessage() {
         val validityConsentForAction = this.validateParameterSetForAction();
-        if(validityConsentForAction!=null && validityConsentForAction.isVetoed()) {
+        if(validityConsentForAction!=null
+                && validityConsentForAction.isVetoed()) {
             return validityConsentForAction.getReason();
         }
         return null;
@@ -296,7 +292,7 @@ public class ParameterNegotiationModel {
             bindableParamValue = _Bindables.forValue(initialValue);
             bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
 
-            bindableParamValue.setValueRefiner(MmEntityUtil::refetch);
+            //bindableParamValue.setValueRefiner(MmEntityUtil::refetch); no longer used
             bindableParamValue.setValueGuard(MmAssertionUtil.assertInstanceOf(metaModel.getElementType()));
             bindableParamValue.addListener((event, oldValue, newValue)->{
                 if(newValue==null) {

@@ -26,12 +26,14 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.spec.HasObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -365,6 +367,12 @@ extends
         return getSpecification().getIcon(this);
     }
 
+    default Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark() {
+        return isBookmarkMemoized()
+            ? Either.left(this)
+            : Either.right(this);
+    }
+
     // -- FACTORIES
 
     /**
@@ -448,22 +456,20 @@ extends
         }
         val bookmarkIfAny = bookmarkIfKnown
                 .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
-        if(bookmarkIfAny.isPresent()) {
-            return entityAttached(spec, pojo, bookmarkIfAny);
-        } else {
-            return entityDetached(spec, pojo);
-        }
+        return bookmarkIfAny
+            .map(bookmark->entityHypridBookmarked(spec, pojo, bookmarkIfAny))
+            .orElseGet(()->entityHybirdDetached(spec, pojo));
     }
-    //FIXME java-doc
-    static ManagedObject entityAttached(
+    // bookmarked hybrid in its final state (cannot transition)
+    private static ManagedObject entityHypridBookmarked(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
         return new _ManagedObjectEntityHybrid(
-                        new _ManagedObjectEntityAttached(spec, pojo, bookmarkIfKnown));
+                        new _ManagedObjectEntityBookmarked(spec, pojo, bookmarkIfKnown));
     }
-    //FIXME java-doc
-    static ManagedObject entityDetached(
+    // initially detached hybrid that can transition to bookmarked anytime on reassessment
+    private static ManagedObject entityHybirdDetached(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
@@ -492,7 +498,7 @@ extends
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
      */
-    static ManagedObject other(
+    private static ManagedObject other(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
@@ -523,9 +529,6 @@ extends
     static ManagedObject adaptScalar(
             final @NonNull SpecificationLoader specLoader,
             final @NonNull Object pojo) {
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
         val spec = specLoader.specForType(pojo.getClass()).orElse(null);
         return adaptScalarInternal(spec, pojo, Optional.empty());
     }
@@ -533,13 +536,13 @@ extends
     static ManagedObject adaptScalar(
             final @NonNull ObjectSpecification guess,
             final @Nullable Object pojo) {
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
         return adaptScalarInternal(guess, pojo, Optional.empty());
     }
 
-    static ManagedObject identified(
+    /**
+     * Optimized for cases, when the pojo's specification and bookmark are already available.
+     */
+    static ManagedObject bookmarked(
             final @NonNull  ObjectSpecification spec,
             final @Nullable Object pojo,
             final @NonNull  Bookmark bookmark) {
@@ -556,8 +559,9 @@ extends
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfAny) {
 
+        MmAssertionUtil.assertPojoNotWrapped(pojo);
         MmAssertionUtil.assertPojoIsScalar(pojo);
-        val spec = MmSpecUtil.quicklyResolveObjectSpecificationFor(guess, pojo.getClass());
+        val spec = MmSpecUtil.quicklyResolveObjectSpecification(guess, pojo.getClass());
 
         val specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
@@ -586,50 +590,15 @@ extends
         throw _Exceptions.unmatchedCase(specialization);
     }
 
-    // -- FACTORIES LEGACY
+    static ManagedObject adaptParameter(
+            final @NonNull ObjectActionParameter param,
+            final @Nullable Object paramValue) {
 
-    /**
-     * Optimized for cases, when the pojo's specification is already available.
-     * If {@code pojo} is an entity, automatically memoizes its bookmark.
-     * @param spec
-     * @param pojo - might also be a collection of pojos (null-able)
-     */
-    @Deprecated
-    static ManagedObject of(
-            final @NonNull ObjectSpecification spec,
-            final @Nullable Object pojo) {
-
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
-
-        //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
-        //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
-        val adapter = spec.getMetaModelContext().getObjectManager().adapt(pojo, spec);
-        return adapter;
-    }
-
-    /**
-     * Optimized for cases, when the pojo's specification and bookmark are already available.
-     */
-    @Deprecated
-    static ManagedObject bookmarked(
-            final @NonNull ObjectSpecification spec,
-            final @NonNull Object pojo,
-            final @NonNull Bookmark bookmark) {
-
-        MmAssertionUtil.assertPojoIsScalar(pojo);
-
-        if(!spec.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "Pojo not compatible with ObjectSpecification, " +
-                    "objectSpec.correspondingClass = %s, " +
-                    "pojo.getClass() = %s, " +
-                    "pojo.toString() = %s",
-                    spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
-        }
-        MmAssertionUtil.assertPojoNotWrapped(pojo);
-        return ManagedObject.identified(spec, pojo, bookmark);
+        return param.isScalar()
+                ? adaptScalar(param.getElementType(), paramValue)
+                // else adopt each element pojo then pack
+                : packed(param.getElementType(),
+                        ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
     }
 
 }

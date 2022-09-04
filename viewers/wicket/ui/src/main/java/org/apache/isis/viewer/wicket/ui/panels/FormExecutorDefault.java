@@ -173,6 +173,7 @@ implements FormExecutor {
             });
 
             // redirect using associated strategy
+            // XXX note: on property edit, triggers SQL update (on JPA)
             resultResponse
                 .getHandlingStrategy()
                 .handleResults(getCommonContext(), resultResponse);

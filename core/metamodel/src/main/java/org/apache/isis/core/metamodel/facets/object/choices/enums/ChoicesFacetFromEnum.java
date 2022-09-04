@@ -42,7 +42,7 @@ extends ChoicesFacetAbstract {
 
         val elementSpec = specForTypeElseFail(enumClass);
         this.choices = Can.ofArray(choices)
-                .map(choice->ManagedObject.of(elementSpec, choice));
+                .map(choice->ManagedObject.value(elementSpec, choice));
     }
 
     @Override
