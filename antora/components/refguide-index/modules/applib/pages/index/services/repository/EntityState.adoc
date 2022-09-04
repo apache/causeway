@@ -11,17 +11,19 @@ Enumerates the state of an entity.
 enum EntityState {
   NOT_PERSISTABLE     // <.>
   PERSISTABLE_ATTACHED     // <.>
-  PERSISTABLE_NEW     // <.>
   PERSISTABLE_DETACHED     // <.>
   PERSISTABLE_REMOVED     // <.>
+  PERSISTABLE_ATTACHED_NO_OID     // <.>
+  PERSISTABLE_DETACHED_WITH_OID     // <.>
   boolean isPersistable()     // <.>
   boolean isAttached()     // <.>
-  boolean isNew()     // <.>
   boolean isDetached()     // <.>
   boolean isRemoved()     // <.>
-  boolean isDetachedOrRemoved()     // <.>
+  boolean isDetachedCannotReattach()
   boolean isAttachedOrRemoved()     // <.>
-  boolean isAttachedOrNew()     // <.>
+  boolean isSpecicalJdoAttachedNoOid()     // <.>
+  boolean isSpecicalJpaDetachedWithOid()     // <.>
+  boolean hasOid()
 }
 ----
 
@@ -35,11 +37,6 @@ Object with this state is not an entity (for example it might be a view model, v
 --
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
 --
-<.> xref:#PERSISTABLE_NEW[PERSISTABLE_NEW]
-+
---
-DN/JDO specific on pre-store. Is attached, has no OID yet.
---
 <.> xref:#PERSISTABLE_DETACHED[PERSISTABLE_DETACHED]
 +
 --
@@ -49,6 +46,16 @@ Object with this state is an entity but that is detached from a persistence sess
 +
 --
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
+--
+<.> xref:#PERSISTABLE_ATTACHED_NO_OID[PERSISTABLE_ATTACHED_NO_OID]
++
+--
+DN/JDO specific on pre-store. Is attached, has no OID yet.
+--
+<.> xref:#PERSISTABLE_DETACHED_WITH_OID[PERSISTABLE_DETACHED_WITH_OID]
++
+--
+JPA specific. Is detached, but has an OID.
 --
 <.> xref:#isPersistable_[isPersistable()]
 +
@@ -60,11 +67,6 @@ Object is an entity so is _potentially_ persistable ot the database.
 --
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
 --
-<.> xref:#isNew_[isNew()]
-+
---
-DN/JDO specific on pre-store. Is attached, has no OID yet.
---
 <.> xref:#isDetached_[isDetached()]
 +
 --
@@ -75,9 +77,18 @@ Object with this state is an entity but that is detached from a persistence sess
 --
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
 --
-<.> xref:#isDetachedOrRemoved_[isDetachedOrRemoved()]
 <.> xref:#isAttachedOrRemoved_[isAttachedOrRemoved()]
-<.> xref:#isAttachedOrNew_[isAttachedOrNew()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+not supported by JPA
+====
+--
+<.> xref:#isSpecicalJdoAttachedNoOid_[isSpecicalJdoAttachedNoOid()]
+<.> xref:#isSpecicalJpaDetachedWithOid_[isSpecicalJpaDetachedWithOid()]
 
 == Members
 
@@ -91,11 +102,6 @@ Object with this state is not an entity (for example it might be a view model, v
 
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
 
-[#PERSISTABLE_NEW]
-=== PERSISTABLE_NEW
-
-DN/JDO specific on pre-store. Is attached, has no OID yet.
-
 [#PERSISTABLE_DETACHED]
 === PERSISTABLE_DETACHED
 
@@ -106,6 +112,16 @@ Object with this state is an entity but that is detached from a persistence sess
 
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
 
+[#PERSISTABLE_ATTACHED_NO_OID]
+=== PERSISTABLE_ATTACHED_NO_OID
+
+DN/JDO specific on pre-store. Is attached, has no OID yet.
+
+[#PERSISTABLE_DETACHED_WITH_OID]
+=== PERSISTABLE_DETACHED_WITH_OID
+
+JPA specific. Is detached, but has an OID.
+
 [#isPersistable_]
 === isPersistable()
 
@@ -115,11 +131,6 @@ Object is an entity so is _potentially_ persistable ot the database.
 === isAttached()
 
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
-
-[#isNew_]
-=== isNew()
-
-DN/JDO specific on pre-store. Is attached, has no OID yet.
 
 [#isDetached_]
 === isDetached()
@@ -133,11 +144,18 @@ Object with this state is an entity that has been removed from the database. Obj
 
 Only supported by JDO. Will always return false with JPA.
 
-[#isDetachedOrRemoved_]
-=== isDetachedOrRemoved()
-
 [#isAttachedOrRemoved_]
 === isAttachedOrRemoved()
 
-[#isAttachedOrNew_]
-=== isAttachedOrNew()
+[WARNING]
+====
+[red]#_deprecated:_#
+
+not supported by JPA
+====
+
+[#isSpecicalJdoAttachedNoOid_]
+=== isSpecicalJdoAttachedNoOid()
+
+[#isSpecicalJpaDetachedWithOid_]
+=== isSpecicalJpaDetachedWithOid()

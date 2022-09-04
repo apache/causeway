@@ -27,6 +27,7 @@ class Clob {
   CharSequence getChars()
   Blob toBlob(Charset charset)
   void writeCharsTo(Writer wr)
+  String asString()
   boolean equals(Object o)
   int hashCode()
   String toString()

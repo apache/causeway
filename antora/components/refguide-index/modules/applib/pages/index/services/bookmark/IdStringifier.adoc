@@ -17,6 +17,7 @@ interface IdStringifier<T> {
   Class<T> getCorrespondingClass()
   String enstring(T value)     // <.>
   T destring(Class<?> targetEntityClass, String stringified)     // <.>
+  boolean isValid(T value)     // <.>
 }
 ----
 
@@ -30,6 +31,11 @@ Convert the value (which will be of the same type as returned by _#getCorrespond
 --
 Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.
 --
+<.> xref:#isValid_T[isValid(T)]
++
+--
+Whether the non-null primary key object is valid, that is, in the case of a composite, whether it is fully populated.
+--
 
 == Members
 
@@ -42,3 +48,8 @@ Convert the value (which will be of the same type as returned by _#getCorrespond
 === destring(Class, String)
 
 Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.
+
+[#isValid_T]
+=== isValid(T)
+
+Whether the non-null primary key object is valid, that is, in the case of a composite, whether it is fully populated.

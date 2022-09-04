@@ -11,7 +11,7 @@ Calls lifecycle callbacks for entities, ensuring that any given entity is only e
 class LifecycleCallbackNotifier {
   void postCreate(ManagedObject entity)
   void postLoad(ManagedObject entity)
-  void prePersist(ManagedObject entity)
+  void prePersist(Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid)     // <.>
   void postPersist(ManagedObject entity)
   void preUpdate(ManagedObject entity)
   void postUpdate(ManagedObject entity)
@@ -19,3 +19,9 @@ class LifecycleCallbackNotifier {
 }
 ----
 
+<.> xref:#prePersist_Either[prePersist(Either)]
+
+== Members
+
+[#prePersist_Either]
+=== prePersist(Either)

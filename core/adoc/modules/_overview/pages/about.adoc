@@ -1702,7 +1702,7 @@ Directory: /core/runtime
 ****
 o.a.i.core.runtime.events.MetamodelEventService +
 o.a.i.core.runtime.events.TransactionEventEmitter +
-o.a.i.core.runtime.idstringifier.IdStringifierService +
+o.a.i.core.runtime.idstringifier.IdStringifierLookupService +
 ****
 
 .Dependencies
