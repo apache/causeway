@@ -604,39 +604,4 @@ extends
                         ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
     }
 
-    // -- FACTORIES LEGACY
-
-    /**
-     * Optimized for cases, when the pojo's specification is already available.
-     * If {@code pojo} is an entity, automatically memoizes its bookmark.
-     * @param spec
-     * @param pojo - might also be a collection of pojos (null-able)
-     * @deprecated use any 'adaptScalar' or {@link #packed(ObjectSpecification, Can)} instead
-     */
-    @Deprecated
-    static ManagedObject of(
-            final @NonNull ObjectSpecification spec,
-            final @Nullable Object pojo) {
-
-        MmAssertionUtil.assertPojoNotWrapped(pojo);
-
-        //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
-        //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
-        if(pojo==null) {
-            return ManagedObject.empty(spec);
-        }
-        spec.assertPojoCompatible(pojo);
-
-        final ManagedObject adapter =
-        (spec.isValue()
-                || pojo.getClass().equals(spec.getCorrespondingClass()))
-            // if actual type matches spec's, we assume, that we don't need to reload,
-            // so this is a shortcut for performance reasons
-            ? ManagedObject.adaptScalar(spec, pojo)
-            // fallback, ignoring proposedSpec
-            : spec.getObjectManager().adapt(pojo);
-        return adapter;
-    }
-
-
 }
