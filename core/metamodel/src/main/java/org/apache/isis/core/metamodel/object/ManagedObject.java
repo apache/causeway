@@ -528,9 +528,6 @@ extends
     static ManagedObject adaptScalar(
             final @NonNull SpecificationLoader specLoader,
             final @NonNull Object pojo) {
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
         val spec = specLoader.specForType(pojo.getClass()).orElse(null);
         return adaptScalarInternal(spec, pojo, Optional.empty());
     }
@@ -544,7 +541,10 @@ extends
         return adaptScalarInternal(guess, pojo, Optional.empty());
     }
 
-    static ManagedObject identified(
+    /**
+     * Optimized for cases, when the pojo's specification and bookmark are already available.
+     */
+    static ManagedObject bookmarked(
             final @NonNull  ObjectSpecification spec,
             final @Nullable Object pojo,
             final @NonNull  Bookmark bookmark) {
@@ -561,8 +561,9 @@ extends
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfAny) {
 
+        MmAssertionUtil.assertPojoNotWrapped(pojo);
         MmAssertionUtil.assertPojoIsScalar(pojo);
-        val spec = MmSpecUtil.quicklyResolveObjectSpecificationFor(guess, pojo.getClass());
+        val spec = MmSpecUtil.quicklyResolveObjectSpecification(guess, pojo.getClass());
 
         val specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
@@ -612,29 +613,6 @@ extends
         //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
         val adapter = spec.getMetaModelContext().getObjectManager().adapt(pojo, spec);
         return adapter;
-    }
-
-    /**
-     * Optimized for cases, when the pojo's specification and bookmark are already available.
-     */
-    @Deprecated
-    static ManagedObject bookmarked(
-            final @NonNull ObjectSpecification spec,
-            final @NonNull Object pojo,
-            final @NonNull Bookmark bookmark) {
-
-        MmAssertionUtil.assertPojoIsScalar(pojo);
-
-        if(!spec.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "Pojo not compatible with ObjectSpecification, " +
-                    "objectSpec.correspondingClass = %s, " +
-                    "pojo.getClass() = %s, " +
-                    "pojo.toString() = %s",
-                    spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
-        }
-        MmAssertionUtil.assertPojoNotWrapped(pojo);
-        return ManagedObject.identified(spec, pojo, bookmark);
     }
 
 }

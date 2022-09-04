@@ -29,8 +29,9 @@ public final class MmSpecUtil {
     /**
      * optimized for the case when a specification that probably matches is known in advance
      * the result must be an instance of guess
+     * @throws AssertionError if guess is not assignable from actual type
      */
-    public ObjectSpecification quicklyResolveObjectSpecificationFor(
+    public ObjectSpecification quicklyResolveObjectSpecification(
             final @NonNull ObjectSpecification guess,
             final @NonNull Class<?> requiredType) {
         return guess.getCorrespondingClass().equals(requiredType)

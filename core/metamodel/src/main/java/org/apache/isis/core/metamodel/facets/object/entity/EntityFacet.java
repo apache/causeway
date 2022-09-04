@@ -120,7 +120,7 @@ public interface EntityFacet extends Facet {
     default Optional<Bookmark> bookmarkFor(final @Nullable Object pojo) {
         return identifierFor(pojo)
                 .map(id->Bookmark.forLogicalTypeAndIdentifier(
-                        MmSpecUtil.quicklyResolveObjectSpecificationFor(
+                        MmSpecUtil.quicklyResolveObjectSpecification(
                                 getEntitySpecification(),
                                 pojo.getClass())
                         .getLogicalType(),
