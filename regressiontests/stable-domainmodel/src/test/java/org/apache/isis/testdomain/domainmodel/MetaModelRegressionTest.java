@@ -19,7 +19,6 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -92,9 +91,7 @@ class MetaModelRegressionTest {
 
     private static String asXml(final Blob zip) throws IOException {
         val clob = zip.unZip(CommonMimeType.XML).toClob(StandardCharsets.UTF_8);
-        val sw = new StringWriter();
-        clob.writeCharsTo(sw);
-        return sw.toString();
+        return clob.asString();
     }
 
     private Options options() {
