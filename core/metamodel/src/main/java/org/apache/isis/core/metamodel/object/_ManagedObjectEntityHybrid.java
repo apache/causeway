@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -48,34 +47,50 @@ implements _Refetchable {
     private @NonNull Either<_ManagedObjectEntityDetached, _ManagedObjectEntityBookmarked>
         eitherDetachedOrBookmarked;
 
-    private EntityState entityState;
+    private enum MorphState {
+        /** Has no bookmark yet; can be transitioned to BOOKMARKED once
+         *  for accompanied pojo, an OID becomes available. */
+        DETACHED,
+        /** Final state, once we have an OID,
+         * regardless of the accompanied pojo's persistent state. */
+        BOOKMARKED;
+        public boolean isDetached() { return this == DETACHED; }
+//        public boolean isBookmarked() { return this == BOOKMARKED; }
+        static MorphState valueOf(final EntityState entityState) {
+            return entityState.hasOid()
+                    ? BOOKMARKED
+                    : DETACHED;
+        }
+    }
+
+    private MorphState morphState;
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityDetached detached) {
         super(ManagedObject.Specialization.ENTITY, detached.getSpecification());
         this.eitherDetachedOrBookmarked = Either.left(detached);
-        this.entityState = EntityState.PERSISTABLE_DETACHED;
+        this.morphState = MorphState.DETACHED;
     }
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityBookmarked attached) {
         super(ManagedObject.Specialization.ENTITY, attached.getSpecification());
         this.eitherDetachedOrBookmarked = Either.right(attached);
-        this.entityState = EntityState.PERSISTABLE_ATTACHED;
-        this.bookmarkRef.set(attached.getBookmark().orElseThrow());
+        this.morphState = MorphState.BOOKMARKED;
+        _Assert.assertTrue(attached.getBookmark().isPresent(),
+                ()->"bookmarked entity must have bookmark");
     }
 
     @Override
     public Optional<Bookmark> getBookmark() {
-        if(!isBookmarkMemoized()) {
-            triggerReassessment();
-        }
-        return Optional.ofNullable(bookmarkRef.get());
+        return eitherDetachedOrBookmarked
+                .fold(Bookmarkable::getBookmark, Bookmarkable::getBookmark);
     }
 
     @Override
     public boolean isBookmarkMemoized() {
-        return bookmarkRef.get()!=null;
+        return eitherDetachedOrBookmarked
+                .fold(Bookmarkable::isBookmarkMemoized, Bookmarkable::isBookmarkMemoized);
     }
 
     @Override
@@ -84,17 +99,14 @@ implements _Refetchable {
         val entityState = eitherDetachedOrBookmarked
                 .fold(ManagedObject::getEntityState, ManagedObject::getEntityState);
 
-        if(this.entityState!=entityState) {
-            log.debug("about to morph {} -> {}", this.entityState, entityState);
-            this.entityState = entityState;
-            reassessVariant(entityState, peekAtPojo());
-            if(entityState.hasOid()) {
-                _Assert.assertTrue(isVariantAttached());
-            } else {
-                _Assert.assertTrue(isVariantDetached());
-            }
-        }
+        val newMorphState = MorphState.valueOf(entityState);
 
+        if(this.morphState!=newMorphState) {
+            log.debug("about to transition to bookmarked variant given {}", entityState);
+            reassessVariant(entityState, peekAtPojo());
+            _Assert.assertTrue(isVariantAttached(), ()->"successful transition");
+            this.morphState = newMorphState;
+        }
         return entityState;
     }
 
@@ -125,10 +137,10 @@ implements _Refetchable {
     // -- HELPER
 
     private void triggerReassessment() {
-        _Blackhole.consume(getEntityState());
+        if(morphState.isDetached()) {
+            _Blackhole.consume(getEntityState());
+        }
     }
-
-    private final AtomicReference<Bookmark> bookmarkRef = new AtomicReference<Bookmark>();
 
     private boolean isVariantAttached() {
         return eitherDetachedOrBookmarked.isRight();
@@ -144,29 +156,14 @@ implements _Refetchable {
                 && entityState.hasOid()) {
             attach(pojo);
         }
-        // only run when the above has not run!
-        else if(isVariantAttached()
-                && !entityState.hasOid()) {
-            detach(pojo);
-        }
     }
 
     // morph into attached
     private void attach(final Object pojo) {
-        val bookmark = isBookmarkMemoized()
-                ? Optional.ofNullable(bookmarkRef.get())
-                : getSpecification().entityFacetElseFail().bookmarkFor(pojo);
-        val attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, bookmark);
+        val attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, Optional.empty());
         eitherDetachedOrBookmarked = Either.right(attached);
-        // set in any case
-        bookmarkRef.set(attached.getBookmark().orElseThrow());
+        _Assert.assertTrue(attached.getBookmark().isPresent(),
+                ()->"bookmarked entity must have bookmark");
     }
-
-    // morph into detached
-    private void detach(final Object pojo) {
-        eitherDetachedOrBookmarked = Either.left(
-                new _ManagedObjectEntityDetached(getSpecification(), pojo));
-    }
-
 
 }

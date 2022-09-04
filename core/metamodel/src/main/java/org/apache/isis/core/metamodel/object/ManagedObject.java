@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
@@ -365,6 +366,12 @@ extends
         return getSpecification().getIcon(this);
     }
 
+    default Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark() {
+        return isBookmarkMemoized()
+            ? Either.left(this)
+            : Either.right(this);
+    }
+
     // -- FACTORIES
 
     /**
@@ -448,22 +455,20 @@ extends
         }
         val bookmarkIfAny = bookmarkIfKnown
                 .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
-        if(bookmarkIfAny.isPresent()) {
-            return entityAttached(spec, pojo, bookmarkIfAny);
-        } else {
-            return entityDetached(spec, pojo);
-        }
+        return bookmarkIfAny
+            .map(bookmark->entityHypridBookmarked(spec, pojo, bookmarkIfAny))
+            .orElseGet(()->entityHybirdDetached(spec, pojo));
     }
-    //FIXME java-doc
-    static ManagedObject entityAttached(
+    // bookmarked hybrid in its final state (cannot transition)
+    private static ManagedObject entityHypridBookmarked(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
         return new _ManagedObjectEntityHybrid(
                         new _ManagedObjectEntityBookmarked(spec, pojo, bookmarkIfKnown));
     }
-    //FIXME java-doc
-    static ManagedObject entityDetached(
+    // initially detached hybrid that can transition to bookmarked anytime on reassessment
+    private static ManagedObject entityHybirdDetached(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
@@ -631,6 +636,5 @@ extends
         MmAssertionUtil.assertPojoNotWrapped(pojo);
         return ManagedObject.identified(spec, pojo, bookmark);
     }
-
 
 }

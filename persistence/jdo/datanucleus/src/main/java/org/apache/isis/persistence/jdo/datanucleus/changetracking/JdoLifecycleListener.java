@@ -31,7 +31,6 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
@@ -103,17 +102,10 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
          * or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            // well but then we need an OID
-            if(pojo.dnGetObjectId()!=null) {
-                // adapts to initially attached entity hybrid
-                val entityWithOid = adaptEntity(pojo);
-                objectLifecyclePublisher.onPrePersist(Either.left(entityWithOid));
-            } else {
-                // adapts to initially non-attached entity hybrid
-                val spec = metaModelContext.getSpecificationLoader().specForTypeElseFail(pojo.getClass());
-                val entityWithoutOid = ManagedObject.entityDetached(spec, pojo);
-                objectLifecyclePublisher.onPrePersist(Either.right(entityWithoutOid));
-            }
+            // well but then we need an OID, so we distinguish between either we have one or not
+            val entity = adaptEntity(pojo);
+            objectLifecyclePublisher.onPrePersist(
+                    entity.asEitherWithOrWithoutMemoizedBookmark());
         }
     }
 
