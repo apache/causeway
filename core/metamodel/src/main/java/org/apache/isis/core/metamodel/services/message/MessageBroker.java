@@ -16,30 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.context;
+package org.apache.isis.core.metamodel.services.message;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import java.util.Optional;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.apache.isis.commons.collections.Can;
 
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
+public interface MessageBroker {
 
-/**
- *
- * @since 2.0
- *
- */
-@Configuration
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetaModelContexts")
-public class MetaModelContexts {
+    void reset();
 
-    @Bean @Singleton @Primary
-    public MetaModelContext metaModelContext(final IsisSystemEnvironment systemEnvironment) {
-        return new MetaModelContext_usingSpring(systemEnvironment.getIocContainer());
-    }
+    Can<String> drainMessages();
+
+    void addMessage(String message);
+
+    Can<String> drainWarnings();
+
+    void addWarning(String warning);
+
+    Optional<String> drainApplicationError();
+
+    void setApplicationError(String applicationError);
 
 }

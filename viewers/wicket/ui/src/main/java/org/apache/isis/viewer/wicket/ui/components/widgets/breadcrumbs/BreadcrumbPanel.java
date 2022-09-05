@@ -130,6 +130,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
                             val configuration = getCommonContext().getConfiguration();
+
                             getCommonContext().getMessageBroker()
                             .ifPresent(messageBroker->{
                                 messageBroker.addWarning("Cannot find object");

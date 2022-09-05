@@ -26,7 +26,10 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -35,6 +38,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -102,7 +106,15 @@ public interface MetaModelContext {
 
     PlaceholderRenderService getPlaceholderRenderService();
 
+    MessageService getMessageService();
+
     ManagedObject getHomePageAdapter();
+
+    WebAppContextPath getWebAppContextPath();
+
+    MenuBarsService getMenuBarsService();
+
+    InteractionLayerTracker getInteractionLayerTracker();
 
     // cannot move to ServiceRegistry, because applib does not know ManagedObject
     Stream<ManagedObject> streamServiceAdapters();
@@ -115,8 +127,5 @@ public interface MetaModelContext {
     public static MetaModelContext from(final ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
     }
-
-
-
 
 }

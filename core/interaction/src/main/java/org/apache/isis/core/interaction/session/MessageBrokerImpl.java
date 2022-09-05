@@ -24,7 +24,9 @@ import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.services.message.MessageBroker;
 
+import lombok.NoArgsConstructor;
 import lombok.val;
 
 /**
@@ -34,7 +36,8 @@ import lombok.val;
  *
  * @since 1.x
  */
-public class MessageBroker implements Serializable {
+@NoArgsConstructor
+public class MessageBrokerImpl implements Serializable, MessageBroker {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,11 +48,9 @@ public class MessageBroker implements Serializable {
     private final List<String> warnings = _Lists.newArrayList();
     private String applicationError;
 
-    public MessageBroker() {
-    }
-
     // -- RESET
 
+    @Override
     public void reset() {
         synchronized ($lock) {
             warnings.clear();
@@ -60,23 +61,27 @@ public class MessageBroker implements Serializable {
 
     // -- MESSAGES & WARNINGS
 
+    @Override
     public Can<String> drainMessages() {
         return copyAndClear(messages);
     }
 
+    @Override
     public void addMessage(final String message) {
         addIfNotAlreadyPresent(this.messages, message);
     }
 
+    @Override
     public Can<String> drainWarnings() {
         return copyAndClear(warnings);
     }
 
+    @Override
     public void addWarning(final String warning) {
         addIfNotAlreadyPresent(this.warnings, warning);
     }
 
-    private void addIfNotAlreadyPresent(List<String> strings, String string) {
+    private void addIfNotAlreadyPresent(final List<String> strings, final String string) {
         synchronized ($lock) {
             if (strings.contains(string)) {
                 // just ignore it...
@@ -88,6 +93,7 @@ public class MessageBroker implements Serializable {
 
     // -- APPLICATION ERROR
 
+    @Override
     public Optional<String> drainApplicationError() {
         synchronized ($lock) {
             final String error = applicationError;
@@ -96,7 +102,8 @@ public class MessageBroker implements Serializable {
         }
     }
 
-    public void setApplicationError(String applicationError) {
+    @Override
+    public void setApplicationError(final String applicationError) {
         synchronized ($lock) {
             this.applicationError = applicationError;
         }

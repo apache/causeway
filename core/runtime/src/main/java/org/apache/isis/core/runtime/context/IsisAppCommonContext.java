@@ -23,12 +23,9 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.services.message.MessageBroker;
 
 import lombok.Getter;
 import lombok.val;
@@ -51,15 +48,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
 
     @Getter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-
-    @Getter(lazy = true)
-    private final WebAppContextPath webAppContextPath = lookupServiceElseFail(WebAppContextPath.class);
-
-    @Getter(lazy = true)
-    private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
-
-    @Getter(lazy = true)
-    private final InteractionLayerTracker interactionLayerTracker = lookupServiceElseFail(InteractionLayerTracker.class);
 
     public Optional<MessageBroker> getMessageBroker() {
         return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);

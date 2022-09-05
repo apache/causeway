@@ -26,7 +26,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 
-import org.apache.isis.core.interaction.session.MessageBroker;
+import org.apache.isis.core.interaction.session.MessageBrokerImpl;
+import org.apache.isis.core.metamodel.services.message.MessageBroker;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.webapp.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.webapp.health.HealthIndicatorUsingHealthCheckService;
@@ -61,7 +62,7 @@ public class IsisModuleCoreWebapp {
             value = WebApplicationContext.SCOPE_SESSION,
             proxyMode = ScopedProxyMode.TARGET_CLASS)
     public MessageBroker sessionScopedMessageBroker() {
-        return new MessageBroker();
+        return new MessageBrokerImpl();
     }
 
     /**

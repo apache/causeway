@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
@@ -69,6 +70,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
@@ -407,6 +409,15 @@ implements MetaModelContext {
         return wrapperFactory;
     }
 
+    @Override
+    public WebAppContextPath getWebAppContextPath() {
+        return new WebAppContextPath();
+    }
+
+    @Override
+    public InteractionLayerTracker getInteractionLayerTracker() {
+        return (InteractionLayerTracker) getInteractionProvider();
+    }
 
     public void runWithConfigProperties(final Consumer<Map<String, String>> setup, final Runnable runnable) {
         val properties = _Maps.<String, String>newHashMap();
