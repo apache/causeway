@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
@@ -70,7 +69,7 @@ public interface ObjectManager {
      * Creates and initializes an instance conforming to given request parameters.
      * @param objectCreateRequest
      */
-    public default ManagedObject createObject(final ObjectCreator.Request objectCreateRequest) {
+    public default ManagedObject createObject(final ObjectSpecification objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
     }
 

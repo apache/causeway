@@ -69,7 +69,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
@@ -519,13 +518,11 @@ extends
     }
 
     /**
-     * Delegates to {@link ObjectManager#createObject(org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator.Request)}
+     * Delegates to {@link ObjectManager#createObject(ObjectSpecification)}
      * @since 2.0
      */
     default ManagedObject createObject() {
-        val mmc = getMetaModelContext();
-        val objectCreateRequest = ObjectCreator.Request.of(this);
-        val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
+        val managedObject = getObjectManager().createObject(this);
         return managedObject;
     }
 

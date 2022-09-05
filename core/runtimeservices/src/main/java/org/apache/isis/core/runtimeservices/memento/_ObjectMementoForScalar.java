@@ -96,7 +96,8 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
         val spec = adapter.getSpecification();
 
-        if(spec.isIdentifiable() || spec.isParented() ) {
+        if(spec.isIdentifiable()
+                || spec.isParented() ) {
             val hintId = adapter.getPojo() instanceof HintIdProvider
                  ? ((HintIdProvider) adapter.getPojo()).hintId()
                  : null;

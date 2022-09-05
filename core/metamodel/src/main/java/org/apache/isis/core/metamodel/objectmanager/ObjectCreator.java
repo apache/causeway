@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.objectmanager.create;
+package org.apache.isis.core.metamodel.objectmanager;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -38,14 +38,22 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Handles injection and lifecycle callbacks.
  *
  * @since 2.0
- *
  */
-final class ObjectCreator_builtinHandlers {
+public interface ObjectCreator {
+
+    ManagedObject createObject(ObjectSpecification objectSpecification);
+
+    // -- FACTORY
+
+    public static ObjectCreator createDefault(final MetaModelContext metaModelContext) {
+        return new DefaultCreationHandler(metaModelContext);
+    }
 
     @Value @Log4j2
-    public static class DefaultCreationHandler implements ObjectCreator.Handler {
+    public static class DefaultCreationHandler implements ObjectCreator {
 
         @Getter
         private final @NonNull MetaModelContext metaModelContext;
@@ -55,15 +63,9 @@ final class ObjectCreator_builtinHandlers {
             getMetaModelContext().getServiceRegistry()
                     .lookupServiceElseFail(ObjectLifecyclePublisher.class);
 
-        @Override
-        public boolean isHandling(final ObjectCreator.Request objectCreateRequest) {
-            return true;
-        }
 
         @Override
-        public ManagedObject handle(final ObjectCreator.Request objectCreateRequest) {
-
-            val spec = objectCreateRequest.getObjectSpecification();
+        public ManagedObject createObject(final ObjectSpecification spec) {
 
             if (log.isDebugEnabled()) {
                 log.debug("creating instance of {}", spec);
@@ -106,8 +108,6 @@ final class ObjectCreator_builtinHandlers {
             }
 
         }
-
-
 
     }
 
