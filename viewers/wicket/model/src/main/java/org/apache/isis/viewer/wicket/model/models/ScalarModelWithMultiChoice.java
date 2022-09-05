@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.object.Bookmarkable;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 
@@ -68,16 +70,19 @@ implements
     public ArrayList<ObjectMemento> getObject() {
 
         val packedValue = pendingValue().getValue().getValue();
-        val unpackedValue = ManagedObjects.unpack(scalarModel().getScalarTypeSpec(), packedValue);
+        val unpackedValues = ManagedObjects.unpack(scalarModel().getScalarTypeSpec(), packedValue);
 
-        log.debug("getObject() as unpackedValue {}", unpackedValue);
+        log.debug("getObject() as unpackedValue {}", unpackedValues);
 
-        val unpackedMemento = unpackedValue.stream()
-        .map(getCommonContext()::mementoForSingle)
-        .collect(Collectors.toCollection(()->new ArrayList<>(unpackedValue.size())));
+        val mementos = unpackedValues.stream()
+        .filter(Bookmarkable.class::isInstance)
+        .map(Bookmarkable::getMemento) //TODO why can we not flat map this?
+        .map(opt->opt.orElse(null))
+        .filter(_NullSafe::isPresent)
+        .collect(Collectors.toCollection(()->new ArrayList<ObjectMemento>()));
 
-        log.debug("getObject() as unpackedMemento {}", unpackedMemento);
-        return unpackedMemento;
+        log.debug("getObject() as unpackedMemento {}", mementos);
+        return mementos;
     }
 
     @Override

@@ -26,7 +26,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
@@ -85,7 +84,7 @@ extends ModelAbstract<ManagedObject> {
         if(adapter instanceof PackedManagedObject) {
             setObjectCollection((PackedManagedObject)adapter);
         } else {
-            memento = super.getMementoService().mementoForSingle(adapter);
+            memento = adapter.getMemento().orElseThrow();
         }
     }
 
@@ -98,12 +97,7 @@ extends ModelAbstract<ManagedObject> {
         }
 
         super.setObject(adapter);
-
-        val pojos = adapter.getPojo();
-        memento = super.getMementoService()
-                .mementoForPojos(getLogicalElementType()
-                            .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()),
-                        _Casts.uncheckedCast(pojos));
+        memento = adapter.getMemento().orElseThrow();
     }
 
     public final Bookmark asBookmarkIfSupported() {

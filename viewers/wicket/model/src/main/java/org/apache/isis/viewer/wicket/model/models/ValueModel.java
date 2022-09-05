@@ -56,7 +56,7 @@ extends ModelAbstract<ManagedObject> {
             final @Nullable ManagedObject valueAdapter) {
         super(commonContext);
         this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
-        adapterMemento = super.getMementoService().mementoForSingle(valueAdapter);
+        adapterMemento = valueAdapter.getMemento().orElseThrow();
     }
 
     @Override

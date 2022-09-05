@@ -60,8 +60,7 @@ implements
 
     @Override
     public ObjectMemento getObject() {
-        return getCommonContext().mementoForSingle(
-                pendingValue().getValue().getValue());
+        return pendingValue().getValue().getValue().getMemento().orElseThrow();
     }
 
     @Override

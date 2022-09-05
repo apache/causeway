@@ -69,24 +69,24 @@ extends ChoiceProviderAbstractForScalarModel {
         }
         val scalarTypeSpec = scalarModel().getScalarTypeSpec();
         val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
-        return autoCompleteAdapters.map(getCommonContext()::mementoForSingle);
+        return autoCompleteAdapters
+                .map(ManagedObject::getMementoElseFail);
     }
 
     // -- HELPER
 
     private Can<ObjectMemento> queryAll() {
         return scalarModel().getChoices() // must not return detached entities
-                .map(getCommonContext()::mementoForAnyCardinality);
+                .map(ManagedObject::getMementoElseFail);
     }
 
     private Can<ObjectMemento> queryWithAutoComplete(final String term) {
-        val commonContext = getCommonContext();
         val scalarModel = scalarModel();
         val pendingArgs = scalarModel.isParameter()
                 ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         val pendingArgMementos = pendingArgs
-                .map(commonContext::mementoForAnyCardinality);
+                .map(ManagedObject::getMementoElseFail);
 
         if(scalarModel.isParameter()) {
             // recover any pendingArgs
@@ -100,7 +100,7 @@ extends ChoiceProviderAbstractForScalarModel {
 
         return scalarModel
                 .getAutoComplete(term)
-                .map(commonContext::mementoForSingle);
+                .map(ManagedObject::getMementoElseFail);
     }
 
     private Can<ManagedObject> reconstructPendingArgs(

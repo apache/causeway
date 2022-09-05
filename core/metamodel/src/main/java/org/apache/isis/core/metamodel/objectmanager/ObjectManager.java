@@ -69,6 +69,9 @@ public interface ObjectManager extends HasMetaModelContext {
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
     }
 
+    default ManagedObject demementify(final ObjectMemento memento) {
+        return loadObjectElseFail(memento.getBookmark());
+    }
     ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento);
 
     // -- SHORTCUTS

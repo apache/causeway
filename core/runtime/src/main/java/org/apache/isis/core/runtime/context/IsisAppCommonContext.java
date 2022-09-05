@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
@@ -36,12 +35,9 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -72,9 +68,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
     @Getter(lazy = true)
     private final InteractionLayerTracker interactionLayerTracker = lookupServiceElseFail(InteractionLayerTracker.class);
 
-    @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);
-
     public Optional<MessageBroker> getMessageBroker() {
         return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
     }
@@ -104,20 +97,8 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
 
-    public ObjectMemento mementoForSingle(final ManagedObject adapter) {
-        return getMementoService().mementoForSingle(adapter);
-    }
-
-    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject adapter) {
-        return getMementoService().mementoForAnyCardinality(adapter);
-    }
-
-    public ObjectMemento mementoForBookmark(final Bookmark bookmark) {
-        return getMementoService().mementoForBookmark(bookmark);
-    }
-
     public ManagedObject reconstructObject(final ObjectMemento memento) {
-        return getMementoService().reconstructObject(memento);
+        return getObjectManager().demementify(memento);
     }
 
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
@@ -136,10 +117,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
 
         default SpecificationLoader getSpecificationLoader() {
             return getCommonContext().getSpecificationLoader();
-        }
-
-        default ObjectMementoService getMementoService() {
-            return getCommonContext().getMementoService();
         }
 
         default ServiceInjector getServiceInjector() {
