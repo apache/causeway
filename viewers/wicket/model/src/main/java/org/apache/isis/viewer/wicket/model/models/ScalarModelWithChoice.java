@@ -20,22 +20,24 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+
+
 
 public interface ScalarModelWithChoice<T>
 extends
     IModel<T>,
-    HasCommonContext {
+    HasMetaModelContext {
 
     ScalarModel scalarModel();
 
     default ManagedValue pendingValue() { return scalarModel().proposedValue(); }
 
     @Override
-    default IsisAppCommonContext getCommonContext() {
-        return scalarModel().getCommonContext();
+    default MetaModelContext getMetaModelContext() {
+        return scalarModel().getMetaModelContext();
     }
 
 }

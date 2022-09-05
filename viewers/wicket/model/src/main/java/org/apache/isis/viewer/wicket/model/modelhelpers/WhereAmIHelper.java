@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.model.modelhelpers;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 import lombok.val;
@@ -34,19 +34,19 @@ import lombok.val;
  */
 public class WhereAmIHelper {
 
-    public static WhereAmIHelper of(EntityModel startOfChain) {
+    public static WhereAmIHelper of(final EntityModel startOfChain) {
         return new WhereAmIHelper(startOfChain);
     }
 
     private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
     private final EntityModel startOfChain;
-    private final IsisAppCommonContext commonContext;
+    private final MetaModelContext commonContext;
 
     private final boolean isWhereAmIEnabled;
 
     public WhereAmIHelper(final EntityModel startOfChain) {
         this.startOfChain = startOfChain;
-        this.commonContext = startOfChain.getCommonContext();
+        this.commonContext = startOfChain.getMetaModelContext();
 
         val settings = commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs();
         this.isWhereAmIEnabled = settings.isEnabled();
@@ -93,7 +93,7 @@ public class WhereAmIHelper {
 
     // -- HELPER
 
-    private EntityModel toEntityModel(Object domainObject) {
+    private EntityModel toEntityModel(final Object domainObject) {
         val objectAdapter = commonContext.getObjectManager().adapt(domainObject);
         return EntityModel.ofAdapter(commonContext, objectAdapter);
     }

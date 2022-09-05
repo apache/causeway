@@ -20,12 +20,12 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.blob;
 
 import java.io.ByteArrayInputStream;
 
-import org.springframework.lang.Nullable;
-
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.server.InputStreamFactory;
 import com.vaadin.flow.server.StreamResource;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
 

@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -54,6 +55,10 @@ public interface Bookmarkable {
      *  is supported and a {@link Bookmark} is available.
      */
     Optional<ObjectMemento> getMemento();
+    default ObjectMemento getMementoElseFail() {
+        return getMemento()
+                .orElseThrow(()->_Exceptions.illegalState("failed to create memento for %s", this));
+    }
 
     // -- SPECIAL SUB INTERFACES
 

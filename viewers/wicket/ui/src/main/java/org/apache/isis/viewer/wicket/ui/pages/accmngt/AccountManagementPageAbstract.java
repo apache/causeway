@@ -93,12 +93,12 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
 
     private void addPageTitle() {
-        val applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
+        val applicationName = getWicketViewerSettings().getApplication().getName();
         Wkt.labelAdd(this, ID_PAGE_TITLE, applicationName);
     }
 
     private void addApplicationName(final MarkupContainer parent) {
-        val branding = super.getCommonContext()
+        val branding = super.getMetaModelContext()
                 .lookupServiceElseFail(BrandingUiService.class)
                 .getSignInBranding();
         val brandLogo = new BrandLogo("brandLogo", branding);
@@ -113,10 +113,10 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        getConfiguration().getViewer().getWicket().getApplication().getCss()
+        getWicketViewerSettings().getApplication().getCss()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
 
-        getConfiguration().getViewer().getWicket().getApplication().getJs()
+        getWicketViewerSettings().getApplication().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 

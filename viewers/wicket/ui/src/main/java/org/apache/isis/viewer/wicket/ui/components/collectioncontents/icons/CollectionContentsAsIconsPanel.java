@@ -58,7 +58,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         add(entityInstances);
         for (val adapter : visibleAdapters) {
             final String childId = entityInstances.newChildId();
-            final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
+            final EntityModel entityModel = EntityModel.ofAdapter(super.getMetaModelContext(), adapter);
             final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);
             entityInstances.add(entitySummaryPanel);
         }

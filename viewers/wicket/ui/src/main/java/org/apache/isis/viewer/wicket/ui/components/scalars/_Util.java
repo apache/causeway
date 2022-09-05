@@ -135,8 +135,7 @@ class _Util {
             // seeing this code-path particularly with enum choices
             return Optional.ofNullable(
                     scalarModel
-                        .getCommonContext()
-                        .reconstructObject((ObjectMemento)valueObject));
+                        .getObjectManager().demementify((ObjectMemento)valueObject));
         }
 
         return Optional.ofNullable(
@@ -169,7 +168,7 @@ class _Util {
 //            final IValidatable<Object> validatable,
 //            final ScalarModel scalarModel){
 //        return mementoForProposedValue(validatable, scalarModel)
-//                .map(scalarModel.getCommonContext()::reconstructObject);
+//                .map(scalarModel.getMetaModelContext()::reconstructObject);
 //    }
 //
 //    private Optional<ObjectMemento> mementoForProposedValue(

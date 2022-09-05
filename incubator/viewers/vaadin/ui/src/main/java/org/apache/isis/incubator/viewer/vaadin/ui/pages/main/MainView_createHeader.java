@@ -29,8 +29,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
@@ -42,7 +42,7 @@ import lombok.val;
 final class MainView_createHeader {
 
     static Component createHeader(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final HeaderUiModel headerUiModel,
             final Consumer<ManagedAction> menuActionEventHandler,
             final Runnable onHomepageLinkClick) {
@@ -87,7 +87,7 @@ final class MainView_createHeader {
 
 
     private static Component createTitleOrLogo(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final BrandingUiModel brandingUiModel) {
 
 

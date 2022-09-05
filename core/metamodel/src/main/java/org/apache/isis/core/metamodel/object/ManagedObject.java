@@ -556,12 +556,15 @@ extends
      */
     private static ManagedObject adaptScalarInternal(
             final @Nullable ObjectSpecification guess,
-            final @NonNull Object pojo,
+            final @Nullable Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfAny) {
 
         MmAssertionUtil.assertPojoNotWrapped(pojo);
         MmAssertionUtil.assertPojoIsScalar(pojo);
-        val spec = MmSpecUtil.quicklyResolveObjectSpecification(guess, pojo.getClass());
+        val spec = pojo!=null
+                && guess!=null
+                    ? MmSpecUtil.quicklyResolveObjectSpecification(guess, pojo.getClass())
+                    : guess;
 
         val specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
@@ -570,6 +573,8 @@ extends
         switch(specialization) {
         case UNSPECIFIED:
             return unspecified();
+        case EMPTY:
+            return empty(spec);
         case VALUE:
             return value(spec, pojo);
         case SERVICE:
@@ -582,8 +587,6 @@ extends
             return mixin(spec, pojo);
         case OTHER:
             return other(spec, pojo);
-        // unreachable (in this context)
-        case EMPTY:
         case PACKED:
             throw _Exceptions.unexpectedCodeReach();
         }

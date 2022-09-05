@@ -24,8 +24,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -48,24 +48,24 @@ implements GenericColumn {
 
     private static final long serialVersionUID = 1L;
 
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
     private transient ComponentFactoryRegistry componentRegistry;
 
     protected GenericColumnAbstract(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final String columnName) {
         this(commonContext, Model.of(columnName), null);
     }
 
     protected GenericColumnAbstract(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final IModel<String> columnNameModel,
             final String sortColumn) {
         super(columnNameModel, sortColumn);
         this.commonContext = commonContext;
     }
 
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 

@@ -28,7 +28,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -41,6 +44,7 @@ import org.apache.isis.commons.internal.ioc._IocContainer;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -54,10 +58,10 @@ import lombok.Getter;
 import lombok.val;
 
 
-class MetaModelContext_usingIoc implements MetaModelContext {
+class MetaModelContext_usingSpring implements MetaModelContext {
 
     private final _IocContainer iocContainer;
-    public MetaModelContext_usingIoc(final _IocContainer iocContainer) {
+    public MetaModelContext_usingSpring(final _IocContainer iocContainer) {
         this.iocContainer = iocContainer;
     }
 
@@ -138,6 +142,21 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     private final MemberExecutorService memberExecutor =
     getSingletonElseFail(MemberExecutorService.class);
 
+    @Getter(lazy = true)
+    private final WebAppContextPath webAppContextPath =
+    getSingletonElseFail(WebAppContextPath.class);
+
+    @Getter(lazy = true)
+    private final MenuBarsService menuBarsService =
+    getSingletonElseFail(MenuBarsService.class);
+
+    @Getter(lazy = true)
+    private final MessageService messageService =
+    getSingletonElseFail(MessageService.class);
+
+    @Getter(lazy = true)
+    private final InteractionLayerTracker interactionLayerTracker =
+    getSingletonElseFail(InteractionLayerTracker.class);
 
     @Override
     public final ManagedObject getHomePageAdapter() {

@@ -30,11 +30,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.locale.UserLocale;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import lombok.val;
 
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
@@ -43,7 +43,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6I
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
 import de.agilecoders.wicket.jquery.Config;
-import lombok.val;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * A text input field that is used as a date or date/time picker.
@@ -72,7 +73,7 @@ implements IConverter<T> {
         setOutputMarkupId(true);
 
         this.config = createDatePickerConfig(
-                scalarModel.getCommonContext(),
+                scalarModel.getMetaModelContext(),
                 ((ConverterBasedOnValueSemantics<T>) converter).getEditingPattern(),
                 !scalarModel.isRequired());
 
@@ -172,7 +173,7 @@ implements IConverter<T> {
     // -- HELPER
 
     private DateTimeConfig createDatePickerConfig(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final String temporalPattern,
             final boolean isInputNullable) {
         val config = new DateTimeConfig();

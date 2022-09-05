@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -49,7 +48,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -66,11 +64,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext mmc;
     @Inject private ObjectManager objectManager;
-
-    @Override
-    public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
-        return _ObjectMementoForScalar.createPersistent(bookmark, specificationLoader);
-    }
 
     @Override
     public ObjectMemento mementoForSingle(@Nullable final ManagedObject adapter) {

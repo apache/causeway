@@ -27,10 +27,10 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
@@ -53,7 +53,7 @@ implements CancelHintRequired  {
 
     public EntityLinkSimplePanel(final String id, final IModel<ManagedObject> model) {
         super(id, model);
-        _Assert.assertTrue(model instanceof HasCommonContext);
+        _Assert.assertTrue(model instanceof HasMetaModelContext);
         setType(ManagedObject.class);
     }
 
@@ -113,18 +113,18 @@ implements CancelHintRequired  {
      * Translate without context: Tooltips, Button-Labels, etc.
      */
     public final String translate(final String input) {
-        return getCommonContext().getTranslationService()
+        return getMetaModelContext().getTranslationService()
                 .translate(TranslationContext.empty(), input);
     }
 
     // -- DEPENDENCIES
 
     private PlaceholderRenderService getPlaceholderRenderService() {
-        return getCommonContext().getPlaceholderRenderService();
+        return getMetaModelContext().getPlaceholderRenderService();
     }
 
-    private IsisAppCommonContext getCommonContext() {
-        return ((HasCommonContext)getModel()).getCommonContext();
+    private MetaModelContext getMetaModelContext() {
+        return ((HasMetaModelContext)getModel()).getMetaModelContext();
     }
 
 

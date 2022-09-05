@@ -75,13 +75,13 @@ public abstract class MenuActionPanel extends PanelBase {
 
     private void addFolderItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        ServiceActionUtil.addFolderItem(super.getCommonContext(), menuItem, listItem, parent);
+        ServiceActionUtil.addFolderItem(super.getMetaModelContext(), menuItem, listItem, parent);
     }
 
     private void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
         ServiceActionUtil.addLeafItem(
-                super.getCommonContext(), menuItem, listItem, parent);
+                super.getMetaModelContext(), menuItem, listItem, parent);
     }
 
     private void addSpacer(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {

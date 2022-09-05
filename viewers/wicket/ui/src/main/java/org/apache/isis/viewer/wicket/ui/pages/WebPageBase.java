@@ -27,10 +27,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
@@ -39,16 +40,16 @@ import org.apache.isis.viewer.wicket.model.util.WktContext;
  */
 public abstract class WebPageBase
 extends WebPage
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
     private transient InteractionService interactionService;
 
-    protected WebPageBase(PageParameters parameters) {
+    protected WebPageBase(final PageParameters parameters) {
         super(parameters);
     }
 
@@ -57,15 +58,15 @@ implements HasCommonContext {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         renderFavicon(response);
     }
 
     // -- FAVICON SUPPORT
 
-    protected void renderFavicon(IHeaderResponse response) {
-        getConfiguration().getViewer().getWicket().getApplication().getFaviconUrl()
+    protected void renderFavicon(final IHeaderResponse response) {
+        getWicketViewerSettings().getApplication().getFaviconUrl()
         .filter(_Strings::isNotEmpty)
         .map(getWebAppContextPath()::prependContextPathIfLocal)
         .ifPresent(faviconUrl->{
@@ -76,15 +77,16 @@ implements HasCommonContext {
     // -- DEPENDENCIES
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
     @Override
     public IsisConfiguration getConfiguration() {
-        return getCommonContext().getConfiguration();
+        return getMetaModelContext().getConfiguration();
     }
 
+    @Override
     public WebAppContextPath getWebAppContextPath() {
         return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
@@ -97,16 +99,21 @@ implements HasCommonContext {
         return interactionService = computeIfAbsent(InteractionService.class, interactionService);
     }
 
+    @Override
     public IsisSystemEnvironment getSystemEnvironment() {
-        return getCommonContext().getSystemEnvironment();
+        return getMetaModelContext().getSystemEnvironment();
+    }
+
+    protected Wicket getWicketViewerSettings() {
+        return getConfiguration().getViewer().getWicket();
     }
 
     // -- HELPER
 
-    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+    private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                : getCommonContext().lookupServiceElseFail(type);
+                : getMetaModelContext().lookupServiceElseFail(type);
     }
 
 }

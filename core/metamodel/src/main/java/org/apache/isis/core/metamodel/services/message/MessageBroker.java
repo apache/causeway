@@ -16,43 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components.clob;
+package org.apache.isis.core.metamodel.services.message;
 
-import com.vaadin.flow.component.customfield.CustomField;
+import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.apache.isis.commons.collections.Can;
 
-import org.apache.isis.applib.value.Clob;
+public interface MessageBroker {
 
-// TODO just a stub yet
-//
-public class ClobField extends CustomField<Clob> {
+    void reset();
 
-    private static final long serialVersionUID = 1L;
+    Can<String> drainMessages();
 
-    private Clob clob;
+    void addMessage(String message);
 
-    public ClobField(String label) {
-        super();
-        setLabel(label);
-        // ...
-    }
+    Can<String> drainWarnings();
 
-    @Override
-    protected Clob generateModelValue() {
-        return clob;
-    }
+    void addWarning(String warning);
 
-    @Override
-    protected void setPresentationValue(@Nullable Clob clob) {
-        this.clob = clob;
+    Optional<String> drainApplicationError();
 
-        if(clob==null) {
-            // ...
-            return;
-        }
-
-        // ...
-    }
+    void setApplicationError(String applicationError);
 
 }

@@ -20,25 +20,25 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.val;
 
 public final class CommonContextModel
-extends LoadableDetachableModel<IsisAppCommonContext> {
+extends LoadableDetachableModel<MetaModelContext> {
 
     private static final long serialVersionUID = 1L;
 
-    public static CommonContextModel wrap(final IsisAppCommonContext commonContext) {
+    public static CommonContextModel wrap(final MetaModelContext commonContext) {
         val model = new CommonContextModel();
         model.setObject(commonContext);
         return model;
     }
 
     @Override
-    protected IsisAppCommonContext load() {
-        return WktContext.getCommonContext();
+    protected MetaModelContext load() {
+        return WktContext.getMetaModelContext();
     }
 
 }

@@ -45,7 +45,7 @@ extends FormAbstract<ManagedObject>{
 
     protected OkCancelForm(final String id, final IModel<ManagedObject> model) {
         super(id, model);
-        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, ()->translate("OK"), getSettings(), this::onOkSubmitted);
+        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, ()->translate("OK"), getWicketViewerSettings(), this::onOkSubmitted);
         cancelButton = Wkt.buttonAdd(this, ID_CANCEL_BUTTON, ()->translate("Cancel"), (button, target)->{
             onCancelSubmitted(target);
         });
@@ -60,7 +60,7 @@ extends FormAbstract<ManagedObject>{
     protected abstract void onCancelSubmitted(AjaxRequestTarget target);
 
     protected void configureOkButton(final AjaxButton okButton) {
-        okButton.add(new JGrowlBehaviour(super.getCommonContext()));
+        okButton.add(new JGrowlBehaviour(getMetaModelContext()));
     }
 
     protected void configureCancelButton(final AjaxButton cancelButton) {

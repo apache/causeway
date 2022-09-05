@@ -55,10 +55,10 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.MessageBroker;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -79,7 +79,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Log4j2
-public class WebRequestCycleForIsis implements IRequestCycleListener {
+public class WebRequestCycleForIsis
+implements
+    HasMetaModelContext,
+    IRequestCycleListener {
 
     // introduced (ISIS-1922) to handle render 'session refreshed' messages after session was expired
     private static enum SessionLifecyclePhase {
@@ -114,7 +117,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
 
     private PageClassRegistry pageClassRegistry;
-    private IsisAppCommonContext commonContext;
+    private MetaModelContext commonContext;
 
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
@@ -142,7 +145,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             return;
         }
 
-        val commonContext = getCommonContext();
+        val commonContext = getMetaModelContext();
         val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
         // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
         interactionService.openInteraction(interactionContext);
@@ -168,7 +171,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         } else if(handler instanceof RenderPageRequestHandler) {
 
             // using side-effect free access to MM validation result
-            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+            val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
             .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));
 
             if(validationResult.hasFailures()) {
@@ -224,7 +227,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         log.debug("onEndRequest");
 
-        getCommonContext().lookupService(InteractionService.class).ifPresent(
+        getMetaModelContext().lookupService(InteractionService.class).ifPresent(
             InteractionService::closeInteractionLayers
         );
 
@@ -243,7 +246,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         log.debug("onException {}", ex.getClass().getSimpleName());
 
         // using side-effect free access to MM validation result
-        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+        val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
@@ -270,7 +273,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             val exceptionRecognizerService = getExceptionRecognizerService();
             val recognizedIfAny = exceptionRecognizerService.recognize(ex);
             if(recognizedIfAny.isPresent()) {
-                addWarning(recognizedIfAny.get().toMessage(getCommonContext().getTranslationService()));
+                addWarning(recognizedIfAny.get().toMessage(getMetaModelContext().getTranslationService()));
                 return respondGracefully(cycle);
             }
 
@@ -335,7 +338,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if(text == null) {
             return null;
         }
-        return getCommonContext().getTranslationService()
+        return getMetaModelContext().getTranslationService()
                 .translate(
                 		TranslationContext.forClassName(WebRequestCycleForIsis.class),
                 		text);
@@ -356,22 +359,22 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     protected IRequestablePage errorPageFor(final Exception ex) {
 
-        val commmonContext = getCommonContext();
+        val commmonContext = getMetaModelContext();
 
         if(commmonContext==null) {
-            log.warn("Unable to obtain the IsisAppCommonContext (no session?)");
+            log.warn("Unable to obtain the MetaModelContext (no session?)");
             return null;
         }
 
         // using side-effect free access to MM validation result
-        val validationResult = getCommonContext().getSpecificationLoader().getValidationResult()
+        val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
         }
 
-        val exceptionRecognizerService = getCommonContext().getServiceRegistry()
+        val exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
 
         final Optional<Recognition> recognition = exceptionRecognizerService
@@ -436,7 +439,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if (containerRequest instanceof HttpServletRequest) {
             val cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
             val cookieKey = _Strings.nullToEmpty(
-                    getCommonContext().getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
+                    getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
 
             for (val cookie : cookies) {
                 if (cookieKey.equals(cookie.getName())) {
@@ -454,20 +457,17 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     // -- DEPENDENCIES
 
-    public IsisAppCommonContext getCommonContext() {
+    @Override
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
-        return getCommonContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
+        return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
 
     private boolean isInInteraction() {
-        return getCommonContext().getInteractionLayerTracker().isInInteraction();
-    }
-
-    private Optional<MessageBroker> getMessageBroker() {
-        return getCommonContext().getMessageBroker();
+        return getMetaModelContext().getInteractionLayerTracker().isInInteraction();
     }
 
     private AuthenticatedWebSession getWicketAuthenticatedWebSession() {

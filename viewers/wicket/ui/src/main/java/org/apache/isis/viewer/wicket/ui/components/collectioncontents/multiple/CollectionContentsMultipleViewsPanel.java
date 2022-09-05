@@ -72,7 +72,7 @@ implements CollectionCountProvider {
 
         final ComponentHintKey selectedItemSessionAttribute =
                 model.getVariant().isParented()
-                    ? ComponentHintKey.create(super.getCommonContext(), this, UIHINT_VIEW)
+                    ? ComponentHintKey.create(super.getMetaModelContext(), this, UIHINT_VIEW)
                     : null;
 
         selectorHelper = new CollectionPresentationSelectorHelper(

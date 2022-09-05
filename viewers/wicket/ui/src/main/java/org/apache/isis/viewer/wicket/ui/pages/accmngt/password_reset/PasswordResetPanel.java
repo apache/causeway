@@ -69,7 +69,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
 
         form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
-        val commonContext = super.getCommonContext();
+        val commonContext = super.getMetaModelContext();
 
         Button signUpButton = new Button("passwordResetSubmit") {
             private static final long serialVersionUID = -6355836432811022200L;

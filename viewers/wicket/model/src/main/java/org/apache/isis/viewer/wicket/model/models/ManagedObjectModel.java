@@ -26,14 +26,13 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -50,12 +49,12 @@ extends ModelAbstract<ManagedObject> {
     private ObjectMemento memento;
 
     protected ManagedObjectModel(
-            @NonNull final IsisAppCommonContext commonContext) {
+            @NonNull final MetaModelContext commonContext) {
         this(commonContext, null);
     }
 
     protected ManagedObjectModel(
-            @NonNull final IsisAppCommonContext commonContext,
+            @NonNull final MetaModelContext commonContext,
             @Nullable final ObjectMemento initialMemento) {
 
         super(commonContext);
@@ -68,7 +67,7 @@ extends ModelAbstract<ManagedObject> {
         if (memento == null) {
             return null;
         }
-        return super.getCommonContext().reconstructObject(memento);
+        return getObjectManager().demementify(memento);
     }
 
     @Override
@@ -85,7 +84,7 @@ extends ModelAbstract<ManagedObject> {
         if(adapter instanceof PackedManagedObject) {
             setObjectCollection((PackedManagedObject)adapter);
         } else {
-            memento = super.getMementoService().mementoForSingle(adapter);
+            memento = adapter.getMemento().orElseThrow();
         }
     }
 
@@ -98,12 +97,7 @@ extends ModelAbstract<ManagedObject> {
         }
 
         super.setObject(adapter);
-
-        val pojos = adapter.getPojo();
-        memento = super.getMementoService()
-                .mementoForPojos(getLogicalElementType()
-                            .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()),
-                        _Casts.uncheckedCast(pojos));
+        memento = adapter.getMemento().orElseThrow();
     }
 
     public final Bookmark asBookmarkIfSupported() {
@@ -182,7 +176,7 @@ extends ModelAbstract<ManagedObject> {
 //    }
 //
 //    private void memento(final ObjectMemento memento) {
-//        val manageObject = super.getCommonContext().reconstructObject(memento);
+//        val manageObject = super.getMetaModelContext().reconstructObject(memento);
 //        super.setObject(manageObject);
 //        this.memento = memento;
 //        this.elementTypeSpec = null; // invalidate

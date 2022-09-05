@@ -19,7 +19,8 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+
 
 /**
  * Model providing welcome text.
@@ -29,13 +30,13 @@ extends ModelAbstract<IsisConfiguration.Viewer.Wicket.Welcome> {
 
     private static final long serialVersionUID = 1L;
 
-    public WelcomeModel(final IsisAppCommonContext commonContext) {
+    public WelcomeModel(final MetaModelContext commonContext) {
         super(commonContext);
     }
 
     @Override
     protected IsisConfiguration.Viewer.Wicket.Welcome load() {
-        return getCommonContext().getConfiguration().getViewer().getWicket().getWelcome();
+        return getWicketViewerSettings().getWelcome();
     }
 
 }

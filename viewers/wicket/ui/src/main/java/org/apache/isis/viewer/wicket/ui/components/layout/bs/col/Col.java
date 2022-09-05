@@ -47,8 +47,8 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 

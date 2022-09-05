@@ -18,7 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.AccessLevel;
@@ -43,8 +44,8 @@ extends ChoiceProviderAbstract {
     // -- DEPS
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
-        return scalarModel().getCommonContext();
+    public MetaModelContext getMetaModelContext() {
+        return scalarModel().getMetaModelContext();
     }
 
 }

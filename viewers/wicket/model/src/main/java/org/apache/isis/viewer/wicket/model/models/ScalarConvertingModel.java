@@ -46,7 +46,7 @@ extends ChainingModel<T> {
         val scalarModel = scalarModel();
         val value = toScalarValue(modelValue);
         val objectAdapter = value != null
-                ? scalarModel().getCommonContext().getObjectManager().adapt(value)
+                ? scalarModel().getMetaModelContext().getObjectManager().adapt(value)
                 : ManagedObject.empty(scalarModel.getScalarTypeSpec());
         scalarModel.setObject(objectAdapter);
     }

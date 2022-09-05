@@ -33,7 +33,6 @@ import com.vaadin.flow.router.RouteAlias;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
@@ -58,7 +57,7 @@ implements BeforeEnterObserver {
 
     private static final long serialVersionUID = 1L;
 
-    private final transient IsisAppCommonContext commonContext;
+    private final transient MetaModelContext commonContext;
     private final transient MetaModelContext metaModelContext;
     private final transient UiContextVaa uiContext;
     private final transient UiActionHandlerVaa uiActionHandler;
@@ -80,7 +79,7 @@ implements BeforeEnterObserver {
             final UiComponentFactoryVaa uiComponentFactory) {
 
         this.metaModelContext = metaModelContext;
-        this.commonContext = IsisAppCommonContext.of(metaModelContext);
+        this.commonContext = metaModelContext;
         this.uiActionHandler = uiActionHandler;
         this.headerUiService = headerUiService;
         this.uiContext = uiContext;
@@ -91,7 +90,7 @@ implements BeforeEnterObserver {
     }
 
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
+    public void beforeEnter(final BeforeEnterEvent event) {
 
         val faStyleSheet = LocalResourceUtil.ResourceDescriptor.webjars(IconDecorator.FONTAWESOME_RESOURCE);
         LocalResourceUtil.addStyleSheet(faStyleSheet);
@@ -110,7 +109,7 @@ implements BeforeEnterObserver {
         renderHomepage();
     }
 
-    private void replaceContent(Component component) {
+    private void replaceContent(final Component component) {
         pageContent.removeAll();
         pageContent.add(component);
     }
@@ -120,7 +119,7 @@ implements BeforeEnterObserver {
         uiContext.route(metaModelContext::getHomePageAdapter);
     }
 
-    private Component uiComponentForActionResult(ManagedObject actionResult) {
+    private Component uiComponentForActionResult(final ManagedObject actionResult) {
         if (actionResult.getSpecification().isNonScalar()) {
             return TableViewVaa.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {

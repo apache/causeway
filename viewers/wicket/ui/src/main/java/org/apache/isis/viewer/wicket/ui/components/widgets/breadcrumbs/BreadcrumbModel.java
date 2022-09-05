@@ -28,7 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -42,9 +42,9 @@ public class BreadcrumbModel implements Serializable {
     private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
     private final List<Bookmark> list = _Lists.newArrayList();
 
-    private final transient IsisAppCommonContext commonContext;
+    private final transient MetaModelContext commonContext;
 
-    public BreadcrumbModel(final IsisAppCommonContext commonContext) {
+    public BreadcrumbModel(final MetaModelContext commonContext) {
         super();
         this.commonContext = commonContext;
     }

@@ -31,8 +31,8 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.Col;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 public class Row
 extends PanelAbstract<ManagedObject, EntityModel>

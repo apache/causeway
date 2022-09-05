@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -43,7 +43,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
 
     @Mock protected Request mockRequest;
     @Mock protected AuthenticationManager mockAuthMgr;
-    @Mock protected IsisAppCommonContext mockCommonContext;
+    @Mock protected MetaModelContext mockCommonContext;
     @Mock protected InteractionService mockInteractionService;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
@@ -82,11 +82,11 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
             private static final long serialVersionUID = 1L;
 
             {
-                commonContext = mockCommonContext;
+                metaModelContext = mockCommonContext;
             }
 
             @Override
-            protected AuthenticationManager getAuthenticationManager() {
+            public AuthenticationManager getAuthenticationManager() {
                 return mockAuthMgr;
             }
         };

@@ -43,7 +43,7 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
     private RegistrationFormPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
 
-        boolean suppressSignUp = getConfiguration().getViewer().getWicket().isSuppressSignUp();
+        boolean suppressSignUp = getWicketViewerSettings().isSuppressSignUp();
         if(suppressSignUp) {
             pageNavigationService.interceptAndRestartAt(PageType.SIGN_IN);
         }

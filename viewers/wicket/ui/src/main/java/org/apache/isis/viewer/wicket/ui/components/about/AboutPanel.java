@@ -79,7 +79,7 @@ extends PanelAbstract<IsisConfiguration.Viewer.Wicket.Application, AboutModel> {
         if(jarManifestModel == null) {
             Provider<InputStream> metaInfManifestProvider =
                     () -> servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
-            jarManifestModel = new JarManifestModel(super.getCommonContext(), metaInfManifestProvider);
+            jarManifestModel = new JarManifestModel(super.getMetaModelContext(), metaInfManifestProvider);
         }
 
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));

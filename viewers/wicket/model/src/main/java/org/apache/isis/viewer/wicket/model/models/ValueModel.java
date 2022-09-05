@@ -20,12 +20,12 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.memento.ObjectMemberMemento;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.NonNull;
 
@@ -40,7 +40,7 @@ extends ModelAbstract<ManagedObject> {
     // -- FACTORIES
 
     public static ValueModel of(
-            final @NonNull  IsisAppCommonContext commonContext,
+            final @NonNull  MetaModelContext commonContext,
             final @NonNull  ObjectMember objectMember,
             final @Nullable ManagedObject valueAdapter) {
         return new ValueModel(commonContext, objectMember, valueAdapter);
@@ -51,17 +51,17 @@ extends ModelAbstract<ManagedObject> {
     private final ObjectMemento adapterMemento;
 
     private ValueModel(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final @NonNull  ObjectMember objectMember,
             final @Nullable ManagedObject valueAdapter) {
         super(commonContext);
         this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
-        adapterMemento = super.getMementoService().mementoForSingle(valueAdapter);
+        adapterMemento = valueAdapter.getMemento().orElseThrow();
     }
 
     @Override
     protected ManagedObject load() {
-        return getCommonContext().reconstructObject(adapterMemento);
+        return getObjectManager().demementify(adapterMemento);
     }
 
     // -- META MODEL
@@ -72,7 +72,7 @@ extends ModelAbstract<ManagedObject> {
      * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
      */
     public ObjectMember getObjectMember() {
-        return objectMemberMemento.getObjectMember(getCommonContext()::getSpecificationLoader);
+        return objectMemberMemento.getObjectMember(getMetaModelContext()::getSpecificationLoader);
     }
 
 //    @SuppressWarnings("unchecked")

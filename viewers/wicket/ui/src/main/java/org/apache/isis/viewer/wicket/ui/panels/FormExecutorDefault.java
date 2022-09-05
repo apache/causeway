@@ -27,15 +27,13 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.exceprecog.Recognition;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
@@ -48,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public final class FormExecutorDefault
-implements FormExecutor {
+implements FormExecutor, HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -176,7 +174,7 @@ implements FormExecutor {
             // XXX note: on property edit, triggers SQL update (on JPA)
             resultResponse
                 .getHandlingStrategy()
-                .handleResults(getCommonContext(), resultResponse);
+                .handleResults(getMetaModelContext(), resultResponse);
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log("[EXECUTOR] ... return\n"
@@ -235,31 +233,20 @@ implements FormExecutor {
 
     // -- DEPENDENCIES
 
-    private IsisAppCommonContext getCommonContext() {
+    @Override
+    public MetaModelContext getMetaModelContext() {
         return actionOrPropertyModel
                 .fold(
-                        act->act.getCommonContext(),
-                        prop->prop.getCommonContext());
+                        act->act.getMetaModelContext(),
+                        prop->prop.getMetaModelContext());
     }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
         return getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
 
-    private TranslationService getTranslationService() {
-        return getCommonContext().getTranslationService();
-    }
-
-    private MessageService getMessageService() {
-        return getServiceRegistry().lookupServiceElseFail(MessageService.class);
-    }
-
-    private ServiceRegistry getServiceRegistry() {
-        return getCommonContext().getServiceRegistry();
-    }
-
     protected final Wicket getSettings() {
-        return getCommonContext().getConfiguration().getViewer().getWicket();
+        return getConfiguration().getViewer().getWicket();
     }
 
 

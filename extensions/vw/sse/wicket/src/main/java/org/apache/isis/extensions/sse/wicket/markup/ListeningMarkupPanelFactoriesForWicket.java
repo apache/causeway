@@ -54,7 +54,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
             val markupComponent = new ListeningMarkupComponent(
                     id, model, getEventStreamResource(model));
             markupComponent.setEnabled(false);
-            return getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
+            return getMetaModelContext().getServiceInjector().injectServicesInto(markupComponent);
         }
 
         // -- HELPER
@@ -80,7 +80,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
         @Override
         protected MarkupComponent newMarkupComponent(final String id, final ValueModel model) {
-            return getCommonContext()
+            return getMetaModelContext()
                     .getServiceInjector()
                     .injectServicesInto(new ListeningMarkupComponent(id, model));
         }

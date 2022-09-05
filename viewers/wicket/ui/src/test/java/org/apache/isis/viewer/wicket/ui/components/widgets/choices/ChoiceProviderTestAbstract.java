@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtimeservices.memento.ObjectMementoServiceDefault;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -66,7 +65,7 @@ abstract class ChoiceProviderTestAbstract {
         when(mockScalarModel.getChoices()).thenReturn(choices);
         when(mockScalarModel.isRequired()).thenReturn(isRequired);
         when(mockScalarModel.hasChoices()).thenReturn(true);
-        when(mockScalarModel.getCommonContext()).thenReturn(IsisAppCommonContext.of(mmc));
+        when(mockScalarModel.getMetaModelContext()).thenReturn(mmc);
         return mockScalarModel;
     }
 

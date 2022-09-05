@@ -25,8 +25,8 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuVisitor;
@@ -45,7 +45,7 @@ import lombok.experimental.UtilityClass;
 public final class ServiceActionUtil {
 
     static void addLeafItem(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final CssMenuItem menuItem,
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
@@ -70,7 +70,7 @@ public final class ServiceActionUtil {
     }
 
     static void addFolderItem(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final CssMenuItem subMenuItem,
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
@@ -98,7 +98,7 @@ public final class ServiceActionUtil {
     @RequiredArgsConstructor(staticName = "of")
     private static class MenuBuilderWkt implements MenuVisitor {
 
-        private final IsisAppCommonContext commonContext;
+        private final MetaModelContext commonContext;
         private final Consumer<CssMenuItem> onNewMenuItem;
 
         private CssMenuItem currentTopLevelMenu = null;
@@ -143,7 +143,7 @@ public final class ServiceActionUtil {
     }
 
     public static void buildMenu(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
 

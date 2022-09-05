@@ -28,16 +28,11 @@ import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.interaction.session.MessageBroker;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.isis.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -57,16 +52,14 @@ import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
  */
 public class PanelBase<T>
 extends GenericPanel<T>
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
     private transient WebAppContextPath webAppContextPath;
-    private transient IsisConfiguration isisConfiguration;
     private transient PageClassRegistry pageClassRegistry;
     private transient ImageResourceCache imageCache;
-    private transient MetaModelContext metaModelContext;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
     private transient InteractionService interactionService;
     private transient TranslationService translationService;
     private transient LanguageProvider localeProvider;
@@ -85,20 +78,17 @@ implements HasCommonContext {
     }
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
     public Wicket getWicketViewerSettings() {
-        return getIsisConfiguration().getViewer().getWicket();
+        return getConfiguration().getViewer().getWicket();
     }
 
+    @Override
     public WebAppContextPath getWebAppContextPath() {
         return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
-    }
-
-    public IsisConfiguration getIsisConfiguration() {
-        return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
     }
 
     public PageClassRegistry getPageClassRegistry() {
@@ -109,14 +99,11 @@ implements HasCommonContext {
         return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
     }
 
-    public MetaModelContext getMetaModelContext() {
-        return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
-    }
-
     public InteractionService getInteractionService() {
         return interactionService = computeIfAbsent(InteractionService.class, interactionService);
     }
 
+    @Override
     public TranslationService getTranslationService() {
         return translationService = computeIfAbsent(TranslationService.class, translationService);
     }
@@ -139,16 +126,6 @@ implements HasCommonContext {
 
     protected PageNavigationService getPageNavigationService() {
         return pageNavigationService = computeIfAbsent(PageNavigationService.class, pageNavigationService);
-    }
-
-    protected PlaceholderRenderService getPlaceholderRenderService() {
-        return getCommonContext().getPlaceholderRenderService();
-    }
-
-    protected MessageBroker getMessageBroker() {
-        return getCommonContext().getMessageBroker()
-        .orElseThrow(()->_Exceptions.illegalState(
-                "no MessageBroker available on current session"));
     }
 
     protected HeaderUiModel getHeaderModel() {
@@ -182,13 +159,13 @@ implements HasCommonContext {
     private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : getCommonContext().lookupServiceElseFail(type);
+                        : lookupServiceElseFail(type);
     }
 
     private <X> X computeIfAbsentOrFallback(final Class<X> type, final X existingIfAny, final Supplier<X> fallback) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : getCommonContext().lookupServiceElseFallback(type, fallback);
+                        : lookupServiceElseFallback(type, fallback);
     }
 
 }

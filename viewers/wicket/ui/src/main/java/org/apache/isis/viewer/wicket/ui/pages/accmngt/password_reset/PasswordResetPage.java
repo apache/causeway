@@ -51,7 +51,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
     private PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
 
-        boolean suppressPasswordResetLink = getConfiguration().getViewer().getWicket().isSuppressPasswordReset();
+        boolean suppressPasswordResetLink = getWicketViewerSettings().isSuppressPasswordReset();
         if(suppressPasswordResetLink) {
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
         }

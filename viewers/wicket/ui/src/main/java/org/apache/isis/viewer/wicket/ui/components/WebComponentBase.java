@@ -23,8 +23,8 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.model.util.WktContext;
  */
 public abstract class WebComponentBase
 extends WebComponent
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     public WebComponentBase(final String id) {
         super(id);
@@ -47,10 +47,10 @@ implements HasCommonContext {
 
     private transient IsisConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
@@ -68,7 +68,7 @@ implements HasCommonContext {
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                : getCommonContext().lookupServiceElseFail(type);
+                : getMetaModelContext().lookupServiceElseFail(type);
     }
 
 }

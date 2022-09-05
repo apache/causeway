@@ -19,21 +19,13 @@
 package org.apache.isis.core.metamodel._testing;
 
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 
-import lombok.NonNull;
-
 public class ObjectMementoService_forTesting
 implements ObjectMementoService {
-
-    @Override
-    public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
-        return null;
-    }
 
     @Override
     public ObjectMemento mementoForSingle(final ManagedObject adapter) {

@@ -73,7 +73,7 @@ extends PanelAbstract<Void, IModel<Void>> {
         super.onInitialize();
 
         if(getThemeSupport()==null) {
-            super.getCommonContext().injectServicesInto(this);
+            super.getMetaModelContext().injectServicesInto(this);
         }
 
         final ActiveThemeProvider activeThemeProvider = getActiveThemeProvider();
@@ -155,7 +155,7 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getConfiguration().getViewer().getWicket().getThemes().isShowChooser();
+        boolean shouldShow = getWicketViewerSettings().getThemes().isShowChooser();
         setVisible(shouldShow);
     }
 

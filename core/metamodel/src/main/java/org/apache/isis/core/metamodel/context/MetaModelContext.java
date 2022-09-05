@@ -18,105 +18,22 @@
  */
 package org.apache.isis.core.metamodel.context;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.execution.MemberExecutorService;
-import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 /**
- *
  * @since 2.0
- *
  */
-public interface MetaModelContext {
+public interface MetaModelContext extends HasMetaModelContext {
 
-    IsisSystemEnvironment getSystemEnvironment();
-
-    /**
-     *
-     * Configuration 'beans' with meta-data (IDE-support).
-     *
-     * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
-     *
-     */
-    IsisConfiguration getConfiguration();
-
-    ObjectManager getObjectManager();
-
-    WrapperFactory getWrapperFactory();
-
-    ServiceInjector getServiceInjector();
-
-    ServiceRegistry getServiceRegistry();
-
-    SpecificationLoader getSpecificationLoader();
-
-    default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
-        return getSpecificationLoader().specForType(type);
+    @Override
+    default MetaModelContext getMetaModelContext() {
+        return this;
     }
-
-    default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
-        return getSpecificationLoader().specForTypeElseFail(type);
-    }
-
-    TranslationService getTranslationService();
-
-    AuthorizationManager getAuthorizationManager();
-
-    AuthenticationManager getAuthenticationManager();
-
-    InteractionProvider getInteractionProvider();
-
-    TitleService getTitleService();
-
-    ObjectIconService getObjectIconService();
-
-    RepositoryService getRepositoryService();
-
-    FactoryService getFactoryService();
-
-    MemberExecutorService getMemberExecutor();
-
-    TransactionService getTransactionService();
-
-    PlaceholderRenderService getPlaceholderRenderService();
-
-    ManagedObject getHomePageAdapter();
-
-    // cannot move to ServiceRegistry, because applib does not know ManagedObject
-    Stream<ManagedObject> streamServiceAdapters();
-
-    // cannot move to ServiceRegistry, because applib does not know ManagedObject
-    ManagedObject lookupServiceAdapterById(String serviceId);
 
     // -- EXTRACTORS
 
     public static MetaModelContext from(final ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
     }
-
-
-
 
 }

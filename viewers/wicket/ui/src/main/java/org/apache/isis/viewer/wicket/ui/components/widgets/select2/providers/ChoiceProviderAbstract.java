@@ -26,21 +26,20 @@ import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 
 import lombok.val;
 
 public abstract class ChoiceProviderAbstract
 extends ChoiceProvider<ObjectMemento>
-implements HasCommonContext {
+implements HasMetaModelContext {
     private static final long serialVersionUID = 1L;
 
     /** arbitrary string */
@@ -126,7 +125,7 @@ implements HasCommonContext {
         }
 
         val translationContext = TranslationContext.empty();
-        val translator = getCommonContext().getTranslationService();
+        val translator = getTranslationService();
         val termLower = term.toLowerCase();
 
         return choiceMementos.filter((final ObjectMemento candidateMemento)->{
@@ -148,18 +147,14 @@ implements HasCommonContext {
     // -- DEPENDENCIES
 
     protected final Wicket getSettings() {
-        return getCommonContext().getConfiguration().getViewer().getWicket();
+        return getConfiguration().getViewer().getWicket();
     }
 
     /**
      * Translate without context: Tooltips, Button-Labels, etc.
      */
     protected String translate(final String input) {
-        return getCommonContext().getTranslationService().translate(TranslationContext.empty(), input);
-    }
-
-    protected PlaceholderRenderService getPlaceholderRenderService() {
-        return getCommonContext().getPlaceholderRenderService();
+        return getTranslationService().translate(TranslationContext.empty(), input);
     }
 
 }

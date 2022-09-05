@@ -39,7 +39,7 @@ public class MetaModelContexts {
 
     @Bean @Singleton @Primary
     public MetaModelContext metaModelContext(final IsisSystemEnvironment systemEnvironment) {
-        return new MetaModelContext_usingIoc(systemEnvironment.getIocContainer());
+        return new MetaModelContext_usingSpring(systemEnvironment.getIocContainer());
     }
 
 }
