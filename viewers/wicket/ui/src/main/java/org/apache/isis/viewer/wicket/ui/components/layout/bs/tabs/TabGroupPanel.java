@@ -35,8 +35,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel
@@ -82,7 +83,7 @@ implements HasDynamicallyVisibleContent {
         super(id, tabsFor(entityModel, bsTabGroup));
         this.entityModel = entityModel;
 
-        this.selectedTabHintKey = ComponentHintKey.create(entityModel.getCommonContext(), this, SESSION_ATTR_SELECTED_TAB);
+        this.selectedTabHintKey = ComponentHintKey.create(entityModel.getMetaModelContext(), this, SESSION_ATTR_SELECTED_TAB);
     }
 
     @Override

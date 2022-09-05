@@ -22,25 +22,33 @@ import org.apache.wicket.Application;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import lombok.experimental.UtilityClass;
+
 
 /**
  * @since 2.0
  */
+@UtilityClass
 public class WktContext {
 
-    public static IsisAppCommonContext getCommonContext() {
-        return ((HasCommonContext) Application.get()).getCommonContext();
+    public MetaModelContext getMetaModelContext() {
+        return ((HasMetaModelContext) Application.get()).getMetaModelContext();
     }
 
-    public static IsisAppCommonContext computeIfAbsent(final IsisAppCommonContext commonContext) {
+    public MetaModelContext getCommonContext() {
+        return ((HasMetaModelContext) Application.get()).getMetaModelContext();
+    }
+
+    public MetaModelContext computeIfAbsent(final MetaModelContext commonContext) {
         return commonContext!=null
                 ? commonContext
-                : getCommonContext();
+                : getMetaModelContext();
     }
 
-    public static void pageReload() {
+    public void pageReload() {
         var cycle = RequestCycle.get();
         var handler = cycle.getActiveRequestHandler();
         if(handler instanceof ListenerRequestHandler) {

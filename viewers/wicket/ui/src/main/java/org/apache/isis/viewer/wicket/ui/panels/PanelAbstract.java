@@ -18,11 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.commons.model.components.ComponentType;

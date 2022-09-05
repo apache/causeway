@@ -36,13 +36,11 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -53,7 +51,6 @@ import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
-
     @Rule
     public final JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -62,16 +59,21 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
     @Mock protected Request mockRequest;
     @Mock protected Authenticator mockAuthenticator;
-    @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected InteractionService mockInteractionService;
     @Mock protected ImpersonatedUserHolder mockImpersonatedUserHolder;
     @Mock protected InteractionLayerTracker mockInteractionLayerTracker;
-    @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
+    private MetaModelContext mmc;
 
     @Before
     public void setUp() throws Exception {
+
+        mmc = MetaModelContext_forTesting.builder()
+                .singleton(mockInteractionService)
+                .singleton(mockImpersonatedUserHolder)
+                .build();
+
         authMgr = new AuthenticationManager(
                 Collections.singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
@@ -81,21 +83,6 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
         context.checking(new Expectations() {
             {
-                allowing(mockCommonContext).getServiceRegistry();
-                will(returnValue(mockServiceRegistry));
-
-                allowing(mockServiceRegistry).select(SessionSubscriber.class);
-                will(returnValue(Can.empty()));
-
-                allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
-                will(returnValue(mockInteractionService));
-
-                allowing(mockCommonContext).lookupServiceElseFail(ImpersonatedUserHolder.class);
-                will(returnValue(mockImpersonatedUserHolder));
-
-                allowing(mockCommonContext).getInteractionLayerTracker();
-                will(returnValue(mockInteractionLayerTracker));
-
                 allowing(mockInteractionLayerTracker).currentInteractionContext();
                 will(returnValue(Optional.of(InteractionContextFactory.testing())));
 
@@ -123,7 +110,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
             private static final long serialVersionUID = 1L;
 
             {
-                commonContext = mockCommonContext;
+                metaModelContext = mmc;
             }
 
             @Override

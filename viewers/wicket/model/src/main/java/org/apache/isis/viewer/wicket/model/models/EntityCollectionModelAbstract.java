@@ -25,10 +25,10 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
@@ -99,8 +99,8 @@ implements EntityCollectionModel {
     }
 
     @Override
-    public final IsisAppCommonContext getCommonContext() {
-        return delegate().getCommonContext();
+    public final MetaModelContext getMetaModelContext() {
+        return delegate().getMetaModelContext();
     }
 
     // -- VARIANT SUPPORT

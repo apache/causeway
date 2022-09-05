@@ -22,8 +22,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.Getter;
@@ -38,7 +38,7 @@ extends ModelAbstract<ManagedObject> {
 
     /** overwrites any current cache entry, only safe when no other views/models reference the same ManagedObject */
     public static BookmarkedObjectWkt ofAdapter(
-            final @NonNull IsisAppCommonContext commonContext,
+            final @NonNull MetaModelContext commonContext,
             final @Nullable ManagedObject domainObject) {
         val bookmark = commonContext.getObjectManager()
                 .bookmarkObjectElseFail(domainObject);
@@ -46,20 +46,20 @@ extends ModelAbstract<ManagedObject> {
     }
 
     public static BookmarkedObjectWkt ofBookmark(
-            final @NonNull IsisAppCommonContext commonContext,
+            final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
         return new BookmarkedObjectWkt(commonContext, bookmark);
     }
 
     private BookmarkedObjectWkt(
-            final @NonNull IsisAppCommonContext commonContext,
+            final @NonNull MetaModelContext commonContext,
             final @NonNull Bookmark bookmark) {
         super(commonContext);
         this.bookmark = bookmark;
     }
 
     private BookmarkedObjectWkt(
-            final @NonNull IsisAppCommonContext commonContext,
+            final @NonNull MetaModelContext commonContext,
             final @NonNull Bookmark bookmark,
             final @Nullable ManagedObject domainObject) {
         super(commonContext, domainObject);
@@ -78,7 +78,7 @@ extends ModelAbstract<ManagedObject> {
 
     @Override
     protected final ManagedObject load() {
-        val adapter = getCommonContext().getObjectManager().loadObjectElseFail(bookmark);
+        val adapter = getMetaModelContext().getObjectManager().loadObjectElseFail(bookmark);
         return adapter;
     }
 

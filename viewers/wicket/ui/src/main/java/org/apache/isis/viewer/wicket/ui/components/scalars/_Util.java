@@ -168,7 +168,7 @@ class _Util {
 //            final IValidatable<Object> validatable,
 //            final ScalarModel scalarModel){
 //        return mementoForProposedValue(validatable, scalarModel)
-//                .map(scalarModel.getCommonContext()::reconstructObject);
+//                .map(scalarModel.getMetaModelContext()::reconstructObject);
 //    }
 //
 //    private Optional<ObjectMemento> mementoForProposedValue(

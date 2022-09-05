@@ -141,7 +141,7 @@ public class PageParameterUtils {
                 ManagedObjects.isIdentifiable(adapter)
                     && !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? EntityModel.ofAdapter(
-                    callingEntityModel.getCommonContext(),
+                    callingEntityModel.getMetaModelContext(),
                     Facets.projected(adapter))
                     .getPageParametersWithoutUiHints()
                 : callingEntityModel.getPageParametersWithoutUiHints();

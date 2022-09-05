@@ -198,7 +198,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
     protected MarkupContainer newUsernameField() {
         RequiredTextField<String> username = new RequiredTextField<>(ID_USERNAME);
-        username.add(UsernameAvailableValidator.instance(super.getCommonContext()));
+        username.add(UsernameAvailableValidator.instance(super.getMetaModelContext()));
         FormGroup usernameFormGroup = new FormGroup(ID_USERNAME_FORM_GROUP, username);
         usernameFormGroup.add(username);
         return usernameFormGroup;

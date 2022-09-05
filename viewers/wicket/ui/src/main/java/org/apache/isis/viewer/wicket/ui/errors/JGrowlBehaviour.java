@@ -28,8 +28,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.message.MessageBroker;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.val;
@@ -46,20 +47,22 @@ import lombok.val;
  * editButton.add(new JGrowlBehaviour());
  * </pre>
  */
-public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
+public class JGrowlBehaviour
+extends AbstractDefaultAjaxBehavior
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
-    public JGrowlBehaviour(final IsisAppCommonContext commonContext) {
+    public JGrowlBehaviour(final MetaModelContext commonContext) {
         this.commonContext = commonContext;
     }
 
     @Override
     protected void respond(final AjaxRequestTarget target) {
 
-        val configuration = getCommonContext().getConfiguration();
-        getCommonContext().getMessageBroker().ifPresent(messageBroker->{
+        val configuration = getMetaModelContext().getConfiguration();
+        getMessageBroker().ifPresent(messageBroker->{
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
             if(!_Strings.isNullOrEmpty(feedbackMsg)) {
                 target.appendJavaScript(feedbackMsg);
@@ -79,8 +82,8 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
                 JavaScriptHeaderItem
                 .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/isis-bootstrap-growl.js")));
 
-        val configuration = getCommonContext().getConfiguration();
-        getCommonContext().getMessageBroker().ifPresent(messageBroker->{
+        val configuration = getMetaModelContext().getConfiguration();
+        getMessageBroker().ifPresent(messageBroker->{
 
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
             if(_Strings.isNotEmpty(feedbackMsg)) {
@@ -91,7 +94,8 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
 
     }
 
-    protected IsisAppCommonContext getCommonContext() {
+    @Override
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 

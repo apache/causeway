@@ -41,7 +41,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this,
                 ComponentType.ENTITY_ICON_AND_TITLE,
-                EntityModel.ofAdapter(model.getCommonContext(), targetAdapter));
+                EntityModel.ofAdapter(model.getMetaModelContext(), targetAdapter));
 
         Wkt.labelAdd(this, ID_PROPERTY_NAME, model::getFriendlyName)
             .setEscapeModelStrings(true);

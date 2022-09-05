@@ -37,8 +37,8 @@ import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.isis.HasAmendableInteractionContext;
@@ -61,7 +61,7 @@ extends AuthenticatedWebSession
 implements
     BreadcrumbModelProvider,
     BookmarkedPagesModelProvider,
-    HasCommonContext,
+    HasMetaModelContext,
     HasAmendableInteractionContext {
 
     private static final long serialVersionUID = 1L;
@@ -70,7 +70,7 @@ implements
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
-    @Getter protected transient IsisAppCommonContext commonContext;
+    @Getter protected transient MetaModelContext metaModelContext;
 
     @Getter
     private BreadcrumbModel breadcrumbModel;
@@ -104,10 +104,10 @@ implements
         super(request);
     }
 
-    public void init(final IsisAppCommonContext commonContext) {
-        this.commonContext = commonContext;
-        bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
-        breadcrumbModel = new BreadcrumbModel(commonContext);
+    public void init(final MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+        bookmarkedPagesModel = new BookmarkedPagesModel(metaModelContext);
+        breadcrumbModel = new BreadcrumbModel(metaModelContext);
         sessionGuid = UUID.randomUUID();
     }
 
@@ -198,7 +198,7 @@ implements
         }
         signIn(true);
 
-        val impersonatedUserHolder = commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class);
+        val impersonatedUserHolder = lookupServiceElseFail(ImpersonatedUserHolder.class);
         return impersonatedUserHolder.getUserMemento()
                 .map(x -> this.authentication.withUser(x))
                 .orElse(this.authentication);
@@ -269,16 +269,16 @@ implements
     }
 
     protected Can<SessionSubscriber> getSessionLoggingServices() {
-        return commonContext.getServiceRegistry().select(SessionSubscriber.class);
+        return getServiceRegistry().select(SessionSubscriber.class);
     }
 
     protected InteractionService getInteractionService() {
-        return commonContext.lookupServiceElseFail(InteractionService.class);
+        return lookupServiceElseFail(InteractionService.class);
     }
 
     private VirtualClock virtualClock() {
         try {
-            return commonContext.getServiceRegistry()
+            return getServiceRegistry()
                     .lookupService(ClockService.class)
                     .map(ClockService::getClock)
                     .orElseGet(this::nowFallback);

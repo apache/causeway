@@ -81,7 +81,7 @@ implements HasDynamicallyVisibleContent {
 
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
-        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(),
+        selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
                 this::getSelectorDropdownPanel,
                 EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
 

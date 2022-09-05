@@ -20,8 +20,9 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -29,7 +30,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContex
  */
 public abstract class ModelAbstract<T>
 extends LoadableDetachableModel<T>
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,17 +40,21 @@ implements HasCommonContext {
         this.commonContextModel = new CommonContextModel();
     }
 
-    protected ModelAbstract(final IsisAppCommonContext commonContext) {
+    protected ModelAbstract(final MetaModelContext commonContext) {
         this.commonContextModel = CommonContextModel.wrap(commonContext);
     }
 
-    protected ModelAbstract(final IsisAppCommonContext commonContext, final T t) {
+    protected ModelAbstract(final MetaModelContext commonContext, final T t) {
         this.commonContextModel = CommonContextModel.wrap(commonContext);
         super.setObject(t);
     }
 
+    protected Wicket getWicketViewerSettings() {
+        return getConfiguration().getViewer().getWicket();
+    }
+
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContextModel.getObject();
     }
 

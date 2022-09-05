@@ -29,9 +29,9 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -88,13 +88,13 @@ extends IndicatingAjaxLink<ManagedObject> {
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
-    protected transient IsisAppCommonContext commonContext;
+    protected transient MetaModelContext commonContext;
 
     private ActionLink(
             final String id,
             final ActionModel model) {
         super(id, model);
-        this.commonContext = model.getCommonContext();
+        this.commonContext = model.getMetaModelContext();
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
@@ -203,7 +203,7 @@ extends IndicatingAjaxLink<ManagedObject> {
             targetAdapter.invalidateBookmark();
 
             val bookmark = targetAdapter.getBookmark().orElseThrow();
-            getCommonContext().getTransactionService().flushTransaction();
+            getMetaModelContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"
             RequestCycle.get().setResponsePage(EntityPage.class,
@@ -255,7 +255,7 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     // -- DEPENDENCIES
 
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
@@ -264,7 +264,7 @@ extends IndicatingAjaxLink<ManagedObject> {
     }
 
     public Wicket getSettings() {
-        return getCommonContext().getConfiguration().getViewer().getWicket();
+        return getMetaModelContext().getConfiguration().getViewer().getWicket();
     }
 
 }

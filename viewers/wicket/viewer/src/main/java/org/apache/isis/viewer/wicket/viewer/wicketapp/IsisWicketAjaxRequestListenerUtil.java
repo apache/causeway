@@ -27,7 +27,7 @@ import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.component.IRequestablePage;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.val;
@@ -39,7 +39,7 @@ public final class IsisWicketAjaxRequestListenerUtil {
 
     public void setRootRequestMapper(
             final WebApplication app,
-            final IsisAppCommonContext commonContext) {
+            final MetaModelContext commonContext) {
 
         app.setRootRequestMapper(new SystemMapper(app) {
             @Override

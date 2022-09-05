@@ -28,9 +28,9 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -53,7 +53,7 @@ extends GenericColumnAbstract {
     private IModel<DataTableModel> dataTableModelHolder;
 
     public GenericToggleboxColumn(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final IModel<DataTableModel> dataTableModelHolder) {
         super(commonContext, "");
         this.dataTableModelHolder = dataTableModelHolder;

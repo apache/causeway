@@ -36,7 +36,7 @@ import javax.inject.Provider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.val;
@@ -55,13 +55,13 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
      * @param metaInfManifestProvider provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
     public JarManifestModel(
-            IsisAppCommonContext commonContext,
-            Provider<InputStream> metaInfManifestProvider) {
+            final MetaModelContext commonContext,
+            final Provider<InputStream> metaInfManifestProvider) {
 
         super(commonContext);
 
         Manifest manifest;
-        try(val metaInfManifestIs = metaInfManifestProvider.get()) {
+        try(var metaInfManifestIs = metaInfManifestProvider.get()) {
             manifest = new Manifest(metaInfManifestIs);
             manifests.add(JarManifestAttributes.jarName("Web archive (war file)"));
             manifests.add(JarManifestAttributes.jarUrl(null));
@@ -107,23 +107,23 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
         private JarName jarName;
 
-        public JarManifest(URL url) {
+        public JarManifest(final URL url) {
             this.url = url;
             jarName = asJarName(url);
         }
 
-        void addAttributesFrom(Manifest manifest) {
+        void addAttributesFrom(final Manifest manifest) {
             addAttributes(manifest, attributes);
         }
 
-        void addAttributesTo(List<JarManifestAttributes> manifests) {
+        void addAttributesTo(final List<JarManifestAttributes> manifests) {
             manifests.add(JarManifestAttributes.jarName(jarName.name));
             manifests.add(JarManifestAttributes.jarUrl(url));
             manifests.addAll(attributes);
         }
 
         @Override
-        public int compareTo(JarManifest o) {
+        public int compareTo(final JarManifest o) {
             return jarName.compareTo(o.jarName);
         }
     }
@@ -134,19 +134,19 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         }
         Type type;
         String name;
-        JarName(Type type, String name) {
+        JarName(final Type type, final String name) {
             this.type = type;
             this.name = name;
         }
         @Override
-        public int compareTo(JarName o) {
+        public int compareTo(final JarName o) {
             int x = type.compareTo(o.type);
             if(x != 0) return x;
             return name.compareTo(o.name);
         }
     }
 
-    private static JarName asJarName(URL url) {
+    private static JarName asJarName(final URL url) {
         final String path = url.getPath();
         // strip off the meta-inf
         String strippedPath = stripSuffix(path, "/META-INF/MANIFEST.MF");
@@ -180,7 +180,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         return new JarName(JarName.Type.OTHER, strippedPath);
     }
 
-    public static String stripSuffix(String path, String suffix) {
+    public static String stripSuffix(String path, final String suffix) {
         int indexOf = path.indexOf(suffix);
         if(indexOf != -1) {
             path = path.substring(0, indexOf);
@@ -188,7 +188,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         return path;
     }
 
-    static void addAttributes(Manifest manifest, List<JarManifestAttributes> attributes) {
+    static void addAttributes(final Manifest manifest, final List<JarManifestAttributes> attributes) {
         final Attributes mainAttribs = manifest.getMainAttributes();
         Set<Entry<Object, Object>> entrySet = mainAttribs.entrySet();
         for (Entry<Object, Object> entry : entrySet) {
@@ -203,7 +203,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
     }
 
     @Override
-    public void setObject(JarManifestModel ex) {
+    public void setObject(final JarManifestModel ex) {
         // no-op
     }
 

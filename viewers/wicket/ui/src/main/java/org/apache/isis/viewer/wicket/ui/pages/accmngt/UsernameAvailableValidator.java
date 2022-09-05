@@ -23,7 +23,7 @@ import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 
 import lombok.val;
@@ -36,21 +36,21 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static UsernameAvailableValidator instance(IsisAppCommonContext commonContext) {
+    public static UsernameAvailableValidator instance(MetaModelContext commonContext) {
         return new UsernameAvailableValidator(commonContext);
     }
 
-    private UsernameAvailableValidator(IsisAppCommonContext commonContext) {
+    private UsernameAvailableValidator(MetaModelContext commonContext) {
         super(commonContext);
     }
 
     @Override
     public void validate(final IValidatable<String> validatable) {
 
-        val userRegistrationService = super.getCommonContext()
+        val userRegistrationService = super.getMetaModelContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
 
-        val interactionService = super.getCommonContext()
+        val interactionService = super.getMetaModelContext()
                 .lookupServiceElseFail(InteractionService.class);
 
         interactionService.runAnonymous(() -> {

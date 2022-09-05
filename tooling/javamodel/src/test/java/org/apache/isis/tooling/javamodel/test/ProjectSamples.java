@@ -66,7 +66,7 @@ class ProjectSamples {
         //.peek(System.out::println) //debug
         .collect(Collectors.toSet());
         
-        assertTrue(sources.contains("o.a.i/core/runtime/context/IsisAppCommonContext.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/context/MetaModelContext.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/IsisContext.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMemento.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoCollection.java"));

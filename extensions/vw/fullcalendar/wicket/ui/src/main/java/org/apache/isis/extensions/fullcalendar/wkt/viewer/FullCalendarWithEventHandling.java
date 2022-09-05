@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
@@ -44,7 +43,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
 
     @SuppressWarnings("unused")
 	private final NotificationPanel feedback;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
 
     FullCalendarWithEventHandling(
@@ -66,17 +65,15 @@ final class FullCalendarWithEventHandling extends FullCalendar {
             return;
         }
 
-        val commonContext = getCommonContext();
+        val commonContext = getMetaModelContext();
 
         final SpecificationLoader specificationLoader = commonContext.getSpecificationLoader();
-        final MetaModelContext metaModelContext = commonContext.getMetaModelContext();
         final ObjectManager objectManager = commonContext.getObjectManager();
-        final IsisAppCommonContext webAppCommonContext = IsisAppCommonContext.of(metaModelContext);
 
         val managedObject = objectManager
                 .loadObject(ProtoObject.resolveElseFail(specificationLoader, bookmark));
 
-        final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
+        final EntityModel entityModel = EntityModel.ofAdapter(commonContext, managedObject);
 
         val pageParameters = entityModel.getPageParameters();
         if(pageParameters!=null) {
@@ -86,7 +83,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         // otherwise ignore
     }
 
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 

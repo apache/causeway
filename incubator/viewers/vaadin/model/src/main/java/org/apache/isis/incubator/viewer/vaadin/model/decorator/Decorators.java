@@ -30,7 +30,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiService;
 import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
@@ -121,7 +121,7 @@ public class Decorators {
 
         public Component decorateWithAvatar(
                 final Label label,
-                final IsisAppCommonContext commonContext) {
+                final MetaModelContext commonContext) {
 
             val profileIfAny = commonContext.lookupServiceElseFail(UserProfileUiService.class)
                     .userProfile();

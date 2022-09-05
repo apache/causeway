@@ -27,11 +27,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
@@ -94,8 +94,8 @@ implements ActionModel {
     }
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
-        return delegate.getCommonContext();
+    public MetaModelContext getMetaModelContext() {
+        return delegate.getMetaModelContext();
     }
 
     // -- BOOKMARKABLE

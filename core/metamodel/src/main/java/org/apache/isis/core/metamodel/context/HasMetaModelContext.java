@@ -19,7 +19,10 @@
 package org.apache.isis.core.metamodel.context;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -43,6 +46,7 @@ import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.services.message.MessageBroker;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -105,14 +109,6 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getTitleService();
     }
 
-    default Optional<ObjectSpecification> specForType(final Class<?> type) {
-        return getMetaModelContext().specForType(type);
-    }
-
-    default ObjectSpecification specForTypeElseFail(final Class<?> type) {
-        return getMetaModelContext().specForTypeElseFail(type);
-    }
-
     default RepositoryService getRepositoryService() {
         return getMetaModelContext().getRepositoryService();
     }
@@ -162,7 +158,47 @@ public interface HasMetaModelContext {
                 .map(InteractionContext::getLocale);
     }
 
+    // -- SPEC SHORTCUTS
+
+    default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
+        return getSpecificationLoader().specForType(type);
+    }
+
+    default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
+        return getSpecificationLoader().specForTypeElseFail(type);
+    }
+
+    // -- SERVICE SHORTCUTS
+
+    public default <T> Optional<T> lookupService(final Class<T> serviceClass) {
+        return getMetaModelContext().getServiceRegistry().lookupService(serviceClass);
+    }
+
+    public default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+        return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceClass);
+    }
+
+    public default <T> T lookupServiceElseFallback(final Class<T> serviceClass, final Supplier<T> fallback) {
+        return getMetaModelContext().getServiceRegistry().lookupService(serviceClass)
+                .orElseGet(fallback);
+    }
+
+    public default <T> T loadServiceIfAbsent(final Class<T> type, final @Nullable T instanceIfAny) {
+        return instanceIfAny==null
+                ? lookupServiceElseFail(type)
+                : instanceIfAny;
+    }
+
+    public default <T> T injectServicesInto(final T pojo) {
+        return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
+    }
+
     // -- ADVANCED SHORTCUTS
+
+    public default Optional<MessageBroker> getMessageBroker() {
+        // session scoped!
+        return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
+    }
 
     default ManagedObject lookupServiceAdapterById(final String serviceId) {
         return getMetaModelContext().lookupServiceAdapterById(serviceId);

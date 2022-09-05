@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
@@ -27,7 +28,6 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationMo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
@@ -57,7 +57,7 @@ implements PropertyUiModel {
             final PropertyUiModelWkt delegate,
             final ScalarRepresentation viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
-        super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()),
+        super(EntityModel.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()),
                 viewOrEdit, renderingHint);
         this.delegate = delegate;
     }
@@ -154,8 +154,8 @@ implements PropertyUiModel {
     }
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
-        return delegate.getCommonContext();
+    public MetaModelContext getMetaModelContext() {
+        return delegate.getMetaModelContext();
     }
 
 }

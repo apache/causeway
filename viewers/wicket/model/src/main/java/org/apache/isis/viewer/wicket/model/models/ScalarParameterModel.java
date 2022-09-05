@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -26,7 +27,6 @@ import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
@@ -51,7 +51,7 @@ implements ParameterUiModel {
      */
     private ScalarParameterModel(
             final ParameterUiModelWkt delegate) {
-        super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()));
+        super(EntityModel.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()));
         this.delegate = delegate;
     }
 
@@ -119,8 +119,8 @@ implements ParameterUiModel {
     // -- HELPER
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
-        return delegate.getCommonContext();
+    public MetaModelContext getMetaModelContext() {
+        return delegate.getMetaModelContext();
     }
 
 

@@ -25,8 +25,8 @@ import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModelFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuItemDto;
@@ -39,7 +39,7 @@ import lombok.val;
 //@Log4j2
 class MenuBuilderVaa implements MenuVisitor {
 
-    private final IsisAppCommonContext commonContext;
+    private final MetaModelContext commonContext;
     private final Consumer<ManagedAction> menuActionEventHandler;
     private final MenuBar menuBar;
 

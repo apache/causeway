@@ -23,7 +23,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
@@ -35,7 +35,7 @@ import lombok.val;
  * Uses Wicket's default page factory, except for {@link EntityPage}s which require special instantiation:
  * <p>
  * Constructor
- * {@link EntityPage#EntityPage(IsisAppCommonContext, PageParameters)}
+ * {@link EntityPage#EntityPage(MetaModelContext, PageParameters)}
  * needs the common-context as argument.
  *
  * @since 2.0
@@ -51,7 +51,7 @@ class _PageFactory implements IPageFactory {
     public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
 
         if(EntityPage.class.equals(pageClass)) {
-            return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getCommonContext(), parameters));
+            return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getMetaModelContext(), parameters));
         }
 
         return delegate.newPage(pageClass, parameters);

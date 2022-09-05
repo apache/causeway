@@ -20,11 +20,11 @@ package org.apache.isis.viewer.wicket.ui.app.logout;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.security.authentication.logout.LogoutHandler;
-import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

@@ -22,11 +22,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -34,13 +32,16 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 
 public abstract class FormAbstract<T> extends Form<T>
-implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
+implements
+    HasMetaModelContext,
+    ComponentFactoryRegistryAccessor,
+    PageClassRegistryAccessor {
 
     private static final long serialVersionUID = 1L;
 
     private transient ComponentFactoryRegistry componentFactoryRegistry;
     private transient PageClassRegistry pageClassRegistry;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
     protected FormAbstract(final String id) {
         super(id);
@@ -52,7 +53,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     // -- DEPENDENCIES
 
-    public final IsisAppCommonContext getCommonContext() {
+    @Override
+    public final MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
@@ -79,20 +81,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
         return pageClassRegistry;
     }
 
-    protected final SpecificationLoader getSpecificationLoader() {
-        return getCommonContext().getSpecificationLoader();
-    }
 
-    protected final ServiceRegistry getServiceRegistry() {
-        return getCommonContext().getServiceRegistry();
-    }
-
-    protected final TranslationService getTranslationService() {
-        return getCommonContext().getTranslationService();
-    }
-
-    protected final Wicket getSettings() {
-        return getCommonContext().getConfiguration().getViewer().getWicket();
+    protected Wicket getWicketViewerSettings() {
+        return getConfiguration().getViewer().getWicket();
     }
 
 }

@@ -21,13 +21,13 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.viewer.commons.model.HasParentUiModel;
 
 public interface FormExecutorContext
 extends
     HasParentUiModel<EntityModel>,
-    HasCommonContext {
+    HasMetaModelContext {
 
     PromptStyle getPromptStyle();
 

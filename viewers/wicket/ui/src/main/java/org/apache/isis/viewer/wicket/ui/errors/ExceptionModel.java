@@ -28,8 +28,8 @@ import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.val;
@@ -48,9 +48,9 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private final String mainMessage;
 
     public static ExceptionModel create(
-            IsisAppCommonContext commonContext,
-            Optional<Recognition> recognition,
-            Exception ex) {
+            final MetaModelContext commonContext,
+            final Optional<Recognition> recognition,
+            final Exception ex) {
 
         val translationService = commonContext.getTranslationService();
         val recognizedMessage = recognition.map($->$.toMessage(translationService));
@@ -64,7 +64,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
      * @param recognizedMessageIfAny
      * @param ex
      */
-    private ExceptionModel(IsisAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
+    private ExceptionModel(final MetaModelContext commonContext, final String recognizedMessageIfAny, final Exception ex) {
 
         super(commonContext);
 
@@ -106,7 +106,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         return stackTraceDetailList;
     }
 
-    private static <T extends Exception> T causalChainOf(Exception ex, Class<T> exType) {
+    private static <T extends Exception> T causalChainOf(final Exception ex, final Class<T> exType) {
 
         final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
         for (Throwable cause : causalChain) {
@@ -118,7 +118,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     }
 
     @Override
-    public void setObject(List<StackTraceDetail> stackTraceDetail) {
+    public void setObject(final List<StackTraceDetail> stackTraceDetail) {
         if(stackTraceDetail == null) {
             return;
         }
@@ -162,7 +162,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         return stackTraceDetailLists;
     }
 
-    private static List<StackTraceDetail> asStackTrace(Throwable ex) {
+    private static List<StackTraceDetail> asStackTrace(final Throwable ex) {
         List<StackTraceDetail> stackTrace = _Lists.newArrayList();
         List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
         boolean firstTime = true;
@@ -179,7 +179,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         return stackTrace;
     }
 
-    private static List<List<StackTraceDetail>> asStackTraces(Throwable ex) {
+    private static List<List<StackTraceDetail>> asStackTraces(final Throwable ex) {
         List<List<StackTraceDetail>> stackTraces = _Lists.newArrayList();
 
         List<Throwable> causalChain = _Exceptions.getCausalChain(ex);

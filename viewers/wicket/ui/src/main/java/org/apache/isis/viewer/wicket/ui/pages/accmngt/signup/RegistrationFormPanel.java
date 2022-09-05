@@ -70,7 +70,7 @@ public class RegistrationFormPanel extends PanelBase<Void> {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.doesntExist(getCommonContext()));
+        emailField.add(EmailAvailableValidator.doesntExist(getMetaModelContext()));
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
@@ -90,7 +90,7 @@ public class RegistrationFormPanel extends PanelBase<Void> {
                 final EmailRegistrationEvent emailRegistrationEvent = new EmailRegistrationEvent(
                         email,
                         confirmationUrl,
-                        getIsisConfiguration().getViewer().getWicket().getApplication().getName());
+                        getWicketViewerSettings().getApplication().getName());
 
                 boolean emailSent = emailNotificationService.send(emailRegistrationEvent);
                 if (emailSent) {

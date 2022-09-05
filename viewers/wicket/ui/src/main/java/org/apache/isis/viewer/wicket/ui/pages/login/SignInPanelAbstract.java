@@ -42,8 +42,8 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.cookies.CookieUtils;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.Getter;
@@ -58,7 +58,7 @@ import lombok.val;
  */
 public abstract class SignInPanelAbstract
 extends Panel
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,10 +84,10 @@ implements HasCommonContext {
     @Getter @Setter
     private ZoneId timezone;
 
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 

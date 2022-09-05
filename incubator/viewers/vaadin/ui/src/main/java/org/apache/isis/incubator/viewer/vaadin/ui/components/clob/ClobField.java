@@ -18,9 +18,9 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.clob;
 
-import org.springframework.lang.Nullable;
-
 import com.vaadin.flow.component.customfield.CustomField;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Clob;
 
