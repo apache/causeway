@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoCollection;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
-import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +59,6 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod_ = {@Override}) private ObjectBulkLoader objectBulkLoader;
     @Getter(onMethod_ = {@Override}) private ObjectCreator objectCreator;
     @Getter(onMethod_ = {@Override}) private ObjectBookmarker objectBookmarker;
-    @Getter(onMethod_ = {@Override}) private ObjectSerializer objectSerializer;
 
     @PostConstruct
     public void init() {
@@ -68,7 +66,6 @@ public class ObjectManagerDefault implements ObjectManager {
         objectLoader = ObjectLoader.createDefault(metaModelContext);
         objectBulkLoader = ObjectBulkLoader.createDefault(metaModelContext);
         objectBookmarker = ObjectBookmarker.createDefault();
-        objectSerializer = ObjectSerializer.createDefault(metaModelContext);
     }
 
     @Override

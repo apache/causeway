@@ -39,12 +39,7 @@ interface _Recreatable {
          * The {@link ManagedObject} that this is for, is already known by its
          * (persistent) {@link Oid}.
          */
-        LOOKUP(new _RecreatableLookup()),
-        /**
-         * If all other strategies fail, as last resort we use plain java serialization, provided
-         * that the type in question is serializable
-         */
-        SERIALIZABLE(new _RecreatableSerializable());
+        LOOKUP(new _RecreatableLookup());
 
         private final _Recreatable delegate;
 

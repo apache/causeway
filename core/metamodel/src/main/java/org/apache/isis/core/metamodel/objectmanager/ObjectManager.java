@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -53,7 +52,6 @@ public interface ObjectManager extends HasMetaModelContext {
     ObjectLoader getObjectLoader();
     ObjectBulkLoader getObjectBulkLoader();
     ObjectBookmarker getObjectBookmarker();
-    ObjectSerializer getObjectSerializer();
 
     // -- OBJECT MEMENTOS
 

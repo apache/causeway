@@ -117,19 +117,6 @@ implements HasLogicalType, Serializable, ObjectMemento {
             return;
         }
 
-        if(spec.isSerializable()) {
-            val serializer = spec.getMetaModelContext().getObjectManager().getObjectSerializer();
-
-            final int hashCode = adapter.getPojo().hashCode();
-
-            serializedPayload = serializer.serialize(adapter);
-            recreateStrategy = _Recreatable.RecreateStrategy.SERIALIZABLE;
-            // pseudo bookmark
-            bookmark = Bookmark.forLogicalTypeNameAndIdentifier(
-                    getLogicalTypeName(), "" + hashCode);
-            return;
-        }
-
         throw _Exceptions.illegalArgument("Don't know how to create an ObjectMemento for a type "
                 + "with ObjectSpecification %s. "
                 + "All other strategies failed. Type is neither "
