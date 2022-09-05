@@ -26,7 +26,7 @@ public enum PdfJsVersion {
     /** <i>Mozilla pdf.js</i> last released 1.x version: {@code 1.10.100} */
     V1_X("v1", "pdfjs-dist"),
     /** <i>Mozilla pdf.js</i> latest version */
-    V2_X("v2", "pdfjs-dist/2.15.349")
+    V2_X("v2", "pdfjs-dist/2.16.105")
     ;
     @Getter private final String integrationScriptSuffix;
     @Getter private final String webjarPath;
