@@ -26,6 +26,7 @@ import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -88,21 +89,26 @@ implements _Refetchable {
             return pojo; // is attached
         }
 
-        if(entityState.isSpecicalJpaDetachedWithOid()) {
-            return entityFacet.fetchByBookmark(bookmark)
-                    .orElse(pojo);
+        val refetchedIfSuccess = entityFacet.fetchByBookmark(bookmark);
+
+        if(refetchedIfSuccess.isEmpty()) {
+            // if cannot refetch from this special JPA state, try again later
+            if(entityState.isSpecicalJpaDetachedWithOid()) {
+                return pojo;
+            }
+            // eg. throws on deleted entity
+            throw new ObjectNotFoundException(""+bookmark);
         }
 
-        // throws on deleted entity
-        val reattachedPojo = entityFacet.fetchByBookmark(bookmark)
-                .orElseThrow(()->{
-                    return new ObjectNotFoundException(""+bookmark);});
+        val refetchedPojo = refetchedIfSuccess.get();
 
-        if(!entityFacet.getEntityState(reattachedPojo).hasOid()) {
+        if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
             throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
-        return this.pojo = assertCompliance(reattachedPojo);
+        _XrayEvent.event("Entity %s refetched from persistence.", getSpecification());
+
+        return this.pojo = assertCompliance(refetchedPojo);
     }
 
     @Override
