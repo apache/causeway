@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -69,7 +68,9 @@ public interface ObjectManager extends HasMetaModelContext {
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
     }
 
+    //FIXME why not use loadObject(bookmark) instead
     ManagedObject demementify(final ObjectMemento memento);
+    //FIXME why not use loadObject(bookmark) instead
     default ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
         return demementify(memento);
     }

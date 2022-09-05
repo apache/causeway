@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
-import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
+import org.apache.isis.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
