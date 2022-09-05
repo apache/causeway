@@ -22,8 +22,8 @@ import org.apache.wicket.RestartResponseException;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
@@ -34,8 +34,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 final class FullCalendarWithEventHandling extends FullCalendar {
 
@@ -72,8 +73,8 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         final ObjectManager objectManager = commonContext.getObjectManager();
         final IsisAppCommonContext webAppCommonContext = IsisAppCommonContext.of(metaModelContext);
 
-        val spec = specificationLoader.specForLogicalTypeName(bookmark.getLogicalTypeName()).orElse(null);
-        val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, bookmark));
+        val managedObject = objectManager
+                .loadObject(ProtoObject.resolveElseFail(specificationLoader, bookmark));
 
         final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
 

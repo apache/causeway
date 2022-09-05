@@ -32,7 +32,7 @@ public interface ObjectBookmarker {
 
     // -- FACTORY
 
-    public static ObjectBookmarker createDefault() {
+    static ObjectBookmarker createDefault() {
         return managedObject ->
             managedObject==null
                     ? Optional.empty()

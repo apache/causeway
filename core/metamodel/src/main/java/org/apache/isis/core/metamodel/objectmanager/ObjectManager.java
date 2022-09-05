@@ -28,9 +28,9 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
@@ -49,9 +49,7 @@ import lombok.val;
  *
  * @since 2.0
  */
-public interface ObjectManager {
-
-    MetaModelContext getMetaModelContext();
+public interface ObjectManager extends HasMetaModelContext {
 
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
@@ -75,7 +73,7 @@ public interface ObjectManager {
      * Loads an instance identified with given request parameters.
      * @param objectLoadRequest
      */
-    public default ManagedObject loadObject(final ObjectLoader.Request objectLoadRequest) {
+    public default ManagedObject loadObject(final ProtoObject objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
 
@@ -91,11 +89,8 @@ public interface ObjectManager {
             return Optional.empty();
         }
         val specLoader = getMetaModelContext().getSpecificationLoader();
-        val objManager = this;
-        return specLoader
-                .specForLogicalTypeName(bookmark.getLogicalTypeName())
-                .map(spec->objManager.loadObject(
-                        ObjectLoader.Request.of(spec, bookmark)));
+        return ProtoObject.resolve(specLoader, bookmark)
+                .map(this::loadObject);
     }
 
     default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
@@ -140,6 +135,7 @@ public interface ObjectManager {
         return specForType(pojo.getClass());
     }
 
+    @Override
     default Optional<ObjectSpecification> specForType(final @Nullable Class<?> domainType) {
         return getMetaModelContext().getSpecificationLoader().specForType(domainType);
     }

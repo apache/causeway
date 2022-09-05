@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0
  */
-public interface ObjectCreator {
+interface ObjectCreator {
 
     ManagedObject createObject(ObjectSpecification objectSpecification);
 
