@@ -27,20 +27,22 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- *
  * @since 2.0
- *
  */
 @Service
 @Named(IsisModuleCoreMetamodel.NAMESPACE + ".ObjectManagerDefault")
@@ -52,12 +54,15 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
 
+    // resolve lazily (dependency cycle, simple JUnit support)
+    private _Lazy<ObjectMementoService> objectMementoService = _Lazy.threadSafe(()->
+            getServiceRegistry().lookupServiceElseFail(ObjectMementoService.class));
+
     @Getter(onMethod_ = {@Override}) private ObjectLoader objectLoader;
     @Getter(onMethod_ = {@Override}) private ObjectBulkLoader objectBulkLoader;
     @Getter(onMethod_ = {@Override}) private ObjectCreator objectCreator;
     @Getter(onMethod_ = {@Override}) private ObjectBookmarker objectBookmarker;
     @Getter(onMethod_ = {@Override}) private ObjectSerializer objectSerializer;
-    @Getter(onMethod_ = {@Override}) private ObjectMemorizer objectMemorizer;
 
     @PostConstruct
     public void init() {
@@ -66,13 +71,15 @@ public class ObjectManagerDefault implements ObjectManager {
         objectBulkLoader = ObjectBulkLoader.createDefault(metaModelContext);
         objectBookmarker = ObjectBookmarker.createDefault();
         objectSerializer = ObjectSerializer.createDefault(metaModelContext);
-        objectMemorizer = ObjectMemorizer.createDefault(metaModelContext);
     }
 
+    @Override
+    public ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
+       return objectMementoService.get().reconstructObject(memento);
+    }
 
     // JUnit support
     public static ObjectManager forTesting(final MetaModelContext metaModelContext) {
-
         val objectManager = new ObjectManagerDefault(metaModelContext);
         objectManager.init();
         return objectManager;

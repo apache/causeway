@@ -218,16 +218,16 @@ public final class ManagedAction extends ManagedMember {
         static MementoForArgs create(
                 final ObjectManager objectManager,
                 final Can<ManagedObject> args) {
-            return new MementoForArgs(args.map(objectManager.getObjectMemorizer()::serialize));
+            return new MementoForArgs(args.map(objectManager::mementifyElseFail));
         }
 
         private final Can<ObjectMemento> argsMementos;
 
         public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
             val argTypes = actionMeta.getParameterTypes();
-            val objectMemorizer = actionMeta.getMetaModelContext().getObjectManager().getObjectMemorizer();
+            val objectManager = actionMeta.getMetaModelContext().getObjectManager();
             return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
-                objectMemorizer.deserialize(argMemento, argSpec));
+                objectManager.demementify(argMemento, argSpec));
         }
     }
 

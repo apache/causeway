@@ -27,6 +27,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0
+ */
 @RequiredArgsConstructor
 public class ObjectMementoForEmpty implements ObjectMemento {
 

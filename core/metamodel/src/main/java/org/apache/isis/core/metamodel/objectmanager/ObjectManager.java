@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ProtoObject;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,7 +55,21 @@ public interface ObjectManager extends HasMetaModelContext {
     ObjectBulkLoader getObjectBulkLoader();
     ObjectBookmarker getObjectBookmarker();
     ObjectSerializer getObjectSerializer();
-    ObjectMemorizer getObjectMemorizer();
+
+    // -- OBJECT MEMENTOS
+
+    default Optional<ObjectMemento> mementify(final @Nullable ManagedObject object) {
+        return Optional.ofNullable(object)
+        .flatMap(ManagedObject::getMemento);
+    }
+
+    default ObjectMemento mementifyElseFail(final @NonNull ManagedObject object) {
+        return object.getMemento()
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
+    }
+
+    ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento);
 
     // -- SHORTCUTS
 
