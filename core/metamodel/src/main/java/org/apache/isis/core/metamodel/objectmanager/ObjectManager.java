@@ -111,8 +111,10 @@ public interface ObjectManager extends HasMetaModelContext {
         val adapter = loadObject(bookmark)
                 .orElseThrow(()->
                     _Exceptions.unrecoverable("failed to restore object from bookmark %s", bookmark));
-        _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
-                ()->"object loaded from bookmark must itself return an equal bookmark");
+        if(adapter.getSpecialization().isEntity()) {
+            _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
+                    ()->"object loaded from bookmark must itself return an equal bookmark");
+        }
         return adapter;
     }
 
