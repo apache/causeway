@@ -61,7 +61,7 @@ extends ModelAbstract<ManagedObject> {
 
     @Override
     protected ManagedObject load() {
-        return getCommonContext().reconstructObject(adapterMemento);
+        return getObjectManager().demementify(adapterMemento);
     }
 
     // -- META MODEL

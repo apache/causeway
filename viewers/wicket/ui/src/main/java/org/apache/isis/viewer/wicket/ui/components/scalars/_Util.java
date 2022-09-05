@@ -135,8 +135,7 @@ class _Util {
             // seeing this code-path particularly with enum choices
             return Optional.ofNullable(
                     scalarModel
-                        .getCommonContext()
-                        .reconstructObject((ObjectMemento)valueObject));
+                        .getObjectManager().demementify((ObjectMemento)valueObject));
         }
 
         return Optional.ofNullable(

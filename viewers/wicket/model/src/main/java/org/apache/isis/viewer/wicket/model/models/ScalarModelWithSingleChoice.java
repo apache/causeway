@@ -66,7 +66,7 @@ implements
     @Override
     public void setObject(final ObjectMemento memento) {
         pendingValue().getValue().setValue(
-                getCommonContext().reconstructObject(memento));
+                getObjectManager().demementify(memento));
     }
 
 

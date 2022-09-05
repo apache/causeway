@@ -130,7 +130,7 @@ implements
     }
 
     public ManagedObject getConvertedInputValue() {
-        return getCommonContext().reconstructObject(convertedInput());
+        return getObjectManager().demementify(convertedInput());
     }
 
     public void setLabel(final Model<String> model) {

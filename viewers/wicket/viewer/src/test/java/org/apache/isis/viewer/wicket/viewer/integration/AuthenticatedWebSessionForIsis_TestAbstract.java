@@ -86,7 +86,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
             }
 
             @Override
-            protected AuthenticationManager getAuthenticationManager() {
+            public AuthenticationManager getAuthenticationManager() {
                 return mockAuthMgr;
             }
         };

@@ -67,7 +67,7 @@ extends ModelAbstract<ManagedObject> {
         if (memento == null) {
             return null;
         }
-        return super.getCommonContext().reconstructObject(memento);
+        return getObjectManager().demementify(memento);
     }
 
     @Override

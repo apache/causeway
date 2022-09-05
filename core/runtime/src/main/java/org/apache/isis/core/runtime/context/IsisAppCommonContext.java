@@ -24,18 +24,11 @@ import java.util.function.Supplier;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.val;
@@ -97,34 +90,15 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
 
-    public ManagedObject reconstructObject(final ObjectMemento memento) {
-        return getObjectManager().demementify(memento);
-    }
-
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
 
-    public static interface HasCommonContext {
+    public static interface HasCommonContext extends HasMetaModelContext {
 
         IsisAppCommonContext getCommonContext();
 
-        default IsisConfiguration getConfiguration() {
-            return getCommonContext().getConfiguration();
-        }
-
-        default ServiceRegistry getServiceRegistry() {
-            return getCommonContext().getServiceRegistry();
-        }
-
-        default SpecificationLoader getSpecificationLoader() {
-            return getCommonContext().getSpecificationLoader();
-        }
-
-        default ServiceInjector getServiceInjector() {
-            return getCommonContext().getServiceInjector();
-        }
-
-        default ObjectManager getObjectManager() {
-            return getCommonContext().getObjectManager();
+        @Override
+        default MetaModelContext getMetaModelContext() {
+            return getCommonContext().getMetaModelContext();
         }
 
     }

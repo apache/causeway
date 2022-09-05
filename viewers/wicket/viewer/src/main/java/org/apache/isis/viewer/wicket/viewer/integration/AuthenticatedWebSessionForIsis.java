@@ -241,12 +241,6 @@ implements
         super.detach();
     }
 
-
-
-    protected AuthenticationManager getAuthenticationManager() {
-        return commonContext.getAuthenticationManager();
-    }
-
     private void log(
             final SessionSubscriber.Type type,
             final String username,

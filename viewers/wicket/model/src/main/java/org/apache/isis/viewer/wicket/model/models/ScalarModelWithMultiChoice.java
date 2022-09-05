@@ -24,8 +24,7 @@ import java.util.stream.Collectors;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.object.Bookmarkable;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 
@@ -75,10 +74,7 @@ implements
         log.debug("getObject() as unpackedValue {}", unpackedValues);
 
         val mementos = unpackedValues.stream()
-        .filter(Bookmarkable.class::isInstance)
-        .map(Bookmarkable::getMemento) //TODO why can we not flat map this?
-        .map(opt->opt.orElse(null))
-        .filter(_NullSafe::isPresent)
+        .map(ManagedObject::getMementoElseFail)
         .collect(Collectors.toCollection(()->new ArrayList<ObjectMemento>()));
 
         log.debug("getObject() as unpackedMemento {}", mementos);
@@ -90,8 +86,7 @@ implements
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
         val logicalType = scalarModel().getScalarTypeSpec().getLogicalType();
         val packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
-        pendingValue().getValue().setValue(
-                getCommonContext().reconstructObject(packedMemento));
+        pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }
 
 

@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -109,6 +108,7 @@ implements HasCommonContext {
         return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
     }
 
+    @Override
     public MetaModelContext getMetaModelContext() {
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
@@ -117,6 +117,7 @@ implements HasCommonContext {
         return interactionService = computeIfAbsent(InteractionService.class, interactionService);
     }
 
+    @Override
     public TranslationService getTranslationService() {
         return translationService = computeIfAbsent(TranslationService.class, translationService);
     }
@@ -139,10 +140,6 @@ implements HasCommonContext {
 
     protected PageNavigationService getPageNavigationService() {
         return pageNavigationService = computeIfAbsent(PageNavigationService.class, pageNavigationService);
-    }
-
-    protected PlaceholderRenderService getPlaceholderRenderService() {
-        return getCommonContext().getPlaceholderRenderService();
     }
 
     protected MessageBroker getMessageBroker() {

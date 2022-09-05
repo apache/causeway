@@ -119,7 +119,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
             }
 
             @Override
-            protected AuthenticationManager getAuthenticationManager() {
+            public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
             }
         };

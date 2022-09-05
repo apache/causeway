@@ -127,7 +127,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
             }
 
             @Override
-            protected AuthenticationManager getAuthenticationManager() {
+            public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
             }
         };

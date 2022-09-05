@@ -26,7 +26,6 @@ import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -156,10 +155,6 @@ implements HasCommonContext {
      */
     protected String translate(final String input) {
         return getCommonContext().getTranslationService().translate(TranslationContext.empty(), input);
-    }
-
-    protected PlaceholderRenderService getPlaceholderRenderService() {
-        return getCommonContext().getPlaceholderRenderService();
     }
 
 }
