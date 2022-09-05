@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.debug._XrayEvent;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -51,7 +50,7 @@ implements
     @Nullable private /*final*/ Object pojo;
 
     protected final _Lazy<Optional<Bookmark>> bookmarkLazy =
-            _Lazy.threadSafe(()->bookmark(this));
+            _Lazy.threadSafe(()->createBookmark());
 
     _ManagedObjectViewmodel(
             final ObjectSpecification spec,
@@ -88,21 +87,8 @@ implements
         bookmarkLazy.set(Optional.ofNullable(replacer.apply(old)));
     }
 
-    // guards against non-identifiable objects;
-    // historically, we allowed non-identifiable to be handled by the objectManager,
-    // which as a fallback creates 'random' UUIDs
-    private Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
-
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || adapter.getSpecification().isValue()
-                || !ManagedObjects.isIdentifiable(adapter)) {
-            return Optional.empty();
-        }
-
-        return ManagedObjects.spec(adapter)
-                .map(ObjectSpecification::getMetaModelContext)
-                .map(MetaModelContext::getObjectManager)
-                .flatMap(objectManager->objectManager.bookmarkObject(adapter));
+    private Optional<Bookmark> createBookmark() {
+        return Optional.ofNullable(getSpecification().viewmodelFacetElseFail().serializeToBookmark(this));
     }
 
     // -- REFRESH OPTIMIZATION

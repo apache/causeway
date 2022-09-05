@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
-import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
