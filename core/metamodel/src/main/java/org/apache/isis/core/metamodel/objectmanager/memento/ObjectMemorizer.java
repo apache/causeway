@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
@@ -49,9 +50,9 @@ public interface ObjectMemorizer {
     }
 
     default ObjectMemento serialize(final ManagedObject object) {
-        val request = BiForm.serializationRequest(object);
-        val response = serializeObject(request);
-        return response.getSerializedObject().getMemento();
+        return Optional.ofNullable(object)
+        .flatMap(ManagedObject::getMemento)
+        .orElse(null);
     }
 
     @Value(staticConstructor = "of")

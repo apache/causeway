@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -26,6 +27,8 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
@@ -85,6 +88,17 @@ implements ManagedObject {
     public String getTitle() {
         return _InternalTitleUtil.titleString(
                 TitleRenderRequest.forObject(this));
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return this instanceof PackedManagedObject
+                ? Optional.ofNullable(objectMementoService().mementoForMulti((PackedManagedObject)this))
+                : Optional.ofNullable(objectMementoService().mementoForSingle(this));
+    }
+
+    private ObjectMementoService objectMementoService() {
+        return getServiceRegistry().lookupServiceElseFail(ObjectMementoService.class);
     }
 
     //XXX compares pojos by their 'equals' semantics -

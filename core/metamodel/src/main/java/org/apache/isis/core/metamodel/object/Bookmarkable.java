@@ -18,12 +18,14 @@
  */
 package org.apache.isis.core.metamodel.object;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 
 public interface Bookmarkable {
 
@@ -47,6 +49,15 @@ public interface Bookmarkable {
     }
 
     /**
+     * Optionally a {@link Serializable} representation of this object,
+     *  with an additional memorized object title, based on whether
+     *  is supported and a {@link Bookmark} is available.
+     */
+    Optional<ObjectMemento> getMemento();
+
+    // -- SPECIAL SUB INTERFACES
+
+    /**
      * Implements {@link Bookmarkable} reflecting
      * {@link org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK}
      */
@@ -54,17 +65,19 @@ public interface Bookmarkable {
         @Override default boolean isBookmarkSupported() { return false; }
         @Override default Optional<Bookmark> getBookmark() { return Optional.empty(); }
         @Override default boolean isBookmarkMemoized() { return false; }
+        @Override default Optional<ObjectMemento> getMemento() { return Optional.empty(); }
     }
 
     static interface BookmarkRefreshable extends Bookmarkable {
         /**
          * Invalidates any memoized {@link Bookmark} for (lazy) recreation,
          * reflecting the object's current state.
-         * @apiNote only makes sense in the context of mutable viewmodels
+         * @apiNote only makes sense in the context of (mutable) viewmodels
          */
-        @Override
-        void invalidateBookmark();
+        @Override void invalidateBookmark();
 
     }
+
+
 
 }
