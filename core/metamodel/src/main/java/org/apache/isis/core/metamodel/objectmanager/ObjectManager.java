@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
-import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -55,7 +54,6 @@ public interface ObjectManager extends HasMetaModelContext {
     ObjectLoader getObjectLoader();
     ObjectBulkLoader getObjectBulkLoader();
     ObjectBookmarker getObjectBookmarker();
-    ObjectRefresher getObjectRefresher();
     ObjectSerializer getObjectSerializer();
     ObjectMemorizer getObjectMemorizer();
 
@@ -118,14 +116,6 @@ public interface ObjectManager extends HasMetaModelContext {
         return bookmarkObject(managedObject)
                 .orElseThrow(()->
                     _Exceptions.unrecoverable("failed to bookmark %s", managedObject.getSpecification()));
-    }
-
-    /**
-     * Reloads the state of the (entity) instance from the data store.
-     * @param managedObject
-     */
-    public default void refreshObject(final ManagedObject managedObject) {
-        getObjectRefresher().refreshObject(managedObject);
     }
 
     public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {

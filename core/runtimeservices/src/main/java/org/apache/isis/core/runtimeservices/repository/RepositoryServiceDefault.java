@@ -43,17 +43,20 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -64,13 +67,16 @@ import lombok.val;
 @Qualifier("Default")
 @RequiredArgsConstructor
 //@Log4j2
-public class RepositoryServiceDefault implements RepositoryService {
+public class RepositoryServiceDefault
+implements RepositoryService, HasMetaModelContext {
 
     final FactoryService factoryService;
     final WrapperFactory wrapperFactory;
     final TransactionService transactionService;
     final IsisConfiguration isisConfiguration;
-    final ObjectManager objectManager;
+
+    @Getter(onMethod_ = {@Override})
+    final MetaModelContext metaModelContext;
 
     private boolean autoFlush;
 
@@ -82,7 +88,7 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public EntityState getEntityState(final @Nullable Object object) {
-        val adapter = objectManager.adapt(unwrapped(object));
+        val adapter = getObjectManager().adapt(unwrapped(object));
         return MmEntityUtil.getEntityState(adapter);
     }
 
@@ -94,7 +100,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Override
     public <T> T persist(final T domainObject) {
 
-        val adapter = objectManager.adapt(unwrapped(domainObject));
+        val adapter = getObjectManager().adapt(unwrapped(domainObject));
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
@@ -121,7 +127,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if (domainObject == null) {
             return; // noop
         }
-        val adapter = objectManager.adapt(unwrapped(domainObject));
+        val adapter = getObjectManager().adapt(unwrapped(domainObject));
         if(MmEntityUtil.hasOid(adapter)) {
             MmEntityUtil.destroyInCurrentTransaction(adapter);
         }
@@ -169,8 +175,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        val resultTypeSpec = objectManager.getMetaModelContext()
-                .getSpecificationLoader()
+        val resultTypeSpec = getSpecificationLoader()
                 .specForType(query.getResultType())
                 .orElse(null);
 
@@ -179,7 +184,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         }
 
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = objectManager.queryObjects(queryRequest);
+        val allMatching = getObjectManager().queryObjects(queryRequest);
         final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtil.multipleAsList(allMatching));
         return resultList;
     }
@@ -217,23 +222,27 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     @Override
-    public <T> T refresh(final T pojo) {
-        val managedObject = objectManager.adapt(pojo);
-        objectManager.getObjectRefresher().refreshObject(managedObject);
-        return _Casts.uncheckedCast(managedObject.getPojo());
+    public <T> T refresh(final T entity) {
+        if(entity==null) { return null; }
+
+        getSpecificationLoader()
+        .specForType(entity.getClass())
+        .flatMap(ObjectSpecification::entityFacet)
+        .ifPresent(entityFacet->entityFacet.refresh(entity));
+
+        return entity;
     }
 
     @Override
     public <T> T detach(final T entity) {
         if(entity==null) { return null; }
 
-        val mmc = objectManager.getMetaModelContext();
-
-        return mmc.getSpecificationLoader()
+        return getSpecificationLoader()
         .specForType(entity.getClass())
         .flatMap(ObjectSpecification::entityFacet)
         .map(entityFacet->entityFacet.detach(entity))
-        .map(mmc.getServiceInjector()::injectServicesInto) // just in case
+        .map(detachedEntity->_Assert.assertSameObject(detachedEntity, entity, ()->
+                "expected same (otherwise would need injection points resolved)"))
         .orElse(entity);
     }
 

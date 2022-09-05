@@ -51,17 +51,17 @@ public final class _Assert {
 
     // -- TRUE
 
-    public static void assertTrue(boolean condition) {
+    public static void assertTrue(final boolean condition) {
         assertTrue(condition, (String) null);
     }
 
-    public static void assertTrue(boolean condition, String message) {
+    public static void assertTrue(final boolean condition, final String message) {
         if (!condition) {
             fail(message, true, false);
         }
     }
 
-    public static void assertTrue(boolean condition, Supplier<String> lazyMessage) {
+    public static void assertTrue(final boolean condition, final Supplier<String> lazyMessage) {
         if (!condition) {
             fail(lazyMessage.get(), true, false);
         }
@@ -69,17 +69,17 @@ public final class _Assert {
 
     // -- FALSE
 
-    public static void assertFalse(boolean condition) {
+    public static void assertFalse(final boolean condition) {
         assertFalse(condition, (String) null);
     }
 
-    public static void assertFalse(boolean condition, String message) {
+    public static void assertFalse(final boolean condition, final String message) {
         if (condition) {
             fail(message, false, true);
         }
     }
 
-    public static void assertFalse(boolean condition, Supplier<String> lazyMessage) {
+    public static void assertFalse(final boolean condition, final Supplier<String> lazyMessage) {
         if (condition) {
             fail(lazyMessage.get(), true, false);
         }
@@ -87,17 +87,17 @@ public final class _Assert {
 
     // -- NULL
 
-    public static void assertNull(Object object) {
+    public static void assertNull(final Object object) {
         assertNull(object, (String) null);
     }
 
-    public static void assertNull(Object object, String message) {
+    public static void assertNull(final Object object, final String message) {
         if (object!=null) {
             fail(message, "null", "not null");
         }
     }
 
-    public static void assertNull(Object object, Supplier<String> lazyMessage) {
+    public static void assertNull(final Object object, final Supplier<String> lazyMessage) {
         if (object!=null) {
             fail(lazyMessage.get(), "null", "not null");
         }
@@ -105,21 +105,52 @@ public final class _Assert {
 
     // -- NOT NULL
 
-    public static void assertNotNull(Object object) {
+    public static void assertNotNull(final Object object) {
         assertNotNull(object, (String) null);
     }
 
-    public static void assertNotNull(Object object, String message) {
+    public static void assertNotNull(final Object object, final String message) {
         if (object==null) {
             fail(message, "not null", "null");
         }
     }
 
-    public static void assertNotNull(Object object, Supplier<String> lazyMessage) {
+    public static void assertNotNull(final Object object, final Supplier<String> lazyMessage) {
         if (object==null) {
             fail(lazyMessage.get(), "not null", "null");
         }
     }
+
+    // -- SAMENESS
+
+    /**
+     * <em>Assert</em> that {@code left} == {@code right}.
+     * @return {@code left} if assertion holds
+     */
+    public static <T> T assertSameObject(final T left, final Object right) {
+        assertTrue(left == right);
+        return left;
+    }
+
+    /**
+     * <em>Assert</em> that {@code left} == {@code right}.
+     * @return {@code left} if assertion holds
+     */
+    public static <T> T assertSameObject(final T left, final Object right, final String msg) {
+        assertTrue(left == right, msg);
+        return left;
+    }
+
+    /**
+     * <em>Assert</em> that {@code left} == {@code right}.
+     * @return {@code left} if assertion holds
+     */
+    public static <T> T assertSameObject(final T left, final Object right, final Supplier<String> lazyMessage) {
+        assertTrue(left == right, lazyMessage);
+        return left;
+    }
+
+    // -- EQUALITY
 
     /**
      * <em>Assert</em> that {@code expected} and {@code actual} are equal.
@@ -127,7 +158,7 @@ public final class _Assert {
      *
      * @see Object#equals(Object)
      */
-    public static void assertEquals(Object left, Object right) {
+    public static void assertEquals(final Object left, final Object right) {
         assertEquals(left, right, (String) null);
     }
 
@@ -138,13 +169,13 @@ public final class _Assert {
      *
      * @see Object#equals(Object)
      */
-    public static void assertEquals(Object left, Object right, String message) {
+    public static void assertEquals(final Object left, final Object right, final String message) {
         if (!Objects.equals(left, right)) {
             fail(message, left, right);
         }
     }
 
-    public static void assertEquals(Object left, Object right, Supplier<String> lazyMessage) {
+    public static void assertEquals(final Object left, final Object right, final Supplier<String> lazyMessage) {
         if (!Objects.equals(left, right)) {
             fail(lazyMessage.get(), left, right);
         }
@@ -152,25 +183,25 @@ public final class _Assert {
 
     // -- RANGE CHECKS
 
-    public static void assertRangeContains(_Ints.Range range, int value, String message) {
+    public static void assertRangeContains(final _Ints.Range range, final int value, final String message) {
         if(!range.contains(value)) {
             fail(message, range.toString(), value);
         }
     }
 
-    public static void assertRangeContains(_Ints.Range range, int value, Supplier<String> lazyMessage) {
+    public static void assertRangeContains(final _Ints.Range range, final int value, final Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
         }
     }
 
-    public static void assertRangeContains(_Longs.Range range, long value, String message) {
+    public static void assertRangeContains(final _Longs.Range range, final long value, final String message) {
         if(!range.contains(value)) {
             fail(message, range.toString(), value);
         }
     }
 
-    public static void assertRangeContains(_Longs.Range range, long value, Supplier<String> lazyMessage) {
+    public static void assertRangeContains(final _Longs.Range range, final long value, final Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
         }
@@ -178,7 +209,7 @@ public final class _Assert {
 
     // -- TYPE INSTANCE OF
 
-    public static void assertTypeIsInstanceOf(Class<?> type, Class<?> requiredType) {
+    public static void assertTypeIsInstanceOf(final Class<?> type, final Class<?> requiredType) {
         if(!requiredType.isAssignableFrom(type)) {
             throw _Exceptions.assertionError(String.format(
                     "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
@@ -213,11 +244,11 @@ public final class _Assert {
 
     // -- HELPER
 
-    static String buildPrefix(String message) {
+    static String buildPrefix(final String message) {
         return _Strings.isNotEmpty(message) ? message + " ==> " : "";
     }
 
-    private static void fail(String message, Object expected, Object actual) {
+    private static void fail(final String message, final Object expected, final Object actual) {
         val error = _Exceptions.assertionError(
                 buildPrefix(message)
                 + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
