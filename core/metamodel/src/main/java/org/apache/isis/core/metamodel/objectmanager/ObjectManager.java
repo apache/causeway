@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
@@ -59,7 +58,6 @@ public interface ObjectManager {
     ObjectBulkLoader getObjectBulkLoader();
     ObjectBookmarker getObjectBookmarker();
     ObjectRefresher getObjectRefresher();
-    ObjectDetacher getObjectDetacher();
     ObjectSerializer getObjectSerializer();
     ObjectMemorizer getObjectMemorizer();
 

@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
@@ -224,9 +225,16 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public <T> T detach(final T entity) {
-        val managedObject = objectManager.adapt(entity);
-        val managedDetachedObject = objectManager.getObjectDetacher().detachObject(managedObject);
-        return _Casts.uncheckedCast(managedDetachedObject.getPojo());
+        if(entity==null) { return null; }
+
+        val mmc = objectManager.getMetaModelContext();
+
+        return mmc.getSpecificationLoader()
+        .specForType(entity.getClass())
+        .flatMap(ObjectSpecification::entityFacet)
+        .map(entityFacet->entityFacet.detach(entity))
+        .map(mmc.getServiceInjector()::injectServicesInto) // just in case
+        .orElse(entity);
     }
 
     @Override

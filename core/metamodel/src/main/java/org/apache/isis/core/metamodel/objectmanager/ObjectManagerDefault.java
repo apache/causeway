@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
@@ -60,7 +59,6 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod_ = {@Override}) private ObjectCreator objectCreator;
     @Getter(onMethod_ = {@Override}) private ObjectBookmarker objectBookmarker;
     @Getter(onMethod_ = {@Override}) private ObjectRefresher objectRefresher;
-    @Getter(onMethod_ = {@Override}) private ObjectDetacher objectDetacher;
     @Getter(onMethod_ = {@Override}) private ObjectSerializer objectSerializer;
     @Getter(onMethod_ = {@Override}) private ObjectMemorizer objectMemorizer;
 
@@ -71,7 +69,6 @@ public class ObjectManagerDefault implements ObjectManager {
         objectBulkLoader = ObjectBulkLoader.createDefault(metaModelContext);
         objectBookmarker = ObjectBookmarker.createDefault();
         objectRefresher = ObjectRefresher.createDefault();
-        objectDetacher = ObjectDetacher.createDefault(metaModelContext);
         objectSerializer = ObjectSerializer.createDefault(metaModelContext);
         objectMemorizer = ObjectMemorizer.createDefault(metaModelContext);
     }
