@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.memento;
+package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import org.springframework.lang.Nullable;
 
@@ -32,7 +32,7 @@ class _RecreatableLookup implements _Recreatable{
 
     @Override
     public @Nullable ManagedObject recreateObject(
-            final _ObjectMementoForScalar memento,
+            final ObjectMementoForScalar memento,
             final MetaModelContext mmc) {
 
         if(memento.bookmark==null) {
@@ -47,13 +47,13 @@ class _RecreatableLookup implements _Recreatable{
     }
 
     @Override
-    public boolean equals(final _ObjectMementoForScalar oam, final _ObjectMementoForScalar other) {
+    public boolean equals(final ObjectMementoForScalar oam, final ObjectMementoForScalar other) {
         return other.recreateStrategy == RecreateStrategy.LOOKUP
                 && oam.bookmark.equals(other.bookmark);
     }
 
     @Override
-    public int hashCode(final _ObjectMementoForScalar oam) {
+    public int hashCode(final ObjectMementoForScalar oam) {
         return oam.bookmark.hashCode();
     }
 }

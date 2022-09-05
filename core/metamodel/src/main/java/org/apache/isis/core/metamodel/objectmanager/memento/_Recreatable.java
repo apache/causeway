@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.memento;
+package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -49,26 +49,26 @@ interface _Recreatable {
         private final _Recreatable delegate;
 
         @Override
-        public ManagedObject recreateObject(final _ObjectMementoForScalar memento, final MetaModelContext mmc) {
+        public ManagedObject recreateObject(final ObjectMementoForScalar memento, final MetaModelContext mmc) {
             return delegate.recreateObject(memento, mmc);
         }
 
         @Override
-        public boolean equals(final _ObjectMementoForScalar memento, final _ObjectMementoForScalar otherMemento) {
+        public boolean equals(final ObjectMementoForScalar memento, final ObjectMementoForScalar otherMemento) {
             return delegate.equals(memento, otherMemento);
         }
 
         @Override
-        public int hashCode(final _ObjectMementoForScalar memento) {
+        public int hashCode(final ObjectMementoForScalar memento) {
             return delegate.hashCode();
         }
 
     }
 
-    ManagedObject recreateObject(_ObjectMementoForScalar memento, MetaModelContext mmc);
+    ManagedObject recreateObject(ObjectMementoForScalar memento, MetaModelContext mmc);
 
-    boolean equals(_ObjectMementoForScalar memento, _ObjectMementoForScalar otherMemento);
+    boolean equals(ObjectMementoForScalar memento, ObjectMementoForScalar otherMemento);
 
-    int hashCode(_ObjectMementoForScalar memento);
+    int hashCode(ObjectMementoForScalar memento);
 
 }

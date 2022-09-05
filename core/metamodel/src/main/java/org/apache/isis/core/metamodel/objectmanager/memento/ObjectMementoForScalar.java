@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.memento;
+package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -32,30 +32,29 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmTitleUtil;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-final class _ObjectMementoForScalar
+public final class ObjectMementoForScalar
 implements HasLogicalType, Serializable, ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
-    public static Optional<_ObjectMementoForScalar> create(final @Nullable ManagedObject adapter) {
+    public static Optional<ObjectMementoForScalar> create(final @Nullable ManagedObject adapter) {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
-                : Optional.of(new _ObjectMementoForScalar(adapter));
+                : Optional.of(new ObjectMementoForScalar(adapter));
     }
 
-    static _ObjectMementoForScalar createPersistent(
+    static ObjectMementoForScalar createPersistent(
             final Bookmark bookmark,
             final SpecificationLoader specificationLoader) {
-        return new _ObjectMementoForScalar(bookmark, specificationLoader);
+        return new ObjectMementoForScalar(bookmark, specificationLoader);
     }
 
     // --
@@ -69,7 +68,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     byte[] serializedPayload;
 
-    private _ObjectMementoForScalar(
+    private ObjectMementoForScalar(
             final @NonNull Bookmark bookmark,
             final @NonNull SpecificationLoader specLoader) {
 
@@ -89,7 +88,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
                 : _Recreatable.RecreateStrategy.LOOKUP;
     }
 
-    private _ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
+    private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
 
         this.logicalType = adapter.getLogicalType();
         this.title = MmTitleUtil.titleOf(adapter);
@@ -140,7 +139,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     }
 
-    ManagedObject reconstructObject(final MetaModelContext mmc) {
+    public ManagedObject reconstructObject(final MetaModelContext mmc) {
         val spec = mmc.getSpecificationLoader()
                 .specForLogicalType(logicalType).orElse(null);
         if(spec==null) {
@@ -163,10 +162,10 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     @Override
     public boolean equals(final Object other) {
-        if (!(other instanceof _ObjectMementoForScalar)) {
+        if (!(other instanceof ObjectMementoForScalar)) {
             return false;
         }
-        return recreateStrategy.equals(this, (_ObjectMementoForScalar) other);
+        return recreateStrategy.equals(this, (ObjectMementoForScalar) other);
     }
 
 }

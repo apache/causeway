@@ -18,9 +18,13 @@
  */
 package org.apache.isis.core.metamodel.object;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -28,7 +32,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoCollection;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
@@ -93,12 +99,27 @@ implements ManagedObject {
     @Override
     public Optional<ObjectMemento> getMemento() {
         return this instanceof PackedManagedObject
-                ? Optional.ofNullable(objectMementoService().mementoForMulti((PackedManagedObject)this))
-                : Optional.ofNullable(objectMementoService().mementoForSingle(this));
+                ? Optional.ofNullable(mementoForPacked((PackedManagedObject)this))
+                : Optional.ofNullable(mementoForScalar(this));
     }
 
-    private ObjectMementoService objectMementoService() {
-        return getServiceRegistry().lookupServiceElseFail(ObjectMementoService.class);
+    private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
+        MmAssertionUtil.assertPojoIsScalar(adapter);
+        return ObjectMementoForScalar.create(adapter)
+                .map(ObjectMemento.class::cast)
+                .orElseGet(()->
+                ManagedObjects.isSpecified(adapter)
+                ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                        : null);
+    }
+
+    private ObjectMemento mementoForPacked(@Nullable final PackedManagedObject packedAdapter) {
+        val listOfMementos = packedAdapter.unpack().stream()
+                .map(this::mementoForScalar)
+                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
+        return ObjectMementoCollection.of(
+                listOfMementos,
+                packedAdapter.getLogicalType());
     }
 
     //XXX compares pojos by their 'equals' semantics -

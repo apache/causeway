@@ -18,20 +18,16 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.choices;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
-import org.apache.isis.core.runtimeservices.memento.ObjectMementoServiceDefault;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -40,24 +36,13 @@ abstract class ChoiceProviderTestAbstract {
 
     protected MetaModelContext mmc;
 
-    private ObjectMementoServiceDefault mementoService() {
-        return mmc.getServiceInjector().injectServicesInto(new ObjectMementoServiceDefault());
-    }
-
     protected void setUp() {
         mmc = MetaModelContext_forTesting.builder()
-                .singletonProvider(_ManagedBeanAdapter.forTestingLazy(ObjectMementoService.class, this::mementoService))
                 .build()
                 .withValueSemantics(new BigDecimalValueSemantics())
                 .withValueSemantics(new IntValueSemantics())
                 .withValueSemantics(new UUIDValueSemantics())
                 ;
-
-        // verify
-        {
-            val mementoService = mmc.getServiceRegistry().lookupServiceElseFail(ObjectMementoService.class);
-            assertEquals(ObjectMementoServiceDefault.class, mementoService.getClass());
-        }
     }
 
     protected ScalarModel mockScalarModel(final Can<ManagedObject> choices, final boolean isRequired) {
@@ -68,6 +53,5 @@ abstract class ChoiceProviderTestAbstract {
         when(mockScalarModel.getMetaModelContext()).thenReturn(mmc);
         return mockScalarModel;
     }
-
 
 }

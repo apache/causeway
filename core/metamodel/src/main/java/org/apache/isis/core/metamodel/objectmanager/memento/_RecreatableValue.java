@@ -16,40 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel._testing;
+package org.apache.isis.core.metamodel.objectmanager.memento;
 
-import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.PackedManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 
-public class ObjectMementoService_forTesting
-implements ObjectMementoService {
+class _RecreatableValue implements _Recreatable{
 
     @Override
-    public ObjectMemento mementoForSingle(final ManagedObject adapter) {
-        return null;
+    public ManagedObject recreateObject(
+            final ObjectMementoForScalar memento,
+            final MetaModelContext mmc) {
+
+        return mmc.getObjectManager().loadObjectElseFail(memento.bookmark);
     }
 
     @Override
-    public ObjectMemento mementoForMulti(final PackedManagedObject adapter) {
-        return null;
+    public boolean equals(
+            final ObjectMementoForScalar memento,
+            final ObjectMementoForScalar otherMemento) {
+
+        return otherMemento.recreateStrategy == RecreateStrategy.VALUE
+                && memento.bookmark.equals(otherMemento.bookmark);
     }
 
     @Override
-    public ObjectMemento mementoForPojo(final Object pojo) {
-        return null;
-    }
-
-    @Override
-    public ObjectMemento mementoForPojos(final LogicalType logicalType, final Iterable<Object> iterablePojos) {
-        return null;
-    }
-
-    @Override
-    public ManagedObject reconstructObject(final ObjectMemento memento) {
-        return null;
+    public int hashCode(final ObjectMementoForScalar memento) {
+        return memento.bookmark.hashCode();
     }
 
 }

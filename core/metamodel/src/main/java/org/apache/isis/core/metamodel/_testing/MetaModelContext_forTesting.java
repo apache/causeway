@@ -79,7 +79,6 @@ import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetFor
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
@@ -257,8 +256,7 @@ implements MetaModelContext {
                     _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
                     _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader),
-                    _ManagedBeanAdapter.forTestingLazy(ObjectMementoService.class, this::getObjectMementoService)
+                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
                 )
                 );
     }
@@ -378,14 +376,6 @@ implements MetaModelContext {
 
     @Builder.Default
     private final MessageService messageService = new MessageServiceNoop();
-
-    private ObjectMementoService objectMementoService;
-    private ObjectMementoService getObjectMementoService(){
-        if(objectMementoService==null) {
-            objectMementoService = new ObjectMementoService_forTesting();
-        }
-        return objectMementoService;
-    }
 
     @Override
     public ManagedObject getHomePageAdapter() {

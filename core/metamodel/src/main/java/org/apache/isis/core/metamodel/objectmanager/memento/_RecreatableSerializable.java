@@ -16,33 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.memento;
+package org.apache.isis.core.metamodel.objectmanager.memento;
+
+import java.util.Objects;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-class _RecreatableValue implements _Recreatable{
+class _RecreatableSerializable implements _Recreatable{
 
     @Override
     public ManagedObject recreateObject(
-            final _ObjectMementoForScalar memento,
+            final ObjectMementoForScalar memento,
             final MetaModelContext mmc) {
-
-        return mmc.getObjectManager().loadObjectElseFail(memento.bookmark);
+        ObjectSpecification spec = mmc.getSpecificationLoader()
+                .specForLogicalTypeElseFail(memento.logicalType);
+        return mmc.getObjectManager().getObjectSerializer()
+                .deserialize(spec, memento.serializedPayload);
     }
 
     @Override
     public boolean equals(
-            final _ObjectMementoForScalar memento,
-            final _ObjectMementoForScalar otherMemento) {
-
-        return otherMemento.recreateStrategy == RecreateStrategy.VALUE
-                && memento.bookmark.equals(otherMemento.bookmark);
+            final ObjectMementoForScalar memento,
+            final ObjectMementoForScalar otherMemento) {
+        return otherMemento.recreateStrategy == RecreateStrategy.SERIALIZABLE
+                && Objects.equals(memento.logicalType, otherMemento.logicalType)
+                && Objects.equals(memento.serializedPayload, otherMemento.serializedPayload);
     }
 
     @Override
-    public int hashCode(final _ObjectMementoForScalar memento) {
-        return memento.bookmark.hashCode();
+    public int hashCode(final ObjectMementoForScalar memento) {
+        // thats where we stored the hash of the originating pojo
+        return memento.bookmark.getIdentifier().hashCode();
     }
 
 }
