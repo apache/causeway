@@ -91,6 +91,13 @@ public class TypeOfAnyCardinality {
         .orElseGet(()->scalar(paramType));
     }
 
+    public static TypeOfAnyCardinality forNonScalarType(
+            final Class<?> nonScalarType) {
+        return nonScalar(
+                toClass(ResolvableType.forClass(nonScalarType)),
+                nonScalarType);
+    }
+
     // -- WITHERS
 
     public TypeOfAnyCardinality withElementType(final @NonNull Class<?> elementType) {
@@ -134,7 +141,5 @@ public class TypeOfAnyCardinality {
                 : nonScalar.getGeneric(0);
         return genericTypeArg.toClass();
     }
-
-
 
 }

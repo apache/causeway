@@ -125,6 +125,18 @@ extends TypedHolderAbstract {
     /**
      * Principally for testing purposes.
      */
+    public static FacetedMethod createSetterForProperty(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String propertyName) {
+        try {
+            final Method method = declaringType.getMethod("set" + StringExtensions.asPascal(propertyName), String.class);
+            return FacetedMethod.createForProperty(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static FacetedMethod createForProperty(
             final MetaModelContext mmc,
             final Class<?> declaringType,

@@ -64,7 +64,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetFromGenerics);
         final TypeOfFacetFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetFromGenerics) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value());
+        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
 
     }
 
@@ -87,7 +87,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetFromGenerics);
         final TypeOfFacetFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetFromGenerics) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value());
+        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
 
     }
 
@@ -109,7 +109,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetFromArray);
         final TypeOfFacetFromArray typeOfFacetInferredFromArray = (TypeOfFacetFromArray) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromArray.value());
+        assertEquals(Order.class, typeOfFacetInferredFromArray.value().getElementType());
 
     }
 

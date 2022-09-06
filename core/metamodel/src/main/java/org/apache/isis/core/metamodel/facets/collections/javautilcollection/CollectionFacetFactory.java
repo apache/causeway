@@ -20,11 +20,11 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 
 import lombok.val;
 
@@ -48,14 +48,8 @@ extends FacetFactoryAbstract {
                 addFacet(new JavaArrayFacet(facetHolder));
                 return;
             }
-
             addFacet(new JavaCollectionFacet(facetHolder));
-            if(cls.isInterface()) {
-                return;
-            }
-
-            throw _Exceptions.unrecoverable("non-scalar object %s", cls);
-            // addFacetIfPresent(TypeOfFacet.inferFromObjectType(cls, facetHolder));
+            addFacetIfPresent(TypeOfFacet.inferFromNonScalarType(collectionType, cls, facetHolder));
         });
     }
 

@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleTypeValueFacet;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
@@ -44,14 +45,8 @@ public interface TypeOfFacet extends SingleTypeValueFacet {
             final Method method,
             final int paramIndex,
             final FacetHolder holder) {
-
         val type = TypeOfAnyCardinality.forMethodParameter(implementationClass, method, paramIndex);
-        if(type.isScalar()) {
-            return Optional.empty();
-        }
-        return Optional.of(type.isArray()
-                ? inferredFromArray(type, holder)
-                : inferredFromGenerics(type, holder));
+        return toInferredFrom(type, holder);
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
@@ -59,15 +54,26 @@ public interface TypeOfFacet extends SingleTypeValueFacet {
             final Method method,
             final FacetHolder holder) {
         val type = TypeOfAnyCardinality.forMethodReturn(implementationClass, method);
-        if(type.isScalar()) {
-            return Optional.empty();
-        }
-        return Optional.of(type.isArray()
-                ? inferredFromArray(type, holder)
-                : inferredFromGenerics(type, holder));
+        return toInferredFrom(type, holder);
+    }
+
+    static Optional<TypeOfFacet> inferFromNonScalarType(
+            final CollectionType collectionType, final Class<?> nonScalarType, final FacetHolder holder) {
+        val type = TypeOfAnyCardinality.forNonScalarType(nonScalarType);
+        return toInferredFrom(type, holder);
     }
 
     // -- INTERNAL
+
+    private static Optional<TypeOfFacet> toInferredFrom(
+            final TypeOfAnyCardinality type,
+            final FacetHolder holder) {
+        return type.isScalar()
+            ? Optional.empty()
+            : Optional.of(type.isArray()
+                    ? inferredFromArray(type, holder)
+                    : inferredFromGenerics(type, holder));
+    }
 
     private static TypeOfFacet inferredFromArray(
             final TypeOfAnyCardinality type,
@@ -80,6 +86,5 @@ public interface TypeOfFacet extends SingleTypeValueFacet {
             final FacetHolder holder) {
         return new TypeOfFacetFromGenerics(type, holder);
     }
-
 
 }
