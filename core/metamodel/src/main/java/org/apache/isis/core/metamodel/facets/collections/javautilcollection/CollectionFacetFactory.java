@@ -40,13 +40,12 @@ extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
 
         val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
 
         ProgrammingModelConstants.CollectionType.valueOf(cls)
         .ifPresent(collectionType->{
+            val facetHolder = processClassContext.getFacetHolder();
             if (collectionType.isArray()) {
                 addFacet(new JavaArrayFacet(facetHolder));
-                return;
             }
             addFacet(new JavaCollectionFacet(facetHolder));
             addFacetIfPresent(TypeOfFacet.inferFromNonScalarType(collectionType, cls, facetHolder));

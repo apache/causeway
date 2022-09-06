@@ -632,42 +632,6 @@ public final class ProgrammingModelConstants {
         }
         protected abstract Object asContainerType(
                 final Class<?> elementType, final @NonNull List<?> nonScalar);
-
-        /*{
-
-            if(parameterType == Can.class) {
-                if(obj instanceof Can) {
-                    return obj;
-                }
-                return Can.ofStream(_NullSafe.streamAutodetect(obj));
-            }
-
-            if(obj instanceof Can) {
-                obj = ((Can<?>)obj).toList();
-            }
-
-            // allow no side effects on Collection arguments
-            if(Collection.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableCollection((List<?>)obj);
-            }
-
-            // allow no side effects on List arguments
-            if(List.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableList((List<?>)obj);
-            }
-
-            // adapt as Set (unmodifiable)
-            if(Set.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableSet((List<?>)obj);
-            }
-
-            // adapt as SortedSet (unmodifiable)
-            if(SortedSet.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableSortedSet((List<?>)obj);
-            }
-*/
-
-
     }
 
     //TODO perhaps needs an update to reflect Java 7->11 Language changes
