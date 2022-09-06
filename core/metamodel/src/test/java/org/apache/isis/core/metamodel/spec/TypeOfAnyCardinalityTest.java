@@ -62,8 +62,8 @@ class TypeOfAnyCardinalityTest {
         val array = new String[]{};
 
         assertEquals(
-                ProgrammingModelConstants.CollectionType.ARRAY,
-                ProgrammingModelConstants.CollectionType.valueOf(array.getClass())
+                ProgrammingModelConstants.CollectionSemantics.ARRAY,
+                ProgrammingModelConstants.CollectionSemantics.valueOf(array.getClass())
                     .orElse(null));
 
         val arC = new CharSequence[] {};

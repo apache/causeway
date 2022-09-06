@@ -550,7 +550,7 @@ public final class ProgrammingModelConstants {
      */
     @RequiredArgsConstructor
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static enum CollectionType {
+    public static enum CollectionSemantics {
         ARRAY(Array.class){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
@@ -612,14 +612,14 @@ public final class ProgrammingModelConstants {
         //
         public boolean isSetAny() {return isSet() || isSortedSet(); }
         @Getter private final Class<?> containerType;
-        private static final ImmutableEnumSet<CollectionType> all =
-                ImmutableEnumSet.allOf(CollectionType.class);
+        private static final ImmutableEnumSet<CollectionSemantics> all =
+                ImmutableEnumSet.allOf(CollectionSemantics.class);
         @Getter @Accessors(fluent = true)
-        private static final ImmutableEnumSet<CollectionType> typeSubstitutors = all.remove(ARRAY);
-        public static Optional<CollectionType> valueOf(final @Nullable Class<?> type) {
+        private static final ImmutableEnumSet<CollectionSemantics> typeSubstitutors = all.remove(ARRAY);
+        public static Optional<CollectionSemantics> valueOf(final @Nullable Class<?> type) {
             if(type==null) return Optional.empty();
             return type.isArray()
-                    ? Optional.of(CollectionType.ARRAY)
+                    ? Optional.of(CollectionSemantics.ARRAY)
                     : all.stream()
                         .filter(collType->collType.getContainerType().isAssignableFrom(type))
                         .findFirst();

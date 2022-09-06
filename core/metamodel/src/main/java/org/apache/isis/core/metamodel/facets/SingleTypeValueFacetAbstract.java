@@ -32,9 +32,9 @@ public abstract class SingleTypeValueFacetAbstract
 extends FacetAbstract
 implements SingleTypeValueFacet {
 
-    private final TypeOfAnyCardinality value;
+    private final @NonNull TypeOfAnyCardinality value;
 
-    public SingleTypeValueFacetAbstract(
+    protected SingleTypeValueFacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final TypeOfAnyCardinality value) {
@@ -43,29 +43,29 @@ implements SingleTypeValueFacet {
     }
 
     @Override
-    public TypeOfAnyCardinality value() {
+    public final TypeOfAnyCardinality value() {
         return value;
     }
 
     @Override
-    public ObjectSpecification elementSpec() {
-        final Class<?> valueType = value().getElementType();
-        return valueType != null
-                ? getSpecificationLoader().loadSpecification(valueType)
-                : null;
+    public final ObjectSpecification elementSpec() {
+        return getSpecificationLoader().specForTypeElseFail(value().getElementType());
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("value", value());
+        getCollectionSemantics()
+            .ifPresent(sem->visitor.accept("collection-semantics", sem.name()));
     }
 
     @Override
-    public boolean semanticEquals(final @NonNull Facet other) {
+    public final boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof SingleTypeValueFacet
                 ? this.value() == ((SingleTypeValueFacet)other).value()
                 : false;
     }
+
 
 }

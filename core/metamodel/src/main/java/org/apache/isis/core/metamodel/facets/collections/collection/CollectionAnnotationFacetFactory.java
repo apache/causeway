@@ -163,7 +163,7 @@ extends FacetFactoryAbstract {
         val method = processMethodContext.getMethod();
 
         val methodReturnType = method.getReturnType();
-        ProgrammingModelConstants.CollectionType.valueOf(methodReturnType)
+        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(
                     // check for @Collection(typeOf=...)

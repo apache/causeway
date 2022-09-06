@@ -36,8 +36,8 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
     @Override
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
-        return ProgrammingModelConstants.CollectionType.valueOf(cls)
-            .map(ProgrammingModelConstants.CollectionType::getContainerType)
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(cls)
+            .map(ProgrammingModelConstants.CollectionSemantics::getContainerType)
             .map(Substitution::replaceWith) // replace container type with first replacement type that matches
             .orElse( Substitution.passThrough()) // indifferent
         ;

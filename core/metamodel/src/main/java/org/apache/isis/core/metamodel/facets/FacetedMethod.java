@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
@@ -86,7 +85,7 @@ extends TypedHolderAbstract {
             final Class<?> parameterType = param.getType();
 
             final FeatureType featureType =
-                    ProgrammingModelConstants.CollectionType.valueOf(parameterType).isPresent()
+                    ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType).isPresent()
                     ? FeatureType.ACTION_PARAMETER_COLLECTION
                     : FeatureType.ACTION_PARAMETER_SCALAR;
 
@@ -99,10 +98,6 @@ extends TypedHolderAbstract {
             }
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
-
-            FacetUtil.addFacet(
-                    CollectionSemanticsFacetDefault
-                    .forParamType(param, facetedMethodParam));
 
             val facetedMethodParamToUse =
                     TypeOfFacet

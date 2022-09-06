@@ -41,7 +41,7 @@ extends FacetFactoryAbstract {
 
         val cls = processClassContext.getCls();
 
-        ProgrammingModelConstants.CollectionType.valueOf(cls)
+        ProgrammingModelConstants.CollectionSemantics.valueOf(cls)
         .ifPresent(collectionType->{
             val facetHolder = processClassContext.getFacetHolder();
             if (collectionType.isArray()) {

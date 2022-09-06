@@ -110,7 +110,7 @@ public class MmAssertionUtil {
             return;
         }
 
-        _Assert.assertTrue(ProgrammingModelConstants.CollectionType.valueOf(pojo.getClass()).isEmpty(),
+        _Assert.assertTrue(ProgrammingModelConstants.CollectionSemantics.valueOf(pojo.getClass()).isEmpty(),
                 ()->String.format("is scalar %s", pojo.getClass()));
     }
 

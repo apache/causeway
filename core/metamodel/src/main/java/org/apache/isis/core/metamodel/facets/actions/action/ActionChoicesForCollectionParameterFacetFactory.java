@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -98,13 +98,13 @@ implements MetaModelRefiner {
             return;
         }
 
-        parameter.lookupFacet(CollectionSemanticsFacet.class)
-        .ifPresentOrElse(collectionSemanticsFacet->{
+        parameter.lookupFacet(TypeOfFacet.class)
+        .ifPresentOrElse(typeOfFacet->{
 
             // Violation if there are action parameter types that are assignable
             // from java.util.Collection but are not of
             // exact type List, Set, SortedSet or Collection.
-            if(!collectionSemanticsFacet.value().isSupportedInterfaceForActionParameters()) {
+            if(!typeOfFacet.isSupportedInterfaceForActionParameters()) {
 
                 val messageFormat = "Collection action parameter found that is not exactly one "
                         + "of the following supported types: "
@@ -123,7 +123,7 @@ implements MetaModelRefiner {
         },()->{
 
             val messageFormat = "framework bug: non-scalar action parameter found,"
-                    + " that has no CollectionSemanticsFacet"
+                    + " that has no TypeOfFacet"
                     + "Class: %s action: %s parameter %d";
 
             throw _Exceptions.unrecoverable(

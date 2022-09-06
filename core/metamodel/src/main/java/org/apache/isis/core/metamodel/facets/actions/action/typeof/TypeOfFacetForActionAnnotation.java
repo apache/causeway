@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.typeof;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionType;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
@@ -32,7 +32,7 @@ extends TypeOfFacetAbstract {
 
     public static Optional<TypeOfFacet> create(
             final Optional<Action> actionIfAny,
-            final CollectionType collectionType,
+            final CollectionSemantics collectionSemantics,
             final FacetHolder facetHolder) {
 
         return actionIfAny
@@ -42,7 +42,7 @@ extends TypeOfFacetAbstract {
                 .map(typeOf ->
                     new TypeOfFacetForActionAnnotation(
                             TypeOfAnyCardinality
-                                .nonScalar(typeOf, collectionType.getContainerType()),
+                                .nonScalar(typeOf, collectionSemantics.getContainerType(), collectionSemantics),
                             facetHolder));
     }
 

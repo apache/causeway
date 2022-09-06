@@ -63,7 +63,7 @@ public class MethodUtil {
 
     public static boolean isScalar(final Method method) {
         return isNotVoid(method)
-                    && ProgrammingModelConstants.CollectionType.valueOf(method.getReturnType())
+                    && ProgrammingModelConstants.CollectionSemantics.valueOf(method.getReturnType())
                         .isEmpty();
     }
 

@@ -250,7 +250,7 @@ extends FacetFactoryAbstract {
 
         val methodReturnType = method.getReturnType();
 
-        ProgrammingModelConstants.CollectionType.valueOf(methodReturnType)
+        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(
                     TypeOfFacetForActionAnnotation.create(actionIfAny, collectionType, facetedMethod)

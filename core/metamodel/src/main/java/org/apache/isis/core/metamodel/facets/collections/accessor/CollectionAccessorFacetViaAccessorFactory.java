@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 
 import lombok.val;
 
@@ -61,10 +60,6 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         addFacet(
                 new CollectionAccessorFacetViaAccessor(
                         typeSpec, accessorMethod, facetHolder));
-
-        addFacet(
-                CollectionSemanticsFacetDefault
-                .forCollection(accessorMethod, facetHolder));
     }
 
 

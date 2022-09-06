@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionType;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleTypeValueFacet;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
@@ -37,6 +37,10 @@ import lombok.val;
  * {@link Collection#typeOf} annotation.
  */
 public interface TypeOfFacet extends SingleTypeValueFacet {
+
+    default boolean isSupportedInterfaceForActionParameters() {
+        return true;
+    }
 
     // -- FACTORIES
 
@@ -58,8 +62,8 @@ public interface TypeOfFacet extends SingleTypeValueFacet {
     }
 
     static Optional<TypeOfFacet> inferFromNonScalarType(
-            final CollectionType collectionType, final Class<?> nonScalarType, final FacetHolder holder) {
-        val type = TypeOfAnyCardinality.forNonScalarType(nonScalarType);
+            final CollectionSemantics collectionSemantics, final Class<?> nonScalarType, final FacetHolder holder) {
+        val type = TypeOfAnyCardinality.forNonScalarType(nonScalarType, collectionSemantics);
         return toInferredFrom(type, holder);
     }
 

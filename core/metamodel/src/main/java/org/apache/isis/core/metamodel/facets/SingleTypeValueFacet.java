@@ -18,18 +18,27 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Optional;
+
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 public interface SingleTypeValueFacet extends Facet {
 
-    public TypeOfAnyCardinality value();
+    TypeOfAnyCardinality value();
 
     /**
      * Convenience to return the {@link ObjectSpecification} corresponding to
      * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#getElementType()}.
      */
-    public ObjectSpecification elementSpec();
+    ObjectSpecification elementSpec();
+
+    // -- SHORTCUTS
+
+    default Optional<CollectionSemantics> getCollectionSemantics() {
+        return value().getCollectionSemantics();
+    }
 
 }

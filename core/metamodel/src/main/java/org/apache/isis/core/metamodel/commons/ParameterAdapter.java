@@ -80,7 +80,7 @@ public interface ParameterAdapter {
                         : null;
             }
 
-            return ProgrammingModelConstants.CollectionType.valueOf(parameterType)
+            return ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType)
             .map(collectionType->collectionType
                     .unmodifiableCopyOf(parameterType, (Iterable<?>) parameterValue))
             .orElse(parameterValue);

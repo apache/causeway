@@ -38,7 +38,7 @@ implements PropertyOrCollectionIdentifyingFacetFactory {
     }
 
     protected boolean isNonScalar(final Class<?> cls) {
-        return ProgrammingModelConstants.CollectionType.valueOf(cls)
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(cls)
                 .isPresent();
     }
 

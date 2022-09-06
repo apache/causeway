@@ -112,7 +112,7 @@ implements ObjectAction {
             return;
         }
 
-        elementType = Facets.typeOf(getFacetedMethod())
+        elementType = Facets.elementSpec(getFacetedMethod())
                 .orElseGet(()->{
                     val returnType = getReturnType();
                     if(!returnType.isScalar()) {

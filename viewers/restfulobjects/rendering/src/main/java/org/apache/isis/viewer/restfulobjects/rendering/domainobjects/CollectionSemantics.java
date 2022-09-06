@@ -26,7 +26,7 @@ public enum CollectionSemantics {
     LIST;
 
     public static CollectionSemantics valueOf(final OneToManyAssociation collection) {
-        return collection.getCollectionSemantics().isInheritedFromSet()
+        return collection.getCollectionSemantics().isSetAny()
                 ? CollectionSemantics.SET
                 : CollectionSemantics.LIST;
     }

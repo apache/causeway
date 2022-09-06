@@ -35,9 +35,4 @@ implements TypeOfFacet {
         super(type(), holder, type);
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [type=" + value() + "]";
-    }
-
 }

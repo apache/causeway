@@ -27,6 +27,7 @@ import org.springframework.core.ResolvableType;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 
 import lombok.NonNull;
 import lombok.val;
@@ -44,6 +45,7 @@ public class TypeOfAnyCardinality {
      * such as {@link List}, {@link Collection}, etc.
      */
     private final @NonNull Optional<Class<?>> containerType;
+    private final @NonNull Optional<CollectionSemantics> collectionSemantics;
 
     public boolean isScalar() {
         return containerType.isEmpty();
@@ -56,24 +58,28 @@ public class TypeOfAnyCardinality {
     // -- FACTORIES
 
     public static TypeOfAnyCardinality scalar(final @NonNull Class<?> scalarType) {
-        return of(assertScalar(scalarType), Optional.empty());
+        return of(assertScalar(scalarType), Optional.empty(), Optional.empty());
     }
 
     public static TypeOfAnyCardinality nonScalar(
             final @NonNull Class<?> elementType,
-            final @NonNull Class<?> nonScalarType) {
-        return of(assertScalar(elementType), Optional.of(assertNonScalar(nonScalarType)));
+            final @NonNull Class<?> nonScalarType,
+            final @NonNull CollectionSemantics collectionSemantics) {
+        return of(assertScalar(elementType),
+                Optional.of(assertNonScalar(nonScalarType)),
+                Optional.of(collectionSemantics));
     }
 
     public static TypeOfAnyCardinality forMethodReturn(
             final Class<?> implementationClass, final Method method) {
         val methodReturn = method.getReturnType();
 
-        return ProgrammingModelConstants.CollectionType.valueOf(methodReturn)
-        .map(collectionType->
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturn)
+        .map(collectionSemantics->
             nonScalar(
                     inferElementTypeForMethodReturn(implementationClass, method),
-                    methodReturn)
+                    methodReturn,
+                    collectionSemantics)
         )
         .orElseGet(()->scalar(methodReturn));
     }
@@ -82,26 +88,29 @@ public class TypeOfAnyCardinality {
             final Class<?> implementationClass, final Method method, final int paramIndex) {
         val paramType = method.getParameters()[paramIndex].getType();
 
-        return ProgrammingModelConstants.CollectionType.valueOf(paramType)
-        .map(collectionType->
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(paramType)
+        .map(collectionSemantics->
             nonScalar(
                     inferElementTypeForMethodParameter(implementationClass, method, paramIndex),
-                    paramType)
+                    paramType,
+                    collectionSemantics)
         )
         .orElseGet(()->scalar(paramType));
     }
 
     public static TypeOfAnyCardinality forNonScalarType(
-            final Class<?> nonScalarType) {
+            final @NonNull Class<?> nonScalarType,
+            final @NonNull CollectionSemantics collectionSemantics) {
         return nonScalar(
                 toClass(ResolvableType.forClass(nonScalarType)),
-                nonScalarType);
+                nonScalarType,
+                collectionSemantics);
     }
 
     // -- WITHERS
 
     public TypeOfAnyCardinality withElementType(final @NonNull Class<?> elementType) {
-        return of(assertScalar(elementType), this.getContainerType());
+        return of(assertScalar(elementType), this.getContainerType(), this.getCollectionSemantics());
     }
 
     // -- HELPER
@@ -109,14 +118,14 @@ public class TypeOfAnyCardinality {
     private static Class<?> assertScalar(final @NonNull Class<?> scalarType) {
         _Assert.assertEquals(
                 Optional.empty(),
-                ProgrammingModelConstants.CollectionType.valueOf(scalarType),
+                ProgrammingModelConstants.CollectionSemantics.valueOf(scalarType),
                 ()->String.format("%s should not match any supported non-scalar types", scalarType));
         return scalarType;
     }
 
     private static Class<?> assertNonScalar(final @NonNull Class<?> nonScalarType) {
         _Assert.assertTrue(
-                ProgrammingModelConstants.CollectionType.valueOf(nonScalarType).isPresent(),
+                ProgrammingModelConstants.CollectionSemantics.valueOf(nonScalarType).isPresent(),
                 ()->String.format("%s should match a supported non-scalar type", nonScalarType));
         return nonScalarType;
     }

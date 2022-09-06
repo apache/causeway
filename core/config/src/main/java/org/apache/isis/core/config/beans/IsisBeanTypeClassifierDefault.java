@@ -66,7 +66,7 @@ implements IsisBeanTypeClassifier {
             return IsisBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
-        if(ProgrammingModelConstants.CollectionType.valueOf(type).isPresent()) {
+        if(ProgrammingModelConstants.CollectionSemantics.valueOf(type).isPresent()) {
             return IsisBeanMetaData.isisManaged(BeanSort.COLLECTION, type);
         }
 

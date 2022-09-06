@@ -74,6 +74,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -335,9 +336,14 @@ public final class Facets {
                 .map(CollectionLayoutTableDecorationFacet::value);
     }
 
-    public Optional<ObjectSpecification> typeOf(final FacetHolder facetHolder) {
+    public Optional<ObjectSpecification> elementSpec(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
         .map(TypeOfFacet::elementSpec);
+    }
+
+    public Optional<TypeOfAnyCardinality> typeOfAnyCardinality(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(TypeOfFacet.class)
+        .map(TypeOfFacet::value);
     }
 
     public OptionalInt typicalLength(
