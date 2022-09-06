@@ -173,7 +173,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
             Assert.assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
-            assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 
         @Test
@@ -203,7 +203,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
             Assert.assertTrue(facet instanceof TypeOfFacetFromArray);
-            assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 
         @Test
@@ -233,7 +233,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
             Assert.assertTrue(facet instanceof TypeOfFacetFromGenerics);
-            assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 
     }

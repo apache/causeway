@@ -24,8 +24,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -109,7 +109,8 @@ public class MmAssertionUtil {
         if(pojo==null) {
             return;
         }
-        _Assert.assertTrue(!_Collections.isCollectionOrArrayOrCanType(pojo.getClass()),
+
+        _Assert.assertTrue(ProgrammingModelConstants.CollectionType.valueOf(pojo.getClass()).isEmpty(),
                 ()->String.format("is scalar %s", pojo.getClass()));
     }
 

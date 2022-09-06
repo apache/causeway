@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -38,7 +38,8 @@ implements PropertyOrCollectionIdentifyingFacetFactory {
     }
 
     protected boolean isNonScalar(final Class<?> cls) {
-        return _Collections.isCollectionOrArrayOrCanType(cls);
+        return ProgrammingModelConstants.CollectionType.valueOf(cls)
+                .isPresent();
     }
 
 }

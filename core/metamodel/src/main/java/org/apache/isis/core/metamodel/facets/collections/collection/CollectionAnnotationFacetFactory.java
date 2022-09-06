@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -158,25 +158,26 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
+        val cls = processMethodContext.getCls();
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
         val methodReturnType = method.getReturnType();
-        if (!_Collections.isCollectionOrArrayOrCanType(methodReturnType)) {
-            return;
-        }
+        ProgrammingModelConstants.CollectionType.valueOf(methodReturnType)
+        .ifPresent(collectionType->{
+            addFacetIfPresent(
+                    // check for @Collection(typeOf=...)
+                    TypeOfFacetForCollectionAnnotation
+                    .create(collectionIfAny, collectionType, facetHolder)
+                    .or(
+                        // else infer from return type
+                        ()-> TypeOfFacet.inferFromMethodReturnType(
+                                cls,
+                                method,
+                                facetHolder))
+                );
 
-        addFacetIfPresent(
-            // check for @Collection(typeOf=...)
-            TypeOfFacetForCollectionAnnotation
-            .create(collectionIfAny, facetHolder)
-            .or(
-                // else infer from return type
-                ()-> TypeOfFacet.inferFromMethodReturnType(
-                                    method,
-                                    facetHolder))
-        );
-
+        });
     }
 
 

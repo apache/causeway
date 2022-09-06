@@ -18,17 +18,12 @@
  */
 package org.apache.isis.core.metamodel.services.classsubstitutor;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Vector;
-
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.NonNull;
@@ -39,23 +34,13 @@ import lombok.NonNull;
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
-    public Substitution getSubstitution(@NonNull Class<?> cls) {
-        if(Vector.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(Vector.class);
-        }
-        if(List.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(List.class);
-        }
-        if(SortedSet.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(SortedSet.class);
-        }
-        if(Set.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(Set.class);
-        }
-        if(Collection.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(Collection.class);
-        }
+    public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
-        return Substitution.passThrough(); // indifferent
+        return ProgrammingModelConstants.CollectionType.valueOf(cls)
+            .map(ProgrammingModelConstants.CollectionType::getContainerType)
+            .map(Substitution::replaceWith) // replace container type with first replacement type that matches
+            .orElse( Substitution.passThrough()) // indifferent
+        ;
+
     }
 }

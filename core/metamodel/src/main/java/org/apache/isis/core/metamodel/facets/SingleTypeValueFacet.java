@@ -16,13 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.collparam.semantics;
+package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
-/**
- * Represents the semantics of a collection.
- */
-public interface CollectionSemanticsFacet extends SingleValueFacet<CollectionSemantics> {
+public interface SingleTypeValueFacet extends Facet {
+
+    public TypeOfAnyCardinality value();
+
+    /**
+     * Convenience to return the {@link ObjectSpecification} corresponding to
+     * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#getElementType()}.
+     */
+    public ObjectSpecification elementSpec();
 
 }

@@ -52,7 +52,7 @@ implements OneToManyAssociation {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 facetedMethod.getMetaModelContext().getSpecificationLoader()
-                    .loadSpecification(facetedMethod.getType()));
+                    .loadSpecification(facetedMethod.getType().getElementType()));
     }
 
     protected OneToManyAssociationDefault(
@@ -64,8 +64,9 @@ implements OneToManyAssociation {
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        final CollectionSemanticsFacet facet = getFacet(CollectionSemanticsFacet.class);
-        return facet != null ? facet.value() : CollectionSemantics.OTHER_IMPLEMENTATION;
+        return lookupFacet(CollectionSemanticsFacet.class)
+                .map(CollectionSemanticsFacet::value)
+                .orElseGet(CollectionSemantics::other);
     }
 
     // -- visible, usable

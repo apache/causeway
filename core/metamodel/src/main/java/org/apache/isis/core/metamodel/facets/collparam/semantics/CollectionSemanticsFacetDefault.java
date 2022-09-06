@@ -19,27 +19,35 @@
 package org.apache.isis.core.metamodel.facets.collparam.semantics;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public class CollectionSemanticsFacetDefault extends SingleValueFacetAbstract<CollectionSemantics> implements
-CollectionSemanticsFacet {
+public class CollectionSemanticsFacetDefault
+extends SingleValueFacetAbstract<CollectionSemantics>
+implements
+    CollectionSemanticsFacet {
 
     private static final Class<? extends Facet> type() {
         return CollectionSemanticsFacet.class;
     }
 
-    public static CollectionSemanticsFacet forCollection(final Method collectionAccessorMethod, final FacetHolder holder) {
-        return new CollectionSemanticsFacetDefault(CollectionSemantics.of(collectionAccessorMethod.getReturnType()), holder);
+    public static CollectionSemanticsFacet forCollection(
+            final Method collectionAccessorMethod, final FacetHolder holder) {
+        return new CollectionSemanticsFacetDefault(
+                CollectionSemantics.forMethodReturn(collectionAccessorMethod), holder);
     }
 
-    public static CollectionSemanticsFacet forParamType(final Class<?> paramClass, final FacetHolder holder) {
-        return new CollectionSemanticsFacetDefault(CollectionSemantics.of(paramClass), holder);
+    public static CollectionSemanticsFacet forParamType(
+            final Parameter param, final FacetHolder holder) {
+        return new CollectionSemanticsFacetDefault(
+                CollectionSemantics.forParameter(param), holder);
     }
 
-    private CollectionSemanticsFacetDefault(final CollectionSemantics collectionSemantics, final FacetHolder holder) {
+    private CollectionSemanticsFacetDefault(
+            final CollectionSemantics collectionSemantics, final FacetHolder holder) {
         super(type(), collectionSemantics, holder);
     }
 

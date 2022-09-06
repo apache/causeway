@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.val;
@@ -64,9 +63,9 @@ public class MethodUtil {
 
     public static boolean isScalar(final Method method) {
         return isNotVoid(method)
-                    && ! _Collections.isCollectionOrArrayOrCanType(method.getReturnType());
+                    && ProgrammingModelConstants.CollectionType.valueOf(method.getReturnType())
+                        .isEmpty();
     }
-
 
     @UtilityClass
     public static class Predicates {

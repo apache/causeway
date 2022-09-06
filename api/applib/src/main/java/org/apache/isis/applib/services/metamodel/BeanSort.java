@@ -135,7 +135,8 @@ public enum BeanSort {
     public boolean isToBeIntrospected() {
 
         if(isVetoed()
-                || isUnknown()) {
+                || isUnknown()
+                || isCollection()) {
             return false;
         }
         if(this == MANAGED_BEAN_NOT_CONTRIBUTING) {

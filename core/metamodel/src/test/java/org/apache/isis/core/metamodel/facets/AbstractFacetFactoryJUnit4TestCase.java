@@ -86,7 +86,7 @@ implements HasMetaModelContext {
                 metaModelContext,
                 Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(metaModelContext, AbstractFacetFactoryTest.Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(metaModelContext, FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class, 0);
+        facetedMethodParameter = new FacetedMethodParameter(metaModelContext, FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), 0);
 
     }
 

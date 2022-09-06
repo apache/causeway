@@ -22,30 +22,23 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 public abstract class TypedHolderAbstract
 implements TypedHolder {
 
     @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
-
     @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
-
-    /**
-     * For {@link FeatureType#COLLECTION collection}s and for
-     * {@link FeatureType#ACTION_PARAMETER_COLLECTION}s, represents the element type.
-     * <p>
-     * For example, the accessor might return a raw type such as
-     * <tt>java.util.List</tt>, rather than a generic one such as
-     * <tt>java.util.List&lt;Customer&gt;</tt>.
-     */
-    @Getter(onMethod_ = {@Override}) protected Class<?> type;
+    @Getter(onMethod_ = {@Override}) protected TypeOfAnyCardinality type;
 
     protected TypedHolderAbstract(
             final MetaModelContext mmc,
             final FeatureType featureType,
-            final Class<?> type,
+            final @NonNull TypeOfAnyCardinality type,
             final Identifier featureIdentifier) {
         this.facetHolder = FacetHolder.simple(mmc, featureIdentifier);
         this.featureType = featureType;
@@ -54,8 +47,11 @@ implements TypedHolder {
 
     @Override // as used for logging, not strictly required
     public String toString() {
-        return type.getSimpleName();
+        return type.toString();
     }
 
+    public ObjectSpecification getElementSpecification() {
+        return getSpecificationLoader().specForTypeElseFail(type.getElementType());
+    }
 
 }

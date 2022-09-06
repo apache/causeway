@@ -19,19 +19,13 @@
 package org.apache.isis.core.metamodel.commons;
 
 import java.lang.reflect.Executable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.NonNull;
 import lombok.val;
@@ -80,55 +74,16 @@ public interface ParameterAdapter {
 
         private Object _adaptToType(final Class<?> parameterType, final Object parameterValue) {
 
-            var obj = parameterValue;
-
-            if(obj==null) {
+            if(parameterValue==null) {
                 return parameterType.isPrimitive()
                         ? ClassUtil.defaultByPrimitive.get(parameterType)
                         : null;
             }
 
-            if(parameterType == Can.class) {
-                if(obj instanceof Can) {
-                    return obj;
-                }
-                return Can.ofStream(_NullSafe.streamAutodetect(obj));
-            }
-
-            if(obj instanceof Can) {
-                obj = ((Can<?>)obj).toList();
-            }
-
-            if(_Arrays.isArrayType(parameterType)) {
-                final Class<?> elementType = _Arrays.inferComponentType(parameterType).orElse(null);
-                if(elementType==null) {
-                    return obj;
-                }
-                @SuppressWarnings("rawtypes") final List list = (List)obj;
-                return _Arrays.toArray(_Casts.uncheckedCast(list), elementType);
-            }
-
-            // allow no side effects on Collection arguments
-            if(Collection.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableCollection((List<?>)obj);
-            }
-
-            // allow no side effects on List arguments
-            if(List.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableList((List<?>)obj);
-            }
-
-            // adapt as Set (unmodifiable)
-            if(Set.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableSet((List<?>)obj);
-            }
-
-            // adapt as SortedSet (unmodifiable)
-            if(SortedSet.class.equals(parameterType)) {
-                return _Collections.asUnmodifiableSortedSet((List<?>)obj);
-            }
-
-            return obj;
+            return ProgrammingModelConstants.CollectionType.valueOf(parameterType)
+            .map(collectionType->collectionType
+                    .unmodifiableCopyOf(parameterType, (Iterable<?>) parameterValue))
+            .orElse(parameterValue);
         }
 
     }

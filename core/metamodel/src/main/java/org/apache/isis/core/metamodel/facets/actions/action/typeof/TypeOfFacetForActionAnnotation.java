@@ -21,24 +21,33 @@ package org.apache.isis.core.metamodel.facets.actions.action.typeof;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 public class TypeOfFacetForActionAnnotation
 extends TypeOfFacetAbstract {
 
-    public static Optional<TypeOfFacet> create(final Optional<Action> actionIfAny, final FacetHolder facetHolder) {
+    public static Optional<TypeOfFacet> create(
+            final Optional<Action> actionIfAny,
+            final CollectionType collectionType,
+            final FacetHolder facetHolder) {
+
         return actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf!=null
                                         && typeOf != void.class) // ignore when unspecified
                 .map(typeOf ->
-                    new TypeOfFacetForActionAnnotation(typeOf, facetHolder));
+                    new TypeOfFacetForActionAnnotation(
+                            TypeOfAnyCardinality
+                                .nonScalar(typeOf, collectionType.getContainerType()),
+                            facetHolder));
     }
 
     private TypeOfFacetForActionAnnotation(
-            final Class<?> type,
+            final TypeOfAnyCardinality type,
             final FacetHolder holder) {
         super(type, holder);
     }

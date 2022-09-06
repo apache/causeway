@@ -38,7 +38,7 @@ public interface ElementSpecificationProvider {
         if (typeOfFacet == null) {
             return null;
         }
-        final ObjectSpecification spec = typeOfFacet.valueSpec();
+        final ObjectSpecification spec = typeOfFacet.elementSpec();
         return new ElementSpecificationProviderFromTypeOfFacet(spec);
     }
 }

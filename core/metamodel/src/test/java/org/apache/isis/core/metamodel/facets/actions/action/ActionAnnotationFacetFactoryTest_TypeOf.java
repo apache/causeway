@@ -92,7 +92,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
         Assert.assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
-        assertThat(facet.value(), classEqualTo(Order.class));
+        assertThat(facet.value().getElementType(), classEqualTo(Order.class));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
         Assert.assertTrue(facet instanceof TypeOfFacetFromArray);
-        assertThat(facet.value(), classEqualTo(Order.class));
+        assertThat(facet.value().getElementType(), classEqualTo(Order.class));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
         Assert.assertEquals(TypeOfFacetFromGenerics.class, facet.getClass());
-        assertThat(facet.value(), classEqualTo(Order.class));
+        assertThat(facet.value().getElementType(), classEqualTo(Order.class));
     }
 
 }

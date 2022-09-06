@@ -18,119 +18,51 @@
  */
 package org.apache.isis.core.metamodel.facets.collparam.semantics;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedSet;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 
-public enum CollectionSemantics {
+public interface CollectionSemantics {
 
-    ARRAY(true),
+    // -- FACTORIES
 
-    COLLECTION_INTERFACE(true),
-
-    LIST_IMPLEMENTATION,
-    LIST_INTERFACE(true),
-
-    SORTED_SET_IMPLEMENTATION,
-    SORTED_SET_INTERFACE(true),
-
-    SET_IMPLEMENTATION,
-    SET_INTERFACE(true),
-
-    CAN(true),
-
-    OTHER_IMPLEMENTATION
-    ;
-
-    final boolean isSupportedInterfaceForActionParameters;
-
-    private CollectionSemantics() {
-        this(false);
+    static CollectionSemantics forMethodReturn(final Method method) {
+        return create(method.getReturnType());
     }
 
-    private CollectionSemantics(final boolean isSupportedInterfaceForActionParameters) {
-        this.isSupportedInterfaceForActionParameters = isSupportedInterfaceForActionParameters;
+    static CollectionSemantics forParameter(final Parameter param) {
+        return create(param.getType());
     }
 
-    public static CollectionSemantics of(final Class<?> accessorReturnType) {
-        if (Can.class.isAssignableFrom(accessorReturnType)) {
-            return CAN;
-        }
-        if (!Collection.class.isAssignableFrom(accessorReturnType)) {
-            return ARRAY;
-        }
-        if (Collection.class.equals(accessorReturnType)) {
-            return COLLECTION_INTERFACE;
-        }
-        if (List.class.isAssignableFrom(accessorReturnType)) {
-            return List.class.equals(accessorReturnType) ? LIST_INTERFACE : LIST_IMPLEMENTATION;
-        }
-        if (SortedSet.class.isAssignableFrom(accessorReturnType)) {
-            return SortedSet.class.equals(accessorReturnType) ? SORTED_SET_INTERFACE : SORTED_SET_IMPLEMENTATION;
-        }
-        if (Set.class.isAssignableFrom(accessorReturnType)) {
-            return Set.class.equals(accessorReturnType) ? SET_INTERFACE : SET_IMPLEMENTATION;
-        }
-        return OTHER_IMPLEMENTATION;
+    static CollectionSemantics other() {
+        return new CollectionSemantics() {
+            @Override public boolean isSupportedInterfaceForActionParameters() {return false;}
+            @Override public boolean isInheritedFromSet() {return false;}};
     }
 
-    /**
-     * {@link Collection} is not assignable from the corresponding class.
-     */
-    public boolean isArray() {
-        return this == ARRAY;
+    boolean isSupportedInterfaceForActionParameters();
+    boolean isInheritedFromSet();
+
+    // -- HELPER
+
+    private static CollectionSemantics create(
+            final Class<?> containerClass) {
+        return ProgrammingModelConstants.CollectionType.valueOf(containerClass)
+                .<CollectionSemantics>map(collectionType->create(containerClass, collectionType))
+                .orElseGet(CollectionSemantics::other);
     }
 
-    public boolean isCan() {
-        return this == CAN;
-    }
-
-    /**
-     * {@link List} is assignable from the corresponding class.
-     */
-    public boolean isList() {
-        return this == LIST_IMPLEMENTATION || this == LIST_INTERFACE;
-    }
-
-    /**
-     * {@link SortedSet} is assignable from the corresponding class.
-     */
-    public boolean isSortedSet() {
-        return this == SORTED_SET_IMPLEMENTATION || this == SORTED_SET_INTERFACE;
-    }
-
-    /**
-     * {@link Set} (but not {@link SortedSet}) is assignable from the corresponding class.
-     */
-    public boolean isUnorderedSet() {
-        return this == SET_IMPLEMENTATION || this == SET_INTERFACE;
-    }
-
-    /**
-     * {@link Set} is assignable from the corresponding class.
-     */
-    public boolean isAnySet() {
-        return isSortedSet() || isUnorderedSet();
-    }
-
-    /**
-     * For example, {@link Queue}, or some other 3rd party implementation of
-     * {@link Collection}.
-     */
-    public boolean isOther() {
-        return this == OTHER_IMPLEMENTATION;
-    }
-
-    public boolean isListOrArray() {
-        return isList() || isArray();
-    }
-
-    public boolean isSupportedInterfaceForActionParameters() {
-        return isSupportedInterfaceForActionParameters;
+    private static CollectionSemantics create(
+            final Class<?> containerClass,
+            final ProgrammingModelConstants.CollectionType collectionType) {
+        return new CollectionSemantics() {
+            @Override public boolean isSupportedInterfaceForActionParameters() {
+                return collectionType.getContainerType().equals(containerClass);
+            }
+            @Override public boolean isInheritedFromSet() {
+                return collectionType.isSetAny();
+            }};
     }
 
 }

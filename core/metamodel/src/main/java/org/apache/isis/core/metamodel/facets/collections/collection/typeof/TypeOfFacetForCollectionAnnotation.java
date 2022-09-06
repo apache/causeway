@@ -21,16 +21,19 @@ package org.apache.isis.core.metamodel.facets.collections.collection.typeof;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 public class TypeOfFacetForCollectionAnnotation
 extends TypeOfFacetAbstract {
 
     public static Optional<TypeOfFacet> create(
             final Optional<Collection> collectionIfAny,
+            final CollectionType collectionType,
             final FacetedMethod facetHolder) {
 
         return collectionIfAny
@@ -38,10 +41,14 @@ extends TypeOfFacetAbstract {
                 .filter(typeOf -> typeOf!=null
                                         && typeOf != void.class) // ignore when unspecified
                 .map(typeOf ->
-                    new TypeOfFacetForCollectionAnnotation(typeOf, facetHolder));
+                    new TypeOfFacetForCollectionAnnotation(
+                            TypeOfAnyCardinality
+                                .nonScalar(typeOf, collectionType.getContainerType()),
+                        facetHolder));
     }
 
-    private TypeOfFacetForCollectionAnnotation(final Class<?> type, final FacetHolder holder) {
+    private TypeOfFacetForCollectionAnnotation(
+            final TypeOfAnyCardinality type, final FacetHolder holder) {
         super(type, holder);
     }
 

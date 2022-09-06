@@ -28,6 +28,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,6 +39,7 @@ import java.util.Vector;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
@@ -56,8 +58,11 @@ import org.apache.isis.commons.collections.ImmutableCollection;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -544,15 +549,57 @@ public final class ProgrammingModelConstants {
      * Non scalar <i>Action Parameter</i> types cannot be more special than what we offer here.
      */
     @RequiredArgsConstructor
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static enum CollectionType {
-        ARRAY(Array.class),
-        VECTOR(Vector.class),
-        LIST(List.class),
-        SORTED_SET(SortedSet.class),
-        SET(Set.class),
-        COLLECTION(Collection.class),
-        CAN(Can.class),
-        IMMUTABLE_COLLECTION(ImmutableCollection.class),
+        ARRAY(Array.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return _Arrays.toArray(_Casts.uncheckedCast(nonScalar), elementType);
+            }
+        },
+        @Deprecated
+        VECTOR(Vector.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return new Vector(nonScalar);
+            }
+        },
+        LIST(List.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return Collections.unmodifiableList(nonScalar);
+            }
+        },
+        SORTED_SET(SortedSet.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return _Collections.asUnmodifiableSortedSet(nonScalar);
+            }
+        },
+        SET(Set.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return _Collections.asUnmodifiableSet(nonScalar);
+            }
+        },
+        COLLECTION(Collection.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return Collections.unmodifiableCollection(nonScalar);
+            }
+        },
+        CAN(Can.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return Can.ofCollection(nonScalar);
+            }
+        },
+        IMMUTABLE_COLLECTION(ImmutableCollection.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return CAN.asContainerType(elementType, nonScalar);
+            }
+        }
         ;
         public boolean isArray() {return this == ARRAY;}
         public boolean isVector() {return this == VECTOR;}
@@ -577,6 +624,50 @@ public final class ProgrammingModelConstants {
                         .filter(collType->collType.getContainerType().isAssignableFrom(type))
                         .findFirst();
         }
+        public Object unmodifiableCopyOf(
+                final Class<?> elementType, final @NonNull Iterable<?> nonScalar) {
+            // defensive copy
+            return asContainerType(elementType,
+                    _NullSafe.stream(nonScalar).collect(Collectors.toList()));
+        }
+        protected abstract Object asContainerType(
+                final Class<?> elementType, final @NonNull List<?> nonScalar);
+
+        /*{
+
+            if(parameterType == Can.class) {
+                if(obj instanceof Can) {
+                    return obj;
+                }
+                return Can.ofStream(_NullSafe.streamAutodetect(obj));
+            }
+
+            if(obj instanceof Can) {
+                obj = ((Can<?>)obj).toList();
+            }
+
+            // allow no side effects on Collection arguments
+            if(Collection.class.equals(parameterType)) {
+                return _Collections.asUnmodifiableCollection((List<?>)obj);
+            }
+
+            // allow no side effects on List arguments
+            if(List.class.equals(parameterType)) {
+                return _Collections.asUnmodifiableList((List<?>)obj);
+            }
+
+            // adapt as Set (unmodifiable)
+            if(Set.class.equals(parameterType)) {
+                return _Collections.asUnmodifiableSet((List<?>)obj);
+            }
+
+            // adapt as SortedSet (unmodifiable)
+            if(SortedSet.class.equals(parameterType)) {
+                return _Collections.asUnmodifiableSortedSet((List<?>)obj);
+            }
+*/
+
+
     }
 
     //TODO perhaps needs an update to reflect Java 7->11 Language changes

@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -42,10 +43,12 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.reflection._Generics;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.ToString;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -61,7 +64,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newConcurrentHashMap();
 
     @Override
-    public <T> T injectServicesInto(T domainObject) {
+    public <T> T injectServicesInto(final T domainObject) {
         injectServices(domainObject, injectionPoint->{
 
             val injectionPointName = injectionPoint.toString();
@@ -87,7 +90,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     boolean autowireSetters;
     boolean autowireInject;
 
-    private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
+    private void injectServices(final Object targetPojo, final Consumer<InjectionPoint> onNotResolvable) {
 
         val type = targetPojo.getClass();
 
@@ -107,7 +110,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         }
     }
 
-    private void injectToFields(final Object targetPojo, final Class<?> cls, Consumer<InjectionPoint> onNotResolvable) {
+    private void injectToFields(final Object targetPojo, final Class<?> cls, final Consumer<InjectionPoint> onNotResolvable) {
 
         _NullSafe.stream(fieldsByClassCache.computeIfAbsent(cls, __->cls.getDeclaredFields()))
         .filter(isAnnotatedForInjection())
@@ -120,7 +123,9 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         }
     }
 
-    private void injectToField(final Object targetPojo, final Field field, Consumer<InjectionPoint> onNotResolvable) {
+    private void injectToField(final Object targetPojo,
+            final Field field,
+            final Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = field.getType();
         // don't think that type can ever be null,
@@ -130,7 +135,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         }
 
         // inject matching services into a field of type Collection<T> if a generic type T is present
-        final Class<?> elementType = _Collections.inferElementType(field)
+        final Class<?> elementType = inferElementType(field)
                 .orElse(null);
         if(elementType!=null) {
             injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
@@ -164,6 +169,19 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             invokeInjectorField(field, targetPojo, bean);
         }
 
+    }
+
+    /**
+     * Optionally returns the inferred element type for given {@code field}, based on whether
+     * it represents a collection and inference is possible.
+     */
+    private static Optional<Class<?>> inferElementType(final @NonNull Field field) {
+        val fieldType = field.getType();
+        return _Collections.isCollectionType(fieldType)
+                || _Collections.isImmutableCollectionType(fieldType)
+                ? _Generics.streamGenericTypeArgumentsOfField(field)
+                        .findFirst()
+                        : Optional.empty();
     }
 
     @SuppressWarnings("unchecked")
@@ -280,9 +298,9 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
      * JUnit Test support.
      */
     public static _ServiceInjectorLegacy getInstanceAndInit(
-            IsisConfiguration configuration,
-            ServiceRegistry serviceRegistry,
-            _InjectorMethodEvaluator injectorMethodEvaluator) {
+            final IsisConfiguration configuration,
+            final ServiceRegistry serviceRegistry,
+            final _InjectorMethodEvaluator injectorMethodEvaluator) {
         val instance = new _ServiceInjectorLegacy();
 
         instance.configuration = configuration;

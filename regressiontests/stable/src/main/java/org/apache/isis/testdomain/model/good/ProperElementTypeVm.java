@@ -18,7 +18,9 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -31,7 +33,8 @@ import lombok.Setter;
  * @see <a href="https://issues.apache.org/jira/browse/ISIS-2499">ISIS-2499</a>
  */
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperElementTypeVm {
+public class ProperElementTypeVm
+extends ProperElementTypeVmAbstract {
 
     @Collection
     @Getter @Setter private List<ElementTypeInterface> interfaceColl;
@@ -50,5 +53,46 @@ public class ProperElementTypeVm {
 
     @Collection
     @Getter @Setter private List<? extends ElementTypeConcrete> concreteColl2;
+
+    // specialization over Set<ElementTypeInterface> in super
+    @Override
+    public SortedSet<ElementTypeInterface> getSetOfInterfaceType() {
+        return Collections.emptySortedSet();
+    }
+
+    // specialization over Set<? extends ElementTypeConcrete> in super
+    @Override
+    public SortedSet<? extends ElementTypeConcrete> getSetOfConcreteType() {
+        return Collections.emptySortedSet();
+    }
+
+    @Override
+    public Iterable<ElementTypeInterface> getIterableOfInterfaceType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+  //FIXME add Can support
+//    // specialization over Iterable<ElementTypeInterface> in super
+//    @Override
+//    public Can<ElementTypeInterface> getIterableOfInterfaceType() {
+//        return Can.empty();
+//    }
+//
+//    // specialization over Iterable<? extends ElementTypeConcrete> in super
+//    @Override
+//    public Can<? extends ElementTypeConcrete> getIterableOfConcreteType() {
+//        return Can.empty();
+//    }
+//
+//    @Override
+//    void act(final ImmutableCollection<ElementTypeInterface> coll) {
+//    }
+
 
 }

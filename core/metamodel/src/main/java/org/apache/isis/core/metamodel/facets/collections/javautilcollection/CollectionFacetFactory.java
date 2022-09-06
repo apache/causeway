@@ -20,12 +20,11 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 
 import lombok.val;
 
@@ -43,14 +42,21 @@ extends FacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        if (_Collections.isCollectionType(cls)) {
+        ProgrammingModelConstants.CollectionType.valueOf(cls)
+        .ifPresent(collectionType->{
+            if (collectionType.isArray()) {
+                addFacet(new JavaArrayFacet(facetHolder));
+                return;
+            }
+
             addFacet(new JavaCollectionFacet(facetHolder));
-        } else if (_Arrays.isArrayType(cls)) {
-            addFacet(new JavaArrayFacet(facetHolder));
-        }
+            if(cls.isInterface()) {
+                return;
+            }
 
-        addFacetIfPresent(TypeOfFacet.inferFromObjectType(cls, facetHolder));
-
+            throw _Exceptions.unrecoverable("non-scalar object %s", cls);
+            // addFacetIfPresent(TypeOfFacet.inferFromObjectType(cls, facetHolder));
+        });
     }
 
 }

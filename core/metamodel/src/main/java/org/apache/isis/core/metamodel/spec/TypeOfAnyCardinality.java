@@ -49,6 +49,10 @@ public class TypeOfAnyCardinality {
         return containerType.isEmpty();
     }
 
+    public boolean isArray() {
+        return containerType.map(Class::isArray).orElse(false);
+    }
+
     // -- FACTORIES
 
     public static TypeOfAnyCardinality scalar(final @NonNull Class<?> scalarType) {
@@ -74,7 +78,7 @@ public class TypeOfAnyCardinality {
         .orElseGet(()->scalar(methodReturn));
     }
 
-    public static TypeOfAnyCardinality forParameter(
+    public static TypeOfAnyCardinality forMethodParameter(
             final Class<?> implementationClass, final Method method, final int paramIndex) {
         val paramType = method.getParameters()[paramIndex].getType();
 
@@ -130,5 +134,7 @@ public class TypeOfAnyCardinality {
                 : nonScalar.getGeneric(0);
         return genericTypeArg.toClass();
     }
+
+
 
 }

@@ -30,6 +30,7 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -62,7 +63,8 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 //uncomment if intended only for manual verification.
-//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+//FIXME
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class MetaModelRegressionTest {
 
     @Inject MetaModelServiceMenu metaModelServiceMenu;

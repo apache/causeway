@@ -78,8 +78,8 @@ implements MixedInMember {
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault,
         // which ensures that there is always a TypeOfFacet for any mixedIn associations
         // created from mixin actions.
-        Class<?> type = actionTypeOfFacet != null
-                ? actionTypeOfFacet.value()
+        val type = actionTypeOfFacet != null
+                ? actionTypeOfFacet.value().getElementType()
                 : (Class<?>)Object.class;
 
         return objectAction.getSpecificationLoader().loadSpecification(type);

@@ -20,17 +20,18 @@ package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.SingleTypeValueFacetAbstract;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 public abstract class TypeOfFacetAbstract
-extends SingleClassValueFacetAbstract
+extends SingleTypeValueFacetAbstract
 implements TypeOfFacet {
 
     private static final Class<? extends Facet> type() {
         return TypeOfFacet.class;
     }
 
-    protected TypeOfFacetAbstract(final Class<?> type, final FacetHolder holder) {
+    protected TypeOfFacetAbstract(final TypeOfAnyCardinality type, final FacetHolder holder) {
         super(type(), holder, type);
     }
 

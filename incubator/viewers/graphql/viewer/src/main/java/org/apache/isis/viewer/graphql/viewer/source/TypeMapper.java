@@ -83,7 +83,7 @@ public class TypeMapper {
 
                 TypeOfFacet facet = objectAction.getFacet(TypeOfFacet.class);
                 if (facet == null) return GraphQLList.list(Scalars.GraphQLString); // TODO: for now ... Investigate why this can happen
-                ObjectSpecification objectSpecificationForElementWhenCollection = facet.valueSpec();
+                ObjectSpecification objectSpecificationForElementWhenCollection = facet.elementSpec();
                 return GraphQLList.list(outputTypeFor(objectSpecificationForElementWhenCollection));
 
             case VALUE:

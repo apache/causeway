@@ -374,6 +374,15 @@ class DomainModelTest_usingGoodDomain {
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
 
+        //TODO scenario 1
+
+        //abstract Set<ElementTypeInterface> getSetOfInterfaceType();
+        //override SortedSet<ElementTypeInterface> getSetOfInterfaceType();
+
+        //TODO scenario 2
+
+        //abstract Iterable<ElementTypeInterface> getIterableOfInterfaceType();
+        //override Can<ElementTypeInterface> getIterableOfInterfaceType();
     }
 
     @Test
@@ -408,6 +417,17 @@ class DomainModelTest_usingGoodDomain {
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
+
+        //TODO scenario 1
+
+        //abstract Set<? extends ElementTypeConcrete> getSetOfConcreteType();
+        //override SortedSet<? extends ElementTypeConcrete> getSetOfConcreteType();
+
+        //TODO scenario 2
+
+        //abstract Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType();
+        //override Can<? extends ElementTypeConcrete> getIterableOfConcreteType();
+
 
     }
 

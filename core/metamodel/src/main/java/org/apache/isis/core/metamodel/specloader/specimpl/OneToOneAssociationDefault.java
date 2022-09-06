@@ -67,7 +67,7 @@ implements OneToOneAssociation {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 facetedMethod.getMetaModelContext().getSpecificationLoader()
-                    .loadSpecification(facetedMethod.getType()));
+                    .loadSpecification(facetedMethod.getType().getElementType()));
     }
 
     protected OneToOneAssociationDefault(

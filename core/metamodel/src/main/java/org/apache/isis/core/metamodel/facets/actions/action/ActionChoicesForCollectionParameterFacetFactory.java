@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -93,9 +94,13 @@ implements MetaModelRefiner {
             final ObjectActionParameter parameter,
             final int paramNum) {
 
+        if(parameter.isScalar()) {
+            return;
+        }
 
-        val collectionSemanticsFacet = parameter.getFacet(CollectionSemanticsFacet.class);
-        if (collectionSemanticsFacet != null) {
+        parameter.lookupFacet(CollectionSemanticsFacet.class)
+        .ifPresentOrElse(collectionSemanticsFacet->{
+
             // Violation if there are action parameter types that are assignable
             // from java.util.Collection but are not of
             // exact type List, Set, SortedSet or Collection.
@@ -113,10 +118,21 @@ implements MetaModelRefiner {
                                 objectSpec.getFullIdentifier(),
                                 objectAction.getId(),
                                 paramNum));
-
-                return;
             }
-        }
+
+        },()->{
+
+            val messageFormat = "framework bug: non-scalar action parameter found,"
+                    + " that has no CollectionSemanticsFacet"
+                    + "Class: %s action: %s parameter %d";
+
+            throw _Exceptions.unrecoverable(
+                            messageFormat,
+                            objectSpec.getFullIdentifier(),
+                            objectAction.getId(),
+                            paramNum);
+
+        });
 
         val parameterTypeSpec = parameter.getElementType();
 

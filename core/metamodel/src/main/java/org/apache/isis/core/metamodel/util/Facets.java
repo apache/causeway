@@ -337,7 +337,7 @@ public final class Facets {
 
     public Optional<ObjectSpecification> typeOf(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
-        .map(TypeOfFacet::valueSpec);
+        .map(TypeOfFacet::elementSpec);
     }
 
     public OptionalInt typicalLength(

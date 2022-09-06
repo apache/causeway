@@ -19,78 +19,66 @@
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleTypeValueFacet;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.val;
 
 /**
  * The type of the collection or the action.
- *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * collection's accessor or the action's invoker method with the
  * {@link Collection#typeOf} annotation.
  */
-public interface TypeOfFacet extends SingleClassValueFacet {
+public interface TypeOfFacet extends SingleTypeValueFacet {
 
     // -- FACTORIES
 
-    static Optional<TypeOfFacet> inferFromObjectType(
-            final Class<?> cls,
+    static Optional<TypeOfFacet> inferFromMethodParameter(
+            final Class<?> implementationClass,
+            final Method method,
+            final int paramIndex,
             final FacetHolder holder) {
 
-        return _Arrays.isArrayType(cls)
-                ? _Arrays.inferComponentType(cls)
-                        .map(elementType->inferredFromArray(elementType, holder))
-                : _Collections.inferElementType(cls)
-                        .map(elementType->inferredFromGenerics(elementType, holder));
-    }
-
-    static Optional<TypeOfFacet> inferFromParameterType(
-            final Parameter param,
-            final FacetHolder holder) {
-
-        val paramType = param.getType();
-
-        return _Arrays.isArrayType(paramType)
-                ? _Arrays.inferComponentType(paramType)
-                        .map(elementType->inferredFromArray(elementType, holder))
-                : _Collections.inferElementType(param)
-                        .map(elementType->inferredFromGenerics(elementType, holder));
+        val type = TypeOfAnyCardinality.forMethodParameter(implementationClass, method, paramIndex);
+        if(type.isScalar()) {
+            return Optional.empty();
+        }
+        return Optional.of(type.isArray()
+                ? inferredFromArray(type, holder)
+                : inferredFromGenerics(type, holder));
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
+            final Class<?> implementationClass,
             final Method method,
             final FacetHolder holder) {
-
-        val returnType = method.getReturnType();
-
-        return _Arrays.isArrayType(returnType)
-                ? _Arrays.inferComponentType(returnType)
-                        .map(elementType->inferredFromArray(elementType, holder))
-                : _Collections.inferElementType(method)
-                        .map(elementType->inferredFromGenerics(elementType, holder));
+        val type = TypeOfAnyCardinality.forMethodReturn(implementationClass, method);
+        if(type.isScalar()) {
+            return Optional.empty();
+        }
+        return Optional.of(type.isArray()
+                ? inferredFromArray(type, holder)
+                : inferredFromGenerics(type, holder));
     }
 
     // -- INTERNAL
 
     private static TypeOfFacet inferredFromArray(
-            final Class<?> elementType,
+            final TypeOfAnyCardinality type,
             final FacetHolder holder) {
-        return new TypeOfFacetFromArray(elementType, holder);
+        return new TypeOfFacetFromArray(type, holder);
     }
 
     private static TypeOfFacet inferredFromGenerics(
-            final Class<?> elementType,
+            final TypeOfAnyCardinality type,
             final FacetHolder holder) {
-        return new TypeOfFacetFromGenerics(elementType, holder);
+        return new TypeOfFacetFromGenerics(type, holder);
     }
 
 

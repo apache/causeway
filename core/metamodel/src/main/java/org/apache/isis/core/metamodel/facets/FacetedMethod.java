@@ -23,15 +23,15 @@ import java.util.List;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
 import lombok.val;
@@ -49,7 +49,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final Method method) {
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, method, method.getReturnType(), Can.empty());
+                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
@@ -57,7 +57,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final Method method) {
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, method, null, Can.empty());
+                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method), Can.empty());
     }
 
     public static FacetedMethod createForAction(
@@ -65,7 +65,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final Method method) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, method, method.getReturnType(),
+                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method),
                 getParameters(mmc, declaringType, method));
     }
 
@@ -86,13 +86,12 @@ extends TypedHolderAbstract {
             final Class<?> parameterType = param.getType();
 
             final FeatureType featureType =
-                    _Collections.inferElementType(param).isPresent()
-                        || _Arrays.inferComponentType(parameterType).isPresent()
+                    ProgrammingModelConstants.CollectionType.valueOf(parameterType).isPresent()
                     ? FeatureType.ACTION_PARAMETER_COLLECTION
                     : FeatureType.ACTION_PARAMETER_SCALAR;
 
             val facetedMethodParam =
-                    new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, parameterType, paramIndex);
+                    new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, paramIndex);
 
             if(featureType != FeatureType.ACTION_PARAMETER_COLLECTION) {
                 actionParams.add(facetedMethodParam);
@@ -103,11 +102,11 @@ extends TypedHolderAbstract {
 
             FacetUtil.addFacet(
                     CollectionSemanticsFacetDefault
-                    .forParamType(parameterType, facetedMethodParam));
+                    .forParamType(param, facetedMethodParam));
 
             val facetedMethodParamToUse =
                     TypeOfFacet
-                    .inferFromParameterType(param, facetedMethodParam)
+                    .inferFromMethodParameter(declaringType, actionMethod, paramIndex, facetedMethodParam)
                     .map(typeOfFacet->{
                         // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                         FacetUtil.addFacet(typeOfFacet);
@@ -200,7 +199,7 @@ extends TypedHolderAbstract {
             final FeatureType featureType,
             final Class<?> declaringType,
             final Method method,
-            final Class<?> type,
+            final TypeOfAnyCardinality type,
             final Can<FacetedMethodParameter> parameters) {
 
         super(mmc,
@@ -216,7 +215,8 @@ extends TypedHolderAbstract {
 
     @Override
     public String toString() {
-        return getFeatureType().name() + " Peer [identifier=\"" + getFeatureIdentifier() + "\",type=" + getType().getName() + " ]";
+        return getFeatureType().name() + " Peer [identifier=\"" + getFeatureIdentifier()
+            + "\",type=" + getType() + " ]";
     }
 
     /**
@@ -225,7 +225,7 @@ extends TypedHolderAbstract {
      */
     public FacetedMethod withType(final Class<?> elementType) {
         //XXX maybe future refactoring can make the type immutable, so we can remove this method
-        this.type = elementType;
+        this.type = type.withElementType(elementType);
         return this;
     }
 
