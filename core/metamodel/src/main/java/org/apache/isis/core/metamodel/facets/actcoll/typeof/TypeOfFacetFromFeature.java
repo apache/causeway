@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
-public class TypeOfFacetFromGenerics
+public class TypeOfFacetFromFeature
 extends TypeOfFacetAbstract {
 
-    TypeOfFacetFromGenerics(final TypeOfAnyCardinality type, final FacetHolder holder) {
+    TypeOfFacetFromFeature(final TypeOfAnyCardinality type, final FacetHolder holder) {
         super(type, holder);
     }
 

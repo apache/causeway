@@ -19,17 +19,19 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 
 import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
@@ -145,8 +147,9 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof TypeOfFacetFromArray);
+        Assert.assertTrue(facet instanceof TypeOfFacet);
         assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+        assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
     }
 
     @Test
@@ -173,7 +176,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertEquals(TypeOfFacetFromGenerics.class, facet.getClass());
+        Assert.assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
         assertThat(facet.value().getElementType(), classEqualTo(Order.class));
     }
 

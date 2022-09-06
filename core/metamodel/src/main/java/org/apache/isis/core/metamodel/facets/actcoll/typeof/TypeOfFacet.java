@@ -20,11 +20,13 @@ package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleTypeValueFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.val;
@@ -36,10 +38,24 @@ import lombok.val;
  * collection's accessor or the action's invoker method with the
  * {@link Collection#typeOf} annotation.
  */
-public interface TypeOfFacet extends SingleTypeValueFacet {
+public interface TypeOfFacet extends Facet {
 
     default boolean isSupportedInterfaceForActionParameters() {
         return true;
+    }
+
+    TypeOfAnyCardinality value();
+
+    /**
+     * Convenience to return the {@link ObjectSpecification} corresponding to
+     * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#getElementType()}.
+     */
+    ObjectSpecification elementSpec();
+
+    // -- SHORTCUTS
+
+    default Optional<CollectionSemantics> getCollectionSemantics() {
+        return value().getCollectionSemantics();
     }
 
     // -- FACTORIES
@@ -50,7 +66,7 @@ public interface TypeOfFacet extends SingleTypeValueFacet {
             final int paramIndex,
             final FacetHolder holder) {
         val type = TypeOfAnyCardinality.forMethodParameter(implementationClass, method, paramIndex);
-        return toInferredFrom(type, holder);
+        return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
@@ -58,37 +74,36 @@ public interface TypeOfFacet extends SingleTypeValueFacet {
             final Method method,
             final FacetHolder holder) {
         val type = TypeOfAnyCardinality.forMethodReturn(implementationClass, method);
-        return toInferredFrom(type, holder);
+        return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
     static Optional<TypeOfFacet> inferFromNonScalarType(
             final CollectionSemantics collectionSemantics, final Class<?> nonScalarType, final FacetHolder holder) {
         val type = TypeOfAnyCardinality.forNonScalarType(nonScalarType, collectionSemantics);
-        return toInferredFrom(type, holder);
+        return toInferredFrom(TypeOfFacet::inferredFromType, type, holder);
     }
 
     // -- INTERNAL
 
     private static Optional<TypeOfFacet> toInferredFrom(
+            final BiFunction<TypeOfAnyCardinality, FacetHolder, TypeOfFacet> factory,
             final TypeOfAnyCardinality type,
             final FacetHolder holder) {
         return type.isScalar()
             ? Optional.empty()
-            : Optional.of(type.isArray()
-                    ? inferredFromArray(type, holder)
-                    : inferredFromGenerics(type, holder));
+            : Optional.of(factory.apply(type, holder));
     }
 
-    private static TypeOfFacet inferredFromArray(
+    private static TypeOfFacet inferredFromFeature(
             final TypeOfAnyCardinality type,
             final FacetHolder holder) {
-        return new TypeOfFacetFromArray(type, holder);
+        return new TypeOfFacetFromFeature(type, holder);
     }
 
-    private static TypeOfFacet inferredFromGenerics(
+    private static TypeOfFacet inferredFromType(
             final TypeOfAnyCardinality type,
             final FacetHolder holder) {
-        return new TypeOfFacetFromGenerics(type, holder);
+        return new TypeOfFacetFromType(type, holder);
     }
 
 }

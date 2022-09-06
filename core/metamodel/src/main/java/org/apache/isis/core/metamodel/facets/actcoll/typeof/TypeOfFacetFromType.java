@@ -16,29 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
-import java.util.Optional;
-
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
-public interface SingleTypeValueFacet extends Facet {
+public class TypeOfFacetFromType
+extends TypeOfFacetAbstract {
 
-    TypeOfAnyCardinality value();
-
-    /**
-     * Convenience to return the {@link ObjectSpecification} corresponding to
-     * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#getElementType()}.
-     */
-    ObjectSpecification elementSpec();
-
-    // -- SHORTCUTS
-
-    default Optional<CollectionSemantics> getCollectionSemantics() {
-        return value().getCollectionSemantics();
+    TypeOfFacetFromType(final TypeOfAnyCardinality type, final FacetHolder holder) {
+        super(type, holder, Precedence.LOW); // generic type argument resolution on plain type are low priority
     }
 
 }
