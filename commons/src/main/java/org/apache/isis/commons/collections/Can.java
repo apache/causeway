@@ -26,7 +26,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -68,17 +67,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 public interface Can<T>
-extends Iterable<T>, Comparable<Can<T>>, Serializable {
-
-    /**
-     * @return this Can's cardinality
-     */
-    Cardinality getCardinality();
-
-    /**
-     * @return number of elements this Can contains
-     */
-    int size();
+extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Will only ever return an empty Optional, if the elementIndex is out of bounds.
@@ -112,16 +101,6 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     int compareTo(final @Nullable Can<T> o);
 
     /**
-     * @return Stream of elements this Can contains
-     */
-    Stream<T> stream();
-
-    /**
-     * @return possibly concurrent Stream of elements this Can contains
-     */
-    Stream<T> parallelStream();
-
-    /**
      * @return this Can's first element or an empty Optional if no such element
      */
     Optional<T> getFirst();
@@ -146,25 +125,6 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     default T getLastOrFail() {
         return getLast().orElseThrow(_Exceptions::noSuchElement);
     }
-
-    /**
-     * @return this Can's single element or an empty Optional if this Can has any cardinality other than ONE
-     */
-    Optional<T> getSingleton();
-
-    /**
-     * Shortcut for {@code getSingleton().orElseThrow(_Exceptions::noSuchElement)}
-     * @throws NoSuchElementException if result is empty
-     */
-    default T getSingletonOrFail() {
-        return getSingleton().orElseThrow(_Exceptions::noSuchElement);
-    }
-
-    /**
-     * @return whether this Can contains given {@code element}, that is, at least one contained element
-     * passes the {@link Objects#equals(Object, Object)} test with respect to the given element.
-     */
-    boolean contains(@Nullable T element);
 
     // -- FACTORIES
 
@@ -669,6 +629,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     // -- SHORTCUTS FOR PREDICATES
 
+    @Override
     default boolean isEmpty() {
         return getCardinality().isZero();
     }

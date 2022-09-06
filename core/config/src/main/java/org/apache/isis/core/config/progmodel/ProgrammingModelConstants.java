@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Vector;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -49,6 +52,8 @@ import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
@@ -66,6 +71,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 public final class ProgrammingModelConstants {
 
@@ -529,6 +535,48 @@ public final class ProgrammingModelConstants {
         };
         public abstract <T> Optional<Constructor<T>> get(Class<T> correspondingClass);
 
+    }
+
+    /**
+     * Supported collection types, including arrays.
+     * Order matters, as class substitution is processed on first matching type.
+     * <p>
+     * Non scalar <i>Action Parameter</i> types cannot be more special than what we offer here.
+     */
+    @RequiredArgsConstructor
+    public static enum CollectionType {
+        ARRAY(Array.class),
+        VECTOR(Vector.class),
+        LIST(List.class),
+        SORTED_SET(SortedSet.class),
+        SET(Set.class),
+        COLLECTION(Collection.class),
+        CAN(Can.class),
+        IMMUTABLE_COLLECTION(ImmutableCollection.class),
+        ;
+        public boolean isArray() {return this == ARRAY;}
+        public boolean isVector() {return this == VECTOR;}
+        public boolean isList() {return this == LIST;}
+        public boolean isSortedSet() {return this == SORTED_SET;}
+        public boolean isSet() {return this == SET;}
+        public boolean isCollection() {return this == COLLECTION;}
+        public boolean isCan() {return this == CAN;}
+        public boolean isImmutableCollection() {return this == IMMUTABLE_COLLECTION;}
+        //
+        public boolean isSetAny() {return isSet() || isSortedSet(); }
+        @Getter private final Class<?> containerType;
+        private static final ImmutableEnumSet<CollectionType> all =
+                ImmutableEnumSet.allOf(CollectionType.class);
+        @Getter @Accessors(fluent = true)
+        private static final ImmutableEnumSet<CollectionType> typeSubstitutors = all.remove(ARRAY);
+        public static Optional<CollectionType> valueOf(final @Nullable Class<?> type) {
+            if(type==null) return Optional.empty();
+            return type.isArray()
+                    ? Optional.of(CollectionType.ARRAY)
+                    : all.stream()
+                        .filter(collType->collType.getContainerType().isAssignableFrom(type))
+                        .findFirst();
+        }
     }
 
     //TODO perhaps needs an update to reflect Java 7->11 Language changes

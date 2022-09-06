@@ -102,5 +102,14 @@ implements Iterable<E>, java.io.Serializable {
         return from(newEnumSet);
     }
 
+    public ImmutableEnumSet<E> remove(final E entry) {
+        if(!contains(entry)) {
+            return this;
+        }
+        val newEnumSet = delegate.clone();
+        newEnumSet.remove(entry);
+        return from(newEnumSet);
+    }
+
 
 }
