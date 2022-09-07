@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
-import java.util.function.BiConsumer;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
@@ -79,14 +77,12 @@ implements MaxLengthFacet {
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        final int val = value();
-        visitor.accept("maxLength", val == 0 ? "unlimited" : String.valueOf(val));
+    protected String getAttributeNameForValue() {
+        return "maxLength";
     }
 
     @Override
-    protected String getAttributeNameForValue() {
-        return "maxLength";
+    protected String getAttributeValueForValue(final int value) {
+        return value == 0 ? "unlimited" : String.valueOf(value);
     }
 }

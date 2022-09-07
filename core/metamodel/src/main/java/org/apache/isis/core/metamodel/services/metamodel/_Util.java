@@ -55,6 +55,7 @@ class _Util {
             final Facet facetType,
             final org.apache.isis.core.metamodel.facetapi.Facet facet,
             final Config config) {
+        if(!config.isIncludeTitleAnnotations()) return;
         titleAnnotation(facetType,
                 String.format("%s: %s",
                         config.simpleName(facet.facetType()),
@@ -63,6 +64,7 @@ class _Util {
 
     static void titleAnnotation(
             final DomainClassDto domainClass, final ObjectSpecification specification, final Config config) {
+        if(!config.isIncludeTitleAnnotations()) return;
         titleAnnotation(domainClass,
                 String.format("%s: %s",
                         specification.getLogicalTypeName(),
@@ -71,6 +73,7 @@ class _Util {
 
     static void titleAnnotation(
             final Action actionType, final ObjectAction action, final Config config) {
+        if(!config.isIncludeTitleAnnotations()) return;
         titleAnnotation(actionType,
             String.format("%s(...): %s%s",
                     action.getId(),
@@ -80,6 +83,7 @@ class _Util {
 
     static void titleAnnotation(
             final Param parameterType, final ObjectActionParameter parameter, final Config config) {
+        if(!config.isIncludeTitleAnnotations()) return;
         titleAnnotation(parameterType,
                 String.format("%s: %s",
                         parameter.getId(),
@@ -91,6 +95,7 @@ class _Util {
 
     static void titleAnnotation(
             final Property propertyType, final OneToOneAssociation property, final Config config) {
+        if(!config.isIncludeTitleAnnotations()) return;
         titleAnnotation(propertyType,
                 String.format("%s: %s%s",
                         property.getId(),
@@ -100,6 +105,7 @@ class _Util {
 
     static void titleAnnotation(
             final Collection collectionType, final OneToManyAssociation collection, final Config config) {
+        if(!config.isIncludeTitleAnnotations()) return;
         titleAnnotation(collectionType,
                 String.format("%s: %s%s",
                         collection.getId(),

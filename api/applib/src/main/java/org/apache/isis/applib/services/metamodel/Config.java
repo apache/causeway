@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.metamodel;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 
@@ -28,7 +30,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
 
-import jakarta.annotation.Nullable;
 
 /**
  * Describes what to include in the export from
@@ -45,6 +46,7 @@ public class Config {
     private final boolean ignoreBuiltInValueTypes;
     private final boolean ignoreMixins;
     private final boolean includeShadowedFacets;
+    private final boolean includeTitleAnnotations;
     @Builder.Default
     private final UnaryOperator<String> fqcnAbbreviator = Config::abbreviate;
 
@@ -73,6 +75,7 @@ public class Config {
                 .ignoreBuiltInValueTypes(ignoreBuiltInValueTypes)
                 .ignoreMixins(ignoreMixins)
                 .includeShadowedFacets(includeShadowedFacets)
+                .includeTitleAnnotations(includeTitleAnnotations)
                 .fqcnAbbreviator(fqcnAbbreviator)
                 .namespacePrefixes(_Sets.newHashSet(namespacePrefixes));
     }

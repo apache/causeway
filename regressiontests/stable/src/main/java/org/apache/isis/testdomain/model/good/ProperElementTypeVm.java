@@ -25,6 +25,8 @@ import java.util.SortedSet;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -66,33 +68,21 @@ extends ProperElementTypeVmAbstract {
         return Collections.emptySortedSet();
     }
 
+    // specialization over Iterable<ElementTypeInterface> in super
     @Override
-    public Iterable<ElementTypeInterface> getIterableOfInterfaceType() {
-        // TODO Auto-generated method stub
-        return null;
+    public Can<ElementTypeInterface> getIterableOfInterfaceType() {
+        return Can.empty();
+    }
+
+    // specialization over Iterable<? extends ElementTypeConcrete> in super
+    @Override
+    public Can<? extends ElementTypeConcrete> getIterableOfConcreteType() {
+        return Can.empty();
     }
 
     @Override
-    public Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType() {
-        // TODO Auto-generated method stub
-        return null;
+    public void act(final ImmutableCollection<ElementTypeInterface> coll) {
     }
-  //FIXME add Can support
-//    // specialization over Iterable<ElementTypeInterface> in super
-//    @Override
-//    public Can<ElementTypeInterface> getIterableOfInterfaceType() {
-//        return Can.empty();
-//    }
-//
-//    // specialization over Iterable<? extends ElementTypeConcrete> in super
-//    @Override
-//    public Can<? extends ElementTypeConcrete> getIterableOfConcreteType() {
-//        return Can.empty();
-//    }
-//
-//    @Override
-//    void act(final ImmutableCollection<ElementTypeInterface> coll) {
-//    }
 
 
 }

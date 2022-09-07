@@ -57,19 +57,22 @@ implements SingleIntValueFacet {
     }
 
     /**
-     * @apiNote used for reporting only
+     * @apiNote only used for reporting
      */
     protected abstract String getAttributeNameForValue();
+    /**
+     * @apiNote only used for reporting
+     */
+    protected String getAttributeValueForValue(final int value) { return String.valueOf(value); }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept(getAttributeNameForValue(), value);
+        visitor.accept(getAttributeNameForValue(), getAttributeValueForValue(value));
     }
 
     @Override
     public final boolean semanticEquals(final @NonNull Facet other) {
-
         // equality by facet-type and actual value
         return this.facetType().equals(other.facetType())
                     && other instanceof SingleIntValueFacet

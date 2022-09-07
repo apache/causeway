@@ -20,7 +20,11 @@ package org.apache.isis.testdomain.model.good;
 
 import java.util.Set;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
 
 /**
  * @see <a href="https://issues.apache.org/jira/browse/ISIS-3164">ISIS-3164</a>
@@ -41,13 +45,12 @@ public abstract class ProperElementTypeVmAbstract {
     @Collection
     public abstract Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType();
 
-  //FIXME add Can support
-//    @Action
-//    abstract void act(ImmutableCollection<ElementTypeInterface> coll);
-//
-//    @MemberSupport
-//    protected Can<ElementTypeInterface> choices0Act() {
-//        return Can.ofSingleton(new ElementTypeConcrete());
-//    }
+    @Action
+    abstract void act(ImmutableCollection<ElementTypeInterface> coll);
+
+    @MemberSupport
+    protected Can<ElementTypeInterface> choices0Act() {
+        return Can.ofSingleton(new ElementTypeConcrete());
+    }
 
 }
