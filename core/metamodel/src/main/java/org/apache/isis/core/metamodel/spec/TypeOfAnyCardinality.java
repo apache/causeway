@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.core.ResolvableType;
@@ -53,6 +54,21 @@ public class TypeOfAnyCardinality {
 
     public boolean isArray() {
         return containerType.map(Class::isArray).orElse(false);
+    }
+
+    /**
+     * Always <code>true</code> for <i>scalar</i> or <i>array</i>.
+     * Otherwise, whether {@link #getContainerType()} exactly matches
+     * the container type from {@link #getCollectionSemantics()}.
+     */
+    public boolean isSupportedForActionParameter() {
+        return isScalar()
+                || isArray()
+                ? true
+                : Objects.equals(
+                        getContainerType().orElse(null),
+                        getCollectionSemantics().map(CollectionSemantics::getContainerType).orElse(null));
+
     }
 
     // -- FACTORIES

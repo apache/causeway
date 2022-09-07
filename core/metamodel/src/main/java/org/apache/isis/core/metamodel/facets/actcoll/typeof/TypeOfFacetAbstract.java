@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -61,11 +63,18 @@ implements TypeOfFacet {
     }
 
     @Override
+    public final Optional<CollectionSemantics> getCollectionSemantics() {
+        return value().getCollectionSemantics();
+    }
+
+    @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("value", value());
+        visitor.accept("element-type", value().getElementType());
         getCollectionSemantics()
             .ifPresent(sem->visitor.accept("collection-semantics", sem.name()));
+        value().getContainerType()
+            .ifPresent(containerType->visitor.accept("container-type", containerType.getName()));
     }
 
     @Override

@@ -104,7 +104,7 @@ implements MetaModelRefiner {
             // Violation if there are action parameter types that are assignable
             // from java.util.Collection but are not of
             // exact type List, Set, SortedSet or Collection.
-            if(!typeOfFacet.isSupportedInterfaceForActionParameters()) {
+            if(!typeOfFacet.value().isSupportedForActionParameter()) {
 
                 val messageFormat = "Collection action parameter found that is not exactly one "
                         + "of the following supported types: "

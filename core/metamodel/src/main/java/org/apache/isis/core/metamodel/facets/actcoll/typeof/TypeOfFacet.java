@@ -40,10 +40,6 @@ import lombok.val;
  */
 public interface TypeOfFacet extends Facet {
 
-    default boolean isSupportedInterfaceForActionParameters() {
-        return true;
-    }
-
     TypeOfAnyCardinality value();
 
     /**
@@ -52,11 +48,7 @@ public interface TypeOfFacet extends Facet {
      */
     ObjectSpecification elementSpec();
 
-    // -- SHORTCUTS
-
-    default Optional<CollectionSemantics> getCollectionSemantics() {
-        return value().getCollectionSemantics();
-    }
+    Optional<CollectionSemantics> getCollectionSemantics();
 
     // -- FACTORIES
 
