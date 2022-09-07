@@ -5169,9 +5169,9 @@
             <mml:coll id="setOfInterfaceType" mixedIn="false">
                 <mml:facets>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
-                        <mml:attr name="collection-semantics">SET</mml:attr>
-                        <mml:attr name="container-type">java.util.Set</mml:attr>
-                        <mml:attr name="element-type">java.lang.Object</mml:attr>
+                        <mml:attr name="collection-semantics">SORTED_SET</mml:attr>
+                        <mml:attr name="container-type">java.util.SortedSet</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
                         <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                     </mml:facet>
@@ -5214,7 +5214,7 @@
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                     </mml:facet>
                 </mml:facets>
-                <mml:type>java.lang.Object</mml:type>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
             </mml:coll>
         </mml:collections>
         <mml:actions>

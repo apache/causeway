@@ -27,6 +27,7 @@ import java.util.Optional;
 import org.springframework.core.ResolvableType;
 
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 
@@ -87,31 +88,59 @@ public class TypeOfAnyCardinality {
     }
 
     public static TypeOfAnyCardinality forMethodReturn(
-            final Class<?> implementationClass, final Method method) {
-        val methodReturn = method.getReturnType();
+            final Class<?> _implementationClass, final Method _method) {
+        val methodReturnGuess = _method.getReturnType();
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnGuess)
+        .map(__->{
+            // adopt into default class loader context
 
-        return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturn)
-        .map(collectionSemantics->
-            nonScalar(
-                    inferElementTypeForMethodReturn(implementationClass, method),
-                    methodReturn,
-                    collectionSemantics)
-        )
-        .orElseGet(()->scalar(methodReturn));
+            val origin = MethodAndImplementingClass.of(_method, _implementationClass);
+            val adopted = origin
+                    .adoptIntoDefaultClassLoader()
+                    .getValue()
+                    .orElse(origin);
+
+            val method = adopted.getMethod();
+            val methodReturn = method.getReturnType();
+
+            return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturn)
+            .map(collectionSemantics->
+                nonScalar(
+                        adopted.resolveFirstGenericTypeArgumentOnMethodReturn(),
+                        methodReturn,
+                        collectionSemantics)
+            )
+            .orElseGet(()->scalar(methodReturn));
+        })
+        .orElseGet(()->scalar(methodReturnGuess));
     }
 
     public static TypeOfAnyCardinality forMethodParameter(
-            final Class<?> implementationClass, final Method method, final int paramIndex) {
-        val paramType = method.getParameters()[paramIndex].getType();
+            final Class<?> _implementationClass, final Method _method, final int paramIndex) {
+        val paramTypeGuess = _method.getParameters()[paramIndex].getType();
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(paramTypeGuess)
+        .map(__->{
+            // adopt into default class loader context
 
-        return ProgrammingModelConstants.CollectionSemantics.valueOf(paramType)
-        .map(collectionSemantics->
-            nonScalar(
-                    inferElementTypeForMethodParameter(implementationClass, method, paramIndex),
-                    paramType,
-                    collectionSemantics)
-        )
-        .orElseGet(()->scalar(paramType));
+            val origin = MethodAndImplementingClass.of(_method, _implementationClass);
+            val adopted = origin
+                    .adoptIntoDefaultClassLoader()
+                    .getValue()
+                    .orElse(origin);
+
+            val method = adopted.getMethod();
+            val paramType = method.getParameters()[paramIndex].getType();
+
+            return ProgrammingModelConstants.CollectionSemantics.valueOf(paramType)
+            .map(collectionSemantics->
+                nonScalar(
+                        adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
+                        paramType,
+                        collectionSemantics)
+            )
+            .orElseGet(()->scalar(paramType));
+        })
+        .orElseGet(()->scalar(paramTypeGuess));
     }
 
     public static TypeOfAnyCardinality forNonScalarType(
@@ -144,20 +173,6 @@ public class TypeOfAnyCardinality {
                 ProgrammingModelConstants.CollectionSemantics.valueOf(nonScalarType).isPresent(),
                 ()->String.format("%s should match a supported non-scalar type", nonScalarType));
         return nonScalarType;
-    }
-
-    /** Return the element type as a resolved Class, falling back to Object if no specific class can be resolved. */
-    private static Class<?> inferElementTypeForMethodReturn(
-            final Class<?> implementationClass, final Method method) {
-        val nonScalar = ResolvableType.forMethodReturnType(method, implementationClass);
-        return toClass(nonScalar);
-    }
-
-    /** Return the element type as a resolved Class, falling back to Object if no specific class can be resolved. */
-    private static Class<?> inferElementTypeForMethodParameter(
-            final Class<?> implementationClass, final Method method, final int paramIndex) {
-        val nonScalar = ResolvableType.forMethodParameter(method, paramIndex, implementationClass);
-        return toClass(nonScalar);
     }
 
     private static Class<?> toClass(final ResolvableType nonScalar){

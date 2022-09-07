@@ -367,16 +367,39 @@ class DomainModelTest_usingGoodDomain {
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
+    }
 
-        //TODO scenario 1
+    @Test
+    void elementTypeInference_fromGenerics_usingNoWildcards() {
+
+        // when using generic type (no wild-cards)
+
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
+
+        // scenario 1
 
         //abstract Set<ElementTypeInterface> getSetOfInterfaceType();
         //override SortedSet<ElementTypeInterface> getSetOfInterfaceType();
+
+        val interfaceSet = vmSpec.getCollectionElseFail("setOfInterfaceType");
+        val interfaceSetSpec = interfaceSet.getElementType();
+
+        assertEquals(ElementTypeInterface.class, interfaceSetSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceSetSpec.getBeanSort());
 
         //TODO scenario 2
 
         //abstract Iterable<ElementTypeInterface> getIterableOfInterfaceType();
         //override Can<ElementTypeInterface> getIterableOfInterfaceType();
+
+//        val interfaceIter = vmSpec.getCollectionElseFail("iterableOfInterfaceType");
+//        val interfaceIterSpec = interfaceIter.getElementType();
+//
+//        System.err.printf("%s%n", interfaceIter.getTypeOfAnyCardinality());
+//
+//        assertEquals(ElementTypeInterface.class, interfaceIterSpec.getCorrespondingClass());
+//        assertEquals(BeanSort.VIEW_MODEL, interfaceIterSpec.getBeanSort());
+
     }
 
     @Test
