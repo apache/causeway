@@ -59,8 +59,9 @@ public class ParameterNode extends MMNode {
     @Override
     public String createTitle() {
         val title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->""+parameter.getType());
-        return String.format("%s: %s", parameter.getId(), title);
+                .orElseGet(()->
+                    String.format("%s: %s", parameter.getId(), ""+parameter.getType()));
+        return title;
     }
 
     @Override

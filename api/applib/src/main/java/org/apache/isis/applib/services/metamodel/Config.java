@@ -21,11 +21,14 @@ package org.apache.isis.applib.services.metamodel;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
+
+import jakarta.annotation.Nullable;
 
 /**
  * Describes what to include in the export from
@@ -74,6 +77,18 @@ public class Config {
                 .namespacePrefixes(_Sets.newHashSet(namespacePrefixes));
     }
 
+    public String abbrev(final @Nullable Class<?> cls) {
+        if(cls==null) { return ""; }
+        return getFqcnAbbreviator().apply(cls.getName());
+    }
+
+    public String simpleName(final @Nullable Class<?> cls) {
+        if(cls==null) { return ""; }
+        return simpleName(cls.getName());
+    }
+
+    // -- DEFAULTS
+
     static String abbreviate(final String input) {
         return (""+input)
                 .replace("org.apache.isis.core.metamodel.facets.", "».c.m.f.")
@@ -84,5 +99,10 @@ public class Config {
                 .replace("java.lang.", "");
     }
 
+    static String simpleName(final String name) {
+        return _Strings.splitThenStream(""+name, ".")
+        .reduce((first, second) -> second) // get the last
+        .orElse("null");
+    }
 
 }
