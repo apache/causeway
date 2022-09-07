@@ -81,15 +81,8 @@ class AnnotationSyntesizerTest {
     //@Test
     void debug() {
 
-
-        val config = new Config()
-                //            .withIgnoreNoop()
-                //            .withIgnoreAbstractClasses()
-                //            .withIgnoreBuiltInValueTypes()
-                //            .withIgnoreInterfaces()
-                //.withPackagePrefix("*")
-                .withNamespacePrefix("org.apache.isis.testdomain.model.")
-                ;
+        val config = Config.builder().build()
+                .withNamespacePrefix("org.apache.isis.testdomain.model.");
 
         System.out.println("!!! listing MM");
         val metamodelDto = metaModelService.exportMetaModel(config);

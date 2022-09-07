@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,7 +34,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Streams;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +53,8 @@ public class TypeNode extends MMNode {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".TypeNode";
 
+    @Inject protected transient SpecificationLoader specificationLoader;
+
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private DomainClassDto domainClassDto;
 
@@ -61,6 +66,11 @@ public class TypeNode extends MMNode {
     @Override
     protected String iconSuffix() {
         return "";
+    }
+
+    @Override
+    protected MetamodelElement metamodelElement() {
+        return domainClassDto;
     }
 
     // -- TREE NODE STUFF

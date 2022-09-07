@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.schema.metamodel.v2.Member;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,11 @@ public abstract class MemberNode extends MMNode {
 
     protected final String titleSuffix() {
         return isMixedIn() ? " (mixed in)" : "";
+    }
+
+    @Override
+    protected MetamodelElement metamodelElement() {
+        return member();
     }
 
     // -- TREE NODE STUFF

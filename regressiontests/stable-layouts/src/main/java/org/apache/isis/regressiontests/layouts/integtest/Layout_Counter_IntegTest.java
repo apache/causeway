@@ -45,7 +45,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.isis.applib.IsisModuleApplibMixins;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -138,7 +138,7 @@ public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
 
     }
 
-    protected Counter newCounter(String name) {
+    protected Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 
@@ -749,16 +749,16 @@ public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
         ;
     }
 
-    private ObjectAction lookupAction(String id) {
+    private ObjectAction lookupAction(final String id) {
         val objectSpecification = specificationLoader.loadSpecification(Counter.class);
         List<ObjectAction> objectActions = objectSpecification.streamAnyActions(MixedIn.INCLUDED).collect(Collectors.toList());
         return objectSpecification.streamAnyActions(MixedIn.INCLUDED).filter(x -> x.getId().equals(id)).findFirst().orElseThrow();
     }
 
 
-    private void extracted(Class<?> cls) {
+    private void extracted(final Class<?> cls) {
         LogicalType logicalType = metaModelService.lookupLogicalTypeByClass(cls).orElseThrow();
-        MetamodelDto metamodelDto = metaModelService.exportMetaModel(new Config().withNamespacePrefix("layouts.test."));
+        MetamodelDto metamodelDto = metaModelService.exportMetaModel(Config.builder().build().withNamespacePrefix("layouts.test."));
         Map<String, DomainClassDto> metaModelDtoById = metamodelDto.getDomainClassDto().stream().collect(Collectors.toMap(DomainClassDto::getId, Function.identity()));
         DomainClassDto domainClassDto = metaModelDtoById.get(cls.getCanonicalName());
         Map<String, Action> actionById = domainClassDto.getActions().getAct().stream().collect(Collectors.toMap(Action::getId, Function.identity()));

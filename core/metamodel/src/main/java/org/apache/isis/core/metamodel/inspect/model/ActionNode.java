@@ -32,11 +32,13 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.schema.metamodel.v2.Action;
+import org.apache.isis.schema.metamodel.v2.Annotation;
 import org.apache.isis.schema.metamodel.v2.Member;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 @Named(ActionNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -55,10 +57,13 @@ public class ActionNode extends MemberNode {
 
     @Override
     public String createTitle() {
-        return String.format("%s(...): %s%s",
-                action.getId(),
-                typeToString(action.getReturnType()),
-                titleSuffix());
+        val title = lookupTitleAnnotation().map(Annotation::getValue)
+                .orElseGet(()->
+                    String.format("%s(...): %s%s",
+                            action.getId(),
+                            ""+action.getReturnType(),
+                            titleSuffix()));
+        return title;
     }
 
     @Override

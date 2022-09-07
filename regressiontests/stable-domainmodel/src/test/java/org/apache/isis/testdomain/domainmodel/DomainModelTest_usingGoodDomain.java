@@ -126,14 +126,8 @@ class DomainModelTest_usingGoodDomain {
     @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
-        val config = new Config()
-//              .withIgnoreNoop()
-//              .withIgnoreAbstractClasses()
-//              .withIgnoreBuiltInValueTypes()
-//              .withIgnoreInterfaces()
-                //.withPackagePrefix("*")
-                .withNamespacePrefix("org.apache.isis.testdomain.")
-                ;
+        val config = Config.builder().build()
+                .withNamespacePrefix("org.apache.isis.testdomain.");
 
         System.out.println("=== listing MM");
         val metamodelDto = metaModelService.exportMetaModel(config);

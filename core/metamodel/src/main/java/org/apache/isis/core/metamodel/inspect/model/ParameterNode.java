@@ -32,11 +32,14 @@ import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.schema.metamodel.v2.Annotation;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 import org.apache.isis.schema.metamodel.v2.Param;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 @Named(ParameterNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -55,12 +58,19 @@ public class ParameterNode extends MMNode {
 
     @Override
     public String createTitle() {
-        return String.format("%s: %s", parameter.getId(), typeToString(parameter.getType()));
+        val title = lookupTitleAnnotation().map(Annotation::getValue)
+                .orElseGet(()->""+parameter.getType());
+        return String.format("%s: %s", parameter.getId(), title);
     }
 
     @Override
     protected String iconSuffix() {
         return "";
+    }
+
+    @Override
+    protected MetamodelElement metamodelElement() {
+        return parameter;
     }
 
     // -- TREE NODE STUFF

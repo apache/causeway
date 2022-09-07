@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -368,7 +369,7 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoop())
+        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoopFacets())
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 
@@ -378,7 +379,8 @@ class MetaModelExporter {
     private org.apache.isis.schema.metamodel.v2.Facet asXsdType(
             final Facet facet,
             final Config config) {
-        final org.apache.isis.schema.metamodel.v2.Facet facetType = new org.apache.isis.schema.metamodel.v2.Facet();
+        final org.apache.isis.schema.metamodel.v2.Facet facetType =
+                new org.apache.isis.schema.metamodel.v2.Facet();
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
 
@@ -387,22 +389,44 @@ class MetaModelExporter {
         return facetType;
     }
 
+    private void visitNonNullAttributes(final Facet facet, final BiConsumer<String, String> visitor) {
+        facet.visitAttributes((key, attributeObj)->{
+            if(attributeObj == null) {
+                return;
+            }
+            String str = asStr(attributeObj);
+            visitor.accept(key, str);
+        });
+    }
+
     private void addFacetAttributes(
             final Facet facet,
             final org.apache.isis.schema.metamodel.v2.Facet facetType,
             final Config config) {
 
-        Map<String, Object> attributeMap = _Maps.newTreeMap();
-        facet.visitAttributes(attributeMap::put);
+        visitNonNullAttributes(facet, (key, str)->
+            addAttribute(facetType, key, str));
 
-        for (final String key : attributeMap.keySet()) {
-            Object attributeObj = attributeMap.get(key);
-            if(attributeObj == null) {
-                continue;
-            }
+        if(config.isIncludeShadowedFacets()) {
+            facet.getSharedFacetRanking()
+            .ifPresent(ranking->{
+                ranking.getTopRank(facet.facetType())
+                .stream()
+                // skip the winner, as its not shadowed
+                .skip(1)
+                //.filter(shadowedFacet->shadowedFacet.equals(facet))
+                .forEach(shadowedFacet->{
+                    visitNonNullAttributes(shadowedFacet, (key, str)->{
+                        if(key.equals("precedence")) {
+                            return; // skip
+                        }
+                        addAttribute(facetType, key, String.format("%s (shadowed %s)",
+                                str,
+                                shadowedFacet.getClass().getName()));
+                    });
+                });
+            });
 
-            String str = asStr(attributeObj);
-            addAttribute(facetType,key, str);
         }
 
         sortFacetAttributes(facetType.getAttr());

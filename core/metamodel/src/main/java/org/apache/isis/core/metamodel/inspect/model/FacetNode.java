@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.inspect.model;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Named;
@@ -34,8 +33,10 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.schema.metamodel.v2.Annotation;
 import org.apache.isis.schema.metamodel.v2.Facet;
 import org.apache.isis.schema.metamodel.v2.FacetAttr;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -59,17 +60,23 @@ public class FacetNode extends MMNode {
 
     @Override
     public String createTitle() {
-
-        val facetFqcn = lookupFacetAttributeByName("facet")
+        val title = lookupTitleAnnotation().map(Annotation::getValue)
                 .orElseGet(facet::getFqcn);
-
-        return String.format("%s: %s", simpleName(facet.getId()), abbreviate(facetFqcn));
+        return String.format("%s: %s", simpleName(facet.getId()), title);
     }
 
     @Override
     protected String iconSuffix() {
         return "";
     }
+
+    @Override
+    protected MetamodelElement metamodelElement() {
+        return facet;
+    }
+
+    @Getter @Setter
+    private boolean shadowed = false;
 
     // -- TREE NODE STUFF
 
@@ -79,20 +86,12 @@ public class FacetNode extends MMNode {
     @Override
     public Stream<MMNode> streamChildNodes() {
         return streamFacetAttributes()
-                .map(facetAttr->MMNodeFactory.facetAttr(facetAttr, this));
+                    .map(facetAttr->MMNodeFactory.facetAttr(facetAttr, this));
     }
 
     private Stream<FacetAttr> streamFacetAttributes() {
         return _NullSafe.stream(facet.getAttr());
     }
-
-    private Optional<String> lookupFacetAttributeByName(final String attributeName) {
-        return streamFacetAttributes()
-                .filter(facetAttr->facetAttr.getName().equals(attributeName))
-                .map(FacetAttr::getValue)
-                .findFirst();
-    }
-
 
 }
 

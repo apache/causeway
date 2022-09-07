@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.schema.metamodel.v2.FacetHolder.Facets;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,12 +58,16 @@ public class FacetGroupNode extends MMNode {
     @Override
     public String createTitle() {
         return "Facets";
-        //return super.abbreviate(facet.getFqcn());
     }
 
     @Override
     protected String iconSuffix() {
         return "";
+    }
+
+    @Override
+    protected MetamodelElement metamodelElement() {
+        return null;
     }
 
     // -- TREE NODE STUFF

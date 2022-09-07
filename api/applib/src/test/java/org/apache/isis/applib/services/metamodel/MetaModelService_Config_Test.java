@@ -20,37 +20,20 @@ package org.apache.isis.applib.services.metamodel;
 
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotSame;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class MetaModelService_Config_Test {
 
     @Test
-    public void ignore_noop() throws Exception {
-
-        // when
-        Config config = new Config();
-        // then
-        assertThat(config.isIgnoreNoop(), is(equalTo(false)));
-
-        // and when
-        Config config2 = config.withIgnoreNoop();
-
-        // then
-        assertNotSame(config, config2);
-        assertThat(config.isIgnoreNoop(), is(equalTo(false)));
-        assertThat(config2.isIgnoreNoop(), is(equalTo(true)));
-    }
-
-    @Test
     public void namespace_prefixes() throws Exception {
 
         // when
-        Config config = new Config();
+        Config config = Config.builder().build();
         // then
         assertThat(config.getNamespacePrefixes(), is(emptyCollectionOf(String.class)));
 
