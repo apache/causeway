@@ -81,6 +81,7 @@ public class Object_inspectMetamodel {
                 .ignoreAbstractClasses(true)
                 .ignoreInterfaces(true)
                 .ignoreBuiltInValueTypes(true)
+                .includeTitleAnnotations(true)
                 .includeShadowedFacets(true)
                 .build()
                 .withNamespacePrefix(namespace);

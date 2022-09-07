@@ -4701,120 +4701,7 @@
                 <mml:attr name="precedence">DEFAULT</mml:attr>
             </mml:facet>
         </mml:facets>
-        <mml:properties>
-            <mml:prop id="iterableOfConcreteType" mixedIn="false">
-                <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyFromMissingSetter">
-                        <mml:attr name="facet">DisabledFacetOnPropertyFromMissingSetter</mml:attr>
-                        <mml:attr name="interactionAdvisors">DisablingOrEnabling</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="reason">Always disabled</mml:attr>
-                        <mml:attr name="semantics">DISABLED</mml:attr>
-                        <mml:attr name="where">ANYWHERE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
-                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-                        <mml:attr name="facet">PromptStyleFacetAsConfigured</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="promptStyle">INLINE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
-                        <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
-                        <mml:attr name="labelPosition">NOT_SPECIFIED</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
-                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
-                        <mml:attr name="facet">PropertyAccessorFacetViaAccessor</mml:attr>
-                        <mml:attr name="intent.getIterableOfConcreteType">ACCESSOR</mml:attr>
-                        <mml:attr name="methods">public org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVm.getIterableOfConcreteType()</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
-                        <mml:attr name="facet">SnapshotExcludeFacetFromImmutableMember</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
-                        <mml:attr name="facet">PropertyDomainEventFacetDefault</mml:attr>
-                        <mml:attr name="getterFacet">org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
-                        <mml:attr name="interactionAdvisors">Validating, HidingOrShowing, DisablingOrEnabling</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
-                        <mml:attr name="facet">PropertyValidateFacetDefault</mml:attr>
-                        <mml:attr name="interactionAdvisors">Validating</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
-                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
-                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                </mml:facets>
-                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:type>
-            </mml:prop>
-            <mml:prop id="iterableOfInterfaceType" mixedIn="false">
-                <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyFromMissingSetter">
-                        <mml:attr name="facet">DisabledFacetOnPropertyFromMissingSetter</mml:attr>
-                        <mml:attr name="interactionAdvisors">DisablingOrEnabling</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="reason">Always disabled</mml:attr>
-                        <mml:attr name="semantics">DISABLED</mml:attr>
-                        <mml:attr name="where">ANYWHERE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
-                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-                        <mml:attr name="facet">PromptStyleFacetAsConfigured</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="promptStyle">INLINE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
-                        <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
-                        <mml:attr name="labelPosition">NOT_SPECIFIED</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
-                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
-                        <mml:attr name="facet">PropertyAccessorFacetViaAccessor</mml:attr>
-                        <mml:attr name="intent.getIterableOfInterfaceType">ACCESSOR</mml:attr>
-                        <mml:attr name="methods">public org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVm.getIterableOfInterfaceType()</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
-                        <mml:attr name="facet">SnapshotExcludeFacetFromImmutableMember</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
-                        <mml:attr name="facet">PropertyDomainEventFacetDefault</mml:attr>
-                        <mml:attr name="getterFacet">org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
-                        <mml:attr name="interactionAdvisors">Validating, HidingOrShowing, DisablingOrEnabling</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
-                        <mml:attr name="facet">PropertyValidateFacetDefault</mml:attr>
-                        <mml:attr name="interactionAdvisors">Validating</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
-                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
-                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                    </mml:facet>
-                </mml:facets>
-                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
-            </mml:prop>
-        </mml:properties>
+        <mml:properties/>
         <mml:collections>
             <mml:coll id="abstractColl" mixedIn="false">
                 <mml:facets>
@@ -5015,6 +4902,106 @@
                     </mml:facet>
                 </mml:facets>
                 <mml:type>org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:type>
+            </mml:coll>
+            <mml:coll id="immutableOfConcreteType" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">CAN</mml:attr>
+                        <mml:attr name="container-type">org.apache.isis.commons.collections.Can</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault">
+                        <mml:attr name="facet">CollectionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.CollectionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                        <mml:attr name="facet">PagedFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">INFERRED</mml:attr>
+                        <mml:attr name="value">12</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="facet">CollectionAccessorFacetViaAccessor</mml:attr>
+                        <mml:attr name="intent.getImmutableOfConcreteType">ACCESSOR</mml:attr>
+                        <mml:attr name="methods">public org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVm.getImmutableOfConcreteType()</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:type>
+            </mml:coll>
+            <mml:coll id="immutableOfInterfaceType" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">CAN</mml:attr>
+                        <mml:attr name="container-type">org.apache.isis.commons.collections.Can</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault">
+                        <mml:attr name="facet">CollectionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.CollectionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                        <mml:attr name="facet">PagedFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">INFERRED</mml:attr>
+                        <mml:attr name="value">12</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="facet">CollectionAccessorFacetViaAccessor</mml:attr>
+                        <mml:attr name="intent.getImmutableOfInterfaceType">ACCESSOR</mml:attr>
+                        <mml:attr name="methods">public org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVm.getImmutableOfInterfaceType()</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
             </mml:coll>
             <mml:coll id="interfaceColl" mixedIn="false">
                 <mml:facets>
