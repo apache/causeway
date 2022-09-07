@@ -40,7 +40,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
@@ -58,7 +57,6 @@ import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 class IsisToWicketTreeAdapter {
@@ -201,16 +199,6 @@ class IsisToWicketTreeAdapter {
 
     // -- ISIS' TREE-MODEL
 
-    /** this is just to make the ObjectManager happy */
-    @RequiredArgsConstructor
-    public static class PseudoViewmodel implements ViewModel {
-        final String memento;
-        @Override
-        public String viewModelMemento() {
-            return "tree";
-        }
-    }
-
     /**
      * Extending the EntityModel to also provide a TreePath.
      */
@@ -221,7 +209,7 @@ class IsisToWicketTreeAdapter {
         private final boolean isTreePathModelOnly;
 
         public TreeModel(final MetaModelContext commonContext, final TreePath treePath) {
-            super(commonContext, commonContext.getObjectManager().adapt(new PseudoViewmodel(null)));
+            super(commonContext, commonContext.getObjectManager().adapt(0)); // any bookmarkable will do
             this.treePath = treePath;
             this.isTreePathModelOnly = true;
         }

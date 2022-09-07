@@ -74,7 +74,8 @@ public class FacetGroupNode extends MMNode {
     public Stream<MMNode> streamChildNodes() {
 
         return _NullSafe.stream(facets.getFacet())
-                .map(facet->MMNodeFactory.facet(facet, this));
+                .map(facet->MMNodeFactory.facet(facet, this))
+                .sorted((a, b)->a.title().compareToIgnoreCase(b.title()));
     }
 
 

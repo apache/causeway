@@ -40,4 +40,5 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicke
         LogoutHandlerWkt.class,
 })
 public class IsisModuleViewerWicketUi {
+
 }
