@@ -166,7 +166,9 @@ implements FacetHolder {
     @Override
     protected void introspectMembers() {
 
-        if(!this.getBeanSort().isToBeIntrospected()
+        // yet this logic does not skip UNKNONW
+        if(this.getBeanSort().isCollection()
+                || this.getBeanSort().isVetoed()
                 || this.isValue()) {
             if (log.isDebugEnabled()) {
                 log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
