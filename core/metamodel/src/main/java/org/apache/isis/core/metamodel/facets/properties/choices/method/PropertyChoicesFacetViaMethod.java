@@ -63,7 +63,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstOrFail();
-        val elementSpec = specForTypeElseFail(((FacetedMethod) getFacetHolder()).getType());
+        val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
         val optionPojos = MmInvokeUtil.invoke(method, owningAdapter);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(

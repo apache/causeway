@@ -126,14 +126,8 @@ class DomainModelTest_usingGoodDomain {
     @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
-        val config = new Config()
-//              .withIgnoreNoop()
-//              .withIgnoreAbstractClasses()
-//              .withIgnoreBuiltInValueTypes()
-//              .withIgnoreInterfaces()
-                //.withPackagePrefix("*")
-                .withNamespacePrefix("org.apache.isis.testdomain.")
-                ;
+        val config = Config.builder().build()
+                .withNamespacePrefix("org.apache.isis.testdomain.");
 
         System.out.println("=== listing MM");
         val metamodelDto = metaModelService.exportMetaModel(config);
@@ -373,6 +367,39 @@ class DomainModelTest_usingGoodDomain {
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
+    }
+
+    @Test
+    void elementTypeInference_fromGenerics_usingNoWildcards() {
+
+        // when using generic type (no wild-cards)
+
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
+
+        // scenario 1
+
+        //abstract Set<ElementTypeInterface> getSetOfInterfaceType();
+        //override SortedSet<ElementTypeInterface> getSetOfInterfaceType();
+
+        val interfaceSet = vmSpec.getCollectionElseFail("setOfInterfaceType");
+        val interfaceSetSpec = interfaceSet.getElementType();
+
+        assertEquals(ElementTypeInterface.class, interfaceSetSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceSetSpec.getBeanSort());
+
+        //TODO scenario 2
+
+        //abstract ImmutableCollection<ElementTypeInterface> getImmutableOfInterfaceType();
+        //override Can<ElementTypeInterface> getImmutableOfInterfaceType();
+
+        val interfaceIterLookup = vmSpec.getAssociationElseFail("immutableOfInterfaceType");
+        assertTrue(interfaceIterLookup.isOneToManyAssociation(), "required to be a coll");
+
+        val interfaceIter = vmSpec.getCollectionElseFail("immutableOfInterfaceType");
+        val interfaceIterSpec = interfaceIter.getElementType();
+
+        assertEquals(ElementTypeInterface.class, interfaceIterSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceIterSpec.getBeanSort());
 
     }
 
@@ -408,6 +435,17 @@ class DomainModelTest_usingGoodDomain {
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
+
+        //TODO scenario 1
+
+        //abstract Set<? extends ElementTypeConcrete> getSetOfConcreteType();
+        //override SortedSet<? extends ElementTypeConcrete> getSetOfConcreteType();
+
+        //TODO scenario 2
+
+        //abstract Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType();
+        //override Can<? extends ElementTypeConcrete> getIterableOfConcreteType();
+
 
     }
 

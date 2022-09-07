@@ -20,7 +20,6 @@ package org.apache.isis.core.config.beans;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 
 import javax.persistence.Entity;
 
@@ -35,6 +34,7 @@ import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.AccessLevel;
@@ -66,9 +66,7 @@ implements IsisBeanTypeClassifier {
             return IsisBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
-        if(Collection.class.isAssignableFrom(type)
-                || Can.class.isAssignableFrom(type)
-                || type.isArray()) {
+        if(ProgrammingModelConstants.CollectionSemantics.valueOf(type).isPresent()) {
             return IsisBeanMetaData.isisManaged(BeanSort.COLLECTION, type);
         }
 

@@ -18,20 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
-public class ElementSpecificationProviderFromTypeOfFacet implements ElementSpecificationProvider {
+public class TypeOfFacetFromType
+extends TypeOfFacetAbstract {
 
-    private final ObjectSpecification spec;
-
-    public ElementSpecificationProviderFromTypeOfFacet(final ObjectSpecification spec) {
-        this.spec = spec;
-    }
-
-    @Override
-    public ObjectSpecification getElementType() {
-        return spec;
+    TypeOfFacetFromType(final TypeOfAnyCardinality type, final FacetHolder holder) {
+        super(type, holder, Precedence.LOW); // generic type argument resolution on plain type are low priority
     }
 
 }

@@ -28,13 +28,18 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Vector;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
@@ -49,10 +54,15 @@ import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -66,6 +76,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 public final class ProgrammingModelConstants {
 
@@ -529,6 +540,98 @@ public final class ProgrammingModelConstants {
         };
         public abstract <T> Optional<Constructor<T>> get(Class<T> correspondingClass);
 
+    }
+
+    /**
+     * Supported collection types, including arrays.
+     * Order matters, as class substitution is processed on first matching type.
+     * <p>
+     * Non scalar <i>Action Parameter</i> types cannot be more special than what we offer here.
+     */
+    @RequiredArgsConstructor
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static enum CollectionSemantics {
+        ARRAY(Array.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return _Arrays.toArray(_Casts.uncheckedCast(nonScalar), elementType);
+            }
+        },
+        @Deprecated
+        VECTOR(Vector.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return new Vector(nonScalar);
+            }
+        },
+        LIST(List.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return Collections.unmodifiableList(nonScalar);
+            }
+        },
+        SORTED_SET(SortedSet.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return _Collections.asUnmodifiableSortedSet(nonScalar);
+            }
+        },
+        SET(Set.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return _Collections.asUnmodifiableSet(nonScalar);
+            }
+        },
+        COLLECTION(Collection.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return Collections.unmodifiableCollection(nonScalar);
+            }
+        },
+        CAN(Can.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return Can.ofCollection(nonScalar);
+            }
+        },
+        IMMUTABLE_COLLECTION(ImmutableCollection.class){
+            @Override public Object asContainerType(
+                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
+                return CAN.asContainerType(elementType, nonScalar);
+            }
+        }
+        ;
+        public boolean isArray() {return this == ARRAY;}
+        public boolean isVector() {return this == VECTOR;}
+        public boolean isList() {return this == LIST;}
+        public boolean isSortedSet() {return this == SORTED_SET;}
+        public boolean isSet() {return this == SET;}
+        public boolean isCollection() {return this == COLLECTION;}
+        public boolean isCan() {return this == CAN;}
+        public boolean isImmutableCollection() {return this == IMMUTABLE_COLLECTION;}
+        //
+        public boolean isSetAny() {return isSet() || isSortedSet(); }
+        @Getter private final Class<?> containerType;
+        private static final ImmutableEnumSet<CollectionSemantics> all =
+                ImmutableEnumSet.allOf(CollectionSemantics.class);
+        @Getter @Accessors(fluent = true)
+        private static final ImmutableEnumSet<CollectionSemantics> typeSubstitutors = all.remove(ARRAY);
+        public static Optional<CollectionSemantics> valueOf(final @Nullable Class<?> type) {
+            if(type==null) return Optional.empty();
+            return type.isArray()
+                    ? Optional.of(CollectionSemantics.ARRAY)
+                    : all.stream()
+                        .filter(collType->collType.getContainerType().isAssignableFrom(type))
+                        .findFirst();
+        }
+        public Object unmodifiableCopyOf(
+                final Class<?> elementType, final @NonNull Iterable<?> nonScalar) {
+            // defensive copy
+            return asContainerType(elementType,
+                    _NullSafe.stream(nonScalar).collect(Collectors.toList()));
+        }
+        protected abstract Object asContainerType(
+                final Class<?> elementType, final @NonNull List<?> nonScalar);
     }
 
     //TODO perhaps needs an update to reflect Java 7->11 Language changes

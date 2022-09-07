@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.typicallen;
 
-import java.util.function.BiConsumer;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
@@ -53,13 +51,10 @@ implements TypicalLengthFacet {
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        final int typicalLength = value();
-        visitor.accept("typicalLength", typicalLength == 0
+    protected String getAttributeValueForValue(final int value) {
+        return value == 0
                 ? "default"
-                : String.valueOf(typicalLength));
+                : String.valueOf(value);
     }
-
 
 }

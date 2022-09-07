@@ -170,7 +170,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     @Override
     protected void putExtensionsIsisProprietary() {
-        final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
+        final CollectionSemantics semantics = CollectionSemantics.valueOf(objectMember);
         getExtensions().mapPutString("collectionSemantics", semantics.name().toLowerCase());
     }
 

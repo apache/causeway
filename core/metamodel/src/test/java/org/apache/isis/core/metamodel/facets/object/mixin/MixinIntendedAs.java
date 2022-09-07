@@ -79,14 +79,12 @@ abstract class MixinIntendedAs {
     protected FacetedMethodParameter runScalarParameterContextOn(final Method actionMethod, final int paramIndex) {
 
         val owningType = actionMethod.getDeclaringClass();
-        val parameterType = actionMethod.getParameterTypes()[paramIndex];
 
         val facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,
                 FeatureType.ACTION_PARAMETER_SCALAR,
                 owningType,
                 actionMethod,
-                parameterType,
                 0);
 
         val processParameterContext =

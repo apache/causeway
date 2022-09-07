@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionP
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionScope;
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -167,9 +166,12 @@ implements FacetHolder {
     @Override
     protected void introspectMembers() {
 
-        if(this.isValue()) {
+        // yet this logic does not skip UNKNONW
+        if(this.getBeanSort().isCollection()
+                || this.getBeanSort().isVetoed()
+                || this.isValue()) {
             if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for value type {}", getFullIdentifier());
+                log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
             }
             return;
         }
@@ -323,16 +325,12 @@ implements FacetHolder {
     // -- ELEMENT SPECIFICATION
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
-            _Lazy.of(this::lookupElementSpecification);
+            _Lazy.of(()->lookupFacet(TypeOfFacet.class)
+                    .map(typeOfFacet -> typeOfFacet.elementSpec()));
 
     @Override
     public Optional<ObjectSpecification> getElementSpecification() {
         return elementSpecification.get();
-    }
-
-    private Optional<ObjectSpecification> lookupElementSpecification() {
-        return lookupFacet(TypeOfFacet.class)
-                .map(typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType());
     }
 
     // -- TABLE COLUMN RENDERING

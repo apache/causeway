@@ -674,7 +674,7 @@ class Generation {
         }
 
         if(specification.isNonScalar()) {
-            val elementSpec = Facets.typeOf(specification).orElse(null);
+            val elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return arrayPropertyOf(elementSpec);
             }

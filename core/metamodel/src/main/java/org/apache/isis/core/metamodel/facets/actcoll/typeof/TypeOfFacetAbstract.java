@@ -18,25 +18,70 @@
  */
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 public abstract class TypeOfFacetAbstract
-extends SingleClassValueFacetAbstract
+extends FacetAbstract
 implements TypeOfFacet {
 
     private static final Class<? extends Facet> type() {
         return TypeOfFacet.class;
     }
 
-    protected TypeOfFacetAbstract(final Class<?> type, final FacetHolder holder) {
-        super(type(), holder, type);
+    protected TypeOfFacetAbstract(
+            final TypeOfAnyCardinality value,
+            final FacetHolder holder) {
+        this(value, holder, Precedence.DEFAULT);
+    }
+
+    protected TypeOfFacetAbstract(
+            final TypeOfAnyCardinality type,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(type(), holder, precedence);
+        this.value = type;
+    }
+
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
+    private final @NonNull TypeOfAnyCardinality value;
+
+    @Override
+    public final ObjectSpecification elementSpec() {
+        return getSpecificationLoader().specForTypeElseFail(value().getElementType());
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [type=" + value() + "]";
+    public final Optional<CollectionSemantics> getCollectionSemantics() {
+        return value().getCollectionSemantics();
+    }
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("element-type", value().getElementType());
+        getCollectionSemantics()
+            .ifPresent(sem->visitor.accept("collection-semantics", sem.name()));
+        value().getContainerType()
+            .ifPresent(containerType->visitor.accept("container-type", containerType.getName()));
+    }
+
+    @Override
+    public final boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof TypeOfFacet
+                ? this.value() == ((TypeOfFacet)other).value()
+                : false;
     }
 
 }

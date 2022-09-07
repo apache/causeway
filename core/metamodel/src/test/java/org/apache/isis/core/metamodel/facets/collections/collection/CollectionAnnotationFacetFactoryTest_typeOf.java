@@ -20,13 +20,18 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Optional;
 
+import org.hamcrest.Matchers;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 
 public class CollectionAnnotationFacetFactoryTest_typeOf
 extends AbstractFacetFactoryTest {
@@ -62,9 +67,9 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetFromGenerics);
-        final TypeOfFacetFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetFromGenerics) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value());
+        assertTrue(facet instanceof TypeOfFacetFromFeature);
+        final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
+        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
 
     }
 
@@ -85,9 +90,9 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetFromGenerics);
-        final TypeOfFacetFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetFromGenerics) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value());
+        assertTrue(facet instanceof TypeOfFacetFromFeature);
+        final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
+        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
 
     }
 
@@ -105,11 +110,10 @@ extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
+        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetFromArray);
-        final TypeOfFacetFromArray typeOfFacetInferredFromArray = (TypeOfFacetFromArray) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromArray.value());
+        assertEquals(Order.class, facet.value().getElementType());
+        assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
 
     }
 

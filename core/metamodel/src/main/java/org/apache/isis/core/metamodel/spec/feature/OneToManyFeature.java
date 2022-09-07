@@ -18,7 +18,9 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 /**
  * Base interface for {@link OneToManyAssociation} only.
@@ -34,6 +36,13 @@ import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSeman
  */
 public interface OneToManyFeature extends ObjectFeature {
 
-    CollectionSemantics getCollectionSemantics();
+    TypeOfAnyCardinality getTypeOfAnyCardinality();
+
+    default ProgrammingModelConstants.CollectionSemantics getCollectionSemantics() {
+        return getTypeOfAnyCardinality().getCollectionSemantics()
+                .orElseThrow(()->_Exceptions.unrecoverable(
+                        "framework bug: non-scalar %s feature must have a TypeOfFacet",
+                        this.getFeatureIdentifier()));
+    }
 
 }

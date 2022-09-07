@@ -40,6 +40,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
@@ -49,6 +50,7 @@ import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.functions._Predicates;
 
 import lombok.NonNull;
@@ -586,6 +588,44 @@ public final class _Reflect {
 
     public static Can<Constructor<?>> getPublicConstructors(final Class<?> cls) {
         return Can.ofArray(cls.getConstructors());
+    }
+
+    // -- GENENERIC TYPE ARG INTROSPECTION
+
+    @lombok.Value(staticConstructor = "of")
+    public static class MethodAndImplementingClass {
+        final @NonNull Method method;
+        final @NonNull Class<?> implementingClass;
+        /**
+         * [ISIS-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+         */
+        public Try<MethodAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
+            try {
+                val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
+                val methodReloaded = ownerReloaded.getMethod(method.getName(), method.getParameterTypes());
+                return Try.success(MethodAndImplementingClass.of(methodReloaded, ownerReloaded));
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
+        }
+        public Try<MethodAndImplementingClass> adoptIntoDefaultClassLoader() {
+            return adopt(_Context.getDefaultClassLoader());
+        }
+        public Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
+            return genericTypeArg(ResolvableType.forMethodReturnType(method, implementingClass))
+                    .toClass();
+        }
+        public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+            return genericTypeArg(ResolvableType.forMethodParameter(method, paramIndex, implementingClass))
+                    .toClass();
+        }
+        // -- HELPER
+        private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
+            val genericTypeArg = nonScalar.isArray()
+                    ? nonScalar.getComponentType()
+                    : nonScalar.getGeneric(0);
+            return genericTypeArg;
+        }
     }
 
     // -- FILTER

@@ -23,14 +23,13 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.CollectionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.CollectionVisibilityContext;
@@ -38,7 +37,9 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.val;
@@ -52,7 +53,7 @@ implements OneToManyAssociation {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 facetedMethod.getMetaModelContext().getSpecificationLoader()
-                    .loadSpecification(facetedMethod.getType()));
+                    .loadSpecification(facetedMethod.getType().getElementType()));
     }
 
     protected OneToManyAssociationDefault(
@@ -62,10 +63,14 @@ implements OneToManyAssociation {
         super(featureIdentifier, facetedMethod, FeatureType.COLLECTION, objectSpec);
     }
 
-    @Override
-    public CollectionSemantics getCollectionSemantics() {
-        final CollectionSemanticsFacet facet = getFacet(CollectionSemanticsFacet.class);
-        return facet != null ? facet.value() : CollectionSemantics.OTHER_IMPLEMENTATION;
+    // -- UNDERLYING TYPE
+
+    @Getter(onMethod_={@Override}, lazy = true)
+    private final TypeOfAnyCardinality typeOfAnyCardinality = resolveTypeOfAnyCardinality();
+    private TypeOfAnyCardinality resolveTypeOfAnyCardinality() {
+        return Facets.typeOfAnyCardinality(getFacetHolder())
+                .orElseThrow(()->_Exceptions.unrecoverable(
+                        "framework bug: non-scalar feature must have a TypeOfFacet"));
     }
 
     // -- visible, usable

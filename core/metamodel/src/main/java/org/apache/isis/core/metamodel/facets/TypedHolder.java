@@ -22,6 +22,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 /**
  * A {@link FacetHolder} that also has a {@link ObjectSpecification type}.
@@ -31,15 +32,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface TypedHolder extends HasFacetHolder {
 
-    public FeatureType getFeatureType();
+    FeatureType getFeatureType();
 
-    /**
-     * The type of a {@link FeatureType#PROPERTY property}, the referenced (element) type
-     * of a {@link FeatureType#COLLECTION collection}, the return type of an
-     * {@link FeatureType#ACTION action}, the type of a
-     * {@link FeatureType#ACTION_PARAMETER_SCALAR scalar action parameter}s, and the inferred
-     * element type for a {@link FeatureType#ACTION_PARAMETER_COLLECTION collection action parameter}.
-     */
-    public Class<?> getType();
+    TypeOfAnyCardinality getType();
 
 }

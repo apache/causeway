@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.schema.metamodel.v2.FacetAttr;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -61,6 +62,11 @@ public class FacetAttrNode extends MMNode {
     @Override
     protected String iconSuffix() {
         return "";
+    }
+
+    @Override
+    protected MetamodelElement metamodelElement() {
+        return null;
     }
 
     // -- TREE NODE STUFF

@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -244,20 +244,22 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
+        val cls = processMethodContext.getCls();
         val method = processMethodContext.getMethod();
         val facetedMethod = processMethodContext.getFacetHolder();
 
         val methodReturnType = method.getReturnType();
-        if (!_Collections.isCollectionOrArrayOrCanType(methodReturnType)) {
-            return;
-        }
 
-        addFacetIfPresent(
-                TypeOfFacetForActionAnnotation.create(actionIfAny, facetedMethod)
-                .or(
-                    // else infer from generic type arg if any
-                    ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod)
-                    ));
+        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
+        .ifPresent(collectionType->{
+            addFacetIfPresent(
+                    TypeOfFacetForActionAnnotation.create(actionIfAny, collectionType, facetedMethod)
+                    .or(
+                        // else infer from generic type arg if any
+                        ()->TypeOfFacet.inferFromMethodReturnType(cls, method, facetedMethod)
+                        ));
+
+        });
     }
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

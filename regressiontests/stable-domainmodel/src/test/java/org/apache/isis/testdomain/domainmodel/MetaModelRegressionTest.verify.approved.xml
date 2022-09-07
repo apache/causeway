@@ -1760,10 +1760,12 @@
         <mml:collections>
             <mml:coll id="candidates" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeAbstract</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeAbstract</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -1780,11 +1782,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -2802,10 +2799,12 @@
         <mml:collections>
             <mml:coll id="candidates" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -2822,11 +2821,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -3856,10 +3850,12 @@
         <mml:collections>
             <mml:coll id="candidates" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -3876,11 +3872,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -3911,10 +3902,12 @@
         <mml:actions>
             <mml:act id="appendACharacterToCandidates" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation">
                         <mml:attr name="facet">ChoicesFromFacetForActionAnnotation</mml:attr>
@@ -3986,10 +3979,12 @@
                 <mml:params>
                     <mml:param xsi:type="mml:vectorParam" id="input" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom#appendACharacterToCandidates())</mml:attr>
@@ -3997,11 +3992,6 @@
                                 <mml:attr name="originalText">Input</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">Input</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -4715,10 +4705,12 @@
         <mml:collections>
             <mml:coll id="abstractColl" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeAbstract</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeAbstract</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -4735,11 +4727,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -4768,10 +4755,12 @@
             </mml:coll>
             <mml:coll id="abstractColl2" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeAbstract</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeAbstract</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -4788,11 +4777,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -4821,10 +4805,12 @@
             </mml:coll>
             <mml:coll id="concreteColl" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -4841,11 +4827,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -4874,10 +4855,12 @@
             </mml:coll>
             <mml:coll id="concreteColl2" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -4894,11 +4877,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -4925,12 +4903,14 @@
                 </mml:facets>
                 <mml:type>org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:type>
             </mml:coll>
-            <mml:coll id="interfaceColl" mixedIn="false">
+            <mml:coll id="immutableOfConcreteType" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">CAN</mml:attr>
+                        <mml:attr name="container-type">org.apache.isis.commons.collections.Can</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -4948,10 +4928,105 @@
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
                     </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                        <mml:attr name="facet">PagedFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">INFERRED</mml:attr>
+                        <mml:attr name="value">12</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="facet">CollectionAccessorFacetViaAccessor</mml:attr>
+                        <mml:attr name="intent.getImmutableOfConcreteType">ACCESSOR</mml:attr>
+                        <mml:attr name="methods">public org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVm.getImmutableOfConcreteType()</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:type>
+            </mml:coll>
+            <mml:coll id="immutableOfInterfaceType" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">CAN</mml:attr>
+                        <mml:attr name="container-type">org.apache.isis.commons.collections.Can</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault">
+                        <mml:attr name="facet">CollectionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.CollectionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                        <mml:attr name="facet">PagedFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">INFERRED</mml:attr>
+                        <mml:attr name="value">12</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="facet">CollectionAccessorFacetViaAccessor</mml:attr>
+                        <mml:attr name="intent.getImmutableOfInterfaceType">ACCESSOR</mml:attr>
+                        <mml:attr name="methods">public org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVm.getImmutableOfInterfaceType()</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
+            </mml:coll>
+            <mml:coll id="interfaceColl" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault">
+                        <mml:attr name="facet">CollectionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.CollectionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -4980,10 +5055,12 @@
             </mml:coll>
             <mml:coll id="interfaceColl2" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -5000,11 +5077,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
@@ -5031,8 +5103,211 @@
                 </mml:facets>
                 <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
             </mml:coll>
+            <mml:coll id="setOfConcreteType" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">SORTED_SET</mml:attr>
+                        <mml:attr name="container-type">java.util.SortedSet</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault">
+                        <mml:attr name="facet">CollectionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.CollectionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                        <mml:attr name="facet">PagedFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">INFERRED</mml:attr>
+                        <mml:attr name="value">12</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="facet">CollectionAccessorFacetViaAccessor</mml:attr>
+                        <mml:attr name="intent.getSetOfConcreteType">ACCESSOR</mml:attr>
+                        <mml:attr name="methods">public java.util.SortedSet org.apache.isis.testdomain.model.good.ProperElementTypeVm.getSetOfConcreteType()</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeConcrete</mml:type>
+            </mml:coll>
+            <mml:coll id="setOfInterfaceType" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">SORTED_SET</mml:attr>
+                        <mml:attr name="container-type">java.util.SortedSet</mml:attr>
+                        <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault">
+                        <mml:attr name="facet">CollectionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.CollectionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+                        <mml:attr name="facet">PagedFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">INFERRED</mml:attr>
+                        <mml:attr name="value">12</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="facet">CollectionAccessorFacetViaAccessor</mml:attr>
+                        <mml:attr name="intent.getSetOfInterfaceType">ACCESSOR</mml:attr>
+                        <mml:attr name="methods">public java.util.SortedSet org.apache.isis.testdomain.model.good.ProperElementTypeVm.getSetOfInterfaceType()</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
+            </mml:coll>
         </mml:collections>
         <mml:actions>
+            <mml:act id="act" mixedIn="false">
+                <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet">ActionExplicitFacetForActionAnnotation</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
+                        <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
+                        <mml:attr name="interactionAdvisors">Validating, HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">org.apache.isis.applib.events.domain.ActionDomainEvent.Default</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault">
+                        <mml:attr name="declaringType">org.apache.isis.testdomain.model.good.ProperElementTypeVm</mml:attr>
+                        <mml:attr name="eventType">org.apache.isis.applib.events.domain.ActionDomainEvent.Default</mml:attr>
+                        <mml:attr name="facet">ActionInvocationFacetForDomainEventFromDefault</mml:attr>
+                        <mml:attr name="intent.act">EXECUTE</mml:attr>
+                        <mml:attr name="methods">public void org.apache.isis.testdomain.model.good.ProperElementTypeVm.act(org.apache.isis.commons.collections.ImmutableCollection)</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="returnType">void</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetFallback">
+                        <mml:attr name="facet">RedirectFacetFallback</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent">
+                        <mml:attr name="facet">ActionSemanticsFacetFallbackToNonIdempotent</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NON_IDEMPOTENT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
+                        <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">LOW</mml:attr>
+                        <mml:attr name="value">table</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetFromConfiguration">
+                        <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="value">NONE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet" fqcn="org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFromConfiguredRegex">
+                        <mml:attr name="classes">!imperative</mml:attr>
+                        <mml:attr name="facet">CssClassFaFacetOnMemberFromConfiguredRegex</mml:attr>
+                        <mml:attr name="position">!imperative</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
+                        <mml:attr name="facet">NavigationFacetFromHiddenType</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                        <mml:attr name="facet">PromptStyleFacetAsConfigured</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                        <mml:attr name="promptStyle">INLINE</mml:attr>
+                    </mml:facet>
+                    <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
+                        <mml:attr name="facet">AuthorizationFacetImpl</mml:attr>
+                        <mml:attr name="interactionAdvisors">HidingOrShowing, DisablingOrEnabling</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
+                </mml:facets>
+                <mml:returnType>void</mml:returnType>
+                <mml:params>
+                    <mml:param xsi:type="mml:vectorParam" id="coll" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                        <mml:facets>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">IMMUTABLE_COLLECTION</mml:attr>
+                                <mml:attr name="container-type">org.apache.isis.commons.collections.ImmutableCollection</mml:attr>
+                                <mml:attr name="element-type">org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                                <mml:attr name="precedence">DEFAULT</mml:attr>
+                            </mml:facet>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
+                                <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperElementTypeVm#act())</mml:attr>
+                                <mml:attr name="facet">NamedFacetForParameterUsingReflection</mml:attr>
+                                <mml:attr name="originalText">Coll</mml:attr>
+                                <mml:attr name="precedence">LOW</mml:attr>
+                                <mml:attr name="translated">Coll</mml:attr>
+                            </mml:facet>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
+                                <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
+                                <mml:attr name="labelPosition">NOT_SPECIFIED</mml:attr>
+                                <mml:attr name="precedence">DEFAULT</mml:attr>
+                            </mml:facet>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
+                                <mml:attr name="choicesType">org.apache.isis.commons.collections.Can</mml:attr>
+                                <mml:attr name="facet">ActionParameterChoicesFacetViaMethod</mml:attr>
+                                <mml:attr name="intent.choices0Act">CHOICES_OR_AUTOCOMPLETE</mml:attr>
+                                <mml:attr name="methods">protected org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVmAbstract.choices0Act()</mml:attr>
+                                <mml:attr name="precedence">DEFAULT</mml:attr>
+                            </mml:facet>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
+                                <mml:attr name="facet">ParameterDependentDefaultsFacetFromConfiguration</mml:attr>
+                                <mml:attr name="precedence">DEFAULT</mml:attr>
+                                <mml:attr name="value">UPDATE_DEPENDENT</mml:attr>
+                            </mml:facet>
+                        </mml:facets>
+                        <mml:type>org.apache.isis.testdomain.model.good.ElementTypeInterface</mml:type>
+                    </mml:param>
+                </mml:params>
+            </mml:act>
             <mml:act id="downloadLayoutXml" mixedIn="true">
                 <mml:facets>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
@@ -5829,10 +6104,12 @@
         <mml:collections>
             <mml:coll id="sampleCollection" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.MemberDescribedFacetForCollectionLayoutAnnotation">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperFullyImpl#sampleCollection)</mml:attr>
@@ -5863,11 +6140,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation">
                         <mml:attr name="facet">LayoutOrderFacetFromCollectionLayoutAnnotation</mml:attr>
@@ -8398,6 +8670,13 @@
         <mml:collections>
             <mml:coll id="sampleCollection" mixedIn="false">
                 <mml:facets>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.Object</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
+                        <mml:attr name="precedence">DEFAULT</mml:attr>
+                    </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.MemberDescribedFacetForCollectionLayoutAnnotation">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleCollection)</mml:attr>
                         <mml:attr name="facet">MemberDescribedFacetForCollectionLayoutAnnotation</mml:attr>
@@ -8427,11 +8706,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation">
                         <mml:attr name="facet">LayoutOrderFacetFromCollectionLayoutAnnotation</mml:attr>
@@ -9496,10 +9770,12 @@
         <mml:collections>
             <mml:coll id="sampleCollection" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.MemberDescribedFacetForCollectionLayoutAnnotation">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface#sampleCollection)</mml:attr>
@@ -9530,11 +9806,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation">
                         <mml:attr name="facet">LayoutOrderFacetFromCollectionLayoutAnnotation</mml:attr>
@@ -13258,10 +13529,12 @@
         <mml:collections>
             <mml:coll id="collection1" mixedIn="true">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
                         <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
@@ -13374,10 +13647,12 @@
             </mml:coll>
             <mml:coll id="collection2" mixedIn="true">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
                         <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
@@ -13490,10 +13765,12 @@
             </mml:coll>
             <mml:coll id="collection3" mixedIn="true">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
                         <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
@@ -13585,10 +13862,12 @@
             </mml:coll>
             <mml:coll id="myColl" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.members.described.method.MemberDescribedFacetViaMethod">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport#myColl)</mml:attr>
@@ -13619,11 +13898,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet" fqcn="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod">
                         <mml:attr name="facet">DisableForContextFacetViaMethod</mml:attr>
@@ -14217,10 +14491,12 @@
                 <mml:params>
                     <mml:param xsi:type="mml:vectorParam" id="p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action3#act())</mml:attr>
@@ -14228,11 +14504,6 @@
                                 <mml:attr name="originalText">P0</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">P0</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -14283,10 +14554,12 @@
                     </mml:param>
                     <mml:param xsi:type="mml:vectorParam" id="p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action3#act())</mml:attr>
@@ -14294,11 +14567,6 @@
                                 <mml:attr name="originalText">P1</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">P1</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -14453,10 +14721,12 @@
                 <mml:params>
                     <mml:param xsi:type="mml:vectorParam" id="a" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action4#act())</mml:attr>
@@ -14464,11 +14734,6 @@
                                 <mml:attr name="originalText">A</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">A</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -14519,10 +14784,12 @@
                     </mml:param>
                     <mml:param xsi:type="mml:vectorParam" id="b" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action4#act())</mml:attr>
@@ -14530,11 +14797,6 @@
                                 <mml:attr name="originalText">B</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">B</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -16081,10 +16343,12 @@
         <mml:collections>
             <mml:coll id="orders" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">COLLECTION</mml:attr>
+                        <mml:attr name="container-type">java.util.Collection</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.members.described.method.MemberDescribedFacetViaMethod">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery.WhenAnnotationOptional#orders)</mml:attr>
@@ -16115,11 +16379,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">COLLECTION_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet" fqcn="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod">
                         <mml:attr name="facet">DisableForContextFacetViaMethod</mml:attr>
@@ -17187,10 +17446,12 @@
         <mml:collections>
             <mml:coll id="orders" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">COLLECTION</mml:attr>
+                        <mml:attr name="container-type">java.util.Collection</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.members.described.method.MemberDescribedFacetViaMethod">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery.WhenAnnotationRequired#orders)</mml:attr>
@@ -17221,11 +17482,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">COLLECTION_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet" fqcn="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod">
                         <mml:attr name="facet">DisableForContextFacetViaMethod</mml:attr>
@@ -18297,10 +18553,12 @@
         <mml:collections>
             <mml:coll id="orders" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">COLLECTION</mml:attr>
+                        <mml:attr name="container-type">java.util.Collection</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.isis.core.metamodel.facets.members.described.method.MemberDescribedFacetViaMethod">
                         <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery.WhenEncapsulationEnabled#orders)</mml:attr>
@@ -18331,11 +18589,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">COLLECTION_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet" fqcn="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod">
                         <mml:attr name="facet">DisableForContextFacetViaMethod</mml:attr>
@@ -20007,10 +20260,12 @@
                 <mml:params>
                     <mml:param xsi:type="mml:vectorParam" id="p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action3#act())</mml:attr>
@@ -20018,11 +20273,6 @@
                                 <mml:attr name="originalText">P0</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">P0</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -20073,10 +20323,12 @@
                     </mml:param>
                     <mml:param xsi:type="mml:vectorParam" id="p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action3#act())</mml:attr>
@@ -20084,11 +20336,6 @@
                                 <mml:attr name="originalText">P1</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">P1</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -20333,10 +20580,12 @@
                 <mml:params>
                     <mml:param xsi:type="mml:vectorParam" id="a" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action4#act())</mml:attr>
@@ -20344,11 +20593,6 @@
                                 <mml:attr name="originalText">A</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">A</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -20399,10 +20643,12 @@
                     </mml:param>
                     <mml:param xsi:type="mml:vectorParam" id="b" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <mml:facets>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                                <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                            <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                                <mml:attr name="collection-semantics">LIST</mml:attr>
+                                <mml:attr name="container-type">java.util.List</mml:attr>
+                                <mml:attr name="element-type">java.lang.String</mml:attr>
+                                <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                                 <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">java.lang.String</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.isis.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
                                 <mml:attr name="context">TranslationContext(name=org.apache.isis.testdomain.model.good.ProperMemberSupport_action4#act())</mml:attr>
@@ -20410,11 +20656,6 @@
                                 <mml:attr name="originalText">B</mml:attr>
                                 <mml:attr name="precedence">LOW</mml:attr>
                                 <mml:attr name="translated">B</mml:attr>
-                            </mml:facet>
-                            <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                                <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                                <mml:attr name="precedence">DEFAULT</mml:attr>
-                                <mml:attr name="value">LIST_INTERFACE</mml:attr>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.LabelAtFacetFromLayoutConfiguration">
                                 <mml:attr name="facet">LabelAtFacetFromLayoutConfiguration</mml:attr>
@@ -21044,10 +21285,12 @@
         <mml:actions>
             <mml:act id="coll" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
                         <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
@@ -21251,10 +21494,12 @@
         <mml:actions>
             <mml:act id="coll" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
                         <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
@@ -21458,10 +21703,12 @@
         <mml:actions>
             <mml:act id="coll" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
                         <mml:attr name="facet">ActionDomainEventFacetDefault</mml:attr>
@@ -25077,10 +25324,12 @@
         <mml:collections>
             <mml:coll id="collWithPrivateAccessors" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -25097,11 +25346,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet" fqcn="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod">
                         <mml:attr name="facet">DisableForContextFacetViaMethod</mml:attr>
@@ -26004,10 +26248,12 @@
         <mml:collections>
             <mml:coll id="collWithPrivateAccessors" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics">
-                        <mml:attr name="facet">TypeOfFacetFromGenerics</mml:attr>
+                    <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
+                        <mml:attr name="collection-semantics">LIST</mml:attr>
+                        <mml:attr name="container-type">java.util.List</mml:attr>
+                        <mml:attr name="element-type">java.lang.String</mml:attr>
+                        <mml:attr name="facet">TypeOfFacetFromFeature</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">java.lang.String</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetAsConfigured">
                         <mml:attr name="facet">DefaultViewFacetAsConfigured</mml:attr>
@@ -26024,11 +26270,6 @@
                         <mml:attr name="facet">CollectionLayoutTableDecorationFacetFromConfiguration</mml:attr>
                         <mml:attr name="precedence">DEFAULT</mml:attr>
                         <mml:attr name="value">NONE</mml:attr>
-                    </mml:facet>
-                    <mml:facet id="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault">
-                        <mml:attr name="facet">CollectionSemanticsFacetDefault</mml:attr>
-                        <mml:attr name="precedence">DEFAULT</mml:attr>
-                        <mml:attr name="value">LIST_INTERFACE</mml:attr>
                     </mml:facet>
                     <mml:facet id="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet" fqcn="org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod">
                         <mml:attr name="facet">DisableForContextFacetViaMethod</mml:attr>

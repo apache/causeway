@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -81,7 +82,7 @@ class MetaModelExporter {
         // these are added into a map for lookups in phase 2
         final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.snapshotSpecifications()) {
-            DomainClassDto domainClassType = asXsdType(specification);
+            DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
         }
 
@@ -175,16 +176,15 @@ class MetaModelExporter {
     }
 
     private DomainClassDto asXsdType(
-            final ObjectSpecification specification) {
+            final ObjectSpecification specification, final Config config) {
 
         final DomainClassDto domainClass = new DomainClassDto();
-
+        _Util.titleAnnotation(domainClass, specification, config);
         domainClass.setId(specification.getFullIdentifier());
 
         if(specification.isInjectable()) {
             domainClass.setService(true);
         }
-
         return domainClass;
     }
 
@@ -276,8 +276,8 @@ class MetaModelExporter {
             final OneToOneAssociation otoa,
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
-
         Property propertyType = new Property();
+        _Util.titleAnnotation(propertyType, otoa, config);
         propertyType.setId(otoa.getId());
         propertyType.setMixedIn(otoa.isMixedIn());
         propertyType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
@@ -294,6 +294,7 @@ class MetaModelExporter {
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
         Collection collectionType = new Collection();
+        _Util.titleAnnotation(collectionType, otoa, config);
         collectionType.setId(otoa.getId());
         collectionType.setMixedIn(otoa.isMixedIn());
         collectionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
@@ -310,6 +311,7 @@ class MetaModelExporter {
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
         Action actionType = new Action();
+        _Util.titleAnnotation(actionType, oa, config);
         actionType.setId(oa.getId());
         actionType.setMixedIn(oa.isMixedIn());
         actionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
@@ -335,7 +337,7 @@ class MetaModelExporter {
             final Config config) {
         DomainClassDto value = domainClassByObjectSpec.get(specification);
         if(value == null) {
-            final DomainClassDto domainClass = asXsdType(specification);
+            final DomainClassDto domainClass = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClass);
             value = domainClass;
         }
@@ -348,17 +350,18 @@ class MetaModelExporter {
             final Config config) {
 
         Param parameterType = parameter instanceof OneToOneActionParameter
-                ? new ScalarParam()
-                        : new VectorParam();
-                parameterType.setId(parameter.getId());
-                parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
+                    ? new ScalarParam()
+                    : new VectorParam();
+        _Util.titleAnnotation(parameterType, parameter, config);
+        parameterType.setId(parameter.getId());
+        parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
 
-                final ObjectSpecification specification = parameter.getElementType();
-                final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
-                parameterType.setType(value);
+        final ObjectSpecification specification = parameter.getElementType();
+        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        parameterType.setType(value);
 
-                addFacets(parameter, parameterType.getFacets(), config);
-                return parameterType;
+        addFacets(parameter, parameterType.getFacets(), config);
+        return parameterType;
     }
 
     private void addFacets(
@@ -368,7 +371,7 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoop())
+        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoopFacets())
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 
@@ -378,7 +381,9 @@ class MetaModelExporter {
     private org.apache.isis.schema.metamodel.v2.Facet asXsdType(
             final Facet facet,
             final Config config) {
-        final org.apache.isis.schema.metamodel.v2.Facet facetType = new org.apache.isis.schema.metamodel.v2.Facet();
+        final org.apache.isis.schema.metamodel.v2.Facet facetType =
+                new org.apache.isis.schema.metamodel.v2.Facet();
+        _Util.titleAnnotation(facetType, facet, config);
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
 
@@ -387,22 +392,44 @@ class MetaModelExporter {
         return facetType;
     }
 
+    private void visitNonNullAttributes(final Facet facet, final BiConsumer<String, String> visitor) {
+        facet.visitAttributes((key, attributeObj)->{
+            if(attributeObj == null) {
+                return;
+            }
+            String str = asStr(attributeObj);
+            visitor.accept(key, str);
+        });
+    }
+
     private void addFacetAttributes(
             final Facet facet,
             final org.apache.isis.schema.metamodel.v2.Facet facetType,
             final Config config) {
 
-        Map<String, Object> attributeMap = _Maps.newTreeMap();
-        facet.visitAttributes(attributeMap::put);
+        visitNonNullAttributes(facet, (key, str)->
+            addAttribute(facetType, key, str));
 
-        for (final String key : attributeMap.keySet()) {
-            Object attributeObj = attributeMap.get(key);
-            if(attributeObj == null) {
-                continue;
-            }
+        if(config.isIncludeShadowedFacets()) {
+            facet.getSharedFacetRanking()
+            .ifPresent(ranking->{
+                ranking.getTopRank(facet.facetType())
+                .stream()
+                // skip the winner, as its not shadowed
+                .skip(1)
+                //.filter(shadowedFacet->shadowedFacet.equals(facet))
+                .forEach(shadowedFacet->{
+                    visitNonNullAttributes(shadowedFacet, (key, str)->{
+                        if(key.equals("precedence")) {
+                            return; // skip
+                        }
+                        addAttribute(facetType, key, String.format("%s (shadowed %s)",
+                                str,
+                                shadowedFacet.getClass().getName()));
+                    });
+                });
+            });
 
-            String str = asStr(attributeObj);
-            addAttribute(facetType,key, str);
         }
 
         sortFacetAttributes(facetType.getAttr());
