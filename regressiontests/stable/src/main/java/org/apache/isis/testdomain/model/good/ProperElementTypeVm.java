@@ -68,15 +68,15 @@ extends ProperElementTypeVmAbstract {
         return Collections.emptySortedSet();
     }
 
-    // specialization over Iterable<ElementTypeInterface> in super
+    // specialization over ImmutableCollection<ElementTypeInterface> in super
     @Override
-    public Can<ElementTypeInterface> getIterableOfInterfaceType() {
+    public Can<ElementTypeInterface> getImmutableOfInterfaceType() {
         return Can.empty();
     }
 
-    // specialization over Iterable<? extends ElementTypeConcrete> in super
+    // specialization over ImmutableCollection<? extends ElementTypeConcrete> in super
     @Override
-    public Can<? extends ElementTypeConcrete> getIterableOfConcreteType() {
+    public Can<? extends ElementTypeConcrete> getImmutableOfConcreteType() {
         return Can.empty();
     }
 

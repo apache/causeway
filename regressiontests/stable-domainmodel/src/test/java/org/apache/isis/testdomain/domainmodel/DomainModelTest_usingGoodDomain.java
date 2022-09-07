@@ -389,16 +389,17 @@ class DomainModelTest_usingGoodDomain {
 
         //TODO scenario 2
 
-        //abstract Iterable<ElementTypeInterface> getIterableOfInterfaceType();
-        //override Can<ElementTypeInterface> getIterableOfInterfaceType();
+        //abstract ImmutableCollection<ElementTypeInterface> getImmutableOfInterfaceType();
+        //override Can<ElementTypeInterface> getImmutableOfInterfaceType();
 
-//        val interfaceIter = vmSpec.getCollectionElseFail("iterableOfInterfaceType");
-//        val interfaceIterSpec = interfaceIter.getElementType();
-//
-//        System.err.printf("%s%n", interfaceIter.getTypeOfAnyCardinality());
-//
-//        assertEquals(ElementTypeInterface.class, interfaceIterSpec.getCorrespondingClass());
-//        assertEquals(BeanSort.VIEW_MODEL, interfaceIterSpec.getBeanSort());
+        val interfaceIterLookup = vmSpec.getAssociationElseFail("immutableOfInterfaceType");
+        assertTrue(interfaceIterLookup.isOneToManyAssociation(), "required to be a coll");
+
+        val interfaceIter = vmSpec.getCollectionElseFail("immutableOfInterfaceType");
+        val interfaceIterSpec = interfaceIter.getElementType();
+
+        assertEquals(ElementTypeInterface.class, interfaceIterSpec.getCorrespondingClass());
+        assertEquals(BeanSort.ABSTRACT, interfaceIterSpec.getBeanSort());
 
     }
 

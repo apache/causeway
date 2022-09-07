@@ -195,6 +195,14 @@ public class MethodUtil {
             return method->ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, returnType);
         }
 
+        public static Predicate<Method> supportedNonScalarMethodReturnType() {
+            return method->
+                ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, Iterable.class)
+                && ProgrammingModelConstants.CollectionSemantics.valueOf(method.getReturnType())
+                    .isPresent()
+                    ;
+        }
+
     }
 
 }

@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.collections.accessor;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -94,15 +93,14 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     public void findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover,
             final List<Method> methodListToAppendTo) {
-
         methodRemover.removeMethods(
-                MethodUtil.Predicates.nonBooleanGetter(Collection.class),
-                methodListToAppendTo::add
-                );
+                MethodUtil.Predicates.supportedNonScalarMethodReturnType(),
+                methodListToAppendTo::add);
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemovePropertyAccessors(
+            final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
 

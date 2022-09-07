@@ -218,7 +218,8 @@ implements HasMetaModelContext {
             final Consumer<FacetedMethod> onNewAssociationPeer) {
         val collectionAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
-        createCollectionFacetedMethodsFromAccessors(getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
+        createCollectionFacetedMethodsFromAccessors(
+                getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
     }
 
     /**

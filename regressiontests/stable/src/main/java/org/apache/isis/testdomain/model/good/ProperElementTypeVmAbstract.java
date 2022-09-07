@@ -37,13 +37,13 @@ public abstract class ProperElementTypeVmAbstract {
     @Collection
     public abstract Set<? extends ElementTypeConcrete> getSetOfConcreteType();
 
-    // -- TESTING ITERABLE OVERRIDDEN BY CAN
+    // -- TESTING IMMUTABLE COLLECTION OVERRIDDEN BY CAN
 
     @Collection
-    public abstract Iterable<ElementTypeInterface> getIterableOfInterfaceType();
+    public abstract ImmutableCollection<ElementTypeInterface> getImmutableOfInterfaceType();
 
     @Collection
-    public abstract Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType();
+    public abstract ImmutableCollection<? extends ElementTypeConcrete> getImmutableOfConcreteType();
 
     @Action
     abstract void act(ImmutableCollection<ElementTypeInterface> coll);
