@@ -166,9 +166,10 @@ implements FacetHolder {
     @Override
     protected void introspectMembers() {
 
-        if(this.isValue()) {
+        if(!this.getBeanSort().isToBeIntrospected()
+                || this.isValue()) {
             if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for value type {}", getFullIdentifier());
+                log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
             }
             return;
         }
