@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
+import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -82,11 +84,14 @@ public class ShadowedFactetAttributeAnnotator implements MetaModelAnnotator {
         lookupByName(facetType, attributeName)
         .ifPresent(facetAttr->{
             createAnnotation(facetAttr, "@shadowed", annotation);
+            //createAnnotation(facetAttr, "@title.prefixParentWithExclamation", "");
         });
     }
 
     private Optional<FacetAttr> lookupByName(final Facet facetType, final String attributeName) {
-        return Optional.empty();
+        return _NullSafe.stream(facetType.getAttr())
+        .filter(a->Objects.equals(attributeName, a.getName()))
+        .findFirst();
     }
 
 }

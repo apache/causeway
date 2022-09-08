@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
+import java.util.Optional;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -69,7 +71,7 @@ public interface MetaModelAnnotator {
         val titleAnnot = new org.apache.isis.schema.metamodel.v2.Annotation();
         titleAnnot.setName(name);
         titleAnnot.setValue(value);
-        val annots = new Annotations();
+        val annots = Optional.ofNullable(t.getAnnotations()).orElseGet(Annotations::new);
         t.setAnnotations(annots);
         annots.getAsList().add(titleAnnot);
         return t;

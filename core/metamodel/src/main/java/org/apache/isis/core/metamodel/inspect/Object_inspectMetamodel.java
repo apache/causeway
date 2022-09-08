@@ -74,7 +74,7 @@ public class Object_inspectMetamodel {
             messageService.warnUser("Unknown class, unable to export");
             return null;
         }
-        final String namespace = logicalTypeIfAny.get().getNamespace();
+        final String namespace = logicalTypeIfAny.get().getLogicalTypeName();
 
         val config = Config.builder()
                 .ignoreFallbackFacets(true)

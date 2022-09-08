@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.inspect.model;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,6 +43,7 @@ import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 import lombok.Setter;
 
 @XmlSeeAlso({
+    AnnotationNode.class,
     MemberNode.class,
     ActionNode.class,
     CollectionNode.class,
@@ -59,15 +61,25 @@ public abstract class MMNode {
 
     @Collection
     @Setter protected List<MMNode> childNodes;
-    public List<MMNode> getChildNodes() {
+    public final List<MMNode> getChildNodes() {
         if(childNodes==null) {
-            setChildNodes(streamChildNodes().collect(Collectors.toList()));
+            setChildNodes(
+                    Stream.concat(
+                            streamAnnotationNodes(),
+                            streamChildNodes())
+                    .collect(Collectors.toList()));
         }
         return childNodes;
     }
 
     protected abstract MetamodelElement metamodelElement();
     protected abstract Stream<MMNode> streamChildNodes();
+
+    protected final Stream<MMNode> streamAnnotationNodes() {
+        return streamAnnotations()
+                .filter(notNameOf("@title"))
+                .map(a->MMNodeFactory.annotation(a, this));
+    }
 
     protected String title;
 
@@ -96,14 +108,27 @@ public abstract class MMNode {
         return lookupAnnotationByName("@title");
     }
 
-    protected final Optional<Annotation> lookupAnnotationByName(final String annotationName) {
+    protected final Stream<Annotation> streamAnnotations() {
         return Optional.ofNullable(metamodelElement())
                 .map(MetamodelElement::getAnnotations)
                 .map(FacetHolder.Annotations::getAsList)
                 .<Stream<Annotation>>map(List::stream)
-                .orElseGet(Stream::empty)
-                .filter(annot->Objects.equals(annotationName, annot.getName()))
+                .orElseGet(Stream::empty);
+    }
+
+    protected final Optional<Annotation> lookupAnnotationByName(final String annotationName) {
+        return streamAnnotations()
+                .filter(nameOf(annotationName))
                 .findFirst();
     }
+
+    static Predicate<Annotation> nameOf(final String annotationName) {
+        return annot->Objects.equals(annotationName, annot.getName());
+    }
+
+    static Predicate<Annotation> notNameOf(final String annotationName) {
+        return nameOf(annotationName).negate();
+    }
+
 
 }

@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.inspect.model.CollectionNode;
 import org.apache.isis.core.metamodel.inspect.model.FacetAttrNode;
 import org.apache.isis.core.metamodel.inspect.model.FacetGroupNode;
 import org.apache.isis.core.metamodel.inspect.model.FacetNode;
+import org.apache.isis.core.metamodel.inspect.model.MMTreeAdapter;
 import org.apache.isis.core.metamodel.inspect.model.MemberNode;
 import org.apache.isis.core.metamodel.inspect.model.ParameterNode;
 import org.apache.isis.core.metamodel.inspect.model.PropertyNode;
@@ -231,6 +232,7 @@ public class IsisModuleCoreMetamodel {
     @Bean
     public PreloadableTypes metamodelViewTypes() {
         return ()->Stream.of(
+                MMTreeAdapter.class,
                 MemberNode.class,
                 ActionNode.class,
                 CollectionNode.class,

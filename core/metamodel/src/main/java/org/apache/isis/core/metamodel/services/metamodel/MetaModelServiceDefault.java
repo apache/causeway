@@ -232,7 +232,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(config.isIncludeShadowedFacets()) {
             metaModelAnnotators.add(new ShadowedFactetAttributeAnnotator(new ExporterConfig(){}));
         }
-
         return new MetaModelExporter(specificationLoader, metaModelAnnotators)
                 .exportMetaModel(config);
     }

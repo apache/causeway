@@ -23,9 +23,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -74,6 +76,18 @@ class MetaModelExporter {
      * </p>
      */
     MetamodelDto exportMetaModel(final Config config) {
+
+        // single type(s) MM export support
+        val tinyDomain = _Lists.<ObjectSpecification>newArrayList();
+        val useTinyDomain = _NullSafe.stream(config.getNamespacePrefixes())
+        .map(namespace->specificationLookup.specForLogicalTypeName(namespace))
+        .peek(specIfAny->specIfAny.ifPresent(tinyDomain::add))
+        .allMatch(Optional::isPresent);
+
+        if(useTinyDomain) {
+            return exportTinyDomain(tinyDomain, config);
+        }
+
         MetamodelDto metamodelDto = new MetamodelDto();
 
         // phase 1: create a domainClassType for each ObjectSpecification
@@ -82,6 +96,11 @@ class MetaModelExporter {
         for (final ObjectSpecification specification : specificationLookup.snapshotSpecifications()) {
             DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
+        }
+
+        if(useTinyDomain) {
+            metamodelDto.getDomainClassDto().addAll(domainClassByObjectSpec.values());
+            return metamodelDto;
         }
 
         // phase 2: now flesh out the domain class types, passing the map for lookups of the domainClassTypes that
@@ -132,12 +151,35 @@ class MetaModelExporter {
         return metamodelDto;
     }
 
+    private MetamodelDto exportTinyDomain(final List<ObjectSpecification> tinyDomain, final Config config) {
+        MetamodelDto metamodelDto = new MetamodelDto();
+
+        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
+        for (final ObjectSpecification specification : tinyDomain) {
+            DomainClassDto domainClassType = asXsdType(specification, config);
+            domainClassByObjectSpec.put(specification, domainClassType);
+            addFacetsAndMembersTo(specification, domainClassByObjectSpec, config);
+        }
+
+        for (final ObjectSpecification objectSpecification : _Lists.newArrayList(domainClassByObjectSpec.keySet())) {
+            if(shouldIgnore(config, objectSpecification)) {
+                continue;
+            }
+            metamodelDto.getDomainClassDto().add(domainClassByObjectSpec.get(objectSpecification));
+        }
+
+        sortDomainClasses(metamodelDto.getDomainClassDto());
+        return metamodelDto;
+    }
+
     private boolean shouldIgnore(final Config config, final ObjectSpecification specification) {
-        return notInNamespacePrefixes(specification, config) ||
-                config.isIgnoreMixins() && specification.isMixin() ||
-                config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface() ||
-                config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers()) ||
-                config.isIgnoreBuiltInValueTypes() && isValueType(specification);
+        return notInNamespacePrefixes(specification, config)
+                || config.isIgnoreMixins() && specification.isMixin()
+                || config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface()
+                || config.isIgnoreAbstractClasses()
+                    && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers())
+                || config.isIgnoreBuiltInValueTypes()
+                    && isValueType(specification);
     }
 
     private static <T> List<T> remaining(final java.util.Collection<T> processed, final java.util.Collection<T> other) {
@@ -156,10 +198,6 @@ class MetaModelExporter {
             final Config config) {
 
         val namespacePrefixes = config.getNamespacePrefixes();
-        if(namespacePrefixes.isEmpty()) {
-            return false; // export none
-        }
-
         if(config.isNamespacePrefixAny()) {
             return true; // export all
         }
