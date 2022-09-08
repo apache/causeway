@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -60,10 +61,14 @@ import lombok.val;
 
 class MetaModelExporter {
 
-    SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLookup;
+    private final Can<? extends MetaModelAnnotator> annotators;
 
-    public MetaModelExporter(final SpecificationLoader specificationLoader) {
+    public MetaModelExporter(
+            final SpecificationLoader specificationLoader,
+            final Iterable<? extends MetaModelAnnotator> annotators) {
         this.specificationLookup = specificationLoader;
+        this.annotators = Can.ofIterable(annotators);
     }
 
     /**
@@ -179,12 +184,11 @@ class MetaModelExporter {
             final ObjectSpecification specification, final Config config) {
 
         final DomainClassDto domainClass = new DomainClassDto();
-        _Util.titleAnnotation(domainClass, specification, config);
         domainClass.setId(specification.getFullIdentifier());
-
         if(specification.isInjectable()) {
             domainClass.setService(true);
         }
+        annotators.forEach(a->a.annotate(domainClass, specification));
         return domainClass;
     }
 
@@ -277,7 +281,6 @@ class MetaModelExporter {
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
         Property propertyType = new Property();
-        _Util.titleAnnotation(propertyType, otoa, config);
         propertyType.setId(otoa.getId());
         propertyType.setMixedIn(otoa.isMixedIn());
         propertyType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
@@ -286,6 +289,7 @@ class MetaModelExporter {
         propertyType.setType(value);
 
         addFacets(otoa, propertyType.getFacets(), config);
+        annotators.forEach(a->a.annotate(propertyType, otoa));
         return propertyType;
     }
 
@@ -294,7 +298,6 @@ class MetaModelExporter {
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
         Collection collectionType = new Collection();
-        _Util.titleAnnotation(collectionType, otoa, config);
         collectionType.setId(otoa.getId());
         collectionType.setMixedIn(otoa.isMixedIn());
         collectionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
@@ -303,6 +306,7 @@ class MetaModelExporter {
         collectionType.setType(value);
 
         addFacets(otoa, collectionType.getFacets(), config);
+        annotators.forEach(a->a.annotate(collectionType, otoa));
         return collectionType;
     }
 
@@ -311,7 +315,6 @@ class MetaModelExporter {
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
         Action actionType = new Action();
-        _Util.titleAnnotation(actionType, oa, config);
         actionType.setId(oa.getId());
         actionType.setMixedIn(oa.isMixedIn());
         actionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
@@ -328,6 +331,7 @@ class MetaModelExporter {
         for (final ObjectActionParameter parameter : parameters) {
             params.add(asXsdType(parameter, domainClassByObjectSpec, config));
         }
+        annotators.forEach(a->a.annotate(actionType, oa));
         return actionType;
     }
 
@@ -352,7 +356,6 @@ class MetaModelExporter {
         Param parameterType = parameter instanceof OneToOneActionParameter
                     ? new ScalarParam()
                     : new VectorParam();
-        _Util.titleAnnotation(parameterType, parameter, config);
         parameterType.setId(parameter.getId());
         parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
 
@@ -361,6 +364,7 @@ class MetaModelExporter {
         parameterType.setType(value);
 
         addFacets(parameter, parameterType.getFacets(), config);
+        annotators.forEach(a->a.annotate(parameterType, parameter));
         return parameterType;
     }
 
@@ -371,7 +375,9 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoopFacets())
+        .filter(facet -> ! (
+                config.isIgnoreFallbackFacets()
+                    && facet.getPrecedence().isFallback()))
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 
@@ -383,12 +389,11 @@ class MetaModelExporter {
             final Config config) {
         final org.apache.isis.schema.metamodel.v2.Facet facetType =
                 new org.apache.isis.schema.metamodel.v2.Facet();
-        _Util.titleAnnotation(facetType, facet, config);
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
 
         addFacetAttributes(facet, facetType, config);
-
+        annotators.forEach(a->a.annotate(facetType, facet));
         return facetType;
     }
 

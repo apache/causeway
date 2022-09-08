@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
-import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -35,92 +34,86 @@ import org.apache.isis.schema.metamodel.v2.MetamodelElement.Annotations;
 import org.apache.isis.schema.metamodel.v2.Param;
 import org.apache.isis.schema.metamodel.v2.Property;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.experimental.UtilityClass;
+import lombok.experimental.Accessors;
 
-@UtilityClass
-class _Util {
+@RequiredArgsConstructor
+public class TitleAnnotator implements MetaModelAnnotator {
 
-    String withSuffix(String fileName, String suffix) {
-        if(!suffix.startsWith(".")) {
-            suffix = "." + suffix;
-        }
-        if(!fileName.endsWith(suffix)) {
-            fileName += suffix;
-        }
-        return fileName;
-    }
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final ExporterConfig config;
 
-    static void titleAnnotation(
+    @Override
+    public void annotate(
             final Facet facetType,
-            final org.apache.isis.core.metamodel.facetapi.Facet facet,
-            final Config config) {
-        if(!config.isIncludeTitleAnnotations()) return;
+            final org.apache.isis.core.metamodel.facetapi.Facet facet) {
         titleAnnotation(facetType,
                 String.format("%s: %s",
-                        config.simpleName(facet.facetType()),
-                        config.abbrev(facet.getClass())));
+                        config().simpleName(facet.facetType()),
+                        config().abbrev(facet.getClass())));
     }
 
-    static void titleAnnotation(
-            final DomainClassDto domainClass, final ObjectSpecification specification, final Config config) {
-        if(!config.isIncludeTitleAnnotations()) return;
+    @Override
+    public void annotate(
+            final DomainClassDto domainClass, final ObjectSpecification specification) {
         titleAnnotation(domainClass,
                 String.format("%s: %s",
                         specification.getLogicalTypeName(),
-                        config.abbrev(specification.getCorrespondingClass())));
+                        config().abbrev(specification.getCorrespondingClass())));
     }
 
-    static void titleAnnotation(
-            final Action actionType, final ObjectAction action, final Config config) {
-        if(!config.isIncludeTitleAnnotations()) return;
+    @Override
+    public void annotate(
+            final Action actionType, final ObjectAction action) {
         titleAnnotation(actionType,
             String.format("%s(...): %s%s",
                     action.getId(),
-                    config.abbrev(action.getReturnType().getCorrespondingClass()),
+                    config().abbrev(action.getReturnType().getCorrespondingClass()),
                     titleSuffix(action.isMixedIn())));
     }
 
-    static void titleAnnotation(
-            final Param parameterType, final ObjectActionParameter parameter, final Config config) {
-        if(!config.isIncludeTitleAnnotations()) return;
+    @Override
+    public void annotate(
+            final Param parameterType, final ObjectActionParameter parameter) {
         titleAnnotation(parameterType,
                 String.format("%s: %s",
                         parameter.getId(),
                         parameter.isScalar()
-                        ? config.abbrev(parameter.getElementType().getCorrespondingClass())
-                        : renderTypeOf((OneToManyFeature) parameter, config))
+                        ? config().abbrev(parameter.getElementType().getCorrespondingClass())
+                        : renderTypeOf((OneToManyFeature) parameter, config()))
                 );
     }
 
-    static void titleAnnotation(
-            final Property propertyType, final OneToOneAssociation property, final Config config) {
-        if(!config.isIncludeTitleAnnotations()) return;
+    @Override
+    public void annotate(
+            final Property propertyType, final OneToOneAssociation property) {
         titleAnnotation(propertyType,
                 String.format("%s: %s%s",
                         property.getId(),
-                        config.abbrev(property.getElementType().getCorrespondingClass()),
+                        config().abbrev(property.getElementType().getCorrespondingClass()),
                         titleSuffix(property.isMixedIn())));
     }
 
-    static void titleAnnotation(
-            final Collection collectionType, final OneToManyAssociation collection, final Config config) {
-        if(!config.isIncludeTitleAnnotations()) return;
+    @Override
+    public void annotate(
+            final Collection collectionType, final OneToManyAssociation collection) {
         titleAnnotation(collectionType,
                 String.format("%s: %s%s",
                         collection.getId(),
-                        renderTypeOf(collection, config),
+                        renderTypeOf(collection, config()),
                         titleSuffix(collection.isMixedIn())));
     }
 
     // -- HELPER
 
-    private String renderTypeOf(final OneToManyFeature nonScalarFeature, final Config config) {
+    private String renderTypeOf(final OneToManyFeature nonScalarFeature, final ExporterConfig exporterConfig) {
         val toac = nonScalarFeature.getTypeOfAnyCardinality();
         val containerType = toac.getCollectionSemantics()
                 .map(CollectionSemantics::getContainerType)
-                .map(config::simpleName).orElse("?");
-        val elementType = config.abbrev(toac.getElementType());
+                .map(exporterConfig::simpleName).orElse("?");
+        val elementType = exporterConfig.abbrev(toac.getElementType());
         return String.format("%s<%s>", containerType, elementType);
     }
 

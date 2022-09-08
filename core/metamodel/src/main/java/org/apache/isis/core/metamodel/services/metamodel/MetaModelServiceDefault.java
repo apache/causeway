@@ -42,11 +42,13 @@ import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
+import org.apache.isis.core.metamodel.services.metamodel.MetaModelAnnotator.ExporterConfig;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -85,8 +87,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         gridService.remove(domainType);
         specificationLoader.reloadSpecification(domainType);
     }
-
-
 
 
     @Override
@@ -222,7 +222,16 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public MetamodelDto exportMetaModel(final Config config) {
-        return new MetaModelExporter(specificationLoader).exportMetaModel(config);
+
+        /*TODO[ISIS-3206] refactor: ideally config would provide the list, but unfortunately
+         * MetaModelAnnotator type is not know to Config, which lives in applib.
+         */
+        val annotators = config.isIncludeTitleAnnotations()
+                ? (Iterable) Can.<MetaModelAnnotator>of(new TitleAnnotator(new ExporterConfig(){}))
+                : Can.empty();
+
+        return new MetaModelExporter(specificationLoader, annotators)
+                .exportMetaModel(config);
     }
 
 

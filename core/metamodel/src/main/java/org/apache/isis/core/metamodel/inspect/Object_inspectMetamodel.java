@@ -77,7 +77,7 @@ public class Object_inspectMetamodel {
         final String namespace = logicalTypeIfAny.get().getNamespace();
 
         val config = Config.builder()
-                .ignoreNoopFacets(true)
+                .ignoreFallbackFacets(true)
                 .ignoreAbstractClasses(true)
                 .ignoreInterfaces(true)
                 .ignoreBuiltInValueTypes(true)
@@ -112,6 +112,6 @@ public class Object_inspectMetamodel {
     }
 
     @Inject private MetaModelService metaModelService;
-    @Inject MessageService messageService;
+    @Inject private MessageService messageService;
 
 }

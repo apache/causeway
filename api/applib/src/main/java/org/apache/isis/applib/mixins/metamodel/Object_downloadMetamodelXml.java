@@ -87,7 +87,7 @@ public class Object_downloadMetamodelXml {
         final String namespace = logicalTypeIfAny.get().getNamespace();
 
         val config = Config.builder()
-                .ignoreNoopFacets(true)
+                .ignoreFallbackFacets(true)
                 .ignoreAbstractClasses(true)
                 .ignoreInterfaces(true)
                 .ignoreBuiltInValueTypes(true)

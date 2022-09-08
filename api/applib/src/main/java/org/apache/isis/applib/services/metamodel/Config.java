@@ -19,11 +19,7 @@
 package org.apache.isis.applib.services.metamodel;
 
 import java.util.Set;
-import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.Builder;
@@ -40,15 +36,13 @@ import lombok.val;
 @Getter @Builder
 public class Config {
 
-    private final boolean ignoreNoopFacets;
+    private final boolean ignoreFallbackFacets;
     private final boolean ignoreInterfaces;
     private final boolean ignoreAbstractClasses;
     private final boolean ignoreBuiltInValueTypes;
     private final boolean ignoreMixins;
     private final boolean includeShadowedFacets;
     private final boolean includeTitleAnnotations;
-    @Builder.Default
-    private final UnaryOperator<String> fqcnAbbreviator = Config::abbreviate;
 
     @Builder.Default
     private final Set<String> namespacePrefixes = _Sets.newHashSet();
@@ -69,43 +63,15 @@ public class Config {
 
     public Config.ConfigBuilder asBuilder() {
         return Config.builder()
-                .ignoreNoopFacets(ignoreNoopFacets)
+                .ignoreFallbackFacets(ignoreFallbackFacets)
                 .ignoreInterfaces(ignoreInterfaces)
                 .ignoreAbstractClasses(ignoreAbstractClasses)
                 .ignoreBuiltInValueTypes(ignoreBuiltInValueTypes)
                 .ignoreMixins(ignoreMixins)
                 .includeShadowedFacets(includeShadowedFacets)
                 .includeTitleAnnotations(includeTitleAnnotations)
-                .fqcnAbbreviator(fqcnAbbreviator)
                 .namespacePrefixes(_Sets.newHashSet(namespacePrefixes));
     }
 
-    public String abbrev(final @Nullable Class<?> cls) {
-        if(cls==null) { return ""; }
-        return getFqcnAbbreviator().apply(cls.getName());
-    }
-
-    public String simpleName(final @Nullable Class<?> cls) {
-        if(cls==null) { return ""; }
-        return simpleName(cls.getName());
-    }
-
-    // -- DEFAULTS
-
-    static String abbreviate(final String input) {
-        return (""+input)
-                .replace("org.apache.isis.core.metamodel.facets.", "».c.m.f.")
-                .replace("org.apache.isis.core.metamodel.", "».c.m.")
-                .replace("org.apache.isis.core.", "».c.")
-                .replace("org.apache.isis.applib.", "».a.")
-                .replace("org.apache.isis.", "».")
-                .replace("java.lang.", "");
-    }
-
-    static String simpleName(final String name) {
-        return _Strings.splitThenStream(""+name, ".")
-        .reduce((first, second) -> second) // get the last
-        .orElse("null");
-    }
 
 }

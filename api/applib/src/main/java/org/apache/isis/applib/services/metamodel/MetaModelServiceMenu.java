@@ -284,7 +284,7 @@ public class MetaModelServiceMenu {
             final boolean includeInterfaces,
             final List<String> namespaces) {
         var config = Config.builder()
-                .ignoreNoopFacets(true)
+                .ignoreFallbackFacets(true)
                 .ignoreAbstractClasses(true)
                 .ignoreBuiltInValueTypes(true)
                 .ignoreInterfaces(!includeInterfaces)
