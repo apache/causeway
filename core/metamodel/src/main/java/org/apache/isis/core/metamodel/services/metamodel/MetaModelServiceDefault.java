@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -226,11 +225,15 @@ public class MetaModelServiceDefault implements MetaModelService {
         /*TODO[ISIS-3206] refactor: ideally config would provide the list, but unfortunately
          * MetaModelAnnotator type is not know to Config, which lives in applib.
          */
-        val annotators = config.isIncludeTitleAnnotations()
-                ? (Iterable) Can.<MetaModelAnnotator>of(new TitleAnnotator(new ExporterConfig(){}))
-                : Can.empty();
+        val metaModelAnnotators = _Lists.<MetaModelAnnotator>newArrayList();
+        if(config.isIncludeTitleAnnotations()) {
+            metaModelAnnotators.add(new TitleAnnotator(new ExporterConfig(){}));
+        }
+        if(config.isIncludeShadowedFacets()) {
+            metaModelAnnotators.add(new ShadowedFactetAttributeAnnotator(new ExporterConfig(){}));
+        }
 
-        return new MetaModelExporter(specificationLoader, annotators)
+        return new MetaModelExporter(specificationLoader, metaModelAnnotators)
                 .exportMetaModel(config);
     }
 

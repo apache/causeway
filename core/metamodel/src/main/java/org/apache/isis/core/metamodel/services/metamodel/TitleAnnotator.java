@@ -30,7 +30,6 @@ import org.apache.isis.schema.metamodel.v2.Collection;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.schema.metamodel.v2.Facet;
 import org.apache.isis.schema.metamodel.v2.MetamodelElement;
-import org.apache.isis.schema.metamodel.v2.MetamodelElement.Annotations;
 import org.apache.isis.schema.metamodel.v2.Param;
 import org.apache.isis.schema.metamodel.v2.Property;
 
@@ -118,13 +117,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
     }
 
     private <T extends MetamodelElement> T titleAnnotation(final T t, final String title) {
-        val titleAnnot = new org.apache.isis.schema.metamodel.v2.Annotation();
-        titleAnnot.setName("@title");
-        titleAnnot.setValue(title);
-        val annots = new Annotations();
-        t.setAnnotations(annots);
-        annots.getAsList().add(titleAnnot);
-        return t;
+        return createAnnotation(t, "@title", title);
     }
 
     private String titleSuffix(final boolean isMixedIn) {

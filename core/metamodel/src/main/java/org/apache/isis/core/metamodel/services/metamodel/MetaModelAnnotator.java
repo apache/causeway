@@ -30,8 +30,12 @@ import org.apache.isis.schema.metamodel.v2.Action;
 import org.apache.isis.schema.metamodel.v2.Collection;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.schema.metamodel.v2.Facet;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement.Annotations;
 import org.apache.isis.schema.metamodel.v2.Param;
 import org.apache.isis.schema.metamodel.v2.Property;
+
+import lombok.val;
 
 /**
  * SPI that allows to add arbitrary meta data as
@@ -57,6 +61,19 @@ public interface MetaModelAnnotator {
     void annotate(Property propertyType, OneToOneAssociation property);
 
     void annotate(Collection collectionType, OneToManyAssociation collection);
+
+    /**
+     * creates and adds to its parent
+     */
+    default <T extends MetamodelElement> T createAnnotation(final T t, final String name, final String value) {
+        val titleAnnot = new org.apache.isis.schema.metamodel.v2.Annotation();
+        titleAnnot.setName(name);
+        titleAnnot.setValue(value);
+        val annots = new Annotations();
+        t.setAnnotations(annots);
+        annots.getAsList().add(titleAnnot);
+        return t;
+    }
 
     public interface ExporterConfig {
 

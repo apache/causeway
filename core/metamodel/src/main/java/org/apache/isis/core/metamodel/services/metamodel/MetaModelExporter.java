@@ -18,20 +18,14 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.regex.Pattern;
 
-import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.Config;
-import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -41,7 +35,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -397,46 +390,14 @@ class MetaModelExporter {
         return facetType;
     }
 
-    private void visitNonNullAttributes(final Facet facet, final BiConsumer<String, String> visitor) {
-        facet.visitAttributes((key, attributeObj)->{
-            if(attributeObj == null) {
-                return;
-            }
-            String str = asStr(attributeObj);
-            visitor.accept(key, str);
-        });
-    }
+
 
     private void addFacetAttributes(
             final Facet facet,
             final org.apache.isis.schema.metamodel.v2.Facet facetType,
             final Config config) {
-
-        visitNonNullAttributes(facet, (key, str)->
+        _Util.visitNonNullAttributes(facet, (key, str)->
             addAttribute(facetType, key, str));
-
-        if(config.isIncludeShadowedFacets()) {
-            facet.getSharedFacetRanking()
-            .ifPresent(ranking->{
-                ranking.getTopRank(facet.facetType())
-                .stream()
-                // skip the winner, as its not shadowed
-                .skip(1)
-                //.filter(shadowedFacet->shadowedFacet.equals(facet))
-                .forEach(shadowedFacet->{
-                    visitNonNullAttributes(shadowedFacet, (key, str)->{
-                        if(key.equals("precedence")) {
-                            return; // skip
-                        }
-                        addAttribute(facetType, key, String.format("%s (shadowed %s)",
-                                str,
-                                shadowedFacet.getClass().getName()));
-                    });
-                });
-            });
-
-        }
-
         sortFacetAttributes(facetType.getAttr());
     }
 
@@ -491,107 +452,7 @@ class MetaModelExporter {
         return specification.getBeanSort().isValue();
     }
 
-    private String asStr(final Object attributeObj) {
-        String str;
-        if(attributeObj instanceof Method) {
-            str = asStr((Method) attributeObj);
-        } else if(attributeObj instanceof String) {
-            str = asStr((String) attributeObj);
-        } else if(attributeObj instanceof Enum) {
-            str = asStr((Enum<?>) attributeObj);
-        } else if(attributeObj instanceof Class) {
-            str = asStr((Class<?>) attributeObj);
-        } else if(attributeObj instanceof Specification) {
-            str = asStr((Specification) attributeObj);
-        } else if(attributeObj instanceof Facet) {
-            str = asStr((Facet) attributeObj);
-        } else if(attributeObj instanceof MetaModelExportSupport) {
-            str = asStr((MetaModelExportSupport) attributeObj);
-        } else if(attributeObj instanceof Pattern) {
-            str = asStr((Pattern) attributeObj);
-        } else if(attributeObj instanceof CommandDtoProcessor) {
-            str = asStr((CommandDtoProcessor) attributeObj);
-        } else if(attributeObj instanceof ObjectSpecification) {
-            str = asStr((ObjectSpecification) attributeObj);
-        } else if(attributeObj instanceof ObjectMember) {
-            str = asStr((ObjectMember) attributeObj);
-        } else if(attributeObj instanceof List) {
-            str = asStr((List<?>) attributeObj);
-        } else if(attributeObj instanceof Object[]) {
-            str = asStr((Object[]) attributeObj);
-        } else  {
-            str = "" + attributeObj;
-        }
-        return str;
-    }
 
-    private String asStr(final String attributeObj) {
-        return _Strings.emptyToNull(attributeObj);
-    }
-
-    private String asStr(final Specification attributeObj) {
-        return attributeObj.getClass().getName();
-    }
-
-    private String asStr(final ObjectSpecification attributeObj) {
-        return attributeObj.getFullIdentifier();
-    }
-
-    private String asStr(final MetaModelExportSupport attributeObj) {
-        return attributeObj.toMetamodelString();
-    }
-
-    private String asStr(final CommandDtoProcessor attributeObj) {
-        return attributeObj.getClass().getName();
-    }
-
-    private String asStr(final Pattern attributeObj) {
-        return attributeObj.pattern();
-    }
-
-    private String asStr(final Facet attributeObj) {
-        return attributeObj.getClass().getName();
-    }
-
-    private String asStr(final ObjectMember attributeObj) {
-        return attributeObj.getId();
-    }
-
-    private String asStr(final Class<?> attributeObj) {
-        return attributeObj.getCanonicalName();
-    }
-
-    private String asStr(final Enum<?> attributeObj) {
-        return attributeObj.name();
-    }
-
-    private String asStr(final Method attributeObj) {
-        return attributeObj.toGenericString();
-    }
-
-    private String asStr(final Object[] list) {
-        if(list.length == 0) {
-            return null; // skip
-        }
-        List<String> strings = _Lists.newArrayList();
-        for (final Object o : list) {
-            String s = asStr(o);
-            strings.add(s);
-        }
-        return String.join(";", strings);
-    }
-
-    private String asStr(final List<?> list) {
-        if(list.isEmpty()) {
-            return null; // skip
-        }
-        List<String> strings = _Lists.newArrayList();
-        for (final Object o : list) {
-            String s = asStr(o);
-            strings.add(s);
-        }
-        return String.join(";", strings);
-    }
 
 
 }
