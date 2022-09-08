@@ -36,7 +36,7 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
     @Inject IsisConfiguration configuration;
 
     /**
-     * Downgrading jquery 3.6.0 -> 3.5.1 because of:
+     * Upgrading jquery 3.6.0 -> 3.6.1 because of:
      *
      * https://github.com/select2/select2/issues/5993
      */
@@ -44,7 +44,7 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
     public void init(final WebApplication webApplication) {
         val settings = webApplication.getJavaScriptLibrarySettings();
         // settings.setJQueryReference(JQueryResourceReference.getV3());
-        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
+        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.6.1/jquery.js"));
     }
 
 }
