@@ -422,7 +422,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <vaadin.version>23.2.0</vaadin.version>
 
         <wicket.version>9.11.0</wicket.version>
-        <wicket-bootstrap.version>6.0.0-M7</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+        <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.4</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
