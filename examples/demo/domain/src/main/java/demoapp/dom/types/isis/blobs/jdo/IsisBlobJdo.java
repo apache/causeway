@@ -67,7 +67,8 @@ public class IsisBlobJdo                                            // <.>
     @Getter @Setter
     private Blob readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                            // <.>
+    @Property(editing = Editing.ENABLED,                            // <.>
+            optionality = Optionality.MANDATORY)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),
