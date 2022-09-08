@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.interaction.session.MessageBroker;
+import org.apache.isis.core.metamodel.services.message.MessageBroker;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 @Service

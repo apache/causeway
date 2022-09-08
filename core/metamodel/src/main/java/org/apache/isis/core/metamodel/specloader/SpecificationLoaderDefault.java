@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,7 +43,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -63,6 +63,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel.PreloadableTypes;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -116,9 +117,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final IsisBeanTypeRegistry isisBeanTypeRegistry;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
-
     private final ProgrammingModel programmingModel;
     private final PostProcessor postProcessor;
+
+    @Inject
+    public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
 
     @Getter private MetaModelContext metaModelContext; // cannot inject, would cause circular dependency
 
@@ -226,9 +229,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val stopWatch = _Timing.now();
 
-        //XXX[ISIS-2403] these classes only get discovered by validators, so just preload their specs
-        // (an optimization, not strictly required)
-        loadSpecifications(ApplicationFeatureSort.class/*, ...*/);
+        // preload otherwise not eagerly discovered classes
+        val prealoadCount = preloadableTypes.stream()
+            .flatMap(PreloadableTypes::stream)
+            .peek(this::loadSpecification)
+            .count();
+
+        log.info(" - preloaded {} otherwise not eagerly discovered types", prealoadCount);
 
         log.info(" - adding value types from from class-path scan and ValueTypeProviders");
 
@@ -264,7 +271,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
             val sort = typeMeta.getBeanSort();
 
-            if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() ) {
+            if(sort.isManagedBeanAny() || sort.isEntity() || sort.isViewModel() ) {
                 domainObjectSpecs.add(spec);
             } else if(sort.isMixin()) {
                 mixinSpecs.add(spec);

@@ -51,7 +51,7 @@ public class ErrorPage extends PageAbstract {
 
         addBookmarkedPages(themeDiv);
 
-        val errorReportingService = super.getCommonContext().getServiceRegistry()
+        val errorReportingService = super.getMetaModelContext().getServiceRegistry()
                 .lookupService(ErrorReportingService.class).orElse(null);
 
         if(errorReportingService != null) {

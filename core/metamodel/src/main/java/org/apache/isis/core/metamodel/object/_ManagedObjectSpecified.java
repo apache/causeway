@@ -18,13 +18,23 @@
  */
 package org.apache.isis.core.metamodel.object;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoCollection;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
@@ -66,7 +76,50 @@ implements ManagedObject {
         if(specialization.getTypePolicy().isExactTypeRequired()) {
             MmAssertionUtil.assertExactType(specification, pojo);
         }
+        if(getSpecialization().getInjectionPolicy().isAlwaysInject()) {
+            if(!isInjectionPointsResolved()) {
+                getServiceInjector().injectServicesInto(pojo); // might be redundant
+            }
+        }
         return pojo;
+    }
+
+    /**
+     * override if there is optimization available
+     * @apiNote must only be called by {@link #assertCompliance(Object)}
+     */
+    protected boolean isInjectionPointsResolved() { return false; }
+
+    @Override
+    public String getTitle() {
+        return _InternalTitleUtil.titleString(
+                TitleRenderRequest.forObject(this));
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return this instanceof PackedManagedObject
+                ? Optional.ofNullable(mementoForPacked((PackedManagedObject)this))
+                : Optional.ofNullable(mementoForScalar(this));
+    }
+
+    private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
+        MmAssertionUtil.assertPojoIsScalar(adapter);
+        return ObjectMementoForScalar.create(adapter)
+                .map(ObjectMemento.class::cast)
+                .orElseGet(()->
+                ManagedObjects.isSpecified(adapter)
+                ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                        : null);
+    }
+
+    private ObjectMemento mementoForPacked(@Nullable final PackedManagedObject packedAdapter) {
+        val listOfMementos = packedAdapter.unpack().stream()
+                .map(this::mementoForScalar)
+                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
+        return ObjectMementoCollection.of(
+                listOfMementos,
+                packedAdapter.getLogicalType());
     }
 
     //XXX compares pojos by their 'equals' semantics -
@@ -87,16 +140,22 @@ implements ManagedObject {
         if(!this.getSpecification().equals(other.getSpecification())) {
             return false;
         }
-        val canGetPojosWithoutSideeffect = !this.getSpecialization().getPojoPolicy().isRefetchable();
+        val canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
         if(canGetPojosWithoutSideeffect) {
             // expected to work for packed variant just fine, as it compares lists
             return Objects.equals(this.getPojo(), other.getPojo());
         }
-        // objects are considered equal if their bookmarks match
-        _Assert.assertTrue(other.isBookmarkMemoized()); // guarantee no side-effects on other
-        return Objects.equals(
-                sideEffectFreeBookmark(),
-                other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
+
+        if(this.isBookmarkMemoized()
+                && other.isBookmarkMemoized()) {
+            return Objects.equals(
+                    sideEffectFreeBookmark(),
+                    other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
+        }
+
+        val a = (_Refetchable) this;
+        val b = (_Refetchable) this;
+        return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
     }
 
     @Override
@@ -117,7 +176,7 @@ implements ManagedObject {
                 getSpecification(),
                 !getSpecialization().getPojoPolicy().isRefetchable()
                     ? getPojo() // its safe to get pojo side-effect free
-                    : !getSpecialization().getBookmarkPolicy().isNoBookmark()
+                    : isBookmarkMemoized()
                         ? String.format("(refetchable, %s)", sideEffectFreeBookmark())
                         : "(refetchable, suppressed to not cause side effects)");
     }
@@ -125,7 +184,6 @@ implements ManagedObject {
     // -- HELPER
 
     private Bookmark sideEffectFreeBookmark() {
-        _Assert.assertFalse(getSpecialization().getBookmarkPolicy().isNoBookmark());
         _Assert.assertTrue(isBookmarkMemoized());
         return getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach);
     }

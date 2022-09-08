@@ -64,7 +64,6 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // expect
-        allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
 
         super.metaModelContext.getConfiguration()
@@ -106,7 +105,6 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // expect
-        allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
 
         // when
@@ -148,7 +146,6 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // expect
-        allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
 
         // when
@@ -184,7 +181,6 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // expect
-        allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
 
         super.metaModelContext.getConfiguration()

@@ -39,20 +39,19 @@ import javax.jdo.query.BooleanExpression;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectPersistenceException;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import lombok.val;
 
 @Service
 @Named("isis.persistence.jdo.JdoSupportServiceDefault")
@@ -61,7 +60,7 @@ import lombok.val;
 public class JdoSupportServiceDefault implements JdoSupportService {
 
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
-    @Inject private MetaModelContext mmc;
+    @Inject @Lazy private RepositoryService repositoryService;
 
     @Override
     public PersistenceManagerFactory getPersistenceManagerFactory() {
@@ -70,10 +69,7 @@ public class JdoSupportServiceDefault implements JdoSupportService {
 
     @Override
     public <T> T refresh(final T domainObject) {
-        val objectManager = mmc.getObjectManager();
-        val adapter = mmc.getObjectManager().adapt(domainObject);
-        objectManager.refreshObject(adapter);
-        return domainObject;
+        return repositoryService.refresh(domainObject);
     }
 
     @Override
@@ -82,7 +78,6 @@ public class JdoSupportServiceDefault implements JdoSupportService {
     }
 
     // //////////////////////////////////////
-
 
     @Override
     public List<Map<String, Object>> executeSql(final String sql) {
@@ -191,7 +186,7 @@ public class JdoSupportServiceDefault implements JdoSupportService {
 
 
     @Override
-    public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
+    public <T> JDOQLTypedQuery<T> newTypesafeQuery(final Class<T> cls) {
         return getPersistenceManager().newJDOQLTypedQuery(cls);
     }
 
@@ -215,12 +210,12 @@ public class JdoSupportServiceDefault implements JdoSupportService {
     }
 
     @Override
-    public void disableMultivaluedFetch(JDOQLTypedQuery<?> query) {
+    public void disableMultivaluedFetch(final JDOQLTypedQuery<?> query) {
         query.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
 
     @Override
-    public void disableMultivaluedFetch(Query<?> query) {
+    public void disableMultivaluedFetch(final Query<?> query) {
         query.addExtension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
 

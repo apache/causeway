@@ -20,8 +20,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -41,16 +40,16 @@ extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
 
         val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
 
-        if (_Collections.isCollectionType(cls)) {
+        ProgrammingModelConstants.CollectionSemantics.valueOf(cls)
+        .ifPresent(collectionType->{
+            val facetHolder = processClassContext.getFacetHolder();
+            if (collectionType.isArray()) {
+                addFacet(new JavaArrayFacet(facetHolder));
+            }
             addFacet(new JavaCollectionFacet(facetHolder));
-        } else if (_Arrays.isArrayType(cls)) {
-            addFacet(new JavaArrayFacet(facetHolder));
-        }
-
-        addFacetIfPresent(TypeOfFacet.inferFromObjectType(cls, facetHolder));
-
+            addFacetIfPresent(TypeOfFacet.inferFromNonScalarType(collectionType, cls, facetHolder));
+        });
     }
 
 }

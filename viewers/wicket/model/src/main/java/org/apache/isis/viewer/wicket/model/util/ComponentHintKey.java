@@ -26,7 +26,7 @@ import org.danekja.java.util.function.serializable.SerializableSupplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 import lombok.AccessLevel;
@@ -41,7 +41,7 @@ public class ComponentHintKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static ComponentHintKey create(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final SerializableSupplier<Component> componentProvider,
             final String key) {
         return new ComponentHintKey(
@@ -50,7 +50,7 @@ public class ComponentHintKey implements Serializable {
     }
 
     public static ComponentHintKey create(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final Component path,
             final String key) {
         return new ComponentHintKey(
@@ -163,7 +163,7 @@ public class ComponentHintKey implements Serializable {
     private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                : WktContext.getCommonContext().lookupServiceElseFail(type);
+                : WktContext.getMetaModelContext().lookupServiceElseFail(type);
     }
 
 }

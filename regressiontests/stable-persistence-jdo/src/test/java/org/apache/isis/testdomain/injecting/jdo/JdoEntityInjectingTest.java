@@ -71,7 +71,7 @@ class JdoEntityInjectingTest extends IsisIntegrationTestAbstract {
     void init() {
         // given
         jdoTestFixtures.reinstall(()->kvStore.clear(JdoBook.class));
-        assertInjectCountRange(3, 9); //TODO there is some injection redundancy
+        assertInjectCountRange(3, 12); //TODO there is some injection redundancy
     }
 
 

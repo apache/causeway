@@ -186,7 +186,7 @@ class _EndpointLogging {
         if(dto==null
                 || dto instanceof String) {
             log.debug(dto);
-        } else if(_Collections.isCollectionOrArrayOrCanType(dto.getClass())){
+        } else if(_Collections.isAnyCollectionOrArrayType(dto.getClass())){
             log.debug("non-scalar content of type {}", dto.getClass());
         } else {
             val xmlResult = _Xml.writeXml(dto, WriteOptions.builder().allowMissingRootElement(true).build());

@@ -131,7 +131,7 @@ implements CollectionCountProvider {
 
         final int maxTitleLength = getModel().getVariant().isParented()? maxTitleParented: maxTitleStandalone;
         columns.add(new GenericTitleColumn(
-                super.getCommonContext(), variant, contextBookmark, maxTitleLength));
+                super.getMetaModelContext(), variant, contextBookmark, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
@@ -158,7 +158,7 @@ implements CollectionCountProvider {
 
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
-        val commonContext = super.getCommonContext();
+        val commonContext = super.getMetaModelContext();
 
         return new GenericPropertyColumn(
                 commonContext,

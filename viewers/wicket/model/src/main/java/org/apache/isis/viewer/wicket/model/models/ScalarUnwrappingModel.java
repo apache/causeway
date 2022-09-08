@@ -65,7 +65,7 @@ extends ChainingModel<T> {
         if (object == null) {
             scalarModel.setObject(null);
         } else {
-            val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(object);
+            val objectAdapter = scalarModel.getMetaModelContext().getObjectManager().adapt(object);
             scalarModel.setObject(objectAdapter);
         }
     }

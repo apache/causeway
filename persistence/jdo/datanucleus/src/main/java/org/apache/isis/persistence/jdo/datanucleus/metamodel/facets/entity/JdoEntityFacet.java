@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -46,8 +47,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -56,15 +55,18 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -77,14 +79,23 @@ public class JdoEntityFacet
 extends FacetAbstract
 implements EntityFacet {
 
+    // self managed injections via getPersistenceManager or getTransactionalProcessor
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
-    @Inject private IdStringifierService idStringifierService;
+    @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
+
+    @Getter(value = AccessLevel.PROTECTED) @Accessors(fluent = true)
+    @Inject private IdStringifierLookupService idStringifierLookupService;
 
     private final Class<?> entityClass;
+
+    // lazily looks up the primaryKeyTypeFor (needs a PersistenceManager)
+    @Getter(lazy=true, value = AccessLevel.PROTECTED) @Accessors(fluent = true)
+    private final PrimaryKeyType<?> primaryKeyTypeForDecoding = idStringifierLookupService()
+            .primaryKeyTypeFor(entityClass, primaryKeyTypeFor(entityClass));
 
     public JdoEntityFacet(
             final FacetHolder holder, final Class<?> entityClass) {
@@ -97,49 +108,56 @@ implements EntityFacet {
         return PersistenceStack.JDO;
     }
 
+    /* OPTIMIZATION
+     * even though the IdStringifierLookupService already holds a lookup map,
+     * for performance reasons,
+     * we define another one local to the context of the associated entity class */
+    private final Map<Class<?>, PrimaryKeyType<?>> primaryKeyTypesForEncoding = new ConcurrentHashMap<>();
+    private final PrimaryKeyType<?> primaryKeyTypeForEncoding(final @NonNull Object oid) {
+        val actualPrimaryKeyClass = oid.getClass();
+        val primaryKeyType = primaryKeyTypesForEncoding.computeIfAbsent(actualPrimaryKeyClass, key->
+            idStringifierLookupService()
+                .primaryKeyTypeFor(entityClass, actualPrimaryKeyClass));
+        return primaryKeyType;
+    }
+
     @Override
-    public String identifierFor(final Object pojo) {
-
-        if(pojo==null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    entityClass.getName());
+    public boolean isInjectionPointsResolved(final Object pojo) {
+        if(pojo instanceof Persistable) {
+            DnObjectProviderForIsis.extractFrom((Persistable) pojo)
+            .map(DnObjectProviderForIsis::injectServicesIfNotAlready)
+            .orElse(false);
         }
+        return pojo==null;
+    }
 
-        if(!isPersistableType(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given type %s",
-                    pojo.getClass().getName());
+    @Override
+    public Optional<String> identifierFor(final Object pojo) {
+
+        if (!getEntityState(pojo).hasOid()) {
+            return Optional.empty();
         }
 
         val pm = getPersistenceManager();
-        var primaryKey = pm.getObjectId(pojo);
+        var primaryKeyIfAny = Optional.ofNullable(pm.getObjectId(pojo));
 
-//        if(primaryKey==null) {
-//            pm.makePersistent(pojo);
-//            primaryKey = pm.getObjectId(pojo);
-//        }
+        _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
+            String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
 
-        if(primaryKey==null) {
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("detached entity detected %s", pojo);
-            });
-
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given object of type %s, "
-                    + "meaning the object has no identifier that associates it with the persistence layer. "
-                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                    pojo.getClass().getName());
-        }
-
-        return idStringifierService.enstringPrimaryKey(primaryKey.getClass(), primaryKey);
+        val idIfAny = primaryKeyIfAny
+                .map(primaryKey->
+                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
+        return idIfAny;
     }
 
+    @Override
+    public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
+        _Assert.assertNotNull(primaryKeyTypeForDecoding().destring(bookmark.getIdentifier()));
+        return bookmark;
+    }
 
     @Override
-    public ManagedObject fetchByIdentifier(
-            final @NonNull Bookmark bookmark) {
+    public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
@@ -147,8 +165,7 @@ implements EntityFacet {
         try {
 
             val persistenceManager = getPersistenceManager();
-            val primaryKey = idStringifierService
-                    .destringPrimaryKey(primaryKeyTypeFor(entityClass), entityClass, bookmark.getIdentifier());
+            val primaryKey = primaryKeyTypeForDecoding().destring(bookmark.getIdentifier());
 
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
@@ -166,14 +183,7 @@ implements EntityFacet {
             throw e;
         }
 
-        if (entityPojo == null) {
-            throw new ObjectNotFoundException(""+bookmark);
-        }
-
-        val actualEntitySpec = getSpecificationLoader().specForTypeElseFail(entityPojo.getClass());
-        getServiceInjector().injectServicesInto(entityPojo); // might be redundant
-        //TODO integrate with entity change tracking
-        return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
+        return Optional.ofNullable(entityPojo);
     }
 
     private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
@@ -207,11 +217,6 @@ implements EntityFacet {
                         "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
                         entityClass.getName(), identityType));
         }
-    }
-
-    private ObjectSpecification getEntitySpec() {
-        return getSpecificationLoader().specForType(entityClass)
-                .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
     }
 
     @Override
@@ -294,7 +299,7 @@ implements EntityFacet {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
-                || DnEntityStateProvider.entityState(pojo).isAttached()) {
+                || DnEntityStateProvider.entityState(pojo).hasOid()) {
             return; // nothing to do
         }
 
@@ -305,8 +310,6 @@ implements EntityFacet {
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
         .ifFailureFail();
-
-        //TODO integrate with entity change tracking
     }
 
     @Override
@@ -316,7 +319,7 @@ implements EntityFacet {
             return; // nothing to do
         }
 
-        if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
+        if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
             throw _Exceptions.illegalArgument("can only delete an attached entity");
         }
 
@@ -327,8 +330,6 @@ implements EntityFacet {
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
         .ifFailureFail();
-
-        //TODO integrate with entity change tracking
     }
 
     @Override
@@ -347,8 +348,6 @@ implements EntityFacet {
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
         .ifFailureFail();
-
-        //TODO integrate with entity change tracking
     }
 
     @Override
@@ -372,12 +371,6 @@ implements EntityFacet {
         return jdoFacetContext.isMethodProvidedByEnhancement(method);
     }
 
-    // -- INTERACTION TRACKER LAZY LOOKUP
-
-    // memoizes the lookup, just an optimization
-//    private final _Lazy<InteractionLayerTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
-//            ()->getServiceRegistry().lookupServiceElseFail(InteractionLayerTracker.class));
-
     // -- DEPENDENCIES
 
     private PersistenceManager getPersistenceManager() {
@@ -394,26 +387,20 @@ implements EntityFacet {
         return txService;
     }
 
-//    private JdoPersistenceSession getJdoPersistenceSession() {
-//        return isisInteractionTrackerLazy.get().currentInteractionSession()
-//                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
-//                .orElseThrow(()->_Exceptions.illegalState("no JdoPersistenceSession on current thread"));
-//    }
-
     // -- HELPER
 
     private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
-
-        val objectLifecyclePublisher = getFacetHolder().getServiceRegistry().lookupServiceElseFail(ObjectLifecyclePublisher.class);
-
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
-                    .map(fetchedObject->adopt(objectLifecyclePublisher, fetchedObject))
+                    .map(fetchedObject->adapt(objectLifecyclePublisher, fetchedObject))
                     .collect(Can.toCan()))
+                .ifFailureFail()
                 .getValue().orElseThrow();
     }
 
-    private ManagedObject adopt(final ObjectLifecyclePublisher objectLifecyclePublisher, final Object fetchedObject) {
+    private ManagedObject adapt(
+            final ObjectLifecyclePublisher objectLifecyclePublisher,
+            final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
 
         // ought not to be necessary, however for some queries it seems that the
@@ -421,7 +408,6 @@ implements EntityFacet {
         if(fetchedObject instanceof Persistable) {
             // an entity
             val entity = objectManager.adapt(fetchedObject);
-
             objectLifecyclePublisher.onPostLoad(entity);
             return entity;
         } else {
@@ -429,6 +415,5 @@ implements EntityFacet {
             return objectManager.adapt(fetchedObject);
         }
     }
-
 
 }

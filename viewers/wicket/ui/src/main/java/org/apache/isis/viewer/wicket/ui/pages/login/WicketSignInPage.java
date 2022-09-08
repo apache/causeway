@@ -71,12 +71,12 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     protected IsisSignInPanel createSignInPanel() {
 
-        final boolean rememberMeSuppress = getConfiguration().getViewer().getWicket().getRememberMe().isSuppress();
+        final boolean rememberMeSuppress = getWicketViewerSettings().getRememberMe().isSuppress();
         final boolean suppressRememberMe = rememberMeSuppress;
 
-        final boolean suppressSignUpLink = getConfiguration().getViewer().getWicket().isSuppressSignUp();
-        final boolean suppressPasswordResetLink = getConfiguration().getViewer().getWicket().isSuppressPasswordReset();
-        final boolean clearOriginalDestination = getConfiguration().getViewer().getWicket().isClearOriginalDestination();
+        final boolean suppressSignUpLink = getWicketViewerSettings().isSuppressSignUp();
+        final boolean suppressPasswordResetLink = getWicketViewerSettings().isSuppressPasswordReset();
+        final boolean clearOriginalDestination = getWicketViewerSettings().isClearOriginalDestination();
         final boolean rememberMe = !suppressRememberMe;
         final boolean signUpLink = !suppressSignUpLink;
         final boolean passwordReset = !suppressPasswordResetLink;

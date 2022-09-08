@@ -29,10 +29,10 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;

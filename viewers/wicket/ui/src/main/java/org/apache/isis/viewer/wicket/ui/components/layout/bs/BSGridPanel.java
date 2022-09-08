@@ -58,7 +58,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
                 return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
                 .map(bsGrid->{
-                    val commonContext = actionModel.getCommonContext();
+                    val commonContext = actionModel.getMetaModelContext();
                     val entityModelForMixin =
                             EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
                     return new BSGridPanel(id, entityModelForMixin, bsGrid);

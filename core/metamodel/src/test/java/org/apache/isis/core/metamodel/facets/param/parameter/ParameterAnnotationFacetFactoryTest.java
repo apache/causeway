@@ -32,9 +32,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -62,16 +62,6 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
     void expectRemoveMethod(final Method actionMethod) {
         context.checking(new Expectations() {{
             oneOf(mockMethodRemover).removeMethod(actionMethod);
-        }});
-    }
-
-    void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(cls);
-            will(returnValue(mockTypeSpec));
-
-            allowing(mockSpecificationLoader).loadSpecification(returnType);
-            will(returnValue(mockReturnTypeSpec));
         }});
     }
 

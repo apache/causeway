@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
@@ -41,7 +40,6 @@ extends IconFacetAbstract {
     public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
         return domainObjectLayoutIfAny
@@ -50,7 +48,8 @@ extends IconFacetAbstract {
                         iconUiEvent,
                         IconUiEvent.Noop.class,
                         IconUiEvent.Default.class,
-                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getIconUiEvent().isPostForDefault()))
+                        facetHolder.getConfiguration().getApplib().getAnnotation()
+                            .getDomainObjectLayout().getIconUiEvent().isPostForDefault()))
                 .map(iconUiEvent -> {
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
                             iconUiEvent, metamodelEventService, facetHolder);

@@ -18,13 +18,14 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Sets;
 
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
+
 
 /**
  * Describes what to include in the export from
@@ -32,96 +33,45 @@ import lombok.val;
  *
  * @since 1.x {@index}
  */
+@Getter @Builder
 public class Config {
 
-    private static final int IGNORE_NOOP_FACETS = 1;
-    private static final int IGNORE_INTERFACES = 2;
-    private static final int IGNORE_ABSTRACT_CLASSES = 4;
-    private static final int IGNORE_BUILT_IN_VALUE_TYPES = 8;
-    private static final int IGNORE_MIXINS = 16;
+    private final boolean ignoreFallbackFacets;
+    private final boolean ignoreInterfaces;
+    private final boolean ignoreAbstractClasses;
+    private final boolean ignoreBuiltInValueTypes;
+    private final boolean ignoreMixins;
+    private final boolean includeShadowedFacets;
+    private final boolean includeTitleAnnotations;
 
-    private static final String WILDCARD = "*";
-
-    private final int mask;
-
+    @Builder.Default
     private final Set<String> namespacePrefixes = _Sets.newHashSet();
 
-    public Config() {
-        this(0, Collections.emptyList());
-    }
-
-    private Config(final int mask, final Collection<String> namespacePrefixes) {
-        this.mask = mask;
-        this.namespacePrefixes.addAll(namespacePrefixes);
-    }
-
-    public Set<String> getNamespacePrefixes() {
-        return Collections.unmodifiableSet(namespacePrefixes);
-    }
-
-    public Config withIgnoreNoop() {
-        return newConfigWith(IGNORE_NOOP_FACETS);
-    }
-
-    public Config withIgnoreInterfaces() {
-        return newConfigWith(IGNORE_INTERFACES);
-    }
-
-    public Config withIgnoreAbstractClasses() {
-        return newConfigWith(IGNORE_ABSTRACT_CLASSES);
-    }
-
-    public Config withIgnoreBuiltInValueTypes() {
-        return newConfigWith(IGNORE_BUILT_IN_VALUE_TYPES);
-    }
-
-    public Config withIgnoreMixins() {
-        return newConfigWith(IGNORE_MIXINS);
-    }
-
-    private Config newConfigWith(final int x) {
-        return new Config(mask | x, namespacePrefixes);
-    }
-
     public boolean isNamespacePrefixAny() {
-        return namespacePrefixes.contains(WILDCARD);
+        return namespacePrefixes.isEmpty()
+                || namespacePrefixes.contains("*");
     }
 
     /**
-     * Returns a new {@code Config} with given {@code packagePrefix} added to the set of
-     * this {@code Config}'s packagePrefixes.
-     *
-     * @param namespacePrefix - prefix to be added
+     * Returns a copy of this config with given namespace added.
      */
-    public Config withNamespacePrefix(final String namespacePrefix) {
-        val newPrefixes = _Sets.newHashSet(this.namespacePrefixes);
-        newPrefixes.add(namespacePrefix);
-        return new Config(mask, newPrefixes);
+    public Config withNamespacePrefix(final String namespace) {
+        val newConfig = asBuilder().build();
+        newConfig.namespacePrefixes.add(namespace);
+        return newConfig;
     }
 
-    public boolean isIgnoreNoop() {
-        return hasFlag(IGNORE_NOOP_FACETS);
+    public Config.ConfigBuilder asBuilder() {
+        return Config.builder()
+                .ignoreFallbackFacets(ignoreFallbackFacets)
+                .ignoreInterfaces(ignoreInterfaces)
+                .ignoreAbstractClasses(ignoreAbstractClasses)
+                .ignoreBuiltInValueTypes(ignoreBuiltInValueTypes)
+                .ignoreMixins(ignoreMixins)
+                .includeShadowedFacets(includeShadowedFacets)
+                .includeTitleAnnotations(includeTitleAnnotations)
+                .namespacePrefixes(_Sets.newHashSet(namespacePrefixes));
     }
 
-    public boolean isIgnoreInterfaces() {
-        return hasFlag(IGNORE_INTERFACES);
-    }
 
-    public boolean isIgnoreAbstractClasses() {
-        return hasFlag(IGNORE_ABSTRACT_CLASSES);
-    }
-
-    public boolean isIgnoreBuiltInValueTypes() {
-        return hasFlag(IGNORE_BUILT_IN_VALUE_TYPES);
-    }
-
-    public boolean isIgnoreMixins() {
-        return hasFlag(IGNORE_MIXINS);
-    }
-
-    private boolean hasFlag(final int x) {
-        return (mask & x) == x;
-    }
-
-    // ...
 }

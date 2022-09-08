@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
@@ -80,8 +81,8 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
     }
 
     @Override
-    public void onPrePersist(final ManagedObject entity) {
-        lifecycleCallbackNotifier().prePersist(entity);
+    public void onPrePersist(final Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid) {
+        lifecycleCallbackNotifier().prePersist(eitherWithOrWithoutOid);
     }
 
     @Override

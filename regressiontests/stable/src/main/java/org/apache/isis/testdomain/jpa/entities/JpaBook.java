@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.jpa.entities;
 
+import java.util.concurrent.atomic.LongAdder;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Column;
@@ -29,6 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
@@ -136,9 +139,37 @@ implements IBook {
     @Getter @Setter @Column(nullable = true)
     private String author;
 
-    @Property
-    @Getter @Setter @Column(nullable = false, unique = true)
+    @Property(editing = Editing.ENABLED)
+    @Column(nullable = false, unique = true)
     private String isbn;
+    @Override
+    public String getIsbn() {
+        System.err.printf("[%d]getIsbn()->%s%n", this.hashCode(), isbn);
+        if("ISBN-XXXX".equals(isbn)) {
+            System.err.printf("%s%n", "bingo");
+        }
+        return isbn;
+    }
+    public void setIsbn(final String isbn) {
+        System.err.printf("[%d]setIsbn():%s->%s%n", this.hashCode(), this.isbn, isbn);
+        this.isbn = isbn;
+    }
+
+    private static final LongAdder idGen = new LongAdder();
+    private int oid=-1;
+
+
+    @Override
+    public int hashCode() {
+        synchronized(idGen) {
+            if(oid==-1) {
+                idGen.increment();
+                oid = idGen.intValue();
+            }
+        }
+        return oid;
+    }
+
 
     @Property
     @Getter @Setter @Column(nullable = true)
@@ -156,8 +187,10 @@ implements IBook {
 
         super(/*id*/ null, name, description, price, /*comments*/null);
         this.author = author;
+        System.err.printf("[%d]con Isbn():%s%n", this.hashCode(), isbn);
         this.isbn = isbn;
         this.publisher = publisher;
     }
+
 
 }

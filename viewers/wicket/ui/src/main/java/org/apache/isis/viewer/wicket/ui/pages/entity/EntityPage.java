@@ -32,12 +32,12 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
@@ -75,7 +75,7 @@ public class EntityPage extends PageAbstract {
      * @return An EntityModel for the requested OID
      */
     public static EntityPage forPageParameters(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final PageParameters pageParameters) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
@@ -96,7 +96,7 @@ public class EntityPage extends PageAbstract {
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public static EntityPage forAdapter(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final ManagedObject adapter) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
@@ -156,7 +156,7 @@ public class EntityPage extends PageAbstract {
 
         Facets.gridPreload(objectSpec, objectAdapter);
 
-        final String titleStr = objectAdapter.titleString();
+        final String titleStr = objectAdapter.getTitle();
         setTitle(titleStr);
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");

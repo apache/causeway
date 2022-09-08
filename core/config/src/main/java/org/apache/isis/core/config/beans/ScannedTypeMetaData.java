@@ -46,9 +46,10 @@ final class ScannedTypeMetaData {
     @Getter @Setter private String beanNameOverride;
 
     /**
-     * Whether this type should be made available to resolve injection points.
+     * Whether this type is vetoed for injection,
+     * otherwise is made available for Spring to decide whether to use for injection.
      */
-    @Getter @Setter private boolean injectable = true;
+    @Getter @Setter private boolean vetoedForInjection = false;
 
     @Getter(lazy=true)
     private final Try<Class<?>> underlyingClass = resolveClass();

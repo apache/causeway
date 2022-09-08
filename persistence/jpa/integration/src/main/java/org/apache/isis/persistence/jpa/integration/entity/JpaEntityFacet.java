@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jpa.integration.entity;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
@@ -28,15 +29,15 @@ import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.data.jpa.repository.JpaContext;
+import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -45,8 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 
 import lombok.NonNull;
 import lombok.val;
@@ -57,19 +57,22 @@ public class JpaEntityFacet
         extends FacetAbstract
         implements EntityFacet {
 
+    // self managed injections via constructor
+    @Inject private JpaContext jpaContext;
+    @Inject private IdStringifierLookupService idStringifierLookupService;
+
     private final Class<?> entityClass;
-    private final ServiceRegistry serviceRegistry;
-    private final IdStringifierService idStringifierService;
+    private PrimaryKeyType<?> primaryKeyType;
 
     protected JpaEntityFacet(
             final FacetHolder holder,
-            final Class<?> entityClass,
-            final @NonNull ServiceRegistry serviceRegistry) {
-
+            final Class<?> entityClass) {
         super(EntityFacet.class, holder, Precedence.HIGH);
+        getServiceInjector().injectServicesInto(this);
+
         this.entityClass = entityClass;
-        this.serviceRegistry = serviceRegistry;
-        this.idStringifierService = serviceRegistry.lookupServiceElseFail(IdStringifierService.class);
+        this.primaryKeyType = idStringifierLookupService
+                .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
     }
 
     // -- ENTITY FACET
@@ -80,52 +83,37 @@ public class JpaEntityFacet
     }
 
     @Override
-    public String identifierFor(final Object pojo) {
+    public Optional<String> identifierFor(final @Nullable Object pojo) {
 
-        if (pojo == null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    entityClass.getName());
+        if (!getEntityState(pojo).hasOid()) {
+            return Optional.empty();
         }
 
         val entityManager = getEntityManager();
         val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
-        val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+        val primaryKeyIfAny = persistenceUnitUtil.getIdentifier(pojo);
 
-        if (primaryKey == null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given object of type %s, "
-                            + "meaning the object has no identifier that associates it with the persistence layer. "
-                            + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                    pojo.getClass().getName());
-        }
-
-        return idStringifierService.enstringPrimaryKey(getPrimaryKeyType(), primaryKey);
+        return Optional.ofNullable(primaryKeyIfAny)
+                .map(primaryKey->
+                    primaryKeyType.enstringWithCast(primaryKey));
     }
 
     @Override
-    public ManagedObject fetchByIdentifier(
-            final @NonNull Bookmark bookmark) {
+    public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
+        _Assert.assertNotNull(primaryKeyType.destring(bookmark.getIdentifier()));
+        return bookmark;
+    }
+
+    @Override
+    public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        val primaryKey = idStringifierService
-                .destringPrimaryKey(getPrimaryKeyType(), entityClass, bookmark.getIdentifier());
+        val primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
 
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);
-
-        if (entityPojo == null) {
-            throw new ObjectNotFoundException("" + bookmark);
-        }
-
-        final ObjectSpecification entitySpec = getEntitySpec();
-        return ManagedObject.bookmarked(entitySpec, entityPojo, bookmark);
-    }
-
-    private ObjectSpecification getEntitySpec() {
-        return getSpecificationLoader().specForType(entityClass)
-                            .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
+        return Optional.ofNullable(entityPojo);
     }
 
     private Class<?> getPrimaryKeyType() {
@@ -164,10 +152,10 @@ public class JpaEntityFacet
                 typedQuery.setMaxResults(range.getLimitAsInt());
             }
 
-            val spec = getEntitySpec();
+            val entitySpec = getEntitySpecification();
             return Can.ofStream(
                     typedQuery.getResultStream()
-                            .map(entity -> ManagedObject.of(spec, entity)));
+                            .map(entity -> ManagedObject.adaptScalar(entitySpec, entity)));
 
         } else if (query instanceof NamedQuery) {
 
@@ -191,10 +179,10 @@ public class JpaEntityFacet
                     .forEach((paramName, paramValue) ->
                             namedQuery.setParameter(paramName, paramValue));
 
-            val spec = getEntitySpec();
+            val entitySpec = getEntitySpecification();
             return Can.ofStream(
                     namedQuery.getResultStream()
-                            .map(entity -> ManagedObject.of(spec, entity)));
+                            .map(entity -> ManagedObject.adaptScalar(entitySpec, entity)));
 
         }
 
@@ -273,7 +261,13 @@ public class JpaEntityFacet
         try {
             val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
             if (primaryKey == null) {
-                return EntityState.PERSISTABLE_DETACHED; // an optimization, not strictly required
+                return EntityState.PERSISTABLE_DETACHED;
+            } else {
+                // detect shallow primary key
+                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
+                return primaryKeyType.isValid(primaryKey)
+                    ? EntityState.PERSISTABLE_DETACHED_WITH_OID
+                    : EntityState.PERSISTABLE_DETACHED;
             }
         } catch (PersistenceException ex) {
             // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry) (this was without any weaving)
@@ -291,9 +285,6 @@ public class JpaEntityFacet
             }
             throw ex;
         }
-
-        //XXX whether DETACHED or REMOVED is currently undecidable (JPA)
-        return EntityState.PERSISTABLE_DETACHED;
     }
 
     @Override
@@ -332,12 +323,8 @@ public class JpaEntityFacet
 
     // -- DEPENDENCIES
 
-    protected JpaContext getJpaContext() {
-        return serviceRegistry.lookupServiceElseFail(JpaContext.class);
-    }
-
     protected EntityManager getEntityManager() {
-        return getJpaContext().getEntityManagerByManagedType(entityClass);
+        return jpaContext.getEntityManagerByManagedType(entityClass);
     }
 
     protected PersistenceUnitUtil getPersistenceUnitUtil(final EntityManager entityManager) {

@@ -176,7 +176,7 @@ public class TableViewVaa extends VerticalLayout {
             val propertyValue = property.get(targetObject);
             return propertyValue == null
                     ? NULL_LITERAL
-                    : propertyValue.titleString();
+                    : propertyValue.getTitle();
         } catch (Exception e) {
             return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
         }

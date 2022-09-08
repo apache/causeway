@@ -157,8 +157,8 @@ implements
         val records = enlistedPropertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
-                    // assuming this check correctly detects deleted entities (JDO)
-                    if(MmEntityUtil.isDetachedOrRemoved(rec.getEntity())) {
+                    // assuming this check correctly detects deleted entities
+                    if(MmEntityUtil.isDeleted(rec.getEntity())) {
                         rec.withPostValueSetToDeleted();
                     } else {
                         rec.withPostValueSetToCurrent();

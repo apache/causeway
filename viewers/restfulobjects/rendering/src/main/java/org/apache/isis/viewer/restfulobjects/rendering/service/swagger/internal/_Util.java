@@ -87,7 +87,7 @@ final class _Util {
             return true;
         }
         if(specification.isNonScalar()) {
-            val elementSpec = Facets.typeOf(specification).orElse(null);
+            val elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return isVisibleForPublic(elementSpec);
             }

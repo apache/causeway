@@ -69,7 +69,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
@@ -403,8 +402,12 @@ extends
     boolean isHidden();
 
     /**
-     * Whether this specification represents a bean, that is a managed bean
+     * Whether represents a bean, that is a managed bean
      * with scoped life-cycle, available for dependency injection.
+     * <p>
+     * DANGER: don't call during MM introspection
+     * @apiNote this predicate might not be valid until all services
+     *      have been discovered and the application context has settled
      */
     boolean isInjectable();
 
@@ -436,13 +439,13 @@ extends
     default boolean isEntity() {
         return getBeanSort().isEntity()
                 || (getBeanSort().isAbstract()
-                        && lookupFacet(EntityFacet.class).isPresent());
+                        && entityFacet().isPresent());
     }
 
     default boolean isViewModel() {
         return getBeanSort().isViewModel()
                 || (getBeanSort().isAbstract()
-                        && lookupFacet(ViewModelFacet.class).isPresent());
+                        && viewmodelFacet().isPresent());
     }
 
     default boolean isEntityOrViewModel() {
@@ -515,13 +518,11 @@ extends
     }
 
     /**
-     * Delegates to {@link ObjectManager#createObject(org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator.Request)}
+     * Delegates to {@link ObjectManager#createObject(ObjectSpecification)}
      * @since 2.0
      */
     default ManagedObject createObject() {
-        val mmc = getMetaModelContext();
-        val objectCreateRequest = ObjectCreator.Request.of(this);
-        val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
+        val managedObject = getObjectManager().createObject(this);
         return managedObject;
     }
 
@@ -625,5 +626,24 @@ extends
     /** introduced for lookup optimization / allow memoization */
     @SuppressWarnings("rawtypes")
     Optional<ValueFacet> valueFacet();
+    @SuppressWarnings("rawtypes")
+    default ValueFacet valueFacetElseFail() {
+        return valueFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("Value type %s must have a ValueFacet", toString()));
+    }
+
+    /** introduced for lookup optimization / allow memoization */
+    Optional<EntityFacet> entityFacet();
+    default EntityFacet entityFacetElseFail() {
+        return entityFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("Entity type %s must have an EntityFacet", toString()));
+    }
+
+    /** introduced for lookup optimization / allow memoization */
+    Optional<ViewModelFacet> viewmodelFacet();
+    default ViewModelFacet viewmodelFacetElseFail() {
+        return viewmodelFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("ViewModel type %s must have a ViewModelFacet", toString()));
+    }
 
 }

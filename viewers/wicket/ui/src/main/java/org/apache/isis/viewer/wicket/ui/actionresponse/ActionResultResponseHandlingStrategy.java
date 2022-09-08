@@ -32,7 +32,7 @@ import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
@@ -41,7 +41,7 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
         @Override
         public void handleResults(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             final RequestCycle requestCycle = RequestCycle.get();
@@ -51,7 +51,7 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             // force any changes in state etc to happen now prior to the redirect;
@@ -67,7 +67,7 @@ public enum ActionResultResponseHandlingStrategy {
     SCHEDULE_HANDLER {
         @Override
         public void handleResults(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             final RequestCycle requestCycle = RequestCycle.get();
@@ -112,7 +112,7 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_NEW_BROWSER_WINDOW {
         @Override
         public void handleResults(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             final AjaxRequestTarget target = resultResponse.getTarget();
@@ -126,7 +126,7 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_SAME_BROWSER_WINDOW {
         @Override
         public void handleResults(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             final AjaxRequestTarget target = resultResponse.getTarget();
@@ -139,7 +139,7 @@ public enum ActionResultResponseHandlingStrategy {
     };
 
     public abstract void handleResults(
-            IsisAppCommonContext commonContext,
+            MetaModelContext commonContext,
             ActionResultResponse resultResponse);
 
     /**

@@ -77,7 +77,7 @@ final class _CellMarshaller {
 
         final ObjectSpecification propertySpec = otoa.getElementType();
         final Object propertyAsObj = propertyAdapter.getPojo();
-        final String propertyAsTitle = propertyAdapter.titleString();
+        final String propertyAsTitle = propertyAdapter.getTitle();
 
         // value types
         if(propertySpec.isValue()) {

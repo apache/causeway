@@ -20,8 +20,6 @@ package org.apache.isis.incubator.viewer.vaadin.ui.binding;
 
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
-
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.data.binder.Binder;
@@ -29,6 +27,8 @@ import com.vaadin.flow.data.binder.Binder.BindingBuilder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.function.ValueProvider;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
@@ -361,7 +361,8 @@ public final class BindingsVaa {
         //SETTER
         @Override
         public void accept(@NonNull final Bindable<ManagedObject> target, final V fieldValue) {
-            target.setValue(ManagedObject.of(valueSpec, fieldValue));
+            //TODO should we support the packed case as well?
+            target.setValue(ManagedObject.adaptScalar(valueSpec, fieldValue));
         }
 
 

@@ -71,6 +71,11 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
+import org.apache.isis.viewer.wicket.ui.pages.common.datatables.DatatablesCssBootstrap5ReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.pages.common.datatables.DatatablesCssReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptBootstrap5ReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptResourceReferenceInit;
 import org.apache.isis.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
 import org.apache.isis.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
@@ -140,7 +145,7 @@ implements ActionPromptProvider {
 
             themeDiv = Wkt.containerAdd(this, ID_THEME);
 
-            String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
+            String applicationName = getWicketViewerSettings().getApplication().getName();
             Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
@@ -164,12 +169,12 @@ implements ActionPromptProvider {
 
             log.error("Failed to construct page, going back to sign in page", ex);
 
-            val exceptionRecognizerService = getCommonContext().getServiceRegistry()
+            val exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
                     .lookupServiceElseFail(ExceptionRecognizerService.class);
 
             val recognition = exceptionRecognizerService.recognize(ex);
 
-            val exceptionModel = ExceptionModel.create(getCommonContext(), recognition, ex);
+            val exceptionModel = ExceptionModel.create(getMetaModelContext(), recognition, ex);
 
             getSession().invalidate();
             getSession().clear();
@@ -223,7 +228,7 @@ implements ActionPromptProvider {
     protected void setTitle(final String title) {
         Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
                 ? title
-                : getConfiguration().getViewer().getWicket().getApplication().getName());
+                : getWicketViewerSettings().getApplication().getName());
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -239,6 +244,12 @@ implements ActionPromptProvider {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
         response.render(FontAwesomeCssReferenceWkt.asHeaderItem());
 
+        response.render(DatatablesJavaScriptReferenceWkt.asHeaderItem());
+        response.render(DatatablesJavaScriptBootstrap5ReferenceWkt.asHeaderItem());
+        response.render(DatatablesCssReferenceWkt.asHeaderItem());
+        response.render(DatatablesCssBootstrap5ReferenceWkt.asHeaderItem());
+        response.render(DatatablesJavaScriptResourceReferenceInit.instance(getConfiguration()));
+
         response.render(BootstrapOverridesCssResourceReference.asHeaderItem());
         BootstrapOverridesCssResourceReference
             .contributeThemeSpecificOverrides(getApplication(), response);
@@ -248,20 +259,20 @@ implements ActionPromptProvider {
         response.render(LiveQueryJsResourceReference.asHeaderItem());
         response.render(IsisWicketViewerJsResourceReference.asHeaderItem());
 
-        new JGrowlBehaviour(getCommonContext())
+        new JGrowlBehaviour(getMetaModelContext())
             .renderFeedbackMessages(response);
 
-        getConfiguration().getViewer().getWicket().getApplication().getCss()
+        getWicketViewerSettings().getApplication().getCss()
         .ifPresent(applicationCss -> {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         });
 
-        getConfiguration().getViewer().getWicket().getApplication().getJs()
+        getWicketViewerSettings().getApplication().getJs()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         });
 
-        getConfiguration().getViewer().getWicket().getLiveReloadUrl()
+        getWicketViewerSettings().getLiveReloadUrl()
         .ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
@@ -366,11 +377,11 @@ implements ActionPromptProvider {
     }
 
     private boolean isShowBookmarks() {
-        return getCommonContext().getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowChooser();
+        return getWicketViewerSettings().getBookmarkedPages().isShowChooser();
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getCommonContext().getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowDropDownOnFooter();
+        return getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel model) {
@@ -421,9 +432,9 @@ implements ActionPromptProvider {
         }
 
         val dialogMode =
-                sort.isManagedBean()
-                        ? getCommonContext().getConfiguration().getViewer().getWicket().getDialogModeForMenu()
-                        : getCommonContext().getConfiguration().getViewer().getWicket().getDialogMode();
+                sort.isManagedBeanAny()
+                        ? getWicketViewerSettings().getDialogModeForMenu()
+                        : getWicketViewerSettings().getDialogMode();
         switch (dialogMode) {
         case SIDEBAR:
             return actionPromptSidebar;

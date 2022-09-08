@@ -18,14 +18,34 @@
  */
 package org.apache.isis.core.metamodel;
 
+import java.util.stream.Stream;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.graph.tree.TreeAdapter;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.commons.functional.Either;
+import org.apache.isis.commons.functional.Railway;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
+import org.apache.isis.core.metamodel.inspect.model.ActionNode;
+import org.apache.isis.core.metamodel.inspect.model.CollectionNode;
+import org.apache.isis.core.metamodel.inspect.model.FacetAttrNode;
+import org.apache.isis.core.metamodel.inspect.model.FacetGroupNode;
+import org.apache.isis.core.metamodel.inspect.model.FacetNode;
+import org.apache.isis.core.metamodel.inspect.model.MMTreeAdapter;
+import org.apache.isis.core.metamodel.inspect.model.MemberNode;
+import org.apache.isis.core.metamodel.inspect.model.ParameterNode;
+import org.apache.isis.core.metamodel.inspect.model.PropertyNode;
+import org.apache.isis.core.metamodel.inspect.model.TypeNode;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.services.ServiceInjectorDefault;
@@ -88,6 +108,8 @@ import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTime
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
+
+import lombok.NonNull;
 
 @Configuration
 @Import({
@@ -179,5 +201,47 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 public class IsisModuleCoreMetamodel {
 
     public static final String NAMESPACE = "isis.metamodel";
+
+    @FunctionalInterface
+    public static interface PreloadableTypes {
+        @NonNull Stream<Class<?>> stream();
+    }
+
+    @Bean
+    @Primary
+    public PreloadableTypes preloadableTypes() {
+        return ()->Stream.of(
+                java.util.Optional.class, java.util.stream.Stream.class,
+                Try.class, Either.class, Railway.class,
+                ApplicationFeatureSort.class/*, ...*/);
+    }
+
+    @Bean
+    public PreloadableTypes collectionTypes() {
+        // these are vetoed for member inspection, but have an ObjectSpecification
+        return ()->CollectionSemantics
+                .typeSubstitutors().stream().map(CollectionSemantics::getContainerType);
+    }
+
+    @Bean
+    public PreloadableTypes treeAdapterTypes() {
+        return ()->Stream.of(
+                TreeAdapter.class);
+    }
+
+    @Bean
+    public PreloadableTypes metamodelViewTypes() {
+        return ()->Stream.of(
+                MMTreeAdapter.class,
+                MemberNode.class,
+                ActionNode.class,
+                CollectionNode.class,
+                FacetAttrNode.class,
+                FacetGroupNode.class,
+                FacetNode.class,
+                ParameterNode.class,
+                PropertyNode.class,
+                TypeNode.class);
+    }
 
 }

@@ -21,10 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,35 +29,30 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
 
     private TitleAnnotationFacetFactory facetFactory;
 
-    @Mock private ManagedObject mockObjectAdapter;
-    @Mock private ObjectSpecification mockStringSpec;
-    @Mock private ObjectSpecification mockIntegerSpec;
-
     @Before
     public void setUp() throws Exception {
-
-        // PRODUCTION
-
         facetFactory = new TitleAnnotationFacetFactory(metaModelContext);
-
     }
 
     @After
@@ -142,34 +134,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
         }
 
         final Customer2 customer = new Customer2();
+        val objectAdapter = ManagedObject.adaptScalar(specificationLoader, customer);
 
-        context.checking(new Expectations() {{
-
-            allowing(mockObjectAdapter).getPojo();
-            will(returnValue(customer));
-
-            allowing(mockSpecificationLoader).specForType(String.class);
-            will(returnValue(Optional.of(mockStringSpec)));
-
-            allowing(mockStringSpec).getCorrespondingClass();
-            will(returnValue(String.class));
-
-            allowing(mockStringSpec).isValue();
-            will(returnValue(true));
-
-            allowing(mockStringSpec).isScalar();
-            will(returnValue(true));
-
-            allowing(mockStringSpec).isNonScalar();
-            will(returnValue(false));
-
-            allowing(mockStringSpec).isEntity();
-            will(returnValue(false));
-
-            ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
-
-        }});
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
+        final String title = titleFacetViaTitleAnnotation.title(objectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 
@@ -185,6 +152,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         Assert.assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
 
+    @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Customer4 {
 
         @Title(sequence = "1")
@@ -232,70 +200,21 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
+        { // check prerequisites
+            val wThree = ManagedObject.adaptScalar(specificationLoader, Integer.valueOf(3));
+            assertEquals("3", wThree.getTitle());
+            val pThree = ManagedObject.adaptScalar(specificationLoader, 3);
+            assertEquals("3", pThree.getTitle());
+        }
+
         facetFactory.process(ProcessClassContext
                 .forTesting(Customer4.class, mockMethodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;
-
         final Customer4 customer = new Customer4();
+        val objectAdapter = ManagedObject.adaptScalar(specificationLoader, customer);
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectAdapter).getPojo();
-                will(returnValue(customer));
-
-                allowing(mockSpecificationLoader).specForType(String.class);
-                will(returnValue(Optional.of(mockStringSpec)));
-
-                allowing(mockStringSpec).getCorrespondingClass();
-                will(returnValue(String.class));
-
-                allowing(mockStringSpec).isNonScalar();
-                will(returnValue(false));
-
-                allowing(mockStringSpec).isScalar();
-                will(returnValue(true));
-
-                allowing(mockStringSpec).isEntity();
-                will(returnValue(false));
-
-                allowing(mockStringSpec).isValue();
-                will(returnValue(true));
-
-                ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
-
-                allowing(mockSpecificationLoader).specForType(Integer.class);
-                will(returnValue(Optional.of(mockIntegerSpec)));
-
-                allowing(mockIntegerSpec).getCorrespondingClass();
-                will(returnValue(Integer.class));
-
-                allowing(mockIntegerSpec).isValue();
-                will(returnValue(true));
-
-                allowing(mockIntegerSpec).isNonScalar();
-                will(returnValue(false));
-
-                allowing(mockIntegerSpec).isScalar();
-                will(returnValue(true));
-
-                allowing(mockIntegerSpec).isEntity();
-                will(returnValue(false));
-
-                allowing(mockIntegerSpec).getTitle(with(any(TitleRenderRequest.class)));
-                will(returnValue("3"));
-
-                ignoring(mockIntegerSpec).assertPojoCompatible(with(any(Integer.class)));
-                ignoring(mockIntegerSpec).assertPojoCompatible(with(any(int.class)));
-
-            }
-        });
-        final String title = titleFacetViaTitleAnnotation.title(
-                TitleRenderRequest.builder()
-                .object(mockObjectAdapter)
-                .build());
-        assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
+        assertThat(objectAdapter.getTitle(),
+                is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 
 

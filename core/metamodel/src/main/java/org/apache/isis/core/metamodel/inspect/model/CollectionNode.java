@@ -29,12 +29,14 @@ import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.schema.metamodel.v2.Annotation;
 import org.apache.isis.schema.metamodel.v2.Collection;
 import org.apache.isis.schema.metamodel.v2.Member;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 @Named(CollectionNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -53,10 +55,13 @@ public class CollectionNode extends MemberNode {
 
     @Override
     public String createTitle() {
-        return String.format("%s: %s%s",
-                collection.getId(),
-                typeToString(collection.getType()),
-                titleSuffix());
+        val title = lookupTitleAnnotation().map(Annotation::getValue)
+                .orElseGet(()->
+            String.format("%s: %s%s",
+                    collection.getId(),
+                    ""+collection.getType(),
+                    titleSuffix()));
+        return title;
     }
 
     @Override

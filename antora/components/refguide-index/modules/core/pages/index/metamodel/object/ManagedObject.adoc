@@ -1,7 +1,7 @@
 = ManagedObject
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Represents an instance of some element of the meta-model managed by the framework, that is _Spring_ managed beans, persistence-stack provided entities, view-models or instances of value types.
+Represents an instance of some element of the meta-model recognized by the framework, that is _Spring_ managed beans, persistence-stack provided entities, view-models, mixins or instances of value types.
 
 == API
 
@@ -10,33 +10,32 @@ Represents an instance of some element of the meta-model managed by the framewor
 ----
 interface ManagedObject {
   Specialization getSpecialization()     // <.>
+  BookmarkPolicy getBookmarkPolicy()
   ObjectSpecification getSpecification()     // <.>
   Object getPojo()     // <.>
-  Optional<Bookmark> getBookmark()     // <.>
-  Optional<Bookmark> getBookmarkRefreshed()     // <.>
-  void refreshViewmodel(Supplier<Bookmark> bookmarkSupplier)     // <.>
-  boolean isBookmarkMemoized()
+  EntityState getEntityState()
   Supplier<ManagedObject> asSupplier()
   T assertCompliance(T pojo)     // <.>
-  String titleString(UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder)
-  String titleString()
-  Optional<ObjectSpecification> getElementSpecification()     // <.>
-  String getTitle()
+  String getTitle()     // <.>
   String getIconName()     // <.>
   ObjectIcon getIcon()
+  Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark()
   ManagedObject unspecified()     // <.>
   ManagedObject empty(ObjectSpecification spec)     // <.>
   ManagedObject value(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject service(ObjectSpecification spec, Object pojo)     // <.>
-  ManagedObject viewmodel(ObjectSpecification spec, Object pojo)     // <.>
-  ManagedObject entity(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject viewmodel(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
+  ManagedObject entity(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
+  ManagedObject entityHypridBookmarked(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)
+  ManagedObject entityHybirdDetached(ObjectSpecification spec, Object pojo)
   ManagedObject mixin(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject other(ObjectSpecification spec, Object pojo)     // <.>
   PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
-  ManagedObject wrapScalar(SpecificationLoader specLoader, Object pojo)     // <.>
-  ManagedObject notBookmarked(ObjectSpecification spec, Object pojo)
-  ManagedObject of(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject adaptScalar(SpecificationLoader specLoader, Object pojo)     // <.>
+  ManagedObject adaptScalar(ObjectSpecification guess, Object pojo)
   ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
+  ManagedObject adaptScalarInternal(ObjectSpecification guess, Object pojo, Optional<Bookmark> bookmarkIfAny)     // <.>
+  ManagedObject adaptParameter(ObjectActionParameter param, Object paramValue)
 }
 ----
 
@@ -55,30 +54,15 @@ Returns the specification that details the structure (meta-model) of this object
 --
 Returns the adapted domain object, the 'plain old java' object this managed object represents with the framework.
 --
-<.> xref:#getBookmark_[getBookmark()]
-+
---
-Returns the object's bookmark as identified by the ObjectManager. Bookmarks are considered immutable, hence will be memoized once fetched.
---
-<.> xref:#getBookmarkRefreshed_[getBookmarkRefreshed()]
-+
---
-Similar to _#getBookmark()_ , but invalidates any memoized xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] such that the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] returned is recreated, reflecting the object's current state.
---
-<.> xref:#refreshViewmodel_Supplier[refreshViewmodel(Supplier)]
-+
---
-If the underlying domain object is a viewmodel, refreshes any referenced entities. (Acts as a no-op otherwise.)
---
 <.> xref:#assertCompliance_T[assertCompliance(T)]
 +
 --
 Unary operator asserting that _pojo_ and _#getSpecification()_ are compliant with the policies from _#getSpecialization()_ .
 --
-<.> xref:#getElementSpecification_[getElementSpecification()]
+<.> xref:#getTitle_[getTitle()]
 +
 --
-Used only for (standalone or parented) collections.
+The (untranslated) title of the wrapped pojo.
 --
 <.> xref:#getIconName_[getIconName()]
 +
@@ -105,12 +89,12 @@ VALUE
 --
 SERVICE
 --
-<.> xref:#viewmodel_ObjectSpecification_Object[viewmodel(ObjectSpecification, Object)]
+<.> xref:#viewmodel_ObjectSpecification_Object_Optional[viewmodel(ObjectSpecification, Object, Optional)]
 +
 --
 VIEWMODEL
 --
-<.> xref:#entity_ObjectSpecification_Object[entity(ObjectSpecification, Object)]
+<.> xref:#entity_ObjectSpecification_Object_Optional[entity(ObjectSpecification, Object, Optional)]
 +
 --
 ENTITY
@@ -130,20 +114,20 @@ OTHER
 --
 PACKED
 --
-<.> xref:#wrapScalar_SpecificationLoader_Object[wrapScalar(SpecificationLoader, Object)]
+<.> xref:#adaptScalar_SpecificationLoader_Object[adaptScalar(SpecificationLoader, Object)]
 +
 --
 For cases, when the pojo's specification is not available and needs to be looked up.
---
-<.> xref:#of_ObjectSpecification_Object[of(ObjectSpecification, Object)]
-+
---
-Optimized for cases, when the pojo's specification is already available. If _pojo_ is an entity, automatically memoizes its bookmark.
 --
 <.> xref:#bookmarked_ObjectSpecification_Object_Bookmark[bookmarked(ObjectSpecification, Object, Bookmark)]
 +
 --
 Optimized for cases, when the pojo's specification and bookmark are already available.
+--
+<.> xref:#adaptScalarInternal_ObjectSpecification_Object_Optional[adaptScalarInternal(ObjectSpecification, Object, Optional)]
++
+--
+spec and pojo don't need to be strictly in sync, we adapt if required
 --
 
 == Members
@@ -163,30 +147,15 @@ Returns the specification that details the structure (meta-model) of this object
 
 Returns the adapted domain object, the 'plain old java' object this managed object represents with the framework.
 
-[#getBookmark_]
-=== getBookmark()
-
-Returns the object's bookmark as identified by the ObjectManager. Bookmarks are considered immutable, hence will be memoized once fetched.
-
-[#getBookmarkRefreshed_]
-=== getBookmarkRefreshed()
-
-Similar to _#getBookmark()_ , but invalidates any memoized xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] such that the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] returned is recreated, reflecting the object's current state.
-
-[#refreshViewmodel_Supplier]
-=== refreshViewmodel(Supplier)
-
-If the underlying domain object is a viewmodel, refreshes any referenced entities. (Acts as a no-op otherwise.)
-
 [#assertCompliance_T]
 === assertCompliance(T)
 
 Unary operator asserting that _pojo_ and _#getSpecification()_ are compliant with the policies from _#getSpecialization()_ .
 
-[#getElementSpecification_]
-=== getElementSpecification()
+[#getTitle_]
+=== getTitle()
 
-Used only for (standalone or parented) collections.
+The (untranslated) title of the wrapped pojo.
 
 [#getIconName_]
 === getIconName()
@@ -215,13 +184,13 @@ VALUE
 
 SERVICE
 
-[#viewmodel_ObjectSpecification_Object]
-=== viewmodel(ObjectSpecification, Object)
+[#viewmodel_ObjectSpecification_Object_Optional]
+=== viewmodel(ObjectSpecification, Object, Optional)
 
 VIEWMODEL
 
-[#entity_ObjectSpecification_Object]
-=== entity(ObjectSpecification, Object)
+[#entity_ObjectSpecification_Object_Optional]
+=== entity(ObjectSpecification, Object, Optional)
 
 ENTITY
 
@@ -240,19 +209,19 @@ OTHER
 
 PACKED
 
-[#wrapScalar_SpecificationLoader_Object]
-=== wrapScalar(SpecificationLoader, Object)
+[#adaptScalar_SpecificationLoader_Object]
+=== adaptScalar(SpecificationLoader, Object)
 
 For cases, when the pojo's specification is not available and needs to be looked up.
 
 Fails if the pojo is non-scalar.
 
-[#of_ObjectSpecification_Object]
-=== of(ObjectSpecification, Object)
-
-Optimized for cases, when the pojo's specification is already available. If _pojo_ is an entity, automatically memoizes its bookmark.
-
 [#bookmarked_ObjectSpecification_Object_Bookmark]
 === bookmarked(ObjectSpecification, Object, Bookmark)
 
 Optimized for cases, when the pojo's specification and bookmark are already available.
+
+[#adaptScalarInternal_ObjectSpecification_Object_Optional]
+=== adaptScalarInternal(ObjectSpecification, Object, Optional)
+
+spec and pojo don't need to be strictly in sync, we adapt if required

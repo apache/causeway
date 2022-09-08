@@ -38,7 +38,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -65,7 +64,7 @@ public class BookmarkServiceDefault implements BookmarkService {
         if(bookmarkHolder == null) {
             return Optional.empty();
         }
-        val bookmark = bookmarkHolder.bookmark();
+        val bookmark = bookmarkHolder.getBookmark();
         return bookmark != null
                 ? lookup(bookmark)
                 : Optional.empty();
@@ -76,7 +75,7 @@ public class BookmarkServiceDefault implements BookmarkService {
     @Override
     public Optional<Object> lookup(final @Nullable Bookmark bookmark) {
         try {
-            return mmc.loadObject(bookmark)
+            return mmc.getObjectManager().loadObject(bookmark)
                     .map(ManagedObject::getPojo);
         } catch(ObjectNotFoundException ex) {
             return Optional.empty();
@@ -89,12 +88,7 @@ public class BookmarkServiceDefault implements BookmarkService {
             return Optional.empty();
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        if(!ManagedObjects.isIdentifiable(adapter)){
-            // eg values cannot be bookmarked
-            return Optional.empty();
-        }
-        return Optional.of(
-                objectManager.bookmarkObject(adapter));
+        return objectManager.bookmarkObject(adapter);
     }
 
     @Override

@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;

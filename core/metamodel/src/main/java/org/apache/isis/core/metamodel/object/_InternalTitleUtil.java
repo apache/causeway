@@ -36,16 +36,16 @@ final class _InternalTitleUtil {
 
         val managedObject = titleRenderRequest.getObject();
 
-        if(!ManagedObjects.isSpecified(managedObject)) {
-            return "unspecified object";
+        if(managedObject.getSpecialization().isUnspecified()) {
+            return managedObject.getTitle();
         }
 
-        return managedObject.getSpecification().isNonScalar()
-            ? collectionTitleString(
+        return managedObject.getSpecification().isScalar()
+            ? objectTitleString(titleRenderRequest)
+                    .trim()
+            : collectionTitleString(
                     managedObject,
-                    managedObject.getSpecification().getFacet(CollectionFacet.class))
-            : objectTitleString(titleRenderRequest)
-                .trim();
+                    managedObject.getSpecification().getFacet(CollectionFacet.class));
     }
 
     // -- HELPER
@@ -58,6 +58,8 @@ final class _InternalTitleUtil {
 
     private String objectTitleString(@NonNull final TitleRenderRequest titleRenderRequest) {
         val managedObject = titleRenderRequest.getObject();
+
+        //TODO we have value-semantics now, don't skip it for strings
         if (managedObject.getPojo() instanceof String) {
             return (String) managedObject.getPojo();
         }

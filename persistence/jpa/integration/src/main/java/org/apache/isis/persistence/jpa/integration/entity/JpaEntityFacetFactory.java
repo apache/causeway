@@ -49,7 +49,7 @@ extends FacetFactoryAbstract {
         }
 
         addFacet(
-                new JpaEntityFacet(facetHolder, cls, getServiceRegistry()));
+                new JpaEntityFacet(facetHolder, cls));
     }
 
 }

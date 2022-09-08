@@ -120,7 +120,7 @@ extends Function<ObjectAction, LinkAndLabel> {
         if (!isIdentifiable) {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not identifiable (has no identifier).",
-                    objectAdapter.titleString()));
+                    objectAdapter.getTitle()));
         }
     }
 

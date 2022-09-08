@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -78,17 +79,39 @@ public final class ManagedObjects {
 
     /** whether has at least a spec */
     public static boolean isSpecified(final @Nullable ManagedObject adapter) {
-        return adapter!=null && adapter!=ManagedObject.unspecified();
+        return adapter!=null
+                && adapter!=ManagedObject.unspecified();
     }
 
     /**
      * Optionally given adapter, based on whether it is specified
      * (even if empty, that is, representing null.)
+     * @return SPECIFIED
      */
-    public static Optional<ManagedObject> whenSpecified(final ManagedObject adapter) {
+    public static Optional<ManagedObject> asSpecified(final @Nullable ManagedObject adapter) {
         return isSpecified(adapter)
                 ? Optional.of(adapter)
                 : Optional.empty();
+    }
+
+    /**
+     * Optionally given adapter, based on whether it is specified and scalar (not packed)
+     * (even if empty, that is, representing null.)
+     * @return SCALAR or EMTPY
+     */
+    public static Optional<ManagedObject> asScalar(final @Nullable ManagedObject adapter) {
+        return asSpecified(adapter)
+                .filter(obj->!obj.getSpecialization().isPacked());
+    }
+
+    /**
+     * Optionally given adapter, based on whether it is specified
+     * (even if empty, that is, representing null.)
+     * @return SCALAR and NOT_EMTPY
+     */
+    public static Optional<ManagedObject> asScalarNonEmpty(final @Nullable ManagedObject adapter) {
+        return asScalar(adapter)
+                .filter(obj->!obj.getSpecialization().isEmpty());
     }
 
     /**
@@ -158,8 +181,16 @@ public final class ManagedObjects {
 
     public static Bookmark bookmarkElseFail(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
+                .orElseThrow(()->_Exceptions.illegalArgument("Object provides no Bookmark: %s", managedObject));
     }
+
+//    /**
+//     * eg. transient entities have no bookmark, so can fallback to UUID
+//     */
+//    public static Bookmark bookmarkElseUUID(final @Nullable ManagedObject managedObject) {
+//        return bookmark(managedObject)
+//                .orElseGet(()->managedObject.createBookmark(UUID.randomUUID().toString()));
+//    }
 
     /**
      * @param managedObject
@@ -289,7 +320,7 @@ public final class ManagedObjects {
             final @Nullable ManagedObject adapter,
             final @NonNull Supplier<Object> pojoDefaultSupplier) {
         return isNullOrUnspecifiedOrEmpty(adapter)
-            ? ManagedObject.of(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
+            ? ManagedObject.adaptScalar(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
             : adapter;
     }
 
@@ -310,10 +341,10 @@ public final class ManagedObjects {
 
         val expectedType = elementSpec.getCorrespondingClass();
         if(expectedType.isPrimitive()) {
-            return ManagedObject.of(elementSpec, ClassExtensions.toDefault(expectedType));
+            return ManagedObject.value(elementSpec, ClassExtensions.toDefault(expectedType));
         }
         if(Boolean.class.equals(expectedType) && mandatory) {
-            return ManagedObject.of(elementSpec, Boolean.FALSE);
+            return ManagedObject.value(elementSpec, Boolean.FALSE);
         }
 
         return input;
@@ -345,30 +376,27 @@ public final class ManagedObjects {
     // -- ADABT UTILITIES
 
     public static Can<ManagedObject> adaptMultipleOfType(
-            @NonNull  final ObjectSpecification elementSpec,
+            final @NonNull ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
-        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+        .map(pojo->ManagedObject.adaptScalar(elementSpec, pojo)) // pojo is nullable here
         .collect(Can.toCan());
     }
 
     /**
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
-    public static Can<ManagedObject> adaptMultipleOfTypeThenRefetchThenFilterByVisibility(
+    public static Can<ManagedObject> adaptMultipleOfTypeThenFilterByVisibility(
             final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
             final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
-        .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-        .peek(MmEntityUtil::refetch)
+        .map(pojo->ManagedObject.adaptScalar(elementSpec, pojo)) // pojo is nullable here
         .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
-
-    
 
     // -- IMPERATIVE TEXT UTILITY
 
@@ -405,35 +433,15 @@ public final class ManagedObjects {
         return result;
     }
 
-    // -- SPECIFICATION UTILITIES
-
-    /**
-     * @deprecated introduced for debugging
-     */
-    @Deprecated(forRemoval = false)
-    public static ManagedObject resolveActualSpecification(final @Nullable ManagedObject adapter) {
-        if(isNullOrUnspecifiedOrEmpty(adapter)) {
-            return adapter; // no pojo, no deal
-        }
-        if(adapter instanceof PackedManagedObject) {
-            return adapter; // don't process non-scalars
-        }
-        val pojo = adapter.getPojo();
-        val actualSpec = adapter.getSpecification().getSpecificationLoader().loadSpecification(pojo.getClass());
-        return adapter.isBookmarkMemoized()
-            ? ManagedObject.bookmarked(actualSpec, pojo, adapter.getBookmark().get())
-            : ManagedObject.of(actualSpec, pojo);
-    }
-
     // -- VIEWMODEL UTILITIES
 
     public static void refreshViewmodel(
             final @Nullable ManagedObject viewmodel,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
-            return; // do nothing
-        }
-        viewmodel.refreshViewmodel(bookmarkSupplier);
+
+        _Casts.castTo(_RefreshableViewmodel.class, viewmodel)
+        .ifPresent(refreshableViewmodel->
+            refreshableViewmodel.refreshViewmodel(bookmarkSupplier));
     }
 
 }

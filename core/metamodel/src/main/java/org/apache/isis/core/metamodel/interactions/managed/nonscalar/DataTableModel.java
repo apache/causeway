@@ -46,11 +46,11 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.MultiselectChoices;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -126,7 +126,6 @@ implements MultiselectChoices {
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
-                //FIXME[ISIS-3167] entities might be detached
                 .sorted(managedMember.getMetaModel().getElementComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))

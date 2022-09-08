@@ -24,12 +24,12 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.NonNull;
@@ -38,7 +38,7 @@ import lombok.val;
 
 abstract class ValueSemanticsModelAbstract
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ implements
     protected final Identifier featureIdentifier;
     protected final ScalarRepresentation scalarRepresentation;
     protected transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
     protected ValueSemanticsModelAbstract(
             final @NonNull ObjectFeature propOrParam,
@@ -87,7 +87,7 @@ implements
     // -- DEPENDENCIES
 
     @Override
-    public final IsisAppCommonContext getCommonContext() {
+    public final MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 

@@ -47,11 +47,15 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
-        val oid = Bookmark.parseUrlEncoded(value).orElse(null);
 
-        return objectManager.getMetaModelContext()
-        .loadObject(oid)
-        .orElse(null);
+        val obj = Bookmark.parse(value)
+            .flatMap(objectManager.getMetaModelContext().getObjectManager()::loadObject)
+            .orElse(null);
+
+        //XXX ever used ?
+        System.err.printf("ConverterForObjectAdapter: convertTo ManagedObject %s->%s%n", value, obj);
+
+        return obj;
     }
 
     /**
@@ -59,14 +63,13 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
-
-        if(!ManagedObjects.isIdentifiable(adapter)) {
-            // eg. values don't have a Bookmark
-            return null;
-        }
-
-        return ManagedObjects.stringify(adapter)
+        val string =  ManagedObjects.stringify(adapter)
                 .orElse(null);
+
+        //XXX ever used ?
+        System.err.printf("ConverterForObjectAdapter: convertFrom ManagedObject %s->%s%n", adapter, string);
+
+        return string;
     }
 
 

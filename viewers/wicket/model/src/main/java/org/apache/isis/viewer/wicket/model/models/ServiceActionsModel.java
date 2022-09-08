@@ -18,7 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 /**
  * Backing model for actions of application services menu bar (typically, as
@@ -35,7 +36,7 @@ public class ServiceActionsModel extends ModelAbstract<MenuUiModel> {
      * @param menuUiModel - may be null in special case of rendering the tertiary menu on the error page.
      */
     public ServiceActionsModel(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final MenuUiModel menuUiModel) {
 
         super(commonContext);

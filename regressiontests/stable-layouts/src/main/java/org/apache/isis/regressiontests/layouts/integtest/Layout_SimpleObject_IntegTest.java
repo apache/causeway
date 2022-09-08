@@ -21,29 +21,21 @@ package org.apache.isis.regressiontests.layouts.integtest;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.TransactionStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,7 +43,6 @@ import org.apache.isis.applib.IsisModuleApplibMixins;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.layout.LayoutConstants;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -66,7 +57,6 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.regressiontests.layouts.integtest.model.Counter;
 import org.apache.isis.regressiontests.layouts.integtest.model.LayoutTestDomainModel;
 import org.apache.isis.regressiontests.layouts.integtest.model.SimpleObject;
 import org.apache.isis.schema.metamodel.v2.Action;
@@ -160,16 +150,16 @@ public class Layout_SimpleObject_IntegTest extends IsisIntegrationTestAbstract {
         ;
     }
 
-    private ObjectAction lookupAction(String id) {
+    private ObjectAction lookupAction(final String id) {
         val objectSpecification = specificationLoader.loadSpecification(SimpleObject.class);
         List<ObjectAction> objectActions = objectSpecification.streamAnyActions(MixedIn.INCLUDED).collect(Collectors.toList());
         return objectSpecification.streamAnyActions(MixedIn.INCLUDED).filter(x -> x.getId().equals(id)).findFirst().orElseThrow();
     }
 
 
-    private void extracted(Class<?> cls) {
+    private void extracted(final Class<?> cls) {
         LogicalType logicalType = metaModelService.lookupLogicalTypeByClass(cls).orElseThrow();
-        MetamodelDto metamodelDto = metaModelService.exportMetaModel(new Config().withNamespacePrefix("layouts.test."));
+        MetamodelDto metamodelDto = metaModelService.exportMetaModel(Config.builder().build().withNamespacePrefix("layouts.test."));
         Map<String, DomainClassDto> metaModelDtoById = metamodelDto.getDomainClassDto().stream().collect(Collectors.toMap(DomainClassDto::getId, Function.identity()));
         DomainClassDto domainClassDto = metaModelDtoById.get(cls.getCanonicalName());
         Map<String, Action> actionById = domainClassDto.getActions().getAct().stream().collect(Collectors.toMap(Action::getId, Function.identity()));

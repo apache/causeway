@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
-import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -67,7 +67,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        boolean filterForVisibility = super.getMetaModelContext().getConfiguration().getCore().getMetaModel().isFilterVisibility();
+        boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
             final boolean visible = MmVisibilityUtil

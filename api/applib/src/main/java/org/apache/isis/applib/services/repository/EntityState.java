@@ -49,55 +49,80 @@ public enum EntityState {
      * database. Objects in this state may no longer be interacted with.
      */
     PERSISTABLE_REMOVED,
+    /**
+     * DN/JDO specific on pre-store. Is attached, has no OID yet.
+     */
+    PERSISTABLE_ATTACHED_NO_OID,
+    /**
+     * JPA specific. Is detached, but has an OID.
+     */
+    PERSISTABLE_DETACHED_WITH_OID,
+
     ;
 
     /**
      * Object is an entity so is <i>potentially</i> persistable ot the database.
      */
-    public boolean isPersistable() {
-        return this != NOT_PERSISTABLE;
-    }
+    public boolean isPersistable() { return this != NOT_PERSISTABLE; }
     /**
      * Object with this state is an entity that is attached to a persistence
      * session, in other words changes to the entity will be flushed back to
      * the database.
      */
-    public boolean isAttached() {
-        return this == PERSISTABLE_ATTACHED;
-    }
+    public boolean isAttached() { return this == PERSISTABLE_ATTACHED; }
     /**
      * Object with this state is an entity but that is detached from a
      * persistence session, in other words changes to the entity will <i>not</i>
      * be flushed back to the database.
      */
-    public boolean isDetached() {
-        return this == PERSISTABLE_DETACHED;
-    }
+    public boolean isDetached() { return this == PERSISTABLE_DETACHED; }
     /**
      * Object with this state is an entity that has been removed from the
      * database.  Objects in this state may no longer be interacted with.
      * <p>
      * Only supported by JDO. Will always return false with JPA.
      */
-    public boolean isRemoved() {
-        return this == PERSISTABLE_REMOVED;
+    public boolean isRemoved() { return this == PERSISTABLE_REMOVED; }
+
+    // -- SPECIAL STATES
+
+    public boolean isDetachedCannotReattach() {
+        return (isDetached()
+                || isRemoved())
+                && !isSpecicalJpaDetachedWithOid();
     }
 
     /**
      * @apiNote 'removed' is only supported by JDO.
+     * @deprecated not supported by JPA
      */
-    public boolean isDetachedOrRemoved() {
-        return this == PERSISTABLE_REMOVED
-                || this == PERSISTABLE_DETACHED;
-    }
-
-    /**
-     * @apiNote 'removed' is only supported by JDO.
-     */
+    @Deprecated
     public boolean isAttachedOrRemoved() {
-        return this == PERSISTABLE_ATTACHED
-                || this == PERSISTABLE_REMOVED;
+        return isAttached()
+                || isRemoved();
     }
 
+    // -- JDO/JPA SPECIFIC STATES
+
+    /**
+     * @apiNote DN/JDO specific on pre-store. Is attached, has no OID yet.
+     */
+    public boolean isSpecicalJdoAttachedNoOid() {
+        return this == PERSISTABLE_ATTACHED_NO_OID;
+    }
+
+    /**
+     * @apiNote JPA specific. Is detached, but has an OID.
+     */
+    public boolean isSpecicalJpaDetachedWithOid() {
+        return this == PERSISTABLE_DETACHED_WITH_OID;
+    }
+
+    // -- BOOKMARKABLE
+
+    public boolean hasOid() {
+        return isAttached()
+                || isSpecicalJpaDetachedWithOid();
+    }
 
 }

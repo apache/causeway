@@ -38,7 +38,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
+import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -72,6 +74,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -172,11 +175,11 @@ public final class Facets {
         .map(DefaultViewFacet::value);
     }
 
-    public static ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy(
+    public static ParameterConfigOptions.DependentDefaultsPolicy dependentDefaultsPolicy(
             final ObjectActionParameter parameter) {
         return parameter.lookupFacet(ParameterDependentDefaultsFacet.class)
                 .map(ParameterDependentDefaultsFacet::value)
-                .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
+                .orElseGet(ParameterConfigOptions.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
@@ -327,9 +330,20 @@ public final class Facets {
         .orElse(fallback);
     }
 
-    public Optional<ObjectSpecification> typeOf(final FacetHolder facetHolder) {
+    public Optional<CollectionLayoutConfigOptions.TableDecoration> tableDecoration(
+            final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(CollectionLayoutTableDecorationFacet.class)
+                .map(CollectionLayoutTableDecorationFacet::value);
+    }
+
+    public Optional<ObjectSpecification> elementSpec(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
-        .map(TypeOfFacet::valueSpec);
+        .map(TypeOfFacet::elementSpec);
+    }
+
+    public Optional<TypeOfAnyCardinality> typeOfAnyCardinality(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(TypeOfFacet.class)
+        .map(TypeOfFacet::value);
     }
 
     public OptionalInt typicalLength(

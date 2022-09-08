@@ -36,11 +36,10 @@ import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionSubscriber;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -59,14 +58,18 @@ public class AuthenticatedWebSessionForIsis_SignIn {
 
     @Mock protected Request mockRequest;
     @Mock protected Authenticator mockAuthenticator;
-    @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected InteractionService mockInteractionService;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
+    private MetaModelContext mmc;
 
     @Before
     public void setUp() throws Exception {
+        mmc = MetaModelContext_forTesting.builder()
+                .singleton(mockInteractionService)
+                .build();
+
         authMgr = new AuthenticationManager(
                 singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
@@ -79,14 +82,6 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     public void signInJustDelegatesToAuthenticateAndSavesState() {
         context.checking(new Expectations() {
             {
-                allowing(mockCommonContext).getServiceRegistry();
-                will(returnValue(mockServiceRegistry));
-
-                allowing(mockServiceRegistry).select(SessionSubscriber.class);
-                will(returnValue(Can.empty()));
-
-                allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
-                will(returnValue(mockInteractionService));
 
                 allowing(mockInteractionService)
                 .run(with(InteractionContextFactory.testing()), with(any(ThrowingRunnable.class)));
@@ -115,11 +110,11 @@ public class AuthenticatedWebSessionForIsis_SignIn {
             private static final long serialVersionUID = 1L;
 
             {
-                commonContext = mockCommonContext;
+                metaModelContext = mmc;
             }
 
             @Override
-            protected AuthenticationManager getAuthenticationManager() {
+            public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
             }
         };

@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
@@ -73,12 +74,19 @@ extends FacetFactoryAbstract {
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
+                CollectionLayoutTableDecorationFacet
+                        .create(collectionLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
                 PagedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
                 SortedByFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
+
+
+
     }
 
 }

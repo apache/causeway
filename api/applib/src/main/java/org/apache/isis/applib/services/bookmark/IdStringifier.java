@@ -47,6 +47,7 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
+@SuppressWarnings("javadoc")
 public interface IdStringifier<T> {
 
     public final static char SEPARATOR = '_';
@@ -71,6 +72,20 @@ public interface IdStringifier<T> {
      * @param stringified - as returned by {@link #enstring(Object)}
      */
     T destring(@NonNull Class<?> targetEntityClass, @NonNull String stringified);
+
+    /**
+     * Whether the non-null primary key object is valid,
+     * that is, in the case of a composite, whether it is fully populated.
+     * @implNote in the invalid case, the default implementation generates a stacktrace;
+     * @apiNote override for performance reasons if applicable
+     */
+    default boolean isValid(final @NonNull T value) {
+        try {
+            return enstring(value)!=null;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
 
     /**
      * Entity agnostic variant of {@link IdStringifier}.

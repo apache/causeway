@@ -42,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_usingSpringDataJpa;
 import org.apache.isis.testdomain.jpa.springdata.Employee;
@@ -111,7 +110,7 @@ class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
     void jpaEntities_shouldBeRecognisedAsSuch() {
         val productSpec = specLoader.loadSpecification(Employee.class);
         assertTrue(productSpec.isEntity());
-        assertNotNull(productSpec.getFacet(EntityFacet.class));
+        assertNotNull(productSpec.entityFacetElseFail());
     }
 
     @Test @Order(1) @Rollback(false)

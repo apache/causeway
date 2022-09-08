@@ -27,14 +27,13 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.val;
 
@@ -54,7 +53,7 @@ public class EntityModel_hintsTest {
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.buildDefault();
-        val commonContext = IsisAppCommonContext.of(metaModelContext);
+        val commonContext = metaModelContext;
 
         target = EntityModel.ofBookmark(commonContext, null);
 

@@ -20,9 +20,8 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.util.cookies.CookieUtils;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.functions._Functions;

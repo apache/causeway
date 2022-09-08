@@ -20,12 +20,12 @@ package org.apache.isis.viewer.wicket.model.models.interaction.prop;
 
 import org.apache.wicket.model.ChainingModel;
 
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.commons.model.HasParentUiModel;
 import org.apache.isis.viewer.commons.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 public final class PropertyUiModelWkt
 extends ChainingModel<PropertyInteraction>
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     HasParentUiModel<ObjectUiModelWkt>,
     PropertyUiModel {
 
@@ -86,8 +86,8 @@ implements
     }
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
-        return propertyInteractionModel().getCommonContext();
+    public MetaModelContext getMetaModelContext() {
+        return propertyInteractionModel().getMetaModelContext();
     }
 
 }

@@ -71,9 +71,10 @@ extends ViewModelFacetAbstract {
     @Override
     protected ManagedObject createViewmodel(
             @NonNull final ObjectSpecification viewmodelSpec) {
-        return ManagedObject.of(
+        return ManagedObject.viewmodel(
                 viewmodelSpec,
-                deserialize(viewmodelSpec, null));
+                deserialize(viewmodelSpec, null),
+                Optional.empty());
     }
 
     @SneakyThrows

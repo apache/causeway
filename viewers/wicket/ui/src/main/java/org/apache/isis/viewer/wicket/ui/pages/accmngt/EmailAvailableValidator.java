@@ -23,7 +23,7 @@ import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 
 import lombok.val;
@@ -35,11 +35,11 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static EmailAvailableValidator exists(IsisAppCommonContext commonContext) {
+    public static EmailAvailableValidator exists(MetaModelContext commonContext) {
         return new EmailAvailableValidator(commonContext, true, "noSuchUserByEmail");
     }
 
-    public static EmailAvailableValidator doesntExist(IsisAppCommonContext commonContext) {
+    public static EmailAvailableValidator doesntExist(MetaModelContext commonContext) {
         return new EmailAvailableValidator(commonContext, false, "emailIsNotAvailable");
     }
 
@@ -47,7 +47,7 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
     private final String resourceKey;
 
     private EmailAvailableValidator(
-            IsisAppCommonContext commonContext,
+            MetaModelContext commonContext,
             boolean emailExists,
             String resourceKey) {
 
@@ -59,10 +59,10 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
     @Override
     public void validate(final IValidatable<String> validatable) {
 
-        val userRegistrationService = super.getCommonContext()
+        val userRegistrationService = super.getMetaModelContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
 
-        val interactionService = super.getCommonContext()
+        val interactionService = super.getMetaModelContext()
                 .lookupServiceElseFail(InteractionService.class);
 
         interactionService.runAnonymous(() -> {

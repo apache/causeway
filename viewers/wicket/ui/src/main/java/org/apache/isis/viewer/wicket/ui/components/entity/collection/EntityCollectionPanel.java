@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -80,7 +81,7 @@ implements HasDynamicallyVisibleContent {
 
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
-        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(),
+        selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
                 this::getSelectorDropdownPanel,
                 EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
 
@@ -125,6 +126,10 @@ implements HasDynamicallyVisibleContent {
 
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
+
+            Facets.tableDecoration(collectionMetaModel)
+                .map(CollectionLayoutConfigOptions.TableDecoration::cssClass)
+                .ifPresent(tableDecorationCssClass->Wkt.cssAppend(div, tableDecorationCssClass));
 
             val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);

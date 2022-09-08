@@ -218,7 +218,8 @@ implements HasMetaModelContext {
             final Consumer<FacetedMethod> onNewAssociationPeer) {
         val collectionAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
-        createCollectionFacetedMethodsFromAccessors(getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
+        createCollectionFacetedMethodsFromAccessors(
+                getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
     }
 
     /**
@@ -258,11 +259,9 @@ implements HasMetaModelContext {
                     isMixinMain(accessorMethod));
 
             // figure out what the type is
-            Class<?> elementType = Object.class;
-            final TypeOfFacet typeOfFacet = facetedMethod.getFacet(TypeOfFacet.class);
-            if (typeOfFacet != null) {
-                elementType = typeOfFacet.value();
-            }
+            final Class<?> elementType = facetedMethod.lookupFacet(TypeOfFacet.class)
+                    .<Class<?>>map(typeOfFacet->typeOfFacet.value().getElementType())
+                    .orElse(Object.class);
 
             // skip if class substitutor says so.
             if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) {

@@ -32,16 +32,17 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshallerAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -54,8 +55,8 @@ import lombok.val;
 public class SchemaValueMarshallerDefault
 extends SchemaValueMarshallerAbstract {
 
-    @Inject private ValueSemanticsResolver valueSemanticsResolver;
-    @Inject private SpecificationLoader specLoader;
+    @Inject @Getter(onMethod_ = {@Override}) private ValueSemanticsResolver valueSemanticsResolver;
+    @Inject @Getter(onMethod_ = {@Override}) private MetaModelContext metaModelContext;
 
     // -- RECORD VALUES INTO DTO
 
@@ -146,13 +147,7 @@ extends SchemaValueMarshallerAbstract {
                 ? fromTypedTuple(context, valueDto.getComposite())
                 : context.getSemantics().compose(ValueDecomposition.ofFundamental(valueDto));
 
-        if(recoveredValueAsPojo==null) {
-            return ManagedObject.empty(context.getElementType());
-        }
-
-        val recoveredValue = recoveredValueAsPojo!=null
-                ? ManagedObject.of(elementSpec, recoveredValueAsPojo)
-                : ManagedObject.empty(context.getElementType());
+        val recoveredValue = ManagedObject.value(elementSpec, recoveredValueAsPojo);
         return recoveredValue;
     }
 
@@ -162,18 +157,6 @@ extends SchemaValueMarshallerAbstract {
         }
         return context.getSemantics()
                 .compose(ValueDecomposition.ofComposite(typedTupleDto));
-    }
-
-    // -- DEPENDENCIES
-
-    @Override
-    protected final SpecificationLoader getSpecificationLoader() {
-        return specLoader;
-    }
-
-    @Override
-    protected ValueSemanticsResolver getValueSemanticsResolver() {
-        return valueSemanticsResolver;
     }
 
 }

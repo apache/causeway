@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
@@ -50,7 +50,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     // //////////////////////////////////////
 
     public EventProviderAbstract(final EntityCollectionModel collectionModel, final String calendarName) {
-        val commonContext = collectionModel.getCommonContext();
+        val commonContext = collectionModel.getMetaModelContext();
 
         collectionModel.getDataTableModel()
         .getDataElements().getValue()
@@ -80,7 +80,7 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     // -- HELPER
 
-    private Object dereference(final IsisAppCommonContext commonContext, final Object domainObject) {
+    private Object dereference(final MetaModelContext commonContext, final Object domainObject) {
         val serviceRegistry = commonContext.getServiceRegistry();
         val services = serviceRegistry.select(CalendarableDereferencingService.class);
         for (final CalendarableDereferencingService dereferencingService : services) {
@@ -94,7 +94,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     }
 
     private Function<ManagedObject, Event> newEvent(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final String calendarName) {
 
         return domainObject -> {
@@ -121,7 +121,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             final Object dereferencedObject = dereference(commonContext, domainObjectPojo);
 
             val dereferencedManagedObject =
-                    ManagedObject.wrapScalar(commonContext.getSpecificationLoader(), dereferencedObject);
+                    ManagedObject.adaptScalar(commonContext.getSpecificationLoader(), dereferencedObject);
 
             val oid = ManagedObjects.bookmark(dereferencedManagedObject).orElse(null);
             if(oid!=null) {

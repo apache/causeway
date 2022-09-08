@@ -81,7 +81,8 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
                                     }
                             );
                 }
-            });
+            })
+            .ifFailureFail(); // throw if rolled back
         });
     }
 }

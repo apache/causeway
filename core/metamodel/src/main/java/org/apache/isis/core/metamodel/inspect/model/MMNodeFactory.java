@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.inspect.model;
 
 import org.apache.isis.schema.metamodel.v2.Action;
+import org.apache.isis.schema.metamodel.v2.Annotation;
 import org.apache.isis.schema.metamodel.v2.Collection;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.schema.metamodel.v2.Facet;
@@ -30,6 +31,14 @@ import org.apache.isis.schema.metamodel.v2.Property;
 import lombok.val;
 
 public class MMNodeFactory {
+
+
+    public static MMNode annotation(final Annotation annotation, final MMNode parentNode) {
+        val node = new AnnotationNode();
+        node.setAnnotation(annotation);
+        node.setParentNode(parentNode);
+        return node;
+    }
 
     public static MMNode type(final DomainClassDto domainClassDto, final MMNode parentNode) {
         val node = new TypeNode();

@@ -11,13 +11,13 @@ String representation of any persistable or re-creatable object managed by the f
 class Bookmark {
   Bookmark empty(LogicalType logicalType)
   Bookmark emptyForLogicalTypeName(String logicalTypeName)
-  Bookmark forLogicalTypeNameAndIdentifier(String logicalTypeName, String identifier)
-  Bookmark forLogicalTypeAndIdentifier(LogicalType logicalType, String identifier)
+  Bookmark forLogicalTypeNameAndIdentifier(String logicalTypeName, String urlSafeIdentifier)
+  Bookmark forLogicalTypeAndIdentifier(LogicalType logicalType, String urlSafeIdentifier)
   Bookmark forOidDto(OidDto oidDto)
   Bookmark withHintId(String hintId)
   Optional<Bookmark> parse(String str)     // <.>
   Bookmark parseElseFail(String input)
-  Optional<Bookmark> parseUrlEncoded(String urlEncodedStr)
+  Optional<Bookmark> parseUrlEncoded(String urlEncodedStr)     // <.>
   OidDto toOidDto()
   String stringify()
   boolean equals(Object other)
@@ -33,6 +33,11 @@ class Bookmark {
 +
 --
 Round-trip with _#stringify()_ representation.
+--
+<.> xref:#parseUrlEncoded_String[parseUrlEncoded(String)]
++
+--
+there is only one use-case, that is, if a bookmark itself needs to be encoded (eg. page params)
 --
 <.> xref:#stringifyHonoringHintIfAny_[stringifyHonoringHintIfAny()]
 +
@@ -51,6 +56,11 @@ Whether represents _null_ .
 === parse(String)
 
 Round-trip with _#stringify()_ representation.
+
+[#parseUrlEncoded_String]
+=== parseUrlEncoded(String)
+
+there is only one use-case, that is, if a bookmark itself needs to be encoded (eg. page params)
 
 [#stringifyHonoringHintIfAny_]
 === stringifyHonoringHintIfAny()

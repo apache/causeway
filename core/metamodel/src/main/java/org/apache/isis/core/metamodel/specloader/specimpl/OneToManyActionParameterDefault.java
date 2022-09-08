@@ -18,11 +18,14 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
+import org.apache.isis.core.metamodel.util.Facets;
+
+import lombok.Getter;
 
 public class OneToManyActionParameterDefault
 extends ObjectActionParameterAbstract
@@ -35,9 +38,14 @@ implements OneToManyActionParameter {
         super(FeatureType.ACTION_PARAMETER_COLLECTION, index, paramElementType, actionImpl);
     }
 
-    @Override
-    public CollectionSemantics getCollectionSemantics() {
-        return getFacet(CollectionSemanticsFacet.class).value();
+    // -- UNDERLYING TYPE
+
+    @Getter(onMethod_={@Override}, lazy = true)
+    private final TypeOfAnyCardinality typeOfAnyCardinality = resolveTypeOfAnyCardinality();
+    private TypeOfAnyCardinality resolveTypeOfAnyCardinality() {
+        return Facets.typeOfAnyCardinality(getFacetHolder())
+                .orElseThrow(()->_Exceptions.unrecoverable(
+                        "framework bug: non-scalar feature must have a TypeOfFacet"));
     }
 
 

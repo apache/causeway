@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
-import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmAssertionUtil;
@@ -69,7 +68,7 @@ public class PropertyNegotiationModel implements ManagedValue {
             : currentValue;
 
         proposedValue = _Bindables.forValue(defaultValue);
-        proposedValue.setValueRefiner(MmEntityUtil::refetch);
+        //proposedValue.setValueRefiner(MmEntityUtil::refetch); // no longer used
         proposedValue.setValueGuard(MmAssertionUtil.assertInstanceOf(propMeta.getElementType()));
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();

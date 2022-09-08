@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
@@ -148,7 +149,7 @@ implements IBook {
     @Getter @Setter @Column(allowsNull = "true")
     private String author;
 
-    @Property
+    @Property(editing = Editing.ENABLED)
     @Getter @Setter @Column(allowsNull = "true")
     private String isbn;
 

@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionP
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionScope;
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -74,8 +73,6 @@ import lombok.extern.log4j.Log4j2;
 public class ObjectSpecificationDefault
 extends ObjectSpecificationAbstract
 implements FacetHolder {
-
-    // -- constructor, fields
 
     /**
      * Lazily built by {@link #getMember(Method)}.
@@ -101,7 +98,7 @@ implements FacetHolder {
                 typeMeta.getLogicalType().getLogicalTypeSimpleName(),
                 typeMeta.getBeanSort(), facetProcessor, postProcessor);
 
-        this.injectable = typeMeta.getManagedBy().isSpring();
+        this.isVetoedForInjection = typeMeta.getManagedBy().isVetoedForInjection();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
@@ -120,9 +117,6 @@ implements FacetHolder {
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
     }
-
-    @Getter(onMethod_ = {@Override})
-    private final boolean injectable;
 
     @Override
     protected void introspectTypeHierarchy() {
@@ -172,9 +166,12 @@ implements FacetHolder {
     @Override
     protected void introspectMembers() {
 
-        if(this.isValue()) {
+        // yet this logic does not skip UNKNONW
+        if(this.getBeanSort().isCollection()
+                || this.getBeanSort().isVetoed()
+                || this.isValue()) {
             if (log.isDebugEnabled()) {
-                log.debug("skipping full introspection for value type {}", getFullIdentifier());
+                log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
             }
             return;
         }
@@ -325,31 +322,15 @@ implements FacetHolder {
         });
     }
 
-
-    // -- toString
-
-    @Override
-    public String toString() {
-        final ToString str = new ToString(this);
-        str.append("class", getFullIdentifier());
-        str.append("type", getBeanSort().name());
-        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
-        return str.toString();
-    }
-
     // -- ELEMENT SPECIFICATION
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
-            _Lazy.of(this::lookupElementSpecification);
+            _Lazy.of(()->lookupFacet(TypeOfFacet.class)
+                    .map(typeOfFacet -> typeOfFacet.elementSpec()));
 
     @Override
     public Optional<ObjectSpecification> getElementSpecification() {
         return elementSpecification.get();
-    }
-
-    private Optional<ObjectSpecification> lookupElementSpecification() {
-        return lookupFacet(TypeOfFacet.class)
-                .map(typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType());
     }
 
     // -- TABLE COLUMN RENDERING
@@ -361,6 +342,39 @@ implements FacetHolder {
 
         return new _PropertiesAsColumns(getMetaModelContext())
             .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
+    }
+
+    // -- DETERMINE INJECTABILITY
+
+    private boolean isVetoedForInjection;
+
+    private _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(()->
+        !isVetoedForInjection
+                && !getBeanSort().isAbstract()
+                && !getBeanSort().isValue()
+                && !getBeanSort().isEntity()
+                && !getBeanSort().isViewModel()
+                && !getBeanSort().isMixin()
+                && (getBeanSort().isManagedBeanAny()
+                        || getServiceRegistry()
+                                .lookupRegisteredBeanById(getLogicalType())
+                                .isPresent())
+                );
+
+    @Override
+    public boolean isInjectable() {
+        return isInjectableLazy.get();
+    }
+
+    // -- TO STRING
+
+    @Override
+    public String toString() {
+        final ToString str = new ToString(this);
+        str.append("class", getFullIdentifier());
+        str.append("type", getBeanSort().name());
+        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
+        return str.toString();
     }
 
 }

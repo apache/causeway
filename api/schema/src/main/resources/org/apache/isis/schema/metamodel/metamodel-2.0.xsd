@@ -262,55 +262,100 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="facetHolder">
-        <xs:annotation>
-            <xs:documentation>Corresponds to FacetHolder interface in the internal metamodel.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="facets" minOccurs="0">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="facet" type="facet" minOccurs="0" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+	<xs:complexType name="facetHolder">
+		<xs:annotation>
+			<xs:documentation>
+				Corresponds to FacetHolder interface in the internal metamodel.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:sequence>
+					<xs:element name="facets" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="facet" type="facet" minOccurs="0"
+									maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="facet">
-        <xs:annotation>
-            <xs:documentation>Describes a facet of the metamodel, for example whether an action can be disabled, or the name of a class.
-                Corresponds to Facet interface in the internal metamodel.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="attr" type="facetAttr" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="id" type="xs:string">
-        	<xs:annotation>
-        		<xs:documentation>The facet type (fqcn) that is common to a set of concrete 
-					facet implementations. These ids are usually known to the framework for 
-					there well defined semantics within the programming model.
-				</xs:documentation>
-        	</xs:annotation></xs:attribute>
-        <xs:attribute name="fqcn" type="xs:string"/>
-    </xs:complexType>
+	<xs:complexType name="facet">
+		<xs:annotation>
+			<xs:documentation>
+				Describes a facet of the metamodel, for example whether
+				an action can be disabled, or the name of a class.
+				Corresponds to Facet interface in the internal
+				metamodel.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:sequence>
+					<xs:element name="attr" type="facetAttr" minOccurs="0"
+						maxOccurs="unbounded" />				</xs:sequence>
+				<xs:attribute name="id" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The facet type (fqcn) that is common to a set of
+							concrete facet implementations. These ids are
+							usually known to the framework for there well
+							defined semantics within the programming model.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="fqcn" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="facetAttr">
+	<xs:complexType name="facetAttr">
+		<xs:annotation>
+			<xs:documentation>
+				Describes an attribute of a facet of the metamodel, as a
+				simple key/value pair of strings (the key is modelled as
+				an attribute of the value).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:attribute name="name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the attribute, unique across all
+							facet attributes of a facet.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="value" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The value of the attribute.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="annotation">
         <xs:annotation>
-            <xs:documentation>Describes an attribute of a facet of the metamodel, as a simple key/value pair of strings (the key is modelled as an attribute of the value).
+            <xs:documentation>Not part of the metamodel. Enables export tools to add arbitrary meta data.
             </xs:documentation>
         </xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:annotation>
-                    <xs:documentation>The value of the attribute, unique across all facet attributes of a facet.
+                    <xs:documentation>The value of the annotation.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:attribute name="name" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>The name of the attribute, unique across all facet attributes of a facet.
+                        <xs:documentation>The name annotation.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -318,5 +363,24 @@
         </xs:simpleContent>
     </xs:complexType>
 
-
+	<xs:complexType name="metamodelElement">
+        <xs:annotation>
+        	<xs:documentation>Common ancestor of facet and facetHolder.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element name="annotations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Not part of the metamodel. Enables export tools
+						to add arbitrary meta data.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="asList" type="annotation"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+    
 </xs:schema>

@@ -27,20 +27,20 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+
 
 public class ComponentFactoryAbstractTest_init {
 
     @Rule public ExpectedException thrown= ExpectedException.none();
-    
+
     private MetaModelContext metaModelContext;
-    private IsisAppCommonContext commonContext;
-    
+    private MetaModelContext commonContext;
+
     @Before
     public void setUp() throws Exception {
-        
-        metaModelContext = MetaModelContext_forTesting.buildDefault(); 
-        commonContext = IsisAppCommonContext.of(metaModelContext);
+
+        metaModelContext = MetaModelContext_forTesting.buildDefault();
+        commonContext = metaModelContext;
     }
 
     @Test
@@ -51,16 +51,16 @@ public class ComponentFactoryAbstractTest_init {
 
             public ComponentFactoryWithNoComponentClass() {
                 super(null);
-                setCommonContext(commonContext);
+                setMetaModelContext(commonContext);
             }
 
             @Override
-            protected ApplicationAdvice appliesTo(IModel<?> model) {
+            protected ApplicationAdvice appliesTo(final IModel<?> model) {
                 return null;
             }
 
             @Override
-            public Component createComponent(String id, IModel<?> model) {
+            public Component createComponent(final String id, final IModel<?> model) {
                 return null;
             }
 
@@ -78,16 +78,16 @@ public class ComponentFactoryAbstractTest_init {
 
             public ComponentFactoryWithComponentClass() {
                 super(null, ComponentClass.class);
-                setCommonContext(commonContext);
+                setMetaModelContext(commonContext);
             }
 
             @Override
-            protected ApplicationAdvice appliesTo(IModel<?> model) {
+            protected ApplicationAdvice appliesTo(final IModel<?> model) {
                 return null;
             }
 
             @Override
-            public Component createComponent(String id, IModel<?> model) {
+            public Component createComponent(final String id, final IModel<?> model) {
                 return null;
             }
 
@@ -106,16 +106,16 @@ public class ComponentFactoryAbstractTest_init {
 
             public ComponentFactoryWithIncorrectComponentClass() {
                 super(null, ComponentFactoryWithIncorrectComponentClass.class);
-                setCommonContext(commonContext);
+                setMetaModelContext(commonContext);
             }
 
             @Override
-            protected ApplicationAdvice appliesTo(IModel<?> model) {
+            protected ApplicationAdvice appliesTo(final IModel<?> model) {
                 return null;
             }
 
             @Override
-            public Component createComponent(String id, IModel<?> model) {
+            public Component createComponent(final String id, final IModel<?> model) {
                 return null;
             }
 

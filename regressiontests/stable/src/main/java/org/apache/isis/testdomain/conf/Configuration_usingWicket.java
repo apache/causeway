@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.IPageFactory;
@@ -45,18 +44,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.dto.IBook;
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -73,6 +71,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -81,15 +80,25 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 @Configuration
 @Import({
     IsisModuleViewerWicketViewer.class,
+    Configuration_usingWicket.WicketViewerOutputMarkupContainerClassNameEnable.class
 })
 public class Configuration_usingWicket {
 
-    @Bean @Singleton @Inject
-    public IsisAppCommonContext commonContext(final MetaModelContext mmc) {
-        return IsisAppCommonContext.of(mmc);
+    @Configuration
+    public class WicketViewerOutputMarkupContainerClassNameEnable
+    implements WicketApplicationInitializer {
+
+        @Override
+        public void init(final WebApplication webApplication) {
+            webApplication.getDebugSettings()
+                .setComponentPathAttributeName("wicket-tester-path")
+                .setOutputMarkupContainerClassName(true);
+        }
     }
 
-    public static class EntityPageTester extends WicketTester {
+    public static class EntityPageTester
+    extends WicketTester
+    implements HasMetaModelContext {
 
         // -- HOMEPAGE (TEST APP)
 
@@ -120,52 +129,74 @@ public class Configuration_usingWicket {
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
                 + ":entityTitle";
 
-        public static final String INVENTORY_NAME_PROPERTY = "theme:entityPageContainer:entity:rows:2"
-                + ":rowContents:1"
-                + ":col:fieldSets:1"
-                + ":memberGroup:properties:1"
-                + ":property";
+        @RequiredArgsConstructor
+        public static enum SimulatedProperties implements SimulatedProperty {
+            INVENTORY_NAME("theme:entityPageContainer:entity:rows:2"
+                    + ":rowContents:1"
+                    + ":col:fieldSets:1"
+                    + ":memberGroup:properties:1"
+                    + ":property"),
+            JDO_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+                    + ":rowContents:1:col:rows:1:rowContents:1"
+                    + ":col:tabGroups:1:panel:tabPanel:rows:1:rowContents:1:col"
+                    + ":fieldSets:1"
+                    + ":memberGroup:properties:3"
+                    + ":property"),
+            JPA_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+                    + ":rowContents:1:col:rows:1:rowContents:1"
+                    + ":col:tabGroups:1:1"
+                    + ":rowContents:1:col"
+                    + ":fieldSets:1"
+                    + ":memberGroup:properties:4"
+                    + ":property"
+                    );
+            @Getter @Accessors(fluent=true) final String id;
+        }
 
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegular:container-fieldFrame:scalarValueInlinePromptLink";
-
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
-
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM_TEXTFIELD = INVENTORY_NAME_PROPERTY
-                + ":property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.FIELD.getContainerId() + ":"
-                + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
-
-        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
-
-        public static final String INLINE_PROMPT_FORM_FIELD = ""
-                + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.FIELD.getContainerId() + ":"
-                + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
-
-        public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
-                + ":okButton";
+        public static interface SimulatedProperty {
+            String id();
+            default String editLink() {
+                return id() + ":scalarTypeContainer:scalarIfRegular:container-fieldFrame"
+                        + ":scalarValueInlinePromptLink";
+            }
+            default String editInlineForm() {
+                return id() + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
+            }
+            default String scalarField() {
+                return "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
+                    + RegularFrame.FIELD.getContainerId() + ":"
+                    + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
+            }
+            default String editInlineFormTextField() {
+                return id() + ":" + scalarField();
+            }
+            default String editInlinePromptForm() {
+                return editInlineForm();
+                //return id() + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
+            }
+            default String editInlinePromptFormOk() {
+                return editInlinePromptForm() + ":okButton";
+            }
+        }
 
         // --
 
-        @Inject private ObjectManager objectManager;
-
-        private final IsisAppCommonContext commonContext;
+        @Getter
+        private final MetaModelContext metaModelContext;
         private final Function<BookDto, IBook> bookFactory;
 
         public EntityPageTester(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext metaModelContext,
                 final Function<BookDto, IBook> bookFactory) {
-            super(newWicketApplication(commonContext));
-            commonContext.injectServicesInto(this);
-            this.commonContext = commonContext;
+            super(newWicketApplication(metaModelContext));
+            this.metaModelContext = metaModelContext;
+            metaModelContext.injectServicesInto(this);
             this.bookFactory = bookFactory;
+
         }
 
         public PageParameters createPageParameters(final Object entityOrVm) {
-            final ManagedObject domainObject = objectManager.adapt(entityOrVm);
+            final ManagedObject domainObject = getObjectManager().adapt(entityOrVm);
             return PageParameterUtils.createPageParametersForObject(domainObject);
         }
 
@@ -193,7 +224,7 @@ public class Configuration_usingWicket {
         }
 
         public void assertInventoryNameIs(final String expectedName) {
-            assertPropertyValue(INVENTORY_NAME_PROPERTY, adapter->{
+            assertPropertyValue(SimulatedProperties.INVENTORY_NAME.id(), adapter->{
                 assertEquals(expectedName, adapter.getPojo());
             });
         }
@@ -231,7 +262,7 @@ public class Configuration_usingWicket {
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
-            val entityPage = EntityPage.forPageParameters(commonContext, pageParameters);
+            val entityPage = EntityPage.forPageParameters(getMetaModelContext(), pageParameters);
             val startedPage = startPage(entityPage);
             assertRenderedPage(EntityPage.class);
             return startedPage;
@@ -242,7 +273,7 @@ public class Configuration_usingWicket {
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class WicketTesterFactory {
 
-        private final IsisAppCommonContext commonContext;
+        private final MetaModelContext commonContext;
 
         public EntityPageTester createTester(final Function<BookDto, IBook> bookFactory) {
             return new EntityPageTester(commonContext, bookFactory);
@@ -250,13 +281,13 @@ public class Configuration_usingWicket {
     }
 
     @Bean @Inject
-    public WicketTesterFactory wicketTesterFactory(final IsisAppCommonContext commonContext) {
+    public WicketTesterFactory wicketTesterFactory(final MetaModelContext commonContext) {
         return new WicketTesterFactory(commonContext);
     }
 
     // -- HELPER -- APPLICATION (WICKET)
 
-    private static WebApplication newWicketApplication(final IsisAppCommonContext commonContext) {
+    private static WebApplication newWicketApplication(final MetaModelContext commonContext) {
         val wicketApplication = new WicketApplication_forTesting(commonContext);
         ThreadContext.setApplication(wicketApplication);
         return wicketApplication;
@@ -271,7 +302,7 @@ public class Configuration_usingWicket {
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
             if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getCommonContext(), parameters));
+                return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getMetaModelContext(), parameters));
             }
             return delegate.newPage(pageClass, parameters);
         }
@@ -298,7 +329,7 @@ public class Configuration_usingWicket {
     extends WebApplication
     implements
         ComponentFactoryRegistryAccessor,
-        HasCommonContext {
+        HasMetaModelContext {
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -315,15 +346,15 @@ public class Configuration_usingWicket {
         }
 
         @Getter
-        private final IsisAppCommonContext commonContext;
+        private final MetaModelContext metaModelContext;
 
         @Getter(lazy=true)
         private final ComponentFactoryRegistry componentFactoryRegistry =
-                getCommonContext().lookupServiceElseFail(ComponentFactoryRegistry.class);
+                lookupServiceElseFail(ComponentFactoryRegistry.class);
 
         @Getter(lazy=true)
         private final PageClassRegistry pageClassRegistry =
-                getCommonContext().lookupServiceElseFail(PageClassRegistry.class);
+                lookupServiceElseFail(PageClassRegistry.class);
 
         @Override
         public Class<? extends Page> getHomePage() {
@@ -339,7 +370,7 @@ public class Configuration_usingWicket {
         protected void internalInit() {
             super.internalInit();
             // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-            IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
+            IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
         }
 
     }
@@ -358,16 +389,16 @@ public class Configuration_usingWicket {
 //
 //        @Inject MetaModelContext mmc;
 //
-//        private IsisAppCommonContext commonContext;
+//        private MetaModelContext commonContext;
 //
 //        public WicketApplication_forTesting() {
 //            setRootRequestMapper(new SystemMapper(this));
 //        }
 //
 //        @Override
-//        public IsisAppCommonContext getCommonContext() {
+//        public MetaModelContext getCommonContext() {
 //            if(commonContext==null) {
-//                commonContext = IsisAppCommonContext.of(mmc);
+//                commonContext = MetaModelContext.of(mmc);
 //            }
 //            return commonContext;
 //        }

@@ -25,8 +25,8 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;

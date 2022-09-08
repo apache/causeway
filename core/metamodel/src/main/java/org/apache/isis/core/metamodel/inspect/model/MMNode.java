@@ -19,6 +19,9 @@
 package org.apache.isis.core.metamodel.inspect.model;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,11 +36,14 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.schema.metamodel.v2.DomainClassDto;
+import org.apache.isis.schema.metamodel.v2.Annotation;
+import org.apache.isis.schema.metamodel.v2.FacetHolder;
+import org.apache.isis.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Setter;
 
 @XmlSeeAlso({
+    AnnotationNode.class,
     MemberNode.class,
     ActionNode.class,
     CollectionNode.class,
@@ -55,14 +61,25 @@ public abstract class MMNode {
 
     @Collection
     @Setter protected List<MMNode> childNodes;
-    public List<MMNode> getChildNodes() {
+    public final List<MMNode> getChildNodes() {
         if(childNodes==null) {
-            setChildNodes(streamChildNodes().collect(Collectors.toList()));
+            setChildNodes(
+                    Stream.concat(
+                            streamAnnotationNodes(),
+                            streamChildNodes())
+                    .collect(Collectors.toList()));
         }
         return childNodes;
     }
 
+    protected abstract MetamodelElement metamodelElement();
     protected abstract Stream<MMNode> streamChildNodes();
+
+    protected final Stream<MMNode> streamAnnotationNodes() {
+        return streamAnnotations()
+                .filter(notNameOf("@title"))
+                .map(a->MMNodeFactory.annotation(a, this));
+    }
 
     protected String title;
 
@@ -81,35 +98,37 @@ public abstract class MMNode {
         return iconSuffix();
     }
 
-    protected String typeToString(final Object type) {
-        if(type instanceof DomainClassDto) {
-            return typeToString((DomainClassDto) type);
-        }
-        return type!=null
-                ? abbreviate(""+type)
-                : "void";
-    }
-
-    protected String typeToString(final DomainClassDto type) {
-        return type!=null
-                ? abbreviate(type.getId())
-                : "void";
-    }
-
-    protected String abbreviate(final String input) {
-        return (""+input)
-                .replace("org.apache.isis.core.metamodel.facets.", "».c.m.f.")
-                .replace("org.apache.isis.core.metamodel.", "».c.m.")
-                .replace("org.apache.isis.core.", "».c.")
-                .replace("org.apache.isis.applib.", "».a.")
-                .replace("org.apache.isis.", "».")
-                .replace("java.lang.", "");
-    }
-
     protected String simpleName(final String name) {
         return _Strings.splitThenStream(""+name, ".")
         .reduce((first, second) -> second) // get the last
         .orElse("null");
     }
+
+    protected final Optional<Annotation> lookupTitleAnnotation() {
+        return lookupAnnotationByName("@title");
+    }
+
+    protected final Stream<Annotation> streamAnnotations() {
+        return Optional.ofNullable(metamodelElement())
+                .map(MetamodelElement::getAnnotations)
+                .map(FacetHolder.Annotations::getAsList)
+                .<Stream<Annotation>>map(List::stream)
+                .orElseGet(Stream::empty);
+    }
+
+    protected final Optional<Annotation> lookupAnnotationByName(final String annotationName) {
+        return streamAnnotations()
+                .filter(nameOf(annotationName))
+                .findFirst();
+    }
+
+    static Predicate<Annotation> nameOf(final String annotationName) {
+        return annot->Objects.equals(annotationName, annot.getName());
+    }
+
+    static Predicate<Annotation> notNameOf(final String annotationName) {
+        return nameOf(annotationName).negate();
+    }
+
 
 }

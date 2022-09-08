@@ -35,7 +35,7 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
@@ -61,7 +61,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
         final BreadcrumbModel breadcrumbModel = _Casts.castTo(BreadcrumbModelProvider.class, getSession())
                 .map(BreadcrumbModelProvider::getBreadcrumbModel)
-                .orElseGet(()->new BreadcrumbModel(getCommonContext())); // for testing
+                .orElseGet(()->new BreadcrumbModel(getMetaModelContext())); // for testing
 
         final IModel<EntityModel> entityModel = new Model<>();
         ChoiceProvider<EntityModel> choiceProvider = new ChoiceProvider<EntityModel>() {
@@ -74,7 +74,7 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return model.getManagedObject().titleString();
+                return model.getManagedObject().getTitle();
             }
 
             @Override
@@ -129,8 +129,9 @@ extends PanelAbstract<Void, IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            val configuration = getCommonContext().getConfiguration();
-                            getCommonContext().getMessageBroker()
+                            val configuration = getMetaModelContext().getConfiguration();
+
+                            getMetaModelContext().getMessageBroker()
                             .ifPresent(messageBroker->{
                                 messageBroker.addWarning("Cannot find object");
                                 String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
@@ -142,8 +143,8 @@ extends PanelAbstract<Void, IModel<Void>> {
                         setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
-                    private IsisAppCommonContext getCommonContext() {
-                        return BreadcrumbPanel.this.getCommonContext();
+                    private MetaModelContext getMetaModelContext() {
+                        return BreadcrumbPanel.this.getMetaModelContext();
                     }
 
                 });
@@ -159,7 +160,7 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowDropDownOnFooter();
+        boolean shouldShow = getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
         setVisible(shouldShow);
     }
 

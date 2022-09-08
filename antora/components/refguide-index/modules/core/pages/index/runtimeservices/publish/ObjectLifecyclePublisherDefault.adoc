@@ -10,7 +10,7 @@ class ObjectLifecyclePublisherDefault {
   LifecycleCallbackNotifier lifecycleCallbackNotifier()
   void onPostCreate(ManagedObject entity)
   void onPostLoad(ManagedObject entity)
-  void onPrePersist(ManagedObject entity)
+  void onPrePersist(Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid)
   void onPostPersist(ManagedObject entity)
   void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords)
   void onPostUpdate(ManagedObject entity)

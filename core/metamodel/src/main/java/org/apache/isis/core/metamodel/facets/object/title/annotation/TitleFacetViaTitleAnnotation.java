@@ -179,7 +179,7 @@ implements ImperativeFacet {
         if (adapter == null) {
             return null;
         }
-        return adapter.titleString();
+        return adapter.getTitle();
     }
 
     private static String abbreviated(final String str, final int maxLength) {

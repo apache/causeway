@@ -21,7 +21,7 @@ enum BeanSort {
   UNKNOWN
   boolean isManagedBeanContributing()
   boolean isManagedBeanNotContributing()
-  boolean isManagedBean()
+  boolean isManagedBeanAny()
   boolean isMixin()
   boolean isViewModel()
   boolean isValue()

@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._Generics;
 
@@ -72,29 +72,19 @@ public final class _Collections {
         return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
     }
 
-    public static boolean isCanType(final @Nullable Class<?> cls) {
-        return cls!=null ? Can.class.isAssignableFrom(cls) : false;
-    }
-
-    /**
-     * For convenience also provided in {@link _Arrays}.
-     * @param cls
-     * @return whether {@code cls} implements the java.util.Collection interface
-     * or represents an array
-     */
-    public static boolean isCollectionOrArrayType(final Class<?> cls) {
-        return _Collections.isCollectionType(cls) || _Arrays.isArrayType(cls);
+    public static boolean isImmutableCollectionType(final @Nullable Class<?> cls) {
+        return cls!=null ? ImmutableCollection.class.isAssignableFrom(cls) : false;
     }
 
     /**
      * @param cls
      * @return whether {@code cls} implements the java.util.Collection interface
-     * or represents an array or is of type {@link Can}
+     * or represents an array or is of type {@link ImmutableCollection}
      */
-    public static boolean isCollectionOrArrayOrCanType(final Class<?> cls) {
+    public static boolean isAnyCollectionOrArrayType(final Class<?> cls) {
         return _Collections.isCollectionType(cls)
                 || _Arrays.isArrayType(cls)
-                || Can.class.isAssignableFrom(cls);
+                || ImmutableCollection.class.isAssignableFrom(cls);
     }
 
     // -- COLLECTION UNMODIFIABLE ADAPTERS (FOR LIST)
@@ -276,7 +266,7 @@ public final class _Collections {
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Class<?> cls) {
         return _Collections.isCollectionType(cls)
-                || _Collections.isCanType(cls)
+                || _Collections.isImmutableCollectionType(cls)
                 ? _Generics.streamGenericTypeArgumentsOfType(cls)
                         .findFirst()
                 : Optional.empty();
@@ -289,7 +279,7 @@ public final class _Collections {
     public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
         val parameterType = param.getType();
         return _Collections.isCollectionType(parameterType)
-                || _Collections.isCanType(parameterType)
+                || _Collections.isImmutableCollectionType(parameterType)
                 ? _Generics.streamGenericTypeArgumentsOfParameter(param)
                         .findFirst()
                 : Optional.empty();
@@ -303,7 +293,7 @@ public final class _Collections {
     public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
         val returnType = method.getReturnType();
         return _Collections.isCollectionType(returnType)
-                || _Collections.isCanType(returnType)
+                || _Collections.isImmutableCollectionType(returnType)
                 ? _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
                         .findFirst()
                 : Optional.empty();
@@ -316,7 +306,7 @@ public final class _Collections {
     public static Optional<Class<?>> inferElementType(final @NonNull Field field) {
         val fieldType = field.getType();
         return _Collections.isCollectionType(fieldType)
-                || _Collections.isCanType(fieldType)
+                || _Collections.isImmutableCollectionType(fieldType)
                 ? _Generics.streamGenericTypeArgumentsOfField(field)
                         .findFirst()
                 : Optional.empty();

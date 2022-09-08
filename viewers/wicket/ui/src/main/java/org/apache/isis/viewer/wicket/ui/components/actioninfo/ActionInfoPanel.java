@@ -39,7 +39,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
         // TODO: render instead as links (providing isn't a service; provide a
         // component for this?)
-        Wkt.labelAdd(this, ID_TARGET, ()->actionModel.getParentObject().titleString());
+        Wkt.labelAdd(this, ID_TARGET, ()->actionModel.getParentObject().getTitle());
         Wkt.labelAdd(this, ID_ACTION_NAME, ()->actionModel.getFriendlyName());
     }
 }

@@ -27,17 +27,17 @@ import org.apache.isis.commons.internal.base._NullSafe;
 public class MMTreeAdapter implements TreeAdapter<MMNode> {
 
     @Override
-    public Optional<MMNode> parentOf(MMNode node) {
+    public Optional<MMNode> parentOf(final MMNode node) {
         return Optional.ofNullable(node.getParentNode());
     }
 
     @Override
-    public int childCountOf(MMNode node) {
+    public int childCountOf(final MMNode node) {
         return _NullSafe.size(node.getChildNodes());
     }
 
     @Override
-    public Stream<MMNode> childrenOf(MMNode node) {
+    public Stream<MMNode> childrenOf(final MMNode node) {
         return _NullSafe.stream(node.getChildNodes());
     }
 

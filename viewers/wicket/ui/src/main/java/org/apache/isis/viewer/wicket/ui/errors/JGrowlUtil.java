@@ -22,7 +22,7 @@ import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.MessageBroker;
+import org.apache.isis.core.metamodel.services.message.MessageBroker;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

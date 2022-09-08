@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
-import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
@@ -54,7 +53,7 @@ public class DataRow {
     }
 
     public ManagedObject getRowElement() {
-        return MmEntityUtil.refetch(rowElement);
+        return rowElement;
     }
 
     public ManagedObject getCellElement(final DataColumn column) {

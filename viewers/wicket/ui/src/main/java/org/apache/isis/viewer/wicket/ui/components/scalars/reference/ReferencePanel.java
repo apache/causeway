@@ -238,7 +238,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     String getTitleForFormComponentInput() {
         val pendingElseCurrentAdapter = scalarModel().getObject();
         return pendingElseCurrentAdapter != null
-                ? pendingElseCurrentAdapter.titleString()
+                ? pendingElseCurrentAdapter.getTitle()
                 : "(no object)";
     }
 

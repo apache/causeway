@@ -21,32 +21,37 @@ package org.apache.isis.applib.graph.tree;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Domain;
+
 /**
- * Provides the parent/child relationship information between pojos 
- * to derive a tree-structure. 
- * 
+ * Provides the parent/child relationship information between pojos
+ * to derive a tree-structure.
+ *
  * @param <T> type of the tree nodes that make up the tree structure
- * 
+ *
  * @since 2.0 {@index}
  */
 public interface TreeAdapter<T> {
 
     /**
-     * @param value - tree-node (pojo) 
+     * @param value - tree-node (pojo)
      * @return the parent tree-node (pojo) of the specified {@code value} tree-node (pojo)
      */
-    public Optional<T> parentOf(T value);
+    @Domain.Exclude
+    Optional<T> parentOf(T value);
 
     /**
      * @param value - tree-node (pojo)
      * @return number of child tree-nodes of the specified {@code value} tree-node (pojo)
      */
-    public int childCountOf(T value);
+    @Domain.Exclude
+    int childCountOf(T value);
 
     /**
      * @param value - tree-node (pojo)
      * @return stream of child tree-nodes of the specified {@code value} tree-node (pojo)
      */
-    public Stream<T> childrenOf(T value);
+    @Domain.Exclude
+    Stream<T> childrenOf(T value);
 
 }

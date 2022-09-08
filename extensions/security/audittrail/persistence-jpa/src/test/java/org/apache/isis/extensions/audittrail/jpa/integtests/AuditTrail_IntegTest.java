@@ -20,8 +20,6 @@ package org.apache.isis.extensions.audittrail.jpa.integtests;
 
 import javax.inject.Inject;
 
-import org.assertj.core.api.Assumptions;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -36,15 +34,17 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
-import org.apache.isis.extensions.audittrail.jpa.IsisModuleExtAuditTrailPersistenceJpa;
 import org.apache.isis.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
-import org.apache.isis.extensions.audittrail.jpa.dom.AuditTrailEntry;
+import org.apache.isis.extensions.audittrail.jpa.IsisModuleExtAuditTrailPersistenceJpa;
 import org.apache.isis.extensions.audittrail.jpa.integtests.model.Counter;
 import org.apache.isis.extensions.audittrail.jpa.integtests.model.CounterRepository;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 @SpringBootTest(
-        classes = AuditTrail_IntegTest.AppManifest.class
+        classes = AuditTrail_IntegTest.AppManifest.class,
+        properties = {
+                "logging.level.org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener=DEBUG",
+        }
 )
 @ActiveProfiles("test")
 public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
@@ -69,10 +69,9 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
     }
 
     @Override
-    protected org.apache.isis.extensions.audittrail.applib.integtests.model.Counter newCounter(String name) {
+    protected org.apache.isis.extensions.audittrail.applib.integtests.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
-
 
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 }

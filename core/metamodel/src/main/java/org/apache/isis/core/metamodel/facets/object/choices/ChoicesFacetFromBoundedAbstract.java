@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
-import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
+import org.apache.isis.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.SneakyThrows;

@@ -26,7 +26,7 @@ import java.util.Objects;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.val;
 
@@ -38,7 +38,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     private transient PageParameters current;
 
-    public BookmarkedPagesModel(final IsisAppCommonContext commonContext) {
+    public BookmarkedPagesModel(final MetaModelContext commonContext) {
         super(commonContext);
     }
 
@@ -77,7 +77,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     private int getMaxSize() {
-        return getConfiguration().getViewer().getWicket().getBookmarkedPages().getMaxSize();
+        return getWicketViewerSettings().getBookmarkedPages().getMaxSize();
     }
 
     private static void trim(final List<?> list, final int requiredSize) {

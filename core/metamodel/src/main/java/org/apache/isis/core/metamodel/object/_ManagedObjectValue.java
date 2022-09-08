@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -37,7 +36,6 @@ import lombok.experimental.Accessors;
  * (package private) specialization corresponding to {@link Specialization#VALUE}
  * @see ManagedObject.Specialization#VALUE
  */
-@Getter
 final class _ManagedObjectValue
 extends _ManagedObjectSpecified {
 
@@ -61,16 +59,6 @@ extends _ManagedObjectSpecified {
     }
 
     @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark(); // no-op for values
-    }
-
-    @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for values
-    }
-
-    @Override
     public boolean isBookmarkMemoized() {
         return bookmarkLazy.isMemoized();
     }
@@ -78,15 +66,12 @@ extends _ManagedObjectSpecified {
     // -- HELPER
 
     private ValueFacet<?> valueFacet() {
-        return getSpecification().valueFacet().orElseThrow();
+        return getSpecification().valueFacetElseFail();
     }
 
     private Bookmark createBookmark() {
-        //TODO if value semantics providers are enforced to provide an IdStringifier,
-        // we could use that instead (to generate the second argument)!
-        return Bookmark.forLogicalTypeAndIdentifier(
-                getSpecification().getLogicalType(),
-                valueFacet().toEncodedString(Format.JSON, _Casts.uncheckedCast(getPojo())));
+        return createBookmark(
+                valueFacet().enstring(Format.URL_SAFE, _Casts.uncheckedCast(getPojo())));
     }
 
 }

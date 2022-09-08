@@ -47,9 +47,9 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.functional.IndexedFunction;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -65,7 +65,7 @@ class IsisToWicketTreeAdapter {
         if(valueModel==null || valueModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
-        val commonContext = valueModel.getCommonContext();
+        val commonContext = valueModel.getMetaModelContext();
         val treeNode = valueModel.getObject();
         return new EntityTree(id, toITreeProvider(commonContext, treeNode),
                 toIModelRepresentingCollapseExpandState(commonContext, treeNode));
@@ -75,7 +75,7 @@ class IsisToWicketTreeAdapter {
         if(scalarModel==null || scalarModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
-        val commonContext = scalarModel.getCommonContext();
+        val commonContext = scalarModel.getMetaModelContext();
         val treeNode = scalarModel.getObject();
         return new EntityTree(id,
                 toITreeProvider(commonContext, treeNode),
@@ -208,13 +208,13 @@ class IsisToWicketTreeAdapter {
         private final TreePath treePath;
         private final boolean isTreePathModelOnly;
 
-        public TreeModel(final IsisAppCommonContext commonContext, final TreePath treePath) {
-            super(commonContext, commonContext.getObjectManager().adapt(new Object()));
+        public TreeModel(final MetaModelContext commonContext, final TreePath treePath) {
+            super(commonContext, commonContext.getObjectManager().adapt(0)); // any bookmarkable will do
             this.treePath = treePath;
             this.isTreePathModelOnly = true;
         }
 
-        public TreeModel(final IsisAppCommonContext commonContext, final ManagedObject adapter, final TreePath treePath) {
+        public TreeModel(final MetaModelContext commonContext, final ManagedObject adapter, final TreePath treePath) {
             super(commonContext, Objects.requireNonNull(adapter));
             this.treePath = treePath;
             this.isTreePathModelOnly = false;
@@ -242,24 +242,24 @@ class IsisToWicketTreeAdapter {
         private final Class<? extends TreeAdapter> treeAdapterClass;
 
         private transient TreeAdapter wrappedTreeAdapter;
-        private transient IsisAppCommonContext commonContext;
+        private transient MetaModelContext commonContext;
         private transient FactoryService factoryService;
         private transient Function<Object, ManagedObject> pojoToAdapter;
 
 
         private TreeModelTreeAdapter(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final Class<? extends TreeAdapter> treeAdapterClass) {
 
             this.treeAdapterClass = treeAdapterClass;
             init(commonContext);
         }
 
-        private void init(final IsisAppCommonContext commonContext) {
+        private void init(final MetaModelContext commonContext) {
             this.commonContext = commonContext;
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
             this.pojoToAdapter = pojo ->
-                ManagedObject.wrapScalar(commonContext.getSpecificationLoader(), pojo);
+                ManagedObject.adaptScalar(commonContext.getSpecificationLoader(), pojo);
         }
 
         private TreeAdapter wrappedTreeAdapter() {
@@ -319,7 +319,7 @@ class IsisToWicketTreeAdapter {
         // in case we were de-serialzed
         private void ensureInit() {
             if(commonContext!=null) return;
-            init(WktContext.getCommonContext());
+            init(WktContext.getMetaModelContext());
         }
 
     }
@@ -377,7 +377,7 @@ class IsisToWicketTreeAdapter {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static ITreeProvider<TreeModel> toITreeProvider(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final ManagedObject treeNodeObject) {
 
         val treeNode = (TreeNode) treeNodeObject.getPojo();
@@ -402,7 +402,7 @@ class IsisToWicketTreeAdapter {
         private final TreePath treePath;
         private final int hashCode;
 
-        private transient IsisAppCommonContext commonContext;
+        private transient MetaModelContext commonContext;
 
         public LoadableDetachableTreeModel(final TreeModel tModel) {
             super(tModel);
@@ -410,7 +410,7 @@ class IsisToWicketTreeAdapter {
             this.bookmark = ManagedObjects.bookmarkElseFail(tModel.getObject());
 
             this.hashCode = Objects.hash(bookmark.hashCode(), treePath.hashCode());
-            this.commonContext = tModel.getCommonContext();
+            this.commonContext = tModel.getMetaModelContext();
         }
 
         /*
@@ -422,7 +422,7 @@ class IsisToWicketTreeAdapter {
             commonContext = WktContext.computeIfAbsent(commonContext);
 
             val oid = bookmark;
-            val objAdapter = commonContext.getMetaModelContext()
+            val objAdapter = commonContext.getMetaModelContext().getObjectManager()
                     .loadObject(oid)
                     .orElseThrow(()->new NoSuchElementException(
                             String.format("Tree creation: could not recreate TreeModel from Bookmark: '%s'", bookmark)));
@@ -467,7 +467,7 @@ class IsisToWicketTreeAdapter {
      */
     @SuppressWarnings({ "rawtypes" })
     private static TreeExpansionModel toIModelRepresentingCollapseExpandState(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final ManagedObject treeNodeObject) {
 
         val treeNode = (TreeNode) treeNodeObject.getPojo();
@@ -482,7 +482,7 @@ class IsisToWicketTreeAdapter {
         private static final long serialVersionUID = 648152234030889164L;
 
         public static TreeExpansionModel of(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final Set<TreePath> expandedTreePaths) {
 
             return new TreeExpansionModel(commonContext, expandedTreePaths);
@@ -512,7 +512,7 @@ class IsisToWicketTreeAdapter {
         private final Set<TreeModel> expandedNodes;
 
         private TreeExpansionModel(
-                final IsisAppCommonContext commonContext,
+                final MetaModelContext commonContext,
                 final Set<TreePath> expandedTreePaths) {
 
             this.expandedTreePaths = expandedTreePaths;

@@ -20,10 +20,10 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.temporal;
 
 import java.time.LocalDate;
 
-import org.springframework.lang.Nullable;
-
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;
+
+import org.springframework.lang.Nullable;
 
 public class DateField extends CustomField<LocalDate> {
 

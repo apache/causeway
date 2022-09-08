@@ -19,13 +19,10 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Collections;
-import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -37,7 +34,9 @@ import lombok.NonNull;
  */
 final class _ManagedObjectPacked
 extends _ManagedObjectSpecified
-implements PackedManagedObject {
+implements
+    Bookmarkable.NoBookmark,
+    PackedManagedObject {
 
     private final @NonNull Can<ManagedObject> nonScalar;
 
@@ -60,27 +59,8 @@ implements PackedManagedObject {
     }
 
     @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return false;
-    }
-
-    @Override
     public Can<ManagedObject> unpack(){
         return nonScalar;
-    }
-
-    @Override
-    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
     }
 
 }

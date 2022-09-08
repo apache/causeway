@@ -31,17 +31,14 @@ import javax.persistence.PreUpdate;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
-import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.val;
@@ -66,23 +63,22 @@ import lombok.extern.log4j.Log4j2;
 public class IsisEntityListener {
 
     // not managed by Spring (directly)
-    @Inject private ServiceInjector serviceInjector;
+    //@Inject private ServiceInjector serviceInjector;
     @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
-    @Inject private EventBusService eventBusService;
+    //@Inject private EventBusService eventBusService;
 
     @PrePersist void onPrePersist(final Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
-
-        objectLifecyclePublisher.onPrePersist(entity);
+        objectLifecyclePublisher.onPrePersist(Either.left(entity));
     }
 
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPostLoad(entity);
     }
@@ -91,7 +87,7 @@ public class IsisEntityListener {
     @PreUpdate void onPreUpdate(final Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
 
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
 
         val entityManagerResult = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass());
@@ -129,7 +125,7 @@ public class IsisEntityListener {
 
     @PreRemove void onPreRemove(final Object entityPojo) {
         log.debug("onAnyRemove: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPreRemove(entity);
     }

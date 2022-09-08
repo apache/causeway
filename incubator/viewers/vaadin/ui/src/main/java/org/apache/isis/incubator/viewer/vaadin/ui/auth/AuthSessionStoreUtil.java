@@ -20,10 +20,11 @@ package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
 import javax.servlet.http.HttpSession;
 
 import com.vaadin.flow.server.VaadinSession;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 

@@ -79,7 +79,7 @@ import lombok.Getter;
         layoutUiEvent = DomainObjectList.LayoutUiEvent.class)
 public class DomainObjectList {
 
-    public static final String LOGICAL_TYPE_NAME = "isis.applib.DomainObjectList";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".DomainObjectList";
 
     // -- ui event classes
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<DomainObjectList>{  }

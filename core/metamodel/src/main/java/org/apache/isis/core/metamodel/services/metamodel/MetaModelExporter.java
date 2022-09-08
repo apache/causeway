@@ -18,18 +18,16 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Optional;
 
-import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.Config;
-import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -39,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -59,10 +56,14 @@ import lombok.val;
 
 class MetaModelExporter {
 
-    SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLookup;
+    private final Can<? extends MetaModelAnnotator> annotators;
 
-    public MetaModelExporter(final SpecificationLoader specificationLoader) {
+    public MetaModelExporter(
+            final SpecificationLoader specificationLoader,
+            final Iterable<? extends MetaModelAnnotator> annotators) {
         this.specificationLookup = specificationLoader;
+        this.annotators = Can.ofIterable(annotators);
     }
 
     /**
@@ -75,14 +76,31 @@ class MetaModelExporter {
      * </p>
      */
     MetamodelDto exportMetaModel(final Config config) {
+
+        // single type(s) MM export support
+        val tinyDomain = _Lists.<ObjectSpecification>newArrayList();
+        val useTinyDomain = _NullSafe.stream(config.getNamespacePrefixes())
+        .map(namespace->specificationLookup.specForLogicalTypeName(namespace))
+        .peek(specIfAny->specIfAny.ifPresent(tinyDomain::add))
+        .allMatch(Optional::isPresent);
+
+        if(useTinyDomain) {
+            return exportTinyDomain(tinyDomain, config);
+        }
+
         MetamodelDto metamodelDto = new MetamodelDto();
 
         // phase 1: create a domainClassType for each ObjectSpecification
         // these are added into a map for lookups in phase 2
         final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.snapshotSpecifications()) {
-            DomainClassDto domainClassType = asXsdType(specification);
+            DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
+        }
+
+        if(useTinyDomain) {
+            metamodelDto.getDomainClassDto().addAll(domainClassByObjectSpec.values());
+            return metamodelDto;
         }
 
         // phase 2: now flesh out the domain class types, passing the map for lookups of the domainClassTypes that
@@ -133,12 +151,35 @@ class MetaModelExporter {
         return metamodelDto;
     }
 
+    private MetamodelDto exportTinyDomain(final List<ObjectSpecification> tinyDomain, final Config config) {
+        MetamodelDto metamodelDto = new MetamodelDto();
+
+        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
+        for (final ObjectSpecification specification : tinyDomain) {
+            DomainClassDto domainClassType = asXsdType(specification, config);
+            domainClassByObjectSpec.put(specification, domainClassType);
+            addFacetsAndMembersTo(specification, domainClassByObjectSpec, config);
+        }
+
+        for (final ObjectSpecification objectSpecification : _Lists.newArrayList(domainClassByObjectSpec.keySet())) {
+            if(shouldIgnore(config, objectSpecification)) {
+                continue;
+            }
+            metamodelDto.getDomainClassDto().add(domainClassByObjectSpec.get(objectSpecification));
+        }
+
+        sortDomainClasses(metamodelDto.getDomainClassDto());
+        return metamodelDto;
+    }
+
     private boolean shouldIgnore(final Config config, final ObjectSpecification specification) {
-        return notInNamespacePrefixes(specification, config) ||
-                config.isIgnoreMixins() && specification.isMixin() ||
-                config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface() ||
-                config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers()) ||
-                config.isIgnoreBuiltInValueTypes() && isValueType(specification);
+        return notInNamespacePrefixes(specification, config)
+                || config.isIgnoreMixins() && specification.isMixin()
+                || config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface()
+                || config.isIgnoreAbstractClasses()
+                    && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers())
+                || config.isIgnoreBuiltInValueTypes()
+                    && isValueType(specification);
     }
 
     private static <T> List<T> remaining(final java.util.Collection<T> processed, final java.util.Collection<T> other) {
@@ -157,10 +198,6 @@ class MetaModelExporter {
             final Config config) {
 
         val namespacePrefixes = config.getNamespacePrefixes();
-        if(namespacePrefixes.isEmpty()) {
-            return false; // export none
-        }
-
         if(config.isNamespacePrefixAny()) {
             return true; // export all
         }
@@ -175,16 +212,14 @@ class MetaModelExporter {
     }
 
     private DomainClassDto asXsdType(
-            final ObjectSpecification specification) {
+            final ObjectSpecification specification, final Config config) {
 
         final DomainClassDto domainClass = new DomainClassDto();
-
         domainClass.setId(specification.getFullIdentifier());
-
         if(specification.isInjectable()) {
             domainClass.setService(true);
         }
-
+        annotators.forEach(a->a.annotate(domainClass, specification));
         return domainClass;
     }
 
@@ -276,7 +311,6 @@ class MetaModelExporter {
             final OneToOneAssociation otoa,
             final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final Config config) {
-
         Property propertyType = new Property();
         propertyType.setId(otoa.getId());
         propertyType.setMixedIn(otoa.isMixedIn());
@@ -286,6 +320,7 @@ class MetaModelExporter {
         propertyType.setType(value);
 
         addFacets(otoa, propertyType.getFacets(), config);
+        annotators.forEach(a->a.annotate(propertyType, otoa));
         return propertyType;
     }
 
@@ -302,6 +337,7 @@ class MetaModelExporter {
         collectionType.setType(value);
 
         addFacets(otoa, collectionType.getFacets(), config);
+        annotators.forEach(a->a.annotate(collectionType, otoa));
         return collectionType;
     }
 
@@ -326,6 +362,7 @@ class MetaModelExporter {
         for (final ObjectActionParameter parameter : parameters) {
             params.add(asXsdType(parameter, domainClassByObjectSpec, config));
         }
+        annotators.forEach(a->a.annotate(actionType, oa));
         return actionType;
     }
 
@@ -335,7 +372,7 @@ class MetaModelExporter {
             final Config config) {
         DomainClassDto value = domainClassByObjectSpec.get(specification);
         if(value == null) {
-            final DomainClassDto domainClass = asXsdType(specification);
+            final DomainClassDto domainClass = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClass);
             value = domainClass;
         }
@@ -348,17 +385,18 @@ class MetaModelExporter {
             final Config config) {
 
         Param parameterType = parameter instanceof OneToOneActionParameter
-                ? new ScalarParam()
-                        : new VectorParam();
-                parameterType.setId(parameter.getId());
-                parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
+                    ? new ScalarParam()
+                    : new VectorParam();
+        parameterType.setId(parameter.getId());
+        parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
 
-                final ObjectSpecification specification = parameter.getElementType();
-                final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
-                parameterType.setType(value);
+        final ObjectSpecification specification = parameter.getElementType();
+        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        parameterType.setType(value);
 
-                addFacets(parameter, parameterType.getFacets(), config);
-                return parameterType;
+        addFacets(parameter, parameterType.getFacets(), config);
+        annotators.forEach(a->a.annotate(parameterType, parameter));
+        return parameterType;
     }
 
     private void addFacets(
@@ -368,7 +406,9 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoop())
+        .filter(facet -> ! (
+                config.isIgnoreFallbackFacets()
+                    && facet.getPrecedence().isFallback()))
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 
@@ -378,33 +418,24 @@ class MetaModelExporter {
     private org.apache.isis.schema.metamodel.v2.Facet asXsdType(
             final Facet facet,
             final Config config) {
-        final org.apache.isis.schema.metamodel.v2.Facet facetType = new org.apache.isis.schema.metamodel.v2.Facet();
+        final org.apache.isis.schema.metamodel.v2.Facet facetType =
+                new org.apache.isis.schema.metamodel.v2.Facet();
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
 
         addFacetAttributes(facet, facetType, config);
-
+        annotators.forEach(a->a.annotate(facetType, facet));
         return facetType;
     }
+
+
 
     private void addFacetAttributes(
             final Facet facet,
             final org.apache.isis.schema.metamodel.v2.Facet facetType,
             final Config config) {
-
-        Map<String, Object> attributeMap = _Maps.newTreeMap();
-        facet.visitAttributes(attributeMap::put);
-
-        for (final String key : attributeMap.keySet()) {
-            Object attributeObj = attributeMap.get(key);
-            if(attributeObj == null) {
-                continue;
-            }
-
-            String str = asStr(attributeObj);
-            addAttribute(facetType,key, str);
-        }
-
+        _Util.visitNonNullAttributes(facet, (key, str)->
+            addAttribute(facetType, key, str));
         sortFacetAttributes(facetType.getAttr());
     }
 
@@ -459,107 +490,7 @@ class MetaModelExporter {
         return specification.getBeanSort().isValue();
     }
 
-    private String asStr(final Object attributeObj) {
-        String str;
-        if(attributeObj instanceof Method) {
-            str = asStr((Method) attributeObj);
-        } else if(attributeObj instanceof String) {
-            str = asStr((String) attributeObj);
-        } else if(attributeObj instanceof Enum) {
-            str = asStr((Enum<?>) attributeObj);
-        } else if(attributeObj instanceof Class) {
-            str = asStr((Class<?>) attributeObj);
-        } else if(attributeObj instanceof Specification) {
-            str = asStr((Specification) attributeObj);
-        } else if(attributeObj instanceof Facet) {
-            str = asStr((Facet) attributeObj);
-        } else if(attributeObj instanceof MetaModelExportSupport) {
-            str = asStr((MetaModelExportSupport) attributeObj);
-        } else if(attributeObj instanceof Pattern) {
-            str = asStr((Pattern) attributeObj);
-        } else if(attributeObj instanceof CommandDtoProcessor) {
-            str = asStr((CommandDtoProcessor) attributeObj);
-        } else if(attributeObj instanceof ObjectSpecification) {
-            str = asStr((ObjectSpecification) attributeObj);
-        } else if(attributeObj instanceof ObjectMember) {
-            str = asStr((ObjectMember) attributeObj);
-        } else if(attributeObj instanceof List) {
-            str = asStr((List<?>) attributeObj);
-        } else if(attributeObj instanceof Object[]) {
-            str = asStr((Object[]) attributeObj);
-        } else  {
-            str = "" + attributeObj;
-        }
-        return str;
-    }
 
-    private String asStr(final String attributeObj) {
-        return _Strings.emptyToNull(attributeObj);
-    }
-
-    private String asStr(final Specification attributeObj) {
-        return attributeObj.getClass().getName();
-    }
-
-    private String asStr(final ObjectSpecification attributeObj) {
-        return attributeObj.getFullIdentifier();
-    }
-
-    private String asStr(final MetaModelExportSupport attributeObj) {
-        return attributeObj.toMetamodelString();
-    }
-
-    private String asStr(final CommandDtoProcessor attributeObj) {
-        return attributeObj.getClass().getName();
-    }
-
-    private String asStr(final Pattern attributeObj) {
-        return attributeObj.pattern();
-    }
-
-    private String asStr(final Facet attributeObj) {
-        return attributeObj.getClass().getName();
-    }
-
-    private String asStr(final ObjectMember attributeObj) {
-        return attributeObj.getId();
-    }
-
-    private String asStr(final Class<?> attributeObj) {
-        return attributeObj.getCanonicalName();
-    }
-
-    private String asStr(final Enum<?> attributeObj) {
-        return attributeObj.name();
-    }
-
-    private String asStr(final Method attributeObj) {
-        return attributeObj.toGenericString();
-    }
-
-    private String asStr(final Object[] list) {
-        if(list.length == 0) {
-            return null; // skip
-        }
-        List<String> strings = _Lists.newArrayList();
-        for (final Object o : list) {
-            String s = asStr(o);
-            strings.add(s);
-        }
-        return String.join(";", strings);
-    }
-
-    private String asStr(final List<?> list) {
-        if(list.isEmpty()) {
-            return null; // skip
-        }
-        List<String> strings = _Lists.newArrayList();
-        for (final Object o : list) {
-            String s = asStr(o);
-            strings.add(s);
-        }
-        return String.join(";", strings);
-    }
 
 
 }

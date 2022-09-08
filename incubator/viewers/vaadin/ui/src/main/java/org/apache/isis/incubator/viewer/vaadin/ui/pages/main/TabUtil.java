@@ -36,11 +36,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 final class TabUtil {
 
-    static void createMenuTabs(MenuBarsServiceBS menuBarsService, Consumer<Tab> onTabCreated) {
+    static void createMenuTabs(final MenuBarsServiceBS menuBarsService, final Consumer<Tab> onTabCreated) {
         // onTabCreated.accept(TabUtil.createTab("Dashboard", DashboardView.class));
     }
 
-    static void selectTab(Tabs tabs, Class<? extends Component> viewClass) {
+    static void selectTab(final Tabs tabs, final Class<? extends Component> viewClass) {
         String target = RouteConfiguration.forSessionScope().getUrl(viewClass);
         Optional<Component> tabToSelect = tabs.getChildren().filter(tab -> {
             Component child = tab.getChildren().findFirst().get();
@@ -49,19 +49,20 @@ final class TabUtil {
         tabToSelect.ifPresent(tab -> tabs.setSelectedTab((Tab) tab));
     }
 
-    static Tab createTab(String title, Class<? extends Component> viewClass) {
-        return createTab(populateLink(new RouterLink(null, viewClass), title));
+    static Tab createTab(final String title, final Class<? extends Component> viewClass) {
+        final String text = null;
+        return createTab(populateLink(new RouterLink(text, viewClass), title));
     }
 
     // -- HELPER
 
-    private static Tab createTab(Component content) {
+    private static Tab createTab(final Component content) {
         final Tab tab = new Tab();
         tab.add(content);
         return tab;
     }
 
-    private static <T extends HasComponents> T populateLink(T a, String title) {
+    private static <T extends HasComponents> T populateLink(final T a, final String title) {
         a.add(title);
         return a;
     }

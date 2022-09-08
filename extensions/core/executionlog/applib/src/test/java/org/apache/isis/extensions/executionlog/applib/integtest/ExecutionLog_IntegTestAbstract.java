@@ -42,8 +42,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
@@ -59,7 +57,6 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 import lombok.val;
 
 public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTestAbstract {
-
 
     @BeforeAll
     static void beforeAll() {
@@ -168,8 +165,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         assertThat(all).isEmpty();
     }
 
-
-
     @Test
     void edit() {
 
@@ -227,6 +222,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         assertThat(eleBookmarkIfAny).isPresent();
         Bookmark eleBookmark = eleBookmarkIfAny.get();
         String identifier = eleBookmark.getIdentifier();
+
         UUID.fromString(identifier.substring(0, identifier.indexOf("_"))); // should not fail, ie check the format is as we expect
         Integer.parseInt(identifier.substring(identifier.indexOf("_")+1)); // should not fail, ie check the format is as we expect
 

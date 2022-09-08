@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
-import java.util.Optional;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,8 +34,6 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
 @SuppressWarnings("unused")
 public class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
@@ -62,15 +57,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 return "Joe";
             }
         }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
-            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.REST) {
-            })));
-        }});
 
         expectNoMethodsRemoved();
 
@@ -101,15 +87,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
             }
         }
 
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
-            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
-            })));
-        }});
-
         expectNoMethodsRemoved();
 
         facetedMethod = FacetedMethod
@@ -136,15 +113,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
             }
         }
 
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
-            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
-            })));
-        }});
-
         expectNoMethodsRemoved();
 
         facetedMethod = FacetedMethod
@@ -169,14 +137,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 return "Joe";
             }
         }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
-            will(returnValue(Optional.empty()));
-        }});
 
         expectNoMethodsRemoved();
 

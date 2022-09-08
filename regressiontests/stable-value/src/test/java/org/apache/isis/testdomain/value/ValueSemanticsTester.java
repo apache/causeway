@@ -115,10 +115,10 @@ public class ValueSemanticsTester<T> {
             val command = interactionService.currentInteractionElseFail().getCommand();
 
             val propInteraction = PropertyInteraction
-                    .wrap(ManagedProperty.of(ManagedObject.of(objSpec, domainObject), prop, Where.OBJECT_FORMS));
+                    .wrap(ManagedProperty.of(ManagedObject.adaptScalar(objSpec, domainObject), prop, Where.OBJECT_FORMS));
 
             propInteraction.modifyProperty(managedProp->
-                ManagedObject.of(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
+                ManagedObject.adaptScalar(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
 
             probe.testCommand(context, command);
         });

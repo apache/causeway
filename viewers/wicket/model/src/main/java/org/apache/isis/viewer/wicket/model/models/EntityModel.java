@@ -31,10 +31,10 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
 import org.apache.isis.viewer.commons.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -69,21 +69,21 @@ implements
     // -- FACTORIES
 
     public static EntityModel ofPageParameters(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final PageParameters pageParameters) {
         val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
         return ofBookmark(commonContext, bookmark);
     }
 
     public static EntityModel ofAdapter(
-            final @NonNull IsisAppCommonContext commonContext,
+            final @NonNull MetaModelContext commonContext,
             final @Nullable ManagedObject adapter) {
         return new EntityModel(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
     public static EntityModel ofBookmark(
-            final @NonNull IsisAppCommonContext commonContext,
+            final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
         return new EntityModel(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
@@ -92,10 +92,10 @@ implements
     // -- CONSTRUCTORS
 
     /**
-     * As used by TreeModel (same as {@link #ofAdapter(IsisAppCommonContext, ManagedObject)}
+     * As used by TreeModel (same as {@link #ofAdapter(MetaModelContext, ManagedObject)}
      */
     protected EntityModel(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final ManagedObject adapter) {
         this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
@@ -148,7 +148,7 @@ implements
 
     @Override
     public String getHint(final Component component, final String keyName) {
-        final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
+        final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getMetaModelContext(), component, keyName);
         if(componentHintKey != null) {
             return componentHintKey.get(getOwnerBookmark());
         }
@@ -157,7 +157,7 @@ implements
 
     @Override
     public void setHint(final Component component, final String keyName, final String hintValue) {
-        ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
+        ComponentHintKey componentHintKey = ComponentHintKey.create(super.getMetaModelContext(), component, keyName);
         componentHintKey.set(getOwnerBookmark(), hintValue);
     }
 
@@ -170,7 +170,7 @@ implements
 
     @Override
     public String getTitle() {
-        return getObject().titleString();
+        return getObject().getTitle();
     }
 
     @Override
@@ -270,7 +270,7 @@ implements
 
     private transient HintStore hintStore;
     private HintStore hintStore() {
-        return hintStore = getCommonContext().loadServiceIfAbsent(HintStore.class, hintStore);
+        return hintStore = getMetaModelContext().loadServiceIfAbsent(HintStore.class, hintStore);
     }
 
 }

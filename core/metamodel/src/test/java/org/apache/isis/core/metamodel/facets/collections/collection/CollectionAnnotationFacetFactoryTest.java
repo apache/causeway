@@ -18,7 +18,9 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -31,14 +33,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
@@ -66,16 +68,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         });
     }
 
+    @Deprecated
     void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockSpecificationLoader).loadSpecification(cls);
-                will(returnValue(mockTypeSpec));
-
-                allowing(mockSpecificationLoader).loadSpecification(returnType);
-                will(returnValue(mockReturnTypeSpec));
-            }
-        });
     }
 
     private static void processModify(
@@ -181,7 +175,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
             Assert.assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
-            assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 
         @Test
@@ -210,8 +204,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetFromArray);
-            assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
+            Assert.assertTrue(facet instanceof TypeOfFacet);
+            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
         }
 
         @Test
@@ -240,8 +235,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetFromGenerics);
-            assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
+            Assert.assertTrue(facet instanceof TypeOfFacetFromFeature);
+            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 
     }

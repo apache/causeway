@@ -23,6 +23,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 
 import lombok.val;
@@ -44,19 +45,19 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 CssClassFacetForDomainObjectLayoutAnnotation
@@ -73,6 +74,10 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
                 ObjectNamedFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                DomainObjectLayoutTableDecorationFacet
+                        .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
                 PagedFacetForDomainObjectLayoutAnnotation

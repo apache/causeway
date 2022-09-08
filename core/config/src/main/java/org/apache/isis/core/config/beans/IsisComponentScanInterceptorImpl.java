@@ -80,7 +80,7 @@ implements IsisComponentScanInterceptor {
         val correspondingClass = classOrFailure.getValue().get();
         val typeMeta = isisBeanTypeClassifier.classify(correspondingClass);
 
-        scanMeta.setInjectable(typeMeta.getManagedBy().isInjectable());
+        scanMeta.setVetoedForInjection(typeMeta.getManagedBy().isVetoedForInjection());
         if(typeMeta.getManagedBy().isBeanNameOverride()) {
             scanMeta.setBeanNameOverride(typeMeta.getLogicalType().getLogicalTypeName());
         }

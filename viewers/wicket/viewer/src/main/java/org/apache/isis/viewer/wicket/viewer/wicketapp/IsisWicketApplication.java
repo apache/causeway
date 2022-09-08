@@ -54,11 +54,10 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -101,7 +100,7 @@ extends AuthenticatedWebApplication
 implements
     ComponentFactoryRegistryAccessor,
     PageClassRegistryAccessor,
-    HasCommonContext {
+    HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -113,8 +112,6 @@ implements
     }
 
     @Getter(onMethod = @__(@Override))
-    private IsisAppCommonContext commonContext;
-
     @Inject private MetaModelContext metaModelContext;
     @Inject private List<WicketApplicationInitializer> applicationInitializers;
     @Inject private IsisSystemEnvironment systemEnvironment;
@@ -146,12 +143,12 @@ implements
         super.internalInit();
 
         // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-        IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
+        IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
         ajaxRequestTarget.registerRespondListener(
-                commonContext.injectServicesInto(
+                metaModelContext.injectServicesInto(
                         new TargetRespondListenerToResetQueryResultCache() ));
         return ajaxRequestTarget;
     }
@@ -177,8 +174,6 @@ implements
         getComponentInstantiationListeners().add(springInjector);
         // resolve injection-points on self
         springInjector.inject(this);
-
-        this.commonContext = IsisAppCommonContext.of(metaModelContext);
 
         // gather configuration plugins into a list of named tasks
         val initializationTasks =
@@ -239,7 +234,7 @@ implements
     @Override
     public Session newSession(final Request request, final Response response) {
         val newSession = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
-        newSession.init(getCommonContext());
+        newSession.init(getMetaModelContext());
         return newSession;
     }
 
@@ -377,7 +372,7 @@ implements
     protected IConverterLocator newConverterLocator() {
         final ConverterLocator converterLocator = new ConverterLocator();
         converterLocator.set(ManagedObject.class, new ConverterForObjectAdapter());
-        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento(commonContext));
+        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento());
         return converterLocator;
     }
 

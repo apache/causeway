@@ -25,16 +25,15 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
@@ -86,11 +85,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             return;
         }
 
-        val bookmark = objectManager.bookmarkObject(adapter);
-
-        val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), bookmark);
-
-        objectManager.loadObject(loadRequest);
+        _Blackhole.consume(adapter.getPojo());
     }
 
     protected void resolveIfRequired(final Object domainObject) {

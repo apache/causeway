@@ -29,6 +29,8 @@ import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
 
+import org.springframework.util.ClassUtils;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
@@ -60,6 +62,7 @@ import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -70,6 +73,7 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -181,6 +185,8 @@ implements ObjectSpecification {
     private ObjectSpecification superclassSpec;
 
     private ValueFacet valueFacet;
+    private EntityFacet entityFacet;
+    private ViewModelFacet viewmodelFacet;
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
@@ -395,6 +401,24 @@ implements ObjectSpecification {
     }
 
     @Override
+    public final Optional<EntityFacet> entityFacet() {
+        // deliberately don't memoize lookup misses, because could be too early
+        if(entityFacet==null) {
+            entityFacet = getFacet(EntityFacet.class);
+        }
+        return Optional.ofNullable(entityFacet);
+    }
+
+    @Override
+    public final Optional<ViewModelFacet> viewmodelFacet() {
+        // deliberately don't memoize lookup misses, because could be too early
+        if(viewmodelFacet==null) {
+            viewmodelFacet = getFacet(ViewModelFacet.class);
+        }
+        return Optional.ofNullable(viewmodelFacet);
+    }
+
+    @Override
     public String getTitle(final TitleRenderRequest titleRenderRequest) {
         if (titleFacet != null) {
             val titleString = titleFacet.title(titleRenderRequest);
@@ -466,20 +490,38 @@ implements ObjectSpecification {
                 || otherClass.isAssignableFrom(thisClass);
     }
 
+    @Override
+    public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
+
+        val thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
+        val otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
+
+        return thisClass == otherClass
+                || otherClass.isAssignableFrom(thisClass);
+    }
+
+
     // -- NAME, DESCRIPTION, PERSISTABILITY
 
     @Override
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(textFacet->textFacet.translated(NounForm.SINGULAR))
-            .orElseGet(this::getFullIdentifier); // unexpected code reach, however keep for JUnit testing
+            // unexpected code reach, however keep for JUnit testing
+            .orElseGet(()->String.format(
+                    "(%s has neither title- nor object-named-facet)",
+                    getFullIdentifier()));
     }
 
     @Override
     public String getPluralName() {
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(textFacet->textFacet.translated(NounForm.PLURAL))
-            .orElseGet(this::getFullIdentifier); // unexpected code reach, however keep for JUnit testing
+            // unexpected code reach, however keep for JUnit testing
+            .orElseGet(()->String.format(
+                    "(%s has neither title- nor object-named-facet)",
+                    getFullIdentifier()));
+
     }
 
     /**
@@ -559,7 +601,8 @@ implements ObjectSpecification {
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {
 
-        return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(), targetObjectAdapter.titleString(),
+        return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(),
+                targetObjectAdapter.getTitle(),
                 interactionMethod);
     }
 

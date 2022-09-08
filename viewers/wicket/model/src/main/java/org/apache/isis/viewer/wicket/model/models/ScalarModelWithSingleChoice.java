@@ -60,14 +60,13 @@ implements
 
     @Override
     public ObjectMemento getObject() {
-        return getCommonContext().mementoForSingle(
-                pendingValue().getValue().getValue());
+        return pendingValue().getValue().getValue().getMemento().orElseThrow();
     }
 
     @Override
     public void setObject(final ObjectMemento memento) {
         pendingValue().getValue().setValue(
-                getCommonContext().reconstructObject(memento));
+                getObjectManager().demementify(memento));
     }
 
 

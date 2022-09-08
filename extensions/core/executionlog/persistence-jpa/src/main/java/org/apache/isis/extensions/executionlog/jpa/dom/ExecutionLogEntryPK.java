@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
 import lombok.AccessLevel;
@@ -64,6 +65,7 @@ public class ExecutionLogEntryPK implements Serializable {
         val token = new StringTokenizer (value, SEPARATOR);
         this.interactionId = UUID.fromString(token.nextToken());
         this.sequence = Integer.parseInt(token.nextToken());
+        _Assert.assertNotNull(interactionId, ()->"PK required an interactionId");
     }
 
     @Override
@@ -84,6 +86,11 @@ public class ExecutionLogEntryPK implements Serializable {
         public ExecutionLogEntryPK destring(
                 final @NonNull String stringified) {
             return new ExecutionLogEntryPK(stringified);
+        }
+
+        @Override
+        public boolean isValid(@NonNull final ExecutionLogEntryPK value) {
+            return value.getInteractionId()!=null;
         }
     }
 

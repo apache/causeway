@@ -11,11 +11,11 @@ The framework provides mixins that surface the bookmarked domain object as eithe
 .BookmarkHolder.java
 ----
 interface BookmarkHolder {
-  Bookmark bookmark()     // <.>
+  Bookmark getBookmark()     // <.>
 }
 ----
 
-<.> xref:#bookmark_[bookmark()]
+<.> xref:#getBookmark_[getBookmark()]
 +
 --
 A reference to an arbitrary domain object, as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] .
@@ -23,7 +23,7 @@ A reference to an arbitrary domain object, as a xref:refguide:applib:index/servi
 
 == Members
 
-[#bookmark_]
-=== bookmark()
+[#getBookmark_]
+=== getBookmark()
 
 A reference to an arbitrary domain object, as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] .

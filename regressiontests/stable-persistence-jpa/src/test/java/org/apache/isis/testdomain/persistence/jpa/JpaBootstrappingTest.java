@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -43,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
@@ -101,11 +99,11 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
     void jpaEntities_shouldBeRecognisedAsSuch() {
         val productSpec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(productSpec.isEntity());
-        assertNotNull(productSpec.getFacet(EntityFacet.class));
+        assertNotNull(productSpec.entityFacetElseFail());
 
         val inventorySpec = specLoader.loadSpecification(JpaInventory.class);
         assertTrue(inventorySpec.isEntity());
-        assertNotNull(inventorySpec.getFacet(EntityFacet.class));
+        assertNotNull(inventorySpec.entityFacetElseFail());
     }
 
     @Test @Order(1) @Rollback(false)

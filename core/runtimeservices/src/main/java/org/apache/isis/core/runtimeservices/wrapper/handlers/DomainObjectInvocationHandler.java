@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmAssertionUtil;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -127,8 +128,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                     nsme);
         }
 
-        entityFacet = targetAdapter.getSpecification()
-                .getFacet(EntityFacet.class);
+        entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
 
         this.mixeeAdapter = mixeeAdapter;
     }
@@ -152,6 +152,10 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
 
         final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
+
+        if(!targetAdapter.getSpecialization().isMixin()) {
+            MmAssertionUtil.assertIsBookmarkSupported(targetAdapter);
+        }
 
         if (method.equals(titleMethod)) {
             return handleTitleMethod(targetAdapter);
@@ -227,6 +231,8 @@ extends DelegatingInvocationHandlerDefault<T> {
                             "Missing the required mixeeAdapter for action '%s'",
                             objectAction.getId());
                 }
+                MmAssertionUtil.assertIsBookmarkSupported(mixeeAdapter);
+
                 final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
 
                 if (mixinMember != null) {

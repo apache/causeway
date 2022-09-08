@@ -53,15 +53,15 @@ public class HomePage extends PageAbstract {
     private void buildGui() {
 
         if(super.getPageParameters() == null) {
-            super.getCommonContext().lookupServiceElseFail(MessageService.class)
+            super.getMetaModelContext().lookupServiceElseFail(MessageService.class)
             .informUser("Page timeout");
         }
 
-        val homePageAdapter = super.getCommonContext().getHomePageAdapter();
+        val homePageAdapter = super.getMetaModelContext().getHomePageAdapter();
 
         if(ManagedObjects.isSpecified(homePageAdapter)) {
             val requestCycle = RequestCycle.get();
-            val page = EntityPage.forAdapter(getCommonContext(), homePageAdapter);
+            val page = EntityPage.forAdapter(getMetaModelContext(), homePageAdapter);
             requestCycle.setResponsePage(page);
         } else {
             WktComponents.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);

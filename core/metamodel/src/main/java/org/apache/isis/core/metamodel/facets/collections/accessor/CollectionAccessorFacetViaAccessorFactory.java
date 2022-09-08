@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.collections.accessor;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 
 import lombok.val;
 
@@ -61,10 +59,6 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         addFacet(
                 new CollectionAccessorFacetViaAccessor(
                         typeSpec, accessorMethod, facetHolder));
-
-        addFacet(
-                CollectionSemanticsFacetDefault
-                .forCollection(accessorMethod, facetHolder));
     }
 
 
@@ -99,15 +93,14 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     public void findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover,
             final List<Method> methodListToAppendTo) {
-
         methodRemover.removeMethods(
-                MethodUtil.Predicates.nonBooleanGetter(Collection.class),
-                methodListToAppendTo::add
-                );
+                MethodUtil.Predicates.supportedNonScalarMethodReturnType(),
+                methodListToAppendTo::add);
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemovePropertyAccessors(
+            final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
 

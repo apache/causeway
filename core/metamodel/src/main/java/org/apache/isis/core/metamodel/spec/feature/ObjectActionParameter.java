@@ -25,7 +25,6 @@ import javax.enterprise.inject.Vetoed;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -162,7 +161,7 @@ extends ObjectFeature, CurrentHolder {
     }
 
     @NonNull default ManagedObject getEmpty() {
-        return ManagedObject.of(getElementType(), null);
+        return ManagedObject.empty(getElementType());
     }
 
     /**

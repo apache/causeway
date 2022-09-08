@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -79,7 +79,7 @@ implements ImperativeFacet {
         }
 
         val visibleChoices = ManagedObjects
-                .adaptMultipleOfTypeThenRefetchThenFilterByVisibility(
+                .adaptMultipleOfTypeThenFilterByVisibility(
                         requiredSpec, collectionOrArray, interactionInitiatedBy);
 
         return visibleChoices;

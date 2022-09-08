@@ -127,7 +127,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final ValueSerializer<?> valueSerializer) {
         if (valueRepr.isString()) {
             val recoveredValue = Try.call(()->
-                    valueSerializer.fromEncodedString(Format.JSON, valueRepr.asString()))
+                    valueSerializer.destring(Format.JSON, valueRepr.asString()))
                     .mapFailure(ex->_Exceptions
                             .illegalArgument(ex, "Unable to parse value %s as String", valueRepr))
                     .ifFailureFail()
@@ -173,7 +173,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                                 val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                                 // amend emums with "enumTitle"
                                 if(simple.getType() == ValueType.ENUM) {
-                                    decompRepr.mapPutString("enumTitle", valueAdapter.titleString());
+                                    decompRepr.mapPutString("enumTitle", valueAdapter.getTitle());
                                 }
                                 repr.mapPutJsonRepresentation("value", decompRepr);
                                 appendFormats(repr, null, simple.getType().value(), context.isSuppressExtensions());
@@ -235,7 +235,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
         // else
         return Facets.valueSerializerElseFail(objectSpec, cls)
-                .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
+                .enstring(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
     }
 
     /**

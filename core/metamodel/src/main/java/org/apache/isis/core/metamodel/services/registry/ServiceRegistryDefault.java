@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -54,8 +55,8 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @Override
-    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final String id) {
-        return Optional.ofNullable(contributingDomainServicesById.get().get(id));
+    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final LogicalType id) {
+        return Optional.ofNullable(contributingDomainServicesById.get().get(id.getLogicalTypeName()));
     }
 
     @Override

@@ -27,7 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -46,16 +46,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
     void expectRemoveMethod(final Method actionMethod) {
         context.checking(new Expectations() {{
             oneOf(mockMethodRemover).removeMethod(actionMethod);
-        }});
-    }
-
-    void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(cls);
-            will(returnValue(mockTypeSpec));
-
-            allowing(mockSpecificationLoader).loadSpecification(returnType);
-            will(returnValue(mockReturnTypeSpec));
         }});
     }
 
@@ -100,7 +90,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    void allowingPublishingConfigurationToReturn(final PublishingPolicies.ActionPublishingPolicy value) {
+    void allowingPublishingConfigurationToReturn(final ActionConfigOptions.PublishingPolicy value) {
         val config = metaModelContext.getConfiguration();
         config.getApplib().getAnnotation().getAction().setExecutionPublishing(value);
     }

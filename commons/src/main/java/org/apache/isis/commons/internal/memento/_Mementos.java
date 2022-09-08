@@ -130,7 +130,7 @@ public final class _Mementos {
      * @return non-null
      */
     public static Memento create(final EncoderDecoder codec, final SerializingAdapter serializer) {
-        return new _Mementos_MementoDefault(codec, serializer);
+        return new _MementoDefault(codec, serializer);
     }
 
     /**
@@ -157,7 +157,7 @@ public final class _Mementos {
         if(_Strings.isNullOrEmpty(input)) {
             return empty();
         }
-        return _Mementos_MementoDefault.parse(codec, serializer, input);
+        return _MementoDefault.parse(codec, serializer, input);
     }
 
     // -- EMPTY MEMENTO

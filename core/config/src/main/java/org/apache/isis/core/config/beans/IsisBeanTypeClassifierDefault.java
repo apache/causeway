@@ -20,19 +20,21 @@ package org.apache.isis.core.config.beans;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 
 import javax.persistence.Entity;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.AccessLevel;
@@ -48,20 +50,23 @@ implements IsisBeanTypeClassifier {
     private final Can<String> activeProfiles;
     private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
 
+    // handle arbitrary types ...
+    @SuppressWarnings("deprecation")
     @Override
     public IsisBeanMetaData classify(
             final @NonNull Class<?> type) {
 
-        // handle arbitrary types ...
+        //debug
+//        _Debug.onClassSimpleNameMatch(type, "class of interest", ()->{
+//            System.err.printf("classifying %s%n", type);
+//        });
 
-        if(type.isPrimitive()
+        if(ClassUtils.isPrimitiveOrWrapper(type)
                 || type.isEnum()) {
-            return IsisBeanMetaData.indifferent(BeanSort.VALUE, type);
+            return IsisBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
-        if(Collection.class.isAssignableFrom(type)
-                || Can.class.isAssignableFrom(type)
-                || type.isArray()) {
+        if(ProgrammingModelConstants.CollectionSemantics.valueOf(type).isPresent()) {
             return IsisBeanMetaData.isisManaged(BeanSort.COLLECTION, type);
         }
 
@@ -79,7 +84,7 @@ implements IsisBeanTypeClassifier {
 
         // handle vetoing ...
         if(TypeExcludeMarker.anyMatchOn(type)) {
-            return IsisBeanMetaData.isisManaged(BeanSort.VETOED, type); // reject
+            return IsisBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
         }
 
         val profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
@@ -87,7 +92,7 @@ implements IsisBeanTypeClassifier {
                 .orElse(null));
         if(profiles.isNotEmpty()
                 && !profiles.stream().anyMatch(this::isProfileActive)) {
-            return IsisBeanMetaData.isisManaged(BeanSort.VETOED, type); // reject
+            return IsisBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
         }
 
         // handle value types ...
@@ -95,7 +100,7 @@ implements IsisBeanTypeClassifier {
         val aValue = _Annotations.synthesize(type, org.apache.isis.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
-            return IsisBeanMetaData.indifferent(BeanSort.VALUE, type);
+            return IsisBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
         // handle actual bean types ...
@@ -103,9 +108,20 @@ implements IsisBeanTypeClassifier {
         val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
             val logicalType = LogicalType.infer(type);
-            // overrides Spring naming strategy
-            return IsisBeanMetaData
-                        .injectableNamedByIsis(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
+
+            // whether overrides Spring naming strategy
+            @SuppressWarnings("removal")
+            val namedByIsis = aDomainService
+                    .map(DomainService::logicalTypeName)
+                    .map(_Strings::emptyToNull)
+                    .map(logicalType.getLogicalTypeName()::equals)
+                    .orElse(false);
+
+            return namedByIsis
+                    ? IsisBeanMetaData
+                        .injectableNamedByIsis(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType)
+                    : IsisBeanMetaData
+                        .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types

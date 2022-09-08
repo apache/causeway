@@ -25,6 +25,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -35,7 +36,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MmAssertionUtil {
 
-    public static void assertExactType(
+    public void assertExactType(
             final @Nullable ObjectSpecification requiredSpec,
             final @Nullable Object pojo) {
         if(pojo==null
@@ -54,7 +55,24 @@ public class MmAssertionUtil {
     /**
      * Guard against incompatible type.
      */
-    public static @NonNull UnaryOperator<ManagedObject> assertInstanceOf(
+    public @NonNull UnaryOperator<ObjectSpecification> assertTypeOf(
+            final @NonNull ObjectSpecification requiredSpec) {
+        return specUnderInvestigation -> {
+            _Assert.assertNotNull(specUnderInvestigation);
+            if(specUnderInvestigation.isOfTypeResolvePrimitive(requiredSpec)) {
+                return specUnderInvestigation;
+            }
+            throw _Exceptions.illegalArgument("Object has incompatible type %s, "
+                    + "must be an instance of %s.",
+                    specUnderInvestigation,
+                    requiredSpec);
+        };
+    }
+
+    /**
+     * Guard against incompatible type.
+     */
+    public @NonNull UnaryOperator<ManagedObject> assertInstanceOf(
             final ObjectSpecification elementType) {
         return object -> {
             if(ManagedObjects.isInstanceOf(object, elementType)) {
@@ -72,7 +90,7 @@ public class MmAssertionUtil {
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
-    public static void assertPojoNotWrapped(final @Nullable Object pojo) {
+    public void assertPojoNotWrapped(final @Nullable Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;
@@ -86,5 +104,35 @@ public class MmAssertionUtil {
                             pojo.getClass(), pojo.toString());
         }
     }
+
+    public void assertPojoIsScalar(final @Nullable Object pojo) {
+        if(pojo==null) {
+            return;
+        }
+
+        _Assert.assertTrue(ProgrammingModelConstants.CollectionSemantics.valueOf(pojo.getClass()).isEmpty(),
+                ()->String.format("is scalar %s", pojo.getClass()));
+    }
+
+    /** check is free of side-effects */
+    public void assertSpecifiedAndNotEmpty(final @Nullable ManagedObject adapter) {
+        _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter),
+                ()->"object is null unspecified or empty");
+    }
+
+    /** check is free of side-effects - also fails on non-attached entities */
+    public void assertIsBookmarkSupported(final @Nullable ManagedObject adapter) {
+        assertSpecifiedAndNotEmpty(adapter);
+        _Assert.assertFalse(adapter.getSpecialization().getBookmarkPolicy().isNoBookmark(),
+                ()->String.format("object %s does not provide a bookmark", adapter));
+    }
+
+    /** check is NOT free of side-effects */
+    public static void assertHasBookmark(final @Nullable ManagedObject adapter) {
+        assertSpecifiedAndNotEmpty(adapter);
+        _Assert.assertTrue(adapter.getBookmark().isPresent(),
+                ()->String.format("object %s does not provide a bookmark", adapter));
+    }
+
 
 }

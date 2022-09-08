@@ -175,7 +175,7 @@ public class DomainObjectTesterFactory {
             assertEquals(expectedResult,
                     super.objectSpecification.getTitleService().titleOf(vm.getPojo()));
             assertEquals(expectedResult,
-                    vm.titleString());
+                    vm.getTitle());
         }
 
         public void assertIcon(final @Nullable String expectedResult) {
@@ -625,7 +625,9 @@ public class DomainObjectTesterFactory {
 
         @SuppressWarnings("unchecked")
         static void updatePojo(final ManagedValue managedValue, final UnaryOperator replacer) {
-            managedValue.update(v->ManagedObject.of(v.getSpecification(), replacer.apply(v.getPojo())));
+            managedValue.update(v->ManagedObject.adaptScalar(
+                    v.getSpecification(),
+                    replacer.apply(v.getPojo())));
         }
 
         @SneakyThrows
@@ -1128,7 +1130,10 @@ public class DomainObjectTesterFactory {
 
         protected Tester<T> init() {
             this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            this.vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
+            this.vm = ManagedObject.viewmodel(
+                    objectSpecification,
+                    factoryService.viewModel(domainObjectType),
+                    Optional.empty());
             return this;
         }
 

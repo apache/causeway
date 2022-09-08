@@ -59,7 +59,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         val emailField = new RequiredTextField<String>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.exists(getCommonContext()));
+        emailField.add(EmailAvailableValidator.exists(getMetaModelContext()));
 
         val formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
@@ -90,7 +90,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         val passwordResetEvent = new PasswordResetEvent(
                 email,
                 confirmationUrl,
-                getIsisConfiguration().getViewer().getWicket().getApplication().getName());
+                getWicketViewerSettings().getApplication().getName());
 
         boolean emailSent = super.getEmailNotificationService().send(passwordResetEvent);
         if (emailSent) {

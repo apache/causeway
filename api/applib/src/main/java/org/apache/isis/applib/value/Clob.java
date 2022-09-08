@@ -19,6 +19,7 @@
 package org.apache.isis.applib.value;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -36,6 +37,7 @@ import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -169,6 +171,13 @@ public final class Clob implements NamedWithMimeType {
         if(wr!=null && chars!=null){
             wr.append(chars);
         }
+    }
+
+    @SneakyThrows
+    public String asString() {
+        val sw = new StringWriter();
+        writeCharsTo(sw);
+        return sw.toString();
     }
 
     // -- OBJECT CONTRACT

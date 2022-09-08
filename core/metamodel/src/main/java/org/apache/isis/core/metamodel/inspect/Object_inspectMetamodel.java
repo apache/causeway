@@ -68,19 +68,22 @@ public class Object_inspectMetamodel {
 
     @MemberSupport public Object act() {
 
-        final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainObject.getClass());
+        final Optional<LogicalType> logicalTypeIfAny = metaModelService
+                .lookupLogicalTypeByClass(domainObject.getClass());
         if(!logicalTypeIfAny.isPresent()) {
             messageService.warnUser("Unknown class, unable to export");
             return null;
         }
-        final String namespace = logicalTypeIfAny.get().getNamespace();
+        final String namespace = logicalTypeIfAny.get().getLogicalTypeName();
 
-        val config =
-                new Config()
-                .withIgnoreNoop()
-                .withIgnoreAbstractClasses()
-                .withIgnoreInterfaces()
-                .withIgnoreBuiltInValueTypes()
+        val config = Config.builder()
+                .ignoreFallbackFacets(true)
+                .ignoreAbstractClasses(true)
+                .ignoreInterfaces(true)
+                .ignoreBuiltInValueTypes(true)
+                .includeTitleAnnotations(true)
+                .includeShadowedFacets(true)
+                .build()
                 .withNamespacePrefix(namespace);
 
         val metamodelDto = metaModelService.exportMetaModel(config);
@@ -94,6 +97,7 @@ public class Object_inspectMetamodel {
             .orElseThrow(_Exceptions::noSuchElement);
 
         val root = MMNodeFactory.type(domainClassDto, null);
+
         val tree = TreeNode.lazy(root, MMTreeAdapter.class);
 
         // Initialize view-model nodes of the entire tree,
@@ -108,6 +112,6 @@ public class Object_inspectMetamodel {
     }
 
     @Inject private MetaModelService metaModelService;
-    @Inject MessageService messageService;
+    @Inject private MessageService messageService;
 
 }

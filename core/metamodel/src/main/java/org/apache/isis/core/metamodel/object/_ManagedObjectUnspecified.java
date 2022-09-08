@@ -19,12 +19,8 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -36,7 +32,7 @@ import lombok.NonNull;
  * @see ManagedObject.Specialization#UNSPECIFIED
  */
 final class _ManagedObjectUnspecified
-implements ManagedObject {
+implements ManagedObject, Bookmarkable.NoBookmark {
 
     static final ManagedObject INSTANCE = new _ManagedObjectUnspecified();
 
@@ -56,25 +52,6 @@ implements ManagedObject {
     }
 
     @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return false;
-    }
-
-    @Override
-    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-    }
-
-    @Override
     public MetaModelContext getMetaModelContext() {
         throw _Exceptions
                 .illegalArgument("Can only retrieve MetaModelContext from ManagedObjects "
@@ -89,6 +66,11 @@ implements ManagedObject {
     @Override
     public <T> T assertCompliance(final @NonNull T pojo) {
         return pojo; // no-op
+    }
+
+    @Override
+    public String getTitle() {
+        return "unspecified object";
     }
 
     @Override

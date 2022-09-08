@@ -30,12 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 
 import lombok.val;
 
-class ChoiceProviderForValuesTest extends ChoiceProviderTestAbstract {
+class ChoiceProviderForValuesTest
+extends ChoiceProviderTestAbstract {
 
     @BeforeEach
     void setup() throws Exception {
@@ -74,10 +74,8 @@ class ChoiceProviderForValuesTest extends ChoiceProviderTestAbstract {
 
         val recoveredMementos = Can.ofCollection(choiceProvider.toChoices(asIds.toList()));
 
-        val commonContext = IsisAppCommonContext.of(mmc);
-
         val recoveredChoices = recoveredMementos
-                .map(commonContext::reconstructObject);
+                .map(mmc.getObjectManager()::demementify);
 
         val recoveredChoiceValues = recoveredChoices
                 .map(ManagedObject::getPojo);

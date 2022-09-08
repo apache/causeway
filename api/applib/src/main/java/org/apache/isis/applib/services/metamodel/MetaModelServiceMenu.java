@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -46,7 +48,7 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import lombok.val;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
@@ -127,18 +129,7 @@ public class MetaModelServiceMenu {
                 final boolean includeInterfaces
         ) {
 
-            Config config =
-                    new Config()
-                            .withIgnoreNoop()
-                            .withIgnoreAbstractClasses()
-                            .withIgnoreInterfaces()
-                            .withIgnoreBuiltInValueTypes();
-            for (final String namespace : namespaces) {
-                config = config.withNamespacePrefix(namespace);
-            }
-            if(!includeInterfaces) {
-                config = config.withIgnoreInterfaces();
-            }
+            val config = defaultConfig(includeInterfaces, namespaces);
 
             final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
 
@@ -190,18 +181,7 @@ public class MetaModelServiceMenu {
                 final boolean includeInterfaces
         ) {
 
-            Config config =
-                    new Config()
-                            .withIgnoreNoop()
-                            .withIgnoreAbstractClasses()
-                            .withIgnoreInterfaces()
-                            .withIgnoreBuiltInValueTypes();
-            for (final String namespace : namespaces) {
-                config = config.withNamespacePrefix(namespace);
-            }
-            if(!includeInterfaces) {
-                config = config.withIgnoreInterfaces();
-            }
+            val config = defaultConfig(includeInterfaces, namespaces);
 
             final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
 
@@ -259,18 +239,7 @@ public class MetaModelServiceMenu {
 
         ) throws IOException {
 
-            Config config =
-                    new Config()
-                            .withIgnoreNoop()
-                            .withIgnoreAbstractClasses()
-                            .withIgnoreInterfaces()
-                            .withIgnoreBuiltInValueTypes();
-            for (final String namespace : namespaces) {
-                config = config.withNamespacePrefix(namespace);
-            }
-            if(!includeInterfaces) {
-                config = config.withIgnoreInterfaces();
-            }
+            val config = defaultConfig(includeInterfaces, namespaces);
 
             final MetamodelDto leftMetamodelDto =  metaModelService.exportMetaModel(config);
 
@@ -310,6 +279,21 @@ public class MetaModelServiceMenu {
 
 
     // -- HELPER
+
+    private Config defaultConfig(
+            final boolean includeInterfaces,
+            final List<String> namespaces) {
+        var config = Config.builder()
+                .ignoreFallbackFacets(true)
+                .ignoreAbstractClasses(true)
+                .ignoreBuiltInValueTypes(true)
+                .ignoreInterfaces(!includeInterfaces)
+                .build();
+        for (final String namespace : namespaces) {
+            config = config.withNamespacePrefix(namespace);
+        }
+        return config;
+    }
 
     private List<String> namespaceChoices() {
         final DomainModel domainModel = metaModelService.getDomainModel();

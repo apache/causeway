@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -41,7 +40,6 @@ extends CssClassFacetAbstract {
     public static Optional<CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
         return domainObjectLayoutIfAny
@@ -50,7 +48,8 @@ extends CssClassFacetAbstract {
                 cssClassUiEventClass,
                 CssClassUiEvent.Noop.class,
                 CssClassUiEvent.Default.class,
-                configuration.getApplib().getAnnotation().getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
+                facetHolder.getConfiguration().getApplib().getAnnotation()
+                    .getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
         .map(cssClassUiEventClass -> {
             return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
                     cssClassUiEventClass, metamodelEventService, facetHolder);

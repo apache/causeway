@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -57,12 +56,10 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
@@ -152,36 +149,31 @@ implements MemberExecutorService {
                 .map(MmUnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val actionInvocation =
-                new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos
-                );
+        val actionInvocation = new ActionInvocation(
+                        interaction, actionId, targetPojo, argumentPojos);
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), command);
 
         // handle any exceptions
-        final Execution<ActionInvocationDto, ?> priorExecution =
-                _Casts.uncheckedCast(interaction.getPriorExecution());
-
-        val executionExceptionIfAny = priorExecution.getThrew();
-
-        actionInvocation.setThrew(executionExceptionIfAny);
-
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-                ? ((RuntimeException)executionExceptionIfAny)
-                : new RuntimeException(executionExceptionIfAny);
-        }
+        val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
 
         val returnedPojo = priorExecution.getReturned();
         val returnedAdapter = objectManager.adapt(
-                returnedPojo, owningAction::getElementType, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+                returnedPojo, owningAction::getElementType);
+
+        // assert has bookmark, unless non-scalar
+        ManagedObjects.asScalarNonEmpty(returnedAdapter)
+        .filter(scalarNonEmpty->!scalarNonEmpty.getSpecialization().isOther()) // don't care
+        .ifPresent(scalarNonEmpty->{
+            _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->String.format(
+                    "bookmark required for non-empty scalars %s", scalarNonEmpty.getSpecification()));
+        });
 
         // sync DTO with result
         interactionDtoFactory
-        .updateResult(priorExecution.getDto(), owningAction, returnedAdapter);
+        .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
         setCommandResultIfEntity(command, returnedAdapter);
@@ -277,26 +269,23 @@ implements MemberExecutorService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return;
         }
-
-        val entityState = MmEntityUtil.getEntityState(resultAdapter);
-        if(entityState.isDetached())   {
+        val entityState = resultAdapter.getEntityState();
+        if(!entityState.isPersistable()) {
+            return;
+        }
+        if(entityState.isDetached()
+                || entityState.isSpecicalJpaDetachedWithOid()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }
-        if(entityState.isAttached()) {
-            resultAdapter.getBookmark()
-            .ifPresent(bookmark->
-                command.updater().setResult(Try.success(bookmark))
-            );
-        } else {
-            if(entityState.isPersistable()) {
-                log.warn("was unable to get a bookmark for the command result, "
-                        + "which is an entity: {}", resultAdapter);
-            }
+        val entityState2 = resultAdapter.getEntityState();
+        if(entityState2.hasOid()) {
+            val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
+            command.updater().setResult(Try.success(bookmark));
+            return;
         }
-
-        // ignore all other sorts of objects
-
+        log.warn("was unable to get a bookmark for the command result, "
+                + "which is an entity: {}", resultAdapter);
     }
 
     private ManagedObject resultFilteredHonoringVisibility(

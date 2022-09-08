@@ -18,11 +18,15 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +35,8 @@ import lombok.Setter;
  * @see <a href="https://issues.apache.org/jira/browse/ISIS-2499">ISIS-2499</a>
  */
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperElementTypeVm {
+public class ProperElementTypeVm
+extends ProperElementTypeVmAbstract {
 
     @Collection
     @Getter @Setter private List<ElementTypeInterface> interfaceColl;
@@ -50,5 +55,34 @@ public class ProperElementTypeVm {
 
     @Collection
     @Getter @Setter private List<? extends ElementTypeConcrete> concreteColl2;
+
+    // specialization over Set<ElementTypeInterface> in super
+    @Override
+    public SortedSet<ElementTypeInterface> getSetOfInterfaceType() {
+        return Collections.emptySortedSet();
+    }
+
+    // specialization over Set<? extends ElementTypeConcrete> in super
+    @Override
+    public SortedSet<? extends ElementTypeConcrete> getSetOfConcreteType() {
+        return Collections.emptySortedSet();
+    }
+
+    // specialization over ImmutableCollection<ElementTypeInterface> in super
+    @Override
+    public Can<ElementTypeInterface> getImmutableOfInterfaceType() {
+        return Can.empty();
+    }
+
+    // specialization over ImmutableCollection<? extends ElementTypeConcrete> in super
+    @Override
+    public Can<? extends ElementTypeConcrete> getImmutableOfConcreteType() {
+        return Can.empty();
+    }
+
+    @Override
+    public void act(final ImmutableCollection<ElementTypeInterface> coll) {
+    }
+
 
 }

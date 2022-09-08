@@ -82,6 +82,11 @@ public class CommandLogEntryPK implements Serializable {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
 
+        @Override
+        public boolean isValid(@NonNull final CommandLogEntryPK value) {
+            return value.getInteractionId()!=null;
+        }
+
     }
 
 

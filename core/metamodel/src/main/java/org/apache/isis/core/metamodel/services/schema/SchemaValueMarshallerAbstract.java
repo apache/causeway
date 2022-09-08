@@ -34,16 +34,16 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.object.ProtoObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
@@ -60,7 +60,7 @@ import lombok.Value;
 import lombok.val;
 
 public abstract class SchemaValueMarshallerAbstract
-implements SchemaValueMarshaller {
+implements SchemaValueMarshaller, HasMetaModelContext {
 
     @Value(staticConstructor = "of")
     public static class Context<T> {
@@ -214,9 +214,8 @@ implements SchemaValueMarshaller {
     public final ManagedObject recoverReferenceFrom(
             final @NonNull OidDto oidDto) {
         val bookmark = Bookmark.forOidDto(oidDto);
-        val spec = getSpecificationLoader().specForLogicalTypeNameElseFail(bookmark.getLogicalTypeName());
-        val loadRequest = ObjectLoader.Request.of(spec, bookmark);
-        return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
+        return getObjectManager()
+                .loadObject(ProtoObject.resolveElseFail(getSpecificationLoader(), bookmark));
     }
 
     @Override
@@ -360,7 +359,6 @@ implements SchemaValueMarshaller {
 
     // -- DEPENDENCIES
 
-    protected abstract SpecificationLoader getSpecificationLoader();
     protected abstract ValueSemanticsResolver getValueSemanticsResolver();
 
 }

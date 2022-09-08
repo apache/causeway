@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.validation;
 
 import org.apache.wicket.validation.IValidator;
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
@@ -31,19 +31,19 @@ import org.apache.isis.viewer.wicket.model.util.WktContext;
  */
 public abstract class ValidatorBase<T>
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     IValidator<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private transient IsisAppCommonContext commonContext;
+    private transient MetaModelContext commonContext;
 
-    protected ValidatorBase(final IsisAppCommonContext commonContext) {
+    protected ValidatorBase(final MetaModelContext commonContext) {
         this.commonContext = commonContext;
     }
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 

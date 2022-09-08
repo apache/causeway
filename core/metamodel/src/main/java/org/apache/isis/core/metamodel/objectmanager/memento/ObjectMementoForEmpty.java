@@ -27,6 +27,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0
+ */
 @RequiredArgsConstructor
 public class ObjectMementoForEmpty implements ObjectMemento {
 
@@ -41,7 +44,7 @@ public class ObjectMementoForEmpty implements ObjectMemento {
     }
 
     @Override
-    public Bookmark bookmark() {
+    public Bookmark getBookmark() {
         return Bookmark.empty(logicalType);
     }
 

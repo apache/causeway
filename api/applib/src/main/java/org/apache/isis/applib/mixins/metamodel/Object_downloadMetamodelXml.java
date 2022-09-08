@@ -86,12 +86,12 @@ public class Object_downloadMetamodelXml {
         }
         final String namespace = logicalTypeIfAny.get().getNamespace();
 
-        val config =
-                new Config()
-                .withIgnoreNoop()
-                .withIgnoreAbstractClasses()
-                .withIgnoreInterfaces()
-                .withIgnoreBuiltInValueTypes()
+        val config = Config.builder()
+                .ignoreFallbackFacets(true)
+                .ignoreAbstractClasses(true)
+                .ignoreInterfaces(true)
+                .ignoreBuiltInValueTypes(true)
+                .build()
                 .withNamespacePrefix(namespace);
 
         val metamodelDto = metaModelService.exportMetaModel(config);

@@ -348,6 +348,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
         <datanucleus-rdbms.version>6.0.1</datanucleus-rdbms.version>
 
+        <datatables.version>1.12.1</datatables.version> <!-- keep in sync with DatatablesDotNet -->
+
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>4.3</easymock.version>
@@ -396,7 +398,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <npm.version>8.9.0</npm.version>
 
         <objenesis.version>3.3</objenesis.version>
-        <ognl.version>3.3.3</ognl.version>
+        <ognl.version>3.3.4</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.2.2</poi.version>
@@ -417,12 +419,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>3.2.1</togglz.version>
 
-        <vaadin.version>23.1.7</vaadin.version>
+        <vaadin.version>23.2.0</vaadin.version>
 
         <wicket.version>9.11.0</wicket.version>
-        <wicket-bootstrap.version>6.0.0-M7</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+        <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.4</wicket-webjars.version>
-        <wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
+        <wicket-viewer-jquery.version>3.6.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
         <wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
         <wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>

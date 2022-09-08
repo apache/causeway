@@ -79,7 +79,7 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addCredits() {
 
-        val credits = super.getConfiguration().getViewer().getWicket().getCredit();
+        val credits = super.getWicketViewerSettings().getCredit();
         val hasAnyCredits = !_NullSafe.isEmpty(credits);
 
         val creditItems = new RepeatingView("creditItems");
@@ -133,7 +133,7 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addBreadcrumbs() {
 
-        boolean showBreadcrumbs = getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowDropDownOnFooter();
+        boolean showBreadcrumbs = getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
         final Component breadcrumbPanel =
                 showBreadcrumbs
                 ? new BreadcrumbPanel(ID_BREADCRUMBS)
@@ -145,7 +145,7 @@ extends PanelAbstract<String, Model<String>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        final boolean showFooter = getConfiguration().getViewer().getWicket().isShowFooter();
+        final boolean showFooter = getWicketViewerSettings().isShowFooter();
 
         if(!showFooter) {
             setVisible(false);
@@ -162,7 +162,7 @@ extends PanelAbstract<String, Model<String>> {
         add(aboutLink);
 
         final String applicationVersion =
-                getIsisConfiguration().getViewer().getWicket().getApplication().getVersion();
+                getWicketViewerSettings().getApplication().getVersion();
 
         Wkt.labelAdd(aboutLink, ID_ABOUT_MESSAGE,
                 _Strings.isNotEmpty(applicationVersion)

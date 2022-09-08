@@ -45,6 +45,11 @@ public interface Hierarchical {
      */
     boolean isOfType(ObjectSpecification other);
 
+    /**
+     * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
+     */
+    boolean isOfTypeResolvePrimitive(ObjectSpecification other);
+
     public static enum Depth {
         DIRECT,
         TRANSITIVE

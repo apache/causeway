@@ -31,10 +31,10 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
@@ -59,7 +59,7 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            determineScalarAdapter(actionModel.getCommonContext(), resultAdapter); // intercepts collections
+            determineScalarAdapter(actionModel.getMetaModelContext(), resultAdapter); // intercepts collections
             return toEntityPage(resultAdapter);
         }
 
@@ -95,7 +95,7 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getCommonContext();
+            final var commonContext = actionModel.getMetaModelContext();
             final var valueModel = ValueModel.of(commonContext, actionModel.getAction(), resultAdapter);
             valueModel.setActionHint(actionModel);
             final var valuePage = new ValuePage(valueModel);
@@ -136,7 +136,7 @@ public enum ActionResultResponseType {
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            final var webAppContextPath = actionModel.getCommonContext().getWebAppContextPath();
+            final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             return ActionResultResponse
                     .openUrlInBrowser(target, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.getOpenUrlStrategy());
         }
@@ -150,7 +150,7 @@ public enum ActionResultResponseType {
                 final Can<ManagedObject> args) {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            final var webAppContextPath = actionModel.getCommonContext().getWebAppContextPath();
+            final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             IRequestHandler handler = _RedirectHandler.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
@@ -176,7 +176,7 @@ public enum ActionResultResponseType {
                 final Can<ManagedObject> args) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            final var webAppContextPath = actionModel.getCommonContext().getWebAppContextPath();
+            final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             IRequestHandler handler = _RedirectHandler.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
@@ -188,7 +188,7 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getCommonContext();
+            final var commonContext = actionModel.getMetaModelContext();
             final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(actionModel);
             return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
@@ -201,7 +201,7 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            val signInPage = actionModel.getCommonContext()
+            val signInPage = actionModel.getMetaModelContext()
                     .lookupServiceElseFail(PageClassRegistry.class)
                     .getPageClass(PageType.SIGN_IN);
 
@@ -233,13 +233,14 @@ public enum ActionResultResponseType {
     }
 
     public static ActionResultResponse toEntityPage(final ManagedObject entityOrViewmodel) {
-        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmarkRefreshed().orElseThrow());
+        entityOrViewmodel.invalidateBookmark();
+        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmark().orElseThrow());
     }
 
     // -- HELPER
 
     private static ManagedObject determineScalarAdapter(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext commonContext,
             final ManagedObject resultAdapter) {
 
         if (resultAdapter.getSpecification().isScalar()) {

@@ -59,6 +59,7 @@ public @interface CollectionLayout {
     String cssClass()
             default "";
 
+
     /**
      * Indicates which view is used by default to render the collection.
      *
@@ -166,5 +167,13 @@ public @interface CollectionLayout {
     @SuppressWarnings("rawtypes")
     Class<? extends Comparator> sortedBy()
             default Comparator.class;
+
+    /**
+     * Whether a parented collection when represented in a table form should additionally be
+     * &quot;decorated&quot; with client-side (javascript) enhancements, for example to enable paging and filtering.
+     */
+    TableDecoration tableDecoration()
+            default TableDecoration.NOT_SPECIFIED;
+
 
 }

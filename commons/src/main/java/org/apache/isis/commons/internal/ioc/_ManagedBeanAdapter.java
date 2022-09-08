@@ -35,13 +35,16 @@ public interface _ManagedBeanAdapter {
 
     // -- TEST FACTORIES
 
-    public static <T> _ManagedBeanAdapter forTestingLazy(Class<T> beanClass, Supplier<T> beanProvider) {
+    public static <T> _ManagedBeanAdapter forTestingLazy(final String logicalTypeName, final Class<T> beanClass, final Supplier<T> beanProvider) {
+        return _ManagedBeanAdapter_forTestingLazy.of(logicalTypeName, beanClass, beanProvider);
+    }
+
+    public static <T> _ManagedBeanAdapter forTestingLazy(final Class<T> beanClass, final Supplier<T> beanProvider) {
         return _ManagedBeanAdapter_forTestingLazy.of(beanClass.getName(), beanClass, beanProvider);
     }
 
-    public static <T> _ManagedBeanAdapter forTesting(T bean) {
+    public static <T> _ManagedBeanAdapter forTesting(final T bean) {
         return _ManagedBeanAdapter_forTestingLazy.of(bean.getClass().getName(), bean.getClass(), ()->bean);
     }
-
 
 }
