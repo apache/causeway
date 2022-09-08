@@ -311,31 +311,38 @@
 				<xs:attribute name="fqcn" type="xs:string" />
 			</xs:extension>
 		</xs:complexContent>
-
 	</xs:complexType>
 
-    <xs:complexType name="facetAttr">
-        <xs:annotation>
-            <xs:documentation>Describes an attribute of a facet of the metamodel, as a simple key/value pair of strings (the key is modelled as an attribute of the value).
-            </xs:documentation>
-        </xs:annotation>
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:annotation>
-                    <xs:documentation>The value of the attribute, unique across all facet attributes of a facet.
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:attribute name="name" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>The name of the attribute, unique across all facet attributes of a facet.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    
-    <xs:complexType name="annotation">
+	<xs:complexType name="facetAttr">
+		<xs:annotation>
+			<xs:documentation>
+				Describes an attribute of a facet of the metamodel, as a
+				simple key/value pair of strings (the key is modelled as
+				an attribute of the value).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:attribute name="name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the attribute, unique across all
+							facet attributes of a facet.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="value" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The value of the attribute.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="annotation">
         <xs:annotation>
             <xs:documentation>Not part of the metamodel. Enables export tools to add arbitrary meta data.
             </xs:documentation>
