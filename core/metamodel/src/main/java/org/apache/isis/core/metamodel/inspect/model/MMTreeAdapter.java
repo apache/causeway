@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.inspect.model;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.commons.internal.base._NullSafe;
 
-@Domain.Exclude
 public class MMTreeAdapter implements TreeAdapter<MMNode> {
 
     @Override
