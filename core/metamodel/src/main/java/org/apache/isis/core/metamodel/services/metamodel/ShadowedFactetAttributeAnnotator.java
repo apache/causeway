@@ -70,9 +70,9 @@ public class ShadowedFactetAttributeAnnotator implements MetaModelAnnotator {
                     if(attributeName.equals("precedence")) {
                         return; // skip
                     }
-                    addAttributeAnnotation(facetType, attributeName, String.format("%s (shadowed %s)",
+                    addAttributeAnnotation(facetType, attributeName, String.format("'%s' from %s)",
                             str,
-                            shadowedFacet.getClass().getName()));
+                            config().abbrev(shadowedFacet.getClass())));
                 });
             });
         });
