@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -57,8 +58,9 @@ public class FileUploadModels {
 
             @Override
             protected List<FileUpload> fromScalarValue(final Blob blob) {
-                // not used
-                return null;
+                return blob!=null
+                        ? Collections.emptyList() //[ISIS-3203] just enough so we can distinguish the empty from the present case
+                        : null;
             }
 
         };
@@ -92,8 +94,9 @@ public class FileUploadModels {
 
             @Override
             protected List<FileUpload> fromScalarValue(final Clob clob) {
-                // not used
-                return null;
+                return clob!=null
+                        ? Collections.emptyList() //[ISIS-3203] just enough so we can distinguish the empty from the present case
+                        : null;
             }
 
         };

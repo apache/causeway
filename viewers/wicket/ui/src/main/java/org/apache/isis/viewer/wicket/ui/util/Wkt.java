@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
@@ -571,7 +572,28 @@ public class Wkt {
             final String id,
             final String initialCaption,
             final IModel<List<FileUpload>> model) {
-        val fileUploadField = new BootstrapFileInputField(id, model);
+        val fileUploadField = new BootstrapFileInputField(id, model) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void convertInput() {
+                super.convertInput(); // keep side-effects
+                if(!isRequired()) {return;}
+                /*[ISIS-3203]: in the context of mandatory property or action parameter negotiation,
+                 * we need to set the converted input to something other than null, even an empty list will do
+                 */
+                if(isConvertedInputNull()
+                        && !isModelEmpty()) {
+                    super.setConvertedInput(Collections.emptyList()); // always pass
+                }
+            }
+            @Override
+            public boolean checkRequired() {
+                super.checkRequired(); // keep side-effects
+                return true; // always pass otherwise workaround won't work
+            }
+            private boolean isModelEmpty() { return getModel().getObject()==null; }
+            private boolean isConvertedInputNull() { return getConvertedInput()==null; }
+        };
         fileUploadField.getConfig()
             .maxFileCount(1)
             .mainClass("input-group-sm")
