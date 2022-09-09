@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.gridlayout;
+package org.apache.isis.viewer.commons.model.layout;
 
 import java.util.Optional;
 import java.util.Set;
@@ -39,13 +39,14 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.viewer.commons.model.UiModel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "bind")
-public class UiGridLayout {
+public class UiGridLayout implements UiModel {
 
     @RequiredArgsConstructor
     public static abstract class Visitor<C, T> {

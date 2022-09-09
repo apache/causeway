@@ -18,17 +18,9 @@
  */
 package org.apache.isis.viewer.commons.model;
 
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
+/**
+ * Marker interface. Common to UI models.
+ */
+public interface UiModel {
 
-public interface HasParentUiModel<T extends ObjectUiModel> {
-
-    /**
-     * The owning entity/viewmodel/service that is declaring this action or property.
-     */
-    T getParentUiModel();
-
-    default ManagedObject getParentObject()  {
-        return getParentUiModel().getManagedObject();
-    }
 }

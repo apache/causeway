@@ -23,7 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -64,7 +64,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private void addOrReplaceIconAndTitle() {
         final ComponentFactory componentFactory = getComponentFactoryRegistry()
-                .findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getEntityModel());
+                .findComponentFactory(UiComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getEntityModel());
         final Component component = componentFactory.createComponent(getEntityModel());
         addOrReplace(component);
     }

@@ -25,8 +25,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.commons.model.PlacementDirection;
 import org.apache.isis.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
+import org.apache.isis.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
@@ -98,46 +98,46 @@ public class WktTooltips {
     public <T extends Component> T addTooltip(
             final @Nullable T target,
             final @Nullable String body) {
-        return addTooltip(PlacementDirection.BOTTOM, target, body);
+        return addTooltip(UiPlacementDirection.BOTTOM, target, body);
     }
 
     public <T extends Component> T addTooltip(
             final @Nullable T target,
             final @Nullable String title,
             final @Nullable String body) {
-        return addTooltip(PlacementDirection.BOTTOM, target, title, body);
+        return addTooltip(UiPlacementDirection.BOTTOM, target, title, body);
     }
 
     public <T extends Component> T addTooltip(
-            final @NonNull PlacementDirection placementDirection,
+            final @NonNull UiPlacementDirection uiPlacementDirection,
             final @Nullable T target,
             final @Nullable String body) {
         return addTooltip(target, _Strings.isEmpty(body)
                 ? null
-                : TooltipDecorationModel.ofBody(placementDirection, body));
+                : TooltipDecorationModel.ofBody(uiPlacementDirection, body));
     }
 
     public <T extends Component> T addTooltip(
-            final @NonNull PlacementDirection placementDirection,
+            final @NonNull UiPlacementDirection uiPlacementDirection,
             final @Nullable T target,
             final @Nullable String title,
             final @Nullable String body) {
-        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(placementDirection, title, body));
+        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(uiPlacementDirection, title, body));
     }
 
     // -- HELPER
 
     private TooltipBehavior createTooltipBehavior(
-            final @NonNull PlacementDirection placementDirection,
+            final @NonNull UiPlacementDirection uiPlacementDirection,
             final @NonNull IModel<String> titleLabel,
             final @NonNull IModel<String> bodyLabel) {
-        return createPopoverBehavior(titleLabel, bodyLabel, getTooltipConfig(placementDirection));
+        return createPopoverBehavior(titleLabel, bodyLabel, getTooltipConfig(uiPlacementDirection));
     }
 
     private TooltipBehavior createTooltipBehavior(
-            final @NonNull PlacementDirection placementDirection,
+            final @NonNull UiPlacementDirection uiPlacementDirection,
             final @NonNull IModel<String> bodyLabel) {
-        return createPopoverBehavior(Model.of(), bodyLabel, getTooltipConfig(placementDirection));
+        return createPopoverBehavior(Model.of(), bodyLabel, getTooltipConfig(uiPlacementDirection));
     }
 
     private PopoverBehavior createPopoverBehavior(
@@ -169,8 +169,8 @@ public class WktTooltips {
         };
     }
 
-    private PopoverConfig getTooltipConfig(final PlacementDirection placementDirection) {
-        switch(placementDirection) {
+    private PopoverConfig getTooltipConfig(final UiPlacementDirection uiPlacementDirection) {
+        switch(uiPlacementDirection) {
         case TOP:
             return createPopoverConfigDefault()
                 .withPlacement(Placement.top);
@@ -184,7 +184,7 @@ public class WktTooltips {
             return createPopoverConfigDefault()
                 .withPlacement(Placement.left);
         default:
-            throw _Exceptions.unmatchedCase(placementDirection);
+            throw _Exceptions.unmatchedCase(uiPlacementDirection);
         }
     }
 

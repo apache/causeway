@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -37,18 +37,18 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
     private static final long serialVersionUID = 1L;
 
     public EntityComponentFactoryAbstract(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final Class<?> componentClass) {
 
-        super(componentType, componentClass);
+        super(uiComponentType, componentClass);
     }
 
     public EntityComponentFactoryAbstract(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final String name,
             final Class<?> componentClass) {
 
-        super(componentType, name, componentClass);
+        super(uiComponentType, name, componentClass);
     }
 
     @Override

@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -39,7 +39,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ServiceActionsPanelFactory() {
-        super(ComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
+        super(UiComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }
 
     /**

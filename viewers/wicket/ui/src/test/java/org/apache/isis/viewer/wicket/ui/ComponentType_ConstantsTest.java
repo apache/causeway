@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui;
 
 import org.junit.Test;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +29,7 @@ public class ComponentType_ConstantsTest {
 
     @Test
     public void testToString() {
-        assertThat(ComponentType.COLLECTION_CONTENTS.toString(), is("collectionContents"));
+        assertThat(UiComponentType.COLLECTION_CONTENTS.toString(), is("collectionContents"));
     }
 
     public enum X {

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -30,7 +30,7 @@ public class BookmarkedPagesPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public BookmarkedPagesPanelFactory() {
-        super(ComponentType.BOOKMARKED_PAGES, BookmarkedPagesPanel.class);
+        super(UiComponentType.BOOKMARKED_PAGES, BookmarkedPagesPanel.class);
     }
 
     @Override

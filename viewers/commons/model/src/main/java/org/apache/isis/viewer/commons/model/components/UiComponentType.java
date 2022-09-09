@@ -31,13 +31,13 @@ import lombok.RequiredArgsConstructor;
  * using component factories.
  *
  * <p>
- * Some are fine-grained (such as {@link ComponentType#SCALAR_NAME_AND_VALUE}, a
+ * Some are fine-grained (such as {@link UiComponentType#SCALAR_NAME_AND_VALUE}, a
  * panel to represent a single scalar property or parameter), but others are
- * somewhat larger (such as {@link ComponentType#ENTITY}, representing an
+ * somewhat larger (such as {@link UiComponentType#ENTITY}, representing an
  * entity, with its actions, properties and collections).
  */
 @RequiredArgsConstructor
-public enum ComponentType {
+public enum UiComponentType {
 
     /**
      * About page text.
@@ -158,7 +158,7 @@ public enum ComponentType {
      */
     FOOTER;
 
-    private ComponentType() {
+    private UiComponentType() {
         this.optionality = Optionality.MANDATORY;
     }
 
@@ -185,10 +185,10 @@ public enum ComponentType {
     private final Optionality optionality;
 
     @Nullable
-    public static ComponentType lookup(final String id) {
-        for (final ComponentType componentType : values()) {
-            if (componentType.getId().equals(id)) {
-                return componentType;
+    public static UiComponentType lookup(final String id) {
+        for (final UiComponentType uiComponentType : values()) {
+            if (uiComponentType.getId().equals(id)) {
+                return uiComponentType;
             }
         }
         return null;

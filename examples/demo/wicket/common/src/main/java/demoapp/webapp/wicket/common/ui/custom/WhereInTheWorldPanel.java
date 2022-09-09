@@ -25,8 +25,8 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.object.UiObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -103,9 +103,9 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
                     property, ScalarRepresentation.VIEWING,
-                    ObjectUiModel.RenderingHint.REGULAR);
+                    UiObject.RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
-                propertyId, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                propertyId, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
     }
 //end::createPropertyComponent[]
 

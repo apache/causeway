@@ -27,14 +27,14 @@ import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
 import lombok.NonNull;
 
 public class ScalarParameterModel
 extends ScalarModel
-implements ParameterUiModel {
+implements UiParameter {
 
     private static final long serialVersionUID = 1L;
 

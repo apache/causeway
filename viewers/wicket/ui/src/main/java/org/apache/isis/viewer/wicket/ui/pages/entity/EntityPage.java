@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -113,7 +113,7 @@ public class EntityPage extends PageAbstract {
     private EntityPage(
             final PageParameters pageParameters,
             final EntityModel entityModel) {
-        super(pageParameters, null/*titleString*/, ComponentType.ENTITY);
+        super(pageParameters, null/*titleString*/, UiComponentType.ENTITY);
         this.model = entityModel;
     }
 

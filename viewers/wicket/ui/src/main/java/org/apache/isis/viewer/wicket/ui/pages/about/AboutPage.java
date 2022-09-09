@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.pages.about;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -31,7 +31,7 @@ public class AboutPage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     public AboutPage(final PageParameters parameters) {
-        super(parameters, null, ComponentType.ABOUT);
+        super(parameters, null, UiComponentType.ABOUT);
         addBookmarkedPages(themeDiv);
         addChildComponents(themeDiv, null);
     }

@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model;
+package org.apache.isis.viewer.commons.model.components;
 
 import java.io.Serializable;
 
 @lombok.Value(staticConstructor = "of")
-public class StringForRendering implements Serializable {
+public class UiString implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,8 +30,8 @@ public class StringForRendering implements Serializable {
      * <p>
      * In other words, given {@code text} must not to be interpreted by the browser, that renders it.
      */
-    public static StringForRendering text(final String text) {
-        return StringForRendering.of(text, false);
+    public static UiString text(final String text) {
+        return UiString.of(text, false);
     }
 
     /**
@@ -39,8 +39,8 @@ public class StringForRendering implements Serializable {
      * <p>
      * In other words, given {@code html} must be interpreted by the browser, that renders it.
      */
-    public static StringForRendering markup(final String html) {
-        return StringForRendering.of(html, true);
+    public static UiString markup(final String html) {
+        return UiString.of(html, true);
     }
 
     private String string;

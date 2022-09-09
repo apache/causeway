@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.viewer.commons.model.HasParentUiModel;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
@@ -41,8 +41,8 @@ public final class ParameterUiModelWkt
 extends ChainingModel<ActionInteraction>
 implements
     HasCommonContext,
-    HasParentUiModel<ObjectUiModelWkt>,
-    ParameterUiModel {
+    HasUiParentObject<ObjectUiModelWkt>,
+    UiParameter {
 
     private static final long serialVersionUID = 1L;
 

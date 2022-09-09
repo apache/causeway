@@ -24,11 +24,11 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 /**
- * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
+ * Convenience adapter for {@link Panel}s built up using {@link UiComponentType}s.
  *
  * @apiNote using raw-types here, to not further complicate generic type constraints on PanelAbstract
  */
@@ -37,30 +37,30 @@ extends PanelBase<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private ComponentType componentType;
+    private UiComponentType uiComponentType;
 
-    public PanelAbstract(final ComponentType componentType) {
-        this(componentType, null);
+    public PanelAbstract(final UiComponentType uiComponentType) {
+        this(uiComponentType, null);
     }
 
     public PanelAbstract(final String id) {
         this(id, null);
     }
 
-    public PanelAbstract(final ComponentType componentType, final M model) {
-        this(componentType.getId(), model);
+    public PanelAbstract(final UiComponentType uiComponentType, final M model) {
+        this(uiComponentType.getId(), model);
     }
 
     public PanelAbstract(final String id, final M model) {
         super(id, model);
-        this.componentType = ComponentType.lookup(id);
+        this.uiComponentType = UiComponentType.lookup(id);
     }
 
     /**
      * Will be null if created using {@link #PanelAbstract(String, IModel)}.
      */
-    public ComponentType getComponentType() {
-        return componentType;
+    public UiComponentType getComponentType() {
+        return uiComponentType;
     }
 
     @Override
@@ -71,14 +71,14 @@ extends PanelBase<T> {
     /**
      * For subclasses
      */
-    protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
-        return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
+    protected Component addOrReplace(final UiComponentType uiComponentType, final IModel<?> model) {
+        return getComponentFactoryRegistry().addOrReplaceComponent(this, uiComponentType, model);
     }
 
     /**
      * For subclasses
      */
-    protected void permanentlyHide(final ComponentType... componentIds) {
+    protected void permanentlyHide(final UiComponentType... componentIds) {
         WktComponents.permanentlyHide(this, componentIds);
     }
 

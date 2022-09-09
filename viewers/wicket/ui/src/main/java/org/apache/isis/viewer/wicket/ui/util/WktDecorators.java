@@ -28,8 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.viewer.commons.model.PlacementDirection;
-import org.apache.isis.viewer.commons.model.action.decorator.ActionUiDecorator;
+import org.apache.isis.viewer.commons.model.action.decorator.UiActionDecorator;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.isis.viewer.commons.model.decorators.DangerDecorator;
@@ -40,6 +39,7 @@ import org.apache.isis.viewer.commons.model.decorators.PrototypingDecorator;
 import org.apache.isis.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 import org.apache.isis.viewer.commons.model.decorators.TooltipDecorator;
 import org.apache.isis.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
+import org.apache.isis.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
@@ -99,7 +99,7 @@ public class WktDecorators {
         @Override
         public void decorate(final Component uiComponent, final DisablingDecorationModel decorationModel) {
             val tooltipDecorationModel = TooltipDecorationModel
-                    .ofBody(PlacementDirection.BOTTOM, decorationModel.getReason());
+                    .ofBody(UiPlacementDirection.BOTTOM, decorationModel.getReason());
             getTooltip().decorate(uiComponent, tooltipDecorationModel);
 
             Wkt.cssAppend(uiComponent, "disabled");
@@ -174,7 +174,7 @@ public class WktDecorators {
 
     // -- ADVANCED DECORATOR CLASSES
 
-    public final static class ActionLink extends ActionUiDecorator<Component> {
+    public final static class ActionLink extends UiActionDecorator<Component> {
 
         public ActionLink() {
             super(getTooltip(), getDisable(), getConfirm(), getPrototyping(), getIcon());
@@ -195,7 +195,7 @@ public class WktDecorators {
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
                 getTooltipDecorator().decorate(uiComponent,
-                        TooltipDecorationModel.ofBody(PlacementDirection.BOTTOM, disableUiModel.getReason()));
+                        TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, disableUiModel.getReason()));
             });
 
             if (!linkAndLabel.getDisableUiModel().isPresent()) {
@@ -205,12 +205,12 @@ public class WktDecorators {
                 .ifPresent(describedAs->
                     getTooltipDecorator()
                     .decorate(uiComponent,
-                            TooltipDecorationModel.ofBody(PlacementDirection.BOTTOM, describedAs)));
+                            TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (actionMeta.isImmediateConfirmationRequired()) {
 
-                    val confirmUiModel = ConfirmDecorationModel.areYouSure(translationService, PlacementDirection.BOTTOM);
+                    val confirmUiModel = ConfirmDecorationModel.areYouSure(translationService, UiPlacementDirection.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
 
                 }

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
@@ -33,35 +33,35 @@ import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 /**
  * Convenience adapter for {@link FormComponent}s that are implemented using the
  * Wicket {@link FormComponentPanel}, providing the ability to build up the
- * panel using other {@link ComponentType}s.
+ * panel using other {@link UiComponentType}s.
  */
 public abstract class FormComponentPanelAbstract<T>
 extends FormComponentPanel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private ComponentType componentType;
+    private UiComponentType uiComponentType;
 
     public FormComponentPanelAbstract(final String id, final IModel<T> model) {
         super(id, model);
-        this.componentType = ComponentType.lookup(id);
+        this.uiComponentType = UiComponentType.lookup(id);
     }
 
-    public ComponentType getComponentType() {
-        return componentType;
-    }
-
-    /**
-     * For subclasses
-     */
-    protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
-        return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
+    public UiComponentType getComponentType() {
+        return uiComponentType;
     }
 
     /**
      * For subclasses
      */
-    protected void permanentlyHide(final ComponentType... componentIds) {
+    protected Component addOrReplace(final UiComponentType uiComponentType, final IModel<?> model) {
+        return getComponentFactoryRegistry().addOrReplaceComponent(this, uiComponentType, model);
+    }
+
+    /**
+     * For subclasses
+     */
+    protected void permanentlyHide(final UiComponentType... componentIds) {
         permanentlyHide(this, componentIds);
     }
 
@@ -75,7 +75,7 @@ extends FormComponentPanel<T> {
     /**
      * For subclasses
      */
-    protected void permanentlyHide(final MarkupContainer container, final ComponentType... componentIds) {
+    protected void permanentlyHide(final MarkupContainer container, final UiComponentType... componentIds) {
         WktComponents.permanentlyHide(container, componentIds);
     }
 

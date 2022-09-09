@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -40,7 +40,7 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
     private static final String NAME = "icons";
 
     public CollectionContentsAsIconsPanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsIconsPanel.class);
+        super(UiComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsIconsPanel.class);
     }
 
     @Override

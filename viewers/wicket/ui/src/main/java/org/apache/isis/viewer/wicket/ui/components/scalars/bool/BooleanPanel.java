@@ -26,7 +26,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -87,7 +87,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected StringForRendering obtainOutputFormat() {
+    protected UiString obtainOutputFormat() {
         throw _Exceptions.unexpectedCodeReach(); // not used in createComponentForOutput(...)
     }
 

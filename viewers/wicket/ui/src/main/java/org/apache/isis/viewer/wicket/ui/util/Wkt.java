@@ -88,7 +88,7 @@ import org.apache.isis.commons.internal.functions._Functions.SerializableFunctio
 import org.apache.isis.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
@@ -707,9 +707,9 @@ public class Wkt {
 
     /**
      *  Whether to escape the underlying String for rendering
-     *  is dynamically based on the provided {@link StringForRendering}.
+     *  is dynamically based on the provided {@link UiString}.
      */
-    public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<StringForRendering> labelModel) {
+    public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<UiString> labelModel) {
         val label = new Label(id, ()->labelModel.get().getString()) {
             private static final long serialVersionUID = 1L;
             // we are using this method as a hook to update the ESCAPE flag before rendering

@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
@@ -41,7 +41,7 @@ public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract 
 
     public WhereInTheWorldPanelFactory() {
         super(
-            ComponentType.ENTITY                                          // <.>
+            UiComponentType.ENTITY                                          // <.>
             , WhereInTheWorldPanel.class
         );
     }

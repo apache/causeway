@@ -16,8 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model;
+package org.apache.isis.viewer.commons.model.mock;
 
-public enum PlacementDirection {
-    TOP, RIGHT, BOTTOM, LEFT;
+import java.util.Map;
+
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.viewer.commons.model.UiModel;
+
+import lombok.Value;
+
+@Value(staticConstructor = "of")
+public class UiMockup implements UiModel {
+
+    private final String summaryText;
+    private final Map<String, String> keyValuePairs = _Maps.newLinkedHashMap();
+
+    public UiMockup withProperty(final String key, final String value) {
+        keyValuePairs.put(key, value);
+        return this;
+    }
+
 }

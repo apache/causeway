@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -34,7 +34,7 @@ public class ActionInfoPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ActionInfoPanelFactory() {
-        super(ComponentType.ACTION_INFO, ActionInfoPanel.class);
+        super(UiComponentType.ACTION_INFO, ActionInfoPanel.class);
     }
 
     @Override

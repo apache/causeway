@@ -28,7 +28,7 @@ import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -54,12 +54,12 @@ class ComponentFactoryRegistryDefaultTest {
         };
 
         one = Mockito.mock(ComponentFactoryAbstract.class);
-        Mockito.when(one.getComponentType()).thenReturn(ComponentType.COLLECTION_CONTENTS);
-        Mockito.when(one.appliesTo(ComponentType.COLLECTION_CONTENTS, null)).thenReturn(ApplicationAdvice.APPLIES);
+        Mockito.when(one.getComponentType()).thenReturn(UiComponentType.COLLECTION_CONTENTS);
+        Mockito.when(one.appliesTo(UiComponentType.COLLECTION_CONTENTS, null)).thenReturn(ApplicationAdvice.APPLIES);
 
         two = Mockito.mock(ComponentFactoryAbstract.class);
-        Mockito.when(two.getComponentType()).thenReturn(ComponentType.COLLECTION_CONTENTS);
-        Mockito.when(two.appliesTo(ComponentType.COLLECTION_CONTENTS, null)).thenReturn(ApplicationAdvice.APPLIES);
+        Mockito.when(two.getComponentType()).thenReturn(UiComponentType.COLLECTION_CONTENTS);
+        Mockito.when(two.appliesTo(UiComponentType.COLLECTION_CONTENTS, null)).thenReturn(ApplicationAdvice.APPLIES);
     }
 
     @Test

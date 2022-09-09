@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.commons.model.HasParentUiModel;
-import org.apache.isis.viewer.commons.model.feature.PropertyUiModel;
+import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
+import org.apache.isis.viewer.commons.model.scalar.UiProperty;
 import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
  *
  * @apiNote a single <i>Property Interaction</i> could in theory provide a compound of multiple
- * {@link PropertyUiModel}(s).
+ * {@link UiProperty}(s).
  *
  * @see PropertyInteractionWkt
  * @see ChainingModel
@@ -43,8 +43,8 @@ public final class PropertyUiModelWkt
 extends ChainingModel<PropertyInteraction>
 implements
     HasCommonContext,
-    HasParentUiModel<ObjectUiModelWkt>,
-    PropertyUiModel {
+    HasUiParentObject<ObjectUiModelWkt>,
+    UiProperty {
 
     private static final long serialVersionUID = 1L;
 

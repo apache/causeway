@@ -47,7 +47,7 @@ import org.apache.isis.testdomain.model.interaction.Configuration_usingInteracti
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.isis.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.object.UiObject.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;

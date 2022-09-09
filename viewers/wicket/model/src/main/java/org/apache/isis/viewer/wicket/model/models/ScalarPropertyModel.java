@@ -28,14 +28,14 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationMo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.commons.model.feature.PropertyUiModel;
+import org.apache.isis.viewer.commons.model.scalar.UiProperty;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
 import lombok.val;
 
 public class ScalarPropertyModel
 extends ScalarModel
-implements PropertyUiModel {
+implements UiProperty {
 
     private static final long serialVersionUID = 1L;
 

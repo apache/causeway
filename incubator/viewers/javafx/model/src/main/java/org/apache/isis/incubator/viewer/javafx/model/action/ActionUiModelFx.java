@@ -21,7 +21,7 @@ package org.apache.isis.incubator.viewer.javafx.model.action;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.isis.viewer.commons.model.action.ActionUiModel;
+import org.apache.isis.viewer.commons.model.action.UiAction;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import javafx.scene.control.MenuItem;
 
 @RequiredArgsConstructor(staticName = "of")
 public class ActionUiModelFx
-implements ActionUiModel<MenuItem, Node> {
+implements UiAction<MenuItem, Node> {
 
     private final UiContextFx uiContext;
 

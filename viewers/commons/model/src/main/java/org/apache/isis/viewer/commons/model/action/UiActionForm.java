@@ -28,15 +28,19 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmTitleUtil;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.UiModel;
 import org.apache.isis.viewer.commons.model.mixin.HasTitle;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 
 import lombok.val;
 
-public interface ActionFormUiModel
-extends HasTitle, HasActionInteraction {
+public interface UiActionForm
+extends
+    UiModel,
+    HasTitle,
+    HasActionInteraction {
 
-    Stream<? extends ParameterUiModel> streamPendingParamUiModels();
+    Stream<? extends UiParameter> streamPendingParamUiModels();
 
     // -- USABILITY
 
@@ -73,7 +77,7 @@ extends HasTitle, HasActionInteraction {
     default Consent getValidityConsent() {
 
         val proposedArguments = streamPendingParamUiModels()
-                .map(ParameterUiModel::getValue)
+                .map(UiParameter::getValue)
                 .collect(Can.toCan());
 
         _Assert.assertEquals(getAction().getParameterCount(), proposedArguments.size());
@@ -98,7 +102,7 @@ extends HasTitle, HasActionInteraction {
         streamPendingParamUiModels()
         .filter(paramModel->paramModel.getParameterNegotiationModel()
                 .getVisibilityConsent(paramModel.getParameterIndex()).isAllowed())
-        .map(ParameterUiModel::getValue)
+        .map(UiParameter::getValue)
         .forEach(paramValue->{
             if(buf.length() > 0) {
                 buf.append(",");

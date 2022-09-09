@@ -40,10 +40,10 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.feature.ScalarUiModel;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.object.UiObject;
+import org.apache.isis.viewer.commons.model.object.UiObject.HasRenderingHints;
+import org.apache.isis.viewer.commons.model.object.UiObject.RenderingHint;
+import org.apache.isis.viewer.commons.model.scalar.UiScalar;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
@@ -69,7 +69,7 @@ import lombok.val;
 //@Log4j2
 public abstract class ScalarModel
 extends ChainingModel<ManagedObject>
-implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext {
+implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -111,7 +111,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     protected ScalarModel(
             final EntityModel parentEntityModel,
             final ScalarRepresentation viewOrEdit,
-            final ObjectUiModel.RenderingHint renderingHint) {
+            final UiObject.RenderingHint renderingHint) {
         this(EitherParamOrProp.PROPERTY,
                 parentEntityModel, viewOrEdit, renderingHint);
     }
@@ -120,7 +120,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
             final @NonNull EitherParamOrProp paramOrProp,
             final @NonNull EntityModel parentEntityModel,
             final @NonNull ScalarRepresentation viewOrEdit,
-            final @NonNull ObjectUiModel.RenderingHint renderingHint) {
+            final @NonNull UiObject.RenderingHint renderingHint) {
 
         super(parentEntityModel); // the so called target model, we are chaining us to
         this.paramOrProp = paramOrProp;

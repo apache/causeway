@@ -23,10 +23,11 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
+import org.apache.isis.viewer.commons.model.UiModel;
 
 import lombok.RequiredArgsConstructor;
 
-public interface ObjectUiModel {
+public interface UiObject extends UiModel {
 
     ManagedObject getManagedObject();
 

@@ -28,8 +28,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.object.UiObject.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -84,7 +84,7 @@ extends GenericColumnAbstract {
         if(ManagedObjects.isValue(adapter)) {
             val objectMember = dataRow.getParentTable().getMetaModel();
             val valueModel = ValueModel.of(super.getMetaModelContext(), objectMember, adapter);
-            val componentFactory = findComponentFactory(ComponentType.VALUE, valueModel);
+            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(id, valueModel);
         }
 
@@ -95,7 +95,7 @@ extends GenericColumnAbstract {
         entityModel.setContextBookmarkIfAny(contextBookmark);
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
-        val componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, entityModel);
+        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, entityModel);
         return componentFactory.createComponent(id, entityModel);
     }
 

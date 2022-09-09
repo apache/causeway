@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.Getter;
@@ -43,24 +43,24 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     @ToString.Exclude
     @Getter @Setter private transient MetaModelContext metaModelContext;
 
-    @Getter(onMethod_ = {@Override}) private final ComponentType componentType;
+    @Getter(onMethod_ = {@Override}) private final UiComponentType componentType;
     @Getter(onMethod_ = {@Override}) private final String name;
     @Getter(onMethod_ = {@Override}) private final Class<?> componentTypeClass;
 
-    protected ComponentFactoryAbstract(final ComponentType componentType) {
+    protected ComponentFactoryAbstract(final UiComponentType componentType) {
         this(componentType, null, null);
     }
 
-    protected ComponentFactoryAbstract(final ComponentType componentType, final String name) {
+    protected ComponentFactoryAbstract(final UiComponentType componentType, final String name) {
         this(componentType, name, null);
     }
 
-    protected ComponentFactoryAbstract(final ComponentType componentType, final Class<?> componentClass) {
+    protected ComponentFactoryAbstract(final UiComponentType componentType, final Class<?> componentClass) {
         this(componentType, null, componentClass);
     }
 
     protected ComponentFactoryAbstract(
-            final ComponentType componentType,
+            final UiComponentType componentType,
             final String name,
             final Class<?> componentTypeClass) {
 
@@ -82,7 +82,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
      * @see #appliesTo(IModel)
      */
     @Override
-    public final ApplicationAdvice appliesTo(final ComponentType componentType, final IModel<?> model) {
+    public final ApplicationAdvice appliesTo(final UiComponentType componentType, final IModel<?> model) {
         if (componentType != getComponentType()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }

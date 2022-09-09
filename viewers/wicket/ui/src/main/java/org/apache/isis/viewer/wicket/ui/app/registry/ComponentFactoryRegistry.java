@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 
 /**
@@ -39,70 +39,70 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 public interface ComponentFactoryRegistry {
 
     Stream<ComponentFactory> streamComponentFactories(
-            ComponentType componentType, @Nullable IModel<?> model);
+            UiComponentType uiComponentType, @Nullable IModel<?> model);
 
     Stream<ComponentFactory> streamComponentFactories(
-            ImmutableEnumSet<ComponentType> componentTypes,
+            ImmutableEnumSet<UiComponentType> uiComponentTypes,
             @Nullable IModel<?> model);
 
     /**
      * Finds the "best" {@link ComponentFactory} for given componentType.
      * <p>
-     * Falls back to a {@link ComponentType#UNKNOWN} lookup.
+     * Falls back to a {@link UiComponentType#UNKNOWN} lookup.
      */
     default ComponentFactory findComponentFactory(
-            final ComponentType componentType, final @Nullable IModel<?> model) {
-        return streamComponentFactories(componentType, model)
+            final UiComponentType uiComponentType, final @Nullable IModel<?> model) {
+        return streamComponentFactories(uiComponentType, model)
             .findFirst()
-            .orElseGet(()->streamComponentFactories(ComponentType.UNKNOWN, model)
+            .orElseGet(()->streamComponentFactories(UiComponentType.UNKNOWN, model)
                     .findFirst()
                     .orElse(null));
     }
 
     default ComponentFactory findComponentFactoryElseFail(
-            final ComponentType componentType, final @Nullable IModel<?> model) {
-        return streamComponentFactories(componentType, model)
+            final UiComponentType uiComponentType, final @Nullable IModel<?> model) {
+        return streamComponentFactories(uiComponentType, model)
                 .findFirst()
                 .orElseThrow(()->new RuntimeException(String.format(
                         "could not find component for componentType = '%s'; "
                         + "model object is of type %s; "
                         + "model object='%s'",
-                        componentType, model.getClass().getName(), model.getObject())));
+                        uiComponentType, model.getClass().getName(), model.getObject())));
     }
 
     /**
      * As per
-     * {@link #addOrReplaceComponent(MarkupContainer, ComponentType, IModel)},
-     * but with the wicket id derived from the {@link ComponentType}.
+     * {@link #addOrReplaceComponent(MarkupContainer, UiComponentType, IModel)},
+     * but with the wicket id derived from the {@link UiComponentType}.
      */
-    Component addOrReplaceComponent(MarkupContainer markupContainer, ComponentType componentType, IModel<?> model);
+    Component addOrReplaceComponent(MarkupContainer markupContainer, UiComponentType uiComponentType, IModel<?> model);
 
     /**
-     * {@link #createComponent(String, ComponentType, IModel) Creates} the
+     * {@link #createComponent(String, UiComponentType, IModel) Creates} the
      * relevant {@link Component} for the provided arguments, and adds to the
      * provided {@link MarkupContainer}; the wicket id is as specified.
      *
      * <p>
      * If none can be found, will fail fast.
      */
-    Component addOrReplaceComponent(MarkupContainer markupContainer, String id, ComponentType componentType, IModel<?> model);
+    Component addOrReplaceComponent(MarkupContainer markupContainer, String id, UiComponentType uiComponentType, IModel<?> model);
 
     /**
-     * As per {@link #createComponent(String, ComponentType, IModel)}, but with
-     * the wicket id derived from the {@link ComponentType}.
+     * As per {@link #createComponent(String, UiComponentType, IModel)}, but with
+     * the wicket id derived from the {@link UiComponentType}.
      *
-     * @see #createComponent(String, ComponentType, IModel)
+     * @see #createComponent(String, UiComponentType, IModel)
      */
-    Component createComponent(ComponentType componentType, IModel<?> model);
+    Component createComponent(UiComponentType uiComponentType, IModel<?> model);
 
     /**
-     * Create the {@link Component} matching the specified {@link ComponentType}
+     * Create the {@link Component} matching the specified {@link UiComponentType}
      * and {@link IModel} to the provided {@link MarkupContainer}; the id is
      * specified explicitly.
      *
      * <p>
      * If none can be found, will fail fast.
      */
-    Component createComponent(String id, ComponentType componentType, IModel<?> model);
+    Component createComponent(String id, UiComponentType uiComponentType, IModel<?> model);
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.feature;
+package org.apache.isis.viewer.commons.model.scalar;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationMo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public interface PropertyUiModel extends ScalarUiModel {
+public interface UiProperty extends UiScalar {
 
     /** prop meta model */
     @Override

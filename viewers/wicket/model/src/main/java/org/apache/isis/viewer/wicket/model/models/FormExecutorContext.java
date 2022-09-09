@@ -22,11 +22,11 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.viewer.commons.model.HasParentUiModel;
+import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
 
 public interface FormExecutorContext
 extends
-    HasParentUiModel<EntityModel>,
+    HasUiParentObject<EntityModel>,
     HasMetaModelContext {
 
     PromptStyle getPromptStyle();

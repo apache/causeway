@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
@@ -76,8 +76,8 @@ extends ScalarPanelSelectAbstract {
     // --
 
     @Override
-    protected StringForRendering obtainOutputFormat() {
-        return StringForRendering.text(select2.obtainOutputFormatModel().getObject());
+    protected UiString obtainOutputFormat() {
+        return UiString.text(select2.obtainOutputFormatModel().getObject());
     }
 
     // --

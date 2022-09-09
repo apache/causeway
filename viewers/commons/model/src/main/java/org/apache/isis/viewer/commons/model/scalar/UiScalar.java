@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.feature;
+package org.apache.isis.viewer.commons.model.scalar;
 
 import java.util.Optional;
 
@@ -26,8 +26,9 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.viewer.commons.model.UiModel;
 
-public interface ScalarUiModel {
+public interface UiScalar extends UiModel {
 
     ObjectFeature getMetaModel();
 
@@ -86,7 +87,7 @@ public interface ScalarUiModel {
         CHOICES,
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
-        static ChoiceProviderSort valueOf(final ScalarUiModel scalarModel) {
+        static ChoiceProviderSort valueOf(final UiScalar scalarModel) {
             if (scalarModel.hasChoices()) {
                 return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {

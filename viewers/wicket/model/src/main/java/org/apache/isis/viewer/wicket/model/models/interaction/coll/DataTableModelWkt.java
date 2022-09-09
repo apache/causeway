@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableMo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.viewer.commons.model.HasParentUiModel;
+import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
@@ -49,7 +49,7 @@ import lombok.val;
 public class DataTableModelWkt
 extends HasBookmarkedOwnerAbstract<DataTableModel>
 implements
-    HasParentUiModel<ObjectUiModelWkt> {
+    HasUiParentObject<ObjectUiModelWkt> {
 
     // -- FACTORIES
 

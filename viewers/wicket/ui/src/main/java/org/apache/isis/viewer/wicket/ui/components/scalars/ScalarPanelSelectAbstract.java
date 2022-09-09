@@ -27,7 +27,7 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
@@ -107,7 +107,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
      */
     @Override
     public Repaint updateIfNecessary(
-            final @NonNull ParameterUiModel paramModel,
+            final @NonNull UiParameter paramModel,
             final @NonNull Optional<AjaxRequestTarget> target) {
 
         val repaint = super.updateIfNecessary(paramModel, target);

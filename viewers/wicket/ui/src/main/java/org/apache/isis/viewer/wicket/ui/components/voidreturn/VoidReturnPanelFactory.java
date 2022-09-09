@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.voidreturn;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -33,7 +33,7 @@ public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public VoidReturnPanelFactory() {
-        super(ComponentType.VOID_RETURN, VoidReturnPanel.class);
+        super(UiComponentType.VOID_RETURN, VoidReturnPanel.class);
     }
 
     @Override

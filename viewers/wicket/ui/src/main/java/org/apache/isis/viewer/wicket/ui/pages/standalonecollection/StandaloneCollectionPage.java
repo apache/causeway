@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -41,7 +41,7 @@ public class StandaloneCollectionPage extends PageAbstract {
     public StandaloneCollectionPage(final EntityCollectionModelStandalone collectionModel) {
         super(PageParameterUtils.newPageParameters(),
                 collectionModel.getName(),
-                ComponentType.STANDALONE_COLLECTION);
+                UiComponentType.STANDALONE_COLLECTION);
 
         addChildComponents(themeDiv, collectionModel);
         addBookmarkedPages(themeDiv);

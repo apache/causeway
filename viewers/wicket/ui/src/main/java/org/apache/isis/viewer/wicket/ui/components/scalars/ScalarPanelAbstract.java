@@ -46,9 +46,9 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -348,7 +348,7 @@ implements ScalarModelSubscriber {
                 .addOrReplaceComponent(
                     getScalarFrameContainer(),
                     FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
-                    ComponentType.PROPERTY_EDIT_FORM,
+                    UiComponentType.PROPERTY_EDIT_FORM,
                     scalarModel());
 
         getRegularFrame().setVisible(false);
@@ -606,7 +606,7 @@ implements ScalarModelSubscriber {
     * @return - true if changed as a result of these pending arguments.
     */
    public Repaint updateIfNecessary(
-           final @NonNull ParameterUiModel paramModel,
+           final @NonNull UiParameter paramModel,
            final @NonNull Optional<AjaxRequestTarget> target) {
 
        val scalarModel = scalarModel();

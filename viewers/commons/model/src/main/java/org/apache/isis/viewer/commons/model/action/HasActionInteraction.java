@@ -29,10 +29,12 @@ extends HasManagedAction {
 
     ActionInteraction getActionInteraction();
 
+    /**
+     * as we already have an {@link ActionInteraction}, get the {@link ManagedAction} from it directly.
+     */
     @Override
     default ManagedAction getManagedAction() {
         return getActionInteraction().getManagedActionElseFail();
     }
-
 
 }

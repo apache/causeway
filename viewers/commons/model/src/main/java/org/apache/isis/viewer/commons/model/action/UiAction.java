@@ -16,18 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.object;
+package org.apache.isis.viewer.commons.model.action;
 
-import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.viewer.commons.model.UiModel;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+public interface UiAction<M, R>
+extends HasManagedAction, UiModel {
 
-@RequiredArgsConstructor
-public class SimpleObjectUiModel implements ObjectUiModel {
-
-    @NonNull @Getter(onMethod = @__(@Override))
-    private final ManagedObject managedObject;
+    M createMenuUiComponent();
+    R createRegularUiComponent();
 
 }

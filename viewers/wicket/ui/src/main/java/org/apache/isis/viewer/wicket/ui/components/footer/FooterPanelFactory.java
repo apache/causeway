@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.footer;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
 /**
@@ -32,7 +32,7 @@ public class FooterPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public FooterPanelFactory() {
-        super(ComponentType.FOOTER, FooterPanel.class);
+        super(UiComponentType.FOOTER, FooterPanel.class);
     }
 
     @Override

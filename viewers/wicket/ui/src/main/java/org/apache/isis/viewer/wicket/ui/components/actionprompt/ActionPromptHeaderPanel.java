@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -42,7 +42,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
         _Blackhole.consume(model.getObject()); // side-effect: loads the model
 
         getComponentFactoryRegistry()
-        .addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
+        .addOrReplaceComponent(this, UiComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 
         val label = Wkt.labelAdd(this, ID_ACTION_NAME, model::getFriendlyName);
 

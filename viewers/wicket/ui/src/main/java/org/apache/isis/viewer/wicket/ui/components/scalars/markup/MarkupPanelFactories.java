@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -58,7 +58,7 @@ public class MarkupPanelFactories {
         private final Class<T> valueType;
 
         public ParentedAbstract(final Class<T> valueType) {
-            super(ComponentType.SCALAR_NAME_AND_VALUE, ScalarMarkupPanel.class);
+            super(UiComponentType.SCALAR_NAME_AND_VALUE, ScalarMarkupPanel.class);
             this.valueType = valueType;
         }
 
@@ -93,7 +93,7 @@ public class MarkupPanelFactories {
         private final Class<T> valueType;
 
         public StandaloneAbstract(final Class<T> valueType) {
-            super(ComponentType.VALUE, StandaloneMarkupPanel.class);
+            super(UiComponentType.VALUE, StandaloneMarkupPanel.class);
             this.valueType = valueType;
         }
 

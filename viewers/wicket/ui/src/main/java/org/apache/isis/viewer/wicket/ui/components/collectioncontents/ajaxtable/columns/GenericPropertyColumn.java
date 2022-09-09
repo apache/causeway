@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -117,7 +117,7 @@ extends GenericColumnAbstract {
                         ScalarRepresentation.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
-        return findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel)
+        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel)
                 .createComponent(id, scalarModel);
     }
 

@@ -37,7 +37,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -101,7 +101,7 @@ implements HasDynamicallyVisibleContent {
             final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer(ID_ENTITY_HEADER_PANEL);
             div.add(entityHeaderPanel);
             final ComponentFactory componentFactory =
-                    getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getModel());
+                    getComponentFactoryRegistry().findComponentFactory(UiComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getModel());
             final Component component = componentFactory.createComponent(getModel());
             entityHeaderPanel.addOrReplace(component);
 
@@ -262,7 +262,7 @@ implements HasDynamicallyVisibleContent {
                 // the entityModel's getLayoutData() provides the hint as to which collection of the entity to render.
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(
-                                ComponentType.ENTITY_COLLECTION, entityModel);
+                                UiComponentType.ENTITY_COLLECTION, entityModel);
                 final Component collectionPanel = componentFactory.createComponent(id, entityModel);
                 collectionRv.add(collectionPanel);
             }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.feature;
+package org.apache.isis.viewer.commons.model.scalar;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
 
-public interface ParameterUiModel extends ScalarUiModel {
+public interface UiParameter extends UiScalar {
 
     /** param meta model */
     @Override

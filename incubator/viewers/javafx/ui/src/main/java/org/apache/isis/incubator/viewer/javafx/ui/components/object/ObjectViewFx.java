@@ -47,7 +47,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormPane;
 import org.apache.isis.incubator.viewer.javafx.ui.components.panel.TitledPanel;
 import org.apache.isis.viewer.commons.model.components.UiComponentFactory;
 import org.apache.isis.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
-import org.apache.isis.viewer.commons.model.gridlayout.UiGridLayout;
+import org.apache.isis.viewer.commons.model.layout.UiGridLayout;
 
 import lombok.NonNull;
 import lombok.val;

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.standalonecollection;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -36,7 +36,7 @@ public class StandaloneCollectionPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public StandaloneCollectionPanelFactory() {
-        super(ComponentType.STANDALONE_COLLECTION, StandaloneCollectionPanel.class);
+        super(UiComponentType.STANDALONE_COLLECTION, StandaloneCollectionPanel.class);
     }
 
     @Override

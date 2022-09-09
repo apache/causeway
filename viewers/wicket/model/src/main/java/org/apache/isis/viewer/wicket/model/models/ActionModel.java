@@ -24,12 +24,12 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.action.ActionFormUiModel;
+import org.apache.isis.viewer.commons.model.action.UiActionForm;
 
 import lombok.val;
 
 public interface ActionModel
-extends ActionFormUiModel, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
+extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
 
     /** Resets arguments to their fixed point default values
      * @see ActionInteractionHead#defaults(org.apache.isis.core.metamodel.interactions.managed.ManagedAction)

@@ -31,7 +31,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.value.OptionsBasedOnValueSemantics;
@@ -184,18 +184,18 @@ extends ScalarPanelAbstract {
      * <p>
      * Usually HTML, except for (non-empty) text-areas or badges (that are already modeled in HTML).
      */
-    protected StringForRendering obtainOutputFormat() {
+    protected UiString obtainOutputFormat() {
         val proposedValue = scalarModel().proposedValue();
         if(!proposedValue.isPresent()) {
-            return StringForRendering.markup(
+            return UiString.markup(
                     getPlaceholderRenderService()
                     .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
         }
         val useText = isUsingTextarea()
                 || getFormatModifiers().contains(FormatModifier.BADGE);
         return useText
-                        ? StringForRendering.text(proposedValue.getValueAsTitle().getValue())
-                        : StringForRendering.markup(proposedValue.getValueAsHtml().getValue());
+                        ? UiString.text(proposedValue.getValueAsTitle().getValue())
+                        : UiString.markup(proposedValue.getValueAsHtml().getValue());
     }
 
     /**

@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -67,7 +67,7 @@ implements ComponentFactoryRegistry {
     @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
     @Inject private MetaModelContext metaModelContext;
 
-    private final ListMultimap<ComponentType, ComponentFactory> componentFactoriesByType =
+    private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByType =
             _Multimaps.newListMultimap();
 
     @PostConstruct
@@ -109,7 +109,7 @@ implements ComponentFactoryRegistry {
     }
 
     private void ensureAllComponentTypesRegistered() {
-        for (val componentType : ComponentType.values()) {
+        for (val componentType : UiComponentType.values()) {
 
             if(componentType.getOptionality().isOptional()) {
                 continue;
@@ -124,34 +124,34 @@ implements ComponentFactoryRegistry {
     // -- PUBLIC API
 
     @Override
-    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType, final IModel<?> model) {
-        final Component component = createComponent(componentType, model);
+    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final UiComponentType uiComponentType, final IModel<?> model) {
+        final Component component = createComponent(uiComponentType, model);
         markupContainer.addOrReplace(component);
         return component;
     }
 
     @Override
-    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final String id, final ComponentType componentType, final IModel<?> model) {
-        final Component component = createComponent(id, componentType, model);
+    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final String id, final UiComponentType uiComponentType, final IModel<?> model) {
+        final Component component = createComponent(id, uiComponentType, model);
         markupContainer.addOrReplace(component);
         return component;
     }
 
     @Override
-    public Component createComponent(final ComponentType componentType, final IModel<?> model) {
-        return findComponentFactoryElseFail(componentType, model)
+    public Component createComponent(final UiComponentType uiComponentType, final IModel<?> model) {
+        return findComponentFactoryElseFail(uiComponentType, model)
                 .createComponent(model);
     }
 
     @Override
-    public Component createComponent(final String id, final ComponentType componentType, final IModel<?> model) {
-        return findComponentFactoryElseFail(componentType, model)
+    public Component createComponent(final String id, final UiComponentType uiComponentType, final IModel<?> model) {
+        return findComponentFactoryElseFail(uiComponentType, model)
                 .createComponent(id, model);
     }
 
     @Override
     public Stream<ComponentFactory> streamComponentFactories(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final @Nullable IModel<?> model) {
 
         // find all that apply, unless we find one that applies exclusively
@@ -159,9 +159,9 @@ implements ComponentFactoryRegistry {
 
         val exclusiveIfAny = _Refs.<ComponentFactory>objectRef(null);
 
-        val allThatApply = componentFactoriesByType.streamElements(componentType)
+        val allThatApply = componentFactoriesByType.streamElements(uiComponentType)
                 .filter(componentFactory->{
-                    val advice = componentFactory.appliesTo(componentType, model);
+                    val advice = componentFactory.appliesTo(uiComponentType, model);
                     if(advice.appliesExclusively()) {
                         exclusiveIfAny.set(componentFactory);
                     }
@@ -175,14 +175,14 @@ implements ComponentFactoryRegistry {
                     ? Stream.of(exclusiveIfAny.getValueElseFail())
                     : allThatApply.stream()
                 )
-                .peek(componentFactory->logComponentResolving(model, componentType, componentFactory));
+                .peek(componentFactory->logComponentResolving(model, uiComponentType, componentFactory));
     }
 
     @Override
     public Stream<ComponentFactory> streamComponentFactories(
-            final ImmutableEnumSet<ComponentType> componentTypes,
+            final ImmutableEnumSet<UiComponentType> uiComponentTypes,
             final @Nullable IModel<?> model) {
-        return componentTypes.stream()
+        return uiComponentTypes.stream()
                 .flatMap(componentType->streamComponentFactories(componentType, model));
     }
 
@@ -190,12 +190,12 @@ implements ComponentFactoryRegistry {
 
     private static void logComponentResolving(
             final IModel<?> model,
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final ComponentFactory componentFactory) {
         if(!log.isDebugEnabled()) return;
         log.debug("component type for model {} -> {} provided by {}",
                 _Text.abbreviateClassOf(model),
-                componentType.name(),
+                uiComponentType.name(),
                 _Text.abbreviateClassOf(componentFactory));
     }
 

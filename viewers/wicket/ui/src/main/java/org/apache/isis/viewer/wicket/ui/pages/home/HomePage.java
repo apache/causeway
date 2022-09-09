@@ -25,7 +25,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -64,8 +64,8 @@ public class HomePage extends PageAbstract {
             val page = EntityPage.forAdapter(getMetaModelContext(), homePageAdapter);
             requestCycle.setResponsePage(page);
         } else {
-            WktComponents.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
-            getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
+            WktComponents.permanentlyHide(themeDiv, UiComponentType.ACTION_PROMPT);
+            getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, UiComponentType.WELCOME, null);
         }
 
         val breadcrumbModelProvider = (BreadcrumbModelProvider) getSession();

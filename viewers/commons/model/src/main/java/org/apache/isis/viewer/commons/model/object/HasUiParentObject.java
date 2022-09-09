@@ -16,23 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model;
+package org.apache.isis.viewer.commons.model.object;
 
-import java.util.function.Supplier;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
-import org.apache.isis.viewer.commons.model.mixin.HasUiComponent;
+public interface HasUiParentObject<T extends UiObject> {
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+    /**
+     * The owning entity/viewmodel/service that is declaring this action or property.
+     */
+    T getParentUiModel();
 
-@RequiredArgsConstructor
-public class UiComponentHolder<T> implements HasUiComponent<T> {
-
-    protected final Supplier<T> componentFactory;
-
-    // implements HasUiComponent<T>
-    @Getter(onMethod = @__(@Override), lazy = true)
-    private final T uiComponent = componentFactory.get();
-
-
+    default ManagedObject getParentObject()  {
+        return getParentUiModel().getManagedObject();
+    }
 }

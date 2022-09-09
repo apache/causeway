@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.Plac
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -85,13 +85,13 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- OUTPUT FORMAT
 
     @Override
-    protected StringForRendering obtainOutputFormat() {
+    protected UiString obtainOutputFormat() {
         val caption = getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
                 .orElseGet(()->
                     getPlaceholderRenderService()
                     .asText(PlaceholderLiteral.NULL_REPRESENTATION));
-        return StringForRendering.text(caption);
+        return UiString.text(caption);
     }
 
     @Override

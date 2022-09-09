@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public class ActionUiDecorator<T> {
+public class UiActionDecorator<T> {
 
     private final TooltipDecorator<T> tooltipDecorator;
     private final DisablingDecorator<T> disableDecorator;

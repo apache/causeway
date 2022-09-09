@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -77,7 +77,7 @@ implements CancelHintRequired  {
         } else {
 
             val componentFactory = getComponentFactoryRegistry()
-                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
+                    .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
 
             final Component component = componentFactory
                     .createComponent(ID_ENTITY_ICON_AND_TITLE, objectModelForLink);

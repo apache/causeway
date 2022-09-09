@@ -23,8 +23,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.object.UiObject.HasRenderingHints;
+import org.apache.isis.viewer.commons.model.object.UiObject.RenderingHint;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 public interface ObjectAdapterModel

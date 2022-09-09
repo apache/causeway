@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -189,7 +189,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
                 entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, EntityModel.RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 //XXX[ISIS-3026] this is a bad idea
 //        if(scalarNameAndValueComponent instanceof MarkupContainer) {
 //            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
