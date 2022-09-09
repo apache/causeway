@@ -30,7 +30,6 @@
     <name>Apache Isis Core - MetaModel</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.metamodel</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core/metamodel</git-plugin.propertiesDir>
     </properties>
 

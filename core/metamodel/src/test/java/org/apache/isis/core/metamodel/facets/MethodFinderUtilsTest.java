@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +29,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.metamodel._testing._TestDummies;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
@@ -39,10 +38,6 @@ public class MethodFinderUtilsTest {
 
     public static class NoPostConstruct {
         public void thisDoesNotHaveAnyAnnotation(){}
-    }
-    public static class WithPostConstruct {
-        @PostConstruct // @PostConstruct is allowed to appear on non-public methods
-        private void thisDoesHaveAnnotation(){}
     }
 
     private HasPostConstructMethodCache hasPostConstructMethodCache;
@@ -63,10 +58,10 @@ public class MethodFinderUtilsTest {
     public void whenExists() throws Exception {
 
         val cache = hasPostConstructMethodCache.getPostConstructMethodsCache();
-        val method = hasPostConstructMethodCache.postConstructMethodFor(new WithPostConstruct());
+        val method = hasPostConstructMethodCache.postConstructMethodFor(new _TestDummies.WithPostConstruct());
 
         assertThat(method, is(not(nullValue())));
-        final Optional<Method> actual = cache.get(WithPostConstruct.class);
+        final Optional<Method> actual = cache.get(_TestDummies.WithPostConstruct.class);
         assertThat(actual, is(not(nullValue())));
         assertThat(actual.isPresent(), is(true));
         assertThat(actual.orElse(null), is(method));
