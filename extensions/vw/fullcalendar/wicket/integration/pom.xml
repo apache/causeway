@@ -73,7 +73,7 @@
 		    <groupId>org.webjars</groupId>
 			<artifactId>fullcalendar</artifactId>
 			<!--  keep in sync with o.a.i.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendar*Reference -->
-			<version>5.10.2</version>
+			<version>5.11.3</version>
 		</dependency>
 		
 <!-- these are sources only, cannot use -->		
