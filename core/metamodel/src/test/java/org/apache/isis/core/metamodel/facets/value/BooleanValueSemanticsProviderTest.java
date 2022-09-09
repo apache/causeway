@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 
 public class BooleanValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Boolean> {
@@ -34,7 +34,7 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
 
     private Boolean booleanObj;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
         setSemantics(value = new BooleanValueSemantics());

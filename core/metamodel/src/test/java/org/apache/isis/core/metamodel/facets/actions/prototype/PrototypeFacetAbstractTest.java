@@ -18,26 +18,19 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.prototype;
 
-import org.jmock.auto.Mock;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.core.config.environment.DeploymentType;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
-import static org.junit.Assert.assertEquals;
+class PrototypeFacetAbstractTest {
 
-public class PrototypeFacetAbstractTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
-    private VisibilityContext mockVisibilityContext;
-    @Mock
-    private FacetHolder mockFacetHolder;
+    @Mock VisibilityContext mockVisibilityContext;
+    @Mock FacetHolder mockFacetHolder;
 
     @Test
     public void allCombinations() throws Exception {

@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.facets.object.support;
 
 import org.junit.jupiter.api.Assertions;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;

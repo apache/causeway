@@ -20,7 +20,10 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -33,13 +36,13 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 
 import lombok.val;
 
-public class MandatoryAnnotationFacetFactoryTest
+class MandatoryAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);

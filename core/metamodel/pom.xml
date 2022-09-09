@@ -31,6 +31,7 @@
 
     <properties>
         <git-plugin.propertiesDir>org/apache/isis/core/metamodel</git-plugin.propertiesDir>
+        
     </properties>
 
     <build>

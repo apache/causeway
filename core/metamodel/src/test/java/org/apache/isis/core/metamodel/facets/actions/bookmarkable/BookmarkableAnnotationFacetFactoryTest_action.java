@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.facets.actions.bookmarkable;
 
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -27,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
-public class BookmarkableAnnotationFacetFactoryTest_action
+class BookmarkableAnnotationFacetFactoryTest_action
 extends AbstractFacetFactoryTest {
 
     private BookmarkPolicyFacetFallbackFactory facetFactory;

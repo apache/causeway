@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -31,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.snapshot.Snapsh
 
 import lombok.val;
 
-public class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
+class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;

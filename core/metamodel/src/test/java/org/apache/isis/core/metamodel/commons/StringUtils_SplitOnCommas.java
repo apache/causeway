@@ -21,60 +21,61 @@ package org.apache.isis.core.metamodel.commons;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class StringUtils_SplitOnCommas {
+import static org.hamcrest.MatcherAssert.assertThat;
+
+class StringUtils_SplitOnCommas {
 
     @Test
-    public void length() {
+    void length() {
         final List<String> list = StringExtensions.splitOnCommas("foo,bar");
-        Assert.assertThat(list.size(), CoreMatchers.is(2));
+        assertThat(list.size(), CoreMatchers.is(2));
     }
 
     @Test
-    public void elements() {
+    void elements() {
         final List<String> list = StringExtensions.splitOnCommas("foo,bar");
-        Assert.assertThat(list.get(0), CoreMatchers.is("foo"));
-        Assert.assertThat(list.get(1), CoreMatchers.is("bar"));
+        assertThat(list.get(0), CoreMatchers.is("foo"));
+        assertThat(list.get(1), CoreMatchers.is("bar"));
     }
 
     @Test
-    public void whenHasWhiteSpaceAfterComma() {
+    void whenHasWhiteSpaceAfterComma() {
         final List<String> list = StringExtensions.splitOnCommas("foo, bar");
-        Assert.assertThat(list.get(0), CoreMatchers.is("foo"));
-        Assert.assertThat(list.get(1), CoreMatchers.is("bar"));
+        assertThat(list.get(0), CoreMatchers.is("foo"));
+        assertThat(list.get(1), CoreMatchers.is("bar"));
     }
 
     @Test
-    public void whenHasLeadingWhiteSpace() {
+    void whenHasLeadingWhiteSpace() {
         final List<String> list = StringExtensions.splitOnCommas(" foo, bar");
-        Assert.assertThat(list.get(0), CoreMatchers.is("foo"));
-        Assert.assertThat(list.get(1), CoreMatchers.is("bar"));
+        assertThat(list.get(0), CoreMatchers.is("foo"));
+        assertThat(list.get(1), CoreMatchers.is("bar"));
     }
 
     @Test
-    public void whenNull() {
+    void whenNull() {
         final List<String> list = StringExtensions.splitOnCommas(null);
-        Assert.assertThat(list, CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat(list, CoreMatchers.is(CoreMatchers.nullValue()));
     }
 
     @Test
-    public void whenEmpty() {
+    void whenEmpty() {
         final List<String> list = StringExtensions.splitOnCommas("");
-        Assert.assertThat(list.size(), CoreMatchers.is(0));
+        assertThat(list.size(), CoreMatchers.is(0));
     }
 
     @Test
-    public void whenOnlyWhiteSpace() {
+    void whenOnlyWhiteSpace() {
         final List<String> list = StringExtensions.splitOnCommas(" ");
-        Assert.assertThat(list.size(), CoreMatchers.is(0));
+        assertThat(list.size(), CoreMatchers.is(0));
     }
 
     @Test
-    public void whenOnlyWhiteSpaceTabs() {
+    void whenOnlyWhiteSpaceTabs() {
         final List<String> list = StringExtensions.splitOnCommas("\t");
-        Assert.assertThat(list.size(), CoreMatchers.is(0));
+        assertThat(list.size(), CoreMatchers.is(0));
     }
 
 }

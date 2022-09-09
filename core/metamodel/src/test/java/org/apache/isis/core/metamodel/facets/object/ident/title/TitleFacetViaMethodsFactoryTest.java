@@ -20,6 +20,12 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -28,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFa
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 
-public class TitleFacetViaMethodsFactoryTest
+class TitleFacetViaMethodsFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testTitleMethodPickedUpOnClassAndMethodRemoved() {

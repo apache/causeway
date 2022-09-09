@@ -20,16 +20,13 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -47,24 +44,20 @@ import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class AbstractFacetFactoryJUnit4TestCase
+public abstract class AbstractFacetFactoryJupiterTestCase
 implements HasMetaModelContext {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock protected MethodRemover mockMethodRemover;
-    @Mock protected FacetHolder mockFacetHolder;
-    protected SpecificationLoader specificationLoader;
-
-    @Mock protected ObjectSpecification mockOnType;
-    @Mock protected ObjectSpecification mockObjSpec;
-    @Mock protected OneToOneAssociation mockOneToOneAssociation;
-    @Mock protected OneToManyAssociation mockOneToManyAssociation;
-    @Mock protected OneToOneActionParameter mockOneToOneActionParameter;
+    protected MethodRemover mockMethodRemover;
+    protected FacetHolder mockFacetHolder;
+    protected ObjectSpecification mockOnType;
+    protected ObjectSpecification mockObjSpec;
+    protected OneToOneAssociation mockOneToOneAssociation;
+    protected OneToManyAssociation mockOneToManyAssociation;
+    protected OneToOneActionParameter mockOneToOneActionParameter;
 
     @Getter(onMethod_ = {@Override})
     protected MetaModelContext metaModelContext;
+    protected SpecificationLoader specificationLoader;
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
@@ -73,8 +66,16 @@ implements HasMetaModelContext {
         @Getter @Setter private String firstName;
     }
 
-    @Before
-    public void setUpFacetedMethodAndParameter() throws Exception {
+    @BeforeEach
+    protected void setUpFacetedMethodAndParameter() throws Exception {
+
+        mockMethodRemover = Mockito.mock(MethodRemover.class);
+        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        mockOnType = Mockito.mock(ObjectSpecification.class);
+        mockObjSpec = Mockito.mock(ObjectSpecification.class);
+        mockOneToOneAssociation = Mockito.mock(OneToOneAssociation.class);
+        mockOneToManyAssociation = Mockito.mock(OneToManyAssociation.class);
+        mockOneToOneActionParameter = Mockito.mock(OneToOneActionParameter.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                         .valueSemantic(new IntValueSemantics())
@@ -93,8 +94,8 @@ implements HasMetaModelContext {
 
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() throws Exception {
         facetHolder = null;
         facetedMethod = null;
         facetedMethodParameter = null;
@@ -117,8 +118,8 @@ implements HasMetaModelContext {
     }
 
     protected AutoCompleteFacetForDomainObjectAnnotation expectNoMethodsRemoved() {
-        //Mockito.verifyNoMoreInteractions(mockMethodRemover);
-        context.never(mockMethodRemover);
+        //context.never(mockMethodRemover);
+        Mockito.verifyNoInteractions(mockMethodRemover);
         return null;
     }
 

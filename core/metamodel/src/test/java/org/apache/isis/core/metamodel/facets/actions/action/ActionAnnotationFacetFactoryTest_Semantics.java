@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_Semantics
+extends ActionAnnotationFacetFactoryTest {
 
     private void processSemantics(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -40,7 +41,7 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
     }
 
     @Test
-    public void whenSafe() {
+    void whenSafe() {
 
         class Customer {
             @Action(semantics = SemanticsOf.SAFE)
@@ -59,12 +60,12 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
 
         // then
         final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        Assert.assertNotNull(facet);
+        assertNotNull(facet);
         assertThat(facet.value(), is(SemanticsOf.SAFE));
     }
 
     @Test
-    public void whenNotSpecified() {
+    void whenNotSpecified() {
 
         class Customer {
             @Action()
@@ -83,12 +84,12 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
 
         // then
         final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        Assert.assertNotNull(facet);
+        assertNotNull(facet);
         assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
     }
 
     @Test
-    public void whenNoAnnotation() {
+    void whenNoAnnotation() {
 
         class Customer {
             @SuppressWarnings("unused")
@@ -107,7 +108,7 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
 
         // then
         final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        Assert.assertNotNull(facet);
+        assertNotNull(facet);
         assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
     }
 

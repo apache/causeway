@@ -20,13 +20,13 @@ package org.apache.isis.core.metamodel.facets.object.layoutxml;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.Test;
-
-import org.apache.isis.applib.layout.component.FieldSet;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.applib.layout.component.FieldSet;
 
 public class GridFacetDefaultTest {
 

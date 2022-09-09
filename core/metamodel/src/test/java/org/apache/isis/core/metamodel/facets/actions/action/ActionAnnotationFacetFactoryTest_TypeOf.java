@@ -22,10 +22,13 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
@@ -38,7 +41,8 @@ import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.class
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_TypeOf
+extends ActionAnnotationFacetFactoryTest {
 
     private void processTypeOf(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -47,7 +51,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
     }
 
     @Test
-    public void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
+    void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
 
         class Customer {
             @SuppressWarnings("unused")
@@ -66,11 +70,11 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        Assert.assertNull(facet);
+        assertNull(facet);
     }
 
     @Test
-    public void whenActionAnnotationOnActionReturningCollection() {
+    void whenActionAnnotationOnActionReturningCollection() {
 
         class Order {
         }
@@ -92,13 +96,13 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
+        assertNotNull(facet);
+        assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
         assertThat(facet.value().getElementType(), classEqualTo(Order.class));
     }
 
     @Test
-    public void whenActionAnnotationOnActionNotReturningCollection() {
+    void whenActionAnnotationOnActionNotReturningCollection() {
 
         class Order {
         }
@@ -120,11 +124,11 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        Assert.assertNull(facet);
+        assertNull(facet);
     }
 
     @Test
-    public void whenInferFromType() {
+    void whenInferFromType() {
 
         class Order {
         }
@@ -146,14 +150,14 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof TypeOfFacet);
+        assertNotNull(facet);
+        assertTrue(facet instanceof TypeOfFacet);
         assertThat(facet.value().getElementType(), classEqualTo(Order.class));
         assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
     }
 
     @Test
-    public void whenInferFromGenerics() {
+    void whenInferFromGenerics() {
 
         class Order {
         }
@@ -175,8 +179,8 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
+        assertNotNull(facet);
+        assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
         assertThat(facet.value().getElementType(), classEqualTo(Order.class));
     }
 

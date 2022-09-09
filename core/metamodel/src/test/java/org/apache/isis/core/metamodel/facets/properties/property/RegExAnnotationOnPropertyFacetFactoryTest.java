@@ -22,7 +22,12 @@ import java.lang.reflect.Method;
 
 import javax.validation.constraints.Pattern;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,13 +39,13 @@ import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFace
 
 import lombok.val;
 
-public class RegExAnnotationOnPropertyFacetFactoryTest
+class RegExAnnotationOnPropertyFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);

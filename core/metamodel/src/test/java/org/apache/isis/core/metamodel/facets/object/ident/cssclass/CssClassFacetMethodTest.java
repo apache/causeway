@@ -18,69 +18,74 @@
  */
 package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
-import java.lang.reflect.Method;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
-import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
+import org.apache.isis.core.metamodel.facets.AbstractTestWithMetaModelContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
-public class CssClassFacetMethodTest {
+import lombok.val;
+
+//FIXME[ISIS-3207]
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+class CssClassFacetMethodTest
+extends AbstractTestWithMetaModelContext {
 
     public static final String CSS_CLASS = "someCssClass";
-    private final Mockery mockery = new JUnit4Mockery();
 
-    private CssClassFacetViaCssClassMethod facet;
-    private FacetHolder mockFacetHolder;
-
-    private ManagedObject mockOwningAdapter;
-
-    private DomainObjectInCssClassMethod pojo;
-
-    public static class DomainObjectInCssClassMethod {
-        public String cssClass() {
+    @DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
+    static class DomainObjectInCssClassMethod {
+        @MemberSupport public String cssClass() {
             return CSS_CLASS;
         }
     }
 
-    @Before
-    public void setUp() throws Exception {
+    ObjectSupportFacetFactory fa;
 
-        pojo = new DomainObjectInCssClassMethod();
-        mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ManagedObject.class);
-        final Method iconNameMethod = DomainObjectInCssClassMethod.class.getMethod("cssClass");
-        facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
-                .create(iconNameMethod, mockFacetHolder)
-                .orElse(null);
-
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockOwningAdapter).getPojo();
-                will(returnValue(pojo));
-            }
-        });
-    }
-
-    @After
-    public void tearDown() {
-        facet = null;
+    @BeforeEach
+    void setUp() throws Exception {
+        super.setupWithDefaultProgrammingModel();
+//
+//        super.setupWithProgrammingModel((mmc, prog)->
+//            prog.addFactory(FacetProcessingOrder.F1_LAYOUT, fa = new ObjectSupportFacetFactory(mmc)));
     }
 
     @Test
-    public void testCssClassThrowsException() {
-        final String iconName = facet.cssClass(mockOwningAdapter);
-        assertThat(iconName, is(equalTo(CSS_CLASS)));
+    void test() {
+
+        //getSpecificationLoader().reloadSpecification(DomainObjectInCssClassMethod.class);
+
+        val spec = getSpecificationLoader().loadSpecification(DomainObjectInCssClassMethod.class);
+
+        val ctx = new FacetFactory.ProcessClassContext(
+                DomainObjectInCssClassMethod.class,
+                IntrospectionPolicy.ENCAPSULATION_ENABLED,
+                new MethodRemover_forTesting(), spec);
+
+        val fa = new ObjectSupportFacetFactory(getMetaModelContext());
+
+        fa.process(ctx);
+
+
+        val pojo = new DomainObjectInCssClassMethod();
+        val object = getObjectManager().adapt(pojo);
+
+        val cssClass = spec
+                //object.getSpecification()
+                .getCssClass(object);
+
+        assertThat(cssClass, is(equalTo(CSS_CLASS)));
     }
 
 }

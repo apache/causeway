@@ -18,21 +18,21 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class StringValueSemanticsProviderTest
+import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
+
+class StringValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<String> {
 
     private StringValueSemantics value;
 
     private String string;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         string = "text entry";
         setSemantics(value = new StringValueSemantics());

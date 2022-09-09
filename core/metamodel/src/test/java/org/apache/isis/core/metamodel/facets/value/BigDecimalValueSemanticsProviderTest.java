@@ -20,14 +20,14 @@ package org.apache.isis.core.metamodel.facets.value;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 
 public class BigDecimalValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
@@ -36,7 +36,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
     private BigDecimal bigDecimal;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 

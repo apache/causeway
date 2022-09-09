@@ -20,20 +20,20 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import javax.inject.Named;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 
-public class NamedAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJUnit4TestCase {
+class NamedAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     @Test
-    public void logicalTypeNameAnnotationPickedUpOnClass() {
+    void logicalTypeNameAnnotationPickedUpOnClass() {
 
         @Named("CUS")
         @DomainObject

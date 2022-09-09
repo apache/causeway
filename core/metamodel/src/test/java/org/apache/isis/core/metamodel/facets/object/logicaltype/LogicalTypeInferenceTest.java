@@ -20,23 +20,23 @@ package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
 import javax.inject.Named;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 
 public class LogicalTypeInferenceTest
-extends AbstractFacetFactoryJUnit4TestCase {
+extends AbstractFacetFactoryJupiterTestCase {
 
     public static class Customer {
     }
 
     @Test
-    public void installsFacet_passedThroughClassSubstitutor() {
+    void installsFacet_passedThroughClassSubstitutor() {
         assertThat(LogicalType.infer(Customer.class).getLogicalTypeName(),
                 is(Customer.class.getCanonicalName()));
     }
@@ -46,18 +46,18 @@ extends AbstractFacetFactoryJUnit4TestCase {
     }
 
     @Test
-    public void installsFacet_onValues() {
+    void installsFacet_onValues() {
         assertThat(LogicalType.infer(ValueExample1.class).getLogicalTypeName(),
                 is(ValueExample1.class.getCanonicalName()));
     }
 
     @Named("xxx.ValueExample")
     @Value
-    public static class ValueExample2 {
+    static class ValueExample2 {
     }
 
     @Test
-    public void installsFacet_onValuesUsingLogicalTypeName() {
+    void installsFacet_onValuesUsingLogicalTypeName() {
         assertThat(LogicalType.infer(ValueExample2.class).getLogicalTypeName(),
                 is("xxx.ValueExample"));
     }

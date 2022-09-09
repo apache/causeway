@@ -21,11 +21,15 @@ package org.apache.isis.core.metamodel.facets.actions;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 
-public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {
+class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private IteratorFilteringFacetFactory facetFactory;
 

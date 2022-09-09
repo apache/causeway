@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 
 public class FloatValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Float> {
@@ -33,7 +33,7 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
     private FloatValueSemantics value;
     private Float float1;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
 
         float1 = Float.valueOf(32.5f);

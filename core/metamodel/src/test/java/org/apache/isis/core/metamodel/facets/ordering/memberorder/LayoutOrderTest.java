@@ -21,17 +21,13 @@ package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
-import org.junit.Rule;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
@@ -41,30 +37,28 @@ import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFac
 
 import lombok.val;
 
-public class LayoutOrderTest
+class LayoutOrderTest
 extends AbstractFacetFactoryTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
-            will(new Action() {
-                @Override
-                public Object invoke(final Invocation invocation) throws Throwable {
-                    return invocation.getParameter(1);
-                }
-
-                @Override
-                public void describeTo(final Description description) {
-                    description.appendText("Returns parameter #1");
-                }
-            });
-        }});
+//FIXME
+//        context.checking(new Expectations() {{
+//            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
+//            will(new Action() {
+//                @Override
+//                public Object invoke(final Invocation invocation) throws Throwable {
+//                    return invocation.getParameter(1);
+//                }
+//
+//                @Override
+//                public void describeTo(final Description description) {
+//                    description.appendText("Returns parameter #1");
+//                }
+//            });
+//        }});
     }
 
     @Override

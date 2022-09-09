@@ -18,20 +18,19 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 
 import lombok.val;
 
-public class ApplicationFeatureTypeTest {
+class ApplicationFeatureTypeTest {
 
     public static class HideClassName extends ApplicationFeatureTypeTest {
         @Test
@@ -53,9 +52,6 @@ public class ApplicationFeatureTypeTest {
     }
 
     public static class Init extends ApplicationFeatureTypeTest {
-
-        @Rule
-        public ExpectedException expectedException = ExpectedException.none();
 
         @Test
         public void givenPackage() throws Exception {
@@ -88,17 +84,13 @@ public class ApplicationFeatureTypeTest {
         }
         @Test
         public void givenMemberMalformed() throws Exception {
-
-            expectedException.expect(IllegalArgumentException.class);
-            ApplicationFeatureId
-                    .newMember("com.mycompany.BarISMISSINGTHEHASHSYMBOL");
+            assertThrows(IllegalArgumentException.class, ()->
+                ApplicationFeatureId
+                        .newMember("com.mycompany.BarISMISSINGTHEHASHSYMBOL"));
         }
     }
 
     public static class EnsurePackage extends ApplicationFeatureTypeTest {
-
-        @Rule
-        public ExpectedException expectedException = ExpectedException.none();
 
         @Test
         public void whenPackage() throws Exception {
@@ -106,20 +98,17 @@ public class ApplicationFeatureTypeTest {
         }
         @Test
         public void whenClass() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx")));
         }
         @Test
         public void whenMember() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
         }
     }
 
     public static class EnsurePackageOrClass extends ApplicationFeatureTypeTest {
-
-        @Rule
-        public ExpectedException expectedException = ExpectedException.none();
 
         @Test
         public void whenPackage() throws Exception {
@@ -131,20 +120,18 @@ public class ApplicationFeatureTypeTest {
         }
         @Test
         public void whenMember() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
         }
 
     }
 
     public static class EnsureClass extends ApplicationFeatureTypeTest {
-        @Rule
-        public ExpectedException expectedException = ExpectedException.none();
 
         @Test
         public void whenPackage() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx")));
         }
         @Test
         public void whenClass() throws Exception {
@@ -152,25 +139,23 @@ public class ApplicationFeatureTypeTest {
         }
         @Test
         public void whenMember() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x")));
         }
 
     }
 
     public static class EnsureMember extends ApplicationFeatureTypeTest {
-        @Rule
-        public ExpectedException expectedException = ExpectedException.none();
 
         @Test
         public void whenPackage() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "xxx")));
         }
         @Test
         public void whenClass() throws Exception {
-            expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
+            assertThrows(IllegalStateException.class, ()->
+                _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx")));
         }
         @Test
         public void whenMember() throws Exception {

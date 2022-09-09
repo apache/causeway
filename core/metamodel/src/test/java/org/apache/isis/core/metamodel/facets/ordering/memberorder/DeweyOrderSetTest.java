@@ -20,17 +20,12 @@ package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 
 import java.util.List;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
-import org.junit.Rule;
+import org.mockito.Mock;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -87,10 +82,7 @@ public class DeweyOrderSetTest extends TestCase {
     private final List<FacetedMethod> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
     private final List<FacetedMethod> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);
 
-    TranslationService mockTranslationService;
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Mock TranslationService mockTranslationService;
 
 	static TranslationContext ctx = TranslationContext.named("test");
 
@@ -99,21 +91,21 @@ public class DeweyOrderSetTest extends TestCase {
 
         _Context.clear();
 
-        mockTranslationService = context.mock(TranslationService.class);
-        context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
-            will(new Action() {
-                @Override
-                public Object invoke(final Invocation invocation) throws Throwable {
-                    return invocation.getParameter(1);
-                }
-
-                @Override
-                public void describeTo(final Description description) {
-                    description.appendText("Returns parameter #1");
-                }
-            });
-        }});
+//FIXME
+//        context.checking(new Expectations() {{
+//            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
+//            will(new Action() {
+//                @Override
+//                public Object invoke(final Invocation invocation) throws Throwable {
+//                    return invocation.getParameter(1);
+//                }
+//
+//                @Override
+//                public void describeTo(final Description description) {
+//                    description.appendText("Returns parameter #1");
+//                }
+//            });
+//        }});
 
     }
 
@@ -272,7 +264,7 @@ public class DeweyOrderSetTest extends TestCase {
 
     // -- HELPER
 
-    void setupLayoutFacets(String groupId, String sequence, FacetHolder facetedHolder) {
+    void setupLayoutFacets(final String groupId, final String sequence, final FacetHolder facetedHolder) {
         facetedHolder.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedHolder) {});
         facetedHolder.addFacet(new LayoutOrderFacetAbstract(sequence, facetedHolder) {});
     }

@@ -22,16 +22,16 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
-
-import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
+
 import lombok.val;
 
-public class TypeExtractorMethodsParametersTest {
+class TypeExtractorMethodsParametersTest {
 
     @Test
     public void shouldFindGenericTypes() throws Exception {
@@ -49,7 +49,7 @@ public class TypeExtractorMethodsParametersTest {
         final Method method = clazz.getMethod("filterCustomers", List.class);
 
         val classes = TypeExtractor.streamMethodParameters(method).collect(Collectors.toSet());
-        
+
         assertEquals(2, classes.size());
         assertTrue(classes.contains(java.util.List.class));
         assertTrue(classes.contains(Customer.class));

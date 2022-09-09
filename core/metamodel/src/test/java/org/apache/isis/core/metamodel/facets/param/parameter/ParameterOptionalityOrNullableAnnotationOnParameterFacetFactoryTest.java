@@ -22,9 +22,13 @@ import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
@@ -32,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 
-public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
+class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private ParameterAnnotationFacetFactory facetFactory;
 

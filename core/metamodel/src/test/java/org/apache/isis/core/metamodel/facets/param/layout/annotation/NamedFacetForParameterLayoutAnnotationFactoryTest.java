@@ -24,9 +24,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
@@ -35,7 +36,8 @@ import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFa
 
 import lombok.val;
 
-public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
+class NamedFacetForParameterLayoutAnnotationFactoryTest
+extends AbstractFacetFactoryTest {
 
     private static final String NAME = "an action";
 

@@ -18,13 +18,16 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 
-public class DomainServiceFacetAnnotationFactoryTest
+class DomainServiceFacetAnnotationFactoryTest
 extends AbstractFacetFactoryTest {
 
     private DomainServiceFacetAnnotationFactory facetFactory;

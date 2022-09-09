@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
 
-public class MethodFinderUtilsTest {
+class MethodFinderUtilsTest {
 
     public static class NoPostConstruct {
         public void thisDoesNotHaveAnyAnnotation(){}
@@ -42,7 +42,7 @@ public class MethodFinderUtilsTest {
 
     private HasPostConstructMethodCache hasPostConstructMethodCache;
 
-    @Before
+    @BeforeEach
     public void setup() {
         val methodByClassMap = new MethodByClassMap();
         this.hasPostConstructMethodCache = new HasPostConstructMethodCache() {
@@ -52,7 +52,6 @@ public class MethodFinderUtilsTest {
             }
         };
     }
-
 
     @Test
     public void whenExists() throws Exception {

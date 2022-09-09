@@ -18,37 +18,39 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.lang.reflect.Method;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
-public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJUnit4TestCase {
+class ActionLayoutXmlLayoutAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     ActionLayoutFacetFactory facetFactory;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory(metaModelContext);
     }
 
     @Test
-    public void testActionLayoutAnnotationPickedUp() {
+    void testActionLayoutAnnotationPickedUp() {
 
         class Customer {
             @ActionLayout(position = ActionLayout.Position.PANEL)
@@ -63,14 +65,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
+        assertNotNull(facet);
+        assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
         final ActionPositionFacetForActionLayoutAnnotation actionLayoutFacetAnnotation = (ActionPositionFacetForActionLayoutAnnotation) facet;
-        Assert.assertEquals(ActionLayout.Position.PANEL, actionLayoutFacetAnnotation.position());
+        assertEquals(ActionLayout.Position.PANEL, actionLayoutFacetAnnotation.position());
     }
 
     @Test
-    public void testActionLayoutFallbackPickedUp() {
+    void testActionLayoutFallbackPickedUp() {
 
         class Customer {
             @SuppressWarnings("unused")
@@ -85,14 +87,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof ActionPositionFacetFallback);
+        assertNotNull(facet);
+        assertTrue(facet instanceof ActionPositionFacetFallback);
     }
 
-    public static class CssClassFa extends ActionLayoutXmlLayoutAnnotationFacetFactoryTest {
+    static class CssClassFa extends ActionLayoutXmlLayoutAnnotationFacetFactoryTest {
 
         @Test
-        public void testDefaultPosition() {
+        void testDefaultPosition() {
 
             class Customer {
                 @ActionLayout(cssClassFa = "font-awesome")
@@ -114,7 +116,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         }
 
         @Test
-        public void testRightPosition() {
+        void testRightPosition() {
 
             class Customer {
                 @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = CssClassFaPosition.RIGHT)
