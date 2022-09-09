@@ -21,9 +21,10 @@ package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 public class FullCalendarJsReference
 extends WebjarsJavaScriptResourceReference {
@@ -35,7 +36,7 @@ extends WebjarsJavaScriptResourceReference {
         new FullCalendarJsReference();
 
     private FullCalendarJsReference() {
-        super("fullcalendar/5.10.2/main.min.js");
+        super("fullcalendar/5.11.3/main.min.js");
     }
 
     /**
