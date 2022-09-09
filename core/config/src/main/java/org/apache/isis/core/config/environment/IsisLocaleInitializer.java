@@ -21,13 +21,13 @@ package org.apache.isis.core.config.environment;
 import java.util.Locale;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -43,7 +43,7 @@ public class IsisLocaleInitializer {
 
     // -- HELPER
 
-    private static Locale toLocale(String localeSpec) {
+    private static Locale toLocale(final String localeSpec) {
         final int pos = localeSpec.indexOf('_');
         Locale locale;
         if (pos == -1) {
@@ -56,7 +56,7 @@ public class IsisLocaleInitializer {
         return locale;
     }
 
-    private static void setLocaleDefault(Locale locale) {
+    private static void setLocaleDefault(final Locale locale) {
         Locale.setDefault(locale);
         log.info("locale set to {}", locale);
     }

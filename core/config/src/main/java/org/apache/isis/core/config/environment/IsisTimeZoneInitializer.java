@@ -20,13 +20,13 @@ package org.apache.isis.core.config.environment;
 
 import java.util.TimeZone;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 
 @Component
