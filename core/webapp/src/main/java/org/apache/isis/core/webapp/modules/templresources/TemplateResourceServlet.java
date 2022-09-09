@@ -106,7 +106,7 @@ public class TemplateResourceServlet extends HttpServlet {
     }
 
     private InputStream loadFromFileSystem(final HttpServletRequest request) {
-        val inputStream = ResourceUtil.getResourceAsStream(request);
+        val inputStream = _Util.getResourceAsStream(request);
 
         if(log.isDebugEnabled()) {
             val realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());

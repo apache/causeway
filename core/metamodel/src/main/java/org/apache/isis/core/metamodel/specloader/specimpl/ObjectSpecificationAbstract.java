@@ -27,11 +27,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Vetoed;
-
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
@@ -577,7 +576,7 @@ implements ObjectSpecification {
         }
     }
 
-    @Vetoed
+    @Domain.Exclude
     private static class NotANoopFacetFilter<Q extends Facet> implements Predicate<Q> {
         Q noopFacet;
 
