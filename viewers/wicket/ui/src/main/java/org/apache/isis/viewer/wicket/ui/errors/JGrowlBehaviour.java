@@ -28,9 +28,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.message.MessageBroker;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.val;
@@ -49,13 +49,12 @@ import lombok.val;
  */
 public class JGrowlBehaviour
 extends AbstractDefaultAjaxBehavior
-implements HasMetaModelContext {
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
-    private transient MetaModelContext commonContext;
 
     public JGrowlBehaviour(final MetaModelContext commonContext) {
-        this.commonContext = commonContext;
+        this.mmc = commonContext;
     }
 
     @Override
@@ -94,9 +93,10 @@ implements HasMetaModelContext {
 
     }
 
+    private transient MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
 }

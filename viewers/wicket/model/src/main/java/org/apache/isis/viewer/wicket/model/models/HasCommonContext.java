@@ -35,6 +35,10 @@ public interface HasCommonContext extends HasMetaModelContext {
         return getTranslationService().translate(TranslationContext.empty(), input);
     }
 
+    default String translate(final TranslationContext tc, final String text) {
+        return getTranslationService().translate(tc, text);
+    }
+
     default boolean isPrototyping() {
         return getSystemEnvironment().isPrototyping();
     }

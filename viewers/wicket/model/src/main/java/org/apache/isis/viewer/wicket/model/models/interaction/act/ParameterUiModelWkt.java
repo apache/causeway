@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models.interaction.act;
 
 import org.apache.wicket.model.ChainingModel;
 
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -28,6 +27,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.commons.model.HasParentUiModel;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 import lombok.NonNull;
@@ -40,7 +40,7 @@ import lombok.NonNull;
 public final class ParameterUiModelWkt
 extends ChainingModel<ActionInteraction>
 implements
-    HasMetaModelContext,
+    HasCommonContext,
     HasParentUiModel<ObjectUiModelWkt>,
     ParameterUiModel {
 

@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.experimental.UtilityClass;
 
-
 /**
  * @since 2.0
  */
@@ -39,7 +38,7 @@ public class WktContext {
     }
 
     public MetaModelContext getCommonContext() {
-        return ((HasMetaModelContext) Application.get()).getMetaModelContext();
+        return getMetaModelContext();
     }
 
     public MetaModelContext computeIfAbsent(final MetaModelContext commonContext) {
