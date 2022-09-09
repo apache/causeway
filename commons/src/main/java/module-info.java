@@ -6,6 +6,7 @@ module org.apache.isis.commons {
     exports org.apache.isis.commons.handler;
     exports org.apache.isis.commons.having;
     exports org.apache.isis.commons.resource;
+    exports org.apache.isis.commons.internal;
     exports org.apache.isis.commons.internal.assertions;
     exports org.apache.isis.commons.internal.base;
     exports org.apache.isis.commons.internal.binding;
@@ -35,7 +36,6 @@ module org.apache.isis.commons {
     exports org.apache.isis.commons.internal.reflection;
     exports org.apache.isis.commons.internal.resources;
     exports org.apache.isis.commons.internal.testing;
-    exports org.apache.isis.commons.internal;
 
     requires transitive com.fasterxml.jackson.annotation;
     requires transitive com.fasterxml.jackson.core;
@@ -53,4 +53,8 @@ module org.apache.isis.commons {
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
+
+    // JAXB JUnit test
+    opens org.apache.isis.commons.internal.resources to java.xml.bind;
+
 }
