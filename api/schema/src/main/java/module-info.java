@@ -9,4 +9,10 @@ module org.apache.isis.schema {
     requires java.xml;
     requires java.xml.bind;
     requires spring.context;
+
+    opens org.apache.isis.schema.metamodel.v2;
+    opens org.apache.isis.schema.common.v2;
+    opens org.apache.isis.schema.cmd.v2;
+    opens org.apache.isis.schema.ixn.v2;
+    opens org.apache.isis.schema.chg.v2;
 }
