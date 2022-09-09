@@ -18,14 +18,13 @@
  */
 package org.apache.isis.commons.internal.strings;
 
-
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-public class FormatTest {
+class FormatTest {
 
     // copy of code in scripts/generateConfigDocs.groovy
-    public static String format(final String str, int len) {
+    public static String format(final String str, final int len) {
         if(str.length() <= len) {
             return str;
         }

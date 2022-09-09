@@ -30,7 +30,6 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.commons</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/commons</git-plugin.propertiesDir>
 	</properties>
 
