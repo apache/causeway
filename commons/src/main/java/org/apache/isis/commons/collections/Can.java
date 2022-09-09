@@ -39,8 +39,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -292,27 +290,27 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
-    /**
-     * Returns either a {@code Can} with all the elements from given {@code instance}
-     * or an empty {@code Can} if the {@code instance} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
-     * @param <T>
-     * @param instance
-     * @return non-null
-     */
-    public static <T> Can<T> ofInstance(final @Nullable Instance<T> instance) {
-        if(instance==null || instance.isUnsatisfied()) {
-            return empty();
-        }
-        if(instance.isResolvable()) {
-            return Can_Singleton.of(instance.get());
-        }
-        val nonNullElements = instance.stream()
-                .collect(Collectors.toCollection(()->new ArrayList<>()));
-
-        return Can_Multiple.of(nonNullElements);
-
-    }
+//    /**
+//     * Returns either a {@code Can} with all the elements from given {@code instance}
+//     * or an empty {@code Can} if the {@code instance} is {@code null}. Any elements
+//     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+//     * @param <T>
+//     * @param instance
+//     * @return non-null
+//     */
+//    public static <T> Can<T> ofInstance(final @Nullable Instance<T> instance) {
+//        if(instance==null || instance.isUnsatisfied()) {
+//            return empty();
+//        }
+//        if(instance.isResolvable()) {
+//            return Can_Singleton.of(instance.get());
+//        }
+//        val nonNullElements = instance.stream()
+//                .collect(Collectors.toCollection(()->new ArrayList<>()));
+//
+//        return Can_Multiple.of(nonNullElements);
+//
+//    }
 
     // -- OPERATORS
 

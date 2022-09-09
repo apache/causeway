@@ -161,6 +161,13 @@
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
 						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+								<version>${lombok.version}</version>
+							</path>
+						</annotationProcessorPaths>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -858,12 +865,6 @@
 				<groupId>io.swagger</groupId>
 				<artifactId>swagger-core</artifactId>
 				<version>${swagger-core.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>jakarta.annotation</groupId>
-				<artifactId>jakarta.annotation-api</artifactId>
-				<version>${jakarta.annotation-api.version}</version>
 			</dependency>
 
 			<dependency>
