@@ -240,7 +240,6 @@ module org.apache.isis.core.metamodel {
     exports org.apache.isis.core.metamodel.services.exceprecog;
     exports org.apache.isis.core.metamodel.services.grid.bootstrap;
     exports org.apache.isis.core.metamodel.services.grid;
-    exports org.apache.isis.core.metamodel.services.homepage;
     exports org.apache.isis.core.metamodel.services.ixn;
     exports org.apache.isis.core.metamodel.services.layout;
     exports org.apache.isis.core.metamodel.services.message;
@@ -314,7 +313,6 @@ module org.apache.isis.core.metamodel {
     opens org.apache.isis.core.metamodel.facets.actions.contributing;
     opens org.apache.isis.core.metamodel.facets.actions.fileaccept;
     opens org.apache.isis.core.metamodel.facets.actions.homepage.annotation;
-    opens org.apache.isis.core.metamodel.facets.actions.homepage;
     opens org.apache.isis.core.metamodel.facets.actions.layout;
     opens org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
     opens org.apache.isis.core.metamodel.facets.actions.notinservicemenu;
@@ -535,7 +533,6 @@ module org.apache.isis.core.metamodel {
     opens org.apache.isis.core.metamodel.services.exceprecog;
     opens org.apache.isis.core.metamodel.services.grid.bootstrap;
     opens org.apache.isis.core.metamodel.services.grid;
-    opens org.apache.isis.core.metamodel.services.homepage;
     opens org.apache.isis.core.metamodel.services.ixn;
     opens org.apache.isis.core.metamodel.services.layout;
     opens org.apache.isis.core.metamodel.services.message;
