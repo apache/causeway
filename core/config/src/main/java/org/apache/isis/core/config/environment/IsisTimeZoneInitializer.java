@@ -33,8 +33,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisTimeZoneInitializer {
 
-    @PostConstruct @Inject
-    public void initTimeZone(final IsisConfiguration configuration) {
+    @Inject IsisConfiguration configuration;
+
+    @PostConstruct
+    public void initTimeZone() {
         final String timeZoneSpec = configuration.getCore().getRuntime().getTimezone();
         if (timeZoneSpec != null) {
             TimeZone timeZone;

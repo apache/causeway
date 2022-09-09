@@ -35,4 +35,9 @@ module org.apache.isis.core.config {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+
+    uses org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
+
+    opens org.apache.isis.core.config to spring.core, org.hibernate.validator;
+    opens org.apache.isis.core.config.environment to spring.core;
 }
