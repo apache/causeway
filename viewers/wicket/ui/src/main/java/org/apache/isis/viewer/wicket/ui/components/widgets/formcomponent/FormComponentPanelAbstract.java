@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 /**
@@ -112,7 +112,7 @@ extends FormComponentPanel<T> {
     // ///////////////////////////////////////////////////////////////////
 
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
+        final HasComponentFactoryRegistry cfra = (HasComponentFactoryRegistry) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
 

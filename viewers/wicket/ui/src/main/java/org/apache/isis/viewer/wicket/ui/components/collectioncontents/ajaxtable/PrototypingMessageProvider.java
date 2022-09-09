@@ -23,8 +23,10 @@ import java.util.Locale;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.viewer.wicket.model.util.WktContext;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -36,11 +38,14 @@ import lombok.val;
  *
  * @since 2.0
  */
-class PrototypingMessageProvider {
+@RequiredArgsConstructor
+class PrototypingMessageProvider
+implements HasCommonContext {
 
-    private static MetaModelContext commonContext = null;
+    @Getter(onMethod_={@Override})
+    private final MetaModelContext metaModelContext;
 
-    public static String getTookTimingMessageModel() {
+    public String getTookTimingMessageModel() {
         return isPrototyping()
                 ? getTookTimingMessage()
                 : "";
@@ -48,19 +53,11 @@ class PrototypingMessageProvider {
 
     // -- HELPER
 
-    private static MetaModelContext commonContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
-
-    private static boolean isPrototyping() {
-        return commonContext().getSystemEnvironment().isPrototyping();
-    }
-
-    private static String getTookTimingMessage() {
+    private String getTookTimingMessage() {
 
         final StringBuilder tookTimingMessage = new StringBuilder();
 
-        commonContext().getInteractionLayerTracker().currentInteraction()
+        getInteractionService().currentInteraction()
         .map(IsisInteraction.class::cast)
         .ifPresent(interaction->{
             val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());

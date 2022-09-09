@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.BSGridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -260,7 +260,7 @@ extends IndicatingAjaxLink<ManagedObject> {
     }
 
     private ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();
+        return ((HasComponentFactoryRegistry) Application.get()).getComponentFactoryRegistry();
     }
 
     public Wicket getSettings() {

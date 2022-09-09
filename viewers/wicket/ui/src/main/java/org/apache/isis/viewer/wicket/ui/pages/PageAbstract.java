@@ -63,7 +63,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -478,7 +478,7 @@ implements ActionPromptProvider {
 
     // -- getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
+        final HasComponentFactoryRegistry cfra = (HasComponentFactoryRegistry) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
 

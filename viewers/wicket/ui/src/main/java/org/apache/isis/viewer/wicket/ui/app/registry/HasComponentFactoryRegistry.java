@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * For obtaining the {@link ComponentFactoryRegistry}.
  */
-public interface ComponentFactoryRegistryAccessor extends Serializable {
+public interface HasComponentFactoryRegistry extends Serializable {
 
     ComponentFactoryRegistry getComponentFactoryRegistry();
 

@@ -25,21 +25,16 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.LanguageProvider;
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.isis.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
 import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProviderDefault;
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
@@ -52,22 +47,9 @@ import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
  */
 public class PanelBase<T>
 extends GenericPanel<T>
-implements HasMetaModelContext {
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
-
-    private transient WebAppContextPath webAppContextPath;
-    private transient PageClassRegistry pageClassRegistry;
-    private transient ImageResourceCache imageCache;
-    private transient MetaModelContext commonContext;
-    private transient InteractionService interactionService;
-    private transient TranslationService translationService;
-    private transient LanguageProvider localeProvider;
-    private transient TreeThemeProvider treeThemeProvider;
-    private transient EmailNotificationService emailNotificationService;
-    private transient EmailVerificationUrlService emailVerificationUrlService;
-    private transient PageNavigationService pageNavigationService;
-    private transient HeaderUiService headerUiService;
 
     protected PanelBase(final String id) {
         this(id, null);
@@ -77,69 +59,51 @@ implements HasMetaModelContext {
         super(id, model);
     }
 
+    private transient MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
-    public Wicket getWicketViewerSettings() {
-        return getConfiguration().getViewer().getWicket();
-    }
-
-    @Override
-    public WebAppContextPath getWebAppContextPath() {
-        return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
-    }
-
+    private transient PageClassRegistry pageClassRegistry;
     public PageClassRegistry getPageClassRegistry() {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
 
+    private transient ImageResourceCache imageCache;
     public ImageResourceCache getImageResourceCache() {
         return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
     }
 
-    public InteractionService getInteractionService() {
-        return interactionService = computeIfAbsent(InteractionService.class, interactionService);
-    }
-
-    @Override
-    public TranslationService getTranslationService() {
-        return translationService = computeIfAbsent(TranslationService.class, translationService);
-    }
-
+    private transient LanguageProvider localeProvider;
     public LanguageProvider getLanguageProvider() {
         return localeProvider = computeIfAbsent(LanguageProvider.class, localeProvider);
     }
 
+    private transient TreeThemeProvider treeThemeProvider;
     protected TreeThemeProvider getTreeThemeProvider() {
         return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderDefault::new);
     }
 
+    private transient EmailNotificationService emailNotificationService;
     protected EmailNotificationService getEmailNotificationService() {
         return emailNotificationService = computeIfAbsent(EmailNotificationService.class, emailNotificationService);
     }
 
+    private transient EmailVerificationUrlService emailVerificationUrlService;
     protected EmailVerificationUrlService getEmailVerificationUrlService() {
         return emailVerificationUrlService = computeIfAbsent(EmailVerificationUrlService.class, emailVerificationUrlService);
     }
 
+    private transient PageNavigationService pageNavigationService;
     protected PageNavigationService getPageNavigationService() {
         return pageNavigationService = computeIfAbsent(PageNavigationService.class, pageNavigationService);
     }
 
+    private transient HeaderUiService headerUiService;
     protected HeaderUiModel getHeaderModel() {
         headerUiService = computeIfAbsent(HeaderUiService.class, headerUiService);
         return headerUiService.getHeader();
-    }
-
-    // -- TRANSLATION
-
-    /**
-     * Translate without context: Tooltips, Button-Labels, etc.
-     */
-    public final String translate(final String input) {
-        return getTranslationService().translate(TranslationContext.empty(), input);
     }
 
     // Hint support
@@ -151,7 +115,7 @@ implements HasMetaModelContext {
     // other Dependencies
 
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
+        return ((HasComponentFactoryRegistry) getApplication()).getComponentFactoryRegistry();
     }
 
     // -- HELPER

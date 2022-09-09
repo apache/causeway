@@ -16,29 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.wicket.ui.pages;
 
-import org.apache.wicket.model.LoadableDetachableModel;
+import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.viewer.wicket.model.util.WktContext;
+/**
+ * API to obtain the {@link PageClassRegistry}.
+ */
+public interface HasPageClassRegistry extends Serializable {
 
-import lombok.val;
-
-public final class CommonContextModel
-extends LoadableDetachableModel<MetaModelContext> {
-
-    private static final long serialVersionUID = 1L;
-
-    public static CommonContextModel wrap(final MetaModelContext commonContext) {
-        val model = new CommonContextModel();
-        model.setObject(commonContext);
-        return model;
-    }
-
-    @Override
-    protected MetaModelContext load() {
-        return WktContext.getMetaModelContext();
-    }
-
+    PageClassRegistry getPageClassRegistry();
 }

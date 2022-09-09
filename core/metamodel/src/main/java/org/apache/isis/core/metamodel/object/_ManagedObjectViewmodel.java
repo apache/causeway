@@ -97,7 +97,7 @@ implements
 
     @Override
     public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        val shouldRefresh = getMetaModelContext().getInteractionProvider().getInteractionId()
+        val shouldRefresh = getInteractionService().getInteractionId()
         .map(this::shouldRefresh)
         .orElse(true); // if there is no current interaction, refresh regardless; unexpected state, might fail later
 

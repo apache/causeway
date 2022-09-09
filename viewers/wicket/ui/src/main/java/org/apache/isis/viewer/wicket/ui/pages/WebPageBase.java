@@ -24,14 +24,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
@@ -40,14 +35,9 @@ import org.apache.isis.viewer.wicket.model.util.WktContext;
  */
 public abstract class WebPageBase
 extends WebPage
-implements HasMetaModelContext {
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
-
-    private transient WebAppContextPath webAppContextPath;
-    private transient PageClassRegistry pageClassRegistry;
-    private transient MetaModelContext commonContext;
-    private transient InteractionService interactionService;
 
     protected WebPageBase(final PageParameters parameters) {
         super(parameters);
@@ -76,36 +66,15 @@ implements HasMetaModelContext {
 
     // -- DEPENDENCIES
 
+    private transient MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
-    @Override
-    public IsisConfiguration getConfiguration() {
-        return getMetaModelContext().getConfiguration();
-    }
-
-    @Override
-    public WebAppContextPath getWebAppContextPath() {
-        return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
-    }
-
+    private transient PageClassRegistry pageClassRegistry;
     public PageClassRegistry getPageClassRegistry() {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
-    }
-
-    public InteractionService getInteractionService() {
-        return interactionService = computeIfAbsent(InteractionService.class, interactionService);
-    }
-
-    @Override
-    public IsisSystemEnvironment getSystemEnvironment() {
-        return getMetaModelContext().getSystemEnvironment();
-    }
-
-    protected Wicket getWicketViewerSettings() {
-        return getConfiguration().getViewer().getWicket();
     }
 
     // -- HELPER

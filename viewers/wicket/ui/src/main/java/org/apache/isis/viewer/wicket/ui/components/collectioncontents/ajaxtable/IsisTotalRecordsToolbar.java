@@ -27,6 +27,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
@@ -36,7 +39,8 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
  *
  * @since 2.0
  */
-public class IsisTotalRecordsToolbar extends AbstractToolbar {
+public class IsisTotalRecordsToolbar extends AbstractToolbar
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
     private static final String navigatorContainerId = "navigatorContainer";
@@ -73,7 +77,8 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
             String.valueOf(table.getColumns().size()).intern())));
 
         Wkt.labelAdd(container, "navigatorLabel", messageModel);
-        Wkt.labelAdd(container, "prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel());
+        Wkt.labelAdd(container, "prototypingLabel", new PrototypingMessageProvider(getMetaModelContext())
+                .getTookTimingMessageModel());
     }
 
     /**
@@ -91,6 +96,12 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
         }
 
         setVisible(getTable().getPageCount() == 1);
+    }
+
+    private transient MetaModelContext mmc;
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
 }

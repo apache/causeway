@@ -27,9 +27,8 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -101,10 +100,6 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getAuthenticationManager();
     }
 
-    default InteractionProvider getInteractionProvider() {
-        return getMetaModelContext().getInteractionProvider();
-    }
-
     default TitleService getTitleService() {
         return getMetaModelContext().getTitleService();
     }
@@ -149,12 +144,12 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getMenuBarsService();
     }
 
-    default InteractionLayerTracker getInteractionLayerTracker() {
-        return getMetaModelContext().getInteractionLayerTracker();
+    default InteractionService getInteractionService() {
+        return getMetaModelContext().getInteractionService();
     }
 
     default Optional<UserLocale> currentUserLocale() {
-        return getInteractionProvider().currentInteractionContext()
+        return getInteractionService().currentInteractionContext()
                 .map(InteractionContext::getLocale);
     }
 

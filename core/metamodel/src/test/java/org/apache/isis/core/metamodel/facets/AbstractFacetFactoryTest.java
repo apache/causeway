@@ -28,8 +28,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -64,7 +64,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected InteractionProvider mockInteractionProvider;
+    protected InteractionService mockInteractionService;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected MethodRemover_forTesting methodRemover;
 
@@ -81,18 +81,18 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemover_forTesting();
 
-        mockInteractionProvider = context.mock(InteractionProvider.class);
+        mockInteractionService = context.mock(InteractionService.class);
 
         mockTranslationService = context.mock(TranslationService.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .translationService(mockTranslationService)
-                .interactionProvider(mockInteractionProvider)
+                .interactionService(mockInteractionService)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockInteractionProvider).currentInteractionContext();
+            allowing(mockInteractionService).currentInteractionContext();
             will(returnValue(Optional.of(iaContext)));
         }});
 

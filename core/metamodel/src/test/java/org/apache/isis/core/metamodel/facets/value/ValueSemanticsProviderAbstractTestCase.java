@@ -38,7 +38,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
@@ -60,7 +60,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock protected InteractionProvider mockInteractionProvider;
+    @Mock protected InteractionService mockInteractionService;
     @Mock protected ManagedObject mockAdapter;
 
     protected MetaModelContext metaModelContext;
@@ -74,12 +74,12 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
         Locale.setDefault(Locale.UK);
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .interactionProvider(mockInteractionProvider)
+                .interactionService(mockInteractionService)
                 .build();
 
         context.checking(new Expectations() {
             {
-                never(mockInteractionProvider);
+                never(mockInteractionService);
             }
         });
     }

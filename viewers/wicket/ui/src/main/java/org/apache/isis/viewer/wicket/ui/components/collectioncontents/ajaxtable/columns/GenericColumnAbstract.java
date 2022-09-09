@@ -30,7 +30,7 @@ import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 
 import lombok.val;
@@ -75,7 +75,7 @@ implements GenericColumn {
 
     protected ComponentFactoryRegistry getComponentRegistry() {
         if(componentRegistry==null) {
-            val componentFactoryRegistryAccessor = (ComponentFactoryRegistryAccessor) Application.get();
+            val componentFactoryRegistryAccessor = (HasComponentFactoryRegistry) Application.get();
             componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
         }
         return componentRegistry;

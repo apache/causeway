@@ -21,27 +21,21 @@ package org.apache.isis.viewer.wicket.ui.panels;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.HasPageClassRegistry;
 
 public abstract class FormAbstract<T> extends Form<T>
 implements
-    HasMetaModelContext,
-    ComponentFactoryRegistryAccessor,
-    PageClassRegistryAccessor {
+    HasCommonContext,
+    HasComponentFactoryRegistry,
+    HasPageClassRegistry {
 
     private static final long serialVersionUID = 1L;
-
-    private transient ComponentFactoryRegistry componentFactoryRegistry;
-    private transient PageClassRegistry pageClassRegistry;
-    private transient MetaModelContext commonContext;
 
     protected FormAbstract(final String id) {
         super(id);
@@ -53,37 +47,28 @@ implements
 
     // -- DEPENDENCIES
 
+    private transient MetaModelContext mmc;
     @Override
     public final MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
-    /**
-     * Translate without context: Tooltips, Button-Labels, etc.
-     */
-    public final String translate(final String input) {
-        return getTranslationService().translate(TranslationContext.empty(), input);
-    }
-
+    private transient ComponentFactoryRegistry componentFactoryRegistry;
     @Override
     public final ComponentFactoryRegistry getComponentFactoryRegistry() {
         if(componentFactoryRegistry==null) {
-            componentFactoryRegistry = ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
+            componentFactoryRegistry = ((HasComponentFactoryRegistry) getApplication()).getComponentFactoryRegistry();
         }
         return componentFactoryRegistry;
     }
 
+    private transient PageClassRegistry pageClassRegistry;
     @Override
     public final PageClassRegistry getPageClassRegistry() {
         if(pageClassRegistry==null) {
-            pageClassRegistry = ((PageClassRegistryAccessor) getApplication()).getPageClassRegistry();
+            pageClassRegistry = ((HasPageClassRegistry) getApplication()).getPageClassRegistry();
         }
         return pageClassRegistry;
-    }
-
-
-    protected Wicket getWicketViewerSettings() {
-        return getConfiguration().getViewer().getWicket();
     }
 
 }

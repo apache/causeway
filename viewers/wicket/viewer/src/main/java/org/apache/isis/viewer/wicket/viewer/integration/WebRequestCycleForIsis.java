@@ -68,6 +68,7 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -116,8 +117,8 @@ implements
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
             new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
 
+    @Setter
     private PageClassRegistry pageClassRegistry;
-    private MetaModelContext commonContext;
 
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
@@ -450,16 +451,12 @@ implements
         return false;
     }
 
-
-    public void setPageClassRegistry(final PageClassRegistry pageClassRegistry) {
-        this.pageClassRegistry = pageClassRegistry;
-    }
-
     // -- DEPENDENCIES
 
+    private MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
@@ -467,7 +464,7 @@ implements
     }
 
     private boolean isInInteraction() {
-        return getMetaModelContext().getInteractionLayerTracker().isInInteraction();
+        return getMetaModelContext().getInteractionService().isInInteraction();
     }
 
     private AuthenticatedWebSession getWicketAuthenticatedWebSession() {

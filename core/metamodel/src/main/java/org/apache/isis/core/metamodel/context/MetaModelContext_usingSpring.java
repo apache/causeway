@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -155,8 +155,8 @@ class MetaModelContext_usingSpring implements MetaModelContext {
     getSingletonElseFail(MessageService.class);
 
     @Getter(lazy = true)
-    private final InteractionLayerTracker interactionLayerTracker =
-    getSingletonElseFail(InteractionLayerTracker.class);
+    private final InteractionService interactionService =
+    getSingletonElseFail(InteractionService.class);
 
     @Override
     public final ManagedObject getHomePageAdapter() {

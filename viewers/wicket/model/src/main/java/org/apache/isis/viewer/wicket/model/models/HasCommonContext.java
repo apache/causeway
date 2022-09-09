@@ -16,14 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.pages;
+package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 
-/**
- * API to obtain the {@link PageClassRegistry}.
- */
-public interface PageClassRegistryAccessor extends Serializable {
+public interface HasCommonContext extends HasMetaModelContext {
 
-    PageClassRegistry getPageClassRegistry();
+    default Wicket getWicketViewerSettings() {
+        return getConfiguration().getViewer().getWicket();
+    }
+
+    /**
+     * Translate without context: Tooltips, Button-Labels, etc.
+     */
+    default String translate(final String input) {
+        return getTranslationService().translate(TranslationContext.empty(), input);
+    }
+
+    default boolean isPrototyping() {
+        return getSystemEnvironment().isPrototyping();
+    }
+
 }

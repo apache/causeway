@@ -26,6 +26,12 @@ import java.util.Objects;
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.id.LogicalType;
@@ -42,12 +48,6 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -86,7 +86,7 @@ public class ConverterTester<T extends Serializable> {
                     }
                 })
                 .singletons(Arrays.asList(additionalSingletons))
-                .interactionProvider(interactionService = new InteractionService_forTesting())
+                .interactionService(interactionService = new InteractionService_forTesting())
                 .build();
 
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
@@ -97,7 +97,7 @@ public class ConverterTester<T extends Serializable> {
         assertNotNull(reg.selectValueSemantics(identifier, valueType));
         assertTrue(reg.selectValueSemantics(identifier, valueType).isNotEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
-        assertNotNull(mmc.getInteractionProvider());
+        assertNotNull(mmc.getInteractionService());
     }
 
     public void setScenario(

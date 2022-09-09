@@ -31,7 +31,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
@@ -270,10 +269,6 @@ implements
 
     protected Can<SessionSubscriber> getSessionLoggingServices() {
         return getServiceRegistry().select(SessionSubscriber.class);
-    }
-
-    protected InteractionService getInteractionService() {
-        return lookupServiceElseFail(InteractionService.class);
     }
 
     private VirtualClock virtualClock() {
