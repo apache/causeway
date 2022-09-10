@@ -24,15 +24,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import lombok.experimental.UtilityClass;
-
 /**
- * Annotation container class.
+ * Annotation container, without any semantics.
  * @see Domain.Include
  * @see Domain.Exclude
  */
-@UtilityClass
-public class Domain {
+@Target({
+    ElementType.METHOD,
+    ElementType.FIELD,
+    ElementType.ANNOTATION_TYPE
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Domain {
 
     /**
      * Indicates that a field or method must contribute to the metamodel.
