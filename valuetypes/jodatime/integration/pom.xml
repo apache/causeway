@@ -24,7 +24,6 @@
 	<name>Apache Isis Val - Joda Time (integration)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.jodatime.integration</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/valuetypes/jodatime/integration</git-plugin.propertiesDir>
 	</properties>
 
