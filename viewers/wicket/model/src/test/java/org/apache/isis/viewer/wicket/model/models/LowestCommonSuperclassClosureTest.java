@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 
 import lombok.val;
 
-public class LowestCommonSuperclassClosureTest {
+class LowestCommonSuperclassClosureTest {
 
     static class Animal {}
     static class Mineral {}
@@ -52,7 +52,7 @@ public class LowestCommonSuperclassClosureTest {
         assertCommonOfListIs(Arrays.asList(new Lion(), new Lion()), Lion.class);
     }
 
-    private static void assertCommonOfListIs(List<Object> list, Class<?> expected) {
+    private static void assertCommonOfListIs(final List<Object> list, final Class<?> expected) {
         val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
         list.forEach(commonSuperClassFinder::collect);
         assertEquals(expected, commonSuperClassFinder.getCommonSuperclass().get());
