@@ -22,28 +22,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-public class PoReaderTest {
-
-    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2
-            .createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+@ExtendWith(MockitoExtension.class)
+class PoReaderTest {
 
     @Mock TranslationServicePo mockTranslationServicePo;
     @Mock TranslationsResolver mockTranslationsResolver;
@@ -51,29 +49,21 @@ public class PoReaderTest {
 
     PoReader poReader;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-
-        context.checking(new Expectations() {{
-            allowing(mockTranslationServicePo).getLanguageProvider();
-            will(returnValue(mockLanguageProvider));
-
-            allowing(mockTranslationServicePo).getTranslationsResolver();
-            will(returnValue(Can.ofSingleton(mockTranslationsResolver)));
-
-            allowing(mockLanguageProvider).getPreferredLanguage();
-            will(returnValue(Optional.of(Locale.UK)));
-        }});
-
+        Mockito.when(mockTranslationServicePo.getLanguageProvider()).thenReturn(mockLanguageProvider);
+        Mockito.when(mockTranslationServicePo.getTranslationsResolver())
+            .thenReturn(Can.<TranslationsResolver>of(mockTranslationsResolver));
+        Mockito.when(mockLanguageProvider.getPreferredLanguage()).thenReturn(Optional.of(Locale.UK));
     }
 
     @Test
     public void properMockeryOfNonPublicMethods() {
         //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+,
         // we explicitly test proper mockery of non-public methods here ...
-        Assert.assertNotNull(mockTranslationServicePo.getLanguageProvider());
-        Assert.assertNotNull(mockTranslationServicePo.getTranslationsResolver());
-        Assert.assertNotNull(mockLanguageProvider.getPreferredLanguage());
+        assertNotNull(mockTranslationServicePo.getLanguageProvider());
+        assertNotNull(mockTranslationServicePo.getTranslationsResolver());
+        assertNotNull(mockLanguageProvider.getPreferredLanguage());
     }
 
     @Test
