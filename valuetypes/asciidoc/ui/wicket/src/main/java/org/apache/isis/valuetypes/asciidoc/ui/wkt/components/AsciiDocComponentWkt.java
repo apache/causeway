@@ -29,7 +29,7 @@ public class AsciiDocComponentWkt extends MarkupComponent {
 
     public AsciiDocComponentWkt(final String id, final IModel<?> model){
         super(id, model,
-                Options.builder()
+                org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options.builder()
                 .syntaxHighlighter(SyntaxHighlighter.PRISM_COY)
                 .build());
     }
