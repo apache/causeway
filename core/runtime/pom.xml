@@ -33,7 +33,6 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
     </properties>
 
