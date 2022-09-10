@@ -102,8 +102,8 @@ module org.apache.isis.applib {
     exports org.apache.isis.applib.value;
     exports org.apache.isis.applib.value.semantics;
 
-    requires transitive com.fasterxml.jackson.core;
-    requires transitive com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
     requires transitive jakarta.activation;
     requires transitive java.annotation;
     requires transitive java.desktop;
@@ -115,14 +115,14 @@ module org.apache.isis.applib {
     requires transitive java.xml;
     requires transitive javax.inject;
     requires lombok;
-    requires transitive org.apache.isis.commons;
+    requires org.apache.isis.commons;
     requires transitive org.apache.isis.schema;
-    requires transitive org.apache.logging.log4j;
+    requires org.apache.logging.log4j;
     requires transitive org.joda.time;
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
-    requires transitive spring.tx;
+    requires spring.tx;
 
     // JAXB viewmodels
     opens org.apache.isis.applib.layout.component;
