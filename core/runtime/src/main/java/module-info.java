@@ -6,7 +6,7 @@ module org.apache.isis.core.runtime {
 
     requires java.annotation;
     requires java.desktop;
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

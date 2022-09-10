@@ -113,7 +113,7 @@ module org.apache.isis.applib {
     requires transitive java.ws.rs;
     requires transitive java.xml.bind;
     requires transitive java.xml;
-    requires transitive javax.inject;
+    requires transitive java.inject;
     requires lombok;
     requires org.apache.isis.commons;
     requires transitive org.apache.isis.schema;

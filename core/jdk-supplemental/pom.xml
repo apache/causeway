@@ -28,7 +28,8 @@
 	<name>Apache Isis - JDK Supplemental</name>
 	<description>
         Defines a module to bring in dependencies that were part of JDK 8 but
-        had been removed with later JDK versions. Also brings in Jakarta EE API.
+        had been removed with later JDK versions. 
+        Also brings in Jakarta EE API (@Inject, @Qualifier, ...).
     </description>
 
 	<build>
@@ -204,22 +205,35 @@
 			<version>2.3.6</version> 
 		</dependency>
 		
-		<!-- v8.0.0 provides @Inject, @Qualifier, ... that's required by Spring 5.x -->
-<!--         <dependency> -->
-<!--             <groupId>jakarta.platform</groupId> -->
-<!--             <artifactId>jakarta.jakartaee-api</artifactId> -->
-<!--         </dependency> -->
-     	<dependency>
-		    <groupId>javax.inject</groupId>
-		    <artifactId>javax.inject</artifactId>
-		    <version>1</version>
+		<dependency>
+			<!-- provides @Inject, @Qualifier, -->
+		    <groupId>jakarta.inject</groupId>
+		    <artifactId>jakarta.inject-api</artifactId>
+		    <version>1.0.5</version> <!-- do not upgrade until Spring 6 -->
+		</dependency>
+		<dependency>
+        	<!-- provides javax.enterprise.inject.* -->
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>2.0.1</version> <!-- do not upgrade before Spring 6 -->
+            <exclusions>
+            	<exclusion>
+            		<groupId>jakarta.inject</groupId>
+		    		<artifactId>jakarta.inject-api</artifactId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+        	<!-- provides javax.transaction.TransactionalException -->
+		    <groupId>jakarta.transaction</groupId>
+		    <artifactId>jakarta.transaction-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.annotation</groupId>
 			<artifactId>jakarta.annotation-api</artifactId>
 		</dependency>
-		<!-- MediaType support -->
 		<dependency>
+			<!-- MediaType support -->
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
             <version>2.0.1.Final</version>

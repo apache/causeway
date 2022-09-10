@@ -122,7 +122,7 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
 			<exclusions>
-				<!-- already provided by JEE API -->
+				<!-- already provided by jakarta.inject-api -->
 				<exclusion>
 					<groupId>javax.inject</groupId>
 					<artifactId>javax.inject</artifactId>

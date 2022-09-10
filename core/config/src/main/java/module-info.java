@@ -22,7 +22,7 @@ module org.apache.isis.core.config {
     requires java.sql;
     requires java.validation;
     requires java.ws.rs;
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

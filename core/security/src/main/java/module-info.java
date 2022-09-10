@@ -15,7 +15,7 @@ module org.apache.isis.security.api {
 
     requires java.annotation;
     requires java.desktop;
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

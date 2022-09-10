@@ -10,7 +10,7 @@ module org.apache.isis.core.webapp {
     exports org.apache.isis.core.webapp.webappctx;
 
     requires java.annotation;
-    requires javax.inject;
+    requires java.inject;
     requires javax.servlet.api;
     requires lombok;
     requires org.apache.isis.applib;

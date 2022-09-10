@@ -7,7 +7,7 @@ module org.apache.isis.security.bypass {
     requires org.apache.isis.security.api;
     requires org.apache.isis.core.runtimeservices;
     requires java.annotation;
-    requires javax.inject;
+    requires java.inject;
     requires spring.beans;
     requires spring.context;
 }

@@ -6,7 +6,7 @@ module org.apache.isis.viewer.commons.applib {
     exports org.apache.isis.viewer.commons.applib;
     exports org.apache.isis.viewer.commons.applib.mixins;
 
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

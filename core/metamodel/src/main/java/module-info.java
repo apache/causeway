@@ -276,7 +276,7 @@ open module org.apache.isis.core.metamodel {
     requires java.validation;
     requires java.xml;
     requires java.xml.bind;
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

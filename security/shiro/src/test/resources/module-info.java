@@ -7,7 +7,7 @@ module org.apache.isis.security.shiro {
     exports org.apache.isis.security.shiro.webmodule;
 
     requires java.annotation;
-    requires javax.inject;
+    requires java.inject;
     requires javax.servlet.api;
     requires lombok;
     requires org.apache.isis.applib;

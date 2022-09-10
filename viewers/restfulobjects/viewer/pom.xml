@@ -56,12 +56,6 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
-        
-        <!-- provides javax.transaction.TransactionalException -->
-        <dependency>
-		    <groupId>jakarta.transaction</groupId>
-		    <artifactId>jakarta.transaction-api</artifactId>
-		</dependency>
 
         <!-- TESTING -->
         

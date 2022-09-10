@@ -5,7 +5,7 @@ module org.apache.isis.security.spring {
     exports org.apache.isis.security.spring.webmodule;
 
     requires java.annotation;
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

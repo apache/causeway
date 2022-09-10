@@ -2,7 +2,7 @@ module org.apache.isis.valuetypes.jodatime.integration {
     exports org.apache.isis.valuetypes.jodatime.integration;
     exports org.apache.isis.valuetypes.jodatime.integration.valuesemantics;
 
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;

@@ -6,7 +6,7 @@ module org.apache.isis.core.interaction {
 
     requires java.annotation;
     requires java.sql;
-    requires javax.inject;
+    requires java.inject;
     requires lombok;
     requires org.apache.isis.applib;
     requires org.apache.isis.commons;
