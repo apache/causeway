@@ -34,7 +34,6 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.transaction</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core/transaction</git-plugin.propertiesDir>
     </properties>
 
