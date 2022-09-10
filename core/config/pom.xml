@@ -34,6 +34,7 @@
     </description>
 
     <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.config</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core/config</git-plugin.propertiesDir>
     </properties>
 

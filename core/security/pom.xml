@@ -30,6 +30,7 @@
     <name>Apache Isis Core - Security</name>
 
     <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.security.api</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/security/api</git-plugin.propertiesDir>
     </properties>
 

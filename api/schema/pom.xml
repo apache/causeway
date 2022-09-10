@@ -30,6 +30,7 @@
     </description>
 
 	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.schema</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/schema</git-plugin.propertiesDir>
 	</properties>
 

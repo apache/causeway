@@ -35,6 +35,7 @@
     </description>
 
     <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.interaction</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core/interaction</git-plugin.propertiesDir>
     </properties>
 
