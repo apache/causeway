@@ -221,6 +221,10 @@
             		<groupId>jakarta.inject</groupId>
 		    		<artifactId>jakarta.inject-api</artifactId>
             	</exclusion>
+            	<exclusion>
+            		<groupId>javax.inject</groupId>
+            		<artifactId>javax.inject</artifactId>
+            	</exclusion>
             </exclusions>
         </dependency>
         <dependency>
