@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.test.components.widgets.choices;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.wicketstuff.select2.Response;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,6 +58,8 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
 
     }
 
+  //FIXME[ISIS-3207]
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void roundtrip() {
 

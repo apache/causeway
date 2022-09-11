@@ -12,4 +12,6 @@ module org.apache.isis.valuetypes.jodatime.integration {
     requires org.apache.isis.valuetypes.jodatime.applib;
     requires org.joda.time;
     requires spring.context;
+
+    opens org.apache.isis.valuetypes.jodatime.integration.valuesemantics to org.apache.isis.commons;
 }

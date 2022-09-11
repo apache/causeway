@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -48,7 +48,8 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
  */
 @Service
 @Named("isis.viewer.wicket.IsisWicketThemeSupportDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
+//@Priority(PriorityPrecedence.MIDPOINT)
+@Order(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
@@ -111,7 +112,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
      * @param allThemes All available themes
      * @return A list of all enabled themes
      */
-    private List<String> filterThemes(List<String> allThemes) {
+    private List<String> filterThemes(final List<String> allThemes) {
         List<String> enabledThemes;
 
         final Set<String> enabledThemesSet =
