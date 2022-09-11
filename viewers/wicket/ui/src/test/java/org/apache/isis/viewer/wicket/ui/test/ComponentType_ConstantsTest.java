@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-public class ComponentType_ConstantsTest {
+class ComponentType_ConstantsTest {
 
     @Test
     public void testToString() {

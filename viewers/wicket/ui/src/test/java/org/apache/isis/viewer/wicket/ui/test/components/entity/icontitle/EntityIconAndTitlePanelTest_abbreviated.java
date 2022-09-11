@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.test.components.entity.icontitle;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
-public class EntityIconAndTitlePanelTest_abbreviated {
+class EntityIconAndTitlePanelTest_abbreviated {
 
     @Test
     public void notTruncated() throws Exception {

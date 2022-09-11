@@ -20,24 +20,21 @@ package org.apache.isis.viewer.wicket.ui.test;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
-
-public class ComponentFactoryAbstractTest_init {
-
-    @Rule public ExpectedException thrown= ExpectedException.none();
+class ComponentFactoryAbstractTest_init {
 
     private MetaModelContext metaModelContext;
     private MetaModelContext commonContext;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.buildDefault();
@@ -99,7 +96,7 @@ public class ComponentFactoryAbstractTest_init {
 
     @Test
     public void cannotInstantiateComponentFactoryWithIncorrectComponentClass() {
-        thrown.expect(IllegalArgumentException.class);
+
 
         class ComponentFactoryWithIncorrectComponentClass extends ComponentFactoryAbstract {
 
@@ -122,7 +119,10 @@ public class ComponentFactoryAbstractTest_init {
 
         }
 
-        new ComponentFactoryWithIncorrectComponentClass();
+        assertThrows(IllegalArgumentException.class, ()->{
+            new ComponentFactoryWithIncorrectComponentClass();
+        });
+
     }
 
 
