@@ -17,7 +17,7 @@
  *  under the License.
  */
 package org.apache.isis.viewer.wicket.model.models.test;
-/*
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,12 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 
 import lombok.val;
-*/
-//FIXME[ISIS-3207] eclipse refuses to build
-class LowestCommonSuperclassClosureTest {
 
-}
-/*
 class LowestCommonSuperclassClosureTest {
 
     static class Animal {}
@@ -57,12 +52,12 @@ class LowestCommonSuperclassClosureTest {
         assertCommonOfListIs(Arrays.asList(new Lion(), new Lion()), Lion.class);
     }
 
+    // -- HELPER
+
     private static void assertCommonOfListIs(final List<Object> list, final Class<?> expected) {
         val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
         list.forEach(commonSuperClassFinder::collect);
         assertEquals(expected, commonSuperClassFinder.getCommonSuperclass().get());
     }
 
-
 }
-*/
