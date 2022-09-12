@@ -47,10 +47,10 @@ class WicketArtifactReplacer {
                         + "from where to read the patched artifacts"));
 
         _Files.copy(
-                new File(resources, "wicket-core-9.11.0.jar"),
+                new File(resources, "wicket-core-9.11.0.jar.mangled"),
                 new File(m2Repo, "org/apache/wicket/wicket-core/9.11.0/wicket-core-9.11.0.jar"));
         _Files.copy(
-                new File(resources, "wicket-util-9.11.0.jar"),
+                new File(resources, "wicket-util-9.11.0.jar.mangled"),
                 new File(m2Repo, "org/apache/wicket/wicket-util/9.11.0/wicket-util-9.11.0.jar"));
 
     }
