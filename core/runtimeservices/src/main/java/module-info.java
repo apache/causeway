@@ -38,7 +38,6 @@ module org.apache.isis.core.runtimeservices {
     exports org.apache.isis.core.runtimeservices.xmlsnapshot;
 
     requires commons.email;
-    requires org.apache.isis.core.codegen.bytebuddy;
     requires jakarta.activation;
     requires jakarta.mail;
     requires java.annotation;
@@ -62,6 +61,8 @@ module org.apache.isis.core.runtimeservices {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires org.apache.isis.core.codegen.bytebuddy;
 
     opens org.apache.isis.core.runtimeservices.wrapper;
+    opens org.apache.isis.core.runtimeservices.wrapper.proxy; //to org.apache.isis.core.codegen.bytebuddy
 }

@@ -30,7 +30,6 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
  *
  * see <a href="https://mydailyjava.blogspot.com/2018/04/jdk-11-and-proxies-in-world-past.html">byte-buddy blog</a>
  */
-@Deprecated
 class ClassLoadingStrategyAdvisor {
 
     final MethodHandle privateLookupMethodHandle;

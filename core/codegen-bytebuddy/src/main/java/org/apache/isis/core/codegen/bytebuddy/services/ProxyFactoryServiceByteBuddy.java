@@ -37,7 +37,6 @@ import org.apache.isis.commons.internal.proxy._ProxyFactoryServiceAbstract;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ImplementationDefinition;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 
@@ -58,9 +57,8 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
         nextProxyDef(base, interfaces)
         .intercept(InvocationHandlerAdapter.of(handler))
         .make()
-        .load(_Context.getDefaultClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
-                //FIXME[ISIS-3207] can we recover?
-                //strategyAdvisor.getSuitableStrategy(base)) //no longer possible since ISIS-3207 (java modules)
+        .load(_Context.getDefaultClassLoader(),
+                strategyAdvisor.getSuitableStrategy(base))
         .getLoaded();
 
         return new _ProxyFactory<T>() {
