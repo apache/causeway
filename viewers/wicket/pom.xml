@@ -36,6 +36,7 @@
 
     <modules>
         <module>applib</module>
+        <module>graceful</module>
         <module>model</module>
         <module>viewer</module>
         <module>ui</module>

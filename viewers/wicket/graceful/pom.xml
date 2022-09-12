@@ -27,30 +27,46 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-viewer-wicket-model</artifactId>
-    <name>Apache Isis Viewer - Wicket (Model)</name>
+    <artifactId>isis-viewer-wicket-graceful</artifactId>
+    <name>Apache Isis Viewer - Wicket (Graceful)</name>
+
+	<description>
+		Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository 
+		with mangled variants, that do not include module-info.class entries.
+		This artifact - in its realeased form - is empty.
+	</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.model</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/model</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.graceful</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/graceful</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-graceful</artifactId>
-		</dependency>
-
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webapp</artifactId>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
         <dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-commons-model</artifactId>
-		</dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 	
 		<!-- TESTING -->
 
