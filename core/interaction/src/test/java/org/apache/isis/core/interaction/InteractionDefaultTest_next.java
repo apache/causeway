@@ -18,18 +18,18 @@
  */
 package org.apache.isis.core.interaction;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.util.UUID;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import lombok.val;
 
-public class InteractionDefaultTest_next {
+class InteractionDefaultTest_next {
 
     @Test
     public void test() {
