@@ -21,11 +21,12 @@ package org.apache.isis.security.authentication.standard;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
@@ -36,20 +37,24 @@ import org.apache.isis.security.AuthenticatorsForTesting;
 
 import lombok.val;
 
-public class AuthenticationManager_authenticators_Test {
+class AuthenticationManager_authenticators_Test {
 
     private AuthenticationManager authenticationManager;
 
-    @Test(expected = NoAuthenticatorException.class)
+    @Test
     public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
 
-        authenticationManager = new AuthenticationManager(
-                Collections.emptyList(),
-                new InteractionService_forTesting(),
-                new RandomCodeGeneratorDefault(),
-                Optional.empty(),
-                Collections.emptyList());
-        authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
+        assertThrows(NoAuthenticatorException.class, ()->{
+
+            authenticationManager = new AuthenticationManager(
+                    Collections.emptyList(),
+                    new InteractionService_forTesting(),
+                    new RandomCodeGeneratorDefault(),
+                    Optional.empty(),
+                    Collections.emptyList());
+            authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
+
+        });
     }
 
     @Test

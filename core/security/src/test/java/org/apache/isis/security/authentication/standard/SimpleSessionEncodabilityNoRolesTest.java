@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 
-public class SimpleSessionEncodabilityNoRolesTest
+class SimpleSessionEncodabilityNoRolesTest
 extends SimpleSessionEncodabilityTestAbstract {
 
     @Override

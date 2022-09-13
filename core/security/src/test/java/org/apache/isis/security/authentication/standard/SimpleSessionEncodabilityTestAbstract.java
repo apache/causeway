@@ -25,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.security.EncodabilityContractTest;
 
-public abstract class SimpleSessionEncodabilityTestAbstract
+abstract class SimpleSessionEncodabilityTestAbstract
 extends EncodabilityContractTest {
 
     @Override

@@ -21,8 +21,8 @@ package org.apache.isis.security.authentication.standard;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,11 +34,11 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.security.AuthenticatorsForTesting;
 
-public class StandardAuthenticationManager_AuthenticationTest {
+class StandardAuthenticationManager_AuthenticationTest {
 
     private AuthenticationManager authenticationManager;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         authenticationManager = new AuthenticationManager(
