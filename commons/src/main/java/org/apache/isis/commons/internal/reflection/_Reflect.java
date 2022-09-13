@@ -439,10 +439,12 @@ public final class _Reflect {
 
     // -- METHOD/FIELD HANDLES
 
+    @Deprecated // does not work well with JPMS; inline at call-site instead
     public static MethodHandle handleOf(final Method method) throws IllegalAccessException {
         return MethodHandles.lookup().unreflect(method);
     }
 
+    @Deprecated // does not work well with JPMS; inline at call-site instead
     public static MethodHandle handleOfGetterOn(final Field field) throws IllegalAccessException {
         return MethodHandles.lookup().unreflectGetter(field);
     }

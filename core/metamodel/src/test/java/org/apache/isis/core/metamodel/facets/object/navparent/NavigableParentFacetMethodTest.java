@@ -31,14 +31,15 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
-//FIXME[ISIS-3207]
+//FIXME[ISIS-3207] reflection using MH throws
+// java.lang.IllegalAccessException: access to public member failed: org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacetMethodTest$DomainObjectWithProblemInNavigableParentMethod.parent[Ljava.lang.Object;@3eb631b8/invokeVirtual, from class org.apache.isis.commons.internal.reflection._Reflect (module org.apache.isis.commons)
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class NavigableParentFacetMethodTest {
 
-    private NavigableParentFacetViaGetterMethod facet;
+    private NavigableParentFacetViaMethod facet;
     private FacetHolder mockFacetHolder;
     private ManagedObject mockOwningAdapter;
 
@@ -57,7 +58,7 @@ class NavigableParentFacetMethodTest {
         mockFacetHolder = Mockito.mock(FacetHolder.class);
         mockOwningAdapter = Mockito.mock(ManagedObject.class);
         final Method navigableParentMethod = DomainObjectWithProblemInNavigableParentMethod.class.getMethod("parent");
-        facet = new NavigableParentFacetViaGetterMethod(navigableParentMethod, mockFacetHolder);
+        facet = new NavigableParentFacetViaMethod(navigableParentMethod, mockFacetHolder);
 
         Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
     }

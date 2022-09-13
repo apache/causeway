@@ -28,17 +28,16 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 
 import lombok.Getter;
@@ -46,6 +45,9 @@ import lombok.Setter;
 
 public abstract class AbstractFacetFactoryJupiterTestCase
 implements HasMetaModelContext {
+
+    @Getter(onMethod_ = {@Override})
+    protected MetaModelContext metaModelContext;
 
     protected MethodRemover mockMethodRemover;
     protected FacetHolder mockFacetHolder;
@@ -55,9 +57,6 @@ implements HasMetaModelContext {
     protected OneToManyAssociation mockOneToManyAssociation;
     protected OneToOneActionParameter mockOneToOneActionParameter;
 
-    @Getter(onMethod_ = {@Override})
-    protected MetaModelContext metaModelContext;
-    protected SpecificationLoader specificationLoader;
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
@@ -66,8 +65,17 @@ implements HasMetaModelContext {
         @Getter @Setter private String firstName;
     }
 
+
+    protected void setUpMmc() throws Exception {
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .valueSemantic(new IntValueSemantics())
+                .build();
+    }
+
     @BeforeEach
     protected void setUpFacetedMethodAndParameter() throws Exception {
+
+        setUpMmc();
 
         mockMethodRemover = Mockito.mock(MethodRemover.class);
         mockFacetHolder = Mockito.mock(FacetHolder.class);
@@ -77,21 +85,14 @@ implements HasMetaModelContext {
         mockOneToManyAssociation = Mockito.mock(OneToManyAssociation.class);
         mockOneToOneActionParameter = Mockito.mock(OneToOneActionParameter.class);
 
-        metaModelContext = MetaModelContext_forTesting.builder()
-                        .valueSemantic(new IntValueSemantics())
-                        .build();
-
-        specificationLoader = metaModelContext.getSpecificationLoader();
-
         facetHolder = FacetHolder.simple(
-                metaModelContext,
+                getMetaModelContext(),
                 Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
-        facetedMethod = FacetedMethod.createSetterForProperty(metaModelContext,
+        facetedMethod = facetedSetter(
                 AbstractFacetFactoryTest.Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(metaModelContext,
+        facetedMethodParameter = new FacetedMethodParameter(getMetaModelContext(),
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(),
                 facetedMethod.getMethod(), 0);
-
     }
 
     @AfterEach
@@ -99,6 +100,20 @@ implements HasMetaModelContext {
         facetHolder = null;
         facetedMethod = null;
         facetedMethodParameter = null;
+    }
+
+    protected MethodRemover defaultMethodRemover() {
+        return new MethodRemover_forTesting();
+    }
+
+    protected FacetedMethod facetedSetter(final Class<?> declaringClass, final String propertyName) {
+        return FacetedMethod.createSetterForProperty(getMetaModelContext(),
+                declaringClass, propertyName);
+    }
+
+    protected FacetedMethod facetedAction(final Class<?> declaringClass, final String methodName) {
+        return FacetedMethod.createForAction(getMetaModelContext(),
+                declaringClass, methodName);
     }
 
     protected boolean contains(final Class<?>[] types, final Class<?> type) {
@@ -117,10 +132,8 @@ implements HasMetaModelContext {
         return Utils.findMethod(type, methodName);
     }
 
-    protected AutoCompleteFacetForDomainObjectAnnotation expectNoMethodsRemoved() {
-        //context.never(mockMethodRemover);
+    protected void expectNoMethodsRemoved() {
         Mockito.verifyNoInteractions(mockMethodRemover);
-        return null;
     }
 
 }

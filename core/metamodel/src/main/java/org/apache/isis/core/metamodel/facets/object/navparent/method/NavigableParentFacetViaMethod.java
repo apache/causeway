@@ -19,28 +19,26 @@
 package org.apache.isis.core.metamodel.facets.object.navparent.method;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 
 /**
- *
  * @since 2.0
- *
  */
-public class NavigableParentFacetViaGetterMethod
+public class NavigableParentFacetViaMethod
 extends NavigableParentFacetAbstract {
 
     private final MethodHandle methodHandle;
 
-    public NavigableParentFacetViaGetterMethod(
+    public NavigableParentFacetViaMethod(
             final Method method,
             final FacetHolder holder) throws IllegalAccessException {
         super(holder);
-        this.methodHandle = _Reflect.handleOf(method);
+        this.methodHandle = MethodHandles.lookup().unreflect(method);
     }
 
     @Override
