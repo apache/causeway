@@ -20,9 +20,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,8 +46,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+@ExtendWith(MockitoExtension.class)
 class OneToOneAssociationAbstractTest {
 
     @Mock private ObjectSpecification objectSpecification;

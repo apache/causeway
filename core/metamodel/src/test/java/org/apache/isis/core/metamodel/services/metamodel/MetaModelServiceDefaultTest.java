@@ -37,7 +37,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.mockito.Mockito;
 
 import org.apache.isis.applib.Identifier;
@@ -55,9 +54,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-class MetaModelServiceDefaultTest {
+// keep public for JABX
+public class MetaModelServiceDefaultTest {
 
     ServiceInjector stubServicesInjector;
     MetaModelServiceDefault mockMetaModelService;
@@ -89,12 +87,7 @@ class MetaModelServiceDefaultTest {
 
         mockMetaModelService = Mockito.mock(MetaModelServiceDefault.class);
         Mockito.when(mockMetaModelService.getDomainModel())
-            .thenReturn(new DomainModel() {
-                @Override
-                public java.util.List<DomainMember> getDomainMembers() {
-                    return List.of(new DomainMemberDefault(mockSpec, action));
-                }
-            });
+            .thenReturn(new DomainModelDefault(List.of(new DomainMemberDefault(mockSpec, action))));
 
     }
 

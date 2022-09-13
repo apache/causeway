@@ -24,19 +24,20 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
@@ -113,8 +114,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     }
 
-    //FIXME[ISIS-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testValueSerializer(final Format format) {
@@ -123,7 +122,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
         final T value = getSample();
         final String encoded = getValueSerializer().enstring(format, value);
 
-        assertValueEncodesToJsonAs(value, encoded);
+        switch(format) {
+        case JSON:
+            assertValueEncodesToJsonAs(value, encoded);
+            break;
+        case URL_SAFE:
+            assertTrue(_Strings.isUrlSafe(encoded));
+        }
 
         T decoded = getValueSerializer().destring(format, encoded);
 
