@@ -68,9 +68,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         val domainObject = new DomainObjectA();
         val parentMethodName = "root";
-
-        final Class<?> domainClass = domainObject.getClass();
-
+        val domainClass = domainObject.getClass();
         val facetedMethod = facetedAction(domainClass, parentMethodName);
 
         facetFactory.process(ProcessClassContext
@@ -82,8 +80,8 @@ extends AbstractFacetFactoryJupiterTestCase {
         final Method parentMethod = domainClass.getMethod(parentMethodName);
 
         assertEquals(
-                parentMethod.invoke(domainObject, _Constants.emptyObjects),
-                navigableParentFacet.navigableParent(domainObject)	);
+                navigableParentFacet.navigableParent(domainObject),
+                parentMethod.invoke(domainObject, _Constants.emptyObjects));
     }
 
     // -- HELPER

@@ -18,31 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection;
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
-import org.apache.isis.core.metamodel.facets.AbstractTestWithMetaModelContext;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
 import lombok.val;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class CssClassFacetMethodTest
-extends AbstractTestWithMetaModelContext {
+extends AbstractFacetFactoryJupiterTestCase {
 
-    public static final String CSS_CLASS = "someCssClass";
+    static final String CSS_CLASS = "someCssClass";
 
     @DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
     static class DomainObjectInCssClassMethod {
@@ -51,41 +50,52 @@ extends AbstractTestWithMetaModelContext {
         }
     }
 
-    ObjectSupportFacetFactory fa;
+    private ObjectSupportFacetFactory facetFactory;
+
+    @BeforeEach
+    void setup() {
+        super.setUpMmc();
+        facetFactory = new ObjectSupportFacetFactory(getMetaModelContext());
+    }
+
+    @AfterEach
+    @Override
+    protected void tearDown() throws Exception {
+        facetFactory = null;
+        super.tearDown();
+    }
 
     @BeforeEach
     void setUp() throws Exception {
-        super.setupWithDefaultProgrammingModel();
-//
-//        super.setupWithProgrammingModel((mmc, prog)->
-//            prog.addFactory(FacetProcessingOrder.F1_LAYOUT, fa = new ObjectSupportFacetFactory(mmc)));
+        super.setUpMmc();
     }
 
     @Test
     void test() {
 
-        //getSpecificationLoader().reloadSpecification(DomainObjectInCssClassMethod.class);
+        val domainClass = DomainObjectInCssClassMethod.class;
+        val facetedMethod = facetedAction(DomainObjectInCssClassMethod.class, "cssClass");
 
-        val spec = getSpecificationLoader().loadSpecification(DomainObjectInCssClassMethod.class);
+        facetFactory.process(ProcessClassContext
+                .forTesting(domainClass, defaultMethodRemover(), facetedMethod));
 
-        val ctx = new FacetFactory.ProcessClassContext(
-                DomainObjectInCssClassMethod.class,
-                IntrospectionPolicy.ENCAPSULATION_ENABLED,
-                new MethodRemover_forTesting(), spec);
+        val cssClassFacet = assertHasCssClassFacet(facetedMethod);
+        assertTrue(cssClassFacet instanceof CssClassFacetViaCssClassMethod);
 
-        val fa = new ObjectSupportFacetFactory(getMetaModelContext());
+        val imperativeCssClassFacet = (CssClassFacetViaCssClassMethod)cssClassFacet;
 
-        fa.process(ctx);
+        val domainObject = getObjectManager().adapt(new DomainObjectInCssClassMethod());
 
+        assertEquals(CSS_CLASS,
+                imperativeCssClassFacet.cssClass(domainObject));
+    }
 
-        val pojo = new DomainObjectInCssClassMethod();
-        val object = getObjectManager().adapt(pojo);
+    // -- HELPER
 
-        val cssClass = spec
-                //object.getSpecification()
-                .getCssClass(object);
-
-        assertThat(cssClass, is(equalTo(CSS_CLASS)));
+    CssClassFacet assertHasCssClassFacet(final FacetHolder facetHolder) {
+        val navigableParentFacet = facetHolder.getFacet(CssClassFacet.class);
+        assertNotNull(navigableParentFacet, ()->"CssClassFacet required");
+        return navigableParentFacet;
     }
 
 }

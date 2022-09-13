@@ -65,8 +65,7 @@ implements HasMetaModelContext {
         @Getter @Setter private String firstName;
     }
 
-
-    protected void setUpMmc() throws Exception {
+    protected void setUpMmc() {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .valueSemantic(new IntValueSemantics())
                 .build();
