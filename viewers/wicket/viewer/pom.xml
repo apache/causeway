@@ -182,44 +182,10 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
-			<scope>provided</scope> <!-- this is a hack because wicket-core currently requires jupiter-api -->
-			<exclusions>
-				<exclusion>
-					<groupId>org.jmock</groupId>
-					<artifactId>jmock-junit4</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>isis-core-internaltestvintage</artifactId>
+			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-        	<groupId>org.jmock</groupId>
-        	<artifactId>jmock-junit4</artifactId>
-            <scope>test</scope>
-        	<exclusions>
-        		<exclusion>
-        			<groupId>org.ow2.asm</groupId>
-        			<artifactId>asm</artifactId>
-        		</exclusion>
-                <exclusion>
-                    <!-- for dependency convergence -->
-                    <groupId>junit</groupId>
-                    <artifactId>junit-dep</artifactId>
-                </exclusion>
-                <exclusion>
-                	<groupId>cglib</groupId>
-                	<artifactId>cglib</artifactId>
-                </exclusion>
-        	</exclusions>
-        </dependency>
     </dependencies>
 
 </project>
