@@ -309,6 +309,4 @@ open module org.apache.isis.core.metamodel {
 
 //   opens org.apache.isis.core.metamodel.services to spring.core;
 //   opens org.apache.isis.core.metamodel.services.registry to spring.core;
-
-
 }

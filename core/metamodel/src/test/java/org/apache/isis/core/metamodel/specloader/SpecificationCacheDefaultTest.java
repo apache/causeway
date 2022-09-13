@@ -21,11 +21,7 @@ package org.apache.isis.core.metamodel.specloader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,22 +33,25 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-@ExtendWith(MockitoExtension.class)
 class SpecificationCacheDefaultTest {
 
     private LogicalType cus = _LogicalTypeTestFactory.cus();
     private LogicalType ord = _LogicalTypeTestFactory.ord();
 
-    @Mock ObjectSpecification customerSpec;
-    @Mock ObjectSpecification orderSpec;
+    ObjectSpecification customerSpec;
+    ObjectSpecification orderSpec;
 
-    private SpecificationCache<ObjectSpecification> specificationCache = new SpecificationCacheDefault<>();
-    private LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
+    private SpecificationCache<ObjectSpecification> specificationCache =
+            new SpecificationCacheDefault<>();
+    private LogicalTypeResolver logicalTypeResolver =
+            new LogicalTypeResolverDefault();
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @BeforeEach
     public void setUp() throws Exception {
+
+        customerSpec = Mockito.mock(ObjectSpecification.class);
+        orderSpec = Mockito.mock(ObjectSpecification.class);
 
         Mockito.when(customerSpec.getCorrespondingClass()).thenReturn((Class)Customer.class);
         Mockito.when(customerSpec.getLogicalType()).thenReturn(cus);

@@ -278,7 +278,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String capitalize(final @Nullable String input) {
+    public static @Nullable String capitalize(final @Nullable String input) {
         if(input==null) {
             return null;
         }
@@ -296,7 +296,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String decapitalize(final @Nullable String input) {
+    public static @Nullable String decapitalize(final @Nullable String input) {
         if(input==null) {
             return null;
         }
@@ -311,7 +311,7 @@ public final class _Strings {
 
     // -- SPECIAL UNARY OPERATORS
 
-    public static String htmlEscape(final String source) {
+    public static @Nullable String htmlEscape(final @Nullable String source) {
         return _Strings_HtmlEscaper.htmlEscape(source);
     }
 
@@ -320,7 +320,7 @@ public final class _Strings {
     /**
      * @see "https://stackoverflow.com/a/4571518/9269480"
      */
-    public static boolean isUrlSafe(final String input) {
+    public static boolean isUrlSafe(final @Nullable String input) {
         if(_Strings.isEmpty(input)) {
             return true;
         }
@@ -342,7 +342,7 @@ public final class _Strings {
      * @param prefix
      * @return null if {@code input} is null
      */
-    public static String prefix(final @Nullable String input, final @NonNull String prefix) {
+    public static @Nullable String prefix(final @Nullable String input, final @NonNull String prefix) {
         if(input==null) {
             return null;
         }
@@ -358,7 +358,7 @@ public final class _Strings {
      * @param suffix
      * @return null if {@code input} is null
      */
-    public static String suffix(final @Nullable String input, final @NonNull String suffix) {
+    public static @Nullable String suffix(final @Nullable String input, final @NonNull String suffix) {
         if(input==null) {
             return null;
         }

@@ -22,11 +22,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -43,36 +39,37 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-@ExtendWith(MockitoExtension.class)
 class ApplicationFeatureRepositoryDefaultTest {
 
-    @Mock ObjectSpecification mockSpec;
-    @Mock OneToOneAssociation mockProp;
-    @Mock OneToManyAssociation mockColl;
-    @Mock ObjectAction mockAct;
-
+    ObjectSpecification mockSpec;
+    OneToOneAssociation mockProp;
+    OneToManyAssociation mockColl;
+    ObjectAction mockAct;
+    FactoryService mockFactoryService;
+    SpecificationLoader mockSpecificationLoader;
     ObjectAction mockActThatIsHidden;
-
-    @Mock FactoryService mockFactoryService;
-    @Mock ServiceRegistry mockServiceRegistry;
-    @Mock SpecificationLoader mockSpecificationLoader;
+    ServiceRegistry mockServiceRegistry;
 
     protected ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
     @BeforeEach
     public void setUp() throws Exception {
 
+        mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
+
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
                 /*configuration*/ null,
                 mockSpecificationLoader);
 
         mockActThatIsHidden = Mockito.mock(ObjectAction.class, "mockActThatIsHidden");
+
+        mockSpec = Mockito.mock(ObjectSpecification.class);
+        mockProp = Mockito.mock(OneToOneAssociation.class);
+        mockColl = Mockito.mock(OneToManyAssociation.class);
+        mockAct = Mockito.mock(ObjectAction.class);
+        mockFactoryService = Mockito.mock(FactoryService.class);
     }
 
-  //FIXME[ISIS-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     public static class AddClassParent extends ApplicationFeatureRepositoryDefaultTest {
 
         private static ApplicationFeature newApplicationFeature(final ApplicationFeatureId featId) {
@@ -83,6 +80,7 @@ class ApplicationFeatureRepositoryDefaultTest {
         @BeforeEach
         public void setUp() throws Exception {
             super.setUp();
+            mockServiceRegistry = Mockito.mock(ServiceRegistry.class);
             Mockito.when(mockServiceRegistry.streamRegisteredBeans()).thenReturn(Stream.of());
             Mockito.when(mockSpecificationLoader.snapshotSpecifications()).thenReturn(Can.empty());
         }
