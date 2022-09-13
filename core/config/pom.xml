@@ -96,10 +96,11 @@
 			<optional>true</optional>
 		</dependency>
         
-        <!-- TESTS -->
+        <!-- TESTING -->
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestvintage</artifactId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
