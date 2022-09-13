@@ -33,7 +33,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -92,8 +91,6 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         }
     }
 
-  //FIXME[ISIS-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void imposteriserShouldBeUsableForMockery() {
 

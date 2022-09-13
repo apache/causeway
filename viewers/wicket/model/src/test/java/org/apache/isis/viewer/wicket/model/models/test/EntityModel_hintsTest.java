@@ -17,14 +17,14 @@
  *  under the License.
  */
 package org.apache.isis.viewer.wicket.model.models.test;
-/*
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -34,16 +34,11 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-import lombok.val;*/
+import lombok.val;
 
 //FIXME[ISIS-3207] eclipse refuses to build
-class EntityModel_hintsTest {
-
-}
-/*
 //@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-@Disabled
-//@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class EntityModel_hintsTest {
 
     @Mock MarkupContainer mockParent;
@@ -145,6 +140,4 @@ class EntityModel_hintsTest {
         assertThat(target.getHint(mockComponent1, "id2-R"), is("2.R"));
     }
 
-
 }
-*/

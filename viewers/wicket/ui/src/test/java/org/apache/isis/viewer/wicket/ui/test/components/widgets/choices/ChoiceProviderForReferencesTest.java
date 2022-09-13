@@ -59,6 +59,19 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
     }
 
   //FIXME[ISIS-3207]
+    /*
+     * java.lang.IllegalAccessException:
+     * class org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface
+     * (in module org.apache.isis.core.metamodel)
+     * cannot access
+     * class org.apache.isis.viewer.wicket.ui.test.components.widgets.choices.ChoiceProviderForReferencesTest$Customer
+     * (in module org.apache.isis.viewer.wicket.ui)
+     * because module
+     * org.apache.isis.viewer.wicket.ui
+     * does not export
+     * org.apache.isis.viewer.wicket.ui.test.components.widgets.choices
+     * to module org.apache.isis.core.metamodel
+     */
     @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void roundtrip() {
