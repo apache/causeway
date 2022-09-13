@@ -18,63 +18,96 @@
  */
 package org.apache.isis.viewer.wicket.model.models.test;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.Session;
+import org.apache.wicket.ThreadContext;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-import lombok.val;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-//FIXME[ISIS-3207] eclipse refuses to build
-//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-@ExtendWith(MockitoExtension.class)
 class EntityModel_hintsTest {
 
-    @Mock MarkupContainer mockParent;
-    @Mock Component mockComponent1;
-    @Mock Component mockComponent2;
+    MarkupContainer mockParent;
+    Component mockComponent1;
+    Component mockComponent2;
 
     EntityModel target;
     MetaModelContext metaModelContext;
+    HintStore_forTesting hintStore;
+
+    @RequiredArgsConstructor
+    static class WicketAppStup
+    extends org.apache.wicket.Application
+    implements HasMetaModelContext {
+        @Getter final MetaModelContext metaModelContext;
+        @Override public String getApplicationKey() {
+            return null; }
+        @Override public RuntimeConfigurationType getConfigurationType() {
+            return null; }
+        @Override public Class<? extends Page> getHomePage() {
+            return null; }
+        @Override public Session newSession(final Request request, final Response response) {
+            return null; }
+    }
+
+    static class HintStore_forTesting implements HintStore {
+        private final Map<String, String> map = _Maps.newHashMap();
+        @Override public String get(final Bookmark bookmark, final String hintKey) {
+            return map.get(hintKey);}
+        @Override public void set(final Bookmark bookmark, final String hintKey, final String value) {
+            map.put(hintKey, value); }
+        @Override public void remove(final Bookmark bookmark, final String hintKey) {
+            map.remove(hintKey); }
+        @Override public void removeAll(final Bookmark bookmark) {
+            map.clear(); }
+        @Override public Set<String> findHintKeys(final Bookmark bookmark) {
+            return map.keySet(); }
+        @Override public String toString() {
+            return map.toString(); }
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
 
-        metaModelContext = MetaModelContext_forTesting.buildDefault();
-        val commonContext = metaModelContext;
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .singleton(hintStore = new HintStore_forTesting())
+                .build();
 
-        target = EntityModel.ofBookmark(commonContext, null);
+        ThreadContext.setApplication(new WicketAppStup(metaModelContext));
 
-        //        mockParent = context.mock(MarkupContainer.class, "parent");
-        //        mockComponent1 = context.mock(Component.class, "component1");
-        //        mockComponent2 = context.mock(Component.class, "component2");
+        target = EntityModel.ofBookmark(metaModelContext,
+                Bookmark.forLogicalTypeNameAndIdentifier("hi", "there"));
 
-        //FIXME[ISIS-3207]
-        //        context.checking(new Expectations() {{
-        //            allowing(mockParent).getId();
-        //            will(returnValue("parent"));
-        //
-        //            allowing(mockComponent1).getId();
-        //            will(returnValue("id1"));
-        //
-        //            allowing(mockComponent2).getId();
-        //            will(returnValue("id2"));
-        //
-        //            ignoring(mockComponent1);
-        //            ignoring(mockComponent2);
-        //
-        //        }});
+        mockParent = Mockito.mock(MarkupContainer.class);
+        mockComponent1 = Mockito.mock(Component.class);
+        mockComponent2 = Mockito.mock(Component.class);
+
+        Mockito.when(mockParent.getId()).thenReturn("parent");
+        Mockito.when(mockComponent1.getId()).thenReturn("id1");
+        Mockito.when(mockComponent2.getId()).thenReturn("id2");
 
         mockComponent1.setParent(mockParent);
         mockComponent2.setParent(mockParent);
@@ -125,19 +158,20 @@ class EntityModel_hintsTest {
 
     @Test
     public void smoke() throws Exception {
-        target.setHint(mockComponent1, "X", "1.X");
-        target.setHint(mockComponent1, "A", "1.A");
-        target.setHint(mockComponent1, "B", "1.B");
-        target.setHint(mockComponent1, "C", "1.C");
-        target.setHint(mockComponent2, "X", "2.X");
-        target.setHint(mockComponent2, "P", "2.P");
-        target.setHint(mockComponent2, "Q", "2.Q");
-        target.setHint(mockComponent2, "R", "2.R");
+        target.setHint(mockComponent1, "X", "11");
+        target.setHint(mockComponent1, "A", "12");
+        target.setHint(mockComponent1, "B", "13");
+        target.setHint(mockComponent1, "C", "14");
 
-        assertThat(target.getHint(mockComponent1, "id-X"), is("1.X"));
-        assertThat(target.getHint(mockComponent1, "id2-X"), is("2.X"));
-        assertThat(target.getHint(mockComponent1, "id1-B"), is("1.B"));
-        assertThat(target.getHint(mockComponent1, "id2-R"), is("2.R"));
+        target.setHint(mockComponent2, "X", "21");
+        target.setHint(mockComponent2, "P", "22");
+        target.setHint(mockComponent2, "Q", "23");
+        target.setHint(mockComponent2, "R", "24");
+
+        assertThat(target.getHint(mockComponent1, "X"), is("11"));
+        assertThat(target.getHint(mockComponent2, "X"), is("21"));
+        assertThat(target.getHint(mockComponent1, "B"), is("13"));
+        assertThat(target.getHint(mockComponent2, "R"), is("24"));
     }
 
 }
