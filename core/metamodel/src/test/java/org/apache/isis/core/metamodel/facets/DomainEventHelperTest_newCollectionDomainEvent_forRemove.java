@@ -24,14 +24,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.id.LogicalType;
 
-public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
+class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
 
     public static class SomeDomainObject {
         public Set<SomeReferencedObject> getReferences() { return null; }

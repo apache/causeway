@@ -24,14 +24,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.id.LogicalType;
 
-public class DomainEventHelperTest_newActionInteractionEvent {
+class DomainEventHelperTest_newActionInteractionEvent {
 
     public static class SomeDomainObject {
         public String foo(final int x, final String y) { return null; }

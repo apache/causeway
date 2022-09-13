@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -147,12 +146,8 @@ extends AbstractFacetFactoryJupiterTestCase {
         @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
         public static class ForDomainObjectLayout extends CssClass {
 
-            @Before
-            public void setUp2() throws Exception {
-            }
-
             @Override
-            @Before
+            @BeforeEach
             public void setUp() throws Exception {
                 super.setUp();
             }
@@ -200,7 +195,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         public static class ForDomainObjectLayout extends CssClassFa {
 
-            @Before
+            @BeforeEach
             public void setUp2() throws Exception {
             }
 
@@ -249,7 +244,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         public static class ForDomainObjectLayout extends DescribedAs {
 
-            @Before
+            @BeforeEach
             public void setUp2() throws Exception {
             }
 
@@ -296,7 +291,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         public static class ForDomainObjectLayout extends Named {
 
-            @Before
+            @BeforeEach
             public void setUp2() throws Exception {
             }
 
@@ -342,7 +337,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         public static class ForDomainObjectLayout extends Paged {
 
-            @Before
+            @BeforeEach
             public void setUp2() throws Exception {
             }
 
@@ -388,7 +383,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         public static class ForDomainObjectLayout extends Plural {
 
-            @Before
+            @BeforeEach
             public void setUp2() throws Exception {
             }
 

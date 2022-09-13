@@ -18,6 +18,13 @@
  */
 package org.apache.isis.core.metamodel.interactions;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,9 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
 
-import junit.framework.TestCase;
-
-public class InteractionUtils_isA_Test extends TestCase {
+class InteractionUtils_isA_Test {
 
     public class FooSuperFacet extends FacetAbstract {
         public FooSuperFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
@@ -60,10 +65,8 @@ public class InteractionUtils_isA_Test extends TestCase {
     private FooSuperFacet fooSuperFacet;
     private BarFacet barFacet;
 
-    @Override
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
-
         facetHolder = FacetHolder.forTesting(MetaModelContext_forTesting.buildDefault());
         fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
         fooFacet = new FooFacet(facetHolder);
@@ -71,34 +74,37 @@ public class InteractionUtils_isA_Test extends TestCase {
         barFacet = new BarFacet(facetHolder);
     }
 
-    @Override
+    @AfterEach
     protected void tearDown() throws Exception {
         facetHolder = null;
         fooSuperFacet = null;
         fooSubFacet = null;
         fooFacet = null;
         barFacet = null;
-        super.tearDown();
     }
 
+    @Test
     public void testIsAWhenIs() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
-        TestCase.assertTrue(predicate.test(fooFacet));
+        assertTrue(predicate.test(fooFacet));
     }
 
+    @Test
     public void testIsAWhenIsNot() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
-        TestCase.assertFalse(predicate.test(barFacet));
+        assertFalse(predicate.test(barFacet));
     }
 
+    @Test
     public void testIsAWhenIsSubclass() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
-        TestCase.assertTrue(predicate.test(fooSubFacet));
+        assertTrue(predicate.test(fooSubFacet));
     }
 
+    @Test
     public void testIsAWhenIsNotBecauseASuperclass() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
-        TestCase.assertFalse(predicate.test(fooSuperFacet));
+        assertFalse(predicate.test(fooSuperFacet));
     }
 
 }

@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
 
-public class ClobValueSemanticsProviderTest
+class ClobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Clob> {
 
     private ClobValueSemantics value;

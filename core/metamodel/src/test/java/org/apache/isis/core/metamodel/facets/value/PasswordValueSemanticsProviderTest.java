@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
 
-public class PasswordValueSemanticsProviderTest
+class PasswordValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Password> {
 
     private PasswordValueSemantics valueSemantics;

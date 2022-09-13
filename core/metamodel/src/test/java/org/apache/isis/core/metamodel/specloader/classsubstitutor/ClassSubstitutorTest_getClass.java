@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 
 import lombok.val;
 
-public class ClassSubstitutorTest_getClass {
+class ClassSubstitutorTest_getClass {
 
     private ClassSubstitutor classSubstitutor;
     private ClassSubstitutorRegistry classSubstitutorReg;

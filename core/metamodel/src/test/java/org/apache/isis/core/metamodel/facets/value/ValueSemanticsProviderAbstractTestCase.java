@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.value;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.junit.Assume;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,11 +29,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.Parser;
@@ -98,13 +94,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @Test
     public void testParseNull() throws Exception {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
         assertEquals(null, semantics.getParser().parseTextRepresentation(null, null));
     }
 
     @Test
     public void testParseEmptyString() throws Exception {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         final Object newValue = semantics.getParser().parseTextRepresentation(null, "");
 
@@ -122,7 +118,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testValueSerializer(final Format format) {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         final T value = getSample();
         final String encoded = getValueSerializer().enstring(format, value);
@@ -143,7 +139,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testDecodeNULL(final Format format) throws Exception {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         final Object newValue = getValueSerializer()
                 .destring(format, ValueSerializerDefault.ENCODED_NULL);
@@ -153,7 +149,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testEmptyEncoding(final Format format) {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         assertEquals(ValueSerializerDefault.ENCODED_NULL, getValueSerializer()
                 .enstring(format, null));
@@ -161,7 +157,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @Test
     public void testTitleOfForNullObject() {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         if(semantics instanceof StringValueSemantics) {
             // string representation has null-to-empty semantics
@@ -175,8 +171,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     }
 
     // precondition for testing
-    private void assumeValueSemanticsProviderIsSetup() {
-        Assume.assumeThat(semantics, is(not(nullValue())));
+    private boolean isValueSemanticsProviderSetup() {
+        return semantics!=null;
     }
 
 

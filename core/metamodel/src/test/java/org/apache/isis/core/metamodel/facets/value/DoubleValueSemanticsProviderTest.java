@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
 
-public class DoubleValueSemanticsProviderTest
+class DoubleValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Double> {
 
     private DoubleValueSemantics value;

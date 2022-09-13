@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;

@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel.commons;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JavaClassUtilsTest_getBuiltIn {
+class JavaClassUtilsTest_getBuiltIn {
 
     @Test
     public void voidBuiltIns() throws ClassNotFoundException {
