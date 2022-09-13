@@ -87,6 +87,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
         </dependency>
+        
+     	<!-- provides @Digits -->
+		<dependency>
+		    <groupId>jakarta.validation</groupId>
+		    <artifactId>jakarta.validation-api</artifactId>
+	    </dependency>
 
         <!-- marked for deprecation -->
     	<dependency>

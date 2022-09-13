@@ -24,6 +24,7 @@
 	<name>Apache Isis Val - Joda Time (applib)</name>
 
 	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.jodatime.applib</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/valuetypes/jodatime/applib</git-plugin.propertiesDir>
 	</properties>
 
