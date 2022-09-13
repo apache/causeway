@@ -23,13 +23,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TypesTest_filteredList {
+class TypesTest_filteredList {
 
     private List<Object> shapes;
 
@@ -38,7 +38,7 @@ public class TypesTest_filteredList {
     static class Circle extends Shape {}
     static class Rectangle extends Shape {}
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         shapes = Arrays.<Object>asList(new Square(), new Circle(), new Square());
     }

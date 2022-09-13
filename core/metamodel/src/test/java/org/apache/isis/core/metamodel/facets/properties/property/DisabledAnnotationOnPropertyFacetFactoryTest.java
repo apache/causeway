@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
@@ -34,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 
 import lombok.val;
 
-public class DisabledAnnotationOnPropertyFacetFactoryTest
+class DisabledAnnotationOnPropertyFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;

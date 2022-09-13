@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -41,13 +41,13 @@ import lombok.val;
 /**
  * needs the javac -parameter flag set when compiling this test
  */
-public class ParameterNameFacetTest
-extends AbstractFacetFactoryJUnit4TestCase {
+class ParameterNameFacetTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     ProgrammingModel programmingModel;
     Method actionMethod;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         val metaModelContext = MetaModelContext_forTesting.builder()
@@ -59,7 +59,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         super.tearDown();
         programmingModel = null;

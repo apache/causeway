@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.layout.menubars.bootstrap;
 
+import javax.xml.bind.JAXBContext;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +25,10 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenu;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 
 public class BSMenuBars_roundtrip_Test {
 
@@ -47,6 +46,9 @@ public class BSMenuBars_roundtrip_Test {
 
     @Test
     public void happyCase() throws Exception {
+
+        // test prerequisites
+        assertNotNull(JAXBContext.newInstance(BSMenuBars.class));
 
         // given
         BSMenuBars menuBars = new BSMenuBars();

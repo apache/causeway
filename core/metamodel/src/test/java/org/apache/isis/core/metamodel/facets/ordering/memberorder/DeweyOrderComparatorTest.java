@@ -18,16 +18,16 @@
  */
 package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
-import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -36,14 +36,11 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetAbstract;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+class DeweyOrderComparatorTest  {
 
-public class DeweyOrderComparatorTest extends TestCase {
-
-    public static void main(final String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(DeweyOrderComparatorTest.class));
-    }
+//    public static void main(final String[] args) {
+//        junit.textui.TestRunner.run(new TestSuite(DeweyOrderComparatorTest.class));
+//    }
 
     private MemberOrderComparator comparator, laxComparator;
 
@@ -59,14 +56,11 @@ public class DeweyOrderComparatorTest extends TestCase {
     private final FacetedMethod m1 = FacetedMethod.createForProperty(mmc, Customer.class, "abc");
     private final FacetedMethod m2 = FacetedMethod.createForProperty(mmc, Customer.class, "abc");
 
-    TranslationService mockTranslationService;
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Mock TranslationService mockTranslationService;
 
 	static TranslationContext ctx = TranslationContext.named("test");
 
-    @Override
+	@BeforeEach
     protected void setUp() {
 
         _Context.clear();
@@ -74,94 +68,102 @@ public class DeweyOrderComparatorTest extends TestCase {
         comparator = new MemberOrderComparator(true);
         laxComparator = new MemberOrderComparator(false);
 
-        mockTranslationService = context.mock(TranslationService.class);
-        context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
-            will(new Action() {
-                @Override
-                public Object invoke(final Invocation invocation) throws Throwable {
-                    return invocation.getParameter(1);
-                }
-
-                @Override
-                public void describeTo(final Description description) {
-                    description.appendText("Returns parameter #1");
-                }
-            });
-        }});
+        //FIXME
+//        context.checking(new Expectations() {{
+//            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
+//            will(new Action() {
+//                @Override
+//                public Object invoke(final Invocation invocation) throws Throwable {
+//                    return invocation.getParameter(1);
+//                }
+//
+//                @Override
+//                public void describeTo(final Description description) {
+//                    description.appendText("Returns parameter #1");
+//                }
+//            });
+//        }});
 
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-    }
-
+	@Test
     public void testDefaultGroupOneComponent() {
         setupLayoutFacets("", "1", m1);
         setupLayoutFacets("", "2", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneComponentOtherWay() {
         setupLayoutFacets("", "2", m1);
         setupLayoutFacets("", "1", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneComponentSame() {
         setupLayoutFacets("", "1", m1);
         setupLayoutFacets("", "1", m2);
         assertEquals(0, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsOutOfComponentsFirst() {
         setupLayoutFacets("", "1", m1);
         setupLayoutFacets("", "1.1", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsOutOfComponentsFirstOtherWay() {
         setupLayoutFacets("", "1.1", m1);
         setupLayoutFacets("", "1", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsTwoComponents() {
         setupLayoutFacets("", "1.1", m1);
         setupLayoutFacets("", "1.2", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsTwoComponentsOtherWay() {
         setupLayoutFacets("", "1.2", m1);
         setupLayoutFacets("", "1.1", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsLotsOfComponents() {
         setupLayoutFacets("", "1.2.5.8.3.3", m1);
         setupLayoutFacets("", "1.2.5.8.3.4", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsLotsOfComponentsOtherWay() {
         setupLayoutFacets("", "1.2.5.8.3.4", m1);
         setupLayoutFacets("", "1.2.5.8.3.3", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testDefaultGroupOneSideRunsLotsOfComponentsSame() {
         setupLayoutFacets("", "1.2.5.8.3.3", m1);
         setupLayoutFacets("", "1.2.5.8.3.3", m2);
         assertEquals(0, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testNamedGroupOneSideRunsLotsOfComponents() {
         setupLayoutFacets("abc", "1.2.5.8.3.3", m1);
         setupLayoutFacets("abc", "1.2.5.8.3.4", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
+	@Test
     public void testEnsuresInSameGroup() {
         setupLayoutFacets("abc", "1", m1);
         setupLayoutFacets("def", "2", m2);
@@ -173,12 +175,14 @@ public class DeweyOrderComparatorTest extends TestCase {
         }
     }
 
+	@Test
     public void testEnsuresInSameGroupCanBeDisabled() {
         setupLayoutFacets("abc", "1", m1);
         setupLayoutFacets("def", "2", m2);
         assertEquals(-1, laxComparator.compare(m1, m2));
     }
 
+	@Test
     public void testNonAnnotatedAfterAnnotated() {
         // don't annotate m1
         setupLayoutFacets("def", "2", m2);
@@ -187,7 +191,7 @@ public class DeweyOrderComparatorTest extends TestCase {
 
     // -- HELPER
 
-    void setupLayoutFacets(String groupId, String sequence, FacetedMethod facetedMethod) {
+    void setupLayoutFacets(final String groupId, final String sequence, final FacetedMethod facetedMethod) {
         facetedMethod.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedMethod) {});
         facetedMethod.addFacet(new LayoutOrderFacetAbstract(sequence, facetedMethod) {});
     }

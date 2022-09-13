@@ -21,18 +21,17 @@ package org.apache.isis.core.metamodel.commons;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(Parameterized.class)
+//FIXME[ISIS-3207]
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 public class StringUtils_NormalizedTest {
 
-    @Parameters
+    //@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] { { null, null, }, // null
             { "", "", }, // empty string

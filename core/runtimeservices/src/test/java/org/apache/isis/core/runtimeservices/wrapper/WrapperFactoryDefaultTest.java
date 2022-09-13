@@ -18,27 +18,25 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import org.assertj.core.api.Assertions;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.RequiredArgsConstructor;
 
-public class WrapperFactoryDefaultTest {
+class WrapperFactoryDefaultTest {
 
     private static class DomainObject {
     }
@@ -64,35 +62,30 @@ public class WrapperFactoryDefaultTest {
         }
     }
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Mock private _ProxyFactoryService mockProxyFactoryService;
-    
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;
     private SyncControl createProxyCalledWithSyncControl;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         wrapperFactory = new WrapperFactoryDefault() {
 
             @Override
             public void init() {
-                this.proxyFactoryService = mockProxyFactoryService; 
+                this.proxyFactoryService = Mockito.mock(_ProxyFactoryService.class);
                 super.init();
             }
-            
+
             @Override
-            protected <T> T createProxy(T domainObject, SyncControl syncControl) {
+            protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
                 WrapperFactoryDefaultTest.this.createProxyCalledWithSyncControl = syncControl;
                 WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
                 return domainObject;
             }
         };
-        
-        
+
+
     }
 
     @Test
@@ -131,7 +124,7 @@ public class WrapperFactoryDefaultTest {
         // then
         assertThat(wrappingObject, is(not(domainObject)));
         assertThat(createProxyCalledWithDomainObject, is(wrappedObject));
-        Assertions.assertThat(createProxyCalledWithSyncControl.getExecutionModes()).contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        assertThat(createProxyCalledWithSyncControl.getExecutionModes(), contains(ExecutionMode.SKIP_RULE_VALIDATION));
     }
 
 }

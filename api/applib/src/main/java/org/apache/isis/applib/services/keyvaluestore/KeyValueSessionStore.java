@@ -21,15 +21,13 @@ package org.apache.isis.applib.services.keyvaluestore;
 import java.io.Serializable;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 
 /**
  * Defines a mechanism for viewers to store arbitrary key value pairs
- * on a per-session basis. That is usually a {@link HttpSession}.
+ * on a per-session basis. That is usually a {@link javax.servlet.http.HttpSession}.
  * <p>
  * This store <i>is</i> used by the Wicket viewer. For example, the viewer
  * remembers which time-zone the user has logged in. Or when impersonating.

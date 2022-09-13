@@ -20,23 +20,23 @@ package org.apache.isis.core.metamodel.facets.value;
 
 import java.math.BigInteger;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class BigIntValueSemanticsProviderTest
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
+
+class BigIntValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
 
     private BigIntegerValueSemantics value;
     private BigInteger bigInt;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         bigInt = new BigInteger("132199");

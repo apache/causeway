@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.consent;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,12 +30,12 @@ public class InteractionResultTest {
 
     private InteractionResult result;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         result = new InteractionResult(null);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         result = null;
     }

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.clock;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -44,7 +43,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named(ClockService.LOGICAL_TYPE_NAME)
-@Priority(PriorityPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockService {

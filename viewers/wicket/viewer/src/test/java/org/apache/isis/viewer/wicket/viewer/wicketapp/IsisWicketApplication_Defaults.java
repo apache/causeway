@@ -20,36 +20,29 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
-public class IsisWicketApplication_Defaults {
-
-    @Rule
-    public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+class IsisWicketApplication_Defaults {
 
     private IsisWicketApplication application;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         application = new IsisWicketApplication();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
     }
 
@@ -57,15 +50,6 @@ public class IsisWicketApplication_Defaults {
     public void usesCustomSubclassOfAuthenticatedWebSession() {
         final Class<? extends AuthenticatedWebSession> webSessionClass = application.getWebSessionClass();
         assertThat(webSessionClass.equals(AuthenticatedWebSessionForIsis.class), is(true));
-    }
-
-    @Ignore // 6.0.0 does it differently
-    @Test
-    public void providesCustomRequestCycle() {
-        //        final WebRequest mockRequest = context.mock(WebRequest.class);
-        //        final Response mockResponse = context.mock(Response.class);
-        //        final RequestCycle newRequestCycle = application.newRequestCycle(mockRequest, mockResponse);
-        //        assertThat(newRequestCycle, is(WebRequestCycleForIsis.class));
     }
 
     @Test

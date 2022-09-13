@@ -18,15 +18,6 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.jmocking;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.reflection._Reflect;
-
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -42,6 +33,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
 
@@ -56,12 +57,9 @@ class ImposteriserTestUsingCodegenPlugin_Test {
     @BeforeEach
     void setUp() throws Exception {
         _Context.clear();
-        invokable = new Invokable() {
-            @Override
-            public Object invoke(Invocation invocation) throws Throwable {
-                ImposteriserTestUsingCodegenPlugin_Test.this.invocation = invocation;
-                return "result";
-            }
+        invokable = invocation -> {
+            ImposteriserTestUsingCodegenPlugin_Test.this.invocation = invocation;
+            return "result";
         };
     }
 
@@ -87,13 +85,15 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         imposter.toString();
     }
 
-    // class we want to mock, while making sure, that we have access to non public methods 
+    // class we want to mock, while making sure, that we have access to non public methods
     static class NonPublicMethodStub {
         Integer getInteger() {
             return 1;
         }
     }
 
+  //FIXME[ISIS-3207]
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void imposteriserShouldBeUsableForMockery() {
 
@@ -180,7 +180,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
 
 
     public static class AClassWithAPrivateConstructor {
-        private AClassWithAPrivateConstructor(String someArgument) {}
+        private AClassWithAPrivateConstructor(final String someArgument) {}
 
         public String foo() {return "original result";}
     }
@@ -214,7 +214,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
             return null; // never reached
         }
 
-        private static void shouldNotBeCalled(String exceptionMessageIfCalled) {
+        private static void shouldNotBeCalled(final String exceptionMessageIfCalled) {
             throw new IllegalStateException(exceptionMessageIfCalled + " should not be called");
         }
     }
@@ -325,17 +325,14 @@ class ImposteriserTestUsingCodegenPlugin_Test {
     // See issue JMOCK-256 (GitHub #36)
     @Test @Disabled("fails with surefire on jdk-11, not with eclipse") //TODO[2112] jdk-11 issue?
     void doesntDelegateFinalizeMethod() throws Exception {
-        Invokable failIfInvokedAction = new Invokable() {
-            @Override
-            public Object invoke(Invocation invocation) throws Throwable {
-                fail("invocation should not have happened");
-                return null;
-            }
+        Invokable failIfInvokedAction = invocation -> {
+            fail("invocation should not have happened");
+            return null;
         };
 
         val imposter = imposteriser.imposterise(failIfInvokedAction, Object.class);
         _Reflect.invokeMethodOn(Object.class.getDeclaredMethod("finalize"), imposter);
-        
+
     }
 
 }

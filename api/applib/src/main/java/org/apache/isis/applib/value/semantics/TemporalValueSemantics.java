@@ -21,15 +21,14 @@ package org.apache.isis.applib.value.semantics;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import org.apache.isis.applib.annotation.TimePrecision;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
@@ -110,7 +109,7 @@ extends
         /**
          * The locale-independent (canonical) pattern used for editing dates in the UI.
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String datePattern = "yyyy-MM-dd";
 
         // -- TIME PATTERNS - SECOND
@@ -124,7 +123,7 @@ extends
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
          * The output format is inferred by removal of the square brackets (not their content).
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String timePatternNanoSecond = "HH[:mm[:ss][.SSSSSSSSS]]";
 
         /**
@@ -136,7 +135,7 @@ extends
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
          * The output format is inferred by removal of the square brackets (not their content).
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String timePatternMicroSecond = "HH[:mm[:ss][.SSSSSS]]";
 
         /**
@@ -148,7 +147,7 @@ extends
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
          * The output format is inferred by removal of the square brackets (not their content).
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String timePatternMilliSecond = "HH[:mm[:ss][.SSS]]";
 
         /**
@@ -160,7 +159,7 @@ extends
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
          * The output format is inferred by removal of the square brackets (not their content).
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String timePatternSecond = "HH[:mm[:ss]]";
 
         /**
@@ -172,7 +171,7 @@ extends
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
          * The output format is inferred by removal of the square brackets (not their content).
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String timePatternMinute = "HH[:mm]";
 
         /**
@@ -184,7 +183,7 @@ extends
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
          * The output format is inferred by removal of the square brackets (not their content).
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String timePatternHour = "HH";
 
         // -- ZONE PATTERN
@@ -203,13 +202,13 @@ extends
          *
          * TODO no <i>tempus-dominus</i> date/time-picker support yet.
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String zoneIdPatternForOutput = "VV";
 
         /**
          * TODO no <i>tempus-dominus</i> date/time-picker support yet.
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String zoneIdPatternForInput = "VV";
 
         /**
@@ -230,7 +229,7 @@ extends
          * {@link org.apache.isis.viewer.wicket.ui.components.scalars.datepicker._TimeFormatUtil}
          * does the format conversion.
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String offsetPatternForOutput = "XXX";
 
         /**
@@ -239,7 +238,7 @@ extends
          * (Order of optional blocks matter, eg. {@literal [X][XXX]} would not work.)
          * @see "https://stackoverflow.com/questions/34637626/java-datetimeformatter-for-time-zone-with-an-optional-colon-separator"
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String offsetPatternForInput = "[XXX][X]";
 
         // -- JOINING PATTERNS
@@ -251,7 +250,7 @@ extends
          * to interpolate the effective date-time format.
          * @see String#format(String, Object...)
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String dateTimeJoiningPattern = "%1$s %2$s";
 
         /**
@@ -262,7 +261,7 @@ extends
          * to interpolate the effective zoned temporal format.
          * @see String#format(String, Object...)
          */
-        @NotNull @NotEmpty
+        @NonNull //@NotEmpty
         private String zoneJoiningPattern = "%1$s %2$s";
 
         public String getEditingFormatAsPattern(
@@ -273,7 +272,7 @@ extends
 
             switch (temporalCharacteristic) {
             case DATE_TIME:
-                val dateTimePattern =
+                var dateTimePattern =
                     String.format(getDateTimeJoiningPattern(),
                             getDatePattern(),
                             timePattern(timePrecision, direction));

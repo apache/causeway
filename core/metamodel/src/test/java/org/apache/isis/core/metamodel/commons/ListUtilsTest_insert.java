@@ -20,15 +20,15 @@ package org.apache.isis.core.metamodel.commons;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import org.apache.isis.commons.internal.collections._Lists;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ListUtilsTest_insert {
+import org.apache.isis.commons.internal.collections._Lists;
+
+class ListUtilsTest_insert {
 
     @Test
     public void insert_whenInsertionPointAtBeginning() throws Exception {

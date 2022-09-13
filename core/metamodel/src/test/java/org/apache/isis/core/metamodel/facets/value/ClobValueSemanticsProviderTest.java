@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
-
-import static org.junit.Assert.assertEquals;
 
 public class ClobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Clob> {
@@ -32,7 +32,7 @@ extends ValueSemanticsProviderAbstractTestCase<Clob> {
     private ClobValueSemantics value;
     private Clob clob;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);

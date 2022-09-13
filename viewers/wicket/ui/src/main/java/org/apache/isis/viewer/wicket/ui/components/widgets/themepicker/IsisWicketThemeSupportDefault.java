@@ -111,7 +111,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
      * @param allThemes All available themes
      * @return A list of all enabled themes
      */
-    private List<String> filterThemes(List<String> allThemes) {
+    private List<String> filterThemes(final List<String> allThemes) {
         List<String> enabledThemes;
 
         final Set<String> enabledThemesSet =

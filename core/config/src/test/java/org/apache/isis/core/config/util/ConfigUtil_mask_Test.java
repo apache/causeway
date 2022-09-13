@@ -18,31 +18,31 @@
  */
 package org.apache.isis.core.config.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ConfigUtil_mask_Test {
 
     @Test
-    public void not_a_password() {
+    void not_a_password() {
         assertThat(ValueMaskingUtil.maskIfProtected("foo", "bar"), is(equalTo("bar")));
     }
 
     @Test
-    public void a_password() {
+    void a_password() {
         assertThat(ValueMaskingUtil.maskIfProtected("xyz.password.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
-    public void a_PassWord() {
+    void a_PassWord() {
         assertThat(ValueMaskingUtil.maskIfProtected("xyz.PassWord.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
-    public void is_null() {
+    void is_null() {
         assertThat(ValueMaskingUtil.maskIfProtected(null, "bar"), is(equalTo("bar")));
     }
 

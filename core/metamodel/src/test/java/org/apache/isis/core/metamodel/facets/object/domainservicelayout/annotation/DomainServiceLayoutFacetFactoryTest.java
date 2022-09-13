@@ -18,9 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation;
 
-import org.junit.Assert;
-
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -30,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 
-public class DomainServiceLayoutFacetFactoryTest
+class DomainServiceLayoutFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private DomainServiceLayoutFacetFactory facetFactory;
@@ -61,8 +62,8 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
-        Assert.assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
+        //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+        assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
         assertNoMethodsRemoved();
     }
@@ -80,7 +81,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        Assert.assertNotNull(domainServiceLayoutFacet);
+        assertNotNull(domainServiceLayoutFacet);
 
         assertNoMethodsRemoved();
     }
@@ -98,8 +99,8 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
-        Assert.assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
+        //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+        assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
         assertNoMethodsRemoved();
     }
@@ -117,8 +118,8 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("1"));
-        Assert.assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
+        //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("1"));
+        assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
         assertNoMethodsRemoved();
     }

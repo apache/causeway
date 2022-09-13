@@ -360,8 +360,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <htmlparser.version>2.1</htmlparser.version>
 
-        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
-        <jakartaee.version>8.0.0</jakartaee.version>
+        <jakartaee.version>9.1.0</jakartaee.version>
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.29.1-GA</javassist.version>
         <javax-servlet.version>4.0.1</javax-servlet.version>
@@ -421,7 +420,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <vaadin.version>23.2.0</vaadin.version>
 
-        <wicket.version>9.11.0</wicket.version>
+        <wicket.version>9.11.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.4</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.6.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->

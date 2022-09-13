@@ -20,8 +20,6 @@ package org.apache.isis.applib.services.user;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 /**
  * Used by the framework's default implementation of {@link UserService} to
  * allow the current user to be temporarily impersonated.
@@ -29,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * <p>
  *     The intention is that viewers provide an implementation of this service.
  *     Note that the Wicket viewer <i>does</i> implement this service and
- *     uses an {@link HttpSession}; this will have the side-effect
+ *     uses an {@link javax.servlet.http.HttpSession}; this will have the side-effect
  * </p>
  *
  * @since 2.0 {@index}

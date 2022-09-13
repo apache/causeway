@@ -18,11 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Where;
@@ -31,7 +32,8 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_Hidden
+extends ActionAnnotationFacetFactoryTest {
 
     private void processHidden(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -41,7 +43,7 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
     }
 
     @Test
-    public void withAnnotation() {
+    void withAnnotation() {
 
         class Customer {
             @Action(hidden = Where.REFERENCES_PARENT)
@@ -60,12 +62,12 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
 
         // then
         val hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-        Assert.assertNotNull(hiddenFacet);
+        assertNotNull(hiddenFacet);
         assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
 
         val hiddenFacetImpl = facetedMethod.getFacet(HiddenFacet.class);
-        Assert.assertNotNull(hiddenFacetImpl);
-        Assert.assertTrue(hiddenFacet == hiddenFacetImpl);
+        assertNotNull(hiddenFacetImpl);
+        assertTrue(hiddenFacet == hiddenFacetImpl);
     }
 
 }

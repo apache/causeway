@@ -24,12 +24,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.Test;
-
-import org.apache.isis.commons.internal.reflection._Annotations;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 
@@ -75,7 +75,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
 
         class SomeDomainObject {
             public void updateName(
-                    @DomainObj(publishng = DomainObj.Publishng.YES)
+                    @DomainObj(publishng = DomainObj.Publishng.YES) final
                     String name
                     ) {}
         }
@@ -85,7 +85,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
-        
+
     }
 
     @Test
@@ -93,7 +93,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
 
         class SomeDomainObject {
             public void updateName(
-                    @Published
+                    @Published final
                     String name
                     ) {}
         }
@@ -110,7 +110,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
 
         class SomeDomainObject {
             public void updateName(
-                    @MetaPublished
+                    @MetaPublished final
                     String name
                     ) {}
         }
@@ -128,7 +128,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         class SomeDomainObject {
             public void updateName(
                     @MetaPublished
-                    @Published
+                    @Published final
                     String name
                     ) {}
         }
@@ -146,7 +146,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         class SomeDomainObject {
             public void updateName(
                     @MetaPublished
-                    @NotPublished
+                    @NotPublished final
                     String name
                     ) {}
         }
@@ -165,7 +165,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
             public void updateName(
                     @MetaPublished
                     @Published
-                    @DomainObj(publishng = DomainObj.Publishng.NO)
+                    @DomainObj(publishng = DomainObj.Publishng.NO) final
                     String name
                     ) {}
         }
@@ -185,7 +185,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
             public void updateName(
                     @MetaPublished
                     @NotPublished
-                    @DomainObj(publishng = DomainObj.Publishng.YES)
+                    @DomainObj(publishng = DomainObj.Publishng.YES) final
                     String name
                     ) {}
         }

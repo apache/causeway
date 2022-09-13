@@ -18,10 +18,9 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
-import javax.enterprise.inject.Vetoed;
-
 import org.springframework.context.annotation.Profile;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -78,7 +77,7 @@ public enum BeanSort {
     ABSTRACT,
     /**
      * Type must not be added to the meta-model, eg. by means of
-     * {@link Vetoed}, {@link Profile} or {@link Programmatic}
+     * {@link Domain#Exclude}, {@link Profile} or {@link Programmatic}
      */
     VETOED,
     UNKNOWN;

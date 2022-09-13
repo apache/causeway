@@ -22,11 +22,11 @@ import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.calls;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -47,7 +48,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -85,7 +86,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTestCase {
 
     PropertyAnnotationFacetFactory facetFactory;
     Method propertyMethod;
@@ -94,9 +95,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     @Mock ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
-        context.checking(new Expectations() {{
-            oneOf(mockMethodRemover).removeMethod(actionMethod);
-        }});
+        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
     }
 
     private static void processModify(
@@ -154,13 +153,13 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     }
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
     }

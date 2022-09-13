@@ -22,6 +22,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.FormatStyle;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.TimeZoneTranslation;
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.commons.internal._Constants;
@@ -37,11 +42,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateForm
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 @SuppressWarnings("unused")
-public class ValueSemanticsAnnotationFacetFactoryTest
+class ValueSemanticsAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     // -- MAX TOTAL DIGITS

@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import javax.enterprise.inject.Vetoed;
-
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -122,7 +121,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     // Predicates
     // //////////////////////////////////////////////////////
 
-    @Vetoed
+    @Domain.Exclude
     class Predicates {
 
         private Predicates(){}
@@ -154,7 +153,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     // -- UTIL
 
-    @Vetoed
+    @Domain.Exclude
     public static class Util {
         private Util(){}
 

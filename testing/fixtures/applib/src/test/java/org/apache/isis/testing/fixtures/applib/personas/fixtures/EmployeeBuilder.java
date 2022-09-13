@@ -20,8 +20,6 @@
 
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
-import javax.resource.spi.work.ExecutionContext;
-
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.dom.Employee;
 import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
@@ -37,7 +35,7 @@ public class EmployeeBuilder extends BuilderScriptAbstract<Employee> {
     private Employee object;
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
+    protected void execute(final ExecutionContext executionContext) {
         Person person = objectFor(persona, executionContext);
         object = Employee.builder().person(person).build();
     }

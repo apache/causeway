@@ -16,9 +16,9 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.cssclassfa;
 
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 
-public class CssClassFaFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class CssClassFaFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryJupiterTestCase {
 
     // @Test
     // public void testCssClassFaAnnotationPickedUpOnClass() {

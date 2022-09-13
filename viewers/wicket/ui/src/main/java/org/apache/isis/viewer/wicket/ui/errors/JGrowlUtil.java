@@ -95,7 +95,9 @@ public class JGrowlUtil {
         buf.append(");\n");
     }
 
-    String escape(final String origMsg) {
+
+    //JUnit support (public)
+    public String escape(final String origMsg) {
 
         _Text.normalize(origMsg);
 
@@ -109,4 +111,5 @@ public class JGrowlUtil {
                 .replace("\t", " ")
                 .replace("\n", "<br/>");
     }
+
 }

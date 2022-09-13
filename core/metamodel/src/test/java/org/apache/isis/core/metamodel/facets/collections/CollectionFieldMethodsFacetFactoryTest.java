@@ -23,6 +23,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -32,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 
 import lombok.val;
 
-public class CollectionFieldMethodsFacetFactoryTest
+class CollectionFieldMethodsFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     @Override

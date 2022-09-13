@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
 
 public class DoubleValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Double> {
@@ -33,7 +33,7 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
     private DoubleValueSemantics value;
     private Double doubleObj;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
 
         setSemantics(value = new DoubleValueSemantics());

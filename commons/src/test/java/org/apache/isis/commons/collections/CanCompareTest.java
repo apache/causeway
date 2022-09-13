@@ -38,9 +38,9 @@ class CanCompareTest {
             Can.<String>of("hi", "there", "zzz"),
             Can.<String>of("hi", "zzz", "world")
             );
-    
+
     private final int x = 99; // n/a
-    
+
     //  left arg in row
     // right arg in col
     private final int[][] expectationMatrix = {
@@ -52,17 +52,17 @@ class CanCompareTest {
             {1, 1, 1, 1, 1, 0,-1},
             {1, 1, 1, 1, 1, 1, 0},
     };
-    
+
     @Test
     void cans_shouldCompareCorrectly() {
-        
+
         int row = 0;
         for(Can<String> left : samples) {
             int col = 0;
             for(Can<String> right : samples) {
                 // skip first row // as first argument is null and cannot be used
                 if(row>0) {
-                    
+
                     int c = left.compareTo(right);
                     if(c>0) {
                         c = 1;
@@ -71,7 +71,7 @@ class CanCompareTest {
                     }
                     assertEquals(expectationMatrix[row][col], c,
                             String.format("failed in (row, col) (%d, %d) with (%s, %s)",
-                                    row, col, left, right));    
+                                    row, col, left, right));
                 }
                 ++col;
             }

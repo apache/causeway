@@ -19,33 +19,34 @@
 package org.apache.isis.core.metamodel.commons;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class StringUtils_RemoveLeadingWhiteSpace {
+import static org.hamcrest.MatcherAssert.assertThat;
+
+class StringUtils_RemoveLeadingWhiteSpace {
 
     @Test
     public void whenHasLeadingWhiteSpace() {
         final String removed = StringExtensions.removeLeadingWhiteSpace(" 	 foo");
-        Assert.assertThat(removed, CoreMatchers.is("foo"));
+        assertThat(removed, CoreMatchers.is("foo"));
     }
 
     @Test
     public void whenNoLeadingWhiteSpace() {
         final String removed = StringExtensions.removeLeadingWhiteSpace("foo");
-        Assert.assertThat(removed, CoreMatchers.is("foo"));
+        assertThat(removed, CoreMatchers.is("foo"));
     }
 
     @Test
     public void empty() {
         final String removed = StringExtensions.removeLeadingWhiteSpace("");
-        Assert.assertThat(removed, CoreMatchers.is(""));
+        assertThat(removed, CoreMatchers.is(""));
     }
 
     @Test
     public void whenNull() {
         final String removed = StringExtensions.removeLeadingWhiteSpace(null);
-        Assert.assertThat(removed, CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat(removed, CoreMatchers.is(CoreMatchers.nullValue()));
     }
 
 }

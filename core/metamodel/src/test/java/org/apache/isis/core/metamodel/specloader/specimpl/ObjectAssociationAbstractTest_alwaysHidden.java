@@ -18,22 +18,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -50,10 +48,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
-public class ObjectAssociationAbstractTest_alwaysHidden {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+@ExtendWith(MockitoExtension.class)
+class ObjectAssociationAbstractTest_alwaysHidden {
 
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
@@ -69,19 +65,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
         facetedMethod = FacetedMethod.createForProperty(mmc, Customer.class, "firstName");
-
-        context.checking(new Expectations() {{
-            //            allowing(mockServicesInjector).getSpecificationLoader();
-            //            will(returnValue(mockSpecificationLoader));
-            //
-            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            //            will(returnValue(mockPersistenceSessionServiceInternal));
-        }});
 
         objectAssociation = new ObjectAssociationAbstract(
                 facetedMethod.getFeatureIdentifier(),

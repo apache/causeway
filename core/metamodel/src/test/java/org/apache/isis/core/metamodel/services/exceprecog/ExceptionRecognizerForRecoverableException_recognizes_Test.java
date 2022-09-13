@@ -20,12 +20,8 @@ package org.apache.isis.core.metamodel.services.exceprecog;
 
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -36,14 +32,11 @@ public class ExceptionRecognizerForRecoverableException_recognizes_Test {
         private static final long serialVersionUID = 1L;
     }
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
     private Exception ex;
 
     private ExceptionRecognizerForRecoverableException excepRecognizer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         excepRecognizer = new ExceptionRecognizerForRecoverableException();
     }

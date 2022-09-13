@@ -21,10 +21,9 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import javax.enterprise.inject.Vetoed;
-
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -198,7 +197,7 @@ extends ObjectFeature, CurrentHolder {
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
-    @Vetoed
+    @Domain.Exclude
     @UtilityClass
     public static class Predicates {
 

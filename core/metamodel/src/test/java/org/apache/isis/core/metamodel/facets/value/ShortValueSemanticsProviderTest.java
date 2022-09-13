@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
 
 public class ShortValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Short> {
@@ -33,7 +33,7 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
     private ShortValueSemantics value;
     private Short short1;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
 
         short1 = Short.valueOf((short) 32);

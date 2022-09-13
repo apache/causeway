@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -27,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetFact
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
-public class RecreatableObjectFacetFactoryTest
+class RecreatableObjectFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private ViewModelFacetFactory facetFactory;

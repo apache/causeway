@@ -42,8 +42,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Vetoed;
-
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
@@ -85,8 +83,9 @@ public final class ProgrammingModelConstants {
     @Getter
     @RequiredArgsConstructor
     public enum TypeExcludeMarker {
-        DOMAIN_EXCLUDE(Domain.Exclude.class),
-        VETO(Vetoed.class);
+        DOMAIN_EXCLUDE(Domain.Exclude.class)
+        //,VETO(javax.enterprise.inject.Vetoed.class)
+        ;
         private final Class<? extends Annotation> annotationType;
 
         public static boolean anyMatchOn(final Class<?> type) {

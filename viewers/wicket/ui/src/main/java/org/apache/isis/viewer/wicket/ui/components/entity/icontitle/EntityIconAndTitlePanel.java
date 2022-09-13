@@ -191,7 +191,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return getModel().isContextAdapter(other);
     }
 
-    static String abbreviated(final String str, final int maxLength) {
+    //JUnit support (public)
+    public static String abbreviated(final String str, final int maxLength) {
         int length = str.length();
         if (length <= maxLength) {
             return str;

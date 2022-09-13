@@ -20,12 +20,13 @@ package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -35,14 +36,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
-public class CssClassFacetMethodWithProblemTest {
-
-    private final Mockery mockery = new JUnit4Mockery();
+@ExtendWith(MockitoExtension.class)
+class CssClassFacetMethodWithProblemTest {
 
     private CssClassFacetViaCssClassMethod facet;
-    private FacetHolder mockFacetHolder;
-
-    private ManagedObject mockOwningAdapter;
+    @Mock FacetHolder mockFacetHolder;
+    @Mock ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInCssClassMethod pojo;
 
@@ -52,26 +51,20 @@ public class CssClassFacetMethodWithProblemTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInCssClassMethod();
-        mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ManagedObject.class);
+
         final Method iconNameMethod = DomainObjectWithProblemInCssClassMethod.class.getMethod("cssClass");
         facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
                 .create(iconNameMethod, mockFacetHolder)
                 .orElse(null);
 
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockOwningAdapter).getPojo();
-                will(returnValue(pojo));
-            }
-        });
+        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         facet = null;
     }

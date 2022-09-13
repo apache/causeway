@@ -20,11 +20,12 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -39,7 +40,8 @@ import org.apache.isis.core.metamodel.facets.members.publish.execution.Execution
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_executionPublishing extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_executionPublishing
+extends ActionAnnotationFacetFactoryTest {
 
     private void processExecutionPublishing(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -48,7 +50,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_HasInteractionId_thenIgnored() {
+    void given_HasInteractionId_thenIgnored() {
 
         final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
 
@@ -61,7 +63,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
@@ -79,7 +81,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
@@ -99,22 +101,23 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         _Blackhole.consume(facetImpl);
     }
 
-    @Test(expected=IllegalStateException.class)
-    public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
+    @Test
+    void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
+        assertThrows(IllegalStateException.class, ()->
         processExecutionPublishing(facetFactory, ProcessMethodContext
                 .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
-                actionMethod, mockMethodRemover, facetedMethod));
+                actionMethod, mockMethodRemover, facetedMethod)));
 
     }
 
     @Test
-    public void given_noAnnotation_and_configurationSetToNone_thenNone() {
+    void given_noAnnotation_and_configurationSetToNone_thenNone() {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
@@ -133,7 +136,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
+    void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
 
         // given
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
@@ -152,7 +155,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         class Customer {
             @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
@@ -174,7 +177,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
 
         // given
         class Customer {
@@ -203,8 +206,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         expectNoMethodsRemoved();
     }
 
-    @Test(expected=IllegalStateException.class)
-    public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
+    @Test
+    void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         class Customer {
             @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
@@ -215,12 +218,13 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        assertThrows(IllegalStateException.class, ()->
+            processExecutionPublishing(facetFactory, ProcessMethodContext
+                    .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod)));
     }
 
     @Test
-    public void given_asConfigured_and_configurationSetToNone_thenNone() {
+    void given_asConfigured_and_configurationSetToNone_thenNone() {
 
         class Customer {
             @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
@@ -241,7 +245,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_asConfigured_and_configurationSetToAll_thenFacetAdded() {
+    void given_asConfigured_and_configurationSetToAll_thenFacetAdded() {
 
         // given
         class Customer {
@@ -268,7 +272,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_enabled_irrespectiveOfConfiguration_thenFacetAdded() {
+    void given_enabled_irrespectiveOfConfiguration_thenFacetAdded() {
 
         // given
         class Customer {
@@ -294,7 +298,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_disabled_irrespectiveOfConfiguration_thenNone() {
+    void given_disabled_irrespectiveOfConfiguration_thenNone() {
 
         // given
         class Customer {

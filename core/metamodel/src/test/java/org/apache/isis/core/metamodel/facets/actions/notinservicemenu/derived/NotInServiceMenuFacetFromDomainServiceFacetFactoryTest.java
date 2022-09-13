@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
-import org.junit.Before;
-import org.junit.Test;
+
+
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -30,18 +33,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 
 @SuppressWarnings("unused")
 public class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
-extends AbstractFacetFactoryJUnit4TestCase {
+extends AbstractFacetFactoryJupiterTestCase {
 
     private NotInServiceMenuFacetFromDomainServiceFacetFactory facetFactory;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(metaModelContext);
     }

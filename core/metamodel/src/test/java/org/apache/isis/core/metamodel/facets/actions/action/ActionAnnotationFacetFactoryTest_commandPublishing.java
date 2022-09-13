@@ -20,11 +20,11 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
@@ -35,7 +35,8 @@ import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPubl
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_commandPublishing
+extends ActionAnnotationFacetFactoryTest {
 
     private void processCommandPublishing(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -44,7 +45,7 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
     }
 
     @Test
-    public void given_HasInteractionId_thenIgnored() {
+    void given_HasInteractionId_thenIgnored() {
         // given
         final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
 
@@ -57,7 +58,7 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
     }
 
     @Test
-    public void given_annotation_but_command_not_specified_then_facet_not_added() {
+    void given_annotation_but_command_not_specified_then_facet_not_added() {
 
         // given
         class Customer {
@@ -76,7 +77,7 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
     }
 
     @Test
-    public void given_annotation_with_command_enabled_then_facet_added() {
+    void given_annotation_with_command_enabled_then_facet_added() {
 
         // given
         class Customer {
@@ -98,7 +99,7 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
 
 
     @Test
-    public void given_annotation_with_command_disabled_then_facet_not_added() {
+    void given_annotation_with_command_disabled_then_facet_not_added() {
 
         // given
         class Customer {
@@ -115,7 +116,5 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
         // then
         assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
     }
-
-
 
 }

@@ -36,6 +36,7 @@
     </description>
 
     <properties>
+    	<!-- apache shiro is not migrated to JPMS yet, so no point in converting ours to JPMS -->
         <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
     </properties>

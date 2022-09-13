@@ -22,6 +22,10 @@ import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 
 import lombok.val;
 
-public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
+class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;

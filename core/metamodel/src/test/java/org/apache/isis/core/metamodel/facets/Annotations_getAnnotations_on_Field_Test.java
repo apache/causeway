@@ -24,14 +24,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.reflection._Annotations;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -71,13 +71,13 @@ public class Annotations_getAnnotations_on_Field_Test {
                 return name;
             }
         }
-        
+
         val field = SomeDomainObject.class.getDeclaredField("name");
         val nearestF = _Annotations.synthesize(field, Property.class);
-        
+
         assertThat(nearestF.isPresent(), is(true));
         assertThat(nearestF.get().executionPublishing(), is(Publishing.ENABLED));
-        
+
         val method = SomeDomainObject.class.getMethod("getName");
         val nearestM = _Annotations.synthesize(method, Property.class);
 

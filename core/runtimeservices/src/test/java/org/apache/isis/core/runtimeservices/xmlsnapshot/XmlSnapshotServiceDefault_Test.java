@@ -1,54 +1,56 @@
-/**
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
  */
 package org.apache.isis.core.runtimeservices.xmlsnapshot;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Locale;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
 
-public class XmlSnapshotServiceDefault_Test {
+class XmlSnapshotServiceDefault_Test {
 
     private XmlSnapshotServiceDefault xmlSnapshotService;
     private String xmlStr;
     private XmlServiceDefault xmlService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        xmlStr = _Resources.loadAsString(
-                XmlSnapshotServiceDefault_Test.class,
-                "XmlSnapshotServiceAbstractTest.xml", 
-                Charset.forName("UTF-8"));
+        xmlStr = _Strings.read(
+                XmlSnapshotServiceDefault_Test.class.getResourceAsStream("XmlSnapshotServiceAbstractTest.xml"),
+                StandardCharsets.UTF_8);
+        _Assert.assertNotNull(xmlStr, "test resource prerequisites");
         xmlService = new XmlServiceDefault();
         xmlSnapshotService = new XmlSnapshotServiceDefault(xmlService, null);
     }
-
 
     @Test
     public void test() {
@@ -90,7 +92,7 @@ public class XmlSnapshotServiceDefault_Test {
         }
     }
 
-    private static Locale lookupLocale(String language, String country) {
+    private static Locale lookupLocale(final String language, final String country) {
         Locale[] availableLocales = Locale.getAvailableLocales();
         for (Locale locale : availableLocales) {
             if(locale.getCountry().equals(country) && locale.getLanguage().equals(language)) {

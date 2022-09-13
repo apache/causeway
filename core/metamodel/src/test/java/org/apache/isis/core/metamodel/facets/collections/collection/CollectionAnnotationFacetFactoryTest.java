@@ -21,22 +21,23 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.calls;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -49,27 +50,21 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class CollectionAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJUnit4TestCase {
+class CollectionAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     CollectionAnnotationFacetFactory facetFactory;
     Method collectionMethod;
 
-    @Mock
     ObjectSpecification mockTypeSpec;
-    @Mock
     ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
-        context.checking(new Expectations() {
-            {
-                oneOf(mockMethodRemover).removeMethod(actionMethod);
-            }
-        });
-    }
 
-    @Deprecated
-    void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
+        mockTypeSpec = Mockito.mock(ObjectSpecification.class);
+        mockReturnTypeSpec = Mockito.mock(ObjectSpecification.class);
+
+        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
     }
 
     private static void processModify(
@@ -92,22 +87,22 @@ extends AbstractFacetFactoryJUnit4TestCase {
     }
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
     }
 
 
-    public static class Hidden extends CollectionAnnotationFacetFactoryTest {
+    static class Hidden extends CollectionAnnotationFacetFactoryTest {
 
         @Test
-        public void withAnnotation() {
+        void withAnnotation() {
 
             class Order {
             }
@@ -132,23 +127,23 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             // then
             final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-            Assert.assertNotNull(hiddenFacet);
-            Assert.assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
+            assertNotNull(hiddenFacet);
+            assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
             final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
             final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
-            Assert.assertNotNull(hiddenFacetForColl);
-            Assert.assertTrue(hiddenFacet == hiddenFacetForColl);
+            assertNotNull(hiddenFacetForColl);
+            assertTrue(hiddenFacet == hiddenFacetForColl);
         }
 
     }
 
-    public static class TypeOf extends CollectionAnnotationFacetFactoryTest {
+    static class TypeOf extends CollectionAnnotationFacetFactoryTest {
 
 
         @Test
-        public void whenCollectionAnnotation() {
+        void whenCollectionAnnotation() {
 
             class Order {
             }
@@ -173,13 +168,13 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
             assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 
         @Test
-        public void whenInferFromType() {
+        void whenInferFromType() {
 
             class Order {
             }
@@ -203,14 +198,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacet);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacet);
             assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
             assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
         }
 
         @Test
-        public void whenInferFromGenerics() {
+        void whenInferFromGenerics() {
 
             class Order {
             }
@@ -234,8 +229,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetFromFeature);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacetFromFeature);
             assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
         }
 

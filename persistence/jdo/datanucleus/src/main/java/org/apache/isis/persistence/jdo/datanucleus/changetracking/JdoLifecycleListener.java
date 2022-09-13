@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.changetracking;
 
-import javax.enterprise.inject.Vetoed;
 import javax.jdo.listener.AttachLifecycleListener;
 import javax.jdo.listener.ClearLifecycleListener;
 import javax.jdo.listener.CreateLifecycleListener;
@@ -31,6 +30,7 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Vetoed // managed by isis
+@Domain.Exclude // managed by isis
 @RequiredArgsConstructor
 @Log4j2
 public class JdoLifecycleListener

@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_RestrictTo
+extends ActionAnnotationFacetFactoryTest {
 
     private void processRestrictTo(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -38,7 +39,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
     }
 
     @Test
-    public void whenRestrictedToPrototyping() {
+    void whenRestrictedToPrototyping() {
 
         class Customer {
             @Action(restrictTo = org.apache.isis.applib.annotation.RestrictTo.PROTOTYPING)
@@ -57,11 +58,11 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
 
         // then
         final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        Assert.assertNotNull(facet);
+        assertNotNull(facet);
     }
 
     @Test
-    public void whenRestrictedToNoRestriction() {
+    void whenRestrictedToNoRestriction() {
 
         class Customer {
             @Action(restrictTo = org.apache.isis.applib.annotation.RestrictTo.NO_RESTRICTIONS)
@@ -84,7 +85,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
     }
 
     @Test
-    public void whenNotPresent() {
+    void whenNotPresent() {
 
         class Customer {
             @SuppressWarnings("unused")

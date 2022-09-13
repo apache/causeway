@@ -24,12 +24,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.Test;
-
-import org.apache.isis.commons.internal.reflection._Annotations;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.val;
 
@@ -74,7 +74,7 @@ public class Annotations_getAnnotations_on_Method_Test {
 
         class SomeDomainObject {
             @DomainObj(publishng = DomainObj.Publishng.YES)
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -89,7 +89,7 @@ public class Annotations_getAnnotations_on_Method_Test {
 
         class SomeDomainObject {
             @Published
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -104,7 +104,7 @@ public class Annotations_getAnnotations_on_Method_Test {
 
         class SomeDomainObject {
             @MetaPublished
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -120,7 +120,7 @@ public class Annotations_getAnnotations_on_Method_Test {
         class SomeDomainObject {
             @MetaPublished
             @Published
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -136,7 +136,7 @@ public class Annotations_getAnnotations_on_Method_Test {
         class SomeDomainObject {
             @MetaPublished
             @NotPublished
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -153,7 +153,7 @@ public class Annotations_getAnnotations_on_Method_Test {
             @MetaPublished
             @Published
             @DomainObj(publishng = DomainObj.Publishng.NO)
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -171,7 +171,7 @@ public class Annotations_getAnnotations_on_Method_Test {
             @MetaPublished
             @NotPublished
             @DomainObj(publishng = DomainObj.Publishng.YES)
-            public void updateName(String name) {}
+            public void updateName(final String name) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);

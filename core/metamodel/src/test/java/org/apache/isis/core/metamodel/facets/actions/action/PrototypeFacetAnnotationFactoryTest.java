@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -30,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbs
 
 import lombok.val;
 
-public class PrototypeFacetAnnotationFactoryTest
+class PrototypeFacetAnnotationFactoryTest
 extends AbstractFacetFactoryTest {
 
     private ActionAnnotationFacetFactory facetFactory;
