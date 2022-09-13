@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 
-public class UrlEncodingServiceTest {
+class UrlEncodingServiceTest {
 
     UrlEncodingServiceWithCompression serviceWithCompression;
     UrlEncodingService serviceBaseEncoding;
