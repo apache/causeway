@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,8 +40,6 @@ import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.class
 
 import lombok.val;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class ActionAnnotationFacetFactoryTest_Invocation
 extends ActionAnnotationFacetFactoryTest {
 
@@ -68,9 +65,6 @@ extends ActionAnnotationFacetFactoryTest {
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         super.metaModelContext.getConfiguration()
         .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
@@ -78,6 +72,9 @@ extends ActionAnnotationFacetFactoryTest {
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
+
+        // expect
+        expectRemoveMethod(actionMethod);
 
         // then
         final ActionDomainEventFacet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -109,13 +106,13 @@ extends ActionAnnotationFacetFactoryTest {
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         // when
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
+
+        // expect
+        expectRemoveMethod(actionMethod);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -150,13 +147,13 @@ extends ActionAnnotationFacetFactoryTest {
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         // when
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
+
+        // expect
+        expectRemoveMethod(actionMethod);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -185,9 +182,6 @@ extends ActionAnnotationFacetFactoryTest {
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         super.metaModelContext.getConfiguration()
                 .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
@@ -195,6 +189,9 @@ extends ActionAnnotationFacetFactoryTest {
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
+
+        // expect
+        expectRemoveMethod(actionMethod);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);

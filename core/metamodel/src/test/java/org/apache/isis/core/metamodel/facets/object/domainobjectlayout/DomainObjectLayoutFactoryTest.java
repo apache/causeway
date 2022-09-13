@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -136,14 +135,10 @@ extends AbstractFacetFactoryJupiterTestCase {
     }
     // --
 
-  //FIXME[ISIS-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     public static class CssClass extends DomainObjectLayoutFactoryTest {
 
         @Mock ManagedObject mockAdapter;
 
-      //FIXME[ISIS-3207]
-        @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
         public static class ForDomainObjectLayout extends CssClass {
 
             @Override
@@ -190,8 +185,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     public static class CssClassFa extends DomainObjectLayoutFactoryTest {
 
-        @Mock
-        ManagedObject mockAdapter;
+        @Mock ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends CssClassFa {
 
@@ -239,8 +233,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     public static class DescribedAs extends DomainObjectLayoutFactoryTest {
 
-        @Mock
-        ManagedObject mockAdapter;
+        @Mock ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends DescribedAs {
 
@@ -286,8 +279,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     public static class Named extends DomainObjectLayoutFactoryTest {
 
-        @Mock
-        ManagedObject mockAdapter;
+        @Mock ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends Named {
 
@@ -332,8 +324,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     public static class Paged extends DomainObjectLayoutFactoryTest {
 
-        @Mock
-        ManagedObject mockAdapter;
+        @Mock ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends Paged {
 
@@ -378,8 +369,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     public static class Plural extends DomainObjectLayoutFactoryTest {
 
-        @Mock
-        ManagedObject mockAdapter;
+        @Mock ManagedObject mockAdapter;
 
         public static class ForDomainObjectLayout extends Plural {
 

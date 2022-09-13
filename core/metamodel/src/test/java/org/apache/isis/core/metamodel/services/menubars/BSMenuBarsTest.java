@@ -24,7 +24,6 @@ import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.isis.applib.services.jaxb.IsisSchemas;
@@ -32,8 +31,6 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.commons.internal.resources._Resources;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class BSMenuBarsTest {
 
     private JaxbService jaxbService;
