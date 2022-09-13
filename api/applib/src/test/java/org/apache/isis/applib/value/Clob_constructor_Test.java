@@ -18,18 +18,21 @@
  */
 package org.apache.isis.applib.value;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class Clob_constructor_Test {
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class Clob_constructor_Test {
 
     @Test
     public void happyCase() throws Exception {
         new Clob("validName", "application", "xml", "abc");
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void name_cannotContainColon() throws Exception {
-        new Clob("with a colon : in it", "application", "xml", "abc");
+    @Test
+    public void name_cannotContainColon() {
+        assertThrows(IllegalArgumentException.class, ()->
+            new Clob("with a colon : in it", "application", "xml", "abc"));
     }
 
 }

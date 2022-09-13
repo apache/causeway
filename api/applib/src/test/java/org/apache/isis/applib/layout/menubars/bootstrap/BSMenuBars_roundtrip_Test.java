@@ -18,9 +18,9 @@ package org.apache.isis.applib.layout.menubars.bootstrap;
 
 import javax.xml.bind.JAXBContext;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,12 +34,12 @@ public class BSMenuBars_roundtrip_Test {
 
     private JaxbService jaxbService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jaxbService = new JaxbService.Simple();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
     }
 

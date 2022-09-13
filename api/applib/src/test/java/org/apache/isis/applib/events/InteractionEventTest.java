@@ -18,24 +18,19 @@
  */
 package org.apache.isis.applib.events;
 
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
-public class InteractionEventTest {
-
-    @Rule
-    public final JUnitRuleMockery context = new JUnitRuleMockery();
+class InteractionEventTest {
 
     private InteractionEvent interactionEvent;
 
@@ -45,12 +40,12 @@ public class InteractionEventTest {
     private Class<? extends InteractionEventTest> advisorClass;
 
     private static class CustomerOrder {}
-    
-    @Before
+
+    @BeforeEach
     public void setUp() {
         source = new Object();
         identifier = Identifier.actionIdentifier(
-                LogicalType.fqcn(CustomerOrder.class), 
+                LogicalType.fqcn(CustomerOrder.class),
                 "cancelOrder", new Class[] { String.class, boolean.class });
         advisorClass = this.getClass();
     }
@@ -59,7 +54,7 @@ public class InteractionEventTest {
     public void getIdentifier() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.getIdentifier(), is(identifier));
     }
@@ -68,7 +63,7 @@ public class InteractionEventTest {
     public void getSource() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.getSource(), is(source));
     }
@@ -77,7 +72,7 @@ public class InteractionEventTest {
     public void getClassName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.getClassName(), equalTo(CustomerOrder.class.getCanonicalName()));
     }
@@ -86,7 +81,7 @@ public class InteractionEventTest {
     public void getClassNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.getClassNaturalName(), equalTo("Customer Order"));
     }
@@ -95,7 +90,7 @@ public class InteractionEventTest {
     public void getMember() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.getMemberName(), equalTo("cancelOrder"));
     }
@@ -104,7 +99,7 @@ public class InteractionEventTest {
     public void getMemberNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.getMemberNaturalName(), equalTo("Cancel Order"));
     }
@@ -113,7 +108,7 @@ public class InteractionEventTest {
     public void shouldInitiallyNotVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         assertThat(interactionEvent.isVeto(), is(false));
     }
@@ -122,7 +117,7 @@ public class InteractionEventTest {
     public void afterAdvisedShouldVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         interactionEvent.advised("some reason", this.getClass());
         assertThat(interactionEvent.isVeto(), is(true));
@@ -132,7 +127,7 @@ public class InteractionEventTest {
     public void afterAdvisedShouldReturnReason() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         interactionEvent.advised("some reason", this.getClass());
         assertThat(interactionEvent.isVeto(), is(true));
@@ -142,7 +137,7 @@ public class InteractionEventTest {
     public void afterAdvisedShouldReturnAdvisorClass() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            
+
         };
         interactionEvent.advised("some reason", advisorClass);
         assertEquals(interactionEvent.getAdvisorClass(), advisorClass);

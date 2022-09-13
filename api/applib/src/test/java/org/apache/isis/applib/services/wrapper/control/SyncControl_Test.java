@@ -18,14 +18,15 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.val;
 
-public class SyncControl_Test {
+class SyncControl_Test {
 
     @Test
     public void defaults() throws Exception {
@@ -34,7 +35,7 @@ public class SyncControl_Test {
         val control = SyncControl.control();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).isEmpty();
+        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
     }
 
     @Test
@@ -46,7 +47,7 @@ public class SyncControl_Test {
         control.withCheckRules();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).isEmpty();
+        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class SyncControl_Test {
         control.withSkipRules();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION));
     }
 
     @Test
@@ -72,7 +73,7 @@ public class SyncControl_Test {
         control.withExecute();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).isEmpty();
+        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
     }
 
     @Test
@@ -85,7 +86,7 @@ public class SyncControl_Test {
         control.withNoExecute();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).contains(ExecutionMode.SKIP_EXECUTION);
+        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION));
     }
 
     @Test
@@ -98,10 +99,9 @@ public class SyncControl_Test {
                 .withSkipRules()
                 .with(exceptionHandler);
 
-        Assertions.assertThat(
-                control
-                .getExecutionModes())
-        .containsExactlyInAnyOrder(ExecutionMode.SKIP_RULE_VALIDATION, ExecutionMode.SKIP_EXECUTION);
+        assertTrue(control.getExecutionModes().size()==2);
+        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION));
+        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION));
     }
 
 }

@@ -21,12 +21,12 @@ package org.apache.isis.applib.services.exceprecog;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ExceptionRecognizerGeneralTest {
+class ExceptionRecognizerGeneralTest {
 
     private ExceptionRecognizer ersGeneral;
 

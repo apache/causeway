@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.spec;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.spec.AbstractSpecification2.Nullability;
 import org.apache.isis.applib.spec.AbstractSpecification2.TypeChecking;
 
-public class AbstractSpecification2Test {
+class AbstractSpecification2Test {
 
     private AbstractSpecification2<String> specAbstractSomeDomainObject;
 

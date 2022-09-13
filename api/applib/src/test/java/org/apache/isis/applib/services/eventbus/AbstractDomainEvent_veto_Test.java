@@ -18,18 +18,18 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
-public class AbstractDomainEvent_veto_Test {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+class AbstractDomainEvent_veto_Test {
 
     AbstractDomainEvent<?> ev = new AbstractDomainEvent<Object>() {  };
 
@@ -43,11 +43,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto((String)null);
 
         // then ... vetoes
-        Assert.assertTrue(ev.isHidden());
-        Assert.assertFalse(ev.isDisabled());
-        Assert.assertNull(ev.getDisabledReason());
-        Assert.assertFalse(ev.isInvalid());
-        Assert.assertNull(ev.getInvalidityReason());
+        assertTrue(ev.isHidden());
+        assertFalse(ev.isDisabled());
+        assertNull(ev.getDisabledReason());
+        assertFalse(ev.isInvalid());
+        assertNull(ev.getInvalidityReason());
     }
 
     @Test
@@ -59,11 +59,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto("hidden");
 
         // then ... vetoes
-        Assert.assertTrue(ev.isHidden());
-        Assert.assertFalse(ev.isDisabled());
-        Assert.assertNull(ev.getDisabledReason());
-        Assert.assertFalse(ev.isInvalid());
-        Assert.assertNull(ev.getInvalidityReason());
+        assertTrue(ev.isHidden());
+        assertFalse(ev.isDisabled());
+        assertNull(ev.getDisabledReason());
+        assertFalse(ev.isInvalid());
+        assertNull(ev.getInvalidityReason());
     }
 
     @Test
@@ -76,11 +76,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto(reason);
 
         // then ... vetoes
-        Assert.assertTrue(ev.isHidden());
-        Assert.assertFalse(ev.isDisabled());
-        Assert.assertNull(ev.getDisabledReason());
-        Assert.assertFalse(ev.isInvalid());
-        Assert.assertNull(ev.getInvalidityReason());
+        assertTrue(ev.isHidden());
+        assertFalse(ev.isDisabled());
+        assertNull(ev.getDisabledReason());
+        assertFalse(ev.isInvalid());
+        assertNull(ev.getInvalidityReason());
     }
 
     @Test
@@ -90,11 +90,9 @@ public class AbstractDomainEvent_veto_Test {
         final AbstractDomainEvent<?> ev = new AbstractDomainEvent<Object>() {  };
         ev.setEventPhase(AbstractDomainEvent.Phase.DISABLE);
 
-        // expect
-        expectedException.expect(IllegalArgumentException.class);
-
         // when
-        ev.veto((String)null);
+        assertThrows(IllegalArgumentException.class, ()->
+            ev.veto((String)null));
     }
 
     @Test
@@ -107,11 +105,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto(reason);
 
         // then
-        Assert.assertFalse(ev.isHidden());
-        Assert.assertTrue(ev.isDisabled());
-        Assert.assertEquals(reason, ev.getDisabledReason());
-        Assert.assertFalse(ev.isInvalid());
-        Assert.assertNull(ev.getInvalidityReason());
+        assertFalse(ev.isHidden());
+        assertTrue(ev.isDisabled());
+        assertEquals(reason, ev.getDisabledReason());
+        assertFalse(ev.isInvalid());
+        assertNull(ev.getInvalidityReason());
     }
 
     @Test
@@ -124,11 +122,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto(reason);
 
         // then
-        Assert.assertFalse(ev.isHidden());
-        Assert.assertTrue(ev.isDisabled());
-        Assert.assertEquals(reason, ev.getDisabledReasonTranslatable());
-        Assert.assertFalse(ev.isInvalid());
-        Assert.assertNull(ev.getInvalidityReason());
+        assertFalse(ev.isHidden());
+        assertTrue(ev.isDisabled());
+        assertEquals(reason, ev.getDisabledReasonTranslatable());
+        assertFalse(ev.isInvalid());
+        assertNull(ev.getInvalidityReason());
     }
 
     @Test
@@ -137,11 +135,9 @@ public class AbstractDomainEvent_veto_Test {
         // given
         ev.setEventPhase(AbstractDomainEvent.Phase.VALIDATE);
 
-        // expect
-        expectedException.expect(IllegalArgumentException.class);
-
         // when
-        ev.veto((String)null);
+        assertThrows(IllegalArgumentException.class, ()->
+            ev.veto((String)null));
     }
 
     @Test
@@ -155,11 +151,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto(reason);
 
         // then
-        Assert.assertFalse(ev.isHidden());
-        Assert.assertFalse(ev.isDisabled());
-        Assert.assertNull(ev.getDisabledReason());
-        Assert.assertTrue(ev.isInvalid());
-        Assert.assertEquals(reason, ev.getInvalidityReason());
+        assertFalse(ev.isHidden());
+        assertFalse(ev.isDisabled());
+        assertNull(ev.getDisabledReason());
+        assertTrue(ev.isInvalid());
+        assertEquals(reason, ev.getInvalidityReason());
     }
 
     @Test
@@ -173,11 +169,11 @@ public class AbstractDomainEvent_veto_Test {
         ev.veto(reason);
 
         // then
-        Assert.assertFalse(ev.isHidden());
-        Assert.assertFalse(ev.isDisabled());
-        Assert.assertNull(ev.getDisabledReason());
-        Assert.assertTrue(ev.isInvalid());
-        Assert.assertEquals(reason, ev.getInvalidityReasonTranslatable());
+        assertFalse(ev.isHidden());
+        assertFalse(ev.isDisabled());
+        assertNull(ev.getDisabledReason());
+        assertTrue(ev.isInvalid());
+        assertEquals(reason, ev.getInvalidityReasonTranslatable());
     }
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.base;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,6 +36,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
  * <h1>- internal use only -</h1>
@@ -286,6 +288,8 @@ public final class _NullSafe {
     public static boolean isEmpty(final @Nullable long[] array){ return array==null || array.length == 0;}
     public static boolean isEmpty(final @Nullable short[] array){ return array==null || array.length == 0;}
     public static <T> boolean isEmpty(final @Nullable T[] array){ return array==null || array.length == 0;}
+    public static boolean isEmpty(final @Nullable EnumSet<?> enumSet){ return enumSet==null || enumSet.size() == 0;}
+    public static boolean isEmpty(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet==null || enumSet.size() == 0;}
 
     // -- SIZE/LENGTH CHECKS
 
@@ -301,6 +305,8 @@ public final class _NullSafe {
     public static int size(final @Nullable long[] array){ return array!=null ? array.length : 0; }
     public static int size(final @Nullable short[] array){ return array!=null ? array.length : 0; }
     public static <T> int size(final @Nullable T[] array){ return array!=null ? array.length : 0; }
+    public static int size(final @Nullable EnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
+    public static int size(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
 
     // -- TO STRING
 

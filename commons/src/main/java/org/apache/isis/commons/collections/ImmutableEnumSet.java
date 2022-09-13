@@ -72,6 +72,10 @@ implements Iterable<E>, java.io.Serializable {
         return from(EnumSet.allOf(enumType));
     }
 
+    public int size() {
+        return delegate.size();
+    }
+
     public boolean contains(final E element) {
         return delegate.contains(element);
     }
@@ -110,6 +114,5 @@ implements Iterable<E>, java.io.Serializable {
         newEnumSet.remove(entry);
         return from(newEnumSet);
     }
-
 
 }

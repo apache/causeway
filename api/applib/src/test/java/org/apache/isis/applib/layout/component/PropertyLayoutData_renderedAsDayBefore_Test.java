@@ -16,16 +16,16 @@
  */
 package org.apache.isis.applib.layout.component;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class PropertyLayoutData_renderedAsDayBefore_Test {
+class PropertyLayoutData_renderedAsDayBefore_Test {
 
     PropertyLayoutData data;
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         data = new PropertyLayoutData();
 
