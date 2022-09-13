@@ -113,21 +113,8 @@
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <artifactId>isis-core-internaltestvintage</artifactId>
             <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock</artifactId>
-            <scope>test</scope>
-            <exclusions>
-            	<!-- transitively provided by isis-jdk-supplemental -->
-            	<exclusion>
-            		<groupId>org.ow2.asm</groupId>
-            		<artifactId>asm</artifactId>
-            	</exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>

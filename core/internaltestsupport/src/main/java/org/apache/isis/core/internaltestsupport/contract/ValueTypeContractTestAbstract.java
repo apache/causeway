@@ -20,8 +20,8 @@ package org.apache.isis.core.internaltestsupport.contract;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assume.assumeThat;
 
 /**
  * Contract test for value types ({@link #equals(Object) equals} and
@@ -42,7 +41,7 @@ import static org.junit.Assume.assumeThat;
  */
 public abstract class ValueTypeContractTestAbstract<T> {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         assertSizeAtLeast(getObjectsWithSameValue(), 2);
         assertSizeAtLeast(getObjectsWithDifferentValue(), 1);
@@ -101,11 +100,11 @@ public abstract class ValueTypeContractTestAbstract<T> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void comparableEquivalence() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
-            assumeThat(o1 instanceof Comparable, is(true));
+            if(! (o1 instanceof Comparable)) continue;
             Comparable c1 = (Comparable)o1;
 
             for (final T o2 : getObjectsWithSameValue()) {
-                assumeThat(o2 instanceof Comparable, is(true));
+                if(! (o2 instanceof Comparable)) continue;
                 Comparable c2 = (Comparable)o2;
 
                 assertThat(c1.compareTo(c2), is(0));
@@ -113,7 +112,7 @@ public abstract class ValueTypeContractTestAbstract<T> {
             }
 
             for (final T o2 : getObjectsWithDifferentValue()) {
-                assumeThat(o2 instanceof Comparable, is(true));
+                if(! (o2 instanceof Comparable)) continue;
                 Comparable c2 = (Comparable)o2;
 
                 final int x = c1.compareTo(c2);

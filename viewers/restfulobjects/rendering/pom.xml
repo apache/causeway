@@ -49,7 +49,7 @@
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <artifactId>isis-core-internaltestvintage</artifactId>
             <scope>test</scope>
         </dependency>
 
