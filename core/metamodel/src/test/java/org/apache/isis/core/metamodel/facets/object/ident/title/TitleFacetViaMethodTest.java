@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,8 +34,6 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
-//FIXME[ISIS-3207]
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class TitleFacetViaMethodTest
 extends AbstractFacetFactoryJupiterTestCase {
 

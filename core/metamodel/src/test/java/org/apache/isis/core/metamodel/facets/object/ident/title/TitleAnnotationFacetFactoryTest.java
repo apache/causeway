@@ -25,7 +25,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,6 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.Evaluators;
@@ -45,16 +47,27 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 
 import lombok.val;
 
-public class TitleAnnotationFacetFactoryTest
+class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJupiterTestCase {
 
     private TitleAnnotationFacetFactory facetFactory;
 
     @BeforeEach
     public void setUp() throws Exception {
+
+        val mockInteractionService = Mockito.mock(InteractionService.class);
+
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .interactionService(mockInteractionService)
+                .valueSemantic(new IntValueSemantics())
+                .build();
+
+
+        assertNotNull(getInteractionService());
         facetFactory = new TitleAnnotationFacetFactory(metaModelContext);
     }
 
@@ -65,7 +78,9 @@ extends AbstractFacetFactoryJupiterTestCase {
         super.tearDown();
     }
 
-    public static class Customer {
+    // -- SCENARIO 1
+
+    public static class Customer1 {
 
         @Title
         public String someTitle() {
@@ -76,23 +91,27 @@ extends AbstractFacetFactoryJupiterTestCase {
     @Test
     public void testTitleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
         facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, mockMethodRemover, facetedMethod));
+                .forTesting(Customer1.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
-        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;
+        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
+                (TitleFacetViaTitleAnnotation) facet;
 
-        final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
+        final List<Method> titleMethods = Arrays.asList(Customer1.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
             final Evaluators.MethodEvaluator titleEvaluator =
-                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
+                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
+                    .getElseFail(i)
                     .getTitleEvaluator();
 
             assertEquals(titleMethods.get(i),
                     titleEvaluator.getMethod());
         }
     }
+
+    // -- SCENARIO 2
 
     public static class Customer2 {
 
@@ -113,8 +132,6 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     }
 
-  //FIXME[ISIS-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
@@ -124,14 +141,18 @@ extends AbstractFacetFactoryJupiterTestCase {
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
-        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;
+        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
+                (TitleFacetViaTitleAnnotation) facet;
 
-        final List<Method> titleMethods = Arrays.asList(Customer2.class.getMethod("titleElement1"), Customer2.class.getMethod("titleElement3"), Customer2.class.getMethod("titleElement2"));
+        final List<Method> titleMethods = Arrays.asList(
+                Customer2.class.getMethod("titleElement1"),
+                Customer2.class.getMethod("titleElement3"),
+                Customer2.class.getMethod("titleElement2"));
 
-        //final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
             final Evaluators.MethodEvaluator titleEvaluator =
-                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
+                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
+                    .getElseFail(i)
                     .getTitleEvaluator();
 
             assertEquals(titleMethods.get(i),
@@ -145,6 +166,8 @@ extends AbstractFacetFactoryJupiterTestCase {
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 
+    // -- SCENARIO 3
+
     public static class Customer3 {
     }
 
@@ -156,6 +179,8 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
+
+    // -- SCENARIO 4
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Customer4 {
@@ -202,8 +227,6 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     }
 
-  //FIXME[ISIS-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
@@ -217,24 +240,10 @@ extends AbstractFacetFactoryJupiterTestCase {
         facetFactory.process(ProcessClassContext
                 .forTesting(Customer4.class, mockMethodRemover, facetedMethod));
 
-        final Customer4 customer = new Customer4();
-        val objectAdapter = ManagedObject.adaptScalar(getSpecificationLoader(), customer);
+        val objectAdapter = getObjectManager().adapt(new Customer4());
 
         assertThat(objectAdapter.getTitle(),
                 is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
-    }
-
-
-    public static class Customer5 {
-
-        @Title(sequence = "1")
-        public String titleProperty() {
-            return "titleElement1";
-        }
-
-        public String otherProperty() {
-            return null;
-        }
     }
 
 

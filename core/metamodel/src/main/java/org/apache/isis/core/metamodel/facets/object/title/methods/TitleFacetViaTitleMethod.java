@@ -26,6 +26,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
 import org.apache.isis.core.metamodel.facets.ImperativeAspect;
@@ -88,7 +90,10 @@ implements HasImperativeAspect {
             }
             return null;
         } catch (final RuntimeException ex) {
-            val isUnitTesting = getMetaModelContext().getSystemEnvironment().isUnitTesting();
+            val isUnitTesting = Optional.ofNullable(getMetaModelContext())
+                    .map(MetaModelContext::getSystemEnvironment)
+                    .map(IsisSystemEnvironment::isUnitTesting)
+                    .orElse(false);
             if(!isUnitTesting) {
                 log.warn("Failed Title {}", owningAdapter.getSpecification(), ex);
             }

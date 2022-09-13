@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -34,9 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
-//FIXME[ISIS-3207] reflection using MH throws
-// java.lang.IllegalAccessException: access to public member failed: org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacetMethodTest$DomainObjectWithProblemInNavigableParentMethod.parent[Ljava.lang.Object;@3eb631b8/invokeVirtual, from class org.apache.isis.commons.internal.reflection._Reflect (module org.apache.isis.commons)
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class NavigableParentFacetMethodTest {
 
     private NavigableParentFacetViaMethod facet;
