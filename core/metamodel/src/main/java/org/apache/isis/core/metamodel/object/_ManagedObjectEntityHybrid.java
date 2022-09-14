@@ -44,40 +44,40 @@ implements _Refetchable {
      * dynamically mutates from one to the other based on pojo's persistent state;
      * however, the pojo reference must be kept identical
      */
-    private @NonNull Either<_ManagedObjectEntityDetached, _ManagedObjectEntityBookmarked>
+    private @NonNull Either<_ManagedObjectEntityTransient, _ManagedObjectEntityBookmarked>
         eitherDetachedOrBookmarked;
 
     private enum MorphState {
         /** Has no bookmark yet; can be transitioned to BOOKMARKED once
          *  for accompanied pojo, an OID becomes available. */
-        DETACHED,
+        TRANSIENT,
         /** Final state, once we have an OID,
          * regardless of the accompanied pojo's persistent state. */
         BOOKMARKED;
-        public boolean isDetached() { return this == DETACHED; }
+        public boolean isTransient() { return this == TRANSIENT; }
 //        public boolean isBookmarked() { return this == BOOKMARKED; }
         static MorphState valueOf(final EntityState entityState) {
             return entityState.hasOid()
                     ? BOOKMARKED
-                    : DETACHED;
+                    : TRANSIENT;
         }
     }
 
     private MorphState morphState;
 
     _ManagedObjectEntityHybrid(
-            final @NonNull _ManagedObjectEntityDetached detached) {
-        super(ManagedObject.Specialization.ENTITY, detached.getSpecification());
-        this.eitherDetachedOrBookmarked = Either.left(detached);
-        this.morphState = MorphState.DETACHED;
+            final @NonNull _ManagedObjectEntityTransient _transient) {
+        super(ManagedObject.Specialization.ENTITY, _transient.getSpecification());
+        this.eitherDetachedOrBookmarked = Either.left(_transient);
+        this.morphState = MorphState.TRANSIENT;
     }
 
     _ManagedObjectEntityHybrid(
-            final @NonNull _ManagedObjectEntityBookmarked attached) {
-        super(ManagedObject.Specialization.ENTITY, attached.getSpecification());
-        this.eitherDetachedOrBookmarked = Either.right(attached);
+            final @NonNull _ManagedObjectEntityBookmarked bookmarked) {
+        super(ManagedObject.Specialization.ENTITY, bookmarked.getSpecification());
+        this.eitherDetachedOrBookmarked = Either.right(bookmarked);
         this.morphState = MorphState.BOOKMARKED;
-        _Assert.assertTrue(attached.getBookmark().isPresent(),
+        _Assert.assertTrue(bookmarked.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
     }
 
@@ -137,7 +137,7 @@ implements _Refetchable {
     // -- HELPER
 
     private void triggerReassessment() {
-        if(morphState.isDetached()) {
+        if(morphState.isTransient()) {
             _Blackhole.consume(getEntityState());
         }
     }

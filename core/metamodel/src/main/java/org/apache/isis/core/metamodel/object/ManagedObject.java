@@ -458,7 +458,7 @@ extends
                 .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
         return bookmarkIfAny
             .map(bookmark->entityHypridBookmarked(spec, pojo, bookmarkIfAny))
-            .orElseGet(()->entityHybirdDetached(spec, pojo));
+            .orElseGet(()->entityHybirdTransient(spec, pojo));
     }
     // bookmarked hybrid in its final state (cannot transition)
     private static ManagedObject entityHypridBookmarked(
@@ -469,12 +469,12 @@ extends
                         new _ManagedObjectEntityBookmarked(spec, pojo, bookmarkIfKnown));
     }
     // initially detached hybrid that can transition to bookmarked anytime on reassessment
-    private static ManagedObject entityHybirdDetached(
+    private static ManagedObject entityHybirdTransient(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
                 ? new _ManagedObjectEntityHybrid(
-                        new _ManagedObjectEntityDetached(spec, pojo))
+                        new _ManagedObjectEntityTransient(spec, pojo))
                 : empty(spec);
     }
     /**

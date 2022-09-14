@@ -32,14 +32,14 @@ import lombok.experimental.Accessors;
  * (package private) specialization corresponding to a detached {@link Specialization#ENTITY}
  * @see ManagedObject.Specialization#ENTITY
  */
-final class _ManagedObjectEntityDetached
+final class _ManagedObjectEntityTransient
 extends _ManagedObjectSpecified
 implements Bookmarkable.NoBookmark, _Refetchable {
 
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
     private final @NonNull Object pojo;
 
-    _ManagedObjectEntityDetached(
+    _ManagedObjectEntityTransient(
             final ObjectSpecification spec,
             final Object pojo) {
         super(ManagedObject.Specialization.ENTITY, spec);

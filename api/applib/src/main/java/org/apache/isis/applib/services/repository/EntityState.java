@@ -50,7 +50,7 @@ public enum EntityState {
      */
     PERSISTABLE_REMOVED,
     /**
-     * DN/JDO specific on pre-store. Is attached, has no OID yet.
+     * Is attached, has no OID yet. On pre-store.
      */
     PERSISTABLE_ATTACHED_NO_OID,
     /**
@@ -86,6 +86,13 @@ public enum EntityState {
 
     // -- SPECIAL STATES
 
+    /**
+     * @apiNote Is attached, has no OID yet. (On pre-store.)
+     */
+    public boolean isAttachedNoOid() {
+        return this == PERSISTABLE_ATTACHED_NO_OID;
+    }
+
     public boolean isDetachedCannotReattach() {
         return (isDetached()
                 || isRemoved())
@@ -102,14 +109,7 @@ public enum EntityState {
                 || isRemoved();
     }
 
-    // -- JDO/JPA SPECIFIC STATES
-
-    /**
-     * @apiNote DN/JDO specific on pre-store. Is attached, has no OID yet.
-     */
-    public boolean isSpecicalJdoAttachedNoOid() {
-        return this == PERSISTABLE_ATTACHED_NO_OID;
-    }
+    // -- JPA SPECIFIC STATES
 
     /**
      * @apiNote JPA specific. Is detached, but has an OID.
