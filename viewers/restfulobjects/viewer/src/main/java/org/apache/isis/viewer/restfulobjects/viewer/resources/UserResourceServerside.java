@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -113,19 +112,15 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         }
     }
 
-    private void logout(ResourceContext resourceContext) {
-
+    private void logout(final ResourceContext resourceContext) {
         val interactionService = resourceContext.getInteractionService();
-        val interactionLayerTracker = resourceContext.getInteractionLayerTracker();
-        val authenticationManager = resourceContext.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
+        val authenticationManager = resourceContext.getAuthenticationManager();
 
-        interactionLayerTracker
+        interactionService
         .currentInteractionContext()
         .ifPresent(interactionContext->{
-
             authenticationManager.closeSession(interactionContext);
             interactionService.closeInteractionLayers();
-
         });
     }
 

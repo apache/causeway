@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
@@ -41,7 +42,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
  *
  * @since 1.x  {@index}
  */
-public interface IResourceContext {
+public interface IResourceContext extends HasMetaModelContext {
 
     /**
      * Prepends with the servlet's base URI
@@ -74,16 +75,37 @@ public interface IResourceContext {
     List<List<String>> getFollowLinks();
     boolean isValidateOnly();
 
-    boolean honorUiHints();
+    default boolean honorUiHints() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
+    }
 
-    boolean objectPropertyValuesOnly();
+    default boolean objectPropertyValuesOnly() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isObjectPropertyValuesOnly();
+    }
 
-    boolean suppressDescribedByLinks();
-    boolean suppressUpdateLink();
-    boolean suppressMemberId();
-    boolean suppressMemberLinks();
-    boolean suppressMemberExtensions();
-    boolean suppressMemberDisabledReason();
+    default boolean suppressDescribedByLinks() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressDescribedByLinks();
+    }
+
+    default boolean suppressUpdateLink() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressUpdateLink();
+    }
+
+    default boolean suppressMemberId() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberId();
+    }
+
+    default boolean suppressMemberLinks() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberLinks();
+    }
+
+    default boolean suppressMemberExtensions() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberExtensions();
+    }
+
+    default boolean suppressMemberDisabledReason() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberDisabledReason();
+    }
 
     /**
      * To avoid infinite loops when eagerly rendering graphs
@@ -100,7 +122,11 @@ public interface IResourceContext {
      */
     RepresentationService.Intent getIntent();
 
-    InteractionProvider getInteractionProvider();
+    @Deprecated // use directly
+    default InteractionProvider getInteractionProvider() {
+        return getInteractionService();
+    }
+
     MetaModelContext getMetaModelContext();
 
     // -- UTILITY
