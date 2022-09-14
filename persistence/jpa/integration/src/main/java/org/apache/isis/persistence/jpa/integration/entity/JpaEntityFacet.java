@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
+import org.apache.isis.core.metamodel.services.idstringifier.IdStringifierLookupService;
 
 import lombok.NonNull;
 import lombok.val;

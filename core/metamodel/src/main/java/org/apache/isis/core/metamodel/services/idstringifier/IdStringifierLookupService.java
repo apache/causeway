@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.core.runtime.idstringifier;
+package org.apache.isis.core.metamodel.services.idstringifier;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,8 +39,8 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
-import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ import lombok.val;
  * @since 2.0
  */
 @Service
-@Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierLookupService")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".IdStringifierLookupService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class IdStringifierLookupService {

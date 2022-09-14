@@ -69,6 +69,7 @@ open module org.apache.isis.core.metamodel {
     exports org.apache.isis.core.metamodel.services.exceprecog;
     exports org.apache.isis.core.metamodel.services.grid.bootstrap;
     exports org.apache.isis.core.metamodel.services.grid;
+    exports org.apache.isis.core.metamodel.services.idstringifier;
     exports org.apache.isis.core.metamodel.services.ixn;
     exports org.apache.isis.core.metamodel.services.layout;
     exports org.apache.isis.core.metamodel.services.message;
@@ -90,7 +91,11 @@ open module org.apache.isis.core.metamodel {
         //TODO don't expose impl. details
         to org.apache.isis.viewer.wicket.ui, org.apache.isis.core.runtimeservices;
 
-    exports org.apache.isis.core.metamodel.specloader;
+    exports org.apache.isis.core.metamodel.specloader
+        to org.apache.isis.core.runtimeservices,
+        //TODO don't expose to viewers
+        org.apache.isis.viewer.wicket.model, org.apache.isis.viewer.wicket.ui;
+
     exports org.apache.isis.core.metamodel.specloader.validator;
 
     exports org.apache.isis.core.metamodel.util;
@@ -124,6 +129,7 @@ open module org.apache.isis.core.metamodel {
     requires spring.core;
     requires org.apache.isis.core.privileged;
 
+//JUnit testing stuff, not required as long this module is an 'open' one
 //    opens org.apache.isis.core.metamodel.services to spring.core;
 //    opens org.apache.isis.core.metamodel.services.registry to spring.core;
 //    opens org.apache.isis.core.metamodel.services.grid to java.xml.bind;

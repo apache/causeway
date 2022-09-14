@@ -19,7 +19,6 @@
 module org.apache.isis.core.runtime {
     exports org.apache.isis.core.runtime;
     exports org.apache.isis.core.runtime.context;
-    exports org.apache.isis.core.runtime.idstringifier;
     exports org.apache.isis.core.runtime.events;
 
     requires java.annotation;
