@@ -253,9 +253,10 @@ public class JpaEntityFacet
         }
 
         val entityManager = getEntityManager();
+        val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
         if (entityManager.contains(pojo)) {
-            val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
+            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.PERSISTABLE_ATTACHED_NO_OID;
             }
@@ -263,7 +264,7 @@ public class JpaEntityFacet
         }
 
         try {
-            val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
+            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.PERSISTABLE_DETACHED;
             } else {
@@ -274,7 +275,8 @@ public class JpaEntityFacet
                     : EntityState.PERSISTABLE_DETACHED;
             }
         } catch (PersistenceException ex) {
-            // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry) (this was without any weaving)
+            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
+                (this was without any weaving) */
             Throwable cause = ex.getCause();
             if (cause instanceof DescriptorException) {
                 DescriptorException descriptorException = (DescriptorException) cause;
