@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.isis.core.privileged._Privileged;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -103,8 +104,8 @@ extends ViewModelFacetAbstract {
         val constructorTakingMemento = ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
                 .get(viewmodelSpec.getCorrespondingClass())
                 .orElseThrow();
-        val viewmodelPojo = constructorTakingMemento
-                .newInstance(memento);
+        val viewmodelPojo = _Privileged
+                .newInstance(constructorTakingMemento, memento);
         return viewmodelPojo;
     }
 

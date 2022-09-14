@@ -20,21 +20,16 @@ package org.apache.isis.viewer.wicket.ui.test.components.widgets.choices;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.wicketstuff.select2.Response;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel._testing._TestDummies;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.val;
 
 class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
@@ -44,41 +39,12 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
         super.setUp();
     }
 
-    @DomainObject(nature = Nature.VIEW_MODEL)
-    @Data
-    @AllArgsConstructor
-    public static class Customer implements ViewModel {
-
-        private String name;
-
-        @Override
-        public String viewModelMemento() {
-            return name;
-        }
-
-    }
-
-  //FIXME[ISIS-3207]
-    /*
-     * java.lang.IllegalAccessException:
-     * class org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface
-     * (in module org.apache.isis.core.metamodel)
-     * cannot access
-     * class org.apache.isis.viewer.wicket.ui.test.components.widgets.choices.ChoiceProviderForReferencesTest$Customer
-     * (in module org.apache.isis.viewer.wicket.ui)
-     * because module
-     * org.apache.isis.viewer.wicket.ui
-     * does not export
-     * org.apache.isis.viewer.wicket.ui.test.components.widgets.choices
-     * to module org.apache.isis.core.metamodel
-     */
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void roundtrip() {
 
-        val a = new Customer("a");
-        val b = new Customer("b");
-        val c = new Customer("c");
+        val a = new _TestDummies.CustomerAsViewmodel("a");
+        val b = new _TestDummies.CustomerAsViewmodel("b");
+        val c = new _TestDummies.CustomerAsViewmodel("c");
 
         val choiceValues = Can.of(a, b, c);
 
@@ -94,12 +60,13 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
 
         assertEquals(3, mementos.size());
 
+        /* debug
         mementos
         .forEach(memento->{
             System.err.printf("id: %s%n", choiceProvider.getIdValue(memento));
             System.err.printf("title (un-translated):  %s%n", memento.getTitle());
             System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
-        });
+        });*/
 
         val asIds = mementos.map(choiceProvider::getIdValue);
 

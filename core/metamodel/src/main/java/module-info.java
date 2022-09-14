@@ -306,6 +306,7 @@ open module org.apache.isis.core.metamodel {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
+    requires org.apache.isis.core.privileged;
 
 //   opens org.apache.isis.core.metamodel.services to spring.core;
 //   opens org.apache.isis.core.metamodel.services.registry to spring.core;

@@ -19,8 +19,8 @@
 package org.apache.isis.core.codegen.bytebuddy.services;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
+
+import org.apache.isis.core.privileged._Privileged;
 
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -35,12 +35,17 @@ class ClassLoadingStrategyAdvisor {
     final MethodHandle privateLookupMethodHandle;
 
     ClassLoadingStrategyAdvisor() {
-        this.privateLookupMethodHandle = createPrivateLookupMethodHandle();
+        // JDK 9+ required
+        if (!ClassInjector.UsingLookup.isAvailable()) {
+            throw new IllegalStateException("No code generation strategy available");
+        }
+        this.privateLookupMethodHandle = _Privileged.createPrivateLookupMethodHandle();
     }
 
     public ClassLoadingStrategy<ClassLoader> getSuitableStrategy(final Class<?> targetClass) {
         try {
-            Object privateLookup = privateLookupMethodHandle.invoke(targetClass, MethodHandles.lookup());
+            final Object privateLookup = _Privileged
+                    .invokeLookup(privateLookupMethodHandle, targetClass);
             return ClassLoadingStrategy.UsingLookup.of(privateLookup);
         } catch (Throwable e) {
             throw new IllegalStateException(
@@ -48,29 +53,6 @@ class ClassLoadingStrategyAdvisor {
                             targetClass.getName())
                     , e);
         }
-    }
-
-    // -- HELPER
-
-    private MethodHandle createPrivateLookupMethodHandle() {
-
-        // JDK 9+
-        if (!ClassInjector.UsingLookup.isAvailable()) {
-            throw new IllegalStateException("No code generation strategy available");
-        }
-
-        try {
-            Class<?> methodHandles = java.lang.invoke.MethodHandles.class;
-            Method privateLookupIn = methodHandles.getMethod("privateLookupIn",
-                    Class.class,
-                    java.lang.invoke.MethodHandles.Lookup.class);
-
-            MethodHandle mh = MethodHandles.publicLookup().unreflect(privateLookupIn);
-            return mh;
-        } catch (Exception e) {
-            throw new IllegalStateException("No code generation strategy available", e);
-        }
-
     }
 
 }

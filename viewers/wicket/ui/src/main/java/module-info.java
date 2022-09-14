@@ -160,4 +160,5 @@ module org.apache.isis.viewer.wicket.ui {
     requires wicket.bootstrap.themes;
     requires wicket.webjars;
     requires wicketstuff.select2;
+
 }

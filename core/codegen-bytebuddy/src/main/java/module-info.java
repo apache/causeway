@@ -16,36 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel._testing;
+module org.apache.isis.core.codegen.bytebuddy {
+    exports org.apache.isis.core.codegen.bytebuddy.services;
+    exports org.apache.isis.core.codegen.bytebuddy;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-public class _TestDummies {
-
-    public static class WithPostConstruct {
-        @PostConstruct // @PostConstruct is allowed to appear on non-public methods
-        private void thisDoesHaveAnnotation(){}
-    }
-
-    @DomainObject(nature = Nature.VIEW_MODEL)
-    @Data
-    @AllArgsConstructor
-    public static class CustomerAsViewmodel implements ViewModel {
-
-        private String name;
-
-        @Override
-        public String viewModelMemento() {
-            return name;
-        }
-
-    }
-
+    requires net.bytebuddy;
+    requires org.apache.isis.commons;
+    requires org.objenesis;
+    requires spring.context;
+    requires spring.core;
+    requires org.apache.isis.core.privileged;
 }
