@@ -253,13 +253,16 @@ public class JpaEntityFacet
         }
 
         val entityManager = getEntityManager();
+        val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
 
         if (entityManager.contains(pojo)) {
+            if (primaryKey == null) {
+                return EntityState.PERSISTABLE_ATTACHED_NO_OID;
+            }
             return EntityState.PERSISTABLE_ATTACHED;
         }
 
         try {
-            val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.PERSISTABLE_DETACHED;
             } else {
