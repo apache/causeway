@@ -65,7 +65,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
                 RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final UserReprRenderer renderer = new UserReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.includesSelf().with(resourceContext.getInteractionProvider().currentInteractionContextElseFail());
+        renderer.includesSelf().with(resourceContext.getInteractionService().currentInteractionContextElseFail());
 
         return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
     }

@@ -26,10 +26,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
@@ -121,13 +119,6 @@ public interface IResourceContext extends HasMetaModelContext {
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
-
-    @Deprecated // use directly
-    default InteractionProvider getInteractionProvider() {
-        return getInteractionService();
-    }
-
-    MetaModelContext getMetaModelContext();
 
     // -- UTILITY
 
