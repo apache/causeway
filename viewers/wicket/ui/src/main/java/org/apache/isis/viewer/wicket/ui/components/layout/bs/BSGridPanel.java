@@ -26,15 +26,11 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.MixedInMember;
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 public class BSGridPanel
 extends PanelAbstract<ManagedObject, EntityModel> {
@@ -47,22 +43,25 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     public static Optional<BSGridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
 
-        val action = actionModel.getAction();
-        if(action.isMixedIn()) {
-
-            val mixinSpec = ((MixedInMember)action).getMixinType();
-            val targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
-
-            // if we can bootstrap a grid, use it
-            return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
-            .map(bsGrid->{
-                val commonContext = actionModel.getMetaModelContext();
-                val entityModelForMixin =
-                        EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
-                return new BSGridPanel(id, entityModelForMixin, bsGrid);
-            });
-        }
+        //[ISIS-3210] EntityModel.ofAdapter(commonContext, targetAdapterForMixin); not supported for mixins
         return Optional.empty();
+
+//        val action = actionModel.getAction();
+//        if(action.isMixedIn()) {
+//
+//            val mixinSpec = ((MixedInMember)action).getMixinType();
+//            val targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
+//
+//            // if we can bootstrap a grid, use it
+//            return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
+//            .map(bsGrid->{
+//                val commonContext = actionModel.getMetaModelContext();
+//                val entityModelForMixin =
+//                        EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
+//                return new BSGridPanel(id, entityModelForMixin, bsGrid);
+//            });
+//        }
+//        return Optional.empty();
     }
 
 
