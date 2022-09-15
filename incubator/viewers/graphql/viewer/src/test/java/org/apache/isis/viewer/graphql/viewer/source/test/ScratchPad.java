@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.source;
+package org.apache.isis.viewer.graphql.viewer.source.test;
 
 import graphql.Scalars;
 import graphql.schema.*;

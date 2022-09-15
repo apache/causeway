@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.source;
+package org.apache.isis.viewer.graphql.viewer.source.test;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -34,7 +34,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.viewer.graphql.viewer.IsisModuleIncViewerGraphqlViewer;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.TestDomainModule;
+import org.apache.isis.viewer.graphql.viewer.source.test.gqltestdomain.TestDomainModule;
 
 @SpringBootTest(
         classes = {
