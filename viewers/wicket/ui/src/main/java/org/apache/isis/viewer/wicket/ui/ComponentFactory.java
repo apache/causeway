@@ -24,12 +24,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 
 /**
- * Creates {@link Component}s of a specified {@link ComponentType}, optionally
- * {@link #appliesTo(ComponentType, IModel) dependent on} the provided
+ * Creates {@link Component}s of a specified {@link UiComponentType}, optionally
+ * {@link #appliesTo(UiComponentType, IModel) dependent on} the provided
  * {@link IModel model}.
  * <p>
  * This interface is at the very heart of the Wicket Objects' model, being an
@@ -46,10 +46,10 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 public interface ComponentFactory extends Serializable {
 
     /**
-     * The {@link ComponentType} with which this component factory has been
+     * The {@link UiComponentType} with which this component factory has been
      * registered.
      */
-    ComponentType getComponentType();
+    UiComponentType getComponentType();
 
     /**
      * Class of the components this factory creates.
@@ -93,9 +93,9 @@ public interface ComponentFactory extends Serializable {
 
     /**
      * Whether the {@link Component} created by this factory applies to the
-     * specified {@link ComponentType} and {@link IModel}.
+     * specified {@link UiComponentType} and {@link IModel}.
      */
-    ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model);
+    ApplicationAdvice appliesTo(UiComponentType uiComponentType, IModel<?> model);
 
     /**
      * Creates component, with id being derived from the

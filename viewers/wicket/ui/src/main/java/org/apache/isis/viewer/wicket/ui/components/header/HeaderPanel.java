@@ -27,7 +27,7 @@ import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.AvatarImage;
@@ -126,7 +126,7 @@ extends PanelAbstract<String, Model<String>> {
         final MarkupContainer container = this;
         val menuModel = new ServiceActionsModel(super.getMetaModelContext(), menuUiModel);
         val menuBarComponent = getComponentFactoryRegistry()
-                .createComponent(id, ComponentType.SERVICE_ACTIONS, menuModel);
+                .createComponent(id, UiComponentType.SERVICE_ACTIONS, menuModel);
         Wkt.cssAppend(menuBarComponent, menuUiModel.getCssClass());
         container.add(menuBarComponent);
     }

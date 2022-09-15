@@ -32,25 +32,25 @@ class _MixedInMemberFactory {
     // -- MIXINS
 
     Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
-            final ObjectSpecification mixinTypeSpec,
+            final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
         return mixinAction -> new ObjectActionMixedIn(
-                mixinType, mixinMethodName, mixinAction, mixinTypeSpec);
+                mixinType, mixinMethodName, mixinAction, mixeeSpec);
     }
 
     Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
-            final ObjectSpecification mixinTypeSpec,
+            final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
         return mixinAction ->
             mixinAction.getReturnType().isScalar()
                 ? new OneToOneAssociationMixedIn(
-                        mixinAction, mixinTypeSpec, mixinType, mixinMethodName)
+                        mixinAction, mixeeSpec, mixinType, mixinMethodName)
                 : new OneToManyAssociationMixedIn(
-                        mixinAction, mixinTypeSpec, mixinType, mixinMethodName);
+                        mixinAction, mixeeSpec, mixinType, mixinMethodName);
     }
 
 }

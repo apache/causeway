@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.commons;
 
-import org.junit.Test;
+import java.util.Objects;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assume.assumeThat;
 
-public class StringUtils_toLineSeparated {
+class StringUtils_toLineSeparated {
 
     @Test
     public void convertsCarriageReturnToLineSeparator() throws Exception {
@@ -34,18 +34,18 @@ public class StringUtils_toLineSeparated {
 
     @Test
     public void windowsStyleCarriageReturnLeftUnchanged() throws Exception {
-        assumeThatRunningOnWindows(); // ie windows
+        if(!isRunningOnWindows()) return;
         assertThat(StringExtensions.lineSeparated("ok\r\n"), is("ok" + System.getProperty("line.separator")));
     }
 
     @Test
     public void macStyleCarriageReturnLeftUnchanged() throws Exception {
-        assumeThatRunningOnWindows(); // ie windows
+        if(!isRunningOnWindows()) return;
         assertThat(StringExtensions.lineSeparated("ok\r"), is("ok\r"));
     }
 
-    private static void assumeThatRunningOnWindows() {
-        assumeThat(System.getProperty("file.separator"), is(equalTo("\\")));
+    private static boolean isRunningOnWindows() {
+        return Objects.equals(System.getProperty("file.separator"), "\\");
     }
 
 }

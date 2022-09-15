@@ -35,10 +35,10 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
@@ -67,13 +67,13 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     private final String memberId;
     private final Where where;
-    private Can<ParameterUiModelWkt> childModels;
+    private Can<UiParameterWkt> childModels;
     private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
     private @Nullable ScalarParameterModel associatedWithParameterIfAny;
     private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
 
     public static ActionInteractionWkt forEntity(
-            final EntityModel parentEntityModel,
+            final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
@@ -155,12 +155,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     // -- LAZY BINDING
 
-    public Stream<ParameterUiModelWkt> streamParameterUiModels() {
+    public Stream<UiParameterWkt> streamParameterUiModels() {
         if(childModels==null) {
             final int paramCount = actionInteraction().getMetamodel().get().getParameterCount();
-            final int tupleIndex = 0;
             this.childModels = IntStream.range(0, paramCount)
-                    .mapToObj(paramIndex -> new ParameterUiModelWkt(this, paramIndex, tupleIndex))
+                    .mapToObj(paramIndex -> new UiParameterWkt(this, paramIndex))
                     .collect(Can.toCan());
         }
         return childModels.stream();

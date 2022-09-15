@@ -21,7 +21,7 @@ package org.apache.isis.core.internaltestsupport.contract;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * <p>
@@ -50,7 +50,7 @@ public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> 
      * Syntax sugar to remove boilerplate from subclasses.
      */
     @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
+    protected static <E> List<E> listOf(final E... elements) {
         return Arrays.asList(elements);
     }
 

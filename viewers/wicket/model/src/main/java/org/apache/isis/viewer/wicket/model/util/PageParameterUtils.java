@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 
 import lombok.NonNull;
@@ -140,7 +140,7 @@ public class PageParameterUtils {
         return
                 ManagedObjects.isIdentifiable(adapter)
                     && !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                ? EntityModel.ofAdapter(
+                ? UiObjectWkt.ofAdapter(
                     callingEntityModel.getMetaModelContext(),
                     Facets.projected(adapter))
                     .getPageParametersWithoutUiHints()

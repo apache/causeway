@@ -33,11 +33,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.jmock.Expectations;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -45,10 +45,6 @@ import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -58,7 +54,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 
-class MetaModelServiceDefaultTest {
+// keep public for JABX
+public class MetaModelServiceDefaultTest {
 
     ServiceInjector stubServicesInjector;
     MetaModelServiceDefault mockMetaModelService;
@@ -71,56 +68,26 @@ class MetaModelServiceDefaultTest {
     @BeforeEach
     void setUp() throws Exception {
 
-        _Context.clear();
-        JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-
-        mockFacetedMethod = context.mock(FacetedMethod.class);
+        mockFacetedMethod = Mockito.mock(FacetedMethod.class);
         Matcher<Class<? extends Facet>> facetMatcher = _Casts.uncheckedCast(Matchers.any(Class.class));
-        context.checking(new Expectations() {
-            {
-                allowing(mockFacetedMethod).getMetaModelContext();
-                will(returnValue(MetaModelContext_forTesting.buildDefault()));
 
-                allowing(mockFacetedMethod).getFeatureIdentifier();
-                will(returnValue(Identifier.actionIdentifier(
-                        TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
+        Mockito.when(mockFacetedMethod.getMetaModelContext()).thenReturn(MetaModelContext_forTesting.buildDefault());
+        Mockito.when(mockFacetedMethod.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
+              TypeIdentifierTestFactory.newCustomer(), "reduceheadcount"));
+        Mockito.when(mockFacetedMethod.getFacet(Mockito.any(Class.class))).thenReturn(null);
+        Mockito.when(mockFacetedMethod.getParameters()).thenReturn(Can.empty());
 
-                allowing(mockFacetedMethod).getFacet(with(facetMatcher));
-                will(returnValue(null));
-
-                allowing(mockFacetedMethod).getParameters();
-                will(returnValue(Can.empty()));
-            }
-        });
-
-        mockSpec = context.mock(ObjectSpecification.class);
-        context.checking(new Expectations() {
-            {
-                allowing(mockSpec).getFullIdentifier();
-                will(returnValue("mocked"));
-
-                allowing(mockSpec).getLogicalTypeName();
-                will(returnValue("logicalType"));
-
-                allowing(mockSpec).subclasses(Hierarchical.Depth.DIRECT);
-                will(returnValue(Can.empty()));
-
-                allowing(mockSpec).isInjectable();
-                will(returnValue(true));
-            }
-        });
+        mockSpec = Mockito.mock(ObjectSpecification.class);
+        Mockito.when(mockSpec.getFullIdentifier()).thenReturn("mocked");
+        Mockito.when(mockSpec.getLogicalTypeName()).thenReturn("logicalType");
+        Mockito.when(mockSpec.subclasses(Hierarchical.Depth.DIRECT)).thenReturn(Can.empty());
+        Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 
         action = ObjectActionDefault.forMethod(mockFacetedMethod);
 
-        mockMetaModelService = context.mock(MetaModelServiceDefault.class);
-        context.checking(new Expectations() {
-            {
-                allowing(mockMetaModelService).getDomainModel();
-                will(returnValue(new DomainModelDefault(_Lists.of(new DomainMemberDefault(mockSpec, action)))));
-
-            }
-        });
+        mockMetaModelService = Mockito.mock(MetaModelServiceDefault.class);
+        Mockito.when(mockMetaModelService.getDomainModel())
+            .thenReturn(new DomainModelDefault(List.of(new DomainMemberDefault(mockSpec, action))));
 
     }
 

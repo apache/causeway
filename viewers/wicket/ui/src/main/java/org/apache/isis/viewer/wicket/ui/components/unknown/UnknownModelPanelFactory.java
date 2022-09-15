@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
@@ -31,7 +31,7 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public ApplicationAdvice appliesTo(final ComponentType componentType, final IModel<?> model) {
+    public ApplicationAdvice appliesTo(final UiComponentType uiComponentType, final IModel<?> model) {
         return ApplicationAdvice.APPLIES;
     }
 
@@ -41,8 +41,8 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     }
 
     @Override
-    public ComponentType getComponentType() {
-        return ComponentType.UNKNOWN;
+    public UiComponentType getComponentType() {
+        return UiComponentType.UNKNOWN;
     }
 
     @Override

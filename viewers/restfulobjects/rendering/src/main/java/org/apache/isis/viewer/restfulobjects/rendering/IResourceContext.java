@@ -26,9 +26,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Restfulobjects;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
@@ -41,7 +41,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
  *
  * @since 1.x  {@index}
  */
-public interface IResourceContext {
+public interface IResourceContext extends HasMetaModelContext {
 
     /**
      * Prepends with the servlet's base URI
@@ -74,16 +74,9 @@ public interface IResourceContext {
     List<List<String>> getFollowLinks();
     boolean isValidateOnly();
 
-    boolean honorUiHints();
-
-    boolean objectPropertyValuesOnly();
-
-    boolean suppressDescribedByLinks();
-    boolean suppressUpdateLink();
-    boolean suppressMemberId();
-    boolean suppressMemberLinks();
-    boolean suppressMemberExtensions();
-    boolean suppressMemberDisabledReason();
+    default Restfulobjects config() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects();
+    }
 
     /**
      * To avoid infinite loops when eagerly rendering graphs
@@ -99,9 +92,6 @@ public interface IResourceContext {
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
-
-    InteractionProvider getInteractionProvider();
-    MetaModelContext getMetaModelContext();
 
     // -- UTILITY
 

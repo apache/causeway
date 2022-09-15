@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.lang.Args;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 
 import de.agilecoders.wicket.jquery.util.Strings2;
 
@@ -46,9 +46,9 @@ public final class WktComponents {
     /**
      * @see #permanentlyHide(MarkupContainer, String...)
      */
-    public static void permanentlyHide(final MarkupContainer container, final ComponentType... componentIds) {
-        for (final ComponentType componentType : componentIds) {
-            permanentlyHideSingle(container, componentType.getId());
+    public static void permanentlyHide(final MarkupContainer container, final UiComponentType... componentIds) {
+        for (final UiComponentType uiComponentType : componentIds) {
+            permanentlyHideSingle(container, uiComponentType.getId());
         }
     }
 
@@ -75,9 +75,9 @@ public final class WktComponents {
     /**
      * @see #setVisible(MarkupContainer, boolean, String...)
      */
-    public static void setVisible(final MarkupContainer container, final boolean visibility, final ComponentType... componentTypes) {
-        for (final ComponentType componentType : componentTypes) {
-            setVisible(container, visibility, componentType.getId());
+    public static void setVisible(final MarkupContainer container, final boolean visibility, final UiComponentType... componentTypes) {
+        for (final UiComponentType uiComponentType : componentTypes) {
+            setVisible(container, visibility, uiComponentType.getId());
         }
     }
 

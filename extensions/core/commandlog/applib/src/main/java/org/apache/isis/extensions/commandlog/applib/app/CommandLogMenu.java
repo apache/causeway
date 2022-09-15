@@ -23,9 +23,10 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;

@@ -18,20 +18,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -47,10 +47,8 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public class ObjectAssociationAbstractTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+@ExtendWith(MockitoExtension.class)
+class ObjectAssociationAbstractTest {
 
     @Mock private ObjectSpecification objectSpecification;
     @Mock private ServiceInjector mockServicesInjector;
@@ -68,18 +66,11 @@ public class ObjectAssociationAbstractTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
         facetedMethod = FacetedMethod.createForProperty(mmc , Customer.class, "firstName");
-
-        context.checking(new Expectations() {{
-            //            allowing(mockServicesInjector).getSpecificationLoader();
-            //            will(returnValue(mockSpecificationLoader));
-            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            //            will(returnValue(mockPersistenceSessionServiceInternal));
-        }});
 
         objectAssociation = new ObjectAssociationAbstract(
                 facetedMethod.getFeatureIdentifier(),
@@ -187,18 +178,9 @@ public class ObjectAssociationAbstractTest {
     }
 
     private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, final Precedence precedence) {
-        final T facet = context.mock(typeToMock);
-        context.checking(new Expectations() {
-            {
-                allowing(facet).facetType();
-                will(returnValue(typeToMock));
-
-                allowing(facet).getPrecedence();
-                will(returnValue(precedence));
-
-                ignoring(facet);
-            }
-        });
+        final T facet = Mockito.mock(typeToMock);
+        Mockito.when(facet.facetType()).thenReturn(_Casts.uncheckedCast(typeToMock));
+        Mockito.when(facet.getPrecedence()).thenReturn(precedence);
         return facet;
     }
 }

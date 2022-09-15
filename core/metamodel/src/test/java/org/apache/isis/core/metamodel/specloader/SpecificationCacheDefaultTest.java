@@ -18,61 +18,49 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class SpecificationCacheDefaultTest {
-    
+class SpecificationCacheDefaultTest {
+
     private LogicalType cus = _LogicalTypeTestFactory.cus();
     private LogicalType ord = _LogicalTypeTestFactory.ord();
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    ObjectSpecification customerSpec;
+    ObjectSpecification orderSpec;
 
-    @Mock
-    private ObjectSpecification customerSpec;
-    @Mock
-    private ObjectSpecification orderSpec;
+    private SpecificationCache<ObjectSpecification> specificationCache =
+            new SpecificationCacheDefault<>();
+    private LogicalTypeResolver logicalTypeResolver =
+            new LogicalTypeResolverDefault();
 
-    private SpecificationCache<ObjectSpecification> specificationCache = new SpecificationCacheDefault<>();
-    private LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
-
-    @Before
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @BeforeEach
     public void setUp() throws Exception {
 
-        context.checking(new Expectations() {{
-            allowing(customerSpec).getCorrespondingClass();
-            will(returnValue(Customer.class));
+        customerSpec = Mockito.mock(ObjectSpecification.class);
+        orderSpec = Mockito.mock(ObjectSpecification.class);
 
-            allowing(customerSpec).getLogicalType();
-            will(returnValue(cus));
-            
-            allowing(orderSpec).getCorrespondingClass();
-            will(returnValue(Order.class));
-            
-            allowing(orderSpec).getLogicalType();
-            will(returnValue(ord));
-            
-        }});
+        Mockito.when(customerSpec.getCorrespondingClass()).thenReturn((Class)Customer.class);
+        Mockito.when(customerSpec.getLogicalType()).thenReturn(cus);
+
+        Mockito.when(orderSpec.getCorrespondingClass()).thenReturn((Class)Order.class);
+        Mockito.when(orderSpec.getLogicalType()).thenReturn(ord);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         specificationCache = null;
     }
@@ -87,7 +75,7 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void get_whenCached() {
-        
+
         specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
 
         final ObjectSpecification objectSpecification = specificationCache.lookup(Customer.class)
@@ -115,9 +103,9 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenSet() {
-        
+
         specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
-        
+
         val objectSpec = specificationCache.lookup(Customer.class).orElse(null);
 
         assertSame(objectSpec, customerSpec);

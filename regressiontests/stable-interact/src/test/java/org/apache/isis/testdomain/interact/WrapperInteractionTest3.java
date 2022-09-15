@@ -26,8 +26,13 @@ import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -42,10 +47,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -107,7 +108,7 @@ extends InteractionTestAbstract {
 
         // an abstract mixin class
         abstract class MixinAbstract {
-            public Task act(Task.Outcome outcome) {
+            public Task act(final Task.Outcome outcome) {
                 Task.this.outcome = outcome;
                 return Task.this;
             }
@@ -140,6 +141,8 @@ extends InteractionTestAbstract {
                 .count());
     }
 
+  //FIXME[ISIS-3207]
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void mixinActionValidation() {
 

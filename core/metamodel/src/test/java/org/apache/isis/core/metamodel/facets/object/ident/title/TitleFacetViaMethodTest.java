@@ -20,27 +20,26 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
-public class TitleFacetViaMethodTest
-extends AbstractFacetFactoryJUnit4TestCase {
+class TitleFacetViaMethodTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     private TitleFacetViaTitleMethod facet;
 
-    @Mock private ManagedObject mockOwningAdapter;
-
+    private ManagedObject mockOwningAdapter;
     private DomainObjectWithProblemInItsTitleMethod pojo;
     private MetaModelContext metaModelContext;
 
@@ -50,7 +49,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -65,15 +64,11 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .orElse(null);
 
 
-        context.checking(new Expectations() {{
+        mockOwningAdapter = Mockito.mock(ManagedObject.class);
+        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
 
-            allowing(mockFacetHolder).getMetaModelContext();
-            will(returnValue(metaModelContext));
-
-            allowing(mockOwningAdapter).getPojo();
-            will(returnValue(pojo));
-
-        }});
+        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
     }
 
     @Test

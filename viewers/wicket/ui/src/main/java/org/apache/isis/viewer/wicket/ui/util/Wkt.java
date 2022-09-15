@@ -87,7 +87,7 @@ import org.apache.isis.commons.internal.functions._Functions.SerializableFunctio
 import org.apache.isis.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
@@ -571,7 +571,33 @@ public class Wkt {
             final String id,
             final String initialCaption,
             final IModel<List<FileUpload>> model) {
-        val fileUploadField = new BootstrapFileInputField(id, model);
+        val fileUploadField = new BootstrapFileInputField(id, model) {
+            private static final long serialVersionUID = 1L;
+//            @Override
+//            public void convertInput() {
+//                super.convertInput(); // keep side-effects
+//                if(!isRequired()) {return;}
+//                /*[ISIS-3203]: in the context of mandatory property or action parameter negotiation,
+//                 * we need to set the converted input to something other than null, even an empty list will do
+//                 */
+//                if(isConvertedInputNull()
+//                        && !isModelEmpty()) {
+//                    super.setConvertedInput(Collections.emptyList()); // always pass
+//                }
+//            }
+//            @Override
+//            public boolean checkRequired() {
+//                super.checkRequired(); // keep side-effects
+//                return true; // always pass otherwise workaround won't work
+//            }
+//            private boolean isModelEmpty() { return getModel().getObject()==null; }
+//            private boolean isConvertedInputNull() { return getConvertedInput()==null; }
+            @Override
+            public boolean isRequired() {
+                //FIXME[ISIS-3203]
+                return false; // nothing else worked yet
+            }
+        };
         fileUploadField.getConfig()
             .maxFileCount(1)
             .mainClass("input-group-sm")
@@ -685,9 +711,9 @@ public class Wkt {
 
     /**
      *  Whether to escape the underlying String for rendering
-     *  is dynamically based on the provided {@link StringForRendering}.
+     *  is dynamically based on the provided {@link UiString}.
      */
-    public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<StringForRendering> labelModel) {
+    public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<UiString> labelModel) {
         val label = new Label(id, ()->labelModel.get().getString()) {
             private static final long serialVersionUID = 1L;
             // we are using this method as a hook to update the ESCAPE flag before rendering

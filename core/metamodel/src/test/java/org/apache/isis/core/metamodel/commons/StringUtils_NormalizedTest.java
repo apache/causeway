@@ -18,47 +18,37 @@
  */
 package org.apache.isis.core.metamodel.commons;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.stream.Stream;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(Parameterized.class)
-public class StringUtils_NormalizedTest {
+class StringUtils_NormalizedTest {
 
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { null, null, }, // null
-            { "", "", }, // empty string
-            { "yada Foobar", "yada Foobar", }, // alreadyNormalized
-            { "Yada\tFoobar", "Yada Foobar", }, // tab
-            { "Yada\t Foobar", "Yada Foobar", }, // tab and space
-            { "Yada  foobar", "Yada foobar", }, // two spaces
-            { "Yada\nfoobar", "Yada foobar", }, // new line
-            { "Yada\n Foobar", "Yada Foobar", }, // newline and space
-            { "Yada\r\n Foobar", "Yada Foobar", }, // windows newline
-            { "Yada\r Foobar", "Yada Foobar", }, // macos newline
-            { "Yada\r \tFoo \n\tbar  Baz", "Yada Foo bar Baz", }, // multiple
-        });
-    }
-
-    private final String input;
-    private final String expected;
-
-    public StringUtils_NormalizedTest(final String input, final String expected) {
-        this.input = input;
-        this.expected = expected;
-    }
-
-    @Test
-    public void normalizesOk() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void normalizesOk(final String input, final String expected) {
         assertThat(StringExtensions.normalized(input), is(expected));
+    }
+
+    private static Stream<Arguments> data() {
+        return Stream.of(
+          Arguments.of(null, null), // null
+          Arguments.of("", ""), // empty string
+          Arguments.of("yada Foobar", "yada Foobar"), // alreadyNormalized
+          Arguments.of("Yada\tFoobar", "Yada Foobar"), // tab
+          Arguments.of("Yada\t Foobar", "Yada Foobar"), // tab and space
+          Arguments.of("Yada  foobar", "Yada foobar"), // two spaces
+          Arguments.of("Yada\nfoobar", "Yada foobar"), // new line
+          Arguments.of("Yada\n Foobar", "Yada Foobar"), // newline and space
+          Arguments.of("Yada\r\n Foobar", "Yada Foobar"), // windows newline
+          Arguments.of("Yada\r Foobar", "Yada Foobar"), // macos newline
+          Arguments.of("Yada\r \tFoo \n\tbar  Baz", "Yada Foo bar Baz") // multiple
+        );
     }
 
 }

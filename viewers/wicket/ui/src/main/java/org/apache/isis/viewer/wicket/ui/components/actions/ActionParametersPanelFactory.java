@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -34,7 +34,7 @@ public class ActionParametersPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ActionParametersPanelFactory() {
-        super(ComponentType.ACTION_PROMPT, ActionParametersPanel.class);
+        super(UiComponentType.ACTION_PROMPT, ActionParametersPanel.class);
     }
 
     @Override

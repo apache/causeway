@@ -32,7 +32,7 @@ import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
@@ -121,8 +121,8 @@ public class MarkupComponent extends WebComponent {
         if(model instanceof ScalarPropertyModel) {
             return Optional.of(((ScalarPropertyModel)model).getMetaModel());
         }
-        if(model instanceof ParameterUiModel) {
-            return Optional.of(((ParameterUiModel)model).getMetaModel());
+        if(model instanceof UiParameter) {
+            return Optional.of(((UiParameter)model).getMetaModel());
         }
         if(model instanceof ValueModel) {
             return Optional.ofNullable(((ValueModel)model).getActionModelHint())

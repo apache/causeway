@@ -25,8 +25,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -48,7 +48,7 @@ public abstract class EncodabilityContractTest {
         super();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         serializable = createEncodable();
         authContext = InteractionContext.ofUserWithSystemDefaults(
@@ -73,7 +73,7 @@ public abstract class EncodabilityContractTest {
     }
 
     @SneakyThrows
-    private static <T extends Serializable> T doRoundTrip(T serializable) {
+    private static <T extends Serializable> T doRoundTrip(final T serializable) {
 
         val buffer = new ByteArrayOutputStream();
 

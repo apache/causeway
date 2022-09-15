@@ -23,7 +23,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -83,14 +83,14 @@ extends ChoiceProviderAbstractForScalarModel {
     private Can<ObjectMemento> queryWithAutoComplete(final String term) {
         val scalarModel = scalarModel();
         val pendingArgs = scalarModel.isParameter()
-                ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
+                ? ((UiParameter)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         val pendingArgMementos = pendingArgs
                 .map(ManagedObject::getMementoElseFail);
 
         if(scalarModel.isParameter()) {
             // recover any pendingArgs
-            val paramModel = (ParameterUiModel)scalarModel;
+            val paramModel = (UiParameter)scalarModel;
 
             paramModel
                 .getParameterNegotiationModel()
@@ -104,7 +104,7 @@ extends ChoiceProviderAbstractForScalarModel {
     }
 
     private Can<ManagedObject> reconstructPendingArgs(
-            final ParameterUiModel parameterModel,
+            final UiParameter parameterModel,
             final Can<ObjectMemento> pendingArgMementos) {
 
         val pendingArgsList = _NullSafe.stream(pendingArgMementos)

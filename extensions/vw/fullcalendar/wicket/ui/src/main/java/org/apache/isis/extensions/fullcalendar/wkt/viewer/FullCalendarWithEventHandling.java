@@ -29,7 +29,7 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
@@ -73,7 +73,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         val managedObject = objectManager
                 .loadObject(ProtoObject.resolveElseFail(specificationLoader, bookmark));
 
-        final EntityModel entityModel = EntityModel.ofAdapter(commonContext, managedObject);
+        final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(commonContext, managedObject);
 
         val pageParameters = entityModel.getPageParameters();
         if(pageParameters!=null) {

@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -32,12 +32,12 @@ public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityLinkSimplePanelFactory() {
-        super(ComponentType.ENTITY_LINK, EntityLinkSimplePanel.class);
+        super(UiComponentType.ENTITY_LINK, EntityLinkSimplePanel.class);
     }
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (model instanceof EntityModel) {
+        if (model instanceof UiObjectWkt) {
             return ApplicationAdvice.APPLIES;
         }
         if (model instanceof ScalarModel) {

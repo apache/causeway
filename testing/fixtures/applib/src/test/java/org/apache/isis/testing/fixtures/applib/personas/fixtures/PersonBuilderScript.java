@@ -21,7 +21,6 @@
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
 import javax.inject.Inject;
-import javax.resource.spi.work.ExecutionContext;
 
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
 import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
@@ -36,7 +35,7 @@ public class PersonBuilderScript extends BuilderScriptWithResult<Person> {
     private final Person_persona persona;
 
     @Override
-    protected Person buildResult(ExecutionContext ec) {
+    protected Person buildResult(final ExecutionContext ec) {
         return customerRepository.create(persona.getFirstName(), persona.getLastName(), persona.getAge());
     }
 

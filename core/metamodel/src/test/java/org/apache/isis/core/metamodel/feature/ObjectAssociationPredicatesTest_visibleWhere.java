@@ -18,131 +18,81 @@
  */
 package org.apache.isis.core.metamodel.feature;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+class ObjectAssociationPredicatesTest_visibleWhere {
 
-@RunWith(Parameterized.class)
-public class ObjectAssociationPredicatesTest_visibleWhere {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
     private ObjectAssociation mockObjectAssociation;
-
-    @Mock
     private HiddenFacet mockHiddenFacet;
 
-    // given
-    private Where where;
-
-    // when
-    private Where whereContext;
-
-    // then
-    private boolean expectedVisibility;
-
-
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-            {Where.ANYWHERE, Where.ANYWHERE, false},
-            {Where.OBJECT_FORMS, Where.OBJECT_FORMS, false},
-            {Where.OBJECT_FORMS, Where.ALL_TABLES, true},
-            {Where.OBJECT_FORMS, Where.PARENTED_TABLES, true},
-            {Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true},
-            {Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true},
-            {Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true},
-            {Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true},
-            {Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true},
-            {Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false},
-            {Where.PARENTED_TABLES, Where.OBJECT_FORMS, true},
-            {Where.PARENTED_TABLES, Where.PARENTED_TABLES, false},
-            {Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true},
-            {Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true},
-            {Where.ALL_TABLES, Where.OBJECT_FORMS, true},
-            {Where.ALL_TABLES, Where.PARENTED_TABLES, false},
-            {Where.ALL_TABLES, Where.STANDALONE_TABLES, false},
-            {Where.ALL_TABLES, Where.REFERENCES_PARENT, true},
-        });
-    }
-
-    public ObjectAssociationPredicatesTest_visibleWhere(
-            final Where where, final Where context, final boolean visible) {
-        this.where = where;
-        this.whereContext = context;
-        this.expectedVisibility = visible;
-    }
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        context.checking(new Expectations(){{
-            allowing(mockHiddenFacet).where();
-            will(returnValue(where));
-
-            allowing(mockObjectAssociation).streamFacets();
-            will(returnValue(_Lists.of(mockHiddenFacet).stream()));
-        }});
+        mockHiddenFacet = Mockito.mock(HiddenFacet.class);
+        mockObjectAssociation = Mockito.mock(ObjectAssociation.class);
     }
 
-    //    private Matcher<Class<? extends Facet>> subclassOf(final Class<?> cls) {
-    //        return new TypeSafeMatcher<Class<? extends Facet>>() {
-    //            @Override
-    //            protected boolean matchesSafely(final Class<? extends Facet> item) {
-    //                return cls.isAssignableFrom(cls);
-    //            }
-    //
-    //            @Override
-    //            public void describeTo(final Description description) {
-    //                description.appendText("subclass of " + cls.getName());
-    //            }
-    //        };
-    //    }
+    private static Stream<Arguments> data() {
+        return Stream.of(
+          Arguments.of(Where.ANYWHERE, Where.ANYWHERE, false),
+          Arguments.of(Where.OBJECT_FORMS, Where.OBJECT_FORMS, false),
+          Arguments.of(Where.OBJECT_FORMS, Where.ALL_TABLES, true),
+          Arguments.of(Where.OBJECT_FORMS, Where.PARENTED_TABLES, true),
+          Arguments.of(Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true),
+          Arguments.of(Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true),
+          Arguments.of(Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true),
+          Arguments.of(Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true),
+          Arguments.of(Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true),
+          Arguments.of(Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false),
+          Arguments.of(Where.PARENTED_TABLES, Where.OBJECT_FORMS, true),
+          Arguments.of(Where.PARENTED_TABLES, Where.PARENTED_TABLES, false),
+          Arguments.of(Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true),
+          Arguments.of(Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true),
+          Arguments.of(Where.ALL_TABLES, Where.OBJECT_FORMS, true),
+          Arguments.of(Where.ALL_TABLES, Where.PARENTED_TABLES, false),
+          Arguments.of(Where.ALL_TABLES, Where.STANDALONE_TABLES, false),
+          Arguments.of(Where.ALL_TABLES, Where.REFERENCES_PARENT, true)
+        );
+    }
 
-    @Test
-    public void test() {
-        final Predicate<ObjectAssociation> predicate = new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation association) {
-                final List<Facet> facets = association.streamFacets()
-                        .filter(new Predicate<Facet>() {
-                            @Override public boolean test(final Facet facet) {
-                                return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
-                            }
-                        })
-                        .collect(Collectors.toList());
-                for (Facet facet : facets) {
-                    final WhereValueFacet wawF = (WhereValueFacet) facet;
-                    if (wawF.where().includes(whereContext)) {
-                        return false;
-                    }
+    @ParameterizedTest
+    @MethodSource("data")
+    public void visibleWhere(
+            final Where where, final Where whereContext, final boolean expectedVisibility) {
+        Mockito.when(mockHiddenFacet.where()).thenReturn(where);
+        Mockito.when(mockObjectAssociation.streamFacets())
+            .thenReturn(_Lists.<Facet>of(mockHiddenFacet).stream());
+
+        final Predicate<ObjectAssociation> predicate = association -> {
+            final List<Facet> facets = association.streamFacets()
+                    .filter(facet -> facet instanceof WhereValueFacet
+                            && facet instanceof HiddenFacet)
+                    .collect(Collectors.toList());
+            for (Facet facet : facets) {
+                final WhereValueFacet wawF = (WhereValueFacet) facet;
+                if (wawF.where().includes(whereContext)) {
+                    return false;
                 }
-                return true;
             }
+            return true;
         };
         assertThat(predicate.test(mockObjectAssociation), is(expectedVisibility));
     }

@@ -30,12 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
-public class ComparatorsTest {
+class ComparatorsTest {
 
 
     @Test
     void nullArgumentLeftAndRigth() throws Exception {
-        assertEquals(0, 
+        assertEquals(0,
                 _Comparators.deweyOrderCompare(null, null));
     }
 
@@ -131,15 +131,15 @@ public class ComparatorsTest {
                 );
     }
 
-    private static Collection<String> ofS(String... str) {
+    private static Collection<String> ofS(final String... str) {
         return Arrays.asList(str);
     }
 
-    private static List<String> ofL(String... str) {
+    private static List<String> ofL(final String... str) {
         return _Lists.newArrayList(ofS(str));
     }
 
-    private static void assertThatSorting(Collection<String> input, List<String> expected) {
+    private static void assertThatSorting(final Collection<String> input, final List<String> expected) {
         final SortedSet<String> treeSet = new TreeSet<String>(_Comparators.deweyOrderComparator);
         treeSet.addAll(input);
         assertEquals(expected, _Lists.newArrayList(treeSet));

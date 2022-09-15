@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
@@ -60,8 +59,10 @@ import lombok.Setter;
 import lombok.val;
 
 public class ResourceContext
-extends RuntimeContextBase
 implements IResourceContext {
+
+    @Getter(onMethod_={@Override})
+    private MetaModelContext metaModelContext;
 
     @Getter private final HttpHeaders httpHeaders;
     @Getter private final Request request;
@@ -97,7 +98,7 @@ implements IResourceContext {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Map<String, String[]> requestParams) {
 
-        super(metaModelContext);
+        this.metaModelContext = metaModelContext;
 
         this.httpHeaders = httpHeaders;
         //not used ... this.providers = providers;
@@ -222,53 +223,12 @@ implements IResourceContext {
 
     // -- canEagerlyRender
     private Set<Bookmark> rendered = _Sets.newHashSet();
+
     @Override
     public boolean canEagerlyRender(final ManagedObject objectAdapter) {
         return ManagedObjects.bookmark(objectAdapter)
         .map(rendered::add)
         .orElse(true);
-    }
-
-    // -- configuration settings
-
-    @Override
-    public boolean honorUiHints() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
-    }
-
-    @Override
-    public boolean objectPropertyValuesOnly() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isObjectPropertyValuesOnly();
-    }
-
-    @Override
-    public boolean suppressDescribedByLinks() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressDescribedByLinks();
-    }
-
-    @Override
-    public boolean suppressUpdateLink() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressUpdateLink();
-    }
-
-    @Override
-    public boolean suppressMemberId() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberId();
-    }
-
-    @Override
-    public boolean suppressMemberLinks() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberLinks();
-    }
-
-    @Override
-    public boolean suppressMemberExtensions() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberExtensions();
-    }
-
-    @Override
-    public boolean suppressMemberDisabledReason() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberDisabledReason();
     }
 
     @Override
@@ -293,6 +253,5 @@ implements IResourceContext {
     @Getter(onMethod = @__(@Override))
     @Setter //(onMethod = @__(@Override))
     private ObjectAdapterLinkTo objectAdapterLinkTo;
-
 
 }

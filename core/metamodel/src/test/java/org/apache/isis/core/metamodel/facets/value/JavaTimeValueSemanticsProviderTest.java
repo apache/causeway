@@ -23,9 +23,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.annotation.TimePrecision;
@@ -44,7 +44,7 @@ import lombok.val;
 /**
  * Testing the LocalDateTimeValueSemantics under the hood.
  */
-public class JavaTimeValueSemanticsProviderTest
+class JavaTimeValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
 
     @SuppressWarnings("deprecation")

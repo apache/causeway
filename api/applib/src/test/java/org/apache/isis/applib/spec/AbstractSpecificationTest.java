@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.spec;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -28,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.spec.AbstractSpecification.Nullability;
 import org.apache.isis.applib.spec.AbstractSpecification.TypeChecking;
 
-public class AbstractSpecificationTest {
+class AbstractSpecificationTest {
 
     private static class SomeDomainObject {
     }

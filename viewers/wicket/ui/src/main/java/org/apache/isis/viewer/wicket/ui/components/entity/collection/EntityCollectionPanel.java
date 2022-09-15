@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -51,10 +51,10 @@ import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
- * the provided {@link EntityModel}.
+ * the provided {@link UiObjectWkt}.
  */
 public class EntityCollectionPanel
-extends PanelAbstract<ManagedObject, EntityModel>
+extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -76,7 +76,7 @@ implements HasDynamicallyVisibleContent {
 
     private final WebMarkupContainer div;
 
-    public EntityCollectionPanel(final String id, final EntityModel entityModel) {
+    public EntityCollectionPanel(final String id, final UiObjectWkt entityModel) {
         super(id, entityModel);
 
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);

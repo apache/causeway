@@ -23,19 +23,17 @@ import java.util.Optional;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -43,133 +41,104 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptSty
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
     IsisConfiguration stubConfiguration = new IsisConfiguration(null);
 
-    @Mock
     FacetHolder mockFacetHolder;
-
-    @Mock
     PropertyLayout mockPropertyLayout;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        mockPropertyLayout = Mockito.mock(PropertyLayout.class);
+    }
 
     public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
 
         @Test
         public void when_annotated_with_dialog() throws Exception {
 
-            context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(PromptStyle.DIALOG));
-
-                //never(stubConfiguration); //can only set expectations on mock objects
-            }});
+            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.DIALOG);
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                     .orElse(null);
 
-            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
-            Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
+            assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            assertThat(facet.value(), is(PromptStyle.DIALOG));
         }
 
         @Test
         public void when_annotated_with_inline() throws Exception {
 
-            context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(PromptStyle.INLINE));
-
-                //never(stubConfiguration); //can only set expectations on mock objects
-            }});
-
+            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.INLINE);
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                     .orElse(null);
 
-            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
-            Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
+            assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
         @Test
         public void when_annotated_with_as_configured() throws Exception {
 
             stubConfiguration.getViewer().getWicket().setPromptStyle(PromptStyle.INLINE);
-            context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
-                will(returnValue(false));
-            }});
+            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
+            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
+            .thenReturn(false);
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                     .orElse(null);
 
-            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
-            Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
+            assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
+            assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
         @Test
         public void when_annotated_with_as_configured_but_already_has_doop_facet() throws Exception {
 
-            context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(PromptStyle.AS_CONFIGURED));
-
-                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
-                will(returnValue(true));
-
-            }});
+            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
+            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
+            .thenReturn(true);
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                     .orElse(null);
 
-            Assert.assertThat(facet, is(nullValue()));
+            assertThat(facet, is(nullValue()));
         }
 
         @Test
         public void when_not_annotated() throws Exception {
 
-            context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(PromptStyle.NOT_SPECIFIED));
-
-                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
-                will(returnValue(false));
-            }});
+            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.NOT_SPECIFIED);
+            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
+            .thenReturn(false);
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                     .orElse(null);
 
-            Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
-            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
+            assertThat(facet.value(), is(PromptStyle.INLINE));
+            assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
         }
 
         @Test
         public void when_not_annotated_but_already_has_doop_facet() throws Exception {
 
-            context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).promptStyle();
-                will(returnValue(PromptStyle.NOT_SPECIFIED));
-
-                allowing(mockFacetHolder).containsNonFallbackFacet(PromptStyleFacet.class);
-                will(returnValue(true));
-
-            }});
+            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.NOT_SPECIFIED);
+            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
+            .thenReturn(true);
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                     .orElse(null);
 
-            Assert.assertThat(facet, is(nullValue()));
+            assertThat(facet, is(nullValue()));
         }
-
 
     }
 

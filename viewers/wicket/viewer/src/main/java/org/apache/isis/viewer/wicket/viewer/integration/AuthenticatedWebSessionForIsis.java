@@ -31,18 +31,17 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.isis.HasAmendableInteractionContext;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
@@ -61,7 +60,7 @@ extends AuthenticatedWebSession
 implements
     BreadcrumbModelProvider,
     BookmarkedPagesModelProvider,
-    HasMetaModelContext,
+    HasCommonContext,
     HasAmendableInteractionContext {
 
     private static final long serialVersionUID = 1L;
@@ -270,10 +269,6 @@ implements
 
     protected Can<SessionSubscriber> getSessionLoggingServices() {
         return getServiceRegistry().select(SessionSubscriber.class);
-    }
-
-    protected InteractionService getInteractionService() {
-        return lookupServiceElseFail(InteractionService.class);
     }
 
     private VirtualClock virtualClock() {

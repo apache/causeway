@@ -25,6 +25,9 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -33,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 
-public class CollectionAnnotationFacetFactoryTest_typeOf
+class CollectionAnnotationFacetFactoryTest_typeOf
 extends AbstractFacetFactoryTest {
 
     private CollectionAnnotationFacetFactory facetFactory;

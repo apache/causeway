@@ -32,14 +32,14 @@ import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.BSGridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -221,7 +221,7 @@ extends IndicatingAjaxLink<ManagedObject> {
         val actionParametersPanel = (ActionParametersPanel)
                 getComponentFactoryRegistry()
                 .createComponent(actionPrompt.getContentId(),
-                        ComponentType.ACTION_PROMPT,
+                        UiComponentType.ACTION_PROMPT,
                         actionModel);
 
         actionParametersPanel.setShowHeader(false);
@@ -245,7 +245,7 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                 FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
-                ComponentType.PARAMETERS,
+                UiComponentType.PARAMETERS,
                 actionModel);
 
         inlinePromptContext.onPrompt();
@@ -260,7 +260,7 @@ extends IndicatingAjaxLink<ManagedObject> {
     }
 
     private ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();
+        return ((HasComponentFactoryRegistry) Application.get()).getComponentFactoryRegistry();
     }
 
     public Wicket getSettings() {

@@ -25,9 +25,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.jmock.Expectations;
+import org.mockito.Mockito;
 
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -49,57 +52,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private JUnitRuleMockery2 context =
-            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    private ObjectSpecification voidSpec;
-//    private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
-//    private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
+class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void setUp() throws Exception {
-
-        // PRODUCTION
-
         super.setUp();
 
         val specLoader = metaModelContext.getSpecificationLoader();
-        voidSpec = specLoader.loadSpecification(void.class);
+        ObjectSpecification voidSpec = specLoader.loadSpecification(void.class);
 
-        context.checking(new Expectations() {{
-
-            allowing(mockInteractionProvider).currentInteractionContext();
-            will(returnValue(Optional.of(iaContext)));
-        }});
-
+        Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
     }
-
-    //    public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-    //        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
-    //
-    //        facetFactory.setServicesInjector(mockServicesInjector);
-    //
-    //        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-    //        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-    //
-    //        class Customer {
-    //            @SuppressWarnings("unused")
-    //            public void anActionWithNamedAnnotation() {
-    //            }
-    //        }
-    //        final Method method = findMethod(Customer.class, "anActionWithNamedAnnotation");
-    //
-    //        facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-    //
-    //        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-    //        assertNotNull(facet);
-    //        assertTrue(facet instanceof NamedFacet);
-    //        final NamedFacet namedFacet = (NamedFacet) facet;
-    //        assertEquals("An Action With Named Annotation", namedFacet.value());
-    //    }
-
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);

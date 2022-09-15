@@ -62,9 +62,9 @@ import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.HasPageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
@@ -98,8 +98,8 @@ import lombok.extern.log4j.Log4j2;
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
 implements
-    ComponentFactoryRegistryAccessor,
-    PageClassRegistryAccessor,
+    HasComponentFactoryRegistry,
+    HasPageClassRegistry,
     HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;

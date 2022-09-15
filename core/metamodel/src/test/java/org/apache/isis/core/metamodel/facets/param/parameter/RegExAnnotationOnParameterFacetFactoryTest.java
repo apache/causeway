@@ -22,7 +22,12 @@ import java.lang.reflect.Method;
 
 import javax.validation.constraints.Pattern;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -31,12 +36,12 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContex
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
-public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
+class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);

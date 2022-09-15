@@ -24,18 +24,15 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.util.ThreadContext;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
@@ -43,15 +40,12 @@ import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
 
 import lombok.val;
 
-public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     private AuthenticatorShiro authenticator;
     private AuthorizorShiro authorizor;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         // PRODUCTION
@@ -64,7 +58,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     }
 
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         Subject subject = ThreadContext.getSubject();
         if(subject != null) {

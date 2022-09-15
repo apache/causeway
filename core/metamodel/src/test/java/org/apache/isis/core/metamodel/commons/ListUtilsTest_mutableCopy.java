@@ -21,14 +21,14 @@ package org.apache.isis.core.metamodel.commons;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ListUtilsTest_mutableCopy {
+class ListUtilsTest_mutableCopy {
 
     @Test
     public void mutableCopyOfList_whenNotNull() throws Exception {

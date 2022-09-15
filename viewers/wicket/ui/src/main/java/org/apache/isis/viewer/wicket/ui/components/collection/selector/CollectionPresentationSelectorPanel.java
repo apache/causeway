@@ -30,8 +30,8 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.viewer.commons.model.PlacementDirection;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -46,7 +46,7 @@ import lombok.val;
 
 /**
  * Provides a list of links for selecting other views that support
- * {@link org.apache.isis.viewer.commons.model.components.ComponentType#COLLECTION_CONTENTS} with a backing
+ * {@link org.apache.isis.viewer.commons.model.components.UiComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
 public class CollectionPresentationSelectorPanel
@@ -110,7 +110,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
         final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
 
-        WktTooltips.addTooltip(PlacementDirection.TOP,
+        WktTooltips.addTooltip(UiPlacementDirection.TOP,
                 views, translate("Click to change view or see export options."));
 
         views.addOrReplace(container);
@@ -125,7 +125,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             final ComponentFactory componentFactory = item.getModelObject();
 
             // add direct download link instead of a panel
-            if(componentFactory.getComponentType() == ComponentType.COLLECTION_CONTENTS_EXPORT) {
+            if(componentFactory.getComponentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
 
                 DownloadLink downloadLink = (DownloadLink)
                         componentFactory.createComponent(ID_VIEW_LINK, getModel());

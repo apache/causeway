@@ -58,7 +58,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -328,7 +328,7 @@ public class Configuration_usingWicket {
     static class WicketApplication_forTesting
     extends WebApplication
     implements
-        ComponentFactoryRegistryAccessor,
+        HasComponentFactoryRegistry,
         HasMetaModelContext {
         private static final long serialVersionUID = 1L;
 

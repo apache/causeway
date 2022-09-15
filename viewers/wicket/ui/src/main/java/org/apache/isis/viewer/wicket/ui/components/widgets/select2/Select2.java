@@ -31,10 +31,10 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.commons.functional.Either;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
@@ -52,7 +52,7 @@ import lombok.val;
 public class Select2
 implements
     Serializable,
-    HasMetaModelContext {
+    HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +62,7 @@ implements
             final String id,
             final ScalarModel scalarModel,
             final ChoiceProviderAbstract choiceProvider) {
-        val select2 = new Select2(scalarModel.isScalar()
+        val select2 = new Select2(scalarModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
                                 ScalarModelWithSingleChoice.chain(scalarModel),
@@ -155,7 +155,7 @@ implements
     }
 
     public void syncIfNull(final ScalarModel model) {
-        if(!model.isCollection()) {
+        if(!model.isPlural()) {
             if(memento() == null) {
                 this.mementoModel().setObject(null);
                 model.setObject(null);
@@ -204,11 +204,10 @@ implements
 
     // -- DEPENDENCIES
 
-    private transient MetaModelContext commonContext;
-
+    private transient MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
 

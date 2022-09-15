@@ -55,10 +55,10 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -68,6 +68,7 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -81,7 +82,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebRequestCycleForIsis
 implements
-    HasMetaModelContext,
+    HasCommonContext,
     IRequestCycleListener {
 
     // introduced (ISIS-1922) to handle render 'session refreshed' messages after session was expired
@@ -116,8 +117,8 @@ implements
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
             new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
 
+    @Setter
     private PageClassRegistry pageClassRegistry;
-    private MetaModelContext commonContext;
 
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
@@ -334,12 +335,9 @@ implements
         });
     }
 
-    private String translate(final String text) {
-        if(text == null) {
-            return null;
-        }
-        return getMetaModelContext().getTranslationService()
-                .translate(
+    @Override
+    public String translate(final String text) {
+        return translate(
                 		TranslationContext.forClassName(WebRequestCycleForIsis.class),
                 		text);
     }
@@ -359,9 +357,9 @@ implements
 
     protected IRequestablePage errorPageFor(final Exception ex) {
 
-        val commmonContext = getMetaModelContext();
+        val mmc = getMetaModelContext();
 
-        if(commmonContext==null) {
+        if(mmc==null) {
             log.warn("Unable to obtain the MetaModelContext (no session?)");
             return null;
         }
@@ -383,7 +381,7 @@ implements
                         .addAll(exceptionRecognizerService.getExceptionRecognizers()),
                         ex);
 
-        val exceptionModel = ExceptionModel.create(commmonContext, recognition, ex);
+        val exceptionModel = ExceptionModel.create(mmc, recognition, ex);
 
         return isSignedIn()
                 ? new ErrorPage(exceptionModel)
@@ -450,16 +448,12 @@ implements
         return false;
     }
 
-
-    public void setPageClassRegistry(final PageClassRegistry pageClassRegistry) {
-        this.pageClassRegistry = pageClassRegistry;
-    }
-
     // -- DEPENDENCIES
 
+    private MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
@@ -467,7 +461,7 @@ implements
     }
 
     private boolean isInInteraction() {
-        return getMetaModelContext().getInteractionLayerTracker().isInInteraction();
+        return getMetaModelContext().getInteractionService().isInInteraction();
     }
 
     private AuthenticatedWebSession getWicketAuthenticatedWebSession() {

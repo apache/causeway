@@ -52,14 +52,6 @@
 			<artifactId>font-awesome</artifactId>
 			<version>6.1.2</version> <!-- must correspond to entry in /viewer/common/.../IconDecorator.java -->
 		</dependency>
-	
-		<!-- TESTING -->
-		
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 

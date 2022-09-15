@@ -18,24 +18,24 @@
  */
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 
-import static org.junit.Assert.assertEquals;
-
 import lombok.val;
 
-public class ClassSubstitutorTest_getClass {
+class ClassSubstitutorTest_getClass {
 
     private ClassSubstitutor classSubstitutor;
     private ClassSubstitutorRegistry classSubstitutorReg;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         classSubstitutor = new ClassSubstitutorDefault();
         classSubstitutorReg = new ClassSubstitutorRegistry(_Lists.of(classSubstitutor));

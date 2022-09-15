@@ -24,11 +24,12 @@ import java.io.ByteArrayOutputStream;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IoUtils_CopyTest {
 
@@ -61,27 +62,29 @@ public class IoUtils_CopyTest {
 
     private static int BUF_INTERNAL_SIZE = 1024;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void handlesNullInputStream() throws Exception {
         final ByteArrayInputStream bais = null;
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        InputStreamExtensions.copyTo(bais, baos);
+        assertThrows(IllegalArgumentException.class, ()->
+            InputStreamExtensions.copyTo(bais, baos));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void handlesNullOutputStream() throws Exception {
         final byte[] bytes = createByteArray(10);
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final ByteArrayOutputStream baos = null;
-        InputStreamExtensions.copyTo(bais, baos);
+        assertThrows(IllegalArgumentException.class, ()->
+            InputStreamExtensions.copyTo(bais, baos));
     }
 
     @Test

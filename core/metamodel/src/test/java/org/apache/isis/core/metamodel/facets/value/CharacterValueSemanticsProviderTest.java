@@ -18,24 +18,24 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-public class CharacterValueSemanticsProviderTest
+class CharacterValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Character> {
 
     private CharacterValueSemantics valueSemantics;
 
     private Character character;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
         setSemantics(valueSemantics = new CharacterValueSemantics());

@@ -61,7 +61,8 @@ implements
      */
     public void init(final ProgrammingModelInitFilter filter) {
 
-        assertNotInitialized();
+        //assertNotInitialized();
+        if(isInitialized()) return;
 
         // for all registered facet-factories that also implement MetaModelRefiner
         for (val facetFactory : snapshotFactories(filter, metaModelContext)) {
@@ -223,7 +224,7 @@ implements
         return unmodifiableFactories!=null;
     }
 
-    private void assertNotInitialized() {
+    protected void assertNotInitialized() {
         if(isInitialized()) {
             throw _Exceptions.unrecoverable(
                     "The programming-model was already initialized, it cannot be altered.");

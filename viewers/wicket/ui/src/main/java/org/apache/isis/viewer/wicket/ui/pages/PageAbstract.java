@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -58,12 +58,12 @@ import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -89,7 +89,7 @@ import lombok.extern.log4j.Log4j2;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 /**
- * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
+ * Convenience adapter for {@link WebPage}s built up using {@link UiComponentType}s.
  */
 @Log4j2
 public abstract class PageAbstract
@@ -114,7 +114,7 @@ implements ActionPromptProvider {
      */
     public static final ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<>();
 
-    private final List<ComponentType> childComponentIds;
+    private final List<UiComponentType> childComponentIds;
 
     /**
      * Top-level &lt;div&gt; to which all content is added.
@@ -128,7 +128,7 @@ implements ActionPromptProvider {
     protected PageAbstract(
             final PageParameters pageParameters,
             final String title,
-            final ComponentType... childComponentIds) {
+            final UiComponentType... childComponentIds) {
 
         super(pageParameters);
 
@@ -209,7 +209,7 @@ implements ActionPromptProvider {
      * @return The container that should be used as a page header/navigation bar
      */
     protected MarkupContainer createPageHeader(final String id) {
-        Component header = getComponentFactoryRegistry().createComponent(id, ComponentType.HEADER, null);
+        Component header = getComponentFactoryRegistry().createComponent(id, UiComponentType.HEADER, null);
         return (MarkupContainer) header;
     }
 
@@ -220,7 +220,7 @@ implements ActionPromptProvider {
      * @return The container that should be used as a page header/navigation bar
      */
     protected MarkupContainer createPageFooter(final String id) {
-        Component footer = getComponentFactoryRegistry().createComponent(id, ComponentType.FOOTER, null);
+        Component footer = getComponentFactoryRegistry().createComponent(id, UiComponentType.FOOTER, null);
         return (MarkupContainer) footer;
     }
 
@@ -315,14 +315,14 @@ implements ActionPromptProvider {
     }
 
     /**
-     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.commons.model.components.ComponentType...)} constructor}.
+     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.commons.model.components.UiComponentType...)} constructor}.
      *
      * <p>
      * This superclass doesn't do anything with this property directly, but
      * requiring it to be provided enforces standardization of the
      * implementation of the subclasses.
      */
-    public List<ComponentType> getChildModelTypes() {
+    public List<UiComponentType> getChildModelTypes() {
         return childComponentIds;
     }
 
@@ -337,13 +337,13 @@ implements ActionPromptProvider {
      *            render the model.
      */
     protected void addChildComponents(final MarkupContainer container, final IModel<?> model) {
-        for (final ComponentType componentType : getChildModelTypes()) {
-            addComponent(container, componentType, model);
+        for (final UiComponentType uiComponentType : getChildModelTypes()) {
+            addComponent(container, uiComponentType, model);
         }
     }
 
-    private void addComponent(final MarkupContainer container, final ComponentType componentType, final IModel<?> model) {
-        getComponentFactoryRegistry().addOrReplaceComponent(container, componentType, model);
+    private void addComponent(final MarkupContainer container, final UiComponentType uiComponentType, final IModel<?> model) {
+        getComponentFactoryRegistry().addOrReplaceComponent(container, uiComponentType, model);
     }
 
 
@@ -358,7 +358,7 @@ implements ActionPromptProvider {
 
         final Component bookmarks = getBookmarkedPagesModel()
             .map(bm->getComponentFactoryRegistry()
-                            .createComponent(ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, bm))
+                            .createComponent(ID_BOOKMARKED_PAGES, UiComponentType.BOOKMARKED_PAGES, bm))
             .orElseGet(()->new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false));
 
         container.add(bookmarks);
@@ -389,7 +389,7 @@ implements ActionPromptProvider {
         .ifPresent(bm->bm.bookmarkPage(model));
     }
 
-    protected void removeAnyBookmark(final EntityModel model) {
+    protected void removeAnyBookmark(final UiObjectWkt model) {
         getBookmarkedPagesModel()
         .ifPresent(bm->bm.remove(model));
     }
@@ -478,7 +478,7 @@ implements ActionPromptProvider {
 
     // -- getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
+        final HasComponentFactoryRegistry cfra = (HasComponentFactoryRegistry) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
 

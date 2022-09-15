@@ -30,13 +30,12 @@ import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 
@@ -46,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public final class FormExecutorDefault
-implements FormExecutor, HasMetaModelContext {
+implements FormExecutor, HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -236,18 +235,12 @@ implements FormExecutor, HasMetaModelContext {
     @Override
     public MetaModelContext getMetaModelContext() {
         return actionOrPropertyModel
-                .fold(
-                        act->act.getMetaModelContext(),
+                .fold(  act->act.getMetaModelContext(),
                         prop->prop.getMetaModelContext());
     }
 
     private ExceptionRecognizerService getExceptionRecognizerService() {
         return getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
-
-    protected final Wicket getSettings() {
-        return getConfiguration().getViewer().getWicket();
-    }
-
 
 }

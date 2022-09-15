@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.metamodel.valuesemantics.ImageValueSemantics;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -34,7 +34,7 @@ public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public JavaAwtImagePanelFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE, JavaAwtImagePanel.class);
+        super(UiComponentType.SCALAR_NAME_AND_VALUE, JavaAwtImagePanel.class);
     }
 
     @Override

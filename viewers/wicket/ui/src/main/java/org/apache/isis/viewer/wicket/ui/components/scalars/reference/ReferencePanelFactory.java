@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -36,7 +36,7 @@ public class ReferencePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ReferencePanelFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE, ReferencePanel.class);
+        super(UiComponentType.SCALAR_NAME_AND_VALUE, ReferencePanel.class);
     }
 
     @Override

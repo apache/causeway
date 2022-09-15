@@ -22,9 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,21 +32,15 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.val;
 
 public class ApplicationFeatureIdTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     public static class Title extends ApplicationFeatureIdTest {
 
@@ -305,25 +297,18 @@ public class ApplicationFeatureIdTest {
 
         @Test
         public void givenClassInRootPackage() throws Exception {
-
-            // expect
-            expectedException.expect(IllegalArgumentException.class);
-
             // when
-            ApplicationFeatureId.newType("Bar");
+            assertThrows(IllegalArgumentException.class, ()->
+                ApplicationFeatureId.newType("Bar"));
         }
 
         @Test
         public void givenMember() throws Exception {
-
             // given
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
-
-            // then
-            expectedException.expect(AssertionError.class);
-
             // when
-            applicationFeatureId.getParentNamespaceFeatureId();
+            assertThrows(AssertionError.class, ()->
+                applicationFeatureId.getParentNamespaceFeatureId());
         }
 
     }
@@ -349,25 +334,18 @@ public class ApplicationFeatureIdTest {
         public void givenPackage() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
-
-            // then
-            expectedException.expect(AssertionError.class);
-
             // when
-            applicationFeatureId.getParentTypeFeatureId();
+            assertThrows(AssertionError.class, ()->
+                applicationFeatureId.getParentTypeFeatureId());
         }
 
         @Test
         public void givenClass() throws Exception {
-
             // given
             val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
-
-            // then
-            expectedException.expect(AssertionError.class);
-
             // when
-            applicationFeatureId.getParentTypeFeatureId();
+            assertThrows(AssertionError.class, ()->
+                applicationFeatureId.getParentTypeFeatureId());
         }
     }
 
@@ -525,8 +503,8 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenNull() throws Exception {
-                expectedException.expect(NullPointerException.class);
-                func.apply(null);
+                assertThrows(NullPointerException.class, ()->
+                    func.apply(null));
             }
 
             @Test
@@ -553,8 +531,8 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenNull() throws Exception {
-                expectedException.expect(NullPointerException.class);
-                func.apply(null);
+                assertThrows(NullPointerException.class, ()->
+                    func.apply(null));
             }
 
             @Test

@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
-import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.val;
@@ -56,7 +56,7 @@ implements ActionModel {
     // -- FACTORY METHODS
 
     public static ActionModelImpl forEntity(
-            final EntityModel parentEntityModel,
+            final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
@@ -76,7 +76,7 @@ implements ActionModel {
 
     private final ActionInteractionWkt delegate;
 
-    private ActionModelImpl(final EntityModel parentEntityModel, final ActionInteractionWkt delegate) {
+    private ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
         super(parentEntityModel);
         this.delegate = delegate;
     }
@@ -119,8 +119,8 @@ implements ActionModel {
     }
 
     @Override
-    public EntityModel getParentUiModel() {
-        return (EntityModel) super.getTarget();
+    public UiObjectWkt getParentUiModel() {
+        return (UiObjectWkt) super.getTarget();
     }
 
     @Override
@@ -156,7 +156,7 @@ implements ActionModel {
     }
 
     @Override
-    public Stream<ParameterUiModelWkt> streamPendingParamUiModels() {
+    public Stream<UiParameterWkt> streamPendingParamUiModels() {
         return delegate.streamParameterUiModels();
     }
 

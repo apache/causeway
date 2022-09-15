@@ -18,13 +18,12 @@
  */
 package org.apache.isis.core.metamodel.services.message;
 
-import javax.enterprise.inject.Vetoed;
-
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.message.MessageService;
 
-@Vetoed // can be used via producer (optional)
+@Domain.Exclude // can be used via producer (optional)
 public class MessageServiceNoop implements MessageService {
 
     @Override

@@ -29,17 +29,16 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 
 import lombok.val;
 
 public abstract class ChoiceProviderAbstract
 extends ChoiceProvider<ObjectMemento>
-implements HasMetaModelContext {
+implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
     /** arbitrary string */
@@ -142,19 +141,6 @@ implements HasMetaModelContext {
             return null;
         }
         return mementoFromId(id);
-    }
-
-    // -- DEPENDENCIES
-
-    protected final Wicket getSettings() {
-        return getConfiguration().getViewer().getWicket();
-    }
-
-    /**
-     * Translate without context: Tooltips, Button-Labels, etc.
-     */
-    protected String translate(final String input) {
-        return getTranslationService().translate(TranslationContext.empty(), input);
     }
 
 }

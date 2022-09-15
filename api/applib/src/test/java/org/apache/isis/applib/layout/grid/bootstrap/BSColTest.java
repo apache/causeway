@@ -18,21 +18,17 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
-import org.apache.isis.applib.layout.grid.bootstrap.Size;
-import org.apache.isis.applib.layout.grid.bootstrap.SizeSpan;
-
-public class BSColTest {
+class BSColTest {
 
     BSCol bsCol;
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         bsCol = new BSCol();
     }

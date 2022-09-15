@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.header;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
@@ -34,12 +34,12 @@ public class EntityHeaderPanelFactory extends EntityComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityHeaderPanelFactory() {
-        super(ComponentType.ENTITY_SUMMARY, EntityHeaderPanel.class);
+        super(UiComponentType.ENTITY_SUMMARY, EntityHeaderPanel.class);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
+        final UiObjectWkt entityModel = (UiObjectWkt) model;
         return new EntityHeaderPanel(id, entityModel);
     }
 }

@@ -22,10 +22,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
-
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal._Constants;
@@ -48,9 +47,9 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
     @Override
     public <T> _ProxyFactory<T> factory(
-            Class<T> base,
-            Class<?>[] interfaces,
-            Class<?>[] constructorArgTypes) {
+            final Class<T> base,
+            final Class<?>[] interfaces,
+            final Class<?>[] constructorArgTypes) {
 
         final Objenesis objenesis = new ObjenesisStd();
 
@@ -58,13 +57,14 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
         nextProxyDef(base, interfaces)
         .intercept(InvocationHandlerAdapter.of(handler))
         .make()
-        .load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base))
+        .load(_Context.getDefaultClassLoader(),
+                strategyAdvisor.getSuitableStrategy(base))
         .getLoaded();
 
         return new _ProxyFactory<T>() {
 
             @Override
-            public T createInstance(InvocationHandler handler, boolean initialize) {
+            public T createInstance(final InvocationHandler handler, final boolean initialize) {
 
                 try {
 
@@ -83,7 +83,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             }
 
             @Override
-            public T createInstance(InvocationHandler handler, Object[] constructorArgs) {
+            public T createInstance(final InvocationHandler handler, final Object[] constructorArgs) {
 
                 ensureNonEmtpy(constructorArgs);
                 ensureSameSize(constructorArgTypes, constructorArgs);
@@ -98,7 +98,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
             // -- HELPER (create w/o initialize)
 
-            private Object createNotUsingConstructor(InvocationHandler invocationHandler) {
+            private Object createNotUsingConstructor(final InvocationHandler invocationHandler) {
                 final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
                 final Object object = objenesis.newInstance(proxyClass);
                 return object;
@@ -106,7 +106,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
             // -- HELPER (create with initialize)
 
-            private Object createUsingConstructor(InvocationHandler invocationHandler, @Nullable Object[] constructorArgs)
+            private Object createUsingConstructor(final InvocationHandler invocationHandler, @Nullable final Object[] constructorArgs)
                     throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
                 final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
                 return proxyClass
@@ -121,8 +121,8 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
     // -- HELPER
 
     private static <T> ImplementationDefinition<T> nextProxyDef(
-            Class<T> base,
-            Class<?>[] interfaces) {
+            final Class<T> base,
+            final Class<?>[] interfaces) {
         return new ByteBuddy()
                 .with(new NamingStrategy.SuffixingRandom("bb"))
                 .subclass(base)
@@ -130,14 +130,14 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
                 .method(ElementMatchers.any());
     }
 
-    private static void ensureSameSize(Class<?>[] a, Object[] b) {
+    private static void ensureSameSize(final Class<?>[] a, final Object[] b) {
         if(_NullSafe.size(a) != _NullSafe.size(b)) {
             throw new IllegalArgumentException(String.format("Constructor arg count expected %d, got %d.",
                     _NullSafe.size(a), _NullSafe.size(b) ));
         }
     }
 
-    private static void ensureNonEmtpy(Object[] a) {
+    private static void ensureNonEmtpy(final Object[] a) {
         if(_NullSafe.isEmpty(a)) {
             throw new IllegalArgumentException(String.format("Contructor args count expected > 0, got %d.",
                     _NullSafe.size(a) ));

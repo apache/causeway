@@ -107,23 +107,23 @@ public class BookmarkTreeNode implements Serializable {
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
     public boolean matches(final BookmarkableModel candidateBookmarkableModel) {
-        if(candidateBookmarkableModel instanceof EntityModel) {
-            return matchAndUpdateTitleFor((EntityModel) candidateBookmarkableModel);
+        if(candidateBookmarkableModel instanceof UiObjectWkt) {
+            return matchAndUpdateTitleFor((UiObjectWkt) candidateBookmarkableModel);
         }
         return false;
     }
 
     /**
-     * Whether or not the provided {@link EntityModel} matches that contained
+     * Whether or not the provided {@link UiObjectWkt} matches that contained
      * within this node, or any of its children.
      *
      * <p>
      * If it does match, then the matched node's title is updated to that of the provided
-     * {@link EntityModel}.
+     * {@link UiObjectWkt}.
      *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
-    private boolean matchAndUpdateTitleFor(final EntityModel candidateEntityModel) {
+    private boolean matchAndUpdateTitleFor(final UiObjectWkt candidateEntityModel) {
 
         // match only on the oid string
         final String candidateOidStr = oidStrFrom(candidateEntityModel);
@@ -180,8 +180,8 @@ public class BookmarkTreeNode implements Serializable {
         val whetherAdded = _Refs.booleanRef(false);
 
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
-        if(candidateBookmarkableModel instanceof EntityModel) {
-            val entityModel = (EntityModel) candidateBookmarkableModel;
+        if(candidateBookmarkableModel instanceof UiObjectWkt) {
+            val entityModel = (UiObjectWkt) candidateBookmarkableModel;
             val candidateAdapter = entityModel.getObject();
 
             candidateAdapter.getSpecification()

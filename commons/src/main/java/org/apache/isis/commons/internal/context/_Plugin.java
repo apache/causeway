@@ -48,6 +48,7 @@ import lombok.NonNull;
  * </p>
  * @since 2.0
  */
+@Deprecated// does not play well with Java module system
 public final class _Plugin {
 
     private _Plugin(){}

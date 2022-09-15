@@ -1,23 +1,25 @@
-/**
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
  */
 package org.apache.isis.applib.util;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +32,7 @@ public class ObjectContractsTest_toString {
     private Invoice inv;
     private Invoice2 inv2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         inv = new Invoice();
         inv2 = new Invoice2();
@@ -68,7 +70,7 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
     public String getNumber() {
         return number;
     }
-    public void setNumber(String number) {
+    public void setNumber(final String number) {
         this.number = number;
     }
     @Override
@@ -76,7 +78,7 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
         return ObjectContracts.toString(this, KEY_PROPERTIES);
     }
     @Override
-    public int compareTo(Invoice2 o) {
+    public int compareTo(final Invoice2 o) {
         return ObjectContracts.compare(this, o, KEY_PROPERTIES);
     }
 }
@@ -84,7 +86,7 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
 @SuppressWarnings("deprecation")
 class InvoiceItem2 implements Comparable<InvoiceItem2> {
 
-    static InvoiceItem2 newInvoiceItem(Invoice2 invoice, String productCode, Integer quantity, Boolean rush) {
+    static InvoiceItem2 newInvoiceItem(final Invoice2 invoice, final String productCode, final Integer quantity, final Boolean rush) {
         final InvoiceItem2 invoiceItem = new InvoiceItem2();
         invoiceItem.setInvoice(invoice);
         invoiceItem.setProductCode(productCode);
@@ -97,7 +99,7 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public Invoice2 getInvoice() {
         return invoice;
     }
-    public void setInvoice(Invoice2 invoice) {
+    public void setInvoice(final Invoice2 invoice) {
         this.invoice = invoice;
     }
 
@@ -105,7 +107,7 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public String getProductCode() {
         return productCode;
     }
-    public void setProductCode(String productCode) {
+    public void setProductCode(final String productCode) {
         this.productCode = productCode;
     }
 
@@ -113,7 +115,7 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public Integer getQuantity() {
         return quantity;
     }
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -121,13 +123,13 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public Boolean isRush() {
         return rush;
     }
-    public void setRush(Boolean rush) {
+    public void setRush(final Boolean rush) {
         this.rush = rush;
     }
 
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
 
-    private static final ObjectContract<InvoiceItem2> contract = 
+    private static final ObjectContract<InvoiceItem2> contract =
             ObjectContracts.parse(InvoiceItem2.class, KEY_PROPERTIES)
             .withValueToStringFunction(ToStringEvaluator.combineToFunction(new NumberedEvaluator()));
 
@@ -138,7 +140,7 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
         //return new ObjectContracts().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
     }
     @Override
-    public int compareTo(InvoiceItem2 o) {
+    public int compareTo(final InvoiceItem2 o) {
         return ObjectContracts.compare(this, o, KEY_PROPERTIES);
     }
 }

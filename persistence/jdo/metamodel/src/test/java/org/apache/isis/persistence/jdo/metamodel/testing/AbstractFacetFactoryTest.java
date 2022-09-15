@@ -27,8 +27,8 @@ import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.beans.PersistenceStack;
@@ -66,7 +66,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected InteractionProvider mockInteractionProvider;
+    protected InteractionService mockInteractionService;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemover_forTesting methodRemover;
@@ -85,19 +85,19 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemover_forTesting();
 
-        mockInteractionProvider = context.mock(InteractionProvider.class);
+        mockInteractionService = context.mock(InteractionService.class);
         mockTranslationService = context.mock(TranslationService.class);
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-                .interactionProvider(mockInteractionProvider)
+                .interactionService(mockInteractionService)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockInteractionProvider).currentInteractionContext();
+            allowing(mockInteractionService).currentInteractionContext();
             will(returnValue(Optional.of(iaContext)));
         }});
 

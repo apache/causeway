@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -70,8 +70,8 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
         addOrReplace(header);
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, actionModel);
-        getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE,
+        getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PARAMETERS, actionModel);
+        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE,
                 actionModel.getParentUiModel());
 
         Wkt.labelAdd(header, ID_ACTION_NAME, ()->getActionModel().getFriendlyName());

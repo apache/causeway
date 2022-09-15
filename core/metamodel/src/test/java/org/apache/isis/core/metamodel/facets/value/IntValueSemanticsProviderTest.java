@@ -18,22 +18,22 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-public class IntValueSemanticsProviderTest
+class IntValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Integer> {
 
     private IntValueSemantics value;
     private Integer integer;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);

@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.viewer.commons.model.PlacementDirection;
+import org.apache.isis.viewer.commons.model.layout.UiPlacementDirection;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -41,25 +41,25 @@ public interface TooltipDecorator<T> {
 
         private static final long serialVersionUID = 1L;
 
-        final @NonNull PlacementDirection placementDirection;
+        final @NonNull UiPlacementDirection placementDirection;
         final @NonNull Optional<String> title;
         final @NonNull String body;
 
         public static TooltipDecorationModel ofBody(
-                final @NonNull PlacementDirection placementDirection,
+                final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String body) {
-            return of(placementDirection, Optional.empty(), _Strings.nullToEmpty(body));
+            return of(uiPlacementDirection, Optional.empty(), _Strings.nullToEmpty(body));
         }
 
         public static TooltipDecorationModel ofTitleAndBody(
-                final @NonNull PlacementDirection placementDirection,
+                final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String title,
                 final @Nullable String body) {
-            return of(placementDirection, Optional.ofNullable(_Strings.emptyToNull(title)), _Strings.nullToEmpty(body));
+            return of(uiPlacementDirection, Optional.ofNullable(_Strings.emptyToNull(title)), _Strings.nullToEmpty(body));
         }
 
         public static TooltipDecorationModel empty() {
-            return ofBody(PlacementDirection.BOTTOM, "");
+            return ofBody(UiPlacementDirection.BOTTOM, "");
         }
 
         public boolean isEmpty() {

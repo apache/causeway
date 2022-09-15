@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,13 +38,11 @@ implements AuthorizationFacet {
     }
 
     private final AuthorizationManager authorizationManager;
-    private final InteractionProvider interactionProvider;
 
     public AuthorizationFacetAbstract(
             final FacetHolder holder) {
         super(type(), holder);
         this.authorizationManager = getAuthorizationManager();
-        this.interactionProvider = getInteractionProvider();
     }
 
     @Override
@@ -57,7 +54,7 @@ implements AuthorizationFacet {
 
         val hides = authorizationManager
                 .isVisible(
-                        interactionProvider.currentInteractionContextElseFail(),
+                        getInteractionService().currentInteractionContextElseFail(),
                         ic.getIdentifier())
                 ? null
                 : "Not authorized to view";
@@ -78,7 +75,7 @@ implements AuthorizationFacet {
 
         val disables = authorizationManager
                 .isUsable(
-                        interactionProvider.currentInteractionContextElseFail(),
+                        getInteractionService().currentInteractionContextElseFail(),
                         ic.getIdentifier())
                 ? null
                 : "Not authorized to edit";

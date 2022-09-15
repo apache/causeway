@@ -18,17 +18,16 @@
  */
 package org.apache.isis.applib.services.i18n;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
-public class TranslatableStringTest {
+class TranslatableStringTest {
 
     public static class GetText extends TranslatableStringTest {
 
@@ -76,13 +75,10 @@ public class TranslatableStringTest {
         }
     }
 
+    @ExtendWith(MockitoExtension.class)
     public static class Translate extends TranslatableStringTest {
 
-        @Rule
-        public final JUnitRuleMockery context = new JUnitRuleMockery();
-
-        @Mock
-        private TranslationService mockTranslationService;
+        @Mock TranslationService mockTranslationService;
 
         @Test
         public void singularForm() throws Exception {
@@ -94,10 +90,8 @@ public class TranslatableStringTest {
             final TranslatableString ts = TranslatableString.tr(simpleText);
 
             // expect
-            context.checking(new Expectations() {{
-                oneOf(mockTranslationService).translate(someContext, simpleText);
-                will(returnValue(translation));
-            }});
+            Mockito.when(mockTranslationService.translate(someContext, simpleText))
+            .thenReturn(translation);
 
             // when
             assertThat(ts.translate(mockTranslationService, someContext), is(translation));
@@ -115,10 +109,8 @@ public class TranslatableStringTest {
             final TranslatableString ts = TranslatableString.trn(singularText, pluralText, 1);
 
             // expect
-            context.checking(new Expectations() {{
-                oneOf(mockTranslationService).translate(someContext, singularText, pluralText, 1);
-                will(returnValue(translation));
-            }});
+            Mockito.when(mockTranslationService.translate(someContext, singularText, pluralText, 1))
+            .thenReturn(translation);
 
             // when
             assertThat(ts.translate(mockTranslationService, someContext), is(translation));
@@ -137,10 +129,8 @@ public class TranslatableStringTest {
             final TranslatableString ts = TranslatableString.trn(singularText, pluralText, number);
 
             // expect
-            context.checking(new Expectations() {{
-                oneOf(mockTranslationService).translate(someContext, singularText, pluralText, number);
-                will(returnValue(translation));
-            }});
+            Mockito.when(mockTranslationService.translate(someContext, singularText, pluralText, number))
+            .thenReturn(translation);
 
             // when
             assertThat(ts.translate(mockTranslationService, someContext), is(translation));

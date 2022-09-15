@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class LongValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Long> {
@@ -34,7 +34,7 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
 
     private Long longObj;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         longObj = Long.valueOf(367322);
         allowMockAdapterToReturn(longObj);

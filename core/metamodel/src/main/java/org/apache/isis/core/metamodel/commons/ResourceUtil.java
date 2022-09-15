@@ -18,11 +18,7 @@
  */
 package org.apache.isis.core.metamodel.commons;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.isis.commons.internal.context._Context;
 
@@ -63,20 +59,5 @@ public class ResourceUtil {
         }
     }
 
-    /**
-     * @param request
-     * @return real-path resource from file-system, if any
-     */
-    public static InputStream getResourceAsStream(final HttpServletRequest request) {
-        final String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
-        if (realPath == null) {
-            return null;
-        }
-        try {
-            return new FileInputStream(realPath);
-        } catch (final FileNotFoundException e) {
-            return null;
-        }
-    }
 
 }

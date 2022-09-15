@@ -126,7 +126,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         rootNodes.remove(rootNode);
     }
 
-    public void remove(final EntityModel entityModel) {
+    public void remove(final UiObjectWkt entityModel) {
         val bookmark = entityModel.getOwnerBookmark();
         rootNodes.removeIf(node->node.getOidNoVer().equals(bookmark));
     }

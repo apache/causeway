@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.base;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -277,7 +278,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String capitalize(final @Nullable String input) {
+    public static @Nullable String capitalize(final @Nullable String input) {
         if(input==null) {
             return null;
         }
@@ -295,7 +296,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String decapitalize(final @Nullable String input) {
+    public static @Nullable String decapitalize(final @Nullable String input) {
         if(input==null) {
             return null;
         }
@@ -310,8 +311,27 @@ public final class _Strings {
 
     // -- SPECIAL UNARY OPERATORS
 
-    public static String htmlEscape(final String source) {
+    public static @Nullable String htmlEscape(final @Nullable String source) {
         return _Strings_HtmlEscaper.htmlEscape(source);
+    }
+
+    // -- URL-SAFETY
+
+    /**
+     * @see "https://stackoverflow.com/a/4571518/9269480"
+     */
+    public static boolean isUrlSafe(final @Nullable String input) {
+        if(_Strings.isEmpty(input)) {
+            return true;
+        }
+        try {
+            val testDummyUri = new URI("http://localhost/?" + input);
+            val asQuery = testDummyUri.getQuery();
+            return input.equals(asQuery);
+        } catch (Exception e) {
+            // ignore
+        }
+        return false;
     }
 
     // -- PREFIX/SUFFIX
@@ -322,7 +342,7 @@ public final class _Strings {
      * @param prefix
      * @return null if {@code input} is null
      */
-    public static String prefix(final @Nullable String input, final @NonNull String prefix) {
+    public static @Nullable String prefix(final @Nullable String input, final @NonNull String prefix) {
         if(input==null) {
             return null;
         }
@@ -338,7 +358,7 @@ public final class _Strings {
      * @param suffix
      * @return null if {@code input} is null
      */
-    public static String suffix(final @Nullable String input, final @NonNull String suffix) {
+    public static @Nullable String suffix(final @Nullable String input, final @NonNull String suffix) {
         if(input==null) {
             return null;
         }
@@ -847,11 +867,10 @@ public final class _Strings {
     /**
      * for example, so that a DB type converter can return null if the string wouldn't fit into a target column.
      */
-    public static String nullIfExceeds(String str, int maxLength) {
+    public static String nullIfExceeds(final String str, final int maxLength) {
         return str == null || str.length() > maxLength
                     ? null
                     : str;
     }
-
 
 }

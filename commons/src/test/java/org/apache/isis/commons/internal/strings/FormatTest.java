@@ -18,14 +18,13 @@
  */
 package org.apache.isis.commons.internal.strings;
 
-
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class FormatTest {
+class FormatTest {
 
     // copy of code in scripts/generateConfigDocs.groovy
-    public static String format(final String str, int len) {
+    public static String format(final String str, final int len) {
         if(str.length() <= len) {
             return str;
         }
@@ -56,27 +55,27 @@ public class FormatTest {
     }
 
     @Test
-    public void split_once() {
+    void split_once() {
         Assertions.assertEquals("abc.def.ghi.jkl.mno.\npqr.stu.vwx.yza", format("abc.def.ghi.jkl.mno.pqr.stu.vwx.yza", 20));
     }
 
     @Test
-    public void split_twice() {
+    void split_twice() {
         Assertions.assertEquals("abc.def.ghi.jkl.\nmno.pqr.stu.vwx.\nyza", format("abc.def.ghi.jkl.mno.pqr.stu.vwx.yza", 16));
     }
 
     @Test
-    public void split_not_on_divider() {
+    void split_not_on_divider() {
         Assertions.assertEquals("abc.def.ghi.\njkl.mno.pqr.\nstu.vwx.yza", format("abc.def.ghi.jkl.mno.pqr.stu.vwx.yza", 15));
     }
 
     @Test
-    public void no_divider() {
+    void no_divider() {
         Assertions.assertEquals("abcdefghij\nklmnopqrst\nuvwxyza", format("abcdefghijklmnopqrstuvwxyza", 10));
     }
 
     @Test
-    public void real_world() {
+    void real_world() {
         Assertions.assertEquals("isxs.persistence.\njdo-dataxnucleus.\nclass-metadata-\nloaded-listener", format("isxs.persistence.jdo-dataxnucleus.class-metadata-loaded-listener", 20));
     }
 

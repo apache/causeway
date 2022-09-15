@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ChainingObjectModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -46,22 +46,22 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityIconAndTitlePanelFactory(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final Class<?> componentClass) {
 
-        super(componentType, componentClass);
+        super(uiComponentType, componentClass);
     }
 
     public EntityIconAndTitlePanelFactory(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final String name,
             final Class<?> componentClass) {
 
-        super(componentType, name, componentClass);
+        super(uiComponentType, name, componentClass);
     }
 
     public EntityIconAndTitlePanelFactory() {
-        this(ComponentType.ENTITY_ICON_AND_TITLE, EntityIconAndTitlePanel.class);
+        this(UiComponentType.ENTITY_ICON_AND_TITLE, EntityIconAndTitlePanel.class);
     }
 
     @Override
@@ -92,10 +92,8 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             objectAdapterModel = (ObjectAdapterModel) model;
         } else if (model instanceof ScalarModel) {
             val scalarModel = (ScalarModel) model;
-
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
             objectAdapterModel = ChainingObjectModel.chain(scalarModel);
-            objectAdapterModel.setRenderingHint(scalarModel.getRenderingHint());
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }

@@ -21,22 +21,24 @@ package org.apache.isis.core.metamodel.facets.param.parameter;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.calls;
 
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -51,7 +53,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+class ParameterAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     ParameterAnnotationFacetFactory facetFactory;
     Method actionMethod;
@@ -60,18 +63,16 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
     @Mock ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
-        context.checking(new Expectations() {{
-            oneOf(mockMethodRemover).removeMethod(actionMethod);
-        }});
+        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -100,8 +101,8 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final MaxLengthFacet maxLengthFacet = facetedMethodParameter.getFacet(MaxLengthFacet.class);
-            Assert.assertNotNull(maxLengthFacet);
-            Assert.assertTrue(maxLengthFacet instanceof MaxLengthFacetForParameterAnnotation);
+            assertNotNull(maxLengthFacet);
+            assertTrue(maxLengthFacet instanceof MaxLengthFacetForParameterAnnotation);
             assertThat(maxLengthFacet.value(), is(30));
         }
     }
@@ -147,8 +148,8 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethodParameter.getFacet(MustSatisfySpecificationFacet.class);
-            Assert.assertNotNull(mustSatisfySpecificationFacet);
-            Assert.assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
+            assertNotNull(mustSatisfySpecificationFacet);
+            assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
             MustSatisfySpecificationFacetForParameterAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForParameterAnnotation) mustSatisfySpecificationFacet;
             val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
             assertThat(specifications.size(), is(2));
@@ -185,8 +186,8 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            Assert.assertNotNull(mandatoryFacet);
-            Assert.assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Optional);
+            assertNotNull(mandatoryFacet);
+            assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Optional);
         }
 
         @Test
@@ -213,8 +214,8 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            Assert.assertNotNull(mandatoryFacet);
-            Assert.assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Required);
+            assertNotNull(mandatoryFacet);
+            assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Required);
         }
 
         @Test
@@ -241,7 +242,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            Assert.assertNull(mandatoryFacet);
+            assertNull(mandatoryFacet);
         }
 
         @Test
@@ -266,7 +267,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            Assert.assertNull(mandatoryFacet);
+            assertNull(mandatoryFacet);
         }
 
     }
@@ -299,8 +300,8 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            Assert.assertNotNull(regExFacet);
-            Assert.assertTrue(regExFacet instanceof RegExFacetForParameterAnnotation);
+            assertNotNull(regExFacet);
+            assertTrue(regExFacet instanceof RegExFacetForParameterAnnotation);
             assertThat(regExFacet.patternFlags(), is(10));
             assertThat(regExFacet.regexp(), is("[123].*"));
         }
@@ -328,7 +329,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            Assert.assertNull(regExFacet);
+            assertNull(regExFacet);
         }
 
         @Test
@@ -356,7 +357,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            Assert.assertNull(regExFacet);
+            assertNull(regExFacet);
         }
 
         @Test
@@ -384,7 +385,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // then
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            Assert.assertNotNull(regExFacet);
+            assertNotNull(regExFacet);
 
         }
 

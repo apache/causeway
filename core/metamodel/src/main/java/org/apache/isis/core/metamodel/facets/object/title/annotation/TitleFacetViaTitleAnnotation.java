@@ -155,9 +155,7 @@ implements ImperativeFacet {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-
             val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
-
             if(!isUnitTesting) {
                 log.warn("Title failure", ex);
             }

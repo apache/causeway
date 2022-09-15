@@ -105,7 +105,7 @@ public abstract class EventProviderAbstract implements EventProvider {
                 return null;
             }
 
-            val timeZone = commonContext.getInteractionProvider()
+            val timeZone = commonContext.getInteractionService()
                     .currentInteractionContext()
                     .map(InteractionContext::getTimeZone)
                     .orElse(ZoneId.systemDefault());

@@ -18,17 +18,11 @@
  */
 package org.apache.isis.core.metamodel.objects;
 
-import org.junit.Test;
+import java.util.Optional;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.functional.Either;
-import org.apache.isis.core.metamodel.MetaModelTestAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
+import com.sun.xml.bind.v2.schemagen.xmlschema.List;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -36,6 +30,18 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.functional.Either;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.isis.core.metamodel.MetaModelTestAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 
 import lombok.val;
 
@@ -48,6 +54,8 @@ extends MetaModelTestAbstract {
     }
 
     private static final Class<?> COLLECTION_TYPE = Order.class;
+    private static final TypeOfAnyCardinality TOAC = TypeOfAnyCardinality.of(
+            COLLECTION_TYPE, Optional.of(List.class), Optional.of(CollectionSemantics.LIST));
 
     private OneToManyAssociation association;
 
@@ -61,7 +69,7 @@ extends MetaModelTestAbstract {
         when(mockNamedFacet.getSpecialization()).thenReturn(Either.left(mockHasStaticText));
 
         val mockPeer = mock(FacetedMethod.class);
-        doReturn(COLLECTION_TYPE).when(mockPeer).getType();
+        doReturn(TOAC).when(mockPeer).getType();
         when(mockPeer.getMetaModelContext()).thenReturn(getMetaModelContext());
         when(mockPeer.getFeatureIdentifier()).thenReturn(
                 Identifier

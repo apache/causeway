@@ -20,67 +20,76 @@ package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.Method;
 
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
-import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 
-public class NavigableParentAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJUnit4TestCase {
+import lombok.SneakyThrows;
+import lombok.val;
+
+class NavigableParentAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     private NavigableParentAnnotationFacetFactory facetFactory;
 
-    @Mock private ManagedObject mockObjectAdapter;
-
-    @Before
-    public void setUp() throws Exception {
-        facetFactory = new NavigableParentAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    void setUp() throws Exception {
+        super.setUpMmc();
+        facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext()) {
+            @Override
+            public void process(final ProcessClassContext processClassContext) {
+                super.process(processClassContext);
+                assertHasNavigableParentFacet(processClassContext.getFacetHolder());
+            }
+        };
     }
 
-    @After
+    @AfterEach
     @Override
-    public void tearDown() throws Exception {
+    protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
     }
 
-    @Test
-    public void testParentAnnotatedMethod() throws Exception {
-        testParentMethod(new DomainObjectA(), "root");
+    @Test @SneakyThrows
+    protected void testParentAnnotatedMethod() throws Exception {
+
+        val domainObject = new DomainObjectA();
+        val parentMethodName = "root";
+        val domainClass = domainObject.getClass();
+        val facetedMethod = facetedAction(domainClass, parentMethodName);
+
+        facetFactory.process(ProcessClassContext
+                .forTesting(domainClass, defaultMethodRemover(), facetedMethod));
+
+        val navigableParentFacet = assertHasNavigableParentFacet(facetedMethod);
+        assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
+
+        final Method parentMethod = domainClass.getMethod(parentMethodName);
+
+        assertEquals(
+                navigableParentFacet.navigableParent(domainObject),
+                parentMethod.invoke(domainObject, _Constants.emptyObjects));
     }
 
     // -- HELPER
 
-    private void testParentMethod(final Object domainObject, final String parentMethodName) throws Exception {
-
-        final Class<?> domainClass = domainObject.getClass();
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(domainClass, mockMethodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(NavigableParentFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof NavigableParentFacetViaGetterMethod);
-
-        final NavigableParentFacetViaGetterMethod navigableParentFacetMethod = (NavigableParentFacetViaGetterMethod) facet;
-        final Method parentMethod = domainClass.getMethod(parentMethodName);
-
-        Assert.assertEquals(
-                parentMethod.invoke(domainObject, _Constants.emptyObjects),
-                navigableParentFacetMethod.navigableParent(domainObject)	);
-
+    NavigableParentFacet assertHasNavigableParentFacet(final FacetHolder facetHolder) {
+        val navigableParentFacet = facetHolder.getFacet(NavigableParentFacet.class);
+        assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
+        return navigableParentFacet;
     }
-
-
 
 }

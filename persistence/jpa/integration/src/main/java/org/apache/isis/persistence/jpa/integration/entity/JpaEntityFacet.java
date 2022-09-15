@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
+import org.apache.isis.core.metamodel.services.idstringifier.IdStringifierLookupService;
 
 import lombok.NonNull;
 import lombok.val;
@@ -253,13 +253,18 @@ public class JpaEntityFacet
         }
 
         val entityManager = getEntityManager();
+        val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
         if (entityManager.contains(pojo)) {
+            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            if (primaryKey == null) {
+                return EntityState.PERSISTABLE_ATTACHED_NO_OID;
+            }
             return EntityState.PERSISTABLE_ATTACHED;
         }
 
         try {
-            val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
+            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.PERSISTABLE_DETACHED;
             } else {
@@ -270,7 +275,8 @@ public class JpaEntityFacet
                     : EntityState.PERSISTABLE_DETACHED;
             }
         } catch (PersistenceException ex) {
-            // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry) (this was without any weaving)
+            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
+                (this was without any weaving) */
             Throwable cause = ex.getCause();
             if (cause instanceof DescriptorException) {
                 DescriptorException descriptorException = (DescriptorException) cause;

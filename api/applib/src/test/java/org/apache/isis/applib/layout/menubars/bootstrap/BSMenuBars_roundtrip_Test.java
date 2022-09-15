@@ -16,37 +16,39 @@
  */
 package org.apache.isis.applib.layout.menubars.bootstrap;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import javax.xml.bind.JAXBContext;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenu;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 
 public class BSMenuBars_roundtrip_Test {
 
     private JaxbService jaxbService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jaxbService = new JaxbService.Simple();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
     }
 
 
     @Test
     public void happyCase() throws Exception {
+
+        // test prerequisites
+        assertNotNull(JAXBContext.newInstance(BSMenuBars.class));
 
         // given
         BSMenuBars menuBars = new BSMenuBars();

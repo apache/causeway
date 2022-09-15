@@ -87,6 +87,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
         </dependency>
+        
+     	<!-- provides @Digits -->
+		<dependency>
+		    <groupId>jakarta.validation</groupId>
+		    <artifactId>jakarta.validation-api</artifactId>
+	    </dependency>
 
         <!-- marked for deprecation -->
     	<dependency>
@@ -101,19 +107,6 @@
 			<artifactId>isis-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock</artifactId>
-            <scope>test</scope>
-            <exclusions>
-            	<!-- transitively provided by isis-jdk-supplemental -->
-            	<exclusion>
-            		<groupId>org.ow2.asm</groupId>
-            		<artifactId>asm</artifactId>
-            	</exclusion>
-            </exclusions>
-        </dependency>
 
     </dependencies>
 

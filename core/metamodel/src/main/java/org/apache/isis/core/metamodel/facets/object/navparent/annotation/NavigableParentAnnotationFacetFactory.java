@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.Evaluators.MethodEvaluator;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -104,7 +104,7 @@ implements MetaModelRefiner {
         }
 
         try {
-            addFacet(new NavigableParentFacetViaGetterMethod(method, facetHolder));
+            addFacet(new NavigableParentFacetViaMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
             log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}",
                     method, facetHolder, e);

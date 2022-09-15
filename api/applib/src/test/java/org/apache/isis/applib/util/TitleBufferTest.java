@@ -18,13 +18,13 @@
  */
 package org.apache.isis.applib.util;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class TitleBufferTest {
+class TitleBufferTest {
 
     String companyName;
     String name;
@@ -36,7 +36,7 @@ public class TitleBufferTest {
     TitleBuffer t2;
     TitleBuffer t3;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         name = "Fred";
         t1 = new TitleBuffer(name);
@@ -53,17 +53,17 @@ public class TitleBufferTest {
     @Test
     public void testAppend() {
         t1.append("");
-        assertEquals("add empty string", name, t1.toString());
+        assertEquals(name, t1.toString(), "add empty string");
         t1.append("Smith");
         name += (" " + "Smith");
-        assertEquals("append simple string", name, t1.toString());
+        assertEquals(name, t1.toString(), "append simple string");
         t1.append(",", "");
-        assertEquals("append empty string with delimiter", name, t1.toString());
+        assertEquals(name, t1.toString(), "append empty string with delimiter");
         t1.append(",", null);
-        assertEquals("append null with delimiter", name, t1.toString());
+        assertEquals(name, t1.toString(), "append null with delimiter");
         t1.append(",", "Xyz Ltd.");
         name += (", " + "Xyz Ltd.");
-        assertEquals("append string with delimiter", name, t1.toString());
+        assertEquals(name, t1.toString(), "append string with delimiter");
     }
 
     @Test
@@ -182,11 +182,11 @@ public class TitleBufferTest {
         final TitleTestObject s = new TitleTestObject();
 
         t1.append(s);
-        assertEquals("append empty TextString", name, t1.toString());
+        assertEquals(name, t1.toString(), "append empty TextString");
 
         //
         t1.append(new TitleTestObject("square"));
-        assertEquals("append empty TextString", name + " " + "square", t1.toString());
+        assertEquals(name + " " + "square", t1.toString(), "append empty TextString");
     }
 
     @Test

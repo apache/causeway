@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class PoWriterTest_escape {
+class PoWriterTest_escape {
 
     @Test
     public void no_quotes() throws Exception {
@@ -38,7 +38,7 @@ public class PoWriterTest_escape {
         assertThat(escape, is(equalTo(str('a', '\\', '"', 'b', '\\', '"', 'c'))));
     }
 
-    private static String str(char... params) {
+    private static String str(final char... params) {
         return new String(params);
     }
 }

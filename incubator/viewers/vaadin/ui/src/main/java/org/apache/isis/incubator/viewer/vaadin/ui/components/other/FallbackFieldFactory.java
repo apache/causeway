@@ -33,7 +33,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryV
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.debug.DebugField;
 import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
-import org.apache.isis.viewer.commons.model.debug.DebugUiModel;
+import org.apache.isis.viewer.commons.model.mock.UiMockup;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
 
         val spec = request.getManagedFeature().getElementType();
 
-        val debugUiModel = DebugUiModel.of("type not handled")
+        val debugUiModel = UiMockup.of("type not handled")
         .withProperty("ObjectFeature.specification.fullIdentifier",  spec.getFullIdentifier())
         .withProperty("ObjectFeature.identifier",  request.getManagedFeature().getIdentifier().toString());
 

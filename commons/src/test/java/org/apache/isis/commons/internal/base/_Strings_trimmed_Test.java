@@ -18,29 +18,32 @@
  */
 package org.apache.isis.commons.internal.base;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class _Strings_trimmed_Test {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+class _Strings_trimmed_Test {
 
     @Test
     public void fits() {
-        Assertions.assertThat(_Strings.trimmed("abcde", 5)).isEqualTo("abcde");
+        assertThat(_Strings.trimmed("abcde", 5), is("abcde"));
     }
 
     @Test
     public void needs_to_be_trimmed() {
-        Assertions.assertThat(_Strings.trimmed("abcde", 4)).isEqualTo("a...");
+        assertThat(_Strings.trimmed("abcde", 4), is("a..."));
     }
 
     @Test
     public void when_null() {
-        Assertions.assertThat(_Strings.trimmed(null, 4)).isNull();
+        assertThat(_Strings.trimmed(null, 4), nullValue());
     }
 
     @Test
     public void when_empty() {
-        Assertions.assertThat(_Strings.trimmed("", 4)).isEqualTo("");
+        assertThat(_Strings.trimmed("", 4), is(""));
     }
 
 }

@@ -18,26 +18,22 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-public class ObjectAdapterUtilsTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+@ExtendWith(MockitoExtension.class)
+class ObjectAdapterUtilsTest {
 
     @Mock private ManagedObject mockObjectAdapter;
-
     private Object underlyingDomainObject;
 
     @Test
@@ -47,7 +43,7 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapObjectWhenNotNull() {
-        underlyingDomainObject = new Object(); 
+        underlyingDomainObject = new Object();
         expectAdapterWillReturn(underlyingDomainObject);
         assertEquals(underlyingDomainObject, MmUnwrapUtil.single(mockObjectAdapter));
     }
@@ -59,7 +55,7 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
-        underlyingDomainObject = new Object(); 
+        underlyingDomainObject = new Object();
         expectAdapterWillReturn(underlyingDomainObject);
         assertNull(MmUnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
     }
@@ -72,13 +68,7 @@ public class ObjectAdapterUtilsTest {
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectAdapter).getPojo();
-                will(returnValue(domainObject));
-            }
-        });
+        Mockito.when(mockObjectAdapter.getPojo()).thenReturn(domainObject);
     }
-
 
 }

@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.services.menubars;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.isis.applib.services.jaxb.IsisSchemas;
@@ -31,21 +31,21 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.commons.internal.resources._Resources;
 
-public class BSMenuBarsTest {
+class BSMenuBarsTest {
 
     private JaxbService jaxbService;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         jaxbService = new Simple() {};
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() throws Exception {
     }
 
     @Test
-    public void happy_case() throws Exception {
+    void happy_case() throws Exception {
 
         BSMenuBars menuBars = jaxbService.fromXml(BSMenuBars.class,
                 _Resources.loadAsString(getClass(), "menubars.layout.xml", StandardCharsets.UTF_8));
@@ -57,7 +57,7 @@ public class BSMenuBarsTest {
         }
     }
 
-    private void println(String string) {
+    private void println(final String string) {
         //for test debugging only
     }
 

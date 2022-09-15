@@ -18,20 +18,20 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
 
-import static org.junit.Assert.assertEquals;
-
-public class BlobValueSemanticsProviderTest
+class BlobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Blob> {
 
     private Blob blob;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         super.setUp();
 

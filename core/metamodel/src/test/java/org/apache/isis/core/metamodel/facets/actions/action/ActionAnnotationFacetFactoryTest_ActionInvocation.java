@@ -20,6 +20,10 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class ActionAnnotationFacetFactoryTest_ActionInvocation
+class ActionAnnotationFacetFactoryTest_ActionInvocation
 extends AbstractFacetFactoryTest {
 
     private ObjectSpecification voidSpec;

@@ -18,10 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -39,7 +40,8 @@ import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.class
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotationFacetFactoryTest {
+class ActionAnnotationFacetFactoryTest_Invocation
+extends ActionAnnotationFacetFactoryTest {
 
     private void processInvocation(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
@@ -48,7 +50,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
     }
 
     @Test
-    public void withPostsActionInvokedEvent() {
+    void withPostsActionInvokedEvent() {
 
         class Customer {
 
@@ -62,9 +64,6 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // given
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
-
-        // expect
-        expectRemoveMethod(actionMethod);
 
         super.metaModelContext.getConfiguration()
         .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
@@ -74,22 +73,25 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
+        // expect
+        expectRemoveMethod(actionMethod);
+
         // then
         final ActionDomainEventFacet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        Assert.assertNotNull(domainEventFacet);
-        Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetAbstract);
+        assertNotNull(domainEventFacet);
+        assertTrue(domainEventFacet instanceof ActionDomainEventFacetAbstract);
         final ActionDomainEventFacetAbstract domainEventFacetImpl = (ActionDomainEventFacetAbstract) domainEventFacet;
         assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
         final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        Assert.assertNotNull(invocationFacet);
-        Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
+        assertNotNull(invocationFacet);
+        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
         final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
     }
 
     @Test
-    public void withActionInteractionEvent() {
+    void withActionInteractionEvent() {
 
         class Customer {
 
@@ -104,33 +106,33 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         // when
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
+        // expect
+        expectRemoveMethod(actionMethod);
+
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        Assert.assertNotNull(domainEventFacet);
-        Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
+        assertNotNull(domainEventFacet);
+        assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
         final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl =
                 (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
         assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
         final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        Assert.assertNotNull(invocationFacet);
+        assertNotNull(invocationFacet);
 
-        Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
+        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
         final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl =
                 (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
     }
 
     @Test
-    public void withActionDomainEvent() {
+    void withActionDomainEvent() {
 
         class Customer {
 
@@ -145,30 +147,30 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         // when
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
+        // expect
+        expectRemoveMethod(actionMethod);
+
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        Assert.assertNotNull(domainEventFacet);
-        Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
+        assertNotNull(domainEventFacet);
+        assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
         final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
         assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
         final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        Assert.assertNotNull(invocationFacet);
-        Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
+        assertNotNull(invocationFacet);
+        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
         final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
     }
 
     @Test
-    public void withDefaultEvent() {
+    void withDefaultEvent() {
 
         class Customer {
             @SuppressWarnings("unused")
@@ -180,9 +182,6 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         final Class<?> cls = Customer.class;
         actionMethod = findMethod(cls, "someAction");
 
-        // expect
-        expectRemoveMethod(actionMethod);
-
         super.metaModelContext.getConfiguration()
                 .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
@@ -191,16 +190,19 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
                 .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
+        // expect
+        expectRemoveMethod(actionMethod);
+
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        Assert.assertNotNull(domainEventFacet);
-        Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault);
+        assertNotNull(domainEventFacet);
+        assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault);
         final ActionDomainEventFacetDefault domainEventFacetImpl = (ActionDomainEventFacetDefault) domainEventFacet;
         assertThat(domainEventFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
 
         final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        Assert.assertNotNull(invocationFacet);
-        Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromDefault);
+        assertNotNull(invocationFacet);
+        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromDefault);
         final ActionInvocationFacetForDomainEventFromDefault invocationFacetImpl = (ActionInvocationFacetForDomainEventFromDefault) invocationFacet;
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
     }

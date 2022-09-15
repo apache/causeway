@@ -25,7 +25,7 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRowContent;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.clearfix.ClearFix;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.Col;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.RepeatingViewWithDynamicallyVisibleContent;
@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 public class Row
-extends PanelAbstract<ManagedObject, EntityModel>
+extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ implements HasDynamicallyVisibleContent {
 
     public Row(
             final String id,
-            final EntityModel entityModel,
+            final UiObjectWkt entityModel,
             final BSRow bsRow) {
 
         super(id, entityModel);

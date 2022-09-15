@@ -19,30 +19,29 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+import org.apache.isis.viewer.commons.model.scalar.HasUiParameter;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 public class ScalarParameterModel
 extends ScalarModel
-implements ParameterUiModel {
+implements HasUiParameter {
 
     private static final long serialVersionUID = 1L;
 
-    public static ScalarParameterModel wrap(final ParameterUiModelWkt delegate) {
+    public static ScalarParameterModel wrap(final UiParameterWkt delegate) {
         return new ScalarParameterModel(delegate);
     }
 
-    private final ParameterUiModelWkt delegate;
+    @Getter(onMethod_={@Override})
+    private final UiParameterWkt uiParameter;
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -50,24 +49,9 @@ implements ParameterUiModel {
      * value (if any) of that action parameter.
      */
     private ScalarParameterModel(
-            final ParameterUiModelWkt delegate) {
-        super(EntityModel.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()));
-        this.delegate = delegate;
-    }
-
-    @Override
-    public ObjectActionParameter getMetaModel() {
-        return delegate.getMetaModel();
-    }
-
-    @Override
-    public String getIdentifier() {
-        return "" + getParameterIndex();
-    }
-
-    @Override
-    public String getCssClass() {
-        return getMetaModel().getCssClass("isis-");
+            final UiParameterWkt uiParameter) {
+        super(UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()));
+        this.uiParameter = uiParameter;
     }
 
     @Override
@@ -110,18 +94,5 @@ implements ParameterUiModel {
     public ManagedValue proposedValue() {
         return getParameterNegotiationModel().getParamModels().getElseFail(getParameterIndex());
     }
-
-    @Override
-    public ParameterNegotiationModel getParameterNegotiationModel() {
-        return delegate.getParameterNegotiationModel();
-    }
-
-    // -- HELPER
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return delegate.getMetaModelContext();
-    }
-
 
 }

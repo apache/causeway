@@ -35,7 +35,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.services.error.Ticket;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
@@ -119,7 +119,7 @@ public class ExceptionStackTracePanel extends Panel {
 
                 final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
                 final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-                final EntityModel entityModel = breadcrumbModel.getMostRecentlyVisited();
+                final UiObjectWkt entityModel = breadcrumbModel.getMostRecentlyVisited();
 
                 final Class<? extends Page> pageClass;
                 final PageParameters pageParameters;

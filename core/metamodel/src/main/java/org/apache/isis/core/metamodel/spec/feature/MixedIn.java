@@ -20,8 +20,6 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.function.Predicate;
 
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-
 public enum MixedIn {
     /** Member search scope including mixed in members.*/
     INCLUDED {

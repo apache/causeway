@@ -63,7 +63,7 @@ extends ReprRendererAbstract<InteractionContext> {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(getResourceContext().getInteractionProvider().currentInteractionContextElseFail());
+            renderer.with(getResourceContext().getInteractionService().currentInteractionContextElseFail());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
 

@@ -18,11 +18,10 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.task.support.ExecutorServiceAdapter;
 import org.springframework.core.task.support.TaskExecutorAdapter;
 
@@ -30,7 +29,7 @@ import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.val;
 
-public class AsyncControl_Test {
+class AsyncControl_Test {
 
     @Test
     public void defaults() throws Exception {
@@ -97,10 +96,7 @@ public class AsyncControl_Test {
     @Test
     public void chaining() throws Exception {
 
-        val executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(new Executor() {
-            @Override
-            public void execute(Runnable command) {
-            }
+        val executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(command -> {
         }));
         ExceptionHandler exceptionHandler = ex -> null;
 

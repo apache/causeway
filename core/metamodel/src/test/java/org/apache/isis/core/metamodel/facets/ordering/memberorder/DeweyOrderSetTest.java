@@ -20,17 +20,18 @@ package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 
 import java.util.List;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,14 +41,7 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetAbstract;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-public class DeweyOrderSetTest extends TestCase {
-
-    public static void main(final String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(DeweyOrderSetTest.class));
-    }
+class DeweyOrderSetTest {
 
     public static class Customer {
         private String lastName;
@@ -87,40 +81,38 @@ public class DeweyOrderSetTest extends TestCase {
     private final List<FacetedMethod> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
     private final List<FacetedMethod> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);
 
-    TranslationService mockTranslationService;
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Mock TranslationService mockTranslationService;
 
 	static TranslationContext ctx = TranslationContext.named("test");
 
-    @Override
+    @BeforeEach
     protected void setUp() {
 
         _Context.clear();
 
-        mockTranslationService = context.mock(TranslationService.class);
-        context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
-            will(new Action() {
-                @Override
-                public Object invoke(final Invocation invocation) throws Throwable {
-                    return invocation.getParameter(1);
-                }
-
-                @Override
-                public void describeTo(final Description description) {
-                    description.appendText("Returns parameter #1");
-                }
-            });
-        }});
+//FIXME
+//        context.checking(new Expectations() {{
+//            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
+//            will(new Action() {
+//                @Override
+//                public Object invoke(final Invocation invocation) throws Throwable {
+//                    return invocation.getParameter(1);
+//                }
+//
+//                @Override
+//                public void describeTo(final Description description) {
+//                    description.appendText("Returns parameter #1");
+//                }
+//            });
+//        }});
 
     }
 
-    @Override
+    @AfterEach
     protected void tearDown() throws Exception {
     }
 
+    @Test
     public void testDefaultGroup() {
 
         setupLayoutFacets("", "1", lastNameMember);
@@ -132,6 +124,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals("", orderSet.getGroupPath());
     }
 
+    @Test
     public void testDefaultGroupSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -142,6 +135,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(0, orderSet.children().size());
     }
 
+    @Test
     public void testDefaultGroupTwoMembersSorted() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -151,6 +145,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(firstNameMember, orderSet.elementList().get(1));
     }
 
+    @Test
     public void testTwoMembersAtDefaultGroupOtherWay() {
         setupLayoutFacets("", "2", lastNameMember);
         setupLayoutFacets("", "1", firstNameMember);
@@ -160,6 +155,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(lastNameMember, orderSet.elementList().get(1));
     }
 
+    @Test
     public void testWithChildGroupDefaultGroupName() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -173,6 +169,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals("", orderSet.getGroupPath());
     }
 
+    @Test
     public void testWithChildGroupSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -185,6 +182,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(3, orderSet.size());
     }
 
+    @Test
     public void testWithChildGroupChildsGroupName() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -200,6 +198,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals("", childOrderSet.getGroupPath());
     }
 
+    @Test
     public void testWithChildGroupChildsGroupSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -213,6 +212,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(0, childOrderSet.children().size());
     }
 
+    @Test
     public void testWithChildGroupChildsGroupElementOrdering() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
@@ -227,6 +227,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(houseNumberMember, childOrderSet.elementList().get(2));
     }
 
+    @Test
     public void testWithChildGroupOrderedAtEnd() {
         setupLayoutFacets("address", "6", houseNumberMember);
         setupLayoutFacets("address", "5", streetNameMember);
@@ -240,17 +241,20 @@ public class DeweyOrderSetTest extends TestCase {
         assertTrue(orderSet.elementList().get(2) instanceof DeweyOrderSet);
     }
 
+    @Test
     public void testDefaultGroupNeitherAnnotatedSize() {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(2, orderSet.elementList().size());
     }
 
+    @Test
     public void testDefaultGroupNeitherAnnotatedOrderedByName() {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(firstNameMember, orderSet.elementList().get(0));
         assertEquals(lastNameMember, orderSet.elementList().get(1));
     }
 
+    @Test
     public void testDefaultGroupMixOfAnnotatedAndNotSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("address", "2", postalTownMember);
@@ -259,6 +263,7 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(3, orderSet.elementList().size());
     }
 
+    @Test
     public void testDefaultGroupMixOfAnnotatedAndNotOrderedWithAnnotatedFirst() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", postalTownMember);
@@ -272,7 +277,7 @@ public class DeweyOrderSetTest extends TestCase {
 
     // -- HELPER
 
-    void setupLayoutFacets(String groupId, String sequence, FacetHolder facetedHolder) {
+    void setupLayoutFacets(final String groupId, final String sequence, final FacetHolder facetedHolder) {
         facetedHolder.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedHolder) {});
         facetedHolder.addFacet(new LayoutOrderFacetAbstract(sequence, facetedHolder) {});
     }

@@ -21,16 +21,15 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.hints.HasRenderingHints;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 public interface ObjectAdapterModel
 extends
-    HasMetaModelContext,
+    HasCommonContext,
     HasRenderingHints,
     IModel<ManagedObject> {
 

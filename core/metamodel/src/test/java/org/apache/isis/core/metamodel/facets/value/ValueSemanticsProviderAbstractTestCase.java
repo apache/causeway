@@ -21,30 +21,23 @@ package org.apache.isis.core.metamodel.facets.value;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
@@ -57,45 +50,29 @@ import lombok.Getter;
 
 public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock protected InteractionProvider mockInteractionProvider;
-    @Mock protected ManagedObject mockAdapter;
+    protected InteractionService mockInteractionService;
+    protected ManagedObject mockAdapter;
 
     protected MetaModelContext metaModelContext;
 
     @Getter private ValueSemanticsProvider<T> semantics;
     @Getter private ValueSerializer<T> valueSerializer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         Locale.setDefault(Locale.UK);
 
+        mockInteractionService = Mockito.mock(InteractionService.class);
+        mockAdapter = Mockito.mock(ManagedObject.class);
+
         metaModelContext = MetaModelContext_forTesting.builder()
-                .interactionProvider(mockInteractionProvider)
+                .interactionService(mockInteractionService)
                 .build();
-
-        context.checking(new Expectations() {
-            {
-                never(mockInteractionProvider);
-            }
-        });
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        context.assertIsSatisfied();
     }
 
     protected void allowMockAdapterToReturn(final Object pojo) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockAdapter).getPojo();
-                will(returnValue(pojo));
-            }
-        });
+        Mockito.when(mockAdapter.getPojo()).thenReturn(pojo);
     }
 
     protected void setSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
@@ -118,13 +95,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @Test
     public void testParseNull() throws Exception {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
         assertEquals(null, semantics.getParser().parseTextRepresentation(null, null));
     }
 
     @Test
     public void testParseEmptyString() throws Exception {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         final Object newValue = semantics.getParser().parseTextRepresentation(null, "");
 
@@ -140,12 +117,18 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testValueSerializer(final Format format) {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         final T value = getSample();
         final String encoded = getValueSerializer().enstring(format, value);
 
-        assertValueEncodesToJsonAs(value, encoded);
+        switch(format) {
+        case JSON:
+            assertValueEncodesToJsonAs(value, encoded);
+            break;
+        case URL_SAFE:
+            assertTrue(_Strings.isUrlSafe(encoded));
+        }
 
         T decoded = getValueSerializer().destring(format, encoded);
 
@@ -161,7 +144,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testDecodeNULL(final Format format) throws Exception {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         final Object newValue = getValueSerializer()
                 .destring(format, ValueSerializerDefault.ENCODED_NULL);
@@ -171,7 +154,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @ParameterizedTest
     @EnumSource(Format.class)
     public void testEmptyEncoding(final Format format) {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         assertEquals(ValueSerializerDefault.ENCODED_NULL, getValueSerializer()
                 .enstring(format, null));
@@ -179,7 +162,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @Test
     public void testTitleOfForNullObject() {
-        assumeValueSemanticsProviderIsSetup();
+        if(!isValueSemanticsProviderSetup()) return;
 
         if(semantics instanceof StringValueSemantics) {
             // string representation has null-to-empty semantics
@@ -193,8 +176,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     }
 
     // precondition for testing
-    private void assumeValueSemanticsProviderIsSetup() {
-        Assume.assumeThat(semantics, is(not(nullValue())));
+    private boolean isValueSemanticsProviderSetup() {
+        return semantics!=null;
     }
 
 

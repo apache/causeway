@@ -18,14 +18,14 @@
  */
 package org.apache.isis.applib.query;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -45,12 +45,12 @@ class NamedQueryTest_withStart_or_withCount {
 
     @Test
     public void defaults() throws Exception {
-        
+
         val range = namedQuery.getRange();
-        
+
         assertThat(range.getStart(), is(0L));
         assertThat(range.getLimit(), is(UNLIMITED));
-        
+
         assertTrue(range.isUnconstrained());
         assertFalse(range.hasOffset());
         assertFalse(range.hasLimit());
@@ -65,7 +65,7 @@ class NamedQueryTest_withStart_or_withCount {
 
         assertThat(range.getStart(), is(10L));
         assertThat(range.getLimit(), is(5L));
-        
+
         assertFalse(range.isUnconstrained());
         assertTrue(range.hasOffset());
         assertTrue(range.hasLimit());
@@ -80,7 +80,7 @@ class NamedQueryTest_withStart_or_withCount {
 
         assertThat(range.getStart(), is(10L));
         assertThat(range.getLimit(), is(UNLIMITED));
-        
+
         assertFalse(range.isUnconstrained());
         assertTrue(range.hasOffset());
         assertFalse(range.hasLimit());
@@ -88,14 +88,14 @@ class NamedQueryTest_withStart_or_withCount {
 
     @Test
     public void happyCase_startZero() throws Exception {
-        
+
         val range = namedQuery
                 .withRange(QueryRange.start(0L))
                 .getRange();
 
         assertThat(range.getStart(), is(0L));
         assertThat(range.getLimit(), is(UNLIMITED));
-        
+
         assertTrue(range.isUnconstrained());
         assertFalse(range.hasOffset());
         assertFalse(range.hasLimit());
@@ -110,14 +110,14 @@ class NamedQueryTest_withStart_or_withCount {
 
     @Test
     public void happyCase_countOnly() throws Exception {
-        
+
         val range = namedQuery
                 .withRange(QueryRange.limit(10L))
                 .getRange();
 
         assertThat(range.getStart(), is(0L));
         assertThat(range.getLimit(), is(10L));
-        
+
         assertFalse(range.isUnconstrained());
         assertFalse(range.hasOffset());
         assertTrue(range.hasLimit());
@@ -132,18 +132,18 @@ class NamedQueryTest_withStart_or_withCount {
 
     @Test
     public void countUnlimited() throws Exception {
-        
+
         val range = namedQuery
                 .withRange(QueryRange.limit(UNLIMITED))
                 .getRange();
 
         assertThat(range.getStart(), is(0L));
         assertThat(range.getLimit(), is(UNLIMITED));
-        
+
         assertTrue(range.isUnconstrained());
         assertFalse(range.hasOffset());
         assertFalse(range.hasLimit());
-        
+
     }
 
 

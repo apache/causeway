@@ -18,11 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facetapi;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 
-import junit.framework.TestCase;
-
-public class FacetAbstractTest extends TestCase {
+class FacetAbstractTest {
 
     public static interface FooFacet extends Facet {
     }
@@ -40,20 +43,18 @@ public class FacetAbstractTest extends TestCase {
     private FacetAbstract fooFacet;
     private FacetHolder facetHolder;
 
-    @Override
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         facetHolder = FacetHolder.forTesting(MetaModelContext_forTesting.buildDefault());
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
         new ConcreteFacet(BarFacet.class, facetHolder);
         facetHolder.addFacet(fooFacet);
     }
 
-    @Override
+    @AfterEach
     protected void tearDown() throws Exception {
         fooFacet = null;
         facetHolder = null;
-        super.tearDown();
     }
 
     public void testFacetType() {

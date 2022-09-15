@@ -23,7 +23,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -58,7 +58,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         add(entityInstances);
         for (val adapter : visibleAdapters) {
             final String childId = entityInstances.newChildId();
-            final EntityModel entityModel = EntityModel.ofAdapter(super.getMetaModelContext(), adapter);
+            final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(super.getMetaModelContext(), adapter);
             final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);
             entityInstances.add(entitySummaryPanel);
         }

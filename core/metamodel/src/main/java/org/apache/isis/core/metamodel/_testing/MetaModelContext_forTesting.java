@@ -36,9 +36,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
@@ -151,7 +150,7 @@ implements MetaModelContext {
     @Builder.Default
     private Function<MetaModelContext, ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava11::new;
 
-    private InteractionProvider interactionProvider;
+    private InteractionService interactionService;
 
     private TranslationService translationService;
 
@@ -223,7 +222,7 @@ implements MetaModelContext {
                 metamodelEventService,
                 messageService,
 //                specificationLoader,
-                interactionProvider,
+                interactionService,
                 getTranslationService(),
                 authentication,
                 authorizationManager,
@@ -402,11 +401,6 @@ implements MetaModelContext {
     @Override
     public WebAppContextPath getWebAppContextPath() {
         return new WebAppContextPath();
-    }
-
-    @Override
-    public InteractionLayerTracker getInteractionLayerTracker() {
-        return (InteractionLayerTracker) getInteractionProvider();
     }
 
     public void runWithConfigProperties(final Consumer<Map<String, String>> setup, final Runnable runnable) {

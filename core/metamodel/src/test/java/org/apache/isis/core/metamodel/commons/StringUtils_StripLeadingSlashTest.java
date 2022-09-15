@@ -18,12 +18,13 @@
  */
 package org.apache.isis.core.metamodel.commons;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StringUtils_StripLeadingSlashTest {
+class StringUtils_StripLeadingSlashTest {
 
     @Test
     public void shouldStripIfThereIsOne() {
@@ -40,9 +41,10 @@ public class StringUtils_StripLeadingSlashTest {
         assertThat(StringExtensions.stripLeadingSlash("/"), is(""));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void shouldFailOnNull() {
-        StringExtensions.stripLeadingSlash(null);
+        assertThrows(NullPointerException.class, ()->
+            StringExtensions.stripLeadingSlash(null));
     }
 
 }

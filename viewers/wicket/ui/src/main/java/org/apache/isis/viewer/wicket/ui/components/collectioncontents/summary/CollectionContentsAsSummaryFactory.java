@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -59,7 +59,7 @@ implements CollectionContentsAsFactory {
     // //////////////////////////////////////
 
     public CollectionContentsAsSummaryFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
+        super(UiComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
     }
 
     @Override

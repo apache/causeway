@@ -28,7 +28,6 @@ import java.util.UUID;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.joda.time.DateTime;
@@ -47,6 +46,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -607,7 +607,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public FakeDataDemoObjectWithAll updateSomeBigDecimal(
-            @Nullable @Digits(integer = 10, fraction = 4) final BigDecimal d) {
+            @Nullable @ValueSemantics(maxTotalDigits = 14, maxFractionalDigits = 4) final BigDecimal d) {
         setSomeBigDecimal(d);
         return this;
     }

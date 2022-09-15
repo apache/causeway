@@ -27,7 +27,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -40,7 +40,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
     @Inject
     public PdfJsViewerPanelComponentFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
+        super(UiComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
         }
 
         val scalarModel = (ScalarModel) model;
-        if(!scalarModel.containsFacet(PdfJsViewerFacet.class)) {
+        if(!scalarModel.getMetaModel().containsFacet(PdfJsViewerFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 

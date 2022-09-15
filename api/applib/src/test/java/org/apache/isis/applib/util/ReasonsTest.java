@@ -18,13 +18,13 @@
  */
 package org.apache.isis.applib.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ReasonsTest {
+class ReasonsTest {
 
     @Test
     public void testNoReasonReturnsNull() throws Exception {

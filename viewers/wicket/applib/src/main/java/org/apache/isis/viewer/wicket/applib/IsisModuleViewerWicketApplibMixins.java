@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.viewer.wicket.applib.mixins.Object_clearHints;
 
-
 /**
  * @since 1.x {@index}
  */

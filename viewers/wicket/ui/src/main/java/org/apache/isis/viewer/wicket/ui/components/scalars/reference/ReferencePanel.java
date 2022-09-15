@@ -31,8 +31,8 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.StringForRendering;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
@@ -69,8 +69,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected StringForRendering obtainOutputFormat() {
-        return StringForRendering.text(select2.obtainOutputFormatModel().getObject());
+    protected UiString obtainOutputFormat() {
+        return UiString.text(select2.obtainOutputFormatModel().getObject());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         final String name = scalarModel.getFriendlyName();
 
         this.entityLinkOutputFormat = (EntityLinkSimplePanel) getComponentFactoryRegistry()
-                .createComponent(ComponentType.ENTITY_LINK, scalarModel);
+                .createComponent(UiComponentType.ENTITY_LINK, scalarModel);
 
         entityLinkOutputFormat.setOutputMarkupId(true);
         entityLinkOutputFormat.setLabel(Model.of(name));
@@ -96,7 +96,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
-        this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
+        this.entityLink = new EntityLinkSelect2Panel(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
 //        _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
@@ -160,9 +160,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         lookupScalarValueContainer()
         .ifPresent(container->{
             val componentFactory = getComponentFactoryRegistry()
-                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
+                    .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
             val iconAndTitle = componentFactory
-                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
+                    .createComponent(UiComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
             container.addOrReplace(iconAndTitle);
 
             val isInlinePrompt = scalarModel.isInlinePrompt();

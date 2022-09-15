@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.val;
@@ -30,33 +30,33 @@ import lombok.val;
 /**
  * Convenience adapter for a number of {@link ComponentFactoryAbstract component
  * factory}s that where the created {@link Component} are backed by an
- * {@link EntityModel}.
+ * {@link UiObjectWkt}.
  */
 public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public EntityComponentFactoryAbstract(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final Class<?> componentClass) {
 
-        super(componentType, componentClass);
+        super(uiComponentType, componentClass);
     }
 
     public EntityComponentFactoryAbstract(
-            final ComponentType componentType,
+            final UiComponentType uiComponentType,
             final String name,
             final Class<?> componentClass) {
 
-        super(componentType, name, componentClass);
+        super(uiComponentType, name, componentClass);
     }
 
     @Override
     protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof EntityModel)) {
+        if (!(model instanceof UiObjectWkt)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final EntityModel entityModel = (EntityModel) model;
+        final UiObjectWkt entityModel = (UiObjectWkt) model;
         // hit a scenario on a redirect-and-post strategy where the component is rendered not on an
         // EntityPage but instead using a custom home page.  The hacky override in entity page (in EntityPage#onBeforeRender)
         // is therefore not called. resulting in a concurrency exception.
@@ -77,7 +77,7 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
     /**
      * optional hook.
      */
-    protected ApplicationAdvice doAppliesTo(final EntityModel entityModel) {
+    protected ApplicationAdvice doAppliesTo(final UiObjectWkt entityModel) {
         return ApplicationAdvice.APPLIES;
     }
 

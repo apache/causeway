@@ -24,18 +24,18 @@ import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 
-import org.apache.isis.viewer.commons.model.debug.DebugUiModel;
+import org.apache.isis.viewer.commons.model.mock.UiMockup;
 
 import lombok.val;
 
-public class DebugField extends CustomField<DebugUiModel> {
+public class DebugField extends CustomField<UiMockup> {
 
     private static final long serialVersionUID = 1L;
 
     private final Details details = new Details();
-    private DebugUiModel model;
+    private UiMockup model;
 
-    public DebugField(String label) {
+    public DebugField(final String label) {
         super();
         setLabel(label);
         add(details);
@@ -47,12 +47,12 @@ public class DebugField extends CustomField<DebugUiModel> {
     }
 
     @Override
-    protected DebugUiModel generateModelValue() {
+    protected UiMockup generateModelValue() {
         return model;
     }
 
     @Override
-    protected void setPresentationValue(DebugUiModel model) {
+    protected void setPresentationValue(final UiMockup model) {
         this.model = model;
 
         details.setSummaryText(model.getSummaryText());

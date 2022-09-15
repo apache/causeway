@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
@@ -166,6 +167,11 @@ implements MemberExecutorService {
         // assert has bookmark, unless non-scalar
         ManagedObjects.asScalarNonEmpty(returnedAdapter)
         .filter(scalarNonEmpty->!scalarNonEmpty.getSpecialization().isOther()) // don't care
+        // if its a transient entity, flush the current transaction, so we get an OID
+        .filter(scalarNonEmpty->{
+            MmEntityUtil.ifHasNoOidThenFlush(scalarNonEmpty);
+            return true;
+        })
         .ifPresent(scalarNonEmpty->{
             _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->String.format(
                     "bookmark required for non-empty scalars %s", scalarNonEmpty.getSpecification()));

@@ -23,8 +23,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
@@ -435,16 +433,6 @@ public final class _Reflect {
             }
         }
         return false;
-    }
-
-    // -- METHOD/FIELD HANDLES
-
-    public static MethodHandle handleOf(final Method method) throws IllegalAccessException {
-        return MethodHandles.lookup().unreflect(method);
-    }
-
-    public static MethodHandle handleOfGetterOn(final Field field) throws IllegalAccessException {
-        return MethodHandles.lookup().unreflectGetter(field);
     }
 
     // -- FIND GETTER

@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.config.beans;
 
+import java.util.ServiceLoader;
+import java.util.ServiceLoader.Provider;
+
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.context._Plugin;
+import org.apache.isis.commons.internal.context._Context;
 
 import lombok.NonNull;
 
@@ -60,7 +63,10 @@ public interface IsisBeanTypeClassifier {
     // -- LOOKUP
 
     public static Can<IsisBeanTypeClassifier> get() {
-        return Can.ofCollection(_Plugin.loadAll(IsisBeanTypeClassifier.class));
+        return Can.ofStream(ServiceLoader
+                .load(IsisBeanTypeClassifier.class, _Context.getDefaultClassLoader())
+                .stream()
+                .map(Provider::get));
     }
 
 }

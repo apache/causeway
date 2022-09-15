@@ -69,7 +69,7 @@ extends ReprRendererAbstract<Void> {
 
         val metaModelContext = super.getResourceContext().getMetaModelContext();
 
-        addLinkToUser(getResourceContext().getInteractionProvider().currentInteractionContextElseFail());
+        addLinkToUser(getResourceContext().getInteractionService().currentInteractionContextElseFail());
         addLinksToApplicationLogos();
         addLinkToMenuBars();
         addLinkToServices(metaModelContext.streamServiceAdapters());

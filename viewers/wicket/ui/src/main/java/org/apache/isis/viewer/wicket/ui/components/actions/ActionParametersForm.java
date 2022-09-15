@@ -32,14 +32,14 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.commons.model.PlacementDirection;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
-import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.layout.UiPlacementDirection;
+import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -75,7 +75,7 @@ extends PromptFormAbstract<ActionModel> {
         paramPanels.clear();
 
         actionModel.streamPendingParamUiModels()
-        .map(ParameterUiModelWkt.class::cast)
+        .map(UiParameterWkt.class::cast)
         .forEach(paramModel->{
 
             val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
@@ -89,7 +89,7 @@ extends PromptFormAbstract<ActionModel> {
 
     private void newParamPanel(
             final WebMarkupContainer container,
-            final ParameterUiModelWkt paramModel,
+            final UiParameterWkt paramModel,
             final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
 
         val scalarParamModel = ScalarParameterModel.wrap(paramModel);
@@ -97,7 +97,7 @@ extends PromptFormAbstract<ActionModel> {
         // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
         val component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
-                        ComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
+                        UiComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
 
         _Casts.castTo(ScalarPanelAbstract.class, component)
         .ifPresent(scalarPanel->{
@@ -123,7 +123,7 @@ extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmDecorationModel.areYouSure(getTranslationService(), PlacementDirection.BOTTOM);
+            val confirmUiModel = ConfirmDecorationModel.areYouSure(getTranslationService(), UiPlacementDirection.BOTTOM);
             WktDecorators.getConfirm().decorate(button, confirmUiModel);
         }
     }
@@ -137,7 +137,7 @@ extends PromptFormAbstract<ActionModel> {
 
         val actionModel = actionModel();
 
-        val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
+        val updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = updatedParamModel.getParameterIndex();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;

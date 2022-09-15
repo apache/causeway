@@ -20,28 +20,23 @@ package org.apache.isis.core.metamodel.facets.object.navparent;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
-import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class NavigableParentFacetMethodTest {
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
-    private final Mockery mockery = new JUnit4Mockery();
+class NavigableParentFacetMethodTest {
 
-    private NavigableParentFacetViaGetterMethod facet;
+    private NavigableParentFacetViaMethod facet;
     private FacetHolder mockFacetHolder;
-
     private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInNavigableParentMethod pojo;
@@ -52,24 +47,19 @@ public class NavigableParentFacetMethodTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
-        mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ManagedObject.class);
+        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        mockOwningAdapter = Mockito.mock(ManagedObject.class);
         final Method navigableParentMethod = DomainObjectWithProblemInNavigableParentMethod.class.getMethod("parent");
-        facet = new NavigableParentFacetViaGetterMethod(navigableParentMethod, mockFacetHolder);
+        facet = new NavigableParentFacetViaMethod(navigableParentMethod, mockFacetHolder);
 
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockOwningAdapter).getPojo();
-                will(returnValue(pojo));
-            }
-        });
+        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         facet = null;
     }

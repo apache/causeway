@@ -18,16 +18,16 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MetaModelService_Config_Test {
+class MetaModelService_Config_Test {
 
     @Test
     public void namespace_prefixes() throws Exception {

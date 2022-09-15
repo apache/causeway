@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 
 /**
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
@@ -62,11 +62,6 @@ implements ObjectAdapterModel {
     @Override
     public RenderingHint getRenderingHint() {
         return scalarModel().getRenderingHint();
-    }
-
-    @Override
-    public void setRenderingHint(final RenderingHint renderingHint) {
-        scalarModel().setRenderingHint(renderingHint);
     }
 
     @Override

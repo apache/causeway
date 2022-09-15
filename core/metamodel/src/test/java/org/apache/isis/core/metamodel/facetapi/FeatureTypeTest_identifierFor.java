@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

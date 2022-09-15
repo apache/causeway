@@ -18,16 +18,20 @@
  */
 package org.apache.isis.applib.services.jaxb;
 
+import javax.xml.bind.JAXBContext;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 class JaxbServiceTest {
@@ -52,8 +56,11 @@ class JaxbServiceTest {
         assertEquals(sampleDto, clone);
     }
 
-    @Test
+    @Test @SneakyThrows
     void clone_usingUtility() {
+        // test prerequisites
+        assertNotNull(JAXBContext.newInstance(ActionInvocationDto.class));
+
         val dto = getSample();
         assertDtoEquals(dto, _Xml.clone(dto).getValue().orElseThrow());
     }

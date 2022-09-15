@@ -26,6 +26,10 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
@@ -33,9 +37,6 @@ import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
 import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHierarchy;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.val;
 
@@ -131,7 +132,7 @@ class ReflectTest {
 
     // -- HELPER
 
-    private static void assertSetContainsAll(Set<String> shouldContain, Set<String> actuallyContains) {
+    private static void assertSetContainsAll(final Set<String> shouldContain, final Set<String> actuallyContains) {
         assertTrue(_Sets.minus(shouldContain, actuallyContains).isEmpty());
     }
 

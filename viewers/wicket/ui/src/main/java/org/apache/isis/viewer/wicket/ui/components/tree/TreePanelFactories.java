@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.tree;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -40,7 +40,7 @@ public class TreePanelFactories {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
-            super(ComponentType.SCALAR_NAME_AND_VALUE, ParentedTreePanel.class);
+            super(UiComponentType.SCALAR_NAME_AND_VALUE, ParentedTreePanel.class);
         }
 
         @Override
@@ -71,7 +71,7 @@ public class TreePanelFactories {
         private static final long serialVersionUID = 1L;
 
         public Standalone() {
-            super(ComponentType.VALUE, StandaloneTreePanel.class);
+            super(UiComponentType.VALUE, StandaloneTreePanel.class);
         }
 
         @Override

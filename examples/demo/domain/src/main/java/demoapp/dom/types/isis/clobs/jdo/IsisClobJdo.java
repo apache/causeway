@@ -69,7 +69,8 @@ public class IsisClobJdo                                          // <.>
     @Getter @Setter
     private Clob readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                            // <.>
+    @Property(editing = Editing.ENABLED,                            // <.>
+            optionality = Optionality.MANDATORY)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),

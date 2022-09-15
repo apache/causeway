@@ -20,27 +20,24 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 
-public class IsisWicketApplication_Pages {
+@ExtendWith(MockitoExtension.class)
+class IsisWicketApplication_Pages {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-
-    @Mock
-    private PageClassRegistry mockPageClassRegistry;
+    @Mock PageClassRegistry mockPageClassRegistry;
 
     private IsisWicketApplication application;
 
@@ -58,12 +55,10 @@ public class IsisWicketApplication_Pages {
             }
 
         };
-        context.checking(new Expectations() {
-            {
-                oneOf(mockPageClassRegistry).getPageClass(pageType);
-                will(returnValue(expectedPageClass));
-            }
-        });
+
+        Mockito.when(mockPageClassRegistry.getPageClass(pageType))
+        .thenReturn(_Casts.uncheckedCast(expectedPageClass));
+
         final Class<? extends Page> pageClass = application.getHomePage();
         assertThat(expectedPageClass.isAssignableFrom(pageClass), is(true));
     }
@@ -74,7 +69,7 @@ public class IsisWicketApplication_Pages {
         final PageType pageType = PageType.SIGN_IN;
         final Class<WebPage> expectedPageClass = WebPage.class;
 
-        final PageClassRegistry mockPageClassRegistry = context.mock(PageClassRegistry.class);
+        final PageClassRegistry mockPageClassRegistry = Mockito.mock(PageClassRegistry.class);
         application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;
 
@@ -83,12 +78,9 @@ public class IsisWicketApplication_Pages {
                 return mockPageClassRegistry;
             }
         };
-        context.checking(new Expectations() {
-            {
-                oneOf(mockPageClassRegistry).getPageClass(pageType);
-                will(returnValue(expectedPageClass));
-            }
-        });
+        Mockito.when(mockPageClassRegistry.getPageClass(pageType))
+        .thenReturn(_Casts.uncheckedCast(expectedPageClass));
+
         final Class<? extends Page> pageClass = application.getSignInPageClass();
         assertThat(expectedPageClass.isAssignableFrom(pageClass), is(true));
     }

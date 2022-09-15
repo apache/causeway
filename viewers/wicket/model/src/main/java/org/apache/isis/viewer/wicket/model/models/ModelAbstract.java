@@ -20,42 +20,34 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
- * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
- * Isis' dependencies.
+ * Adapter for {@link LoadableDetachableModel}s,
+ * providing access to the {@link MetaModelContext}.
  */
 public abstract class ModelAbstract<T>
 extends LoadableDetachableModel<T>
-implements HasMetaModelContext {
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
-    private final CommonContextModel commonContextModel;
+    protected ModelAbstract() {}
 
-    protected ModelAbstract() {
-        this.commonContextModel = new CommonContextModel();
+    protected ModelAbstract(final MetaModelContext mmc) {
+        this.mmc = mmc;
     }
 
-    protected ModelAbstract(final MetaModelContext commonContext) {
-        this.commonContextModel = CommonContextModel.wrap(commonContext);
-    }
-
-    protected ModelAbstract(final MetaModelContext commonContext, final T t) {
-        this.commonContextModel = CommonContextModel.wrap(commonContext);
+    protected ModelAbstract(final MetaModelContext mmc, final T t) {
+        this.mmc = mmc;
         super.setObject(t);
     }
 
-    protected Wicket getWicketViewerSettings() {
-        return getConfiguration().getViewer().getWicket();
-    }
-
+    private transient MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContextModel.getObject();
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
 }

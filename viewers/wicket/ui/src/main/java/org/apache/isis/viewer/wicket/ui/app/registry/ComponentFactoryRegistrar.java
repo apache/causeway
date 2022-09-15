@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 
 /**
@@ -80,11 +80,11 @@ public interface ComponentFactoryRegistrar {
             return indexOfFirst;
         }
 
-        private static Predicate<ComponentFactory> matching(final ComponentType componentType) {
+        private static Predicate<ComponentFactory> matching(final UiComponentType uiComponentType) {
             return new Predicate<ComponentFactory>() {
                 @Override
                 public boolean test(final ComponentFactory input) {
-                    return input.getComponentType() == componentType;
+                    return input.getComponentType() == uiComponentType;
                 }
             };
         }

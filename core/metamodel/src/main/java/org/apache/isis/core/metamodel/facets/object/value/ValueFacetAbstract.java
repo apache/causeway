@@ -121,7 +121,7 @@ implements ValueFacet<T> {
 
     @Override
     public ValueSemanticsProvider.Context createValueSemanticsContext(final @Nullable ObjectFeature feature) {
-        val iaProvider = super.getInteractionProvider();
+        val iaProvider = super.getInteractionService();
         if(iaProvider==null) {
             return null; // JUnit context
         }

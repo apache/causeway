@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -63,22 +63,22 @@ extends PanelAbstract<Void, IModel<Void>> {
                 .map(BreadcrumbModelProvider::getBreadcrumbModel)
                 .orElseGet(()->new BreadcrumbModel(getMetaModelContext())); // for testing
 
-        final IModel<EntityModel> entityModel = new Model<>();
-        ChoiceProvider<EntityModel> choiceProvider = new ChoiceProvider<EntityModel>() {
+        final IModel<UiObjectWkt> entityModel = new Model<>();
+        ChoiceProvider<UiObjectWkt> choiceProvider = new ChoiceProvider<UiObjectWkt>() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public String getDisplayValue(final EntityModel choice) {
+            public String getDisplayValue(final UiObjectWkt choice) {
                 return titleFor(choice);
             }
 
-            private String titleFor(final EntityModel model) {
+            private String titleFor(final UiObjectWkt model) {
                 return model.getManagedObject().getTitle();
             }
 
             @Override
-            public String getIdValue(final EntityModel choice) {
+            public String getIdValue(final UiObjectWkt choice) {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
@@ -97,12 +97,12 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
             @Override
-            public void query(final String term, final int page, final Response<EntityModel> response) {
-                final List<EntityModel> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
-                final List<EntityModel> checkedList = _Lists.filter(breadCrumbList,
-                        new Predicate<EntityModel>() {
+            public void query(final String term, final int page, final Response<UiObjectWkt> response) {
+                final List<UiObjectWkt> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
+                final List<UiObjectWkt> checkedList = _Lists.filter(breadCrumbList,
+                        new Predicate<UiObjectWkt>() {
                             @Override
-                            public boolean test(final EntityModel input) {
+                            public boolean test(final UiObjectWkt input) {
                                 final Object id = getIdValue(input);
                                 return id != null;
                             }
@@ -111,12 +111,12 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
             @Override
-            public Collection<EntityModel> toChoices(final Collection<String> ids) {
+            public Collection<UiObjectWkt> toChoices(final Collection<String> ids) {
                 return breadcrumbModel.getList();
             }
 
         };
-        final Select2Choice<EntityModel> breadcrumbChoice =
+        final Select2Choice<UiObjectWkt> breadcrumbChoice =
                 new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
 
         breadcrumbChoice.add(
@@ -127,7 +127,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                     @Override
                     protected void onUpdate(final AjaxRequestTarget target) {
                         final String oidStr = breadcrumbChoice.getInput();
-                        final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
+                        final UiObjectWkt selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
                             val configuration = getMetaModelContext().getConfiguration();
 

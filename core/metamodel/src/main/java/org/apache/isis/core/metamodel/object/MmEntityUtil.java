@@ -83,6 +83,24 @@ public final class MmEntityUtil {
     }
 
     /**
+     * Handles transient entities that have no OID yet, but get one once the current transaction flushes.
+     * As a side-effect transitions a transient entity to a bookmarked one. For bookmarked entities,
+     * or any non-entity types acts as a no-op.
+     */
+    public static void ifHasNoOidThenFlush(final @Nullable ManagedObject entity) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
+                || !entity.getSpecialization().isEntity()
+                || entity.isBookmarkMemoized()) {
+            return;
+        }
+        if(!hasOid(entity)) {
+            entity.getTransactionService().flushTransaction();
+            // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
+            entity.getEntityState();
+        }
+    }
+
+    /**
      * @param managedObject
      * @return managedObject
      * @throws AssertionError if managedObject is a detached entity

@@ -55,21 +55,10 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <artifactId>isis-core-internaltestvintage</artifactId>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
-
-    <repositories>
-        <!-- The artifact in the maven repository has been moved and causes a build failure. Using this setting gets the artifact allowing the build to work.  This fix should hopefully be temporary -->
-        <repository>
-          <id>java.net</id>
-          <url>https://repo1.maven.org/maven2</url>
-            <snapshots>
-              <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>

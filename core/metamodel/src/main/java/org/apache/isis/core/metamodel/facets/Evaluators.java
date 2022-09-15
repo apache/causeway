@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -178,7 +179,7 @@ public final class Evaluators  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            return _Reflect.handleOf(method);
+            return MethodHandles.lookup().unreflect(method);
         }
     }
 
@@ -199,8 +200,8 @@ public final class Evaluators  {
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
             val getter = correspondingGetter.orElse(null);
             return getter!=null
-                    ? _Reflect.handleOf(getter)
-                    : _Reflect.handleOfGetterOn(field);
+                    ? MethodHandles.lookup().unreflect(getter)
+                    : MethodHandles.lookup().unreflectGetter(field);
         }
 
         private boolean isSameAs(final MethodEvaluator methodEvaluator) {

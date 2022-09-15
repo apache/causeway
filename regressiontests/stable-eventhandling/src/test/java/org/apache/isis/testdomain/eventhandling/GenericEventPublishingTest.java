@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.eventhandling;
 
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -37,10 +36,10 @@ import lombok.Value;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
-                GenericEventPublishingTest.TestConfig.class, 
+        classes = {
+                GenericEventPublishingTest.TestConfig.class,
                 GenericEventPublishingTest.TestPublisher.class,
-                GenericEventPublishingTest.TestListener.class, 
+                GenericEventPublishingTest.TestListener.class,
                 EventBusServiceSpring.class
         })
 class GenericEventPublishingTest {
@@ -69,23 +68,21 @@ class GenericEventPublishingTest {
     public static class TestPublisher {
 
         @Inject EventBusService eventBusService;
-        
+
         public void fireHelloWorld() {
             eventBusService.post(GenericEvent.of("Hello World!"));
         }
 
     }
 
-    @Service 
+    @Service
     public static class TestListener {
 
         @Getter
         private final StringBuilder history = new StringBuilder();
 
-        //XXX unfortunately Spring does not yet support the @Observes annotation
-        // we are lucky if it does in the future
         @EventListener(GenericEvent.class)
-        public void receiveHelloWorld(@Observes GenericEvent<String> event) {
+        public void receiveHelloWorld(final GenericEvent<String> event) {
             history.append(event.getWhat());
         }
 

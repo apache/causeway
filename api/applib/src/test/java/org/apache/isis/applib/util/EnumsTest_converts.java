@@ -18,12 +18,12 @@
  */
 package org.apache.isis.applib.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class EnumsTest_converts {
+class EnumsTest_converts {
 
     private static enum MyEnum {
         CONTENT_TYPE, LAST_MODIFIED, WARNING, X_REPRESENTATION_TYPE, OBJECT_ACTION

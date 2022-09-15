@@ -103,14 +103,7 @@ implements IRequestListener {
                 String newPageNum = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("pageNum").toString();
                 try {
                     final int pageNum = Integer.parseInt(newPageNum);
-                    final Updater updater = new Updater() {
-                        @Override
-                        public void update(
-                                final PdfJsViewerAdvisor advisor,
-                                final PdfJsViewerAdvisor.InstanceKey renderKey) {
-                            advisor.pageNumChangedTo(renderKey, pageNum);
-                        }
-                    };
+                    final Updater updater = (advisor, renderKey) -> advisor.pageNumChangedTo(renderKey, pageNum);
                     updateAdvisors(updater);
                 } catch(Exception ex) {
                     // ignore
@@ -127,14 +120,7 @@ implements IRequestListener {
                 String newScale = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("scale").toString();
                 try {
                     final Scale scale = Scale.forValue(newScale);
-                    final Updater updater = new Updater() {
-                        @Override
-                        public void update(
-                                final PdfJsViewerAdvisor advisor,
-                                final PdfJsViewerAdvisor.InstanceKey renderKey) {
-                            advisor.scaleChangedTo(renderKey, scale);
-                        }
-                    };
+                    final Updater updater = (advisor, renderKey) -> advisor.scaleChangedTo(renderKey, scale);
                     updateAdvisors(updater);
                 } catch(Exception ex) {
                     // ignore
@@ -152,14 +138,7 @@ implements IRequestListener {
                 String newHeight = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("height").toString();
                 try {
                     final int height = Integer.parseInt(newHeight);
-                    final Updater updater = new Updater() {
-                        @Override
-                        public void update(
-                                final PdfJsViewerAdvisor advisor,
-                                final PdfJsViewerAdvisor.InstanceKey renderKey) {
-                            advisor.heightChangedTo(renderKey, height);
-                        }
-                    };
+                    final Updater updater = (advisor, renderKey) -> advisor.heightChangedTo(renderKey, height);
                     updateAdvisors(updater);
                 } catch(Exception ex) {
                     // ignore
@@ -208,7 +187,7 @@ implements IRequestListener {
         val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
         val pdfJsConfig =
-                scalarModel.lookupFacet(PdfJsViewerFacet.class)
+                scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
                 .withDocumentUrl(urlFor(

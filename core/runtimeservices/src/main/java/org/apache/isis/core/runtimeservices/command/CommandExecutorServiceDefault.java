@@ -60,7 +60,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -193,19 +192,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             for (OidDto targetOidDto : targetOidDtos) {
 
                 val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
-                final ObjectAction objectAction = findObjectAction(targetAdapter, logicalMemberIdentifier);
+                val objectAction = findObjectAction(targetAdapter, logicalMemberIdentifier);
 
                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
                 // it will switch the targetAdapter to be the mixedInAdapter transparently
                 val argAdapters = argAdaptersFor(actionDto);
 
-                InteractionHead head;
-                if(objectAction instanceof ObjectActionMixedIn) {
-                    ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
-                    head = actionMixedIn.interactionHead(targetAdapter);
-                } else {
-                    head = InteractionHead.regular(targetAdapter);
-                }
+                final InteractionHead head = objectAction.interactionHead(targetAdapter);
+
                 val resultAdapter = objectAction.execute(head, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                 // flush any Isis PersistenceCommands pending

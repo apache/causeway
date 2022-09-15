@@ -207,7 +207,7 @@ extends ReprRendererAbstract<ManagedObject> {
         }
 
         // described by
-        if (mode.includeDescribedBy() && !resourceContext.suppressDescribedByLinks()) {
+        if (mode.includeDescribedBy() && !resourceContext.config().isSuppressDescribedByLinks()) {
             addLinkToDescribedBy();
             addLinkToObjectLayout();
             addLinkToObjectIcon();
@@ -216,7 +216,7 @@ extends ReprRendererAbstract<ManagedObject> {
             addLinkToUp();
         }
 
-        if (!mode.isArgs() && !resourceContext.objectPropertyValuesOnly()) {
+        if (!mode.isArgs() && !resourceContext.config().isObjectPropertyValuesOnly()) {
             // update/persist
             addPersistLinkIfTransientAndPersistable();
             addUpdatePropertiesLinkIfRequired();
@@ -290,7 +290,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         addProperties(objectAdapter, appendTo, associations);
 
-        if(!resourceContext.objectPropertyValuesOnly()) {
+        if(!resourceContext.config().isObjectPropertyValuesOnly()) {
             if (!mode.isArgs() ) {
                 addCollections(objectAdapter, appendTo, associations);
             }
@@ -336,7 +336,7 @@ extends ReprRendererAbstract<ManagedObject> {
             }
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
-            final JsonRepresentation propertyRepr = resourceContext.objectPropertyValuesOnly()
+            final JsonRepresentation propertyRepr = resourceContext.config().isObjectPropertyValuesOnly()
                     ? propertyValueRepresentation.getRepresentation("value")
                             : propertyValueRepresentation;
                     members.mapPutJsonRepresentation(assoc.getId(), propertyRepr);
@@ -446,7 +446,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
-        if(!getResourceContext().suppressUpdateLink()) {
+        if(!getResourceContext().config().isSuppressUpdateLink()) {
             val objectRef = ManagedObjects.stringifyElseFail(objectAdapter);
             val updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", objectRef).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
             getLinks().arrayAdd(updateLinkBuilder.build());
@@ -462,7 +462,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         val spec = domainObject.getSpecification();
         if(spec.isValue()) {
-            val context2 = JsonValueConverter.Context.of(objectFeature, context.suppressMemberExtensions());
+            val context2 = JsonValueConverter.Context.of(objectFeature, context.config().isSuppressMemberExtensions());
             return jsonValueEncoder.asObject(domainObject, context2);
         }
 

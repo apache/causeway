@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -214,7 +214,7 @@ public class IsisAjaxDataTable extends DataTable<DataRow, String> {
     }
 
     private UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
+        return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
     }
 
 }

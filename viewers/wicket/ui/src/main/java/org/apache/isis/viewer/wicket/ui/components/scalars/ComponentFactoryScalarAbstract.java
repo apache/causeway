@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -46,7 +46,7 @@ extends ComponentFactoryAbstract {
     protected ComponentFactoryScalarAbstract(
             final Class<?> componentClass,
             final Can<Class<?>> scalarTypes) {
-        super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
+        super(UiComponentType.SCALAR_NAME_AND_VALUE, componentClass);
         this.scalarTypes = scalarTypes;
     }
 

@@ -18,23 +18,23 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-public class ByteValueSemanticsProviderTest
+class ByteValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Byte> {
 
     private ByteValueSemantics value;
 
     private Byte byteObj;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);

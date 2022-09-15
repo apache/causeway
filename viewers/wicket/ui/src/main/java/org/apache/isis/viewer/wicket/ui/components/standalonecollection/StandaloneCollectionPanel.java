@@ -27,7 +27,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -104,7 +104,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         }
 
         getComponentFactoryRegistry()
-            .addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, collectionModel);
+            .addOrReplaceComponent(outerDiv, UiComponentType.COLLECTION_CONTENTS, collectionModel);
     }
 
 

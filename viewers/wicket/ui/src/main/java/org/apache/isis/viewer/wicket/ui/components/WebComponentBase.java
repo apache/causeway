@@ -21,10 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
@@ -33,7 +31,7 @@ import org.apache.isis.viewer.wicket.model.util.WktContext;
  */
 public abstract class WebComponentBase
 extends WebComponent
-implements HasMetaModelContext {
+implements HasCommonContext {
 
     public WebComponentBase(final String id) {
         super(id);
@@ -45,30 +43,10 @@ implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
-    private transient IsisConfiguration isisConfiguration;
-    private transient WebAppContextPath webAppContextPath;
-    private transient MetaModelContext commonContext;
-
+    private transient MetaModelContext mmc;
     @Override
     public MetaModelContext getMetaModelContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
-    }
-
-    public IsisConfiguration getIsisConfiguration() {
-        return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
-    }
-
-    public WebAppContextPath getWebAppContextPath() {
-        return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
-    }
-
-
-    // -- HELPER
-
-    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
-        return existingIfAny!=null
-                ? existingIfAny
-                : getMetaModelContext().lookupServiceElseFail(type);
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
 }

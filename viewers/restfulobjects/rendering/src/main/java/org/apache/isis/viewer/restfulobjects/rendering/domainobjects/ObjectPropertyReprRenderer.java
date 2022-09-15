@@ -94,7 +94,9 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                     .appendValueAndFormat(
                             valueAdapter,
                             representation,
-                            JsonValueConverter.Context.of(objectMember, resourceContext.suppressMemberExtensions()));
+                            JsonValueConverter.Context.of(
+                                    objectMember,
+                                    resourceContext.config().isSuppressMemberExtensions()));
             return;
         }
 
@@ -195,7 +197,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.suppressDescribedByLinks()) {
+        if(resourceContext.config().isSuppressDescribedByLinks()) {
             return;
         }
         final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();

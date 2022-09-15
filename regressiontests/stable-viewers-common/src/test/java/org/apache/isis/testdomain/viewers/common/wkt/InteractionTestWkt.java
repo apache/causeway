@@ -47,9 +47,9 @@ import org.apache.isis.testdomain.model.interaction.Configuration_usingInteracti
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.isis.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
@@ -112,7 +112,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
         val objectSpec = domainObject.getSpecification();
-        val entityModel = EntityModel.ofAdapter(commonContext, domainObject);
+        val entityModel = UiObjectWkt.ofAdapter(commonContext, domainObject);
 
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
         assertEquals(domainObject.getTitle(), entityModel.getTitle());

@@ -23,7 +23,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -54,7 +54,7 @@ extends PromptFormAbstract<ScalarPropertyModel> {
         val container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
         val component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
         _Casts.castTo(ScalarPanelAbstract.class, component)
         .ifPresent(scalarModelSubscriber->

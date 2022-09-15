@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.config.messages.MessageRegistry;
-import org.apache.isis.viewer.commons.model.PlacementDirection;
+import org.apache.isis.viewer.commons.model.layout.UiPlacementDirection;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -49,11 +49,11 @@ public interface ConfirmDecorator<T> {
         final @NonNull Optional<String> message;
         final @NonNull String okLabel;
         final @NonNull String cancelLabel;
-        final @NonNull PlacementDirection placement;
+        final @NonNull UiPlacementDirection placement;
 
         public static ConfirmDecorationModel areYouSure(
                 final TranslationService translationService,
-                final PlacementDirection placement) {
+                final UiPlacementDirection placement) {
 
             val context = TranslationContext.forClassName(MessageRegistry.class);
 

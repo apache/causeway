@@ -25,20 +25,21 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
-import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 import lombok.SneakyThrows;
 import lombok.val;
 
+import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
+import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+
 //tag::class[]
 public class WhereInTheWorldPanel
-extends PanelAbstract<ManagedObject, EntityModel>  {
+extends PanelAbstract<ManagedObject, UiObjectWkt>  {
 
     private static final long serialVersionUID = 1L;    // <.>
 
@@ -46,7 +47,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
 
     public WhereInTheWorldPanel(
             final String id,
-            final EntityModel model,
+            final UiObjectWkt model,
             final GeoapifyClient geoapifyClient) {
         super(id, model);
         this.geoapifyClient = geoapifyClient;
@@ -103,9 +104,9 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
                     property, ScalarRepresentation.VIEWING,
-                    ObjectUiModel.RenderingHint.REGULAR);
+                    RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
-                propertyId, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                propertyId, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
     }
 //end::createPropertyComponent[]
 

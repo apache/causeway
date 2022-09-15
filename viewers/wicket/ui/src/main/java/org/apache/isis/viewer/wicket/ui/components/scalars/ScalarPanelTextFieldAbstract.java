@@ -28,7 +28,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.commons.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -125,7 +125,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- CONVERSION
 
     @Override
-    protected final StringForRendering obtainOutputFormat() {
+    protected final UiString obtainOutputFormat() {
         // conversion does not affect the output format (usually HTML)
         return super.obtainOutputFormat();
     }

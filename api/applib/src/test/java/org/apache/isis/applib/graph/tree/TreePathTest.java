@@ -19,18 +19,16 @@
 package org.apache.isis.applib.graph.tree;
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.graph.tree.TreePath;
-
-public class TreePathTest {
+class TreePathTest {
 
     @Test
     public void rootConstructor() {
-        final TreePath treePath = TreePath.root(); 
+        final TreePath treePath = TreePath.root();
         assertThat(treePath.isRoot(), Matchers.is(true));
         assertThat(treePath.toString(), Matchers.is("/0"));
     }

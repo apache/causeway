@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.commons.model.mixin;
 
+@FunctionalInterface
 public interface HasUiMenuItem<T> {
 
     T getUiMenuItem();

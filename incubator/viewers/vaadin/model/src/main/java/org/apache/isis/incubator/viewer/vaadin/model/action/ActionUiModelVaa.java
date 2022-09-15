@@ -24,14 +24,14 @@ import com.vaadin.flow.component.html.Label;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
-import org.apache.isis.viewer.commons.model.action.ActionUiModel;
+import org.apache.isis.viewer.commons.model.action.UiAction;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
-public class ActionUiModelVaa implements ActionUiModel<Component, Component> {
+public class ActionUiModelVaa implements UiAction<Component, Component> {
 
     @Getter
     private final ManagedAction managedAction;

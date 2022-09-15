@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -40,7 +40,7 @@ implements
     private Class<T> type;
 
     protected CalendaredCollectionFactoryAbstract(final Class<T> type) {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
+        super(UiComponentType.COLLECTION_CONTENTS, NAME);
         this.type = type;
     }
 

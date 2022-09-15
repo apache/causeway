@@ -42,12 +42,12 @@ implements
 
     // TODO parent object model, maybe should not be exposed
     // maybe could be resolved in the process of decoupling the ActionModel from Wicket
-    @Getter private final @NonNull EntityModel entityModel;
+    @Getter private final @NonNull UiObjectWkt entityModel;
 
     // -- FACTORIES
 
     public static EntityCollectionModelParented forParentObjectModel(
-            final @NonNull EntityModel entityModel) {
+            final @NonNull UiObjectWkt entityModel) {
 
         val collMetaModel =
                 Optional.ofNullable(entityModel.getCollectionLayoutData())
@@ -68,7 +68,7 @@ implements
 
     protected EntityCollectionModelParented(
             final @NonNull DataTableModelWkt delegate,
-            final @NonNull EntityModel parentObjectModel) { //TODO maybe instead use the delegate (?)
+            final @NonNull UiObjectWkt parentObjectModel) { //TODO maybe instead use the delegate (?)
         super(delegate, Variant.PARENTED);
         this.entityModel = parentObjectModel;
     }

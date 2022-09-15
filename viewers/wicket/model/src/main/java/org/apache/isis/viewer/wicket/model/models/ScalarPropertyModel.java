@@ -20,32 +20,32 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
-import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.commons.model.feature.PropertyUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
+import org.apache.isis.viewer.commons.model.scalar.HasUiProperty;
+import org.apache.isis.viewer.wicket.model.models.interaction.prop.UiPropertyWkt;
 
+import lombok.Getter;
 import lombok.val;
 
 public class ScalarPropertyModel
 extends ScalarModel
-implements PropertyUiModel {
+implements HasUiProperty {
 
     private static final long serialVersionUID = 1L;
 
-    private PropertyUiModelWkt delegate;
+    @Getter(onMethod_={@Override})
+    private UiPropertyWkt uiProperty;
 
     public static ScalarPropertyModel wrap(
-            final PropertyUiModelWkt delegate,
+            final UiPropertyWkt uiProperty,
             final ScalarRepresentation viewOrEdit,
-            final EntityModel.RenderingHint renderingHint) {
-        return new ScalarPropertyModel(delegate, viewOrEdit, renderingHint);
+            final RenderingHint renderingHint) {
+        return new ScalarPropertyModel(uiProperty, viewOrEdit, renderingHint);
     }
 
     /**
@@ -54,43 +54,23 @@ implements PropertyUiModel {
      * property.
      */
     private ScalarPropertyModel(
-            final PropertyUiModelWkt delegate,
+            final UiPropertyWkt uiProperty,
             final ScalarRepresentation viewOrEdit,
-            final EntityModel.RenderingHint renderingHint) {
-        super(EntityModel.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()),
+            final RenderingHint renderingHint) {
+        super(UiObjectWkt.ofAdapter(uiProperty.getMetaModelContext(), uiProperty.getOwner()),
                 viewOrEdit, renderingHint);
-        this.delegate = delegate;
+        this.uiProperty = uiProperty;
     }
 
     /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
             final ScalarRepresentation viewOrEdit,
-            final EntityModel.RenderingHint renderingHint) {
-        return wrap(delegate, viewOrEdit, renderingHint);
-    }
-
-    @Override
-    public OneToOneAssociation getMetaModel() {
-        return delegate.getMetaModel();
+            final RenderingHint renderingHint) {
+        return wrap(uiProperty, viewOrEdit, renderingHint);
     }
 
     public ManagedProperty getManagedProperty() {
-        return delegate.propertyInteraction().getManagedProperty().get();
-    }
-
-    @Override
-    public PropertyNegotiationModel getPendingPropertyModel() {
-        return delegate.getPendingPropertyModel();
-    }
-
-    @Override
-    public String getIdentifier() {
-        return getMetaModel().getFeatureIdentifier().getMemberLogicalName();
-    }
-
-    @Override
-    public String getCssClass() {
-        return getMetaModel().getCssClass("isis-");
+        return uiProperty.propertyInteraction().getManagedProperty().get();
     }
 
     @Override
@@ -117,13 +97,8 @@ implements PropertyUiModel {
     }
 
     @Override
-    public boolean isCollection() {
-        return false;
-    }
-
-    @Override
     public String toStringOf() {
-        val featureId = delegate.getMetaModel().getFeatureIdentifier();
+        val featureId = uiProperty.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +
                 featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
 
@@ -151,11 +126,6 @@ implements PropertyUiModel {
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
         return getManagedProperty().getAssociatedActions();
-    }
-
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return delegate.getMetaModelContext();
     }
 
 }

@@ -24,11 +24,11 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
 import lombok.Getter;
@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 public interface EntityCollectionModel
 extends
     IModel<DataTableModel>,
-    HasMetaModelContext,
+    HasCommonContext,
     LinksProvider {
 
     // -- VARIANTS
@@ -50,17 +50,22 @@ extends
          * <p>
          * This deals with both persisted and transient objects.
          */
-        STANDALONE(EntityModel.RenderingHint.STANDALONE_PROPERTY_COLUMN, 25),
+        STANDALONE(RenderingHint.STANDALONE_PROPERTY_COLUMN, 25),
 
         /**
          * A collection of an entity (eg Order/OrderDetail).
          */
-        PARENTED(EntityModel.RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
+        PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
         ;
 
-        @Getter private final EntityModel.RenderingHint columnRenderingHint;
+        @Getter private final RenderingHint columnRenderingHint;
         @Getter private final int pageSizeDefault;
 
+        public RenderingHint getTitleColumnRenderingHint() {
+            return isParented()
+                ? RenderingHint.PARENTED_TITLE_COLUMN
+                : RenderingHint.STANDALONE_TITLE_COLUMN;
+        }
 
         public boolean isStandalone() {
             return this == STANDALONE;

@@ -20,6 +20,11 @@ package org.apache.isis.core.metamodel.facets.properties;
 
 import java.lang.reflect.Method;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -56,7 +61,7 @@ import org.apache.isis.core.metamodel.facets.properties.validating.method.Proper
 
 import lombok.val;
 
-public class PropertyMethodsFacetFactoryTest
+class PropertyMethodsFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     @Override

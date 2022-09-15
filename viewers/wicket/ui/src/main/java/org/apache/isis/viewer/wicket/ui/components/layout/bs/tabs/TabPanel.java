@@ -24,7 +24,7 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 public class TabPanel
-extends PanelAbstract<ManagedObject, EntityModel>
+extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -43,11 +43,11 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private final BSTab bsTab;
 
-    public TabPanel(final String id, final EntityModel model, final BSTab bsTab) {
+    public TabPanel(final String id, final UiObjectWkt model, final BSTab bsTab) {
         this(id, model, bsTab, null);
     }
 
-    public TabPanel(final String id, final EntityModel model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
+    public TabPanel(final String id, final UiObjectWkt model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
         super(id);
 
         this.bsTab = bsTab;
@@ -63,7 +63,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
         return bsTab.getName();
     }
 
-    protected void buildGui(final EntityModel model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
+    protected void buildGui(final UiObjectWkt model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_TAB_PANEL);
 
@@ -81,7 +81,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     }
 
-    public static RepeatingViewWithDynamicallyVisibleContent newRows(final EntityModel model, final BSTab bsTab) {
+    public static RepeatingViewWithDynamicallyVisibleContent newRows(final UiObjectWkt model, final BSTab bsTab) {
         final RepeatingViewWithDynamicallyVisibleContent rv = new RepeatingViewWithDynamicallyVisibleContent(ID_ROWS);
 
         for(final BSRow bsRow: bsTab.getRows()) {

@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import org.apache.wicket.MarkupContainer;
 
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 
 import lombok.val;
@@ -35,7 +35,7 @@ public class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
 
     private static final String ID_COPY_LINK = "copyLink";
 
-    public EntityIconTitleAndCopyLinkPanel(final String id, final EntityModel entityModel) {
+    public EntityIconTitleAndCopyLinkPanel(final String id, final UiObjectWkt entityModel) {
         super(id, entityModel);
     }
 

@@ -21,54 +21,47 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.metamodel.facets.ActionConfigOptions;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJUnit4TestCase {
+class ActionAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJupiterTestCase {
 
     ActionAnnotationFacetFactory facetFactory;
     Method actionMethod;
 
-    @Mock ObjectSpecification mockTypeSpec;
-    @Mock ObjectSpecification mockReturnTypeSpec;
+    ObjectSpecification mockTypeSpec;
+    ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
-        context.checking(new Expectations() {{
-            oneOf(mockMethodRemover).removeMethod(actionMethod);
-        }});
+        Mockito.verify(mockMethodRemover, Mockito.atLeastOnce()).removeMethod(actionMethod);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
-        // PRODUCTION
+        mockTypeSpec = Mockito.mock(ObjectSpecification.class);
+        mockReturnTypeSpec = Mockito.mock(ObjectSpecification.class);
 
         facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
 
-        context.checking(new Expectations() {{
-
-            allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            will(returnValue(null));
-
-        }});
+        Mockito.when(mockTypeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class))
+        .thenReturn(null);
 
         actionMethod = findMethod(Customer.class, "someAction");
-
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
     }

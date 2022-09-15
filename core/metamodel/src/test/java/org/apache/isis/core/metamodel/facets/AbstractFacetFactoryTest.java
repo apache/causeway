@@ -21,17 +21,20 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.jmock.Expectations;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -43,12 +46,7 @@ import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayout
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
-import junit.framework.TestCase;
-
-public abstract class AbstractFacetFactoryTest extends TestCase {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+public abstract class AbstractFacetFactoryTest {
 
     public static class Customer {
 
@@ -63,8 +61,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected TranslationService mockTranslationService;
-    protected InteractionProvider mockInteractionProvider;
+    @Mock protected TranslationService mockTranslationService;
+    @Mock protected InteractionService mockInteractionService;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected MethodRemover_forTesting methodRemover;
 
@@ -73,28 +71,17 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected FacetedMethodParameter facetedMethodParameter;
     protected MetaModelContext_forTesting metaModelContext;
 
-    @Override
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
-
-        // PRODUCTION
 
         methodRemover = new MethodRemover_forTesting();
 
-        mockInteractionProvider = context.mock(InteractionProvider.class);
-
-        mockTranslationService = context.mock(TranslationService.class);
-
         metaModelContext = MetaModelContext_forTesting.builder()
                 .translationService(mockTranslationService)
-                .interactionProvider(mockInteractionProvider)
+                .interactionService(mockInteractionService)
                 .build();
 
-        context.checking(new Expectations() {{
-
-            allowing(mockInteractionProvider).currentInteractionContext();
-            will(returnValue(Optional.of(iaContext)));
-        }});
+        Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
 
         facetHolder = FacetHolder.simple(
                 metaModelContext,
@@ -108,11 +95,10 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 facetedMethod.getMethod(), 0);
     }
 
-    @Override
+    @AfterEach
     protected void tearDown() throws Exception {
         methodRemover = null;
         facetedMethod = null;
-        super.tearDown();
     }
 
     protected static boolean contains(final Class<?>[] types, final Class<?> type) {

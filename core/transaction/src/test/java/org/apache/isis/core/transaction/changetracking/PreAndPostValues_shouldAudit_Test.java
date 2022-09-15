@@ -18,18 +18,17 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PreAndPostValue;
-
-import org.junit.jupiter.api.Test;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 
 import lombok.val;
 
-
-public class PreAndPostValues_shouldAudit_Test {
+class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
