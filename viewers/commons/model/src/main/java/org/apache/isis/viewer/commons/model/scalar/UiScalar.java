@@ -43,9 +43,9 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
     ManagedObject getOwner();
 
     String getIdentifier();
-
     String getCssClass();
-
+    boolean whetherHidden();
+    String disableReasonIfAny();
 
     /** feature name */
     default String getFriendlyName() {

@@ -175,7 +175,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedAction> getManagedAction() {
-        return super.getManagedMember();
+        return super.getManagedMember().getSuccess();
     }
 
     /**
@@ -264,11 +264,11 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 return ActionInteraction.wrap(managedAction);
             }
         }
-        
+
         //XXX[ISIS-3080] prior to this fix we returned... (which I'm not sure why - makes no sense to me)
         //val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
         //return ActionInteraction.start(paramValue, memberId, where);
-        
+
         // else if not a composite value
         return ActionInteraction.start(actionOwner, memberId, where);
     }

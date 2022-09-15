@@ -20,6 +20,7 @@ package org.apache.isis.viewer.commons.model.scalar;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -33,6 +34,10 @@ public interface UiProperty extends UiScalar {
     // -- PENDING PROPERTY VALUE MODEL
 
     PropertyNegotiationModel getPendingPropertyModel();
+
+    default ManagedProperty getManagedProperty() {
+        return getPendingPropertyModel().getManagedProperty();
+    }
 
     // -- SHORTCUTS
 
@@ -74,6 +79,16 @@ public interface UiProperty extends UiScalar {
     @Override
     default Can<ManagedObject> getAutoComplete(final String searchArg) {
         return getMetaModel().getAutoComplete(getOwner(), searchArg, InteractionInitiatedBy.USER);
+    }
+
+    @Override
+    default boolean whetherHidden() {
+        return getPendingPropertyModel().whetherHidden();
+    }
+
+    @Override
+    default String disableReasonIfAny() {
+        return getPendingPropertyModel().disableReasonIfAny();
     }
 
 }

@@ -74,7 +74,7 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedProperty> getManagedProperty() {
-        return super.getManagedMember();
+        return super.getManagedMember().getSuccess();
     }
 
     /**

@@ -47,6 +47,8 @@ public class InteractionVeto implements Serializable {
         ACTION_NOT_SAFE,
         ACTION_NOT_IDEMPOTENT,
         ACTION_PARAM_INVALID,
+        ;
+        public boolean isHidden() { return this == HIDDEN;};
     }
 
     @NonNull private final VetoType vetoType;

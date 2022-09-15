@@ -55,16 +55,6 @@ implements HasUiParameter {
     }
 
     @Override
-    public String disableReasonIfAny() {
-        return getParameterNegotiationModel().getUsabilityConsent(getParameterIndex()).getReason();
-    }
-
-    @Override
-    public boolean whetherHidden() {
-        return getParameterNegotiationModel().getVisibilityConsent(getParameterIndex()).isVetoed();
-    }
-
-    @Override
     public String validate(final ManagedObject proposedValue) {
         return getParameterNegotiationModel().getObservableParamValidation(getParameterIndex()).getValue();
     }

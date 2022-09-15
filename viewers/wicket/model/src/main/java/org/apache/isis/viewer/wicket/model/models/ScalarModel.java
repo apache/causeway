@@ -172,10 +172,6 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     public abstract ManagedValue proposedValue();
 
-    public abstract boolean whetherHidden();
-
-    public abstract String disableReasonIfAny();
-
     public abstract String validate(ManagedObject proposedAdapter);
 
     /**

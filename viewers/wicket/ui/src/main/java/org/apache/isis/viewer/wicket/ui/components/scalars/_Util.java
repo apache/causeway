@@ -162,33 +162,4 @@ class _Util {
                             prop.getManagedProperty()));
     }
 
-    // -- PROBABLY NO LONGER NEEDED
-
-//    private Optional<ManagedObject> recoverProposedValue2(
-//            final IValidatable<Object> validatable,
-//            final ScalarModel scalarModel){
-//        return mementoForProposedValue(validatable, scalarModel)
-//                .map(scalarModel.getMetaModelContext()::reconstructObject);
-//    }
-//
-//    private Optional<ObjectMemento> mementoForProposedValue(
-//            final IValidatable<Object> validatable,
-//            final ScalarModel scalarModel) {
-//        final Object proposedValueObj = validatable.getValue();
-//
-//        if (proposedValueObj instanceof List) {
-//            @SuppressWarnings("unchecked")
-//            val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
-//            if (proposedValueObjAsList.isEmpty()) {
-//                return Optional.empty();
-//            }
-//            val memento = proposedValueObjAsList.get(0);
-//            val logicalType = memento.getLogicalType();
-//            return Optional.of(ObjectMemento.pack(proposedValueObjAsList, logicalType));
-//        } else {
-//            return Optional.of((ObjectMemento) proposedValueObj);
-//        }
-//
-//    }
-
 }
