@@ -62,7 +62,7 @@ import lombok.val;
  *
  * @implSpec
  * <pre>
- * ScalarModel --chained-to--> EntityModel
+ * ScalarModel --chained-to--> UiObjectWkt
  * ScalarModel --provides--> ManagedObject <--provides-- ManagedValue
  * </pre>
  */
@@ -98,9 +98,9 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      * value (if any) of that action parameter.
      */
     protected ScalarModel(
-            final UiObjectWkt parentEntityModel) {
+            final UiObjectWkt parentUiObject) {
         this(EitherParamOrProp.PARAMETER,
-                parentEntityModel, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
+                parentUiObject, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
     }
 
     /**
@@ -109,11 +109,11 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      * property.
      */
     protected ScalarModel(
-            final UiObjectWkt parentEntityModel,
+            final UiObjectWkt parentUiObject,
             final ScalarRepresentation viewOrEdit,
             final UiObject.RenderingHint renderingHint) {
         this(EitherParamOrProp.PROPERTY,
-                parentEntityModel, viewOrEdit, renderingHint);
+                parentUiObject, viewOrEdit, renderingHint);
     }
 
     private ScalarModel(

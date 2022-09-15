@@ -96,11 +96,6 @@ implements HasUiProperty {
     }
 
     @Override
-    public boolean isCollection() {
-        return false;
-    }
-
-    @Override
     public String toStringOf() {
         val featureId = uiProperty.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +

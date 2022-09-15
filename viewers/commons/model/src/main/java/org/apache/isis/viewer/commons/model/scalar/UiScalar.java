@@ -52,13 +52,14 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         return getMetaModel().getFriendlyName(this::getOwner);
     }
 
-    default boolean isCollection() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-                || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
+    default boolean isSingular() {
+        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                || getMetaModel().getFeatureType() == FeatureType.PROPERTY;
     }
 
-    default boolean isScalar() {
-        return !isCollection();
+    default boolean isPlural() {
+        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
+                || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
     }
 
     default Optional<String> getDescribedAs() {

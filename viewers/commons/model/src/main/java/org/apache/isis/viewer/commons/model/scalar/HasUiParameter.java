@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -96,17 +95,6 @@ public interface HasUiParameter extends UiParameter {
     @Override
     default String getFriendlyName() {
         return getMetaModel().getFriendlyName(this::getOwner);
-    }
-
-    @Override
-    default boolean isCollection() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-                || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
-    }
-
-    @Override
-    default boolean isScalar() {
-        return !isCollection();
     }
 
     @Override

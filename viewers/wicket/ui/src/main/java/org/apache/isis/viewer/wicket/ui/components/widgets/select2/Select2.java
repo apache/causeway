@@ -62,7 +62,7 @@ implements
             final String id,
             final ScalarModel scalarModel,
             final ChoiceProviderAbstract choiceProvider) {
-        val select2 = new Select2(scalarModel.isScalar()
+        val select2 = new Select2(scalarModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
                                 ScalarModelWithSingleChoice.chain(scalarModel),
@@ -155,7 +155,7 @@ implements
     }
 
     public void syncIfNull(final ScalarModel model) {
-        if(!model.isCollection()) {
+        if(!model.isPlural()) {
             if(memento() == null) {
                 this.mementoModel().setObject(null);
                 model.setObject(null);

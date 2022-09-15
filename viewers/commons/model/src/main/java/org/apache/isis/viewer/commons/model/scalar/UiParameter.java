@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -84,17 +83,6 @@ public interface UiParameter extends UiScalar {
     }
 
     @Override
-    default boolean isCollection() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-                || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
-    }
-
-    @Override
-    default boolean isScalar() {
-        return !isCollection();
-    }
-
-    @Override
     default Optional<String> getDescribedAs() {
         return getMetaModel().getDescription(this::getOwner);
     }
@@ -123,6 +111,7 @@ public interface UiParameter extends UiScalar {
         return getMetaModel().getParameterIndex();
     }
 
+    @Override
     default String getCssClass() {
         return getMetaModel().getCssClass("isis-");
     }
