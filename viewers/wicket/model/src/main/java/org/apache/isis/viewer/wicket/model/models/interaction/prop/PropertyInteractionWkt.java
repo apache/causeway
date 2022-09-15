@@ -104,8 +104,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     public Stream<PropertyUiModelWkt> streamPropertyUiModels() {
         if(childModels==null) {
-            final int tupleIndex = 0;
-            childModels = Can.ofSingleton(new PropertyUiModelWkt(this, tupleIndex));
+            childModels = Can.ofSingleton(new PropertyUiModelWkt(this));
         }
         return childModels.stream();
     }

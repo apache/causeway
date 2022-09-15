@@ -47,15 +47,12 @@ implements
     private static final long serialVersionUID = 1L;
 
     final int paramIndex;
-    final int tupleIndex; //future extension
 
     ParameterUiModelWkt(
             final ActionInteractionWkt model,
-            final int paramIndex,
-            final int tupleIndex) {
+            final int paramIndex) {
         super(model);
         this.paramIndex = paramIndex;
-        this.tupleIndex = tupleIndex;
     }
 
     public final ActionInteraction actionInteraction() {

@@ -33,9 +33,6 @@ import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 /**
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
  *
- * @apiNote a single <i>Property Interaction</i> could in theory provide a compound of multiple
- * {@link UiProperty}(s).
- *
  * @see PropertyInteractionWkt
  * @see ChainingModel
  */
@@ -48,13 +45,9 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    final int tupleIndex; //future extension
-
     PropertyUiModelWkt(
-            final PropertyInteractionWkt model,
-            final int tupleIndex) {
+            final PropertyInteractionWkt model) {
         super(model);
-        this.tupleIndex = tupleIndex;
     }
 
     public final PropertyInteraction propertyInteraction() {
