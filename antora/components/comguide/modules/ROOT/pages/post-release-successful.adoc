@@ -494,6 +494,36 @@ link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apa
 Copy-n-paste the above mailing list announcement should suffice.
 
 
+== Announce on `announce@apache.org`
+
+This mailing list is for official project announcements, including release announcements.
+Posting to this mailing list is highly recommended:
+
+[quote, Sally Khudairi, email out to Apache PMCs]
+"sending your news to announce@ helps amplify your message to thousands of subscribers, and be included in official ASF promotions, including the Weekly News Round-ups (published every Friday; read by members of the media/analyst community --SD News publishes weekly updates on Apache projects from the Round-ups)"
+
+There are strict guidelines regarding posting to announce@apache.org, which is a moderated list.
+The message must:
+
+* be sent from your apache.org address;
+* be in PLAINTEXT (no HTML mail, no embedded links) and with no attachments
+* contain [ANNOUNCE] or [ANN] before a clear subject line
++
+eg: `[ANNOUNCE] Apache PROJECTNAME v2.3 released`.
+
+* include your project boilerplate ~10-60 words (DOAP = description of a project; eg. https://projects.apache.org/project.html?bookkeeper )
+
+* include a link to the project homepage or download source(s)
+
+Examples: link:https://lists.apache.org/list.html?announce\@apache.org[https://lists.apache.org/list.html?announce@apache.org]
+
+
+== Social Media
+
+Announce the release using the `@ApacheIsis` Twitter account.
+
+
+
 == Update BASELINE for the (non-ASF) nightly builds
 
 Nightly builds of the framework's packages are available in two different locations:
