@@ -71,7 +71,7 @@ implements HasObjectFeature {
 
         val context = JsonValueConverter.Context.of(
                 getObjectFeature(),
-                getResourceContext().suppressMemberExtensions());
+                getResourceContext().config().isSuppressMemberExtensions());
         final Object value = jsonValueEncoder.asObject(objectAdapter, context);
 
         representation.mapPut("value", value);

@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Restfulobjects;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -73,36 +74,8 @@ public interface IResourceContext extends HasMetaModelContext {
     List<List<String>> getFollowLinks();
     boolean isValidateOnly();
 
-    default boolean honorUiHints() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
-    }
-
-    default boolean objectPropertyValuesOnly() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isObjectPropertyValuesOnly();
-    }
-
-    default boolean suppressDescribedByLinks() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressDescribedByLinks();
-    }
-
-    default boolean suppressUpdateLink() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressUpdateLink();
-    }
-
-    default boolean suppressMemberId() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberId();
-    }
-
-    default boolean suppressMemberLinks() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberLinks();
-    }
-
-    default boolean suppressMemberExtensions() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberExtensions();
-    }
-
-    default boolean suppressMemberDisabledReason() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberDisabledReason();
+    default Restfulobjects config() {
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects();
     }
 
     /**

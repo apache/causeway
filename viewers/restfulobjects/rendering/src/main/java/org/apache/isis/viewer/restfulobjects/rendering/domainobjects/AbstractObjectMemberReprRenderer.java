@@ -169,7 +169,7 @@ extends ReprRendererAbstract<ManagedMember> {
      */
     protected void renderMemberContent() {
 
-        if(!resourceContext.suppressMemberId()) {
+        if(!resourceContext.config().isSuppressMemberId()) {
             representation.mapPutString("id", objectMember.getId());
         }
 
@@ -177,7 +177,7 @@ extends ReprRendererAbstract<ManagedMember> {
             representation.mapPutString("memberType", objectMemberType.getName());
         }
 
-        if (mode.isInline() && !resourceContext.suppressMemberLinks()) {
+        if (mode.isInline() && !resourceContext.config().isSuppressMemberLinks()) {
             addDetailsLinkIfPersistent();
         }
 
@@ -192,7 +192,7 @@ extends ReprRendererAbstract<ManagedMember> {
         if (mode.isFollowed() || mode.isStandalone() || mode.isMutated()) {
             addMutatorLinksIfEnabled();
 
-            if(!mode.isInline() || !resourceContext.suppressUpdateLink()) {
+            if(!mode.isInline() || !resourceContext.config().isSuppressUpdateLink()) {
                 putExtensionsIsisProprietary();
             }
             addLinksToFormalDomainModel();
@@ -279,7 +279,7 @@ extends ReprRendererAbstract<ManagedMember> {
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     protected final void putDisabledReasonIfDisabled() {
-        if(resourceContext.suppressMemberDisabledReason()) {
+        if(resourceContext.config().isSuppressMemberDisabledReason()) {
             return;
         }
         final String disabledReasonRep = usability().getReason();
