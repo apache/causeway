@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
@@ -73,15 +72,6 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
-    private enum EitherParamOrProp {
-        PROPERTY,
-        PARAMETER;
-    }
-
-    @Getter @NonNull private final EitherParamOrProp paramOrProp;
-    public boolean isProperty() { return paramOrProp == EitherParamOrProp.PROPERTY; }
-    public boolean isParameter() { return paramOrProp == EitherParamOrProp.PARAMETER; }
-
     private final UiObjectWkt parentEntityModel;
 
     @Getter(onMethod = @__(@Override))
@@ -99,8 +89,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      */
     protected ScalarModel(
             final UiObjectWkt parentUiObject) {
-        this(EitherParamOrProp.PARAMETER,
-                parentUiObject, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
+        this(parentUiObject, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
     }
 
     /**
@@ -109,21 +98,11 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      * property.
      */
     protected ScalarModel(
-            final UiObjectWkt parentUiObject,
-            final ScalarRepresentation viewOrEdit,
-            final UiObject.RenderingHint renderingHint) {
-        this(EitherParamOrProp.PROPERTY,
-                parentUiObject, viewOrEdit, renderingHint);
-    }
-
-    private ScalarModel(
-            final @NonNull EitherParamOrProp paramOrProp,
             final @NonNull UiObjectWkt parentEntityModel,
             final @NonNull ScalarRepresentation viewOrEdit,
             final @NonNull UiObject.RenderingHint renderingHint) {
 
         super(parentEntityModel); // the so called target model, we are chaining us to
-        this.paramOrProp = paramOrProp;
         this.parentEntityModel = parentEntityModel;
         this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
@@ -131,18 +110,12 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     /**
      * This instance is either a {@link ScalarParameterModel} or a {@link ScalarPropertyModel}.
-     * <p>
-     * Corresponds to the enum {@link #getParamOrProp()}.
      */
     public final Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
-        switch(getParamOrProp()) {
-        case PARAMETER: return Either.left((ScalarParameterModel) this);
-        case PROPERTY: return Either.right((ScalarPropertyModel) this);
-        default:
-            throw _Exceptions.unmatchedCase(getParamOrProp());
-        }
+        return this.isParameter()
+                ? Either.left((ScalarParameterModel) this)
+                : Either.right((ScalarPropertyModel) this);
     }
-
 
     public <T> IModel<T> unwrapped(final Class<T> type) {
         return new ScalarUnwrappingModel<T>(type, this);
@@ -313,7 +286,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      */
     public boolean mustBeEditable() {
         return getMode() == ScalarRepresentation.EDITING
-                || getParamOrProp() == EitherParamOrProp.PARAMETER
+                || isParameter()
                 || hasAssociatedActionWithInlineAsIfEdit();
     }
 
