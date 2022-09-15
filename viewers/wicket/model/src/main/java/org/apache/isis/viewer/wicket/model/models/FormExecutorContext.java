@@ -26,7 +26,7 @@ import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
 
 public interface FormExecutorContext
 extends
-    HasUiParentObject<EntityModel>,
+    HasUiParentObject<UiObjectWkt>,
     HasMetaModelContext {
 
     PromptStyle getPromptStyle();

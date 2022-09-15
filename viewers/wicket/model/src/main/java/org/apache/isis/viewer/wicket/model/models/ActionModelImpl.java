@@ -56,7 +56,7 @@ implements ActionModel {
     // -- FACTORY METHODS
 
     public static ActionModelImpl forEntity(
-            final EntityModel parentEntityModel,
+            final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
@@ -76,7 +76,7 @@ implements ActionModel {
 
     private final ActionInteractionWkt delegate;
 
-    private ActionModelImpl(final EntityModel parentEntityModel, final ActionInteractionWkt delegate) {
+    private ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
         super(parentEntityModel);
         this.delegate = delegate;
     }
@@ -119,8 +119,8 @@ implements ActionModel {
     }
 
     @Override
-    public EntityModel getParentUiModel() {
-        return (EntityModel) super.getTarget();
+    public UiObjectWkt getParentUiModel() {
+        return (UiObjectWkt) super.getTarget();
     }
 
     @Override

@@ -24,7 +24,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
@@ -34,20 +34,20 @@ import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
- * actions) of an entity, as per the provided {@link EntityModel}.
+ * actions) of an entity, as per the provided {@link UiObjectWkt}.
  */
 public class EntityHeaderPanel
-extends PanelAbstract<ManagedObject, EntityModel> {
+extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
-    public EntityHeaderPanel(final String id, final EntityModel entityModel) {
+    public EntityHeaderPanel(final String id, final UiObjectWkt entityModel) {
         super(id, entityModel);
     }
 
-    public EntityModel getEntityModel() {
+    public UiObjectWkt getEntityModel() {
         return getModel();
     }
 
@@ -71,7 +71,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
 
     private void buildEntityActionsGui() {
-        final EntityModel model = getModel();
+        final UiObjectWkt model = getModel();
         val adapter = model.getObject();
         if (adapter != null) {
             val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)

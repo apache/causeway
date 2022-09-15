@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModelImpl;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -44,7 +44,7 @@ public interface LinkAndLabelFactory
 extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabelFactory forMenu(
-            final EntityModel serviceModel) {
+            final UiObjectWkt serviceModel) {
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         serviceModel,
@@ -55,7 +55,7 @@ extends Function<ObjectAction, LinkAndLabel> {
     }
 
     public static LinkAndLabelFactory forEntity(
-            final EntityModel parentEntityModel) {
+            final UiObjectWkt parentEntityModel) {
         guardAgainstNotBookmarkable(parentEntityModel.getBookmarkedOwner());
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(

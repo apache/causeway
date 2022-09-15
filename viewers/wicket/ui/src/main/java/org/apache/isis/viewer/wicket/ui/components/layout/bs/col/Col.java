@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
@@ -53,7 +53,7 @@ import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import lombok.val;
 
 public class Col
-extends PanelAbstract<ManagedObject, EntityModel>
+extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -69,7 +69,7 @@ implements HasDynamicallyVisibleContent {
 
     public Col(
             final String id,
-            final EntityModel entityModel, final BSCol bsCol) {
+            final UiObjectWkt entityModel, final BSCol bsCol) {
 
         super(id, entityModel);
 
@@ -245,7 +245,7 @@ implements HasDynamicallyVisibleContent {
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);
 
-            final EntityModel entityModel = getModel();
+            final UiObjectWkt entityModel = getModel();
             final CollectionLayoutData snapshot = entityModel.getCollectionLayoutData();
 
             for (CollectionLayoutData collection : collections) {

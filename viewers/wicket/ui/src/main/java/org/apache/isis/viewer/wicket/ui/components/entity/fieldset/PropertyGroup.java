@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -51,7 +51,7 @@ import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
-public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> implements HasDynamicallyVisibleContent {
+public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_MEMBER_GROUP = "memberGroup";
@@ -67,7 +67,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
     private final Can<ScalarPanelAbstract> childScalarPanels;
     private final List<Component> childComponents;
 
-    public PropertyGroup(final String id, final EntityModel model, final FieldSet fieldSet) {
+    public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
         super(id, model);
         this.fieldSet = fieldSet;
 
@@ -82,8 +82,8 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
     }
 
     @Override
-    public EntityModel getModel() {
-        return (EntityModel) getDefaultModel();
+    public UiObjectWkt getModel() {
+        return (UiObjectWkt) getDefaultModel();
     }
 
     private List<Component> buildGui() {
@@ -180,13 +180,13 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
     }
 
     private Component addPropertyToForm(
-            final EntityModel entityModel,
+            final UiObjectWkt entityModel,
             final OneToOneAssociation property,
             final WebMarkupContainer container,
             final Consumer<LinkAndLabel> onAssociatedAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, EntityModel.RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, UiObjectWkt.RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

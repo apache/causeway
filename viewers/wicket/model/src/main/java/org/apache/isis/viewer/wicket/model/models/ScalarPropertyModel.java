@@ -44,7 +44,7 @@ implements UiProperty {
     public static ScalarPropertyModel wrap(
             final PropertyUiModelWkt delegate,
             final ScalarRepresentation viewOrEdit,
-            final EntityModel.RenderingHint renderingHint) {
+            final UiObjectWkt.RenderingHint renderingHint) {
         return new ScalarPropertyModel(delegate, viewOrEdit, renderingHint);
     }
 
@@ -56,8 +56,8 @@ implements UiProperty {
     private ScalarPropertyModel(
             final PropertyUiModelWkt delegate,
             final ScalarRepresentation viewOrEdit,
-            final EntityModel.RenderingHint renderingHint) {
-        super(EntityModel.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()),
+            final UiObjectWkt.RenderingHint renderingHint) {
+        super(UiObjectWkt.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()),
                 viewOrEdit, renderingHint);
         this.delegate = delegate;
     }
@@ -65,7 +65,7 @@ implements UiProperty {
     /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
             final ScalarRepresentation viewOrEdit,
-            final EntityModel.RenderingHint renderingHint) {
+            final UiObjectWkt.RenderingHint renderingHint) {
         return wrap(delegate, viewOrEdit, renderingHint);
     }
 

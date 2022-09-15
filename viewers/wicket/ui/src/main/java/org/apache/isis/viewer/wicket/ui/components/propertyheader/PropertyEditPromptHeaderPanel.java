@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.propertyheader;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -41,7 +41,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this,
                 UiComponentType.ENTITY_ICON_AND_TITLE,
-                EntityModel.ofAdapter(model.getMetaModelContext(), targetAdapter));
+                UiObjectWkt.ofAdapter(model.getMetaModelContext(), targetAdapter));
 
         Wkt.labelAdd(this, ID_PROPERTY_NAME, model::getFriendlyName)
             .setEscapeModelStrings(true);

@@ -27,13 +27,13 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class BSGridPanel
-extends PanelAbstract<ManagedObject, EntityModel> {
+extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,7 +65,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     }
 
 
-    public BSGridPanel(final String id, final EntityModel entityModel, final BSGrid bsGrid) {
+    public BSGridPanel(final String id, final UiObjectWkt entityModel, final BSGrid bsGrid) {
         super(id, entityModel);
         this.bsPage = bsGrid;
         buildGui();

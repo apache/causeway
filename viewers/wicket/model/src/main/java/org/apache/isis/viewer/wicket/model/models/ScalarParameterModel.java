@@ -52,7 +52,7 @@ implements UiParameter {
      */
     private ScalarParameterModel(
             final ParameterUiModelWkt delegate) {
-        super(EntityModel.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()));
+        super(UiObjectWkt.ofAdapter(delegate.getMetaModelContext(), delegate.getOwner()));
         this.delegate = delegate;
     }
 

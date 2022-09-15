@@ -22,12 +22,12 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class ClearFix
-extends PanelAbstract<ManagedObject, EntityModel> {
+extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     public ClearFix(
             final String id,
-            final EntityModel entityModel,
+            final UiObjectWkt entityModel,
             final BSClearFix bsClearFix) {
 
         super(id, entityModel);

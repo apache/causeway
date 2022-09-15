@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.commons.model.object.UiObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
@@ -38,7 +38,7 @@ import lombok.val;
 
 //tag::class[]
 public class WhereInTheWorldPanel
-extends PanelAbstract<ManagedObject, EntityModel>  {
+extends PanelAbstract<ManagedObject, UiObjectWkt>  {
 
     private static final long serialVersionUID = 1L;    // <.>
 
@@ -46,7 +46,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
 
     public WhereInTheWorldPanel(
             final String id,
-            final EntityModel model,
+            final UiObjectWkt model,
             final GeoapifyClient geoapifyClient) {
         super(id, model);
         this.geoapifyClient = geoapifyClient;

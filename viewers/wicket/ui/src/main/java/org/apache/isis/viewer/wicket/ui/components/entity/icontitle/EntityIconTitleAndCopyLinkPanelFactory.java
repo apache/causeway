@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
 /**
@@ -38,7 +38,7 @@ public class EntityIconTitleAndCopyLinkPanelFactory extends EntityComponentFacto
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
+        final UiObjectWkt entityModel = (UiObjectWkt) model;
         return new EntityIconTitleAndCopyLinkPanel(id, entityModel);
     }
 }

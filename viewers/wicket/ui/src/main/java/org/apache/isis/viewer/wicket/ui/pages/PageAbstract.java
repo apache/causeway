@@ -58,7 +58,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -389,7 +389,7 @@ implements ActionPromptProvider {
         .ifPresent(bm->bm.bookmarkPage(model));
     }
 
-    protected void removeAnyBookmark(final EntityModel model) {
+    protected void removeAnyBookmark(final UiObjectWkt model) {
         getBookmarkedPagesModel()
         .ifPresent(bm->bm.remove(model));
     }

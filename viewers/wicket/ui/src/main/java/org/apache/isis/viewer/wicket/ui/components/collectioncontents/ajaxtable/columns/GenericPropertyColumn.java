@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
@@ -109,7 +109,7 @@ extends GenericColumnAbstract {
 
         val domainObject = rowModel.getObject().getRowElement();
         val property = domainObject.getSpecification().getPropertyElseFail(propertyId);
-        val entityModel = EntityModel.ofAdapter(super.getMetaModelContext(), domainObject);
+        val entityModel = UiObjectWkt.ofAdapter(super.getMetaModelContext(), domainObject);
 
         val scalarModel = entityModel
                 .getPropertyModel(

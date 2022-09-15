@@ -43,18 +43,18 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-class EntityModel_hintsTest {
+class UiObjectWkt_hintsTest {
 
     MarkupContainer mockParent;
     Component mockComponent1;
     Component mockComponent2;
 
-    EntityModel target;
+    UiObjectWkt target;
     MetaModelContext metaModelContext;
     HintStore_forTesting hintStore;
 
@@ -98,7 +98,7 @@ class EntityModel_hintsTest {
 
         ThreadContext.setApplication(new WicketAppStup(metaModelContext));
 
-        target = EntityModel.ofBookmark(metaModelContext,
+        target = UiObjectWkt.ofBookmark(metaModelContext,
                 Bookmark.forLogicalTypeNameAndIdentifier("hi", "there"));
 
         mockParent = Mockito.mock(MarkupContainer.class);

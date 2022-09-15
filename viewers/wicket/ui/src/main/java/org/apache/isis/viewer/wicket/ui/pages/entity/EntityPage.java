@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -60,7 +60,7 @@ public class EntityPage extends PageAbstract {
     private static final CssResourceReference ENTITY_PAGE_CSS =
             new CssResourceReference(EntityPage.class, "EntityPage.css");
 
-    private final EntityModel model;
+    private final UiObjectWkt model;
 
     // -- FACTORIES
 
@@ -89,7 +89,7 @@ public class EntityPage extends PageAbstract {
 
         return new EntityPage(
                 pageParameters,
-                EntityModel.ofPageParameters(commonContext, pageParameters));
+                UiObjectWkt.ofPageParameters(commonContext, pageParameters));
     }
 
     /**
@@ -105,14 +105,14 @@ public class EntityPage extends PageAbstract {
 
         return new EntityPage(
                 PageParameterUtils.createPageParametersForObject(adapter),
-                EntityModel.ofAdapter(commonContext, adapter));
+                UiObjectWkt.ofAdapter(commonContext, adapter));
     }
 
     // -- CONSTRUCTOR
 
     private EntityPage(
             final PageParameters pageParameters,
-            final EntityModel entityModel) {
+            final UiObjectWkt entityModel) {
         super(pageParameters, null/*titleString*/, UiComponentType.ENTITY);
         this.model = entityModel;
     }
@@ -207,7 +207,7 @@ public class EntityPage extends PageAbstract {
 
     @Override
     public void onNewRequestCycle() {
-        val entityModel = (EntityModel) getUiHintContainerIfAny();
+        val entityModel = (UiObjectWkt) getUiHintContainerIfAny();
         ManagedObjects.refreshViewmodel(entityModel.getObject(),
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
@@ -216,12 +216,12 @@ public class EntityPage extends PageAbstract {
 
     // -- HELPER
 
-    private void addBreadcrumbIfShown(final EntityModel entityModel) {
+    private void addBreadcrumbIfShown(final UiObjectWkt entityModel) {
         getBreadcrumbModel()
         .ifPresent(breadcrumbModel->breadcrumbModel.visited(entityModel));
     }
 
-    private void removeAnyBreadcrumb(final EntityModel entityModel) {
+    private void removeAnyBreadcrumb(final UiObjectWkt entityModel) {
         getBreadcrumbModel()
         .ifPresent(breadcrumbModel->breadcrumbModel.remove(entityModel));
     }

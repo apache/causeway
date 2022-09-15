@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
@@ -41,7 +41,7 @@ public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
     }
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
+        final UiObjectWkt entityModel = (UiObjectWkt) model;
 
         val objectAdapter = entityModel.getObject();
         val objectSpec = entityModel.getTypeOfSpecification();
@@ -53,7 +53,7 @@ public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
+        final UiObjectWkt entityModel = (UiObjectWkt) model;
 
         val objectAdapter = entityModel.getObject();
         val objectSpec = entityModel.getTypeOfSpecification();

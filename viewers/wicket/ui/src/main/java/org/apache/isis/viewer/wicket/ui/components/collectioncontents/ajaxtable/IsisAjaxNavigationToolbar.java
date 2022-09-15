@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
@@ -110,7 +110,7 @@ implements HasCommonContext {
     }
 
     private UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
+        return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
     }
 
     private transient MetaModelContext mmc;

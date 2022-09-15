@@ -82,7 +82,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     public boolean isProperty() { return paramOrProp == EitherParamOrProp.PROPERTY; }
     public boolean isParameter() { return paramOrProp == EitherParamOrProp.PARAMETER; }
 
-    private final EntityModel parentEntityModel;
+    private final UiObjectWkt parentEntityModel;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
@@ -98,7 +98,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      * value (if any) of that action parameter.
      */
     protected ScalarModel(
-            final EntityModel parentEntityModel) {
+            final UiObjectWkt parentEntityModel) {
         this(EitherParamOrProp.PARAMETER,
                 parentEntityModel, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
     }
@@ -109,7 +109,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
      * property.
      */
     protected ScalarModel(
-            final EntityModel parentEntityModel,
+            final UiObjectWkt parentEntityModel,
             final ScalarRepresentation viewOrEdit,
             final UiObject.RenderingHint renderingHint) {
         this(EitherParamOrProp.PROPERTY,
@@ -118,7 +118,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     private ScalarModel(
             final @NonNull EitherParamOrProp paramOrProp,
-            final @NonNull EntityModel parentEntityModel,
+            final @NonNull UiObjectWkt parentEntityModel,
             final @NonNull ScalarRepresentation viewOrEdit,
             final @NonNull UiObject.RenderingHint renderingHint) {
 
@@ -179,7 +179,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     @Override
-    public final EntityModel getParentUiModel() {
+    public final UiObjectWkt getParentUiModel() {
         return parentEntityModel;
     }
 

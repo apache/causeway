@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.commons.model.object.UiObject;
-import org.apache.isis.viewer.commons.model.object.UiObject.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
@@ -55,37 +54,36 @@ import lombok.extern.log4j.Log4j2;
  * Backing model to represent a domain object as {@link ManagedObject}.
  */
 @Log4j2
-public class EntityModel
+public class UiObjectWkt
 extends HasBookmarkedOwnerAbstract<ManagedObject>
 implements
-    HasRenderingHints,
+    UiObject,
     ObjectAdapterModel,
     UiHintContainer,
-    UiObject,
     BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
-    public static EntityModel ofPageParameters(
+    public static UiObjectWkt ofPageParameters(
             final MetaModelContext commonContext,
             final PageParameters pageParameters) {
         val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
         return ofBookmark(commonContext, bookmark);
     }
 
-    public static EntityModel ofAdapter(
+    public static UiObjectWkt ofAdapter(
             final @NonNull MetaModelContext commonContext,
             final @Nullable ManagedObject adapter) {
-        return new EntityModel(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
+        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
-    public static EntityModel ofBookmark(
+    public static UiObjectWkt ofBookmark(
             final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
-        return new EntityModel(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
+        return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
@@ -94,14 +92,14 @@ implements
     /**
      * As used by TreeModel (same as {@link #ofAdapter(MetaModelContext, ManagedObject)}
      */
-    protected EntityModel(
+    protected UiObjectWkt(
             final MetaModelContext commonContext,
             final ManagedObject adapter) {
         this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
-    private EntityModel(
+    private UiObjectWkt(
             final @NonNull BookmarkedObjectWkt bookmarkedObject,
             final ScalarRepresentation mode,
             final RenderingHint renderingHint) {
@@ -224,7 +222,7 @@ implements
     // -- VIEW OR EDIT
 
     @Override
-    public EntityModel toEditMode() {
+    public UiObjectWkt toEditMode() {
         setMode(ScalarRepresentation.EDITING);
         propertyScalarModels().values()
             .forEach(ScalarPropertyModel::toEditMode);
@@ -232,7 +230,7 @@ implements
     }
 
     @Override
-    public EntityModel toViewMode() {
+    public UiObjectWkt toViewMode() {
         setMode(ScalarRepresentation.VIEWING);
         propertyScalarModels().values()
             .forEach(ScalarPropertyModel::toViewMode);

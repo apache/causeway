@@ -31,7 +31,7 @@ import org.apache.isis.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
@@ -134,7 +134,7 @@ public final class ServiceActionUtil {
         private LinkAndLabel newActionLink(
                 final ManagedAction managedAction) {
 
-            val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
+            val serviceModel = UiObjectWkt.ofAdapter(commonContext, managedAction.getOwner());
 
             return LinkAndLabelFactory.forMenu(serviceModel)
                     .apply(managedAction.getAction());

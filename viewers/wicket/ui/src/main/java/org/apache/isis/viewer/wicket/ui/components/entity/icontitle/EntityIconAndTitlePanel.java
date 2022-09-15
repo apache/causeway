@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
@@ -44,7 +44,7 @@ import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
- * as per the provided {@link EntityModel}.
+ * as per the provided {@link UiObjectWkt}.
  */
 public class EntityIconAndTitlePanel
 extends PanelAbstract<ManagedObject, ObjectAdapterModel> {

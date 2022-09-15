@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -37,7 +37,7 @@ public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (model instanceof EntityModel) {
+        if (model instanceof UiObjectWkt) {
             return ApplicationAdvice.APPLIES;
         }
         if (model instanceof ScalarModel) {

@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 public interface HasUiParentObject<T extends UiObject> {
 
     /**
-     * The owning entity/viewmodel/service that is declaring this action or property.
+     * The owning entity/viewmodel/service that is declaring this action, param or property.
      */
     T getParentUiModel();
 

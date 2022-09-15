@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
@@ -86,7 +86,7 @@ extends IsisAjaxHeadersToolbarAbstract<String> {
     }
 
     private UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
+        return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
     }
 
 }

@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 
 public class BreadcrumbModel implements Serializable {
 
@@ -49,10 +49,10 @@ public class BreadcrumbModel implements Serializable {
         this.commonContext = commonContext;
     }
 
-    public List<EntityModel> getList() {
-        List<EntityModel> entityModels = _Lists.newArrayList();
+    public List<UiObjectWkt> getList() {
+        List<UiObjectWkt> entityModels = _Lists.newArrayList();
         for (Bookmark bookmark : list) {
-            EntityModel entityModel = toEntityModel(bookmark);
+            UiObjectWkt entityModel = toEntityModel(bookmark);
             entityModels.add(entityModel);
         }
         return Collections.unmodifiableList(entityModels);
@@ -67,11 +67,11 @@ public class BreadcrumbModel implements Serializable {
         mostRecentlyVisitedOidStr = null;
     }
 
-    public EntityModel getMostRecentlyVisited() {
+    public UiObjectWkt getMostRecentlyVisited() {
         return mostRecentlyVisitedOidStr != null ? lookup(mostRecentlyVisitedOidStr) : null;
     }
 
-    public void visited(final EntityModel entityModel) {
+    public void visited(final UiObjectWkt entityModel) {
 
         // ignore view models
         if(entityModel.getTypeOfSpecification().isViewModel()) {
@@ -88,7 +88,7 @@ public class BreadcrumbModel implements Serializable {
         trimTo(MAX_SIZE);
     }
 
-    private String oidStrFrom(final EntityModel entityModel) {
+    private String oidStrFrom(final UiObjectWkt entityModel) {
         final PageParameters pageParameters = entityModel.getPageParametersWithoutUiHints();
         return oidStrFrom(pageParameters);
     }
@@ -107,7 +107,7 @@ public class BreadcrumbModel implements Serializable {
         }
     }
 
-    private void addToStart(final String oidStr, final EntityModel entityModel) {
+    private void addToStart(final String oidStr, final UiObjectWkt entityModel) {
         Bookmark bookmark = entityModel.getOwnerBookmark();
         bookmarkByOidStr.put(oidStr, bookmark);
         oidStrByBookmark.put(bookmark, oidStr);
@@ -125,7 +125,7 @@ public class BreadcrumbModel implements Serializable {
         }
     }
 
-    public EntityModel lookup(final String oidStr) {
+    public UiObjectWkt lookup(final String oidStr) {
         if(oidStr == null) {
             return null;
         }
@@ -152,7 +152,7 @@ public class BreadcrumbModel implements Serializable {
         }
     }
 
-    public void remove(final EntityModel entityModel) {
+    public void remove(final UiObjectWkt entityModel) {
         Bookmark bookmark = entityModel.getOwnerBookmark();
         final String oidStr = oidStrByBookmark.get(bookmark);
         if(oidStr != null) {
@@ -160,8 +160,8 @@ public class BreadcrumbModel implements Serializable {
         }
     }
 
-    protected EntityModel toEntityModel(final Bookmark bookmark) {
-        return EntityModel.ofBookmark(commonContext, bookmark);
+    protected UiObjectWkt toEntityModel(final Bookmark bookmark) {
+        return UiObjectWkt.ofBookmark(commonContext, bookmark);
     }
 
     private void remove(final String oid, final Bookmark bookmark) {

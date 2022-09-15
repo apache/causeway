@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.val;
 
@@ -34,17 +34,17 @@ import lombok.val;
  */
 public class WhereAmIHelper {
 
-    public static WhereAmIHelper of(final EntityModel startOfChain) {
+    public static WhereAmIHelper of(final UiObjectWkt startOfChain) {
         return new WhereAmIHelper(startOfChain);
     }
 
     private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
-    private final EntityModel startOfChain;
+    private final UiObjectWkt startOfChain;
     private final MetaModelContext commonContext;
 
     private final boolean isWhereAmIEnabled;
 
-    public WhereAmIHelper(final EntityModel startOfChain) {
+    public WhereAmIHelper(final UiObjectWkt startOfChain) {
         this.startOfChain = startOfChain;
         this.commonContext = startOfChain.getMetaModelContext();
 
@@ -64,7 +64,7 @@ public class WhereAmIHelper {
      *
      * @return the immutable start node of the navigable parent chain
      */
-    public EntityModel getStartOfChain() {
+    public UiObjectWkt getStartOfChain() {
         return startOfChain;
     }
 
@@ -83,7 +83,7 @@ public class WhereAmIHelper {
      * Streams the linked nodes of this model's navigable parent chain in reverse order.
      * @return reversed order stream of linked parent nodes, which does not include the start node
      */
-    public Stream<EntityModel> streamParentChainReversed() {
+    public Stream<UiObjectWkt> streamParentChainReversed() {
         if(!isWhereAmIEnabled)
             return Stream.empty(); //[ahuber] unexpected call, we could log a warning
 
@@ -93,9 +93,9 @@ public class WhereAmIHelper {
 
     // -- HELPER
 
-    private EntityModel toEntityModel(final Object domainObject) {
+    private UiObjectWkt toEntityModel(final Object domainObject) {
         val objectAdapter = commonContext.getObjectManager().adapt(domainObject);
-        return EntityModel.ofAdapter(commonContext, objectAdapter);
+        return UiObjectWkt.ofAdapter(commonContext, objectAdapter);
     }
 
 }

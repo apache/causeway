@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
@@ -202,7 +202,7 @@ class IsisToWicketTreeAdapter {
     /**
      * Extending the EntityModel to also provide a TreePath.
      */
-    private static class TreeModel extends EntityModel {
+    private static class TreeModel extends UiObjectWkt {
         private static final long serialVersionUID = 8916044984628849300L;
 
         private final TreePath treePath;

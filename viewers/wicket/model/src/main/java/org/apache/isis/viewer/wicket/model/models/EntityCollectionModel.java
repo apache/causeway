@@ -49,15 +49,15 @@ extends
          * <p>
          * This deals with both persisted and transient objects.
          */
-        STANDALONE(EntityModel.RenderingHint.STANDALONE_PROPERTY_COLUMN, 25),
+        STANDALONE(UiObjectWkt.RenderingHint.STANDALONE_PROPERTY_COLUMN, 25),
 
         /**
          * A collection of an entity (eg Order/OrderDetail).
          */
-        PARENTED(EntityModel.RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
+        PARENTED(UiObjectWkt.RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
         ;
 
-        @Getter private final EntityModel.RenderingHint columnRenderingHint;
+        @Getter private final UiObjectWkt.RenderingHint columnRenderingHint;
         @Getter private final int pageSizeDefault;
 
 

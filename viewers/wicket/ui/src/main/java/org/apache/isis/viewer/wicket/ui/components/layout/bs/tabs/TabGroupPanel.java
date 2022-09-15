@@ -31,7 +31,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
@@ -50,9 +50,9 @@ implements HasDynamicallyVisibleContent {
 
     // the view metadata
     private final ComponentHintKey selectedTabHintKey;
-    private final EntityModel entityModel;
+    private final UiObjectWkt entityModel;
 
-    private static List<ITab> tabsFor(final EntityModel entityModel, final BSTabGroup bsTabGroup) {
+    private static List<ITab> tabsFor(final UiObjectWkt entityModel, final BSTabGroup bsTabGroup) {
         final List<ITab> tabs = new ArrayList<>();
 
         final List<BSTab> tablist = _NullSafe.stream(bsTabGroup.getTabs())
@@ -79,7 +79,7 @@ implements HasDynamicallyVisibleContent {
         return tabs;
     }
 
-    public TabGroupPanel(final String id, final EntityModel entityModel, final BSTabGroup bsTabGroup) {
+    public TabGroupPanel(final String id, final UiObjectWkt entityModel, final BSTabGroup bsTabGroup) {
         super(id, tabsFor(entityModel, bsTabGroup));
         this.entityModel = entityModel;
 
