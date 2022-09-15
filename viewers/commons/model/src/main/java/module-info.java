@@ -30,9 +30,9 @@ module org.apache.isis.viewer.commons.model {
     exports org.apache.isis.viewer.commons.model.scalar;
 
     requires lombok;
-    requires org.apache.isis.applib;
-    requires org.apache.isis.commons;
-    requires org.apache.isis.core.config;
-    requires org.apache.isis.core.metamodel;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
+    requires transitive org.apache.isis.core.config;
+    requires transitive org.apache.isis.core.metamodel;
     requires spring.core;
 }

@@ -34,13 +34,13 @@ module org.apache.isis.viewer.wicket.model {
 
     requires jakarta.activation;
     requires lombok;
-    requires org.apache.isis.applib;
-    requires org.apache.isis.commons;
-    requires org.apache.isis.core.config;
-    requires org.apache.isis.core.metamodel;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
+    requires transitive org.apache.isis.core.config;
+    requires transitive org.apache.isis.core.metamodel;
     requires org.apache.isis.core.webapp;
-    requires org.apache.isis.viewer.commons.applib;
-    requires org.apache.isis.viewer.commons.model;
+    requires transitive org.apache.isis.viewer.commons.applib;
+    requires transitive org.apache.isis.viewer.commons.model;
     requires org.apache.logging.log4j;
     requires org.danekja.jdk.serializable.functional;
     requires org.slf4j;
