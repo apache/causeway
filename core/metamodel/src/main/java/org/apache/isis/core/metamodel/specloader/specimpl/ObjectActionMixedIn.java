@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.MixedInMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -57,7 +58,7 @@ implements MixedInMember {
     /**
      * The domain object type being mixed in to (being supplemented).
      */
-    private final ObjectSpecification mixedInType;
+    private final ObjectSpecification mixeeSpec;
 
     /**
      * Hold facets rather than delegate to the mixin action
@@ -69,12 +70,12 @@ implements MixedInMember {
             final Class<?> mixinType,
             final String mixinMethodName,
             final ObjectActionDefault mixinAction,
-            final ObjectSpecification mixedInType) {
+            final ObjectSpecification mixeeSpec) {
 
         super(Identifier.actionIdentifier(
                     LogicalType.eager(
-                            mixedInType.getCorrespondingClass(),
-                            mixedInType.getLogicalTypeName()),
+                            mixeeSpec.getCorrespondingClass(),
+                            mixeeSpec.getLogicalTypeName()),
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false);
@@ -84,7 +85,7 @@ implements MixedInMember {
                 mixinAction.getFacetedMethod());
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-        this.mixedInType = mixedInType;
+        this.mixeeSpec = mixeeSpec;
 
         // adjust name if necessary
 
@@ -112,7 +113,7 @@ implements MixedInMember {
 
     @Override
     public ObjectSpecification getDeclaringType() {
-        return mixedInType;
+        return mixeeSpec;
     }
 
     @Override

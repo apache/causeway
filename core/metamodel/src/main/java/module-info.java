@@ -89,7 +89,8 @@ open module org.apache.isis.core.metamodel {
 
     exports org.apache.isis.core.metamodel.specloader.specimpl
         //TODO don't expose impl. details
-        to org.apache.isis.viewer.wicket.ui, org.apache.isis.core.runtimeservices;
+        to //org.apache.isis.viewer.wicket.ui,
+        org.apache.isis.core.runtimeservices;
 
     exports org.apache.isis.core.metamodel.specloader
         to org.apache.isis.core.runtimeservices,
