@@ -61,6 +61,11 @@ extends
         @Getter private final RenderingHint columnRenderingHint;
         @Getter private final int pageSizeDefault;
 
+        public RenderingHint getTitleColumnRenderingHint() {
+            return isParented()
+                ? RenderingHint.PARENTED_TITLE_COLUMN
+                : RenderingHint.STANDALONE_TITLE_COLUMN;
+        }
 
         public boolean isStandalone() {
             return this == STANDALONE;

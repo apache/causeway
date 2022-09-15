@@ -86,7 +86,7 @@ implements
             final ManagedObject adapter,
             final @NonNull EntityCollectionModel.Variant variant) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, variant.getColumnRenderingHint());
+                ScalarRepresentation.VIEWING, variant.getTitleColumnRenderingHint());
     }
 
 
