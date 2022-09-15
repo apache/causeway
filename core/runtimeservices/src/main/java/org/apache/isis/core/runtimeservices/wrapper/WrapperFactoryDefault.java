@@ -92,10 +92,10 @@ import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.MixedInMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -433,7 +433,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     private <T> MemberAndTarget memberAndTargetForMixin(
             final Method method,
-            final T mixedIn,
+            final T mixee,
             final ManagedObject mixinAdapter) {
 
         val mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
@@ -441,24 +441,21 @@ public class WrapperFactoryDefault implements WrapperFactory {
             return MemberAndTarget.notFound();
         }
 
-        // find corresponding action of the mixedIn (this is the 'real' target).
-        val mixedInClass = mixedIn.getClass();
+        // find corresponding action of the mixee (this is the 'real' target, the target usable for invocation).
+        val mixeeClass = mixee.getClass();
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        final ObjectActionMixedIn targetAction = specificationLoader
-        .specForType(mixedInClass)
-        .flatMap(mixedInSpec->mixedInSpec.streamAnyActions(MixedIn.INCLUDED)
-                .filter(ObjectActionMixedIn.class::isInstance)
-                .map(ObjectActionMixedIn.class::cast)
-                .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))
+        final ObjectAction targetAction = specificationLoader.specForType(mixeeClass)
+        .flatMap(mixeeSpec->mixeeSpec.streamAnyActions(MixedIn.ONLY)
+                .filter(act -> ((MixedInMember)act).hasMixinAction((ObjectAction) mixinMember))
                 .findFirst()
         )
         .orElseThrow(()->new UnsupportedOperationException(String.format(
-                "Could not locate objectAction delegating to mixinAction id='%s' on mixedIn class '%s'",
-                mixinMember.getId(), mixedInClass.getName())));
+                "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
+                mixinMember.getId(), mixeeClass.getName())));
 
-        return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixedIn), method);
+        return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixee), method);
     }
 
     private static <R> InteractionContext interactionContextFrom(
