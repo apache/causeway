@@ -172,16 +172,16 @@ public class ParameterNegotiationModel {
     @NonNull public Consent getVisibilityConsent(final int paramNr) {
         val pendingArgValues = getParamValues();
         val paramMeta = getParamMetamodel(paramNr);
-        val head = this.getHead();
-        return paramMeta
-                .isVisible(head, pendingArgValues, InteractionInitiatedBy.USER);
+        val isVisible = paramMeta
+                .isVisible(getHead(), pendingArgValues, InteractionInitiatedBy.USER);
+        return isVisible;
     }
     @NonNull public Consent getUsabilityConsent(final int paramNr) {
         val pendingArgValues = getParamValues();
         val paramMeta = getParamMetamodel(paramNr);
-        val head = this.getHead();
-        return paramMeta
-                .isUsable(head, pendingArgValues, InteractionInitiatedBy.USER);
+        val isUsable = paramMeta
+                .isUsable(getHead(), pendingArgValues, InteractionInitiatedBy.USER);
+        return isUsable;
     }
 
     // -- MULTI SELECT

@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationMo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
+import org.apache.isis.viewer.commons.model.object.UiObject;
 import org.apache.isis.viewer.commons.model.scalar.UiProperty;
 import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
-import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 /**
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
@@ -43,7 +43,7 @@ public final class PropertyUiModelWkt
 extends ChainingModel<PropertyInteraction>
 implements
     HasCommonContext,
-    HasUiParentObject<ObjectUiModelWkt>,
+    HasUiParentObject<UiObject>,
     UiProperty {
 
     private static final long serialVersionUID = 1L;
@@ -66,7 +66,7 @@ implements
     }
 
     @Override
-    public final ObjectUiModelWkt getParentUiModel() {
+    public final UiObject getParentUiModel() {
         return ()->getOwner();
     }
 

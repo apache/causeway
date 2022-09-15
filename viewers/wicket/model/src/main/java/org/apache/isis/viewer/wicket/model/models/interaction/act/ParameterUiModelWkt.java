@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationM
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.commons.model.object.HasUiParentObject;
+import org.apache.isis.viewer.commons.model.object.UiObject;
 import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
-import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 import lombok.NonNull;
 
@@ -41,7 +41,7 @@ public final class ParameterUiModelWkt
 extends ChainingModel<ActionInteraction>
 implements
     HasCommonContext,
-    HasUiParentObject<ObjectUiModelWkt>,
+    HasUiParentObject<UiObject>,
     UiParameter {
 
     private static final long serialVersionUID = 1L;
@@ -67,7 +67,7 @@ implements
     }
 
     @Override
-    public ObjectUiModelWkt getParentUiModel() {
+    public UiObject getParentUiModel() {
         return ()->getOwner();
     }
 

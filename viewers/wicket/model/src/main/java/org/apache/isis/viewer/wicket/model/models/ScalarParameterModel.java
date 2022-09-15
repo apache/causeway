@@ -31,6 +31,7 @@ import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
 import lombok.NonNull;
+import lombok.val;
 
 public class ScalarParameterModel
 extends ScalarModel
