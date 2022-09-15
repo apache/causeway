@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.commons.model.object.UiObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;

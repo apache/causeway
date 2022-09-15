@@ -26,15 +26,16 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.commons.model.object.UiObject;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
-import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 import lombok.SneakyThrows;
 import lombok.val;
+
+import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
+import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
 public class WhereInTheWorldPanel
@@ -103,7 +104,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt>  {
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
                     property, ScalarRepresentation.VIEWING,
-                    UiObject.RenderingHint.REGULAR);
+                    RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
                 propertyId, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
     }

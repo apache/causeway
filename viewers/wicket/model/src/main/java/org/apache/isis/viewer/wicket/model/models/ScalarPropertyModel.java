@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.commons.model.scalar.HasUiProperty;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.UiPropertyWkt;
 
@@ -43,7 +44,7 @@ implements HasUiProperty {
     public static ScalarPropertyModel wrap(
             final UiPropertyWkt uiProperty,
             final ScalarRepresentation viewOrEdit,
-            final UiObjectWkt.RenderingHint renderingHint) {
+            final RenderingHint renderingHint) {
         return new ScalarPropertyModel(uiProperty, viewOrEdit, renderingHint);
     }
 
@@ -55,7 +56,7 @@ implements HasUiProperty {
     private ScalarPropertyModel(
             final UiPropertyWkt uiProperty,
             final ScalarRepresentation viewOrEdit,
-            final UiObjectWkt.RenderingHint renderingHint) {
+            final RenderingHint renderingHint) {
         super(UiObjectWkt.ofAdapter(uiProperty.getMetaModelContext(), uiProperty.getOwner()),
                 viewOrEdit, renderingHint);
         this.uiProperty = uiProperty;
@@ -64,7 +65,7 @@ implements HasUiProperty {
     /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
             final ScalarRepresentation viewOrEdit,
-            final UiObjectWkt.RenderingHint renderingHint) {
+            final RenderingHint renderingHint) {
         return wrap(uiProperty, viewOrEdit, renderingHint);
     }
 

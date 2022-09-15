@@ -23,9 +23,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -52,7 +52,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
         super(id, scalarModel.copyHaving(
                 ScalarRepresentation.EDITING,
-                UiObjectWkt.RenderingHint.REGULAR));
+                RenderingHint.REGULAR));
 
         buildGui(scalarModel);
     }

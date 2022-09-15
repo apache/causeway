@@ -28,6 +28,7 @@ module org.apache.isis.viewer.commons.model {
     exports org.apache.isis.viewer.commons.model.action;
     exports org.apache.isis.viewer.commons.model.decorators;
     exports org.apache.isis.viewer.commons.model.scalar;
+    exports org.apache.isis.viewer.commons.model.hints;
 
     requires lombok;
     requires transitive org.apache.isis.applib;

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.object.UiObject.RenderingHint;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 
 /**
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.

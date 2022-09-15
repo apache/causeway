@@ -39,9 +39,8 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.commons.model.object.UiObject;
-import org.apache.isis.viewer.commons.model.object.UiObject.HasRenderingHints;
-import org.apache.isis.viewer.commons.model.object.UiObject.RenderingHint;
+import org.apache.isis.viewer.commons.model.hints.HasRenderingHints;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.commons.model.scalar.UiScalar;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -52,8 +51,8 @@ import lombok.Setter;
 import lombok.val;
 
 /**
- * Represents a scalar of an entity, either a {@link EitherParamOrProp#PROPERTY property} or
- * a {@link EitherParamOrProp#PARAMETER parameter}.
+ * Represents a scalar of an entity, either a PROPERTY or
+ * a PARAMETER.
  *
  * <p>
  * Is the backing model to each of the fields that appear in forms (for entities
@@ -100,7 +99,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     protected ScalarModel(
             final @NonNull UiObjectWkt parentEntityModel,
             final @NonNull ScalarRepresentation viewOrEdit,
-            final @NonNull UiObject.RenderingHint renderingHint) {
+            final @NonNull RenderingHint renderingHint) {
 
         super(parentEntityModel); // the so called target model, we are chaining us to
         this.parentEntityModel = parentEntityModel;

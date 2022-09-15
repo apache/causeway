@@ -18,14 +18,10 @@
  */
 package org.apache.isis.viewer.commons.model.object;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.viewer.commons.model.UiModel;
-
-import lombok.RequiredArgsConstructor;
 
 public interface UiObject extends UiModel {
 
@@ -34,92 +30,6 @@ public interface UiObject extends UiModel {
     default boolean isVisible() {
         return MmVisibilityUtil
                 .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
-    }
-
-    @RequiredArgsConstructor
-    public enum RenderingHint {
-        // normal form
-        REGULAR(Where.OBJECT_FORMS),
-
-        // inside parent table
-        PARENTED_PROPERTY_COLUMN(Where.PARENTED_TABLES),
-        PARENTED_TITLE_COLUMN(Where.PARENTED_TABLES),
-
-        // stand alone table
-        STANDALONE_PROPERTY_COLUMN(Where.STANDALONE_TABLES),
-        STANDALONE_TITLE_COLUMN(Where.STANDALONE_TABLES);
-
-        private final Where where;
-        public Where asWhere() {
-            return this.where;
-        }
-
-        public boolean isRegular() {
-            return this == REGULAR;
-        }
-
-        public boolean isInParentedTable() {
-            return this == PARENTED_PROPERTY_COLUMN;
-        }
-
-        public boolean isInStandaloneTable() {
-            return this == STANDALONE_PROPERTY_COLUMN;
-        }
-
-        public boolean isInTable() {
-            return isInParentedTable() || isInStandaloneTable() || isInTableTitleColumn();
-        }
-
-        public boolean isInTableTitleColumn() {
-            return isInParentedTableTitleColumn() || isInStandaloneTableTitleColumn();
-        }
-
-        public boolean isInParentedTableTitleColumn() {
-            return this == PARENTED_TITLE_COLUMN;
-        }
-
-        public boolean isInStandaloneTableTitleColumn() {
-            return this == STANDALONE_TITLE_COLUMN;
-        }
-
-    }
-
-    public interface HasRenderingHints {
-
-        /**
-         * @apiNote Similar to {@code #mustBeEditable()}, though not called from the same locations.
-         * My suspicion is that it amounts to more or less the same set of conditions.
-         */
-        boolean isInlinePrompt();
-
-        RenderingHint getRenderingHint();
-        @Deprecated// make immutable? - need to recreate any bound UI components anyway
-        void setRenderingHint(RenderingHint renderingHint);
-
-        ScalarRepresentation getMode();
-        @Deprecated// make immutable? - need to recreate any bound UI components anyway
-        void setMode(ScalarRepresentation mode);
-
-        // -- SHORTCUTS
-
-        default boolean isViewMode() {
-            return getMode() == ScalarRepresentation.VIEWING;
-        }
-
-        default boolean isEditMode() {
-            return getMode() == ScalarRepresentation.EDITING;
-        }
-
-        default HasRenderingHints toEditMode() {
-            setMode(ScalarRepresentation.EDITING);
-            return this;
-        }
-
-        default HasRenderingHints toViewMode() {
-            setMode(ScalarRepresentation.VIEWING);
-            return this;
-        }
-
     }
 
 }

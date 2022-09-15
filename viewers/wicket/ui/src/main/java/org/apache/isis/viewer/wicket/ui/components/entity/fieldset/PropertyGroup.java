@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
@@ -186,7 +187,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
             final Consumer<LinkAndLabel> onAssociatedAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, UiObjectWkt.RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableMo
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
 import lombok.Getter;
@@ -49,15 +50,15 @@ extends
          * <p>
          * This deals with both persisted and transient objects.
          */
-        STANDALONE(UiObjectWkt.RenderingHint.STANDALONE_PROPERTY_COLUMN, 25),
+        STANDALONE(RenderingHint.STANDALONE_PROPERTY_COLUMN, 25),
 
         /**
          * A collection of an entity (eg Order/OrderDetail).
          */
-        PARENTED(UiObjectWkt.RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
+        PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
         ;
 
-        @Getter private final UiObjectWkt.RenderingHint columnRenderingHint;
+        @Getter private final RenderingHint columnRenderingHint;
         @Getter private final int pageSizeDefault;
 
 
