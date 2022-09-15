@@ -39,7 +39,7 @@ import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -75,7 +75,7 @@ extends PromptFormAbstract<ActionModel> {
         paramPanels.clear();
 
         actionModel.streamPendingParamUiModels()
-        .map(ParameterUiModelWkt.class::cast)
+        .map(UiParameterWkt.class::cast)
         .forEach(paramModel->{
 
             val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
@@ -89,7 +89,7 @@ extends PromptFormAbstract<ActionModel> {
 
     private void newParamPanel(
             final WebMarkupContainer container,
-            final ParameterUiModelWkt paramModel,
+            final UiParameterWkt paramModel,
             final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
 
         val scalarParamModel = ScalarParameterModel.wrap(paramModel);

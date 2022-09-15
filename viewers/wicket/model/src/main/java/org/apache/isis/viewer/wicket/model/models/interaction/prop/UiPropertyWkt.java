@@ -36,7 +36,7 @@ import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
  * @see PropertyInteractionWkt
  * @see ChainingModel
  */
-public final class PropertyUiModelWkt
+public final class UiPropertyWkt
 extends ChainingModel<PropertyInteraction>
 implements
     HasCommonContext,
@@ -45,7 +45,7 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    PropertyUiModelWkt(
+    UiPropertyWkt(
             final PropertyInteractionWkt model) {
         super(model);
     }

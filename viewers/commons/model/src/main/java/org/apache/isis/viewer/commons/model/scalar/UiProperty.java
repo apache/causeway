@@ -37,6 +37,16 @@ public interface UiProperty extends UiScalar {
     // -- SHORTCUTS
 
     @Override
+    default String getIdentifier() {
+        return getMetaModel().getFeatureIdentifier().getMemberLogicalName();
+    }
+
+    @Override
+    default String getCssClass() {
+        return getMetaModel().getCssClass("isis-");
+    }
+
+    @Override
     default int getAutoCompleteMinLength() {
         return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
     }

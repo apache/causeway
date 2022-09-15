@@ -21,6 +21,8 @@ package org.apache.isis.viewer.commons.model.scalar;
 import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -28,12 +30,22 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.UiModel;
 
-public interface UiScalar extends UiModel {
+public interface UiScalar extends UiModel, HasMetaModelContext {
 
     ObjectFeature getMetaModel();
 
+    @Override
+    default MetaModelContext getMetaModelContext() {
+        return getMetaModel().getMetaModelContext();
+    }
+
     /** action's or property's owner */
     ManagedObject getOwner();
+
+    String getIdentifier();
+
+    String getCssClass();
+
 
     /** feature name */
     default String getFriendlyName() {

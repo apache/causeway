@@ -213,8 +213,6 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     public abstract String validate(ManagedObject proposedAdapter);
 
-    public abstract String getCssClass();
-
     /**
      * Viewers should not use facets directly.
      * However, viewer extensions that provide their own facet types, will have to.
@@ -336,8 +334,6 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     protected abstract String toStringOf();
-
-    public abstract String getIdentifier();
 
     public final AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {

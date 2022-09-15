@@ -168,7 +168,7 @@ implements
 
     @Override
     public String getTitle() {
-        return getObject().getTitle();
+        return getManagedObject().getTitle();
     }
 
     @Override

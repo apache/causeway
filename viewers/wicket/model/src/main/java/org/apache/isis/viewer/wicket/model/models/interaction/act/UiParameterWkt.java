@@ -37,7 +37,7 @@ import lombok.NonNull;
  *
  * @see ActionInteractionWkt
  */
-public final class ParameterUiModelWkt
+public final class UiParameterWkt
 extends ChainingModel<ActionInteraction>
 implements
     HasCommonContext,
@@ -48,7 +48,7 @@ implements
 
     final int paramIndex;
 
-    ParameterUiModelWkt(
+    UiParameterWkt(
             final ActionInteractionWkt model,
             final int paramIndex) {
         super(model);
@@ -76,11 +76,6 @@ implements
     @Override
     public ObjectActionParameter getMetaModel() {
         return actionInteraction().getMetamodel().get().getParameters().getElseFail(paramIndex);
-    }
-
-    @Override
-    public String getCssClass() {
-        return getMetaModel().getCssClass("isis-");
     }
 
     @Override

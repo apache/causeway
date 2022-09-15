@@ -67,7 +67,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     private final String memberId;
     private final Where where;
-    private Can<ParameterUiModelWkt> childModels;
+    private Can<UiParameterWkt> childModels;
     private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
     private @Nullable ScalarParameterModel associatedWithParameterIfAny;
     private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
@@ -155,11 +155,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     // -- LAZY BINDING
 
-    public Stream<ParameterUiModelWkt> streamParameterUiModels() {
+    public Stream<UiParameterWkt> streamParameterUiModels() {
         if(childModels==null) {
             final int paramCount = actionInteraction().getMetamodel().get().getParameterCount();
             this.childModels = IntStream.range(0, paramCount)
-                    .mapToObj(paramIndex -> new ParameterUiModelWkt(this, paramIndex))
+                    .mapToObj(paramIndex -> new UiParameterWkt(this, paramIndex))
                     .collect(Can.toCan());
         }
         return childModels.stream();

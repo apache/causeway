@@ -33,20 +33,35 @@ import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.NonNull;
 
-public interface UiParameter extends UiScalar {
+@FunctionalInterface
+public interface HasUiParameter extends UiParameter {
 
-    /** param meta model */
+    UiParameter getUiParameter();
+
     @Override
-    ObjectActionParameter getMetaModel();
+    default ObjectActionParameter getMetaModel() {
+        return getUiParameter().getMetaModel();
+    }
 
-    /** param value */
-    @NonNull
-    ManagedObject getValue();
+    @Override
+    default ManagedObject getOwner() {
+        return getUiParameter().getOwner();
+    }
 
-    /** param value */
-    void setValue(ManagedObject paramValue);
+    @Override
+    default @NonNull ManagedObject getValue() {
+        return getUiParameter().getValue();
+    }
 
-    ParameterNegotiationModel getParameterNegotiationModel();
+    @Override
+    default void setValue(final ManagedObject paramValue) {
+        getUiParameter().setValue(paramValue);
+    }
+
+    @Override
+    default ParameterNegotiationModel getParameterNegotiationModel() {
+        return getUiParameter().getParameterNegotiationModel();
+    }
 
     @Override
     default int getAutoCompleteMinLength() {
@@ -119,27 +134,29 @@ public interface UiParameter extends UiScalar {
         return Facets.autoCompleteIsPresent(getScalarTypeSpec());
     }
 
+    @Override
     default int getParameterIndex() {
         return getMetaModel().getParameterIndex();
     }
 
+    @Override
     default String getCssClass() {
-        return getMetaModel().getCssClass("isis-");
+        return getUiParameter().getCssClass();
     }
 
     @Override
     default String getIdentifier() {
-        return "" + getParameterIndex();
+        return getUiParameter().getIdentifier();
     }
 
+    @Override
     default ActionInteractionHead getPendingParamHead() {
-        return getMetaModel().getAction().interactionHead(getOwner());
+        return getMetaModel().getAction().interactionHead(getUiParameter().getOwner());
     }
 
     @Override
     default MetaModelContext getMetaModelContext() {
-        return getMetaModel().getMetaModelContext();
+        return getUiParameter().getMetaModel().getMetaModelContext();
     }
-
 
 }

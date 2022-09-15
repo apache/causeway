@@ -59,7 +59,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     private final String memberId;
     private final Where where;
-    private Can<PropertyUiModelWkt> childModels;
+    private Can<UiPropertyWkt> childModels;
 
     public PropertyInteractionWkt(
             final BookmarkedObjectWkt bookmarkedObject,
@@ -102,9 +102,9 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     // -- LAZY BINDING
 
-    public Stream<PropertyUiModelWkt> streamPropertyUiModels() {
+    public Stream<UiPropertyWkt> streamPropertyUiModels() {
         if(childModels==null) {
-            childModels = Can.ofSingleton(new PropertyUiModelWkt(this));
+            childModels = Can.ofSingleton(new UiPropertyWkt(this));
         }
         return childModels.stream();
     }
