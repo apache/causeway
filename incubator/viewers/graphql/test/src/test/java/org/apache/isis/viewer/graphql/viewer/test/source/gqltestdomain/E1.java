@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.source.test.gqltestdomain;
+package org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain;
 
 import javax.inject.Named;
 import javax.persistence.Entity;

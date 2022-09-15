@@ -93,6 +93,7 @@
 		<module>applib</module>
 		<module>model</module>
 		<module>viewer</module>
+		<module>test</module>
 	</modules>
 
 </project>

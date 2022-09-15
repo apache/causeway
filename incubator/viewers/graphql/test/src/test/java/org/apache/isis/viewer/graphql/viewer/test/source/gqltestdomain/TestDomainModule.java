@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.source.test.gqltestdomain;
+package org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;

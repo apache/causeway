@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.source.test;
+package org.apache.isis.viewer.graphql.viewer.test.source;
 
 import java.util.List;
 
@@ -31,9 +31,9 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.graphql.viewer.source.GraphQlSourceForIsis;
-import org.apache.isis.viewer.graphql.viewer.source.test.gqltestdomain.E1;
-import org.apache.isis.viewer.graphql.viewer.source.test.gqltestdomain.E2;
-import org.apache.isis.viewer.graphql.viewer.source.test.gqltestdomain.GQLTestDomainMenu;
+import org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain.E1;
+import org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain.E2;
+import org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain.GQLTestDomainMenu;
 
 import static org.apache.isis.commons.internal.assertions._Assert.assertEquals;
 import static org.apache.isis.commons.internal.assertions._Assert.assertNotNull;
