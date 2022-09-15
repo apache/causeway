@@ -612,9 +612,10 @@ implements ScalarModelSubscriber {
        val scalarModel = scalarModel();
 
        // visibility
+       val visibilityBefore = isVisible() && isVisibilityAllowed();
        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
-       val visibilityBefore = isVisible();
        val visibilityAfter = visibilityConsent.isAllowed();
+       setVisibilityAllowed(visibilityAfter);
        setVisible(visibilityAfter);
 
        // usability
