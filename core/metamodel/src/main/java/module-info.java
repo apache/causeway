@@ -30,6 +30,8 @@ open module org.apache.isis.core.metamodel {
     exports org.apache.isis.core.metamodel.facets.actions.action.invocation;
     exports org.apache.isis.core.metamodel.facets.actions.layout;
     exports org.apache.isis.core.metamodel.facets.actions.notinservicemenu;
+    exports org.apache.isis.core.metamodel.facets.actions.semantics;
+    exports org.apache.isis.core.metamodel.facets.actcoll.typeof;
     exports org.apache.isis.core.metamodel.facets.all.described;
     exports org.apache.isis.core.metamodel.facets.all.i8n.imperative;
     exports org.apache.isis.core.metamodel.facets.all.i8n.staatic;
@@ -89,8 +91,9 @@ open module org.apache.isis.core.metamodel {
 
     exports org.apache.isis.core.metamodel.specloader
         to org.apache.isis.core.runtimeservices,
-        //TODO don't expose to viewers
-        org.apache.isis.viewer.wicket.model, org.apache.isis.viewer.wicket.ui;
+        //TODO probably don't expose SpecificationLoader to viewers
+        org.apache.isis.viewer.wicket.model, org.apache.isis.viewer.wicket.ui,
+        org.apache.isis.incubator.viewer.graphql.viewer;
 
     exports org.apache.isis.core.metamodel.specloader.validator;
 
@@ -113,10 +116,10 @@ open module org.apache.isis.core.metamodel {
     requires java.xml.bind;
     requires java.inject;
     requires lombok;
-    requires org.apache.isis.applib;
-    requires org.apache.isis.commons;
-    requires org.apache.isis.core.config;
-    requires org.apache.isis.schema;
+    requires transitive org.apache.isis.applib;
+    requires transitive org.apache.isis.commons;
+    requires transitive org.apache.isis.core.config;
+    requires transitive org.apache.isis.schema;
     requires org.apache.isis.security.api;
     requires org.apache.logging.log4j;
     requires org.joda.time;

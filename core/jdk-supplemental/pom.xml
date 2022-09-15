@@ -244,10 +244,10 @@
         </dependency>
 		
 		<!-- provides @Nullable that's required by Spring 5.x -->
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.code.findbugs</groupId> -->
+<!-- 			<artifactId>jsr305</artifactId> -->
+<!-- 		</dependency> -->
 		
 	</dependencies>
 

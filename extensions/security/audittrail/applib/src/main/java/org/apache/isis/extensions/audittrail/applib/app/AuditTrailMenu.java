@@ -23,9 +23,10 @@ package org.apache.isis.extensions.audittrail.applib.app;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;

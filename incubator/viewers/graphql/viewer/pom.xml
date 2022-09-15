@@ -63,24 +63,8 @@
 		<!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-unittestsupport-applib</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -112,6 +96,12 @@
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>jakarta.persistence</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>

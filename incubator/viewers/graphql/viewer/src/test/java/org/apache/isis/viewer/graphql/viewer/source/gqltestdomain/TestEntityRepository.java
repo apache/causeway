@@ -18,13 +18,15 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.springframework.stereotype.Repository;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
+
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Repository
 public class TestEntityRepository {

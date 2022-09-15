@@ -18,42 +18,41 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import graphql.GraphQL;
-import graphql.Scalars;
-import graphql.schema.*;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
-import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
-import org.apache.isis.viewer.graphql.viewer.IsisModuleIncViewerGraphqlViewer;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E1;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E2;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.GQLTestDomainMenu;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.TestDomainModule;
-import org.junit.jupiter.api.Assertions;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.util.List;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E1;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E2;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.GQLTestDomainMenu;
 
-import static org.apache.isis.commons.internal.assertions._Assert.*;
 import static org.apache.isis.commons.internal.assertions._Assert.assertEquals;
+import static org.apache.isis.commons.internal.assertions._Assert.assertNotNull;
+import static org.apache.isis.commons.internal.assertions._Assert.assertTrue;
 
+import graphql.GraphQL;
+import graphql.Scalars;
+import graphql.schema.DataFetcher;
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLScalarType;
+import graphql.schema.GraphQLSchema;
+import graphql.schema.GraphQLSchemaElement;
+import graphql.schema.GraphQLType;
+import graphql.schema.GraphQLTypeReference;
 
 @Transactional
 public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
@@ -77,6 +76,8 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
     @Test
     @Disabled
     void assert_stuff_works() {
+
+        GraphQLSchema x;
 
 //        _IocContainer iocContainer = isisSystemEnvironment.getIocContainer();
 //        iocContainer.streamAllBeans().forEach(b->{
