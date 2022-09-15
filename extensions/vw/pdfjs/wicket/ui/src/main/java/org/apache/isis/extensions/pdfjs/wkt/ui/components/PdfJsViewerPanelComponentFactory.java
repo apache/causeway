@@ -50,7 +50,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
         }
 
         val scalarModel = (ScalarModel) model;
-        if(!scalarModel.containsFacet(PdfJsViewerFacet.class)) {
+        if(!scalarModel.getMetaModel().containsFacet(PdfJsViewerFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 

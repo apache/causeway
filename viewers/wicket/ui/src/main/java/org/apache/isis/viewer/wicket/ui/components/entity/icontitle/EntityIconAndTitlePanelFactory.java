@@ -92,10 +92,8 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             objectAdapterModel = (ObjectAdapterModel) model;
         } else if (model instanceof ScalarModel) {
             val scalarModel = (ScalarModel) model;
-
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
             objectAdapterModel = ChainingObjectModel.chain(scalarModel);
-            objectAdapterModel.setRenderingHint(scalarModel.getRenderingHint());
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }

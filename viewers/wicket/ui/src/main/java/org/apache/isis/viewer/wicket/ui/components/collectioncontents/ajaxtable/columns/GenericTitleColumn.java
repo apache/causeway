@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.commons.model.hints.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -88,15 +87,12 @@ extends GenericColumnAbstract {
             return componentFactory.createComponent(id, valueModel);
         }
 
-        val entityModel = UiObjectWkt.ofAdapter(super.getMetaModelContext(), adapter);
-        entityModel.setRenderingHint(variant.isParented()
-                ? RenderingHint.PARENTED_TITLE_COLUMN
-                : RenderingHint.STANDALONE_TITLE_COLUMN);
-        entityModel.setContextBookmarkIfAny(contextBookmark);
+        val uiObject = UiObjectWkt.ofAdapterForCollection(super.getMetaModelContext(), adapter, variant);
+        uiObject.setContextBookmarkIfAny(contextBookmark);
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
-        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, entityModel);
-        return componentFactory.createComponent(id, entityModel);
+        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
+        return componentFactory.createComponent(id, uiObject);
     }
 
 

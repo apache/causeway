@@ -81,6 +81,15 @@ implements
                 ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
+    public static UiObjectWkt ofAdapterForCollection(
+            final MetaModelContext commonContext,
+            final ManagedObject adapter,
+            final @NonNull EntityCollectionModel.Variant variant) {
+        return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
+                ScalarRepresentation.VIEWING, variant.getColumnRenderingHint());
+    }
+
+
     public static UiObjectWkt ofBookmark(
             final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
@@ -142,7 +151,6 @@ implements
     private ScalarRepresentation mode;
 
     @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
 
     @Override
@@ -271,5 +279,7 @@ implements
     private HintStore hintStore() {
         return hintStore = getMetaModelContext().loadServiceIfAbsent(HintStore.class, hintStore);
     }
+
+
 
 }

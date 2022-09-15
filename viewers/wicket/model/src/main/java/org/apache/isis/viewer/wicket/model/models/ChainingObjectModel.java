@@ -65,11 +65,6 @@ implements ObjectAdapterModel {
     }
 
     @Override
-    public void setRenderingHint(final RenderingHint renderingHint) {
-        scalarModel().setRenderingHint(renderingHint);
-    }
-
-    @Override
     public ObjectSpecification getTypeOfSpecification() {
         return scalarModel().getScalarTypeSpec();
     }

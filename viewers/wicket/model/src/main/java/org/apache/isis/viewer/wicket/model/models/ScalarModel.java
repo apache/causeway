@@ -33,7 +33,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
@@ -73,12 +72,11 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     private final UiObjectWkt parentEntityModel;
 
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
+    @Getter(onMethod_={@Override})
+    @Setter(onMethod_={@Override})
     private ScalarRepresentation mode;
 
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
+    @Getter(onMethod_={@Override})
     private RenderingHint renderingHint;
 
     /**
@@ -155,11 +153,6 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
         return parentEntityModel;
     }
 
-    @Override
-    public final ManagedObject getOwner() {
-        return getParentUiModel().getObject();
-    }
-
     public final boolean isEmpty() {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue().getValue().getValue());
     }
@@ -184,30 +177,6 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     public abstract String disableReasonIfAny();
 
     public abstract String validate(ManagedObject proposedAdapter);
-
-    /**
-     * Viewers should not use facets directly.
-     * However, viewer extensions that provide their own facet types, will have to.
-     */
-    public final <T extends Facet> boolean containsFacet(final Class<T> facetType) {
-        return getMetaModel().containsFacet(facetType);
-    }
-
-    /**
-     * Viewers should not use facets directly.
-     * However, viewer extensions that provide their own facet types, will have to.
-     */
-    public final <T extends Facet> T getFacet(final Class<T> facetType) {
-        return getMetaModel().getFacet(facetType);
-    }
-
-    /**
-     * Viewers should not use facets directly.
-     * However, viewer extensions that provide their own facet types, will have to.
-     */
-    public final <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
-        return getMetaModel().lookupFacet(facetType);
-    }
 
     /**
      * Additional links to render (if any)
