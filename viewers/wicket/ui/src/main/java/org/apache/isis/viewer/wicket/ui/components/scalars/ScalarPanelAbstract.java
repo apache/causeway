@@ -466,8 +466,6 @@ implements ScalarModelSubscriber {
 
             _Xray.onUserParamOrPropertyEdit(scalarPanel);
 
-            System.err.printf("scalarPanel object: %s%n", scalarPanel.scalarModel().getObject());
-
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);
             }
