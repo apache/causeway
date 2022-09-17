@@ -76,6 +76,14 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     // -- PARAM 1 (DemoItem)
 
+    @MemberSupport public DemoItem default1Act(final Parameters params) {
+        // fill in first that is possible based on the first param from the UI dialog
+        return params.parity()==null
+                ? null
+                : autoComplete1Act(params, params.parity.name())
+                    .stream().findFirst().orElse(null);
+    }
+
     @MemberSupport public Collection<DemoItem> autoComplete1Act(
             final Parameters params,
             @MinLength(2) final String search) {
