@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.wicket.validation.IValidatable;
@@ -130,6 +131,18 @@ class _Util {
     private Optional<ManagedObject> recoverProposedValue(
             final Object valueObject,
             final ScalarModel scalarModel){
+
+        if(valueObject instanceof Collection) {
+            val unpackedValues = ((Collection<?>)valueObject).stream()
+            .map(v->scalarModel
+            .getObjectManager().demementify((ObjectMemento)v))
+            .collect(Can.toCan());
+            return Optional.of(ManagedObject.packed(scalarModel.getScalarTypeSpec(), unpackedValues));
+        }
+
+//        if(scalarModel.isPlural()) {
+//            _Assert.assertTrue(valueObject instanceof ObjectMemento, ()->"unexpected code path???");
+//        }
 
         if(valueObject instanceof ObjectMemento) {
             // seeing this code-path particularly with enum choices

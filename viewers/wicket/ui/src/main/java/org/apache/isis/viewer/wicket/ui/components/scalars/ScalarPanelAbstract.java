@@ -65,12 +65,11 @@ import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
@@ -95,10 +94,15 @@ implements ScalarModelSubscriber {
         NO_OUTPUT_ESCAPE
     }
 
+    /**
+     * Order matters: ascending order of precedence, eg. when used in reductions.
+     */
     public enum Repaint {
-        ENTIRE_FORM,
+        NOTHING,
         PARAM_ONLY,
-        NOTHING
+        ENTIRE_FORM,;
+        public boolean isParamOnly() { return this == PARAM_ONLY; }
+        public boolean isEntireForm() { return this == ENTIRE_FORM; }
     }
 
     public enum RenderScenario {
@@ -459,6 +463,10 @@ implements ScalarModelSubscriber {
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
+
+            _Xray.onUserParamOrPropertyEdit(scalarPanel);
+
+            System.err.printf("scalarPanel object: %s%n", scalarPanel.scalarModel().getObject());
 
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);

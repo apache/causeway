@@ -29,8 +29,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
@@ -41,13 +40,13 @@ import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Repaint;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 
-import lombok.val;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import lombok.val;
 
 class ActionParametersForm
 extends PromptFormAbstract<ActionModel> {
@@ -131,45 +130,58 @@ extends PromptFormAbstract<ActionModel> {
     @Override
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
 
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("about to update Param Form ..");
-        });
-
         val actionModel = actionModel();
-
         val updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
+        val paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
+
         final int paramNumberUpdated = updatedParamModel.getParameterIndex();
+        _Xray.beforeParamFormUpdate(paramNumberUpdated, paramNegotiationModel);
+
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;
 
-        actionModel.streamPendingParamUiModels()
-        .skip(skipCount)
-        .forEach(paramModel->{
+        val paramCount = updatedParamModel.getMetaModel().getAction().getParameterCount();
+        val maxCapacity = paramCount - skipCount; // just an optimization, not strictly required
+        val paramOnlyUpdateRequestsHavingParamIndex = _Lists.<Integer>newArrayList(maxCapacity);
 
-            val paramIndex = paramModel.getParameterIndex();
-            val pendingArgs = paramModel.getParameterNegotiationModel();
+        val formRepaint = actionModel.streamPendingParamUiModels()
+            .skip(skipCount)
+            .map(paramModel->{
 
-            val actionParameter = paramModel.getMetaModel();
-            actionParameter.reassessDefault(pendingArgs);
+                val paramIndex = paramModel.getParameterIndex();
+                val pendingArgs = paramModel.getParameterNegotiationModel();
 
-            val paramPanel = paramPanels.get(paramIndex);
-            val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
+                val actionParameter = paramModel.getMetaModel();
+                actionParameter.reassessDefault(pendingArgs);
+                _Xray.reassessedDefault(paramIndex, paramNegotiationModel);
 
-            switch (repaint) {
-            case ENTIRE_FORM:
-                target.add(this);
-                break;
-            case PARAM_ONLY:
+                val paramPanel = paramPanels.get(paramIndex);
+                val paramRepaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
+                if(paramRepaint.isParamOnly()) {
+                    paramOnlyUpdateRequestsHavingParamIndex.add(paramIndex);
+                }
+
+                return paramRepaint;
+            })
+            .reduce(Repaint.NOTHING, (a, b)->a.ordinal()>b.ordinal() ? a : b);
+
+        switch (formRepaint) {
+        case ENTIRE_FORM:
+            target.add(this);
+            break;
+        case PARAM_ONLY:
+            paramOnlyUpdateRequestsHavingParamIndex.forEach(paramIndex->{
+                val paramPanel = paramPanels.get(paramIndex);
                 paramPanel.repaint(target);
-                break;
-            case NOTHING:
-                break;
-            default:
-                throw _Exceptions.unmatchedCase(repaint);
-            }
+            });
+            break;
+        case NOTHING:
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(formRepaint);
+        }
 
-        });
-
+        _Xray.afterParamFormUpdate(paramNumberUpdated, paramNegotiationModel);
 
         // previously this method was also doing:
         // target.add(this);

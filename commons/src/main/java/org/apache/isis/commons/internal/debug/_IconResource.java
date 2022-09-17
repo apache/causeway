@@ -28,7 +28,8 @@ enum _IconResource {
     INTERACTION_OPEN    ("/xray/ia-open.png"),
     INTERACTION_CLOSE   ("/xray/ia-close.png"),
     LOG                 ("/xray/log.png"),
-    TRANSACTION         ("/xray/tx.png");
+    TRANSACTION         ("/xray/tx.png"),
+    USER                ("/xray/user.png");
 
     private final String resourcePath;
 
