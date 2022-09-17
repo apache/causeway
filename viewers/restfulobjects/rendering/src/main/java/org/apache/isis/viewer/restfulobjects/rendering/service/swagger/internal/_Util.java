@@ -86,7 +86,7 @@ final class _Util {
         if(specification.isValue()) {
             return true;
         }
-        if(specification.isNonScalar()) {
+        if(specification.isPlural()) {
             val elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return isVisibleForPublic(elementSpec);

@@ -94,7 +94,7 @@ implements MetaModelRefiner {
             final ObjectActionParameter parameter,
             final int paramNum) {
 
-        if(parameter.isScalar()) {
+        if(parameter.isSingular()) {
             return;
         }
 

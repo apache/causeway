@@ -160,7 +160,7 @@ extends AbstractFacetFactoryJupiterTestCase {
         }
 
         final Customer2 customer = new Customer2();
-        val objectAdapter = ManagedObject.adaptScalar(getSpecificationLoader(), customer);
+        val objectAdapter = ManagedObject.adaptSingular(getSpecificationLoader(), customer);
 
         final String title = titleFacetViaTitleAnnotation.title(objectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
@@ -231,9 +231,9 @@ extends AbstractFacetFactoryJupiterTestCase {
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
         { // check prerequisites
-            val wThree = ManagedObject.adaptScalar(getSpecificationLoader(), Integer.valueOf(3));
+            val wThree = ManagedObject.adaptSingular(getSpecificationLoader(), Integer.valueOf(3));
             assertEquals("3", wThree.getTitle());
-            val pThree = ManagedObject.adaptScalar(getSpecificationLoader(), 3);
+            val pThree = ManagedObject.adaptSingular(getSpecificationLoader(), 3);
             assertEquals("3", pThree.getTitle());
         }
 

@@ -414,7 +414,7 @@ public class ObjectTypeFactory {
                         Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
                         ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
 
-                        ManagedObject owner = ManagedObject.adaptScalar(specification, domainObjectInstance);
+                        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
 
                         ManagedObject managedObject = otom.get(owner);
 

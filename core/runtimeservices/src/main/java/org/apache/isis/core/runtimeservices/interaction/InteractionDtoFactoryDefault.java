@@ -109,7 +109,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
         val elementSpec = objectAction.getElementType();
 
-        if(objectAction.getReturnType().isScalar()) {
+        if(objectAction.getReturnType().isSingular()) {
             //scalar
             valueMarshaller.recordActionResultScalar(actionInvocationDto, objectAction, resultObject);
         } else {

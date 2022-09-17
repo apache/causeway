@@ -240,7 +240,9 @@ implements
                 .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
                 .orElseGet(Can::empty);
 
-        if(pendingArgs.getParamMetamodel(getParameterIndex()).isNonScalar()) {
+        val paramMeta = pendingArgs.getParamMetamodel(getParameterIndex());
+
+        if(paramMeta.isPlural()) {
             final Can<ManagedObject> nonScalarDefaults = defaults
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));

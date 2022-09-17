@@ -155,7 +155,7 @@ public class JpaEntityFacet
             val entitySpec = getEntitySpecification();
             return Can.ofStream(
                     typedQuery.getResultStream()
-                            .map(entity -> ManagedObject.adaptScalar(entitySpec, entity)));
+                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
 
         } else if (query instanceof NamedQuery) {
 
@@ -182,7 +182,7 @@ public class JpaEntityFacet
             val entitySpec = getEntitySpecification();
             return Can.ofStream(
                     namedQuery.getResultStream()
-                            .map(entity -> ManagedObject.adaptScalar(entitySpec, entity)));
+                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
 
         }
 

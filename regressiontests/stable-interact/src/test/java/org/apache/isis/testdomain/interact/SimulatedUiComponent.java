@@ -44,7 +44,7 @@ public class SimulatedUiComponent extends HasValueValidation {
     }
 
     public void simulateValueChange(final Object newValue) {
-        value.setValue(ManagedObject.adaptScalar(valueSpec, newValue));
+        value.setValue(ManagedObject.adaptSingular(valueSpec, newValue));
     }
 
     public ManagedObject getValue() {

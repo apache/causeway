@@ -120,7 +120,7 @@ implements BeforeEnterObserver {
     }
 
     private Component uiComponentForActionResult(final ManagedObject actionResult) {
-        if (actionResult.getSpecification().isNonScalar()) {
+        if (actionResult.getSpecification().isPlural()) {
             return TableViewVaa.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {
             return ObjectViewVaa.fromObject(

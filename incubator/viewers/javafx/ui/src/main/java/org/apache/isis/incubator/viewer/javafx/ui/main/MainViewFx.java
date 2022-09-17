@@ -122,7 +122,7 @@ public class MainViewFx {
 
     private Node uiComponentForActionResult(final ManagedObject actionResult) {
         if (ManagedObjects.isSpecified(actionResult)
-                && actionResult.getSpecification().isNonScalar()) {
+                && actionResult.getSpecification().isPlural()) {
             return TableViewFx.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {
             return ObjectViewFx.fromObject(

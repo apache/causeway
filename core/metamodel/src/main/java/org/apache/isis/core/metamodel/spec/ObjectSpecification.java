@@ -333,12 +333,12 @@ extends
      *
      * <p>
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
-     * therefore will return NOT {@link #isNonScalar()}
+     * therefore will return NOT {@link #isPlural()}
      *
-     * @see #isNonScalar()
+     * @see #isPlural()
      */
-    default boolean isScalar() {
-        return !isNonScalar();
+    default boolean isSingular() {
+        return !isPlural();
     }
 
     /**
@@ -346,11 +346,11 @@ extends
      *
      * <p>
      * In effect, means has got {@link CollectionFacet}, and therefore will
-     * return NOT {@link #isScalar()}.
+     * return NOT {@link #isSingular()}.
      *
-     * @see #isScalar()
+     * @see #isSingular()
      */
-    default boolean isNonScalar() {
+    default boolean isPlural() {
         return getBeanSort().isCollection();
     }
 

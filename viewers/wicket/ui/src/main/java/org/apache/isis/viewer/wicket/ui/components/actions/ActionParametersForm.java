@@ -138,7 +138,7 @@ extends PromptFormAbstract<ActionModel> {
         _Xray.beforeParamFormUpdate(paramNumberUpdated, paramNegotiationModel);
 
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
-        final int skipCount = paramNumberUpdated + 1;
+        final int skipCount = paramNumberUpdated + 1; // eg. if paramNumberUpdated=0 then skipCount=1
 
         val paramCount = updatedParamModel.getMetaModel().getAction().getParameterCount();
         val maxCapacity = paramCount - skipCount; // just an optimization, not strictly required
@@ -148,17 +148,16 @@ extends PromptFormAbstract<ActionModel> {
             .skip(skipCount)
             .map(paramModel->{
 
-                val paramIndex = paramModel.getParameterIndex();
-                val pendingArgs = paramModel.getParameterNegotiationModel();
-
+                val paramIndexForReassessment = paramModel.getParameterIndex();
                 val actionParameter = paramModel.getMetaModel();
-                actionParameter.reassessDefault(pendingArgs);
-                _Xray.reassessedDefault(paramIndex, paramNegotiationModel);
 
-                val paramPanel = paramPanels.get(paramIndex);
+                actionParameter.reassessDefault(paramNegotiationModel);
+                _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
+
+                val paramPanel = paramPanels.get(paramIndexForReassessment);
                 val paramRepaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
                 if(paramRepaint.isParamOnly()) {
-                    paramOnlyUpdateRequestsHavingParamIndex.add(paramIndex);
+                    paramOnlyUpdateRequestsHavingParamIndex.add(paramIndexForReassessment);
                 }
 
                 return paramRepaint;

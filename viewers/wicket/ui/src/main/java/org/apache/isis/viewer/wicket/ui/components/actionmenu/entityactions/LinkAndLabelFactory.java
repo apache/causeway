@@ -29,10 +29,10 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModelImpl;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -98,9 +98,9 @@ extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabelFactory forParameter(
             final ScalarParameterModel parameterModel) {
-        //XXX[ISIS-3080] only supported, when parameter type is a scalar composite value-type
+        //XXX[ISIS-3080] only supported, when parameter type is a singular composite value-type
         val param = parameterModel.getMetaModel();
-        if(param.isScalar()
+        if(param.isSingular()
                 && param.getElementType().isCompositeValue()) {
             return action -> LinkAndLabel.of(
                     ActionModelImpl.forEntity(

@@ -297,7 +297,7 @@ extends
                 final @Nullable ObjectSpecification spec,
                 final @Nullable Object pojo) {
             if(spec==null) { return UNSPECIFIED; }
-            if(spec.isNonScalar()) { return PACKED; }
+            if(spec.isPlural()) { return PACKED; }
             if(pojo==null) { return EMPTY; }
             if(spec.isValue()) { return VALUE; }
             if(spec.isInjectable()) { return SERVICE; }
@@ -522,21 +522,21 @@ extends
     /**
      * For cases, when the pojo's specification is not available and needs to be looked up.
      * <p>
-     * Fails if the pojo is non-scalar.
+     * Fails if the pojo is not a singular (eg. collection).
      * @param specLoader - required
      * @param pojo - required, required non-scalar
      */
-    static ManagedObject adaptScalar(
+    static ManagedObject adaptSingular(
             final @NonNull SpecificationLoader specLoader,
             final @NonNull Object pojo) {
         val spec = specLoader.specForType(pojo.getClass()).orElse(null);
-        return adaptScalarInternal(spec, pojo, Optional.empty());
+        return adaptSingularInternal(spec, pojo, Optional.empty());
     }
 
-    static ManagedObject adaptScalar(
+    static ManagedObject adaptSingular(
             final @NonNull ObjectSpecification guess,
             final @Nullable Object pojo) {
-        return adaptScalarInternal(guess, pojo, Optional.empty());
+        return adaptSingularInternal(guess, pojo, Optional.empty());
     }
 
     /**
@@ -546,7 +546,7 @@ extends
             final @NonNull  ObjectSpecification spec,
             final @Nullable Object pojo,
             final @NonNull  Bookmark bookmark) {
-        return adaptScalarInternal(spec, pojo, Optional.of(bookmark));
+        return adaptSingularInternal(spec, pojo, Optional.of(bookmark));
     }
 
     // -- HELPER
@@ -554,7 +554,7 @@ extends
     /**
      * spec and pojo don't need to be strictly in sync, we adapt if required
      */
-    private static ManagedObject adaptScalarInternal(
+    private static ManagedObject adaptSingularInternal(
             final @Nullable ObjectSpecification guess,
             final @Nullable Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfAny) {
@@ -597,8 +597,8 @@ extends
             final @NonNull ObjectActionParameter param,
             final @Nullable Object paramValue) {
 
-        return param.isScalar()
-                ? adaptScalar(param.getElementType(), paramValue)
+        return param.isSingular()
+                ? adaptSingular(param.getElementType(), paramValue)
                 // else adopt each element pojo then pack
                 : packed(param.getElementType(),
                         ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));

@@ -115,7 +115,7 @@ implements ObjectAction {
         elementType = Facets.elementSpec(getFacetedMethod())
                 .orElseGet(()->{
                     val returnType = getReturnType();
-                    if(!returnType.isScalar()) {
+                    if(!returnType.isSingular()) {
                         log.warn("non-scalar action return type requires a TypeOfFacet: {}", identifier);
                     }
                     return returnType;

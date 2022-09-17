@@ -37,7 +37,7 @@ final class _Xray {
 
         val data = MmDebugUtil
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
-        _XrayEvent.event("Param Form about to update: %s", data.formatted());
+        _XrayEvent.event("Param Form - about to update: %s", data.formatted());
     }
 
     void reassessedDefault(
@@ -47,7 +47,7 @@ final class _Xray {
 
         val data = MmDebugUtil
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
-        _XrayEvent.event("Param Form param default reassessed: %s", data.formatted());
+        _XrayEvent.event("Param Form - param default[%d] reassessed: %s", paramIndex, data.formatted());
     }
 
     void afterParamFormUpdate(
@@ -57,7 +57,7 @@ final class _Xray {
 
         val data = MmDebugUtil
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
-        _XrayEvent.event("Param Form updated: %s", data.formatted());
+        _XrayEvent.event("Param Form - updated: %s", data.formatted());
     }
 
 }
