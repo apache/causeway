@@ -66,7 +66,7 @@ public enum FeatureType {
             return Identifier.actionIdentifier(typeIdentifier, fullMethodName, parameterTypes);
         }
     },
-    ACTION_PARAMETER_SINGULAR("Scalar Parameter") {
+    ACTION_PARAMETER_SINGULAR("Singular Parameter") {
         /**
          * Always returns <tt>null</tt>.
          */
@@ -75,7 +75,7 @@ public enum FeatureType {
             return null;
         }
     },
-    ACTION_PARAMETER_PLURAL("Collection Parameter") {
+    ACTION_PARAMETER_PLURAL("Plural Parameter") {
         /**
          * Always returns <tt>null</tt>.
          */

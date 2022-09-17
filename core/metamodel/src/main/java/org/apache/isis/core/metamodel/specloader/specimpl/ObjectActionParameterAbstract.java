@@ -240,14 +240,12 @@ implements
                 .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
                 .orElseGet(Can::empty);
 
-        val paramMeta = pendingArgs.getParamMetamodel(getParameterIndex());
-
-        if(paramMeta.isPlural()) {
-            final Can<ManagedObject> nonScalarDefaults = defaults
+        if(this.isPlural()) {
+            final Can<ManagedObject> pluralDefaults = defaults
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
-            val packed = ManagedObject.packed(paramSpec, nonScalarDefaults);
+            val packed = ManagedObject.packed(paramSpec, pluralDefaults);
             return packed;
         }
 
