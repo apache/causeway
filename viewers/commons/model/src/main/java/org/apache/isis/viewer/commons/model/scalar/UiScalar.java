@@ -53,12 +53,12 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
     }
 
     default boolean isSingular() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
                 || getMetaModel().getFeatureType() == FeatureType.PROPERTY;
     }
 
     default boolean isPlural() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
+        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL
                 || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
     }
 

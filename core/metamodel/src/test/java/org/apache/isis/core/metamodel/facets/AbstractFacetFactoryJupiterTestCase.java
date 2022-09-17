@@ -90,7 +90,7 @@ implements HasMetaModelContext {
         facetedMethod = facetedSetter(
                 AbstractFacetFactoryTest.Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(getMetaModelContext(),
-                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(),
+                FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
                 facetedMethod.getMethod(), 0);
     }
 

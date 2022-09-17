@@ -30,7 +30,7 @@ implements OneToOneActionParameter {
             final ObjectSpecification paramElementType,
             final int index,
             final ObjectActionDefault actionImpl) {
-        super(FeatureType.ACTION_PARAMETER_SCALAR, index, paramElementType, actionImpl);
+        super(FeatureType.ACTION_PARAMETER_SINGULAR, index, paramElementType, actionImpl);
     }
 
 

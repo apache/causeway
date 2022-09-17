@@ -59,11 +59,11 @@ extends ObjectFeature, CurrentHolder {
     int getParameterIndex();
 
     default boolean isSingular() {
-        return getFeatureType()==FeatureType.ACTION_PARAMETER_SCALAR;
+        return getFeatureType()==FeatureType.ACTION_PARAMETER_SINGULAR;
     }
 
     default boolean isPlural() {
-        return getFeatureType()==FeatureType.ACTION_PARAMETER_COLLECTION;
+        return getFeatureType()==FeatureType.ACTION_PARAMETER_PLURAL;
     }
 
     /**

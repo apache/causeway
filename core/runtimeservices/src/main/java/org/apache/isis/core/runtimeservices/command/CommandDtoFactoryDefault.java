@@ -129,7 +129,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             actionParameter.getFeatureIdentifier();
 
-            if(actionParameter.getFeatureType() != FeatureType.ACTION_PARAMETER_COLLECTION) {
+            if(actionParameter.getFeatureType() != FeatureType.ACTION_PARAMETER_PLURAL) {
                 //scalar
                 valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {

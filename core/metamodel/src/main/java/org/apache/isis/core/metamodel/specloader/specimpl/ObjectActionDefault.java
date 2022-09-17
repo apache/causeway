@@ -197,7 +197,7 @@ implements ObjectAction {
             val paramElementType = specLoader.loadSpecification(facetedParam.getType().getElementType()); // preload
 
             return
-                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
                         ? new OneToOneActionParameterDefault(paramElementType, paramIndex, this)
                         : new OneToManyActionParameterDefault(paramElementType, paramIndex, this);
 

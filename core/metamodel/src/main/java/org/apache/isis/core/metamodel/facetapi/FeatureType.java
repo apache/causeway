@@ -66,7 +66,7 @@ public enum FeatureType {
             return Identifier.actionIdentifier(typeIdentifier, fullMethodName, parameterTypes);
         }
     },
-    ACTION_PARAMETER_SCALAR("Scalar Parameter") {
+    ACTION_PARAMETER_SINGULAR("Scalar Parameter") {
         /**
          * Always returns <tt>null</tt>.
          */
@@ -75,7 +75,7 @@ public enum FeatureType {
             return null;
         }
     },
-    ACTION_PARAMETER_COLLECTION("Collection Parameter") {
+    ACTION_PARAMETER_PLURAL("Collection Parameter") {
         /**
          * Always returns <tt>null</tt>.
          */
@@ -88,7 +88,7 @@ public enum FeatureType {
     public static final ImmutableEnumSet<FeatureType> COLLECTIONS_ONLY = ImmutableEnumSet.of(COLLECTION);
     public static final ImmutableEnumSet<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableEnumSet.of(COLLECTION, ACTION);
     public static final ImmutableEnumSet<FeatureType> ACTIONS_ONLY = ImmutableEnumSet.of(ACTION);
-    public static final ImmutableEnumSet<FeatureType> PARAMETERS_ONLY = ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> PARAMETERS_ONLY = ImmutableEnumSet.of(ACTION_PARAMETER_SINGULAR, ACTION_PARAMETER_PLURAL);
     public static final ImmutableEnumSet<FeatureType> PROPERTIES_ONLY = ImmutableEnumSet.of(PROPERTY);
     public static final ImmutableEnumSet<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableEnumSet.of(PROPERTY, ACTION);
     public static final ImmutableEnumSet<FeatureType> OBJECTS_ONLY = ImmutableEnumSet.of(OBJECT);
@@ -98,7 +98,7 @@ public enum FeatureType {
     public static final ImmutableEnumSet<FeatureType> OBJECTS_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, COLLECTION);
     public static final ImmutableEnumSet<FeatureType> OBJECTS_AND_ACTIONS = ImmutableEnumSet.of(OBJECT, ACTION);
     public static final ImmutableEnumSet<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, PROPERTY, COLLECTION);
-    public static final ImmutableEnumSet<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableEnumSet.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableEnumSet.of(ACTION, ACTION_PARAMETER_SINGULAR, ACTION_PARAMETER_PLURAL);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
@@ -106,7 +106,7 @@ public enum FeatureType {
      */
     public static final ImmutableEnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS =
             ImmutableEnumSet.complementOf(
-                    ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION));
+                    ImmutableEnumSet.of(ACTION_PARAMETER_SINGULAR, ACTION_PARAMETER_PLURAL));
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
@@ -139,8 +139,8 @@ public enum FeatureType {
     public boolean isCollection() { return this == COLLECTION; }
     public boolean isAction() { return this == ACTION; }
     public boolean isActionParameter() {
-        return this == ACTION_PARAMETER_SCALAR
-                || this == ACTION_PARAMETER_COLLECTION;
+        return this == ACTION_PARAMETER_SINGULAR
+                || this == ACTION_PARAMETER_PLURAL;
     }
 
     /**

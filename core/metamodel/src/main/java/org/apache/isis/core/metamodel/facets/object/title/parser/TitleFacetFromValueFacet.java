@@ -80,8 +80,8 @@ implements TitleFacet {
                         .titlePresentation(valueFacet
                                 .createValueSemanticsContext(coll), pojo);
             }
-            case ACTION_PARAMETER_SCALAR:
-            case ACTION_PARAMETER_COLLECTION:{
+            case ACTION_PARAMETER_SINGULAR:
+            case ACTION_PARAMETER_PLURAL:{
                 val param = (ObjectActionParameter)renderRequest.getFeature();
                 final Renderer renderer = valueFacet
                         .selectRendererForParameterElseFallback(param);

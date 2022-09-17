@@ -82,7 +82,7 @@ abstract class MixinIntendedAs {
 
         val facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,
-                FeatureType.ACTION_PARAMETER_SCALAR,
+                FeatureType.ACTION_PARAMETER_SINGULAR,
                 owningType,
                 actionMethod,
                 0);
