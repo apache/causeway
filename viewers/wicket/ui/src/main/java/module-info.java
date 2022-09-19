@@ -141,7 +141,7 @@ module org.apache.isis.viewer.wicket.ui {
     requires org.apache.isis.viewer.commons.model;
     requires org.apache.isis.viewer.commons.prism;
     requires org.apache.isis.viewer.commons.services;
-    requires org.apache.isis.viewer.wicket.model;
+    requires transitive org.apache.isis.viewer.wicket.model;
     requires org.apache.logging.log4j;
     requires org.apache.wicket.auth.roles;
     requires org.apache.wicket.core;

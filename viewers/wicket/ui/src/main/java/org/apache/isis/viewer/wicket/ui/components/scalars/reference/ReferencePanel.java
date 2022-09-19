@@ -32,15 +32,12 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -69,11 +66,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected UiString obtainOutputFormat() {
-        return UiString.text(select2.obtainOutputFormatModel().getObject());
-    }
-
-    @Override
     protected Component createComponentForOutput(final String id) {
 
         val scalarModel = scalarModel();
@@ -90,19 +82,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.SELECT2);
-    }
-
-    @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
         this.entityLink = new EntityLinkSelect2Panel(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
-//        _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
-//                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices; feature %s",
-//                    scalarModel.getMetaModel().getFeatureIdentifier()));
-        this.select2 = createSelect2(ID_AUTO_COMPLETE);
+        this.select2 = createSelect2(ID_AUTO_COMPLETE, ChoiceProviderForReferences::new);
 
         entityLink.addOrReplace(select2.asComponent());
         entityLink.setOutputMarkupId(true);
@@ -168,9 +152,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             val isInlinePrompt = scalarModel.isInlinePrompt();
             if(isInlinePrompt) {
                 iconAndTitle.setVisible(false);
-
-                // bit of a hack... allows us to suppress the title using CSS
-                //Wkt.cssAppend(iconAndTitle, "inlinePrompt");
             }
 
             val adapter = scalarModel.getObject();
@@ -228,11 +209,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     }
 
-    @Override
-    protected ChoiceProviderAbstract buildChoiceProvider() {
-        return new ChoiceProviderForReferences(scalarModel());
-    }
-
     // -- GET INPUT AS TITLE
 
     String getTitleForFormComponentInput() {
@@ -274,19 +250,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
         super.onUpdate(target, scalarPanel);
         Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
-    }
-
-    // -- HELPERS
-
-    private boolean isEditableWithEitherAutoCompleteOrChoices() {
-        if(scalarModel().getRenderingHint().isInTable()) {
-            return false;
-        }
-        // doesn't apply if not editable, either
-        if(scalarModel().isViewMode()) {
-            return false;
-        }
-        return scalarModel().getChoiceProviderSort().isChoicesAny();
     }
 
 }

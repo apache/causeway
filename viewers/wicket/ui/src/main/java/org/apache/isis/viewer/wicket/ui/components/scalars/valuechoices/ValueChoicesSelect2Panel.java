@@ -26,11 +26,8 @@ import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -49,35 +46,22 @@ extends ScalarPanelSelectAbstract {
         this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
     }
 
-    // --
-
     @Override
     protected Component createComponentForOutput(final String id) {
         return Wkt.label(id, "placeholder");
     }
 
     @Override
-    protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.SELECT);
-    }
-
-    @Override
-    protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected FormComponent<ManagedObject> createFormComponent(
+            final String id, final ScalarModel scalarModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(id);
+            this.select2 = createSelect2(id, ChoiceProviderForValues::new);
         } else {
             select2.clearInput();
         }
         @SuppressWarnings("rawtypes") // incompatible generic type parameter cast
         FormComponent formComponent = select2.asComponent();
         return formComponent;
-    }
-
-    // --
-
-    @Override
-    protected UiString obtainOutputFormat() {
-        return UiString.text(select2.obtainOutputFormatModel().getObject());
     }
 
     // --
@@ -135,13 +119,6 @@ extends ScalarPanelSelectAbstract {
         if(isCompactFormat) return;
         setTitleAttribute("");
         select2.setEnabled(true);
-    }
-
-    // --
-
-    @Override
-    protected ChoiceProviderAbstract buildChoiceProvider() {
-        return new ChoiceProviderForValues(scalarModel());
     }
 
 }
