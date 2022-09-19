@@ -1008,7 +1008,7 @@ public class Wkt {
         FOCUS_FIRST_PROPERTY,
         FOCUS_FIRST_PARAMETER,
         OPEN_SELECT2,
-        CLOSE_SELECT2,
+        //CLOSE_SELECT2,
     }
 
     public void javaScriptAdd(final AjaxRequestTarget target, final EventTopic topic, final String containerId) {

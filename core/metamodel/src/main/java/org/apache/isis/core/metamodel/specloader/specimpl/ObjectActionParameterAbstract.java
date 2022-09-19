@@ -186,9 +186,15 @@ implements
             return Can.empty();
         }
 
+        val paramSpec = getElementType();
+
         val visibleChoices = autoCompleteFacet
-                .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
-        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getElementType());
+                .autoComplete(paramSpec,
+                        pendingArgs.getActionTarget(),
+                        pendingArgs.getParamValues(),
+                        searchArg,
+                        interactionInitiatedBy);
+        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, paramSpec);
 
         return visibleChoices;
     }

@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -35,7 +36,8 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.val;
 
 public class ValueChoicesSelect2Panel
-extends ScalarPanelSelectAbstract {
+extends ScalarPanelSelectAbstract
+implements ChoiceTitleHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -91,20 +93,6 @@ extends ScalarPanelSelectAbstract {
         select2.setEnabled(false);
     }
 
-    private void clearTitleAttribute() {
-        val target = getRegularFrame();
-        WktTooltips.clearTooltip(target);
-    }
-
-    private void setTitleAttribute(final String titleAttribute) {
-        if(_Strings.isNullOrEmpty(titleAttribute)) {
-            clearTitleAttribute();
-            return;
-        }
-        val target = getRegularFrame();
-        WktTooltips.addTooltip(target, titleAttribute);
-    }
-
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
@@ -117,8 +105,26 @@ extends ScalarPanelSelectAbstract {
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         super.onEditable(target);
         if(isCompactFormat) return;
-        setTitleAttribute("");
+        clearTitleAttribute();
         select2.setEnabled(true);
+    }
+
+    // -- CHOICE TITLE HANDLER
+
+    @Override
+    public void clearTitleAttribute() {
+        val target = getRegularFrame();
+        WktTooltips.clearTooltip(target);
+    }
+
+    @Override
+    public void setTitleAttribute(final String titleAttribute) {
+        if(_Strings.isNullOrEmpty(titleAttribute)) {
+            clearTitleAttribute();
+            return;
+        }
+        val target = getRegularFrame();
+        WktTooltips.addTooltip(target, titleAttribute);
     }
 
 }

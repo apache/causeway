@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -44,9 +45,16 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
+    public static interface ChoiceTitleHandler extends Serializable {
+        void clearTitleAttribute();
+        void setTitleAttribute(@Nullable String titleAttribute);
+    }
+
     protected Select2 select2;
 
-    public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelSelectAbstract(
+            final String id,
+            final ScalarModel scalarModel) {
         super(id, scalarModel, ManagedObject.class);
         setOutputMarkupId(true);
     }

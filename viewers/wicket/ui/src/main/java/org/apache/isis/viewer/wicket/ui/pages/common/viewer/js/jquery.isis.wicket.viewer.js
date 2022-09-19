@@ -94,14 +94,14 @@ $(function() {
         }, 0);
     });
 
-    Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
-        setTimeout(function() {
-            var $panel = $('#'+panelId);
-            //console.log('Isis.Topic.CLOSE_SELECT2: panelId=' + panelId);
-            //$($panel).find('select').select2('close');
-            //$($panel).find('select').filter(':visible:first').focus();
-        }, 0);
-    });
+//    Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
+//        setTimeout(function() {
+//            var $panel = $('#'+panelId);
+//            //console.log('Isis.Topic.CLOSE_SELECT2: panelId=' + panelId);
+//            //$($panel).find('select').select2('close');
+//            //$($panel).find('select').filter(':visible:first').focus();
+//        }, 0);
+//    });
 
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
         setTimeout(function() {

@@ -65,11 +65,12 @@ import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>

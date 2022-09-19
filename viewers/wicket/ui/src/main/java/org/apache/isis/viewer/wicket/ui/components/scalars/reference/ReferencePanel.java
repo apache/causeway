@@ -30,17 +30,17 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
@@ -49,7 +49,9 @@ import lombok.val;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel extends ScalarPanelSelectAbstract {
+public class ReferencePanel
+extends ScalarPanelSelectAbstract
+implements ChoiceTitleHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -118,16 +120,14 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
         if(isCompactFormat) return;
-        entityLink.setEnabled(false);
-        Wkt.attributeReplace(entityLink, "title", disableReason);
+        setTitleAttribute(disableReason);
     }
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         super.onEditable(target);
         if(isCompactFormat) return;
-        entityLink.setEnabled(true);
-        Wkt.attributeReplace(entityLink, "title", "");
+        clearTitleAttribute();
     }
 
     private Optional<MarkupContainer> lookupScalarValueContainer() {
@@ -137,6 +137,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     private void syncWithInput() {
+
+        System.err.printf("syncWithInput %s%n", scalarModel().getObject());
+
         if(isCompactFormat) return;
 
         val scalarModel = scalarModel();
@@ -246,10 +249,28 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // --
 
+//    @Override
+//    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+//        super.onUpdate(target, scalarPanel);
+//        Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
+//    }
+
+    // -- CHOICE TITLE HANDLER
+
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-        super.onUpdate(target, scalarPanel);
-        Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
+    public void clearTitleAttribute() {
+        entityLink.setEnabled(true);
+        Wkt.attributeReplace(entityLink, "title", "");
+    }
+
+    @Override
+    public void setTitleAttribute(final String titleAttribute) {
+        if(_Strings.isNullOrEmpty(titleAttribute)) {
+            clearTitleAttribute();
+            return;
+        }
+        entityLink.setEnabled(false);
+        Wkt.attributeReplace(entityLink, "title", titleAttribute);
     }
 
 }

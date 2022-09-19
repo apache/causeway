@@ -21,12 +21,16 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
+import org.wicketstuff.select2.JQuery;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
@@ -76,6 +80,9 @@ implements
 
         select2.setLabel(Model.of(scalarModel.getFriendlyName()));
         select2.getSettings().setWidth("100%");
+
+        // listen on select2:select events (client-side)
+        select2.add(new Select2OnSelect());
 
         return select2;
     }
@@ -178,6 +185,32 @@ implements
                     ? memento.getTitle()
                     : null;
         });
+    }
+
+    /**
+     * Listen on select2:select events so that we then can send an AJAX request with the selected object(.id),
+     * while still doing parameter negotiation; that is, not submitting the form yet.
+     * @see "https://select2.org/programmatic-control/events#listening-for-events"
+     * @since 2.0
+     */
+    static class Select2OnSelect extends Behavior {
+        private static final long serialVersionUID = 1L;
+        @Override public void renderHead(final Component component, final IHeaderResponse response) {
+
+            /* DEBUG
+            $('#sel-sample2').on('select2:select', function (e) {
+                var data = e.params.data;
+                console.log(data);
+                alert("selection-event: " + data.id);
+            });*/
+
+            response.render(OnDomReadyHeaderItem.forScript(JQuery.execute("$('#%s')"
+                    + ".on('select2:select', function (e) {"
+                    + "var data = e.params.data;"
+                    + "console.log(data);"
+                    + "});",
+                    component.getMarkupId())));
+        }
     }
 
     // -- HELPER
