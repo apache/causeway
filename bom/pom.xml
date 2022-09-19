@@ -665,7 +665,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.14</version>
+                    <version>0.15</version>
                     <!-- APACHE ISIS customisation 10/21: start -->
                     <configuration>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
