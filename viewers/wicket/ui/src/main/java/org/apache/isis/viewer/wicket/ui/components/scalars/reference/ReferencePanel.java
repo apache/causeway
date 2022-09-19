@@ -137,9 +137,6 @@ implements ChoiceTitleHandler {
     }
 
     private void syncWithInput() {
-
-        System.err.printf("syncWithInput %s%n", scalarModel().getObject());
-
         if(isCompactFormat) return;
 
         val scalarModel = scalarModel();
