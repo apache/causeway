@@ -20,14 +20,17 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
 import org.wicketstuff.select2.JQuery;
@@ -42,6 +45,7 @@ import org.apache.isis.viewer.wicket.model.models.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstractForScalarModel;
@@ -188,28 +192,50 @@ implements
     }
 
     /**
-     * Listen on select2:select events so that we then can send an AJAX request with the selected object(.id),
+     * Listen on select2:select events so that we then can send an AJAX request with all selected object(.id)s,
      * while still doing parameter negotiation; that is, not submitting the form yet.
      * @see "https://select2.org/programmatic-control/events#listening-for-events"
      * @since 2.0
      */
-    static class Select2OnSelect extends Behavior {
+    static class Select2OnSelect extends AbstractAjaxBehavior {
         private static final long serialVersionUID = 1L;
+        private static enum Event {
+            SELECT, UNSELECT, CLEAR;
+            String key() { return name().toLowerCase(); }
+            static Optional<Event> valueOf(final NamedPair pair) {
+                for(val event : Event.values()) {
+                    if(event.name().equalsIgnoreCase(pair.getKey())) {
+                        return Optional.of(event);
+                    }
+                }
+                return Optional.empty();
+            }
+        };
         @Override public void renderHead(final Component component, final IHeaderResponse response) {
+            for(val event : Event.values()) {
+                response.render(OnDomReadyHeaderItem.forScript(JQuery.execute("$('#%s')"
+                        + ".on('select2:%s', function (e) {"
+                        + "var data = e.params.data;"
+                        //debug + "console.log(e);"
+                        + "Wicket.Ajax.get({'u': '%s&%s=' + data.id});"
+                        + "});",
+                        component.getMarkupId(),
+                        event.key(),
+                        getCallbackUrl(),
+                        event.key()
+                        )));
+            }
+        }
 
-            /* DEBUG
-            $('#sel-sample2').on('select2:select', function (e) {
-                var data = e.params.data;
-                console.log(data);
-                alert("selection-event: " + data.id);
-            });*/
-
-            response.render(OnDomReadyHeaderItem.forScript(JQuery.execute("$('#%s')"
-                    + ".on('select2:select', function (e) {"
-                    + "var data = e.params.data;"
-                    + "console.log(data);"
-                    + "});",
-                    component.getMarkupId())));
+        @Override public void onRequest() {
+            PageParameterUtils.streamCurrentRequestParameters()
+            .forEach(pair->
+                Event.valueOf(pair).ifPresent(event->{
+                    val itemId = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    //TODO update the param negotiation model
+                    //System.err.printf("onRequest %s->%s%n", event, itemId.getTitle());
+                })
+            );
         }
     }
 
