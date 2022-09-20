@@ -77,6 +77,9 @@ implements
         select2.setLabel(Model.of(scalarModel.getFriendlyName()));
         select2.getSettings().setWidth("100%");
 
+        // listen on select2:select/unselect events (client-side)
+        select2.add(new Select2OnSelect(scalarModel));
+
         return select2;
     }
 
@@ -179,6 +182,8 @@ implements
                     : null;
         });
     }
+
+    
 
     // -- HELPER
 

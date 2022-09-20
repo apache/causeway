@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -76,6 +77,14 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     // -- PARAM 1 (DemoItem)
 
+    @MemberSupport public DemoItem default1Act(final Parameters params) {
+        // fill in first that is possible based on the first param from the UI dialog
+        return params.parity()==null
+                ? null
+                : autoComplete1Act(params, "")
+                    .stream().findFirst().orElse(null);
+    }
+
     @MemberSupport public Collection<DemoItem> autoComplete1Act(
             final Parameters params,
             @MinLength(2) final String search) {
@@ -92,7 +101,9 @@ public class DependentArgsActionDemo_useAutoComplete {
         return holder.getItems()
                 .stream()
                 .filter(item->parity == item.getParity())
-                .filter(item->item.getName().toLowerCase().contains(search.toLowerCase()))
+                .filter(item->_Strings.isNullOrEmpty(search)
+                        ? true
+                        : item.getName().toLowerCase().contains(search.toLowerCase()))
                 .collect(Collectors.toList());
     }
 

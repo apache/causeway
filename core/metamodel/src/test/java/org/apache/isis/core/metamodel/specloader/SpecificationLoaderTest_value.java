@@ -34,7 +34,7 @@ class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
 
     @Test
     public void testType() throws Exception {
-        assertTrue(specification.isScalar());
+        assertTrue(specification.isSingular());
     }
 
     @Test

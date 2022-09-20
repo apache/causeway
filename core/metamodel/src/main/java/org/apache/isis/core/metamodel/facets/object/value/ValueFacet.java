@@ -92,7 +92,7 @@ extends
             return selectDefaultParser();
         }
         switch(feature.getFeatureType()) {
-        case ACTION_PARAMETER_SCALAR:
+        case ACTION_PARAMETER_SINGULAR:
             return selectParserForParameter((ObjectActionParameter)feature);
         case PROPERTY:
             return selectParserForProperty((OneToOneAssociation)feature);
@@ -133,7 +133,7 @@ extends
             return selectDefaultRenderer();
         }
         switch(feature.getFeatureType()) {
-        case ACTION_PARAMETER_SCALAR:
+        case ACTION_PARAMETER_SINGULAR:
             return selectRendererForParameter((ObjectActionParameter)feature);
         case PROPERTY:
             return selectRendererForProperty((OneToOneAssociation)feature);

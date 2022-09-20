@@ -48,6 +48,16 @@ public interface UiParameter extends UiScalar {
     ParameterNegotiationModel getParameterNegotiationModel();
 
     @Override
+    default boolean whetherHidden() {
+        return getParameterNegotiationModel().getVisibilityConsent(getParameterIndex()).isVetoed();
+    }
+
+    @Override
+    default String disableReasonIfAny() {
+        return getParameterNegotiationModel().getUsabilityConsent(getParameterIndex()).getReason();
+    }
+
+    @Override
     default int getAutoCompleteMinLength() {
         return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
     }

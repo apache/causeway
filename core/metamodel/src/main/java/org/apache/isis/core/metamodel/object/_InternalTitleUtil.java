@@ -40,7 +40,7 @@ final class _InternalTitleUtil {
             return managedObject.getTitle();
         }
 
-        return managedObject.getSpecification().isScalar()
+        return managedObject.getSpecification().isSingular()
             ? objectTitleString(titleRenderRequest)
                     .trim()
             : collectionTitleString(

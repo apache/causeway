@@ -86,7 +86,7 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
      */
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
-        final ManagedObject adapter = ManagedObject.adaptScalar(specificationLoader, domainObject);
+        final ManagedObject adapter = ManagedObject.adaptSingular(specificationLoader, domainObject);
         return new XmlSnapshot(adapter);
     }
 

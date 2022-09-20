@@ -186,9 +186,15 @@ implements
             return Can.empty();
         }
 
+        val paramSpec = getElementType();
+
         val visibleChoices = autoCompleteFacet
-                .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
-        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getElementType());
+                .autoComplete(paramSpec,
+                        pendingArgs.getActionTarget(),
+                        pendingArgs.getParamValues(),
+                        searchArg,
+                        interactionInitiatedBy);
+        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, paramSpec);
 
         return visibleChoices;
     }
@@ -240,12 +246,12 @@ implements
                 .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
                 .orElseGet(Can::empty);
 
-        if(pendingArgs.getParamMetamodel(getParameterIndex()).isNonScalar()) {
-            final Can<ManagedObject> nonScalarDefaults = defaults
+        if(this.isPlural()) {
+            final Can<ManagedObject> pluralDefaults = defaults
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
-            val packed = ManagedObject.packed(paramSpec, nonScalarDefaults);
+            val packed = ManagedObject.packed(paramSpec, pluralDefaults);
             return packed;
         }
 

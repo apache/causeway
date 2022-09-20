@@ -115,7 +115,7 @@ implements ObjectAction {
         elementType = Facets.elementSpec(getFacetedMethod())
                 .orElseGet(()->{
                     val returnType = getReturnType();
-                    if(!returnType.isScalar()) {
+                    if(!returnType.isSingular()) {
                         log.warn("non-scalar action return type requires a TypeOfFacet: {}", identifier);
                     }
                     return returnType;
@@ -197,7 +197,7 @@ implements ObjectAction {
             val paramElementType = specLoader.loadSpecification(facetedParam.getType().getElementType()); // preload
 
             return
-                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
                         ? new OneToOneActionParameterDefault(paramElementType, paramIndex, this)
                         : new OneToManyActionParameterDefault(paramElementType, paramIndex, this);
 

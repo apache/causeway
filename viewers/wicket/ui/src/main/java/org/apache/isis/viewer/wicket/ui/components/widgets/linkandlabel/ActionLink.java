@@ -156,10 +156,6 @@ extends IndicatingAjaxLink<ManagedObject> {
                 : null;
     }
 
-//    protected Wicket getSettings() {
-//        return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
-//    }
-
     @Override
     public void onClick(final AjaxRequestTarget target) {
 

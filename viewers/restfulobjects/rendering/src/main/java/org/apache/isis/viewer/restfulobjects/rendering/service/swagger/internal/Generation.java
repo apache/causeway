@@ -634,7 +634,7 @@ class Generation {
     }
 
     Property actionReturnTypeFor(final ObjectAction objectAction) {
-        return objectAction.getReturnType().isNonScalar()
+        return objectAction.getReturnType().isPlural()
                 ? arrayPropertyOf(objectAction.getElementType())
                 : modelFor(objectAction.getReturnType());
     }
@@ -673,7 +673,7 @@ class Generation {
             return new ObjectProperty();
         }
 
-        if(specification.isNonScalar()) {
+        if(specification.isPlural()) {
             val elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return arrayPropertyOf(elementSpec);

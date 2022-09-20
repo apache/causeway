@@ -26,11 +26,9 @@ import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -38,7 +36,8 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.val;
 
 public class ValueChoicesSelect2Panel
-extends ScalarPanelSelectAbstract {
+extends ScalarPanelSelectAbstract
+implements ChoiceTitleHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,35 +48,22 @@ extends ScalarPanelSelectAbstract {
         this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
     }
 
-    // --
-
     @Override
     protected Component createComponentForOutput(final String id) {
         return Wkt.label(id, "placeholder");
     }
 
     @Override
-    protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.SELECT);
-    }
-
-    @Override
-    protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected FormComponent<ManagedObject> createFormComponent(
+            final String id, final ScalarModel scalarModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(id);
+            this.select2 = createSelect2(id, ChoiceProviderForValues::new);
         } else {
             select2.clearInput();
         }
         @SuppressWarnings("rawtypes") // incompatible generic type parameter cast
         FormComponent formComponent = select2.asComponent();
         return formComponent;
-    }
-
-    // --
-
-    @Override
-    protected UiString obtainOutputFormat() {
-        return UiString.text(select2.obtainOutputFormatModel().getObject());
     }
 
     // --
@@ -107,20 +93,6 @@ extends ScalarPanelSelectAbstract {
         select2.setEnabled(false);
     }
 
-    private void clearTitleAttribute() {
-        val target = getRegularFrame();
-        WktTooltips.clearTooltip(target);
-    }
-
-    private void setTitleAttribute(final String titleAttribute) {
-        if(_Strings.isNullOrEmpty(titleAttribute)) {
-            clearTitleAttribute();
-            return;
-        }
-        val target = getRegularFrame();
-        WktTooltips.addTooltip(target, titleAttribute);
-    }
-
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
@@ -133,15 +105,26 @@ extends ScalarPanelSelectAbstract {
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         super.onEditable(target);
         if(isCompactFormat) return;
-        setTitleAttribute("");
+        clearTitleAttribute();
         select2.setEnabled(true);
     }
 
-    // --
+    // -- CHOICE TITLE HANDLER
 
     @Override
-    protected ChoiceProviderAbstract buildChoiceProvider() {
-        return new ChoiceProviderForValues(scalarModel());
+    public void clearTitleAttribute() {
+        val target = getRegularFrame();
+        WktTooltips.clearTooltip(target);
+    }
+
+    @Override
+    public void setTitleAttribute(final String titleAttribute) {
+        if(_Strings.isNullOrEmpty(titleAttribute)) {
+            clearTitleAttribute();
+            return;
+        }
+        val target = getRegularFrame();
+        WktTooltips.addTooltip(target, titleAttribute);
     }
 
 }

@@ -123,7 +123,7 @@ public class QueryFieldFactory {
                                 ObjectSpecification specification = specificationLoader
                                         .loadSpecification(domainObjectInstanceClass);
 
-                                ManagedObject owner = ManagedObject.adaptScalar(specification, domainObjectInstance);
+                                ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
 
                                 ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
 

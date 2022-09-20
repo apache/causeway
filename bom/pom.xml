@@ -320,7 +320,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <!-- LIBRARY DEPENDENCIES -->
         <archunit.version>0.23.1</archunit.version>
-        <asciidoctorj.version>2.5.5</asciidoctorj.version>
+        <asciidoctorj.version>2.5.6</asciidoctorj.version>
         <asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.2.2</approvaltests.version>
 
@@ -332,7 +332,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.11.0</commons-io.version>
 
-        <cucumber.version>7.7.0</cucumber.version>
+        <cucumber.version>7.8.0</cucumber.version>
 
         <cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
 
@@ -400,7 +400,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <ognl.version>3.3.4</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
-        <poi.version>5.2.2</poi.version>
+        <poi.version>5.2.3</poi.version>
 
         <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
@@ -418,7 +418,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>3.2.1</togglz.version>
 
-        <vaadin.version>23.2.0</vaadin.version>
+        <vaadin.version>23.2.1</vaadin.version>
 
         <wicket.version>9.11.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -665,7 +665,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.14</version>
+                    <version>0.15</version>
                     <!-- APACHE ISIS customisation 10/21: start -->
                     <configuration>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>

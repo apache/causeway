@@ -86,13 +86,13 @@ extends TypedHolderAbstract {
 
             final FeatureType featureType =
                     ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType).isPresent()
-                    ? FeatureType.ACTION_PARAMETER_COLLECTION
-                    : FeatureType.ACTION_PARAMETER_SCALAR;
+                    ? FeatureType.ACTION_PARAMETER_PLURAL
+                    : FeatureType.ACTION_PARAMETER_SINGULAR;
 
             val facetedMethodParam =
                     new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, paramIndex);
 
-            if(featureType != FeatureType.ACTION_PARAMETER_COLLECTION) {
+            if(featureType != FeatureType.ACTION_PARAMETER_PLURAL) {
                 actionParams.add(facetedMethodParam);
                 continue;
             }

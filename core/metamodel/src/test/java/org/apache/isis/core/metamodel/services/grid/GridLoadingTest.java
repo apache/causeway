@@ -70,7 +70,7 @@ extends MetaModelTestAbstract {
         assertNotNull(gridFacet);
 
         // triggers grid to be loaded (if initial or reloading supported)
-        val grid = gridFacet.getGrid(ManagedObject.adaptScalar(barSpec, new Bar()));
+        val grid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
         assertNotNull(grid);
 
         // verify object-action's member named facet was installed when loading Grid from XML
@@ -82,7 +82,7 @@ extends MetaModelTestAbstract {
         // verify however, that the number of facets stays constant
 
         // triggers grid to be re-loaded
-        val grid2 = gridFacet.getGrid(ManagedObject.adaptScalar(barSpec, new Bar()));
+        val grid2 = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
         assertNotSame(grid, grid2); // verify that we actually got a new grid, indicative of a reload having taken place
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));

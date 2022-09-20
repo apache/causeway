@@ -2487,7 +2487,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
@@ -2685,7 +2685,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
@@ -3532,7 +3532,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="LIST"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.List org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
@@ -3736,7 +3736,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="LIST"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.List org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString$ProperChoicesWhenActionHasParamSupportingMethod_remove.choices0Act()"/>
@@ -5292,7 +5292,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="org.apache.isis.commons.collections.Can"/>
+                                <mml:attr name="choicesType" value="CAN"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="protected org.apache.isis.commons.collections.Can org.apache.isis.testdomain.model.good.ProperElementTypeVmAbstract.choices0Act()"/>
@@ -14078,7 +14078,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.autoComplete0Act(java.lang.String)"/>
@@ -14086,7 +14086,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.choices0Act()"/>
@@ -14134,7 +14134,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.autoComplete1Act(java.lang.String)"/>
@@ -14142,7 +14142,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.choices1Act(java.lang.String)"/>
@@ -14294,7 +14294,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.autoComplete0Act(java.lang.String)"/>
@@ -14302,7 +14302,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.choices0Act()"/>
@@ -14350,7 +14350,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.autoComplete1Act(java.lang.String)"/>
@@ -14358,7 +14358,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.choices1Act()"/>
@@ -14517,7 +14517,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.autoComplete0Act(java.lang.String)"/>
@@ -14525,7 +14525,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.choices0Act()"/>
@@ -14580,7 +14580,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.autoComplete1Act(java.lang.String)"/>
@@ -14588,7 +14588,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.choices1Act()"/>
@@ -14747,7 +14747,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoCompleteA" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.autoCompleteA(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter,java.lang.String)"/>
@@ -14755,7 +14755,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choicesA" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.choicesA(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
@@ -14810,7 +14810,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoCompleteB" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.autoCompleteB(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter,java.lang.String)"/>
@@ -14818,7 +14818,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choicesB" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.choicesB(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
@@ -15039,7 +15039,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="LIST"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.List org.apache.isis.testdomain.model.good.ProperMemberSupport_action6.choices0Act()"/>
@@ -15106,7 +15106,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="LIST"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices2Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.List org.apache.isis.testdomain.model.good.ProperMemberSupport_action6.choices2Act()"/>
@@ -15825,7 +15825,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0MyAction" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport.autoComplete0MyAction(java.lang.String)"/>
@@ -15833,7 +15833,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0MyAction" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport.choices0MyAction()"/>
@@ -15881,7 +15881,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1MyAction" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport.autoComplete1MyAction(java.lang.String)"/>
@@ -15889,7 +15889,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1MyAction" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport.choices1MyAction()"/>
@@ -17026,7 +17026,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Collection"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0PlaceOrder" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Collection org.apache.isis.testdomain.model.base.MemberDetection$PublicBase.choices0PlaceOrder(java.lang.String)"/>
@@ -17088,7 +17088,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1PlaceOrder" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Collection org.apache.isis.testdomain.model.base.MemberDetection$PublicBase.autoComplete1PlaceOrder(java.lang.String,java.lang.String)"/>
@@ -18133,7 +18133,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Collection"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0PlaceOrder" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Collection org.apache.isis.testdomain.model.base.MemberDetection$PublicBase.choices0PlaceOrder(java.lang.String)"/>
@@ -18195,7 +18195,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1PlaceOrder" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Collection org.apache.isis.testdomain.model.base.MemberDetection$PublicBase.autoComplete1PlaceOrder(java.lang.String,java.lang.String)"/>
@@ -19240,7 +19240,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Collection"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0PlaceOrder" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="protected java.util.Collection org.apache.isis.testdomain.model.base.MemberDetection$ProtectedBase.choices0PlaceOrder(java.lang.String)"/>
@@ -19302,7 +19302,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1PlaceOrder" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="protected java.util.Collection org.apache.isis.testdomain.model.base.MemberDetection$ProtectedBase.autoComplete1PlaceOrder(java.lang.String,java.lang.String)"/>
@@ -19667,7 +19667,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.autoComplete0Act(java.lang.String)"/>
@@ -19675,7 +19675,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.choices0Act()"/>
@@ -19723,7 +19723,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.autoComplete1Act(java.lang.String)"/>
@@ -19731,7 +19731,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action1.choices1Act(java.lang.String)"/>
@@ -19973,7 +19973,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.autoComplete0Act(java.lang.String)"/>
@@ -19981,7 +19981,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.choices0Act()"/>
@@ -20029,7 +20029,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.autoComplete1Act(java.lang.String)"/>
@@ -20037,7 +20037,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action2.choices1Act()"/>
@@ -20286,7 +20286,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.autoComplete0Act(java.lang.String)"/>
@@ -20294,7 +20294,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.choices0Act()"/>
@@ -20349,7 +20349,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.autoComplete1Act(java.lang.String)"/>
@@ -20357,7 +20357,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action3.choices1Act()"/>
@@ -20606,7 +20606,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoCompleteA" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.autoCompleteA(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter,java.lang.String)"/>
@@ -20614,7 +20614,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choicesA" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.choicesA(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
@@ -20669,7 +20669,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoCompleteB" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.autoCompleteB(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter,java.lang.String)"/>
@@ -20677,7 +20677,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Set"/>
+                                <mml:attr name="choicesType" value="SET"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choicesB" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Set org.apache.isis.testdomain.model.good.ProperMemberSupport_action4.choicesB(org.apache.isis.testdomain.model.good.ProperMemberSupport_action4$Parameter)"/>
@@ -21078,7 +21078,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="LIST"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.List org.apache.isis.testdomain.model.good.ProperMemberSupport_action6.choices0Act()"/>
@@ -21145,7 +21145,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.List"/>
+                                <mml:attr name="choicesType" value="LIST"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices2Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.List org.apache.isis.testdomain.model.good.ProperMemberSupport_action6.choices2Act()"/>
@@ -22601,7 +22601,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.lang.String"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Collection org.apache.isis.testdomain.model.good.ProperParameterSupport.autoComplete0Act(org.apache.isis.testdomain.model.good.ProperParameterSupport$Parameters,java.lang.String)"/>
@@ -22609,7 +22609,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="java.util.Collection"/>
+                                <mml:attr name="choicesType" value="COLLECTION"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public java.util.Collection org.apache.isis.testdomain.model.good.ProperParameterSupport.choices0Act(org.apache.isis.testdomain.model.good.ProperParameterSupport$Parameters)"/>
@@ -22670,7 +22670,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="int"/>
+                                <mml:attr name="choicesType" value="ARRAY"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public int[] org.apache.isis.testdomain.model.good.ProperParameterSupport.autoComplete1Act(org.apache.isis.testdomain.model.good.ProperParameterSupport$Parameters,java.lang.String)"/>
@@ -22678,7 +22678,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="int[]"/>
+                                <mml:attr name="choicesType" value="ARRAY"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public int[] org.apache.isis.testdomain.model.good.ProperParameterSupport.choices1Act(org.apache.isis.testdomain.model.good.ProperParameterSupport$Parameters)"/>
@@ -22739,7 +22739,7 @@
                                 <mml:attr name="typicalLengthFacet" value="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet" fqcn="org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod">
-                                <mml:attr name="choicesType" value="boolean"/>
+                                <mml:attr name="choicesType" value="ARRAY"/>
                                 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
                                 <mml:attr name="intent.autoComplete2Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public boolean[] org.apache.isis.testdomain.model.good.ProperParameterSupport.autoComplete2Act(org.apache.isis.testdomain.model.good.ProperParameterSupport$Parameters,java.lang.String)"/>
@@ -22747,7 +22747,7 @@
                                 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod">
-                                <mml:attr name="choicesType" value="boolean[]"/>
+                                <mml:attr name="choicesType" value="ARRAY"/>
                                 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
                                 <mml:attr name="intent.choices2Act" value="CHOICES_OR_AUTOCOMPLETE"/>
                                 <mml:attr name="methods" value="public boolean[] org.apache.isis.testdomain.model.good.ProperParameterSupport.choices2Act(org.apache.isis.testdomain.model.good.ProperParameterSupport$Parameters)"/>

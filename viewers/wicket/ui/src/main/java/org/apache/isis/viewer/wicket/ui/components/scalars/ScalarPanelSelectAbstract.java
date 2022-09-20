@@ -18,17 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.io.Serializable;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.springframework.lang.Nullable;
-import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -42,48 +45,70 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
+    public static interface ChoiceTitleHandler extends Serializable {
+        void clearTitleAttribute();
+        void setTitleAttribute(@Nullable String titleAttribute);
+    }
+
     protected Select2 select2;
 
-    public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelSelectAbstract(
+            final String id,
+            final ScalarModel scalarModel) {
         super(id, scalarModel, ManagedObject.class);
         setOutputMarkupId(true);
     }
 
-    protected final Select2 createSelect2(final String id) {
-        val select2 = Select2.createSelect2(id, scalarModel(), buildChoiceProvider());
-        addSelect2Semantics(select2.getSettings());
-        return select2;
-    }
-
-    private void addSelect2Semantics(final Settings settings) {
+    protected final Select2 createSelect2(
+            final String id,
+            final Function<ScalarModel, ChoiceProviderAbstract> choiceProviderFactory) {
         val scalarModel = scalarModel();
-
+        val select2 = Select2.createSelect2(id, scalarModel,
+                choiceProviderFactory.apply(scalarModel));
+        val settings = select2.getSettings();
         switch(scalarModel.getChoiceProviderSort()) {
         case CHOICES:
             settings.setPlaceholder(scalarModel.getFriendlyName());
-            return;
+            break;
         case AUTO_COMPLETE:
             settings.setPlaceholder(scalarModel.getFriendlyName());
             settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
-            return;
+            break;
         case OBJECT_AUTO_COMPLETE:
             //TODO render object place holder?
             Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
             .ifPresent(settings::setMinimumInputLength);
-            return;
+            break;
         default:
             // ignore if no choices
         }
+        return select2;
+    }
+
+    protected final boolean isEditableWithEitherAutoCompleteOrChoices() {
+        if(scalarModel().getRenderingHint().isInTable()) {
+            return false;
+        }
+        // doesn't apply if not editable, either
+        if(scalarModel().isViewMode()) {
+            return false;
+        }
+        return scalarModel().getChoiceProviderSort().isChoicesAny();
     }
 
     public final boolean checkSelect2Required() {
         return select2.checkRequired();
     }
 
-    /**
-     * Mandatory hook (is called by {@link #createSelect2(String)})
-     */
-    protected abstract ChoiceProviderAbstract buildChoiceProvider();
+    @Override
+    protected final UiString obtainOutputFormat() {
+        return UiString.text(select2.obtainOutputFormatModel().getObject());
+    }
+
+    @Override
+    protected final Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.SELECT2);
+    }
 
     // //////////////////////////////////////
 
@@ -91,7 +116,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
      * Automatically "opens" the select2.
      */
     @Override
-    protected void onSwitchFormForInlinePrompt(
+    protected final void onSwitchFormForInlinePrompt(
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
         Wkt.javaScriptAdd(target, EventTopic.OPEN_SELECT2, inlinePromptForm.getMarkupId());
@@ -100,13 +125,12 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     // //////////////////////////////////////
 
     /**
-     * Hook method to refresh choices when changing.
-     *
+     * Refresh choices when changing.
      * <p>
      * called from onUpdate callback
      */
     @Override
-    public Repaint updateIfNecessary(
+    public final Repaint updateIfNecessary(
             final @NonNull UiParameter paramModel,
             final @NonNull Optional<AjaxRequestTarget> target) {
 
@@ -138,7 +162,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
      * @param target The Ajax request handler
      */
     @Override
-    public void repaint(final AjaxRequestTarget target) {
+    public final void repaint(final AjaxRequestTarget target) {
         target.add(this);
     }
 

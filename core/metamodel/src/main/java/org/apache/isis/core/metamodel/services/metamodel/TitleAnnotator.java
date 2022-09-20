@@ -79,7 +79,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
         titleAnnotation(parameterType,
                 String.format("%s: %s",
                         parameter.getId(),
-                        parameter.isScalar()
+                        parameter.isSingular()
                         ? config().abbrev(parameter.getElementType().getCorrespondingClass())
                         : renderTypeOf((OneToManyFeature) parameter, config()))
                 );

@@ -130,7 +130,7 @@ class _BindingUtil {
     // -- HELPER
 
     private boolean isNonScalarParam(final @NonNull ObjectActionParameter param) {
-        return param.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
+        return param.getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL;
     }
 
     private void guardAgainstNonScalarParam(final @NonNull ObjectActionParameter param) {

@@ -152,7 +152,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ObjectActionParameter actionParameter,
             final @NonNull ManagedObject value) {
 
-        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR);
+        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR);
 
         val feature = actionParameter;
         val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
@@ -175,7 +175,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ObjectActionParameter actionParameter,
             final @NonNull Can<ManagedObject> values) {
 
-        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION);
+        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL);
 
         val feature = actionParameter;
         val valueCls = feature.getElementType().getCorrespondingClass();

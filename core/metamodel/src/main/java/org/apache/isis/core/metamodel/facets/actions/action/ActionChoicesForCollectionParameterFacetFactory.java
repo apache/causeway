@@ -77,7 +77,7 @@ implements MetaModelRefiner {
 
                 int paramNum = 0;
                 for (ObjectActionParameter parameter : objectAction.getParameters()) {
-                    if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
+                    if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL) {
                         validateActionParameter_whenCollection(
                                 objectSpec, objectAction, parameter, paramNum);
                     }
@@ -94,7 +94,7 @@ implements MetaModelRefiner {
             final ObjectActionParameter parameter,
             final int paramNum) {
 
-        if(parameter.isScalar()) {
+        if(parameter.isSingular()) {
             return;
         }
 

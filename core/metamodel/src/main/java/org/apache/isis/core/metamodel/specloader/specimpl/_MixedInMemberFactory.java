@@ -46,7 +46,7 @@ class _MixedInMemberFactory {
             final String mixinMethodName) {
 
         return mixinAction ->
-            mixinAction.getReturnType().isScalar()
+            mixinAction.getReturnType().isSingular()
                 ? new OneToOneAssociationMixedIn(
                         mixinAction, mixeeSpec, mixinType, mixinMethodName)
                 : new OneToManyAssociationMixedIn(

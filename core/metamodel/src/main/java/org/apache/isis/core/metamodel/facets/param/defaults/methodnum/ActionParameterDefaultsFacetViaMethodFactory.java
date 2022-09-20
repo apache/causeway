@@ -22,16 +22,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
 import lombok.val;
 
-/**
- * Sets up all the {@link Facet}s for an action in a single shot.
- */
 public class ActionParameterDefaultsFacetViaMethodFactory
 extends ActionParameterSupportFacetFactoryAbstract {
 

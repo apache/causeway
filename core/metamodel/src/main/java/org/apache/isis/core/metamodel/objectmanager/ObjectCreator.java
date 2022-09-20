@@ -72,7 +72,7 @@ interface ObjectCreator {
             }
 
             val pojo = instantiate(spec); // can only be a scalar
-            val domainObject = ManagedObject.adaptScalar(spec, pojo);
+            val domainObject = ManagedObject.adaptSingular(spec, pojo);
 
             // initialize new object
             domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)

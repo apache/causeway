@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -67,25 +66,6 @@ implements HasUiProperty {
             final ScalarRepresentation viewOrEdit,
             final RenderingHint renderingHint) {
         return wrap(uiProperty, viewOrEdit, renderingHint);
-    }
-
-    public ManagedProperty getManagedProperty() {
-        return uiProperty.propertyInteraction().getManagedProperty().get();
-    }
-
-    @Override
-    public boolean whetherHidden() {
-        return getManagedProperty()
-                .checkVisibility()
-                .isPresent();
-    }
-
-    @Override
-    public String disableReasonIfAny() {
-        return getManagedProperty()
-                .checkUsability()
-                .map(InteractionVeto::getReason)
-                .orElse(null);
     }
 
     @Override

@@ -67,7 +67,7 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
             // is ok;
         }
         val spec = entityModel.getTypeOfSpecification();
-        if (spec.isScalar()
+        if (spec.isSingular()
                 && !spec.isValue()) {
             return doAppliesTo(entityModel);
         }

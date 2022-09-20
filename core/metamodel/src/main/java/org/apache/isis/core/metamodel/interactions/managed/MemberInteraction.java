@@ -84,8 +84,8 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * @return optionally the ManagedMember based on whether there
      * was no interaction veto within the originating chain
      */
-    protected Optional<T> getManagedMember() {
-        return railway.getSuccess();
+    protected InteractionRailway<T> getManagedMember() {
+        return railway;
     }
 
     /**

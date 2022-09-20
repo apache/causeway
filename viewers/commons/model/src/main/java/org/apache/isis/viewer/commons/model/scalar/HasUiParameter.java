@@ -138,6 +138,16 @@ public interface HasUiParameter extends UiParameter {
     }
 
     @Override
+    default boolean whetherHidden() {
+        return getUiParameter().whetherHidden();
+    }
+
+    @Override
+    default String disableReasonIfAny() {
+        return getUiParameter().disableReasonIfAny();
+    }
+
+    @Override
     default ActionInteractionHead getPendingParamHead() {
         return getMetaModel().getAction().interactionHead(getUiParameter().getOwner());
     }

@@ -80,7 +80,9 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
                     val propIa = propertyInteraction();
                     val prop = propIa.getManagedProperty().orElseThrow();
                     ManagedObjects.refreshViewmodel(prop.getOwner(), /* bookmark provider*/ null);
-                    return propIa.startPropertyNegotiation();
+                    return propIa.startPropertyNegotiation()
+                            //.orElseThrow(()->_Exceptions.noSuchElement(memberId))
+                            ;
                 });
 
         return PropertyInteraction.wrap(

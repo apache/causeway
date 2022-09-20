@@ -22,6 +22,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Obtain auto-completion for each of the parameters of the action.
@@ -34,6 +35,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 public interface ActionParameterAutoCompleteFacet extends Facet {
 
     public Can<ManagedObject> autoComplete(
+            ObjectSpecification requiredSpec,
             ManagedObject inObject,
             Can<ManagedObject> pendingArgs,
             String searchArg,

@@ -74,6 +74,13 @@ public class _XrayEvent {
         record(1, _IconResource.TRANSACTION, format, args);
     }
 
+    /**
+     * User originating event.
+     */
+    public void user(final String format, final Object...args) {
+        record(1, _IconResource.USER, format, args);
+    }
+
     // -- HELPER
 
     /**

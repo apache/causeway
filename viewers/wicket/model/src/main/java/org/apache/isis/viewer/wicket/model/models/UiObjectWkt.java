@@ -232,17 +232,13 @@ implements
 
     @Override
     public UiObjectWkt toEditMode() {
-        setMode(ScalarRepresentation.EDITING);
-        propertyScalarModels().values()
-            .forEach(ScalarPropertyModel::toEditMode);
+        //noop for objects
         return this;
     }
 
     @Override
     public UiObjectWkt toViewMode() {
-        setMode(ScalarRepresentation.VIEWING);
-        propertyScalarModels().values()
-            .forEach(ScalarPropertyModel::toViewMode);
+        //noop for objects
         return this;
     }
 

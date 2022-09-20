@@ -200,7 +200,7 @@ implements ContentNegotiationService {
         val returnTypeCompileTimeSpecification = objectAndActionInvocation.getReturnTypeSpecification();
 
         val isDomainObjectOrCollection = returnTypeCompileTimeSpecification.isEntityOrViewModelOrAbstract()
-                || returnTypeCompileTimeSpecification.isNonScalar();
+                || returnTypeCompileTimeSpecification.isPlural();
 
         final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
         if(isDomainObjectOrCollection

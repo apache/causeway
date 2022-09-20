@@ -41,11 +41,11 @@ extends ActionParameterSupportFacetFactoryAbstract {
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
         val choicesMethod = searchResult.getSupportingMethod();
-        val returnType = searchResult.getReturnType();
         val patConstructor = searchResult.getPatConstructor();
+        val paramSupportReturnType = searchResult.getParamSupportReturnType();
         addFacet(
                 new ActionParameterChoicesFacetViaMethod(
-                        choicesMethod, returnType, patConstructor, paramAsHolder));
+                        choicesMethod, paramSupportReturnType, patConstructor, paramAsHolder));
     }
 
 

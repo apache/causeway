@@ -35,7 +35,7 @@ implements OneToManyActionParameter {
             final ObjectSpecification paramElementType,
             final int index,
             final ObjectActionDefault actionImpl) {
-        super(FeatureType.ACTION_PARAMETER_COLLECTION, index, paramElementType, actionImpl);
+        super(FeatureType.ACTION_PARAMETER_PLURAL, index, paramElementType, actionImpl);
     }
 
     // -- UNDERLYING TYPE

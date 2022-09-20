@@ -43,7 +43,7 @@ class SpecificationLoaderTest_nonScalar {
         }
 
         @Test void testType() throws Exception {
-            assertTrue(specification.isNonScalar());
+            assertTrue(specification.isPlural());
         }
 
         @Test void testName() throws Exception {
@@ -73,7 +73,7 @@ class SpecificationLoaderTest_nonScalar {
         }
 
         @Test void testType() throws Exception {
-            assertTrue(specification.isNonScalar());
+            assertTrue(specification.isPlural());
         }
 
         @Test void testName() throws Exception {
@@ -102,7 +102,7 @@ class SpecificationLoaderTest_nonScalar {
         }
 
         @Test void testType() throws Exception {
-            assertTrue(specification.isNonScalar());
+            assertTrue(specification.isPlural());
         }
 
         @Test void testName() throws Exception {

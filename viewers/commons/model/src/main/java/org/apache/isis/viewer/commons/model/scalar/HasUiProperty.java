@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.commons.model.scalar;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -42,5 +43,19 @@ public interface HasUiProperty extends UiProperty {
         return getUiProperty().getPendingPropertyModel();
     }
 
+    @Override
+    default ManagedProperty getManagedProperty() {
+        return getUiProperty().getManagedProperty();
+    }
+
+    @Override
+    default boolean whetherHidden() {
+        return getUiProperty().whetherHidden();
+    }
+
+    @Override
+    default String disableReasonIfAny() {
+        return getUiProperty().disableReasonIfAny();
+    }
 
 }

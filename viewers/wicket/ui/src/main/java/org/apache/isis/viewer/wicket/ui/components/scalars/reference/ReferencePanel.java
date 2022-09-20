@@ -30,20 +30,17 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
@@ -52,7 +49,9 @@ import lombok.val;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel extends ScalarPanelSelectAbstract {
+public class ReferencePanel
+extends ScalarPanelSelectAbstract
+implements ChoiceTitleHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,11 +65,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
-    }
-
-    @Override
-    protected UiString obtainOutputFormat() {
-        return UiString.text(select2.obtainOutputFormatModel().getObject());
     }
 
     @Override
@@ -90,19 +84,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.SELECT2);
-    }
-
-    @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
         this.entityLink = new EntityLinkSelect2Panel(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
-//        _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
-//                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices; feature %s",
-//                    scalarModel.getMetaModel().getFeatureIdentifier()));
-        this.select2 = createSelect2(ID_AUTO_COMPLETE);
+        this.select2 = createSelect2(ID_AUTO_COMPLETE, ChoiceProviderForReferences::new);
 
         entityLink.addOrReplace(select2.asComponent());
         entityLink.setOutputMarkupId(true);
@@ -134,16 +120,14 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
         if(isCompactFormat) return;
-        entityLink.setEnabled(false);
-        Wkt.attributeReplace(entityLink, "title", disableReason);
+        setTitleAttribute(disableReason);
     }
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         super.onEditable(target);
         if(isCompactFormat) return;
-        entityLink.setEnabled(true);
-        Wkt.attributeReplace(entityLink, "title", "");
+        clearTitleAttribute();
     }
 
     private Optional<MarkupContainer> lookupScalarValueContainer() {
@@ -168,9 +152,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             val isInlinePrompt = scalarModel.isInlinePrompt();
             if(isInlinePrompt) {
                 iconAndTitle.setVisible(false);
-
-                // bit of a hack... allows us to suppress the title using CSS
-                //Wkt.cssAppend(iconAndTitle, "inlinePrompt");
             }
 
             val adapter = scalarModel.getObject();
@@ -228,11 +209,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     }
 
-    @Override
-    protected ChoiceProviderAbstract buildChoiceProvider() {
-        return new ChoiceProviderForReferences(scalarModel());
-    }
-
     // -- GET INPUT AS TITLE
 
     String getTitleForFormComponentInput() {
@@ -270,23 +246,28 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // --
 
+//    @Override
+//    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+//        super.onUpdate(target, scalarPanel);
+//        Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
+//    }
+
+    // -- CHOICE TITLE HANDLER
+
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-        super.onUpdate(target, scalarPanel);
-        Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
+    public void clearTitleAttribute() {
+        entityLink.setEnabled(true);
+        Wkt.attributeReplace(entityLink, "title", "");
     }
 
-    // -- HELPERS
-
-    private boolean isEditableWithEitherAutoCompleteOrChoices() {
-        if(scalarModel().getRenderingHint().isInTable()) {
-            return false;
+    @Override
+    public void setTitleAttribute(final String titleAttribute) {
+        if(_Strings.isNullOrEmpty(titleAttribute)) {
+            clearTitleAttribute();
+            return;
         }
-        // doesn't apply if not editable, either
-        if(scalarModel().isViewMode()) {
-            return false;
-        }
-        return scalarModel().getChoiceProviderSort().isChoicesAny();
+        entityLink.setEnabled(false);
+        Wkt.attributeReplace(entityLink, "title", titleAttribute);
     }
 
 }

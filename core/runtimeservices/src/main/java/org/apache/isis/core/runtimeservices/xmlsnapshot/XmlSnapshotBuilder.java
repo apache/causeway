@@ -79,7 +79,7 @@ public class XmlSnapshotBuilder {
     }
 
     public XmlSnapshot build() {
-        final ManagedObject adapter = ManagedObject.adaptScalar(specificationLoader, domainObject);
+        final ManagedObject adapter = ManagedObject.adaptSingular(specificationLoader, domainObject);
         final XmlSnapshot snapshot = (schema != null)
                 ? new XmlSnapshot(adapter, schema)
                 : new XmlSnapshot(adapter);

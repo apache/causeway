@@ -362,7 +362,7 @@ public final class BindingsVaa {
         @Override
         public void accept(@NonNull final Bindable<ManagedObject> target, final V fieldValue) {
             //TODO should we support the packed case as well?
-            target.setValue(ManagedObject.adaptScalar(valueSpec, fieldValue));
+            target.setValue(ManagedObject.adaptSingular(valueSpec, fieldValue));
         }
 
 

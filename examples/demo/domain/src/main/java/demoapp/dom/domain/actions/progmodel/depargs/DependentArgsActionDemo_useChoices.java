@@ -76,6 +76,13 @@ public class DependentArgsActionDemo_useChoices {
 
     // -- PARAM 1 (DemoItem)
 
+    @MemberSupport public DemoItem default1Act(final Parameters params) {
+        // fill in first that is possible based on the first param from the UI dialog
+        return params.parity()==null
+                ? null
+                : choices1Act(params).stream().findFirst().orElse(null);
+    }
+
     @MemberSupport public Collection<DemoItem> choices1Act(final Parameters params) {
 
         val parity = params.parity(); // <-- the refining parameter from the dialog above

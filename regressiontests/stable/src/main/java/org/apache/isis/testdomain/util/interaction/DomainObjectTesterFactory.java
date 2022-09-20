@@ -625,7 +625,7 @@ public class DomainObjectTesterFactory {
 
         @SuppressWarnings("unchecked")
         static void updatePojo(final ManagedValue managedValue, final UnaryOperator replacer) {
-            managedValue.update(v->ManagedObject.adaptScalar(
+            managedValue.update(v->ManagedObject.adaptSingular(
                     v.getSpecification(),
                     replacer.apply(v.getPojo())));
         }

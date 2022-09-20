@@ -33,6 +33,7 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTyp
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -74,8 +75,8 @@ public final class ParameterSupport {
         int paramIndex;
         Class<?> paramType;
         Method supportingMethod;
-        Class<?> returnType;
         Optional<Constructor<?>> patConstructor;
+        TypeOfAnyCardinality paramSupportReturnType;
     }
 
     @FunctionalInterface
@@ -141,19 +142,21 @@ public final class ParameterSupport {
                 .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType)),
                 paramTypes,
                 searchRequest.getAdditionalParamTypes())
-        .map(methodAndPatConstructor->toSearchResult(paramIndex, paramType, methodAndPatConstructor))
+        .map(methodAndPatConstructor->toSearchResult(type, paramIndex, paramType, methodAndPatConstructor))
         .forEach(onMethodFound);
     }
 
     private static ParamSupportingMethodSearchResult toSearchResult(
+            final Class<?> declaringClass,
             final int paramIndex,
             final Class<?> paramType,
             final MethodAndPatConstructor supportingMethodAndPatConstructor) {
         return ParamSupportingMethodSearchResult
                 .of(paramIndex, paramType,
-                        supportingMethodAndPatConstructor.getSupportingMethod(),
-                        supportingMethodAndPatConstructor.getSupportingMethod().getReturnType(),
-                        Optional.of(supportingMethodAndPatConstructor.getPatConstructor()));
+                    supportingMethodAndPatConstructor.getSupportingMethod(),
+                    Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
+                    TypeOfAnyCardinality.forMethodReturn(
+                            declaringClass, supportingMethodAndPatConstructor.getSupportingMethod()));
     }
 
     private static void singleArgBeingParamType(
@@ -172,7 +175,7 @@ public final class ParameterSupport {
         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
         .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
         .streamMethodsMatchingSignature(signature)
-        .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+        .map(supportingMethod->toSearchResult(type, paramIndex, paramType, supportingMethod))
         .forEach(onMethodFound);
     }
 
@@ -193,9 +196,7 @@ public final class ParameterSupport {
 
         //limit: [0 .. paramIndex + 1]
         for(int limit = paramIndex + 1; limit>=0; --limit) {
-
             val signature = concat(paramTypes, limit, additionalParamTypes);
-
             val supportingMethod =
                     MethodFinder
                     .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
@@ -203,25 +204,24 @@ public final class ParameterSupport {
                     .streamMethodsMatchingSignature(signature)
                     .findFirst()
                     .orElse(null);
-
             if(supportingMethod != null) {
-                onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));
+                onMethodFound.accept(toSearchResult(type, paramIndex, paramType, supportingMethod));
                 return;
             }
-
         }
-
     }
 
     private static ParamSupportingMethodSearchResult toSearchResult(
+            final Class<?> declaringClass,
             final int paramIndex,
             final Class<?> paramType,
             final Method supportingMethod) {
         return ParamSupportingMethodSearchResult
                 .of(paramIndex, paramType,
-                        supportingMethod,
-                        supportingMethod.getReturnType(),
-                        Optional.empty());
+                    supportingMethod,
+                    Optional.empty(),
+                    TypeOfAnyCardinality.forMethodReturn(
+                            declaringClass, supportingMethod));
     }
 
     /**

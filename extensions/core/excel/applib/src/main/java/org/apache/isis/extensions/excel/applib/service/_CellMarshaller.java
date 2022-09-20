@@ -87,7 +87,7 @@ final class _CellMarshaller {
         }
 
         // reference types
-        if(!propertySpec.isNonScalar()) {
+        if(!propertySpec.isPlural()) {
             setCellValueForBookmark(cell, propertyAsObj, propertyAsTitle, defaultCellStyle);
             return;
         }
@@ -318,7 +318,7 @@ final class _CellMarshaller {
         }
 
         // reference types
-        if(!propertySpec.isNonScalar()) {
+        if(!propertySpec.isPlural()) {
             return getCellComment(cell, requiredType);
         }
 

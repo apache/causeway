@@ -95,10 +95,15 @@ implements ScalarModelSubscriber {
         NO_OUTPUT_ESCAPE
     }
 
+    /**
+     * Order matters: ascending order of precedence, eg. when used in reductions.
+     */
     public enum Repaint {
-        ENTIRE_FORM,
+        NOTHING,
         PARAM_ONLY,
-        NOTHING
+        ENTIRE_FORM,;
+        public boolean isParamOnly() { return this == PARAM_ONLY; }
+        public boolean isEntireForm() { return this == ENTIRE_FORM; }
     }
 
     public enum RenderScenario {
@@ -460,6 +465,8 @@ implements ScalarModelSubscriber {
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
 
+            _Xray.onUserParamOrPropertyEdit(scalarPanel);
+
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);
             }
@@ -612,9 +619,10 @@ implements ScalarModelSubscriber {
        val scalarModel = scalarModel();
 
        // visibility
+       val visibilityBefore = isVisible() && isVisibilityAllowed();
        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
-       val visibilityBefore = isVisible();
        val visibilityAfter = visibilityConsent.isAllowed();
+       setVisibilityAllowed(visibilityAfter);
        setVisible(visibilityAfter);
 
        // usability

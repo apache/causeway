@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableCollection;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
@@ -190,8 +191,8 @@ public final class _NullSafe {
         if(pojo instanceof Collection) {
             return ((Collection<?>)pojo).stream();
         }
-        if(pojo instanceof Can) {
-            return ((Can<?>)pojo).stream();
+        if(pojo instanceof ImmutableCollection) {
+            return ((ImmutableCollection<?>)pojo).stream();
         }
         if(pojo.getClass().isArray()) {
             if(Array.getLength(pojo)==0) return Stream.empty();

@@ -320,7 +320,7 @@ public final class ManagedObjects {
             final @Nullable ManagedObject adapter,
             final @NonNull Supplier<Object> pojoDefaultSupplier) {
         return isNullOrUnspecifiedOrEmpty(adapter)
-            ? ManagedObject.adaptScalar(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
+            ? ManagedObject.adaptSingular(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
             : adapter;
     }
 
@@ -380,7 +380,7 @@ public final class ManagedObjects {
             final @Nullable Object collectionOrArray) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
-        .map(pojo->ManagedObject.adaptScalar(elementSpec, pojo)) // pojo is nullable here
+        .map(pojo->ManagedObject.adaptSingular(elementSpec, pojo)) // pojo is nullable here
         .collect(Can.toCan());
     }
 
@@ -393,7 +393,7 @@ public final class ManagedObjects {
             final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
-        .map(pojo->ManagedObject.adaptScalar(elementSpec, pojo)) // pojo is nullable here
+        .map(pojo->ManagedObject.adaptSingular(elementSpec, pojo)) // pojo is nullable here
         .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }

@@ -54,7 +54,7 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedCollection> getManagedCollection() {
-        return super.getManagedMember();
+        return super.getManagedMember().getSuccess();
     }
 
     /**

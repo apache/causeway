@@ -177,8 +177,8 @@ public interface ObjectManager extends HasMetaModelContext {
         if(spec==null) {
             return ManagedObject.unspecified();
         }
-        return spec.isScalar()
-                ? ManagedObject.adaptScalar(spec, pojo)
+        return spec.isSingular()
+                ? ManagedObject.adaptSingular(spec, pojo)
                 : ManagedObject.packed(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)

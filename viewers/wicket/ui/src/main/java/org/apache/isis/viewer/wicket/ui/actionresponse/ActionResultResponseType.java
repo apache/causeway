@@ -243,7 +243,7 @@ public enum ActionResultResponseType {
             final MetaModelContext commonContext,
             final ManagedObject resultAdapter) {
 
-        if (resultAdapter.getSpecification().isScalar()) {
+        if (resultAdapter.getSpecification().isSingular()) {
             return resultAdapter;
         } else {
             // will only be a single element
@@ -276,7 +276,7 @@ public enum ActionResultResponseType {
 
             // scalar ...
 
-            _Assert.assertTrue(resultSpec.isScalar());
+            _Assert.assertTrue(resultSpec.isSingular());
 
             if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
                 return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);

@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -89,7 +89,7 @@ implements ImperativeFacet {
         return _NullSafe.streamAutodetect(defaultValue)
                 .map(pojo->pojo!=null
                     ? getObjectManager().adapt(pojo)
-                    : managedParam.getMetaModel().isNonScalar()
+                    : managedParam.getMetaModel().isPlural()
                         ? null // assuming for non-scalar parameters, including null makes no sense
                         : ManagedObject.empty(managedParam.getElementType()))
                 .collect(Can.toCan());

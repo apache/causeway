@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -33,6 +34,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -43,18 +45,18 @@ extends ActionParameterChoicesFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    private final Class<?> choicesType;
+    private final TypeOfAnyCardinality paramSupportReturnType;
     private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterChoicesFacetViaMethod(
             final Method method,
-            final Class<?> choicesType,
+            final TypeOfAnyCardinality paramSupportReturnType,
             final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
-        this.choicesType = choicesType;
+        this.paramSupportReturnType = paramSupportReturnType;
         this.patConstructor = patConstructor;
     }
 
@@ -89,7 +91,9 @@ implements ImperativeFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("choicesType", choicesType);
+        visitor.accept("choicesType", paramSupportReturnType.getCollectionSemantics()
+                .map(CollectionSemantics::name)
+                .orElse("NONE"));
     }
 
 }

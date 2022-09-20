@@ -39,14 +39,14 @@ public final class MmInvokeUtil {
 
     /** PAT ... Parameters as Tuple */
     public static Object invokeWithPAT(
-            final Constructor<?> ppmConstructor,
+            final Constructor<?> patConstructor,
             final Method method,
             final ManagedObject adapter,
             final Can<ManagedObject> pendingArguments,
             final List<Object> additionalArguments) {
 
-        val ppmTuple = CanonicalInvoker.construct(ppmConstructor, MmUnwrapUtil.multipleAsArray(pendingArguments));
-        val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
+        val pat = CanonicalInvoker.construct(patConstructor, MmUnwrapUtil.multipleAsArray(pendingArguments));
+        val paramPojos = _Arrays.combineWithExplicitType(Object.class, pat, additionalArguments.toArray());
         return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(adapter), paramPojos);
     }
 

@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmAssertionUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -45,7 +46,7 @@ public class PropertyNegotiationModel implements ManagedValue {
     private final @NonNull LazyObservable<String> validation;
     private final @NonNull _BindableAbstract<String> searchArgument;
     private final @NonNull LazyObservable<Can<ManagedObject>> choices;
-    private final @NonNull ManagedProperty managedProperty;
+    @Getter private final @NonNull ManagedProperty managedProperty;
     private Observable<String> proposedValueAsTitle;
     private Observable<String> proposedValueAsHtml;
     private Bindable<String> proposedValueAsParsableText;
@@ -166,6 +167,23 @@ public class PropertyNegotiationModel implements ManagedValue {
     @Override
     public Observable<Can<ManagedObject>> getChoices() {
         return choices;
+    }
+
+    // -- VISIBILITY
+
+    public boolean whetherHidden() {
+        return managedProperty
+                .checkVisibility()
+                .isPresent();
+    }
+
+    // -- USABILITY
+
+    public String disableReasonIfAny() {
+        return managedProperty
+                .checkUsability()
+                .map(InteractionVeto::getReason)
+                .orElse(null);
     }
 
     // -- VALIDATION

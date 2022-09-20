@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.wicket.validation.IValidatable;
@@ -131,6 +132,18 @@ class _Util {
             final Object valueObject,
             final ScalarModel scalarModel){
 
+        if(valueObject instanceof Collection) {
+            val unpackedValues = ((Collection<?>)valueObject).stream()
+            .map(v->scalarModel
+            .getObjectManager().demementify((ObjectMemento)v))
+            .collect(Can.toCan());
+            return Optional.of(ManagedObject.packed(scalarModel.getScalarTypeSpec(), unpackedValues));
+        }
+
+//        if(scalarModel.isPlural()) {
+//            _Assert.assertTrue(valueObject instanceof ObjectMemento, ()->"unexpected code path???");
+//        }
+
         if(valueObject instanceof ObjectMemento) {
             // seeing this code-path particularly with enum choices
             return Optional.ofNullable(
@@ -161,34 +174,5 @@ class _Util {
                             scalarModel.getMetaModel(),
                             prop.getManagedProperty()));
     }
-
-    // -- PROBABLY NO LONGER NEEDED
-
-//    private Optional<ManagedObject> recoverProposedValue2(
-//            final IValidatable<Object> validatable,
-//            final ScalarModel scalarModel){
-//        return mementoForProposedValue(validatable, scalarModel)
-//                .map(scalarModel.getMetaModelContext()::reconstructObject);
-//    }
-//
-//    private Optional<ObjectMemento> mementoForProposedValue(
-//            final IValidatable<Object> validatable,
-//            final ScalarModel scalarModel) {
-//        final Object proposedValueObj = validatable.getValue();
-//
-//        if (proposedValueObj instanceof List) {
-//            @SuppressWarnings("unchecked")
-//            val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
-//            if (proposedValueObjAsList.isEmpty()) {
-//                return Optional.empty();
-//            }
-//            val memento = proposedValueObjAsList.get(0);
-//            val logicalType = memento.getLogicalType();
-//            return Optional.of(ObjectMemento.pack(proposedValueObjAsList, logicalType));
-//        } else {
-//            return Optional.of((ObjectMemento) proposedValueObj);
-//        }
-//
-//    }
 
 }

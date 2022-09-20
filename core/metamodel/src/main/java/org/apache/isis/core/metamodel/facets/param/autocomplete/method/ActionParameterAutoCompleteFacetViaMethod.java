@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -33,6 +34,8 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -43,19 +46,19 @@ extends ActionParameterAutoCompleteFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    private final Class<?> choicesType;
+    private final TypeOfAnyCardinality paramSupportReturnType;
     private final int minLength;
     private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterAutoCompleteFacetViaMethod(
             final Method method,
-            final Class<?> choicesType,
+            final TypeOfAnyCardinality paramSupportReturnType,
             final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
-        this.choicesType = choicesType;
+        this.paramSupportReturnType = paramSupportReturnType;
         this.minLength = MinLengthUtil.determineMinLength(method);
         this.patConstructor = patConstructor;
     }
@@ -72,6 +75,7 @@ implements ImperativeFacet {
 
     @Override
     public Can<ManagedObject> autoComplete(
+            final ObjectSpecification elementSpec,
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs,
             final String searchArg,
@@ -87,7 +91,6 @@ implements ImperativeFacet {
         if (collectionOrArray == null) {
             return Can.empty();
         }
-        val elementSpec = specForTypeElseFail(choicesType);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         elementSpec, collectionOrArray, interactionInitiatedBy);
@@ -99,7 +102,9 @@ implements ImperativeFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("choicesType", choicesType);
+        visitor.accept("choicesType", paramSupportReturnType.getCollectionSemantics()
+                .map(CollectionSemantics::name)
+                .orElse("NONE"));
         visitor.accept("minLength", minLength);
     }
 
