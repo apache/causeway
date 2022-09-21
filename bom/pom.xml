@@ -383,7 +383,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <jsr305.version>3.0.2</jsr305.version>
         <jsoup.version>1.15.3</jsoup.version>
         <junit-jupiter.version>5.9.0</junit-jupiter.version> <!-- overrides spring -->
-        <junit-platform.version>1.9.0</junit-platform.version>
+        <junit-platform.version>1.9.1</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
