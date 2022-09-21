@@ -88,12 +88,20 @@ implements ChoiceTitleHandler {
         this.entityLink = new EntityLinkSelect2Panel(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
-        this.select2 = createSelect2(ID_AUTO_COMPLETE, ChoiceProviderForReferences::new);
+        this.select2 = createSelect2(ID_AUTO_COMPLETE,
+                ChoiceProviderForReferences::new);
 
         entityLink.addOrReplace(select2.asComponent());
         entityLink.setOutputMarkupId(true);
 
-        return this.entityLink;
+        return entityLink;
+    }
+
+    // -- CUSTOM UPDATING BEHAVIOR
+
+    @Override
+    protected void installScalarModelChangeBehavior() {
+        // no-op, as we already have the Select2OnSelect behavior (directly) installed with the Select2 form component
     }
 
     // -- ON BEFORE RENDER

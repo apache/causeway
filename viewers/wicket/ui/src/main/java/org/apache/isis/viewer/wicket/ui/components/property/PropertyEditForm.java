@@ -58,7 +58,7 @@ extends PromptFormAbstract<ScalarPropertyModel> {
 
         _Casts.castTo(ScalarPanelAbstract.class, component)
         .ifPresent(scalarModelSubscriber->
-            scalarModelSubscriber.notifyOnChange(this)); // handling onUpdate and onError
+            scalarModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
     }
 
     @Override

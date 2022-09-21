@@ -16,19 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.select2.res.js;
+package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-/**
- * A JavaScript reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.js</a>
- */
-public class Select2JsReference
-extends JavaScriptResourceReference {
-    private static final long serialVersionUID = 1L;
+import lombok.NonNull;
+import lombok.val;
 
-    public Select2JsReference() {
-    	super(Select2JsReference.class, "select2.full.js");
+public interface ScalarModelChangeDispatcher {
+
+    @NonNull Iterable<ScalarModelChangeListener> getChangeListeners();
+    @NonNull ScalarPanelAbstract getScalarPanel();
+
+    default void notifyUpdate(final AjaxRequestTarget target) {
+        for (val listener : getChangeListeners()) {
+            listener.onUpdate(target, getScalarPanel());
+        }
+    }
+
+    default void notifyError(final AjaxRequestTarget target) {
+        for (val listener : getChangeListeners()) {
+            listener.onError(target, getScalarPanel());
+        }
     }
 
 }

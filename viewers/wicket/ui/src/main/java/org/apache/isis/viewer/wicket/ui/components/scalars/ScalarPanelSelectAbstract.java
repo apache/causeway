@@ -52,7 +52,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     protected Select2 select2;
 
-    public ScalarPanelSelectAbstract(
+    protected ScalarPanelSelectAbstract(
             final String id,
             final ScalarModel scalarModel) {
         super(id, scalarModel, ManagedObject.class);
@@ -64,7 +64,8 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             final Function<ScalarModel, ChoiceProviderAbstract> choiceProviderFactory) {
         val scalarModel = scalarModel();
         val select2 = Select2.createSelect2(id, scalarModel,
-                choiceProviderFactory.apply(scalarModel));
+                choiceProviderFactory.apply(scalarModel),
+                getScalarModelChangeDispatcher());
         val settings = select2.getSettings();
         switch(scalarModel.getChoiceProviderSort()) {
         case CHOICES:

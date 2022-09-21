@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelChangeListener;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -56,7 +56,7 @@ public abstract class PromptFormAbstract<T extends
     FormExecutorContext
     & IModel<ManagedObject>>
 extends OkCancelForm<T>
-implements ScalarModelSubscriber {
+implements ScalarModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 

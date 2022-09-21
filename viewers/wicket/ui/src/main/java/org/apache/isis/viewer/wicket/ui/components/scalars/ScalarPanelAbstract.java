@@ -18,15 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -68,13 +70,14 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
-implements ScalarModelSubscriber {
+implements ScalarModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -303,8 +306,8 @@ implements ScalarModelSubscriber {
 
         addCssFromMetaModel();
 
-        notifyOnChange(this);
-        addFormComponentBehaviourToUpdateSubscribers();
+        addChangeListener(this);
+        installScalarModelChangeBehavior();
     }
 
     protected abstract void setupInlinePrompt();
@@ -444,58 +447,56 @@ implements ScalarModelSubscriber {
         super.onConfigure();
     }
 
-
     // //////////////////////////////////////
 
+    protected void installScalarModelChangeBehavior() {
+        addOrReplaceBehavoir(ScalarModelDefaultChangeBehavior.class, ()->new ScalarModelDefaultChangeBehavior(this));
+    }
 
-    static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
+    @RequiredArgsConstructor
+    static class ScalarModelChangeDispatcherImpl
+    implements ScalarModelChangeDispatcher, Serializable {
         private static final long serialVersionUID = 1L;
+        private final List<ScalarModelChangeListener> changeListeners = _Lists.newArrayList();
 
+        @Getter(onMethod_={@Override})
         private final ScalarPanelAbstract scalarPanel;
 
-        private ScalarUpdatingBehavior(final ScalarPanelAbstract scalarPanel) {
-            super("change");
-            this.scalarPanel = scalarPanel;
-        }
-
         @Override
-        protected void onUpdate(final AjaxRequestTarget target) {
-
+        public void notifyUpdate(final AjaxRequestTarget target) {
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
-
             _Xray.onUserParamOrPropertyEdit(scalarPanel);
-
-            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
-                subscriber.onUpdate(target, scalarPanel);
-            }
+            ScalarModelChangeDispatcher.super.notifyUpdate(target);
         }
 
         @Override
-        protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
-            super.onError(target, e);
-            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
-                subscriber.onError(target, scalarPanel);
-            }
+        public @NonNull Iterable<ScalarModelChangeListener> getChangeListeners() {
+            return Collections.unmodifiableCollection(changeListeners);
+        }
+
+        public void addChangeListener(final ScalarModelChangeListener listener) {
+            changeListeners.add(listener);
         }
     }
 
-    private final List<ScalarModelSubscriber> subscribers = _Lists.newArrayList();
+    @Getter
+    private final ScalarModelChangeDispatcher scalarModelChangeDispatcher =
+            new ScalarModelChangeDispatcherImpl(this);
 
-    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
-        subscribers.add(subscriber);
+    public void addChangeListener(final ScalarModelChangeListener listener) {
+        ((ScalarModelChangeDispatcherImpl)getScalarModelChangeDispatcher()).addChangeListener(listener);
     }
 
-    private void addFormComponentBehaviourToUpdateSubscribers() {
+    protected final <T extends Behavior> void addOrReplaceBehavoir(
+            final @NonNull Class<T> behaviorClass, final @NonNull Supplier<T> factory) {
         val validationFeedbackReceiver = getValidationFeedbackReceiver();
-        if(validationFeedbackReceiver == null) {
-            return;
+        if(validationFeedbackReceiver == null) { return; }
+        for (val behavior : validationFeedbackReceiver.getBehaviors(behaviorClass)) {
+            validationFeedbackReceiver.remove(behavior);
         }
-        for (Behavior b : validationFeedbackReceiver.getBehaviors(ScalarUpdatingBehavior.class)) {
-            validationFeedbackReceiver.remove(b);
-        }
-        validationFeedbackReceiver.add(new ScalarUpdatingBehavior(this));
+        validationFeedbackReceiver.add(factory.get());
     }
 
     // //////////////////////////////////////
@@ -661,5 +662,7 @@ implements ScalarModelSubscriber {
                ? Repaint.PARAM_ONLY
                : Repaint.NOTHING;
    }
+
+
 
 }
