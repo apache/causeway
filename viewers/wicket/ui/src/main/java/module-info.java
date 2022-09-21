@@ -54,7 +54,6 @@ module org.apache.isis.viewer.wicket.ui {
     exports org.apache.isis.viewer.wicket.ui.components.layout.bs.tabs;
     exports org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
     exports org.apache.isis.viewer.wicket.ui.pages.login;
-    exports org.apache.isis.viewer.wicket.ui.components.widgets.select2.res.js;
     exports org.apache.isis.viewer.wicket.ui.components;
     exports org.apache.isis.viewer.wicket.ui.components.unknown;
     exports org.apache.isis.viewer.wicket.ui.pages.common.sidebar.css;
@@ -69,7 +68,6 @@ module org.apache.isis.viewer.wicket.ui {
     exports org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
     exports org.apache.isis.viewer.wicket.ui.components.scalars;
     exports org.apache.isis.viewer.wicket.ui.pages;
-    exports org.apache.isis.viewer.wicket.ui.components.widgets.select2.res.css;
     exports org.apache.isis.viewer.wicket.ui.components.scalars.reference;
     exports org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
     exports org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
