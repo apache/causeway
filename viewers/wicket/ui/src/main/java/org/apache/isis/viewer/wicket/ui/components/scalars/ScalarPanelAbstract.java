@@ -18,22 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
@@ -44,7 +43,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
-import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -55,7 +53,6 @@ import org.apache.isis.viewer.commons.model.decorators.FormLabelDecorator.FormLa
 import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
@@ -73,6 +70,7 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -309,7 +307,7 @@ implements ScalarModelChangeListener {
         addCssFromMetaModel();
 
         addChangeListener(this);
-        installScalarModelUpdateDispatcher();
+        installScalarModelChangeBehavior();
     }
 
     protected abstract void setupInlinePrompt();
@@ -449,69 +447,46 @@ implements ScalarModelChangeListener {
         super.onConfigure();
     }
 
-
     // //////////////////////////////////////
 
-    protected void installScalarModelUpdateDispatcher() {
-        addOrReplaceBehavoir(ScalarUpdatingBehavior.class, ()->new ScalarUpdatingBehavior(this));
+    protected void installScalarModelChangeBehavior() {
+        addOrReplaceBehavoir(ScalarModelDefaultChangeBehavior.class, ()->new ScalarModelDefaultChangeBehavior(this));
     }
 
-    static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior
-    implements ScalarModelChangeDispatcher {
+    @RequiredArgsConstructor
+    static class ScalarModelChangeDispatcherImpl
+    implements ScalarModelChangeDispatcher, Serializable {
         private static final long serialVersionUID = 1L;
+        private final List<ScalarModelChangeListener> changeListeners = _Lists.newArrayList();
 
         @Getter(onMethod_={@Override})
         private final ScalarPanelAbstract scalarPanel;
 
         @Override
-        public @NonNull Iterable<ScalarModelChangeListener> getOnChangeListeners() {
-            return scalarPanel.onChangeListeners;
-        }
-
-        private ScalarUpdatingBehavior(final ScalarPanelAbstract scalarPanel) {
-            super("change");
-            this.scalarPanel = scalarPanel;
-        }
-
-        @Override
-        protected Form.MethodMismatchResponse onMethodMismatch() {
-            onBeforeRequest(); // onRequest method in super is final, hooking into onMethodMismatch is trick
-            return super.onMethodMismatch();
-        }
-
-        private void onBeforeRequest() {
-            val requestArgs = PageParameterUtils.streamCurrentRequestParameters()
-                    .map(pair->String.format("%s->%s", pair.getKey(), pair.getValue()))
-                    .collect(Collectors.joining(", "));
-
-            _XrayEvent.event("onRequest %s%n", requestArgs);
-        }
-
-        @Override
-        protected void onUpdate(final AjaxRequestTarget target) {
-
+        public void notifyUpdate(final AjaxRequestTarget target) {
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
-
             _Xray.onUserParamOrPropertyEdit(scalarPanel);
-
-            notifyUpdate(target);
+            ScalarModelChangeDispatcher.super.notifyUpdate(target);
         }
 
         @Override
-        protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
-            super.onError(target, e);
-            notifyError(target);
+        public @NonNull Iterable<ScalarModelChangeListener> getChangeListeners() {
+            return Collections.unmodifiableCollection(changeListeners);
         }
 
+        public void addChangeListener(final ScalarModelChangeListener listener) {
+            changeListeners.add(listener);
+        }
     }
 
     @Getter
-    private final List<ScalarModelChangeListener> onChangeListeners = _Lists.newArrayList();
+    private final ScalarModelChangeDispatcher scalarModelChangeDispatcher =
+            new ScalarModelChangeDispatcherImpl(this);
 
-    public void addChangeListener(final ScalarModelChangeListener subscriber) {
-        onChangeListeners.add(subscriber);
+    public void addChangeListener(final ScalarModelChangeListener listener) {
+        ((ScalarModelChangeDispatcherImpl)getScalarModelChangeDispatcher()).addChangeListener(listener);
     }
 
     protected final <T extends Behavior> void addOrReplaceBehavoir(
@@ -687,5 +662,7 @@ implements ScalarModelChangeListener {
                ? Repaint.PARAM_ONLY
                : Repaint.NOTHING;
    }
+
+
 
 }

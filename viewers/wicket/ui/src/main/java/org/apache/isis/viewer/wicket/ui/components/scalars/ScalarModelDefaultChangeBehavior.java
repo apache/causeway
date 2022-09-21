@@ -19,25 +19,27 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 
-import lombok.NonNull;
-import lombok.val;
+class ScalarModelDefaultChangeBehavior extends AjaxFormComponentUpdatingBehavior {
+    private static final long serialVersionUID = 1L;
 
-public interface ScalarModelChangeDispatcher {
+    private final ScalarPanelAbstract scalarPanel;
 
-    @NonNull Iterable<ScalarModelChangeListener> getChangeListeners();
-    @NonNull ScalarPanelAbstract getScalarPanel();
-
-    default void notifyUpdate(final AjaxRequestTarget target) {
-        for (val listener : getChangeListeners()) {
-            listener.onUpdate(target, getScalarPanel());
-        }
+    ScalarModelDefaultChangeBehavior(final ScalarPanelAbstract scalarPanel) {
+        super("change");
+        this.scalarPanel = scalarPanel;
     }
 
-    default void notifyError(final AjaxRequestTarget target) {
-        for (val listener : getChangeListeners()) {
-            listener.onError(target, getScalarPanel());
-        }
+    @Override
+    protected void onUpdate(final AjaxRequestTarget target) {
+        scalarPanel.getScalarModelChangeDispatcher().notifyUpdate(target);
+    }
+
+    @Override
+    protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
+        super.onError(target, e);
+        scalarPanel.getScalarModelChangeDispatcher().notifyError(target);
     }
 
 }

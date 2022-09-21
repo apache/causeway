@@ -18,9 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.stream.Collectors;
+
 import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.object.MmDebugUtil;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.val;
 
@@ -41,6 +44,18 @@ class _Xray {
             prop->{
                 _XrayEvent.user("User property update: %s", prop.getObject());
             });
+    }
+
+    public static void debugRequestParams() {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
+
+        val requestArgs = PageParameterUtils.streamCurrentRequestParameters()
+                .map(pair->String.format("%s->%s", pair.getKey(), pair.getValue()))
+                .collect(Collectors.joining(",\n"));
+
+        _XrayEvent.event("Form Component Change Event %s%n", requestArgs);
     }
 
 }

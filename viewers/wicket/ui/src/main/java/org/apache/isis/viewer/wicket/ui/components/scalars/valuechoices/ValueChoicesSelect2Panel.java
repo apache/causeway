@@ -57,7 +57,7 @@ implements ChoiceTitleHandler {
     protected FormComponent<ManagedObject> createFormComponent(
             final String id, final ScalarModel scalarModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(id, ChoiceProviderForValues::new, null);
+            this.select2 = createSelect2(id, ChoiceProviderForValues::new);
         } else {
             select2.clearInput();
         }

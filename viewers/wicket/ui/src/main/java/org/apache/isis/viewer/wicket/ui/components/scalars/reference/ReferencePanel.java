@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.wicket.Application;
@@ -37,8 +36,6 @@ import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelChangeListener;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
@@ -46,8 +43,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Cho
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -94,7 +89,7 @@ implements ChoiceTitleHandler {
         entityLink.setRequired(scalarModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
-                ChoiceProviderForReferences::new, new Select2ChangeDispatcher(this));
+                ChoiceProviderForReferences::new);
 
         entityLink.addOrReplace(select2.asComponent());
         entityLink.setOutputMarkupId(true);
@@ -105,25 +100,8 @@ implements ChoiceTitleHandler {
     // -- CUSTOM UPDATING BEHAVIOR
 
     @Override
-    protected void installScalarModelUpdateDispatcher() {
-        // no-op
-    }
-
-    static class Select2ChangeDispatcher
-    implements ScalarModelChangeDispatcher, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        @Getter(onMethod_={@Override})
-        private final ReferencePanel scalarPanel;
-
-        private Select2ChangeDispatcher(final ReferencePanel scalarPanel) {
-            this.scalarPanel = scalarPanel;
-        }
-
-        @Override
-        public @NonNull Iterable<ScalarModelChangeListener> getOnChangeListeners() {
-            return scalarPanel.getOnChangeListeners();
-        }
+    protected void installScalarModelChangeBehavior() {
+        // no-op, as we already have the Select2OnSelect behavior (directly) installed with the Select2 form component
     }
 
     // -- ON BEFORE RENDER
