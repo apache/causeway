@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstractForScalarModel;
 
@@ -61,7 +62,8 @@ implements
     public static Select2 createSelect2(
             final String id,
             final ScalarModel scalarModel,
-            final ChoiceProviderAbstract choiceProvider) {
+            final ChoiceProviderAbstract choiceProvider,
+            final ScalarModelChangeDispatcher select2ChangeDispatcher) {
         val select2 = new Select2(scalarModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
@@ -78,7 +80,9 @@ implements
         select2.getSettings().setWidth("100%");
 
         // listen on select2:select/unselect events (client-side)
-        select2.add(new Select2OnSelect(scalarModel));
+        if(select2ChangeDispatcher!=null) {
+            select2.add(new Select2OnSelect(scalarModel, select2ChangeDispatcher));
+        }
 
         return select2;
     }
@@ -183,7 +187,6 @@ implements
         });
     }
 
-    
 
     // -- HELPER
 

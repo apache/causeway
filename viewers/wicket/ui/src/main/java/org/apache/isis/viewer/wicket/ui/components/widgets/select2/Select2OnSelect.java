@@ -19,24 +19,32 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
+import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.JQuery;
 
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug._XrayEvent;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +60,10 @@ import lombok.val;
  */
 @RequiredArgsConstructor
 class Select2OnSelect extends AbstractAjaxBehavior {
+
     private static final long serialVersionUID = 1L;
     private final ScalarModel scalarModel;
+    private final ScalarModelChangeDispatcher select2ChangeDispatcher;
 
     private static enum Event {
         SELECT, UNSELECT, CLEAR;
@@ -71,6 +81,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     @Override
     public void renderHead(final Component component, final IHeaderResponse response) {
         for(var event : Event.values()) {
+            //response.render(OnDomReadyHeaderItem.forScript("Wicket.Log.enabled=true;"));
             response.render(OnDomReadyHeaderItem.forScript(JQuery.execute("$('#%s')"
                     + ".on('select2:%s', function (e) {"
                     + "var data = e.params.data;"
@@ -85,11 +96,15 @@ class Select2OnSelect extends AbstractAjaxBehavior {
         }
     }
 
+    @Override
+    public void onRequest() {
+        updatePendingModels();
+    }
+
     /**
      * update the param negotiation model
      */
-    @Override
-    public void onRequest() {
+    private void updatePendingModels() {
         PageParameterUtils.streamCurrentRequestParameters()
         .forEach(pair->
             Event.valueOf(pair).ifPresent(event->{
@@ -98,20 +113,14 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                     val component = (Select2MultiChoiceExt)getComponent();
                     switch(event) {
                     case SELECT:{
-                        val selection = component.getModelObject();
-                        val newSelection = selection!=null
-                                ? new ArrayList<ObjectMemento>(selection)
-                                : new ArrayList<ObjectMemento>();
+                        val newSelection = copySelection(component.getModelObject());
                         newSelection.add(objectMementoFromEvent);
                         component.setModelObject(newSelection);
                         updateReceiver().setValue(demementify(newSelection));
                         break;
                     }
                     case UNSELECT:{
-                        val selection = component.getModelObject();
-                        val newSelection = selection!=null
-                                ? new ArrayList<ObjectMemento>(selection)
-                                : new ArrayList<ObjectMemento>();
+                        val newSelection = copySelection(component.getModelObject());
                         newSelection.remove(objectMementoFromEvent);
                         component.setModelObject(newSelection);
                         updateReceiver().setValue(demementify(newSelection));
@@ -122,8 +131,6 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                         clearUpdateReceiver();
                         break;
                     }
-//                    System.err.printf("value updated %s%n",
-//                            scalarModel.getObjectManager().demementify(objectMementoFromEvent));
                 }
                 else
                 if(getComponent() instanceof Select2ChoiceExt) {
@@ -142,13 +149,31 @@ class Select2OnSelect extends AbstractAjaxBehavior {
 
                 } else return;
 
-                //TODO schedule form update (AJAX)
+                if(XrayUi.isXrayEnabled()) {
+                    _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.getBookmark());
+                }
+
+                // schedule form update (AJAX)
+
+                WebApplication app = (WebApplication)getComponent().getApplication();
+                AjaxRequestTarget target = app.newAjaxRequestTarget(getComponent().getPage());
+
+                select2ChangeDispatcher.notifyUpdate(target);
+
+                RequestCycle requestCycle = RequestCycle.get();
+                requestCycle.scheduleRequestHandlerAfterCurrent(target);
 
             })
         );
     }
 
     // -- HELPER
+
+    private List<ObjectMemento> copySelection(final @Nullable Collection<ObjectMemento> outdatedSelection) {
+        return outdatedSelection!=null
+                ? new ArrayList<>(outdatedSelection)
+                : new ArrayList<>(1);
+    }
 
     private ManagedObject demementify(final ObjectMemento memento) {
         return scalarModel.getObjectManager().demementify(memento);
@@ -186,6 +211,5 @@ class Select2OnSelect extends AbstractAjaxBehavior {
             prop->
                 prop.getPendingPropertyModel().clear());
     }
-
 
 }

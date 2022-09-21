@@ -22,6 +22,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -31,6 +33,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
@@ -41,6 +44,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -51,6 +55,7 @@ import org.apache.isis.viewer.commons.model.decorators.FormLabelDecorator.FormLa
 import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
@@ -74,7 +79,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
-implements ScalarModelSubscriber {
+implements ScalarModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -303,8 +308,8 @@ implements ScalarModelSubscriber {
 
         addCssFromMetaModel();
 
-        notifyOnChange(this);
-        addFormComponentBehaviourToUpdateSubscribers();
+        addChangeListener(this);
+        installScalarModelUpdateDispatcher();
     }
 
     protected abstract void setupInlinePrompt();
@@ -447,15 +452,39 @@ implements ScalarModelSubscriber {
 
     // //////////////////////////////////////
 
+    protected void installScalarModelUpdateDispatcher() {
+        addOrReplaceBehavoir(ScalarUpdatingBehavior.class, ()->new ScalarUpdatingBehavior(this));
+    }
 
-    static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
+    static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior
+    implements ScalarModelChangeDispatcher {
         private static final long serialVersionUID = 1L;
 
+        @Getter(onMethod_={@Override})
         private final ScalarPanelAbstract scalarPanel;
+
+        @Override
+        public @NonNull Iterable<ScalarModelChangeListener> getOnChangeListeners() {
+            return scalarPanel.onChangeListeners;
+        }
 
         private ScalarUpdatingBehavior(final ScalarPanelAbstract scalarPanel) {
             super("change");
             this.scalarPanel = scalarPanel;
+        }
+
+        @Override
+        protected Form.MethodMismatchResponse onMethodMismatch() {
+            onBeforeRequest(); // onRequest method in super is final, hooking into onMethodMismatch is trick
+            return super.onMethodMismatch();
+        }
+
+        private void onBeforeRequest() {
+            val requestArgs = PageParameterUtils.streamCurrentRequestParameters()
+                    .map(pair->String.format("%s->%s", pair.getKey(), pair.getValue()))
+                    .collect(Collectors.joining(", "));
+
+            _XrayEvent.event("onRequest %s%n", requestArgs);
         }
 
         @Override
@@ -467,35 +496,32 @@ implements ScalarModelSubscriber {
 
             _Xray.onUserParamOrPropertyEdit(scalarPanel);
 
-            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
-                subscriber.onUpdate(target, scalarPanel);
-            }
+            notifyUpdate(target);
         }
 
         @Override
         protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
             super.onError(target, e);
-            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
-                subscriber.onError(target, scalarPanel);
-            }
+            notifyError(target);
         }
+
     }
 
-    private final List<ScalarModelSubscriber> subscribers = _Lists.newArrayList();
+    @Getter
+    private final List<ScalarModelChangeListener> onChangeListeners = _Lists.newArrayList();
 
-    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
-        subscribers.add(subscriber);
+    public void addChangeListener(final ScalarModelChangeListener subscriber) {
+        onChangeListeners.add(subscriber);
     }
 
-    private void addFormComponentBehaviourToUpdateSubscribers() {
+    protected final <T extends Behavior> void addOrReplaceBehavoir(
+            final @NonNull Class<T> behaviorClass, final @NonNull Supplier<T> factory) {
         val validationFeedbackReceiver = getValidationFeedbackReceiver();
-        if(validationFeedbackReceiver == null) {
-            return;
+        if(validationFeedbackReceiver == null) { return; }
+        for (val behavior : validationFeedbackReceiver.getBehaviors(behaviorClass)) {
+            validationFeedbackReceiver.remove(behavior);
         }
-        for (Behavior b : validationFeedbackReceiver.getBehaviors(ScalarUpdatingBehavior.class)) {
-            validationFeedbackReceiver.remove(b);
-        }
-        validationFeedbackReceiver.add(new ScalarUpdatingBehavior(this));
+        validationFeedbackReceiver.add(factory.get());
     }
 
     // //////////////////////////////////////

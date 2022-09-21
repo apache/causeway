@@ -45,8 +45,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import lombok.val;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 class ActionParametersForm
 extends PromptFormAbstract<ActionModel> {
@@ -100,7 +101,7 @@ extends PromptFormAbstract<ActionModel> {
 
         _Casts.castTo(ScalarPanelAbstract.class, component)
         .ifPresent(scalarPanel->{
-            scalarPanel.notifyOnChange(this); // handling onUpdate and onError
+            scalarPanel.addChangeListener(this); // handling onUpdate and onError
             onNewScalarPanel.accept(scalarPanel);
         });
 
