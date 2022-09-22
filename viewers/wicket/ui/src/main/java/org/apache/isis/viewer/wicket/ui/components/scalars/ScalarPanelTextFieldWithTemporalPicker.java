@@ -51,8 +51,25 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         val scalarModel = scalarModel();
-        return new TextFieldWithDateTimePicker<T>(
+        val textField = new TextFieldWithDateTimePicker<T>(
                 id, scalarModel, type, getConverter(scalarModel));
+
+        /* [ISIS-3201]
+         * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.
+         * Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
+         * also updates the Wicket model for this form component on the server side.
+         */
+        textField.add(new OnChangeAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                // triggers update of dependent args (action prompt)
+                ScalarPanelTextFieldWithTemporalPicker.this
+                    .getScalarModelChangeDispatcher().notifyUpdate(target);
+            }
+        });
+
+        return textField;
     }
 
     protected final TextField<T> getTextField() {
@@ -66,22 +83,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     @Override
     protected void installScalarModelChangeBehavior() {
-        //super.installScalarModelChangeBehavior(); // don't install the default change listener
-
-        /* [ISIS-3201]
-         * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.
-         * Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
-         * also updates the Wicket model for this form component on the server side.
-         */
-        getTextField().add(new OnChangeAjaxBehavior() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void onUpdate(final AjaxRequestTarget target) {
-                // triggers update of dependent args (action prompt)
-                ScalarPanelTextFieldWithTemporalPicker.this
-                    .getScalarModelChangeDispatcher().notifyUpdate(target);
-            }
-        });
+        // don't install the default change listener, instead OnChangeAjaxBehavior is installed above
     }
 
 }

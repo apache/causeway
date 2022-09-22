@@ -158,6 +158,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                 WebApplication app = (WebApplication)getComponent().getApplication();
                 AjaxRequestTarget target = app.newAjaxRequestTarget(getComponent().getPage());
 
+                // triggers update of dependent args (action prompt)
                 select2ChangeDispatcher.notifyUpdate(target);
 
                 RequestCycle requestCycle = RequestCycle.get();
