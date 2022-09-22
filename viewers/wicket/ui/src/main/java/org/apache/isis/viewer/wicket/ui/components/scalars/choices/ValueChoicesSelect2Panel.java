@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import java.util.Optional;
 

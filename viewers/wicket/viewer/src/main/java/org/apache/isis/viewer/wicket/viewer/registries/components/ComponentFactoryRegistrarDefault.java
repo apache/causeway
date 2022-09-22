@@ -40,6 +40,7 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
@@ -68,14 +69,13 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldW
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.bool.BooleanPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.choices.ChoicesSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.composite.CompositeValuePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.tree.TreePanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
@@ -210,8 +210,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
 
         componentFactories.add(TreePanelFactories.parented());
-
-        componentFactories.add(new ReferencePanelFactory());
         componentFactories.add(MarkupPanelFactories.parented());
 
         componentFactories.add(new BooleanPanelFactory());
@@ -231,7 +229,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new ValueFallbackPanelFactory());
 
         // or for choices
-        componentFactories.add(new ValueChoicesSelect2PanelFactory());
+        componentFactories.add(new ChoicesSelect2PanelFactory());
 
     }
 

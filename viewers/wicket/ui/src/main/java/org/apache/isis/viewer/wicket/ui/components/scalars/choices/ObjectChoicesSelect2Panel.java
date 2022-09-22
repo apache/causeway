@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import java.util.Optional;
 
@@ -49,7 +49,7 @@ import lombok.val;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel
+public class ObjectChoicesSelect2Panel
 extends ScalarPanelSelectAbstract
 implements ChoiceTitleHandler {
 
@@ -58,11 +58,11 @@ implements ChoiceTitleHandler {
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_TITLE_IF_NULL = "entityTitleIfNull";
 
-    private EntityLinkSelect2Panel entityLink;
+    private ObjectChoiceFormComponent entityLink;
     private EntityLinkSimplePanel entityLinkOutputFormat;
     private final boolean isCompactFormat;
 
-    public ReferencePanel(final String id, final ScalarModel scalarModel) {
+    public ObjectChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
     }
@@ -85,7 +85,7 @@ implements ChoiceTitleHandler {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
-        this.entityLink = new EntityLinkSelect2Panel(UiComponentType.ENTITY_LINK.getId(), this);
+        this.entityLink = new ObjectChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
@@ -101,7 +101,9 @@ implements ChoiceTitleHandler {
 
     @Override
     protected void installScalarModelChangeBehavior() {
-        // no-op, as we already have the Select2OnSelect behavior (directly) installed with the Select2 form component
+        /* no-op, as we already have the Select2OnSelect behavior
+         * (directly) installed with the Select2 form component
+         */
     }
 
     // -- ON BEFORE RENDER

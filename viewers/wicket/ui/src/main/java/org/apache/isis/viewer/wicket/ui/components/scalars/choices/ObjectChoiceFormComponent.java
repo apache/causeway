@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
@@ -27,15 +27,15 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
-class EntityLinkSelect2Panel
+class ObjectChoiceFormComponent
 extends FormComponentPanelAbstract<ManagedObject>
 implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;
 
-    private ReferencePanel owningPanel;
+    private ObjectChoicesSelect2Panel owningPanel;
 
-    public EntityLinkSelect2Panel(final String id, final ReferencePanel owningPanel) {
+    public ObjectChoiceFormComponent(final String id, final ObjectChoicesSelect2Panel owningPanel) {
         super(id, owningPanel.scalarModel());
         this.owningPanel = owningPanel;
         setType(ManagedObject.class);

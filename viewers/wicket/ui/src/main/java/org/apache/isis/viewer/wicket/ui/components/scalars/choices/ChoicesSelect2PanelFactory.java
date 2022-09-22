@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -28,40 +28,34 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitleBad
 
 import lombok.val;
 
-public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
+public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValueChoicesSelect2PanelFactory() {
-        super(UiComponentType.SCALAR_NAME_AND_VALUE, ValueChoicesSelect2Panel.class);
+    public ChoicesSelect2PanelFactory() {
+        super(UiComponentType.SCALAR_NAME_AND_VALUE);
     }
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        val scalarModel = (ScalarModel) model;
-
-        // autoComplete not supported for values, only for references
-        // this is because there is no easy way in the ChoiceProvider to convert the list of Ids (strings)
-        // into corresponding ObjectAdapterMemento's.
-        // see subclasses of ObjectAdapterMementoProviderAbstract
-
-        return appliesIf(scalarModel.getScalarTypeSpec().isValue()
-                && (scalarModel.hasChoices()
-                /* || scalarModel.hasAutoComplete() */
-                        ));
+        return appliesIf(model instanceof ScalarModel);
     }
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         val scalarModel = (ScalarModel) model;
-        if(scalarModel.isViewMode()) {
-            val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
-            return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
+
+        if(scalarModel.getScalarTypeSpec().isValue()) {
+
+            if(scalarModel.isViewMode()) {
+                val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
+                return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
+            } else {
+                return new ValueChoicesSelect2Panel(id, scalarModel);
+            }
+
         } else {
-            return new ValueChoicesSelect2Panel(id, scalarModel);
+            return new ObjectChoicesSelect2Panel(id, scalarModel);
         }
     }
 
