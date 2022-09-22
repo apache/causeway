@@ -58,7 +58,7 @@ implements ChoiceTitleHandler {
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_TITLE_IF_NULL = "entityTitleIfNull";
 
-    private ObjectChoiceFormComponent entityLink;
+    private ChoiceFormComponent entityLink;
     private EntityLinkSimplePanel entityLinkOutputFormat;
     private final boolean isCompactFormat;
 
@@ -85,7 +85,7 @@ implements ChoiceTitleHandler {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
-        this.entityLink = new ObjectChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
+        this.entityLink = new ChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
@@ -95,15 +95,6 @@ implements ChoiceTitleHandler {
         entityLink.setOutputMarkupId(true);
 
         return entityLink;
-    }
-
-    // -- CUSTOM UPDATING BEHAVIOR
-
-    @Override
-    protected void installScalarModelChangeBehavior() {
-        /* no-op, as we already have the Select2OnSelect behavior
-         * (directly) installed with the Select2 form component
-         */
     }
 
     // -- ON BEFORE RENDER

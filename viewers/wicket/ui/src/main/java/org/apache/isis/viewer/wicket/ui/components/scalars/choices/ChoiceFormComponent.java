@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
-class ObjectChoiceFormComponent
+class ChoiceFormComponent
 extends FormComponentPanelAbstract<ManagedObject>
 implements CancelHintRequired  {
 
@@ -33,7 +33,7 @@ implements CancelHintRequired  {
 
     private ObjectChoicesSelect2Panel owningPanel;
 
-    public ObjectChoiceFormComponent(final String id, final ObjectChoicesSelect2Panel owningPanel) {
+    public ChoiceFormComponent(final String id, final ObjectChoicesSelect2Panel owningPanel) {
         super(id, owningPanel.scalarModel());
         this.owningPanel = owningPanel;
         setType(ManagedObject.class);

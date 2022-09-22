@@ -86,6 +86,15 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         return select2;
     }
 
+    // -- CUSTOM UPDATING BEHAVIOR
+
+    @Override
+    protected final void installScalarModelChangeBehavior() {
+        /* no-op, as we already have the Select2OnSelect behavior
+         * (directly) installed with the Select2 form component
+         */
+    }
+
     protected final boolean isEditableWithEitherAutoCompleteOrChoices() {
         if(scalarModel().getRenderingHint().isInTable()) {
             return false;
