@@ -36,6 +36,7 @@ import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
@@ -95,6 +96,11 @@ implements ChoiceTitleHandler {
         entityLink.setOutputMarkupId(true);
 
         return entityLink;
+    }
+
+    @Override
+    protected final Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.SELECT_OBJECT);
     }
 
     // -- ON BEFORE RENDER

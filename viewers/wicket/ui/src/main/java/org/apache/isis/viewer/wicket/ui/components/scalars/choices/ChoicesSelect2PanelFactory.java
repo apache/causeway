@@ -21,7 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
+import org.apache.isis.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;
@@ -38,7 +40,10 @@ public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof ScalarModel);
+        return appliesIf(_Casts.castTo(ScalarModel.class, model)
+                .map(ScalarModel::getChoiceProviderSort)
+                .map(ChoiceProviderSort::isChoicesAny)
+                .orElse(false));
     }
 
     @Override

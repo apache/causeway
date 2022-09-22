@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.UiString;
 import org.apache.isis.viewer.commons.model.scalar.UiParameter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -113,11 +112,6 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     @Override
     protected final UiString obtainOutputFormat() {
         return UiString.text(select2.obtainOutputFormatModel().getObject());
-    }
-
-    @Override
-    protected final Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(InputFragment.SELECT2);
     }
 
     // //////////////////////////////////////

@@ -184,8 +184,8 @@ public class ScalarFragmentFactory {
         DATE("fragment-input-date"),
         CHECKBOX("fragment-input-checkbox"),
         FILE("fragment-input-file"),
-        SELECT("fragment-input-select"),
-        SELECT2("fragment-input-select2"),
+        SELECT_VALUE("fragment-input-select_value"),
+        SELECT_OBJECT("fragment-input-select_object"),
         ;
         private final String fragmentId;
         /**
