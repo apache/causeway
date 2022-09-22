@@ -88,7 +88,10 @@ implements ScalarModelChangeListener {
     @Override
     public final void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
+        /*[ISIS-3217] in the context of a modal dialog with a select2 causes:
+         * java.io.IOException: An established connection was aborted by the software in your host machine
+         */
+//        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
     }
 
     @Override
