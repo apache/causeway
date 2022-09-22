@@ -368,7 +368,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <jaxws-ri.version>2.3.5</jaxws-ri.version>
 
         <jbcrypt.version>0.4</jbcrypt.version>
-        <jboss-jaxrs-api_2.0_spec.version>1.0.1.Final</jboss-jaxrs-api_2.0_spec.version>
+        <jboss-jaxrs-api_2.1_spec.version>2.0.2.Final</jboss-jaxrs-api_2.1_spec.version>
 
         <!-- v3.2 not available yet, use datanucleus staging for now -->
         <!-- <jdo-api.version>3.2</jdo-api.version> -->
