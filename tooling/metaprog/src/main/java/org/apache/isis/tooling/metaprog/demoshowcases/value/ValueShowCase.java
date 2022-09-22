@@ -38,13 +38,15 @@ public enum ValueShowCase {
     ENUM(Config.builder()
             .showcaseName("JavaLangEnum")
             .javaPackage("demoapp.dom.types.javalang.enums")
-            .showcaseValueType("demoapp.dom.types.javalang.enums.samples.DemoEnum")
-            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.EnumValueSemantics")),
+            .showcaseValueType("demoapp.dom._infra.samples.DemoEnum")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.EnumValueSemantics")
+            .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own EnumSamples
     STRING(Config.builder()
             .showcaseName("JavaLangString")
             .javaPackage("demoapp.dom.types.javalang.strings")
             .showcaseValueType("java.lang.String")
-            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics")),
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics")
+            .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own NameSamples
 //    VOID(Config.builder()
 //            .showcaseName("JavaLangVoid")
 //            .javaPackage("demoapp.dom.types.javalang.voids")

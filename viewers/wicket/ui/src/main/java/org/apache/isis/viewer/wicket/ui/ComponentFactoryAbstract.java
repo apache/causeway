@@ -66,8 +66,10 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
         this.componentType = componentType;
         this.name = name != null ? name : getClass().getSimpleName();
-        if(componentTypeClass != null && ComponentFactory.class.isAssignableFrom(componentTypeClass)) {
-            throw new IllegalArgumentException("specified a ComponentFactory as a componentTypeClass... "
+        if(componentTypeClass != null
+                && ComponentFactory.class.isAssignableFrom(componentTypeClass)) {
+            throw new IllegalArgumentException(
+                    "specified a ComponentFactory as a componentTypeClass... "
                     + "you probably meant the component instead? componentClass = "
                     + componentTypeClass.getName());
         }

@@ -51,21 +51,21 @@ public class JavaLangEnumHolder_updateReadOnlyOptionalPropertyWithChoices {
 
     @MemberSupport public JavaLangEnumHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            final demoapp.dom.types.javalang.enums.samples.DemoEnum newValue) {
+            final demoapp.dom._infra.samples.DemoEnum newValue) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public demoapp.dom.types.javalang.enums.samples.DemoEnum default0Act() {
+    @MemberSupport public demoapp.dom._infra.samples.DemoEnum default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 
-    @MemberSupport public List<demoapp.dom.types.javalang.enums.samples.DemoEnum> choices0Act() {
+    @MemberSupport public List<demoapp.dom._infra.samples.DemoEnum> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<demoapp.dom.types.javalang.enums.samples.DemoEnum> samples;
+    Samples<demoapp.dom._infra.samples.DemoEnum> samples;
 }
 //end::class[]

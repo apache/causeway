@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -103,19 +101,6 @@ implements IConverter<T> {
             }
         };
         */
-
-        //XXX ISIS-2834
-        //Adding OnChangeAjaxBehavior registers a JavaScript event listener on change event.
-        //Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
-        // also updates the Wicket model for this form component on the server side.
-        // onUpdate() is a callback method that you could use to do something more or don't do anything
-        add(new OnChangeAjaxBehavior() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void onUpdate(final AjaxRequestTarget target) {
-                // nothing to do
-            }
-        });
     }
 
     @Override

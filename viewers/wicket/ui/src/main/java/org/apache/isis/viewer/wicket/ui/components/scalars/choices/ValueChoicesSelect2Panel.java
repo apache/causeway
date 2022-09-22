@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import java.util.Optional;
 
@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
@@ -64,6 +65,11 @@ implements ChoiceTitleHandler {
         @SuppressWarnings("rawtypes") // incompatible generic type parameter cast
         FormComponent formComponent = select2.asComponent();
         return formComponent;
+    }
+
+    @Override
+    protected final Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.SELECT_VALUE);
     }
 
     // --

@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -28,40 +30,49 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitleBad
 
 import lombok.val;
 
-public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
+public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValueChoicesSelect2PanelFactory() {
-        super(UiComponentType.SCALAR_NAME_AND_VALUE, ValueChoicesSelect2Panel.class);
+    private static enum ComponentSort {
+        TITLE_BADGE,
+        VALUE_CHOICES,
+        OBJECT_CHOICES;
+        static ComponentSort valueOf(final ScalarModel scalarModel) {
+            if(scalarModel.getScalarTypeSpec().isValue()
+                    && scalarModel.getChoiceProviderSort().isChoicesAny()) {
+                return scalarModel.isViewMode()
+                    ? TITLE_BADGE
+                    : VALUE_CHOICES;
+            }
+            return OBJECT_CHOICES;
+        }
+    }
+
+    public ChoicesSelect2PanelFactory() {
+        super(UiComponentType.SCALAR_NAME_AND_VALUE);
     }
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        val scalarModel = (ScalarModel) model;
-
-        // autoComplete not supported for values, only for references
-        // this is because there is no easy way in the ChoiceProvider to convert the list of Ids (strings)
-        // into corresponding ObjectAdapterMemento's.
-        // see subclasses of ObjectAdapterMementoProviderAbstract
-
-        return appliesIf(scalarModel.getScalarTypeSpec().isValue()
-                && (scalarModel.hasChoices()
-                /* || scalarModel.hasAutoComplete() */
-                        ));
+        return appliesIf(_Casts.castTo(ScalarModel.class, model)
+                .isPresent());
     }
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         val scalarModel = (ScalarModel) model;
-        if(scalarModel.isViewMode()) {
+        val componentSort = ComponentSort.valueOf(scalarModel);
+        switch(componentSort) {
+        case TITLE_BADGE:
             val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
             return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
-        } else {
+        case VALUE_CHOICES:
             return new ValueChoicesSelect2Panel(id, scalarModel);
+        case OBJECT_CHOICES:
+            return new ObjectChoicesSelect2Panel(id, scalarModel);
+        default:
+            throw _Exceptions.unmatchedCase(componentSort);
         }
     }
 

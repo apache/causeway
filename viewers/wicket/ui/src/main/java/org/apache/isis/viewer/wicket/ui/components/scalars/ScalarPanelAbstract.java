@@ -58,8 +58,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.bool.BooleanPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.choices.ObjectChoicesSelect2Panel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.choices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -204,7 +204,7 @@ implements ScalarModelChangeListener {
 
     /**
      * Used by most subclasses
-     * ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel})
+     * ({@link ScalarPanelAbstract}, {@link ObjectChoicesSelect2Panel}, {@link ValueChoicesSelect2Panel})
      * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
     @Getter(AccessLevel.PROTECTED)

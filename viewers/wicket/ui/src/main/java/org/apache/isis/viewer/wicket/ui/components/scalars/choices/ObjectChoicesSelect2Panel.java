@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
+package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
 import java.util.Optional;
 
@@ -36,6 +36,7 @@ import org.apache.isis.viewer.commons.model.components.UiComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
@@ -49,7 +50,7 @@ import lombok.val;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel
+public class ObjectChoicesSelect2Panel
 extends ScalarPanelSelectAbstract
 implements ChoiceTitleHandler {
 
@@ -58,11 +59,11 @@ implements ChoiceTitleHandler {
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_TITLE_IF_NULL = "entityTitleIfNull";
 
-    private EntityLinkSelect2Panel entityLink;
+    private ChoiceFormComponent entityLink;
     private EntityLinkSimplePanel entityLinkOutputFormat;
     private final boolean isCompactFormat;
 
-    public ReferencePanel(final String id, final ScalarModel scalarModel) {
+    public ObjectChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
     }
@@ -85,7 +86,7 @@ implements ChoiceTitleHandler {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
-        this.entityLink = new EntityLinkSelect2Panel(UiComponentType.ENTITY_LINK.getId(), this);
+        this.entityLink = new ChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
@@ -97,11 +98,9 @@ implements ChoiceTitleHandler {
         return entityLink;
     }
 
-    // -- CUSTOM UPDATING BEHAVIOR
-
     @Override
-    protected void installScalarModelChangeBehavior() {
-        // no-op, as we already have the Select2OnSelect behavior (directly) installed with the Select2 form component
+    protected final Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.SELECT_OBJECT);
     }
 
     // -- ON BEFORE RENDER
