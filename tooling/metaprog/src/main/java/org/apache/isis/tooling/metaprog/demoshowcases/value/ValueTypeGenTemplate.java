@@ -145,6 +145,10 @@ public class ValueTypeGenTemplate {
         public static Can<Template> REGULAR_SET = Can.ofArray(Template.values())
             .remove(HOLDER_ACTION_RETURNING_ARRAY);
 
+        public static Can<Template> REGULAR_SET_NO_SAMPLES = Can.ofArray(Template.values())
+                .remove(HOLDER_ACTION_RETURNING_ARRAY)
+                .remove(SAMPLES);
+
         public static Can<Template> PRIMITIVE_SET = Can.ofArray(Template.values())
                 .remove(HOLDER_ACTION_RETURNING_COLLECTION)
                 .remove(HOLDER_UPDATE_ROO_PROPERTY)

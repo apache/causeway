@@ -16,23 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.enums.samples;
+package demoapp.dom._infra.samples;
 
-import java.util.stream.Stream;
-
-import org.springframework.stereotype.Service;
-
-import lombok.SneakyThrows;
-
-import demoapp.dom.types.Samples;
-
-@Service
-public class JavaLangEnumSamples implements Samples<DemoEnum> {
-
-    @SneakyThrows
-    @Override
-    public Stream<DemoEnum> stream() {
-        return Stream.of(DemoEnum.values());
-    }
-
+public enum DemoEnum {
+    CIRCLE,
+    TRIANGLE,
+    SQUARE,
+    PENTAGON
 }
