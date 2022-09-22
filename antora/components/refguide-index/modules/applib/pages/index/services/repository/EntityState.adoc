@@ -19,9 +19,9 @@ enum EntityState {
   boolean isAttached()     // <.>
   boolean isDetached()     // <.>
   boolean isRemoved()     // <.>
+  boolean isAttachedNoOid()     // <.>
   boolean isDetachedCannotReattach()
   boolean isAttachedOrRemoved()     // <.>
-  boolean isSpecicalJdoAttachedNoOid()     // <.>
   boolean isSpecicalJpaDetachedWithOid()     // <.>
   boolean hasOid()
 }
@@ -50,7 +50,7 @@ Object with this state is an entity that has been removed from the database. Obj
 <.> xref:#PERSISTABLE_ATTACHED_NO_OID[PERSISTABLE_ATTACHED_NO_OID]
 +
 --
-DN/JDO specific on pre-store. Is attached, has no OID yet.
+Is attached, has no OID yet. On pre-store.
 --
 <.> xref:#PERSISTABLE_DETACHED_WITH_OID[PERSISTABLE_DETACHED_WITH_OID]
 +
@@ -77,6 +77,7 @@ Object with this state is an entity but that is detached from a persistence sess
 --
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
 --
+<.> xref:#isAttachedNoOid_[isAttachedNoOid()]
 <.> xref:#isAttachedOrRemoved_[isAttachedOrRemoved()]
 +
 --
@@ -87,7 +88,6 @@ Object with this state is an entity that has been removed from the database. Obj
 not supported by JPA
 ====
 --
-<.> xref:#isSpecicalJdoAttachedNoOid_[isSpecicalJdoAttachedNoOid()]
 <.> xref:#isSpecicalJpaDetachedWithOid_[isSpecicalJpaDetachedWithOid()]
 
 == Members
@@ -115,7 +115,7 @@ Object with this state is an entity that has been removed from the database. Obj
 [#PERSISTABLE_ATTACHED_NO_OID]
 === PERSISTABLE_ATTACHED_NO_OID
 
-DN/JDO specific on pre-store. Is attached, has no OID yet.
+Is attached, has no OID yet. On pre-store.
 
 [#PERSISTABLE_DETACHED_WITH_OID]
 === PERSISTABLE_DETACHED_WITH_OID
@@ -144,6 +144,9 @@ Object with this state is an entity that has been removed from the database. Obj
 
 Only supported by JDO. Will always return false with JPA.
 
+[#isAttachedNoOid_]
+=== isAttachedNoOid()
+
 [#isAttachedOrRemoved_]
 === isAttachedOrRemoved()
 
@@ -153,9 +156,6 @@ Only supported by JDO. Will always return false with JPA.
 
 not supported by JPA
 ====
-
-[#isSpecicalJdoAttachedNoOid_]
-=== isSpecicalJdoAttachedNoOid()
 
 [#isSpecicalJpaDetachedWithOid_]
 === isSpecicalJpaDetachedWithOid()

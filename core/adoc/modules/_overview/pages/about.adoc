@@ -465,6 +465,7 @@ o.a.i.testing.h2console.ui.webmodule.WebModuleH2Console +
 .Dependencies
 ****
 com.h2database:h2:jar:<managed> +
+javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 ****
 
@@ -568,7 +569,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:19.1.2 +
+io.cucumber:messages:jar:19.1.3 +
 org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
@@ -739,6 +740,7 @@ demoapp.dom._infra.resources.MarkdownReaderService +
 demoapp.dom._infra.resources.MarkupReaderService +
 demoapp.dom._infra.resources.MarkupVariableResolverService +
 demoapp.dom._infra.resources.ResourceReaderService +
+demoapp.dom._infra.samples.EnumSamples +
 demoapp.dom._infra.samples.NameSamples +
 demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
 demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
@@ -854,7 +856,6 @@ demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples +
 demoapp.dom.types.javalang.enums.jdo.JavaLangEnumJdoEntities +
 demoapp.dom.types.javalang.enums.jpa.JavaLangEnumJpaEntities +
 demoapp.dom.types.javalang.enums.persistence.JavaLangEnumSeeding +
-demoapp.dom.types.javalang.enums.samples.JavaLangEnumSamples +
 demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities +
 demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpaEntities +
 demoapp.dom.types.javalang.floats.persistence.WrapperFloatSeeding +
@@ -1281,14 +1282,15 @@ Directory: /commons
 ****
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
+com.google.code.findbugs:jsr305:jar:<managed> +
+org.apache.isis.core:isis-core-privileged:jar:<managed> +
 org.apache.isis.core:isis-jdk-supplemental:pom:<managed> +
-org.assertj:assertj-core:jar:<managed> +
+org.hamcrest:hamcrest-library:jar:<managed> +
 org.jdom:jdom2:jar:<managed> +
 org.jsoup:jsoup:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.jupiter:junit-jupiter-params:jar:<managed> +
-org.junit.vintage:junit-vintage-engine:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
 org.springframework:spring-context:jar:<managed> +
 org.springframework:spring-tx:jar:<managed> +
@@ -1345,6 +1347,16 @@ skinparam rectangle<<15>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<16>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<17>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -1391,24 +1403,26 @@ skinparam rectangle<<10>> {
   BorderColor #2E6295
 }
 package "Core\n[Software System]" {
-  rectangle "==Apache Isis - JDK Supplemental\n<size:10>[Container: packaging: pom]</size>" <<14>> as 14
+  rectangle "==Apache Isis - JDK Supplemental\n<size:10>[Container: packaging: pom]</size>" <<16>> as 16
   rectangle "==Apache Isis Api - AppLib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
-  rectangle "==Apache Isis Api - Schemas\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis Api - Schemas\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
   rectangle "==Apache Isis Core\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Core - Code Gen (ByteBuddy)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Isis Core - Configuration\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
   rectangle "==Apache Isis Core - Interaction\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Core - Internal Test Support\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
-  rectangle "==Apache Isis Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
-  rectangle "==Apache Isis Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
-  rectangle "==Apache Isis Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
-  rectangle "==Apache Isis Core - Security\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
-  rectangle "==Apache Isis Core - Transaction\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
-  rectangle "==Apache Isis Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis Core - Internal Test Support (Vintage)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Core - Privileged\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Isis Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Core - Security\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis Core - Transaction\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
+  rectangle "==Apache Isis Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
 }
-2 .[#707070].> 14 : ""
+2 .[#707070].> 16 : ""
 2 .[#707070].> 3 : ""
-2 .[#707070].> 15 : ""
+2 .[#707070].> 17 : ""
 2 .[#707070].> 4 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 6 : ""
@@ -1419,6 +1433,8 @@ package "Core\n[Software System]" {
 2 .[#707070].> 11 : ""
 2 .[#707070].> 12 : ""
 2 .[#707070].> 13 : ""
+2 .[#707070].> 14 : ""
+2 .[#707070].> 15 : ""
 @enduml
 ----
 .Projects/Modules (Core)
@@ -1473,12 +1489,12 @@ o.a.i.applib.services.user.UserService +
 
 .Dependencies
 ****
+jakarta.validation:jakarta.validation-api:jar:<managed> +
 joda-time:joda-time:jar:<managed> +
 org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-jdk-supplemental:pom:<managed> +
 org.apache.isis.core:isis-schema:jar:<managed> +
-org.jmock:jmock:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -1578,26 +1594,40 @@ Artifact: isis-core-internaltestsupport
 Type: jar
 Directory: /core/internaltestsupport
 ----
-|Support for writing unit tests in either JUnit 4 or JUnit 5; should be added as a dependency with scope=test only
+|Support for writing unit tests in JUnit 5; should be added as a dependency with scope=test only
 
 .Dependencies
 ****
-net.bytebuddy:byte-buddy:jar:<managed> +
 org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-core-codegen-bytebuddy:jar:<managed> +
-org.assertj:assertj-core:jar:<managed> +
 org.datanucleus:javax.jdo:jar:<managed> +
 org.hamcrest:hamcrest-library:jar:<managed> +
-org.jmock:jmock:jar:<managed> +
-org.jmock:jmock-junit4:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
-org.junit.vintage:junit-vintage-engine:jar:<managed> +
+org.junit.jupiter:junit-jupiter-params:jar:<managed> +
 org.mockito:mockito-core:jar:<managed> +
-org.picocontainer:picocontainer:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
-org.springframework:spring-test:jar:<managed> +
 org.springframework.boot:spring-boot-starter-test:jar:<managed> +
+****
+
+|Apache Isis Core - Internal Test Support (Vintage)
+[source,yaml]
+----
+Group: org.apache.isis.core
+Artifact: isis-core-internaltestvintage
+Type: jar
+Directory: /core/internaltestvintage
+----
+|Legacy support for writing unit tests in JUnit 4 with JMocj and AssertJ. DEPRECATED!
+
+.Dependencies
+****
+org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.assertj:assertj-core:jar:<managed> +
+org.jmock:jmock:jar:<managed> +
+org.jmock:jmock-junit4:jar:<managed> +
+org.junit.vintage:junit-vintage-engine:jar:<managed> +
+org.picocontainer:picocontainer:jar:<managed> +
 ****
 
 |Apache Isis Core - MetaModel
@@ -1624,6 +1654,7 @@ o.a.i.core.metamodel.services.grid.GridLoaderServiceDefault +
 o.a.i.core.metamodel.services.grid.GridReaderUsingJaxb +
 o.a.i.core.metamodel.services.grid.GridServiceDefault +
 o.a.i.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap +
+o.a.i.core.metamodel.services.idstringifier.IdStringifierLookupService +
 o.a.i.core.metamodel.services.layout.LayoutServiceDefault +
 o.a.i.core.metamodel.services.metamodel.MetaModelServiceDefault +
 o.a.i.core.metamodel.services.registry.ServiceRegistryDefault +
@@ -1680,13 +1711,24 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 org.apache.isis.core:isis-core-config:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-security:jar:<managed> +
-org.jmock:jmock:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject], xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
+xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject], xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/metamodel/MetaModelAnnotator.adoc[MetaModelAnnotator], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
 ****
+
+|Apache Isis Core - Privileged
+[source,yaml]
+----
+Group: org.apache.isis.core
+Artifact: isis-core-privileged
+Type: jar
+Directory: /core/privileged
+----
+|Installs as an automatic module with unrestricted access to the class-path (not module-path).
+In the context of the Java platform module system, allows for reflective access to all classes
+on the class-path. Classes on the module-path need to 'opens' to this module.
 
 |Apache Isis Core - Runtime
 [source,yaml]
@@ -1702,7 +1744,6 @@ Directory: /core/runtime
 ****
 o.a.i.core.runtime.events.MetamodelEventService +
 o.a.i.core.runtime.events.TransactionEventEmitter +
-o.a.i.core.runtime.idstringifier.IdStringifierLookupService +
 ****
 
 .Dependencies
@@ -1741,7 +1782,6 @@ o.a.i.core.runtimeservices.interaction.InteractionDtoFactoryDefault +
 o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault +
 o.a.i.core.runtimeservices.locale.LanguageProviderDefault +
 o.a.i.core.runtimeservices.locale.LocaleChoiceProviderDefault +
-o.a.i.core.runtimeservices.memento.ObjectMementoServiceDefault +
 o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault +
 o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS +
 o.a.i.core.runtimeservices.message.MessageServiceDefault +
@@ -1805,10 +1845,7 @@ o.a.i.core.security.authorization.manager.AuthorizationManager +
 ****
 org.apache.isis.core:isis-applib:jar:<managed> +
 org.apache.isis.core:isis-core-config:jar:<managed> +
-org.hamcrest:hamcrest-library:jar:<managed> +
-org.junit.jupiter:junit-jupiter-api:jar:<managed> +
-org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
-org.junit.vintage:junit-vintage-engine:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -1866,6 +1903,7 @@ o.a.i.core.webapp.webappctx.IsisWebAppContextInitializer +
 
 .Dependencies
 ****
+javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.isis.core:isis-core-interaction:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
@@ -1890,21 +1928,25 @@ Type: pom
 Directory: /core/jdk-supplemental
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
-had been removed with later JDK versions. Also brings in Jakarta EE API.
+had been removed with later JDK versions.
+Also brings in Jakarta EE API (@Inject, @Qualifier, ...).
 
 .Dependencies
 ****
 com.fasterxml.woodstox:woodstox-core:jar:<managed> +
-com.google.code.findbugs:jsr305:jar:<managed> +
 com.sun.xml.bind:jaxb-impl:jar:<managed> +
 com.sun.xml.bind.external:relaxng-datatype:jar:2.3.6 +
 com.sun.xml.bind.external:rngom:jar:2.3.6 +
 com.sun.xml.ws:jaxws-ri:pom:${jaxws-ri.version} +
 com.sun.xml.ws:jaxws-rt:jar:${jaxws-ri.version} +
-jakarta.platform:jakarta.jakartaee-api:jar:<managed> +
+jakarta.annotation:jakarta.annotation-api:jar:<managed> +
+jakarta.enterprise:jakarta.enterprise.cdi-api:jar:2.0.1 +
+jakarta.inject:jakarta.inject-api:jar:1.0.5 +
+jakarta.transaction:jakarta.transaction-api:jar:<managed> +
 org.codehaus.woodstox:stax2-api:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.moxy:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.sdo:jar:<managed> +
+org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:jar:<managed> +
 ****
 
 |Apache Isis Api - Schemas
@@ -2190,7 +2232,7 @@ o.a.i.persistence.jdo.metamodel.JdoProgrammingModel +
 
 .Dependencies
 ****
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-provider:jar:<managed> +
@@ -2349,6 +2391,7 @@ Directory: /persistence/jpa/eclipselink
 
 .Dependencies
 ****
+jakarta.el:jakarta.el-api:jar:3.0.3 +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jpa-integration:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.jpa:jar:2.7.11 +
@@ -2588,7 +2631,7 @@ o.a.i.security.shiro.webmodule.WebModuleShiro +
 
 .Dependencies
 ****
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
@@ -2767,7 +2810,6 @@ Directory: /viewers/commons/model
 ----
 |.Dependencies
 ****
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-commons-applib:jar:<managed> +
 org.webjars:font-awesome:jar:6.1.2 +
@@ -2908,7 +2950,7 @@ Directory: /viewers/restfulobjects/applib
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -2995,7 +3037,7 @@ o.a.i.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServic
 
 .Dependencies
 ****
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed> +
 ****
@@ -3015,7 +3057,7 @@ Directory: /viewers/restfulobjects/testing
 ----
 |.Dependencies
 ****
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed> +
 ****
@@ -3047,7 +3089,7 @@ o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
 .Dependencies
 ****
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-commons-services:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-rendering:jar:<managed> +
@@ -3101,17 +3143,24 @@ skinparam rectangle<<6>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 package "Wicket\n[Software System]" {
   rectangle "==Apache Isis Viewer - Wicket\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Viewer - Wicket (Applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
-  rectangle "==Apache Isis Viewer - Wicket (Model)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Isis Viewer - Wicket (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
-  rectangle "==Apache Isis Viewer - Wicket (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Viewer - Wicket (Graceful)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Viewer - Wicket (Model)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Viewer - Wicket (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Viewer - Wicket (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
 }
 2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 6 : ""
+2 .[#707070].> 7 : ""
 @enduml
 ----
 .Projects/Modules (Wicket)
@@ -3140,12 +3189,30 @@ Directory: /viewers/wicket/applib
 |.Dependencies
 ****
 org.apache.isis.core:isis-applib:jar:<managed> +
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
 xref:refguide:viewer:index/wicket/applib/IsisModuleViewerWicketApplibMixins.adoc[IsisModuleViewerWicketApplibMixins], xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc[Object_clearHints]
+****
+
+|Apache Isis Viewer - Wicket (Graceful)
+[source,yaml]
+----
+Group: org.apache.isis.viewer
+Artifact: isis-viewer-wicket-graceful
+Type: jar
+Directory: /viewers/wicket/graceful
+----
+|Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository
+with mangled variants, that do not include module-info.class entries.
+This artifact - in its realeased form - is empty.
+
+.Dependencies
+****
+org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.wicket:wicket-core:jar:<managed> +
+org.apache.wicket:wicket-extensions:jar:<managed> +
 ****
 
 |Apache Isis Viewer - Wicket (Model)
@@ -3161,8 +3228,7 @@ Directory: /viewers/wicket/model
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
-org.apache.wicket:wicket-core:jar:<managed> +
-org.apache.wicket:wicket-extensions:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-wicket-graceful:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -3191,9 +3257,9 @@ de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-extensions:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-themes:jar:<managed> +
 de.agilecoders.wicket.webjars:wicket-webjars:jar:<managed> +
-javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-jodatime-integration:jar:${project.version} +
 org.apache.isis.viewer:isis-viewer-commons-prism:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-commons-services:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-model:jar:<managed> +
@@ -3245,11 +3311,10 @@ o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 com.github.rototor:cglib:jar:4516ac7b61 +
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 org.apache.wicket:wicket-auth-roles:jar:<managed> +
 org.apache.wicket:wicket-spring:jar:<managed> +
-org.jmock:jmock-junit4:jar:<managed> +
 org.springframework:spring-web:jar:<managed> +
 ****
 
@@ -4679,7 +4744,7 @@ com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
-org.webjars:fullcalendar:jar:5.10.2 +
+org.webjars:fullcalendar:jar:5.11.3 +
 ****
 
 |Apache Isis Ext - FullCalendar Wicket (UI)
@@ -4789,7 +4854,7 @@ Directory: /extensions/vw/pdfjs/wicket/integration
 org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 org.webjars.bowergithub.mozilla:pdfjs-dist:jar:1.10.100 +
-org.webjars.npm:pdfjs-dist:jar:2.15.349 +
+org.webjars.npm:pdfjs-dist:jar:2.16.105 +
 ****
 
 .Document Index Entries
@@ -5367,7 +5432,7 @@ o.a.i.extensions.excel.applib.service.ExcelServiceDefault +
 .Dependencies
 ****
 org.apache.isis.core:isis-applib:jar:<managed> +
-org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestvintage:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
 org.apache.poi:poi-ooxml:jar:<managed> +
@@ -5800,10 +5865,8 @@ eg. code mining, automated documentation.
 
 .Dependencies
 ****
-org.checkerframework:checker-qual:jar:3.24.0 +
-org.junit.jupiter:junit-jupiter-api:jar:<managed> +
-org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
-org.junit.vintage:junit-vintage-engine:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestsupport:jar:${project.version} +
+org.checkerframework:checker-qual:jar:3.25.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.2.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -5900,12 +5963,8 @@ Directory: /tooling/metaprog
 com.graphql-java:graphql-java:jar:<managed> +
 com.squareup:javapoet:jar:${javapoet.version} +
 org.apache.isis.commons:isis-commons:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestsupport:jar:${project.version} +
 org.apache.logging.log4j:log4j-core:jar:<managed> +
-org.assertj:assertj-core:jar:<managed> +
-org.junit.jupiter:junit-jupiter-api:jar:<managed> +
-org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
-org.junit.jupiter:junit-jupiter-params:jar:<managed> +
-org.junit.vintage:junit-vintage-engine:jar:<managed> +
 ****
 
 |Apache Isis - Tooling - Model for AsciiDoc
@@ -5966,22 +6025,22 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<22>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6623,15 +6682,22 @@ skinparam rectangle<<5>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 package "GraphQL Viewer\n[Software System]" {
   rectangle "==Apache Isis Inc - Viewer GraphQL\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis Inc - Viewer GraphQL (Applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Inc - Viewer GraphQL (Model)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Isis Inc - Viewer GraphQL (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Inc - Viewer GraphQL (Test)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Inc - Viewer GraphQL (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
 }
 2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
 2 .[#707070].> 5 : ""
+2 .[#707070].> 6 : ""
 @enduml
 ----
 .Projects/Modules (GraphQL Viewer)
@@ -6673,10 +6739,31 @@ Directory: /incubator/viewers/graphql/model
 ----
 |.Dependencies
 ****
+com.graphql-java:graphql-java:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-graphql-applib:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 org.springframework.graphql:spring-graphql:jar:<managed> +
+****
+
+|Apache Isis Inc - Viewer GraphQL (Test)
+[source,yaml]
+----
+Group: org.apache.isis.incubator.viewer
+Artifact: isis-viewer-graphql-test
+Type: jar
+Directory: /incubator/viewers/graphql/test
+----
+|.Dependencies
+****
+com.approvaltests:approvaltests:jar:<managed> +
+com.h2database:h2:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
+org.apache.isis.incubator.viewer:isis-viewer-graphql-viewer:jar:<managed> +
+org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.isis.security:isis-security-bypass:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
 |Apache Isis Inc - Viewer GraphQL (Viewer)
@@ -6698,18 +6785,8 @@ o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
 
 .Dependencies
 ****
-com.approvaltests:approvaltests:jar:<managed> +
-com.h2database:h2:jar:<managed> +
-org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-graphql-model:jar:<managed> +
-org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.isis.security:isis-security-bypass:jar:<managed> +
-org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
-org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
-org.assertj:assertj-core:jar:<managed> +
-org.mockito:mockito-core:jar:<managed> +
-org.springframework:spring-test:jar:<managed> +
 org.springframework.boot:spring-boot-starter-websocket:jar:<managed> +
 ****
 |===

@@ -27,14 +27,14 @@ interface ManagedObject {
   ManagedObject viewmodel(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
   ManagedObject entity(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
   ManagedObject entityHypridBookmarked(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)
-  ManagedObject entityHybirdDetached(ObjectSpecification spec, Object pojo)
+  ManagedObject entityHybirdTransient(ObjectSpecification spec, Object pojo)
   ManagedObject mixin(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject other(ObjectSpecification spec, Object pojo)     // <.>
   PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
-  ManagedObject adaptScalar(SpecificationLoader specLoader, Object pojo)     // <.>
-  ManagedObject adaptScalar(ObjectSpecification guess, Object pojo)
+  ManagedObject adaptSingular(SpecificationLoader specLoader, Object pojo)     // <.>
+  ManagedObject adaptSingular(ObjectSpecification guess, Object pojo)
   ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
-  ManagedObject adaptScalarInternal(ObjectSpecification guess, Object pojo, Optional<Bookmark> bookmarkIfAny)     // <.>
+  ManagedObject adaptSingularInternal(ObjectSpecification guess, Object pojo, Optional<Bookmark> bookmarkIfAny)     // <.>
   ManagedObject adaptParameter(ObjectActionParameter param, Object paramValue)
 }
 ----
@@ -114,7 +114,7 @@ OTHER
 --
 PACKED
 --
-<.> xref:#adaptScalar_SpecificationLoader_Object[adaptScalar(SpecificationLoader, Object)]
+<.> xref:#adaptSingular_SpecificationLoader_Object[adaptSingular(SpecificationLoader, Object)]
 +
 --
 For cases, when the pojo's specification is not available and needs to be looked up.
@@ -124,7 +124,7 @@ For cases, when the pojo's specification is not available and needs to be looked
 --
 Optimized for cases, when the pojo's specification and bookmark are already available.
 --
-<.> xref:#adaptScalarInternal_ObjectSpecification_Object_Optional[adaptScalarInternal(ObjectSpecification, Object, Optional)]
+<.> xref:#adaptSingularInternal_ObjectSpecification_Object_Optional[adaptSingularInternal(ObjectSpecification, Object, Optional)]
 +
 --
 spec and pojo don't need to be strictly in sync, we adapt if required
@@ -209,19 +209,19 @@ OTHER
 
 PACKED
 
-[#adaptScalar_SpecificationLoader_Object]
-=== adaptScalar(SpecificationLoader, Object)
+[#adaptSingular_SpecificationLoader_Object]
+=== adaptSingular(SpecificationLoader, Object)
 
 For cases, when the pojo's specification is not available and needs to be looked up.
 
-Fails if the pojo is non-scalar.
+Fails if the pojo is not a singular (eg. collection).
 
 [#bookmarked_ObjectSpecification_Object_Bookmark]
 === bookmarked(ObjectSpecification, Object, Bookmark)
 
 Optimized for cases, when the pojo's specification and bookmark are already available.
 
-[#adaptScalarInternal_ObjectSpecification_Object_Optional]
-=== adaptScalarInternal(ObjectSpecification, Object, Optional)
+[#adaptSingularInternal_ObjectSpecification_Object_Optional]
+=== adaptSingularInternal(ObjectSpecification, Object, Optional)
 
 spec and pojo don't need to be strictly in sync, we adapt if required

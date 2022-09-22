@@ -9,27 +9,16 @@ Describes what to include in the export from _MetaModelService#exportMetaModel(C
 .Config.java
 ----
 class Config {
-  Config()
-  Set<String> getNamespacePrefixes()
-  Config withIgnoreNoop()
-  Config withIgnoreInterfaces()
-  Config withIgnoreAbstractClasses()
-  Config withIgnoreBuiltInValueTypes()
-  Config withIgnoreMixins()
   boolean isNamespacePrefixAny()
-  Config withNamespacePrefix(String namespacePrefix)     // <.>
-  boolean isIgnoreNoop()
-  boolean isIgnoreInterfaces()
-  boolean isIgnoreAbstractClasses()
-  boolean isIgnoreBuiltInValueTypes()
-  boolean isIgnoreMixins()
+  Config withNamespacePrefix(String namespace)     // <.>
+  Config.ConfigBuilder asBuilder()
 }
 ----
 
 <.> xref:#withNamespacePrefix_String[withNamespacePrefix(String)]
 +
 --
-Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.
+Returns a copy of this config with given namespace added.
 --
 
 == Members
@@ -37,4 +26,4 @@ Returns a new _Config_ with given _packagePrefix_ added to the set of this _Conf
 [#withNamespacePrefix_String]
 === withNamespacePrefix(String)
 
-Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.
+Returns a copy of this config with given namespace added.

@@ -17,18 +17,9 @@ interface IResourceContext {
   ObjectAdapterLinkTo getObjectAdapterLinkTo()
   List<List<String>> getFollowLinks()
   boolean isValidateOnly()
-  boolean honorUiHints()
-  boolean objectPropertyValuesOnly()
-  boolean suppressDescribedByLinks()
-  boolean suppressUpdateLink()
-  boolean suppressMemberId()
-  boolean suppressMemberLinks()
-  boolean suppressMemberExtensions()
-  boolean suppressMemberDisabledReason()
+  Restfulobjects config()
   boolean canEagerlyRender(ManagedObject objectAdapter)     // <.>
   RepresentationService.Intent getIntent()     // <.>
-  InteractionProvider getInteractionProvider()
-  MetaModelContext getMetaModelContext()
   Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref)
 }
 ----
