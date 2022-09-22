@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;
@@ -34,6 +34,21 @@ public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    private static enum ComponentSort {
+        TITLE_BADGE,
+        VALUE_CHOICES,
+        OBJECT_CHOICES;
+        static ComponentSort valueOf(final ScalarModel scalarModel) {
+            if(scalarModel.getScalarTypeSpec().isValue()
+                    && scalarModel.getChoiceProviderSort().isChoicesAny()) {
+                return scalarModel.isViewMode()
+                    ? TITLE_BADGE
+                    : VALUE_CHOICES;
+            }
+            return OBJECT_CHOICES;
+        }
+    }
+
     public ChoicesSelect2PanelFactory() {
         super(UiComponentType.SCALAR_NAME_AND_VALUE);
     }
@@ -41,26 +56,23 @@ public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
         return appliesIf(_Casts.castTo(ScalarModel.class, model)
-                .map(ScalarModel::getChoiceProviderSort)
-                .map(ChoiceProviderSort::isChoicesAny)
-                .orElse(false));
+                .isPresent());
     }
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         val scalarModel = (ScalarModel) model;
-
-        if(scalarModel.getScalarTypeSpec().isValue()) {
-
-            if(scalarModel.isViewMode()) {
-                val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
-                return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
-            } else {
-                return new ValueChoicesSelect2Panel(id, scalarModel);
-            }
-
-        } else {
+        val componentSort = ComponentSort.valueOf(scalarModel);
+        switch(componentSort) {
+        case TITLE_BADGE:
+            val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
+            return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
+        case VALUE_CHOICES:
+            return new ValueChoicesSelect2Panel(id, scalarModel);
+        case OBJECT_CHOICES:
             return new ObjectChoicesSelect2Panel(id, scalarModel);
+        default:
+            throw _Exceptions.unmatchedCase(componentSort);
         }
     }
 
