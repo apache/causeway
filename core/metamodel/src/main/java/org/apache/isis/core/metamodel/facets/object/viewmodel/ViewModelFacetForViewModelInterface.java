@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
@@ -100,7 +102,7 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final String memento) {
+            @Nullable final String memento) {
         val constructorTakingMemento = ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
                 .get(viewmodelSpec.getCorrespondingClass())
                 .orElseThrow();
