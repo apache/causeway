@@ -20,6 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.Optional;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 
 import org.apache.isis.core.metamodel.util.Facets;
@@ -53,9 +55,33 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
                 id, scalarModel, type, getConverter(scalarModel));
     }
 
+    protected final TextField<T> getTextField() {
+        return (TextField<T>)getFormComponent();
+    }
+
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
         return Optional.of(InputFragment.DATE);
+    }
+
+    @Override
+    protected void installScalarModelChangeBehavior() {
+        //super.installScalarModelChangeBehavior(); // don't install the default change listener
+
+        /* [ISIS-3201]
+         * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.
+         * Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
+         * also updates the Wicket model for this form component on the server side.
+         */
+        getTextField().add(new OnChangeAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                // triggers update of dependent args (action prompt)
+                ScalarPanelTextFieldWithTemporalPicker.this
+                    .getScalarModelChangeDispatcher().notifyUpdate(target);
+            }
+        });
     }
 
 }
