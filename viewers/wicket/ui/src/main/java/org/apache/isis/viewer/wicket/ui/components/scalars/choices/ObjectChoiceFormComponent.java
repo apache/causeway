@@ -18,11 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.choices;
 
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
@@ -39,13 +37,6 @@ implements CancelHintRequired  {
         super(id, owningPanel.scalarModel());
         this.owningPanel = owningPanel;
         setType(ManagedObject.class);
-    }
-
-    @Override
-    public void validate() {
-        if(shouldValidate()) {
-            super.validate();
-        }
     }
 
     /**
@@ -76,25 +67,6 @@ implements CancelHintRequired  {
     @Override
     public void onCancel() {
         // no-op
-    }
-
-    // -- HELPER
-
-    /**
-     * [ISIS-3070]
-     * Skip validation if one of the callers is an {@link AjaxFormComponentUpdatingBehavior},
-     * as this validation might be called too early,
-     * when the pending value is not yet updated to the user's (new) input.
-     * Instead wait for the AjaxFormComponentUpdatingBehavior, which happens later,
-     * when the actual pending value is available for validation.
-     * <p>
-     * This is a hack, for the lack of a better solution yet.
-     */
-    private boolean shouldValidate() {
-        return !_Exceptions
-        .streamStackTrace()
-        .anyMatch(element->
-                    element.getClassName().contains(AjaxFormComponentUpdatingBehavior.class.getSimpleName()));
     }
 
 }
