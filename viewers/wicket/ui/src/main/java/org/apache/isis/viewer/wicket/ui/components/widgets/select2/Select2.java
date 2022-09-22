@@ -80,9 +80,7 @@ implements
         select2.getSettings().setWidth("100%");
 
         // listen on select2:select/unselect events (client-side)
-        if(select2ChangeDispatcher!=null) {
-            select2.add(new Select2OnSelect(scalarModel, select2ChangeDispatcher));
-        }
+        select2.add(new Select2OnSelect(scalarModel, select2ChangeDispatcher));
 
         return select2;
     }
