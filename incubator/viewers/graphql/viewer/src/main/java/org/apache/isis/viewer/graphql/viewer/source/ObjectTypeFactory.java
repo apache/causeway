@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.feature.*;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -205,7 +206,7 @@ public class ObjectTypeFactory {
                                 ObjectSpecification specification = specificationLoader
                                         .loadSpecification(domainObjectInstanceClass);
 
-                                ManagedObject owner = ManagedObject.of(specification, domainObject);
+                                ManagedObject owner = ManagedObject.adaptSingular(specification, domainObject);
 
                                 ActionInteractionHead actionInteractionHead = action.interactionHead(owner);
 
@@ -226,7 +227,7 @@ public class ObjectTypeFactory {
                                             throw new RuntimeException("Not yet implemented");
 
                                         case VALUE:
-                                            return ManagedObject.of(elementType, argumentValue);
+                                            return ManagedObject.adaptSingular(elementType, argumentValue);
 
                                         default:
                                             throw new RuntimeException("Not yet implemented");
@@ -252,7 +253,7 @@ public class ObjectTypeFactory {
         LinkedHashMap map = (LinkedHashMap) argumentValue;
         String identifier = (String) map.get("id");
         Bookmark bookmark = Bookmark.forLogicalTypeNameAndIdentifier(elementType.getLogicalTypeName(), identifier);
-        return bookmarkService.lookup(bookmark).map(p->ManagedObject.of(elementType, p)).orElse(ManagedObject.empty(elementType));
+        return bookmarkService.lookup(bookmark).map(p->ManagedObject.adaptSingular(elementType, p)).orElse(ManagedObject.empty(elementType));
     }
 
     void addTypeIfNotAlreadyPresent(
@@ -584,7 +585,7 @@ public class ObjectTypeFactory {
                                     Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
                                     ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
 
-                                    ManagedObject owner = ManagedObject.of(specification, domainObjectInstance);
+                                    ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
 
                                     ManagedObject managedObject = otom.get(owner);
 

@@ -27,7 +27,7 @@ import graphql.schema.*;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
@@ -160,7 +160,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 case UNKNOWN:
                     break;
             }
-        }, false);
+        });
 
         // can remain 'static' for all fields / collections (having no params)
         GraphQLObjectType propertiesGenericType = newObject().name(_Utils.GQL_GENERIC_PROPERTY_TYPENAME)
@@ -206,7 +206,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                     Map<String, Object> arguments = environment.getArguments();
                     String objectId = (String) arguments.get("id");
                     Bookmark bookmark = Bookmark.forLogicalTypeNameAndIdentifier(entity.getLogicalTypeName(), objectId);
-                    return bookmarkService.lookup(bookmark).map(p->ManagedObject.of(entity, p).getPojo()).orElse(null);
+                    return bookmarkService.lookup(bookmark).map(p->ManagedObject.adaptSingular(entity, p).getPojo()).orElse(null);
                 }
 
             });

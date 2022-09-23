@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
+package org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain.TestEntity;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ import java.util.stream.Collectors;
 )
 @Named("gqltestdomain.E2")
 @DomainObject(nature = Nature.ENTITY)
-public class E2 implements TestEntity{
+public class E2 implements TestEntity {
 
     @Id
     @Setter

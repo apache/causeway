@@ -7,10 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ProtoObject;
+import org.apache.isis.core.metamodel.objectmanager.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+
 import org.apache.isis.core.metamodel.spec.ActionScope;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.*;
 
@@ -33,8 +36,8 @@ public class ObjectTypeConstructionHelper {
 
     public ManagedObject getManagedObject(final Bookmark bookmark) {
         try {
-            ObjectLoader.Request request = ObjectLoader.Request.of(getObjectSpecification(), bookmark);
-            return objectManager.loadObject(request);
+            ProtoObject protoObject = ProtoObject.of(getObjectSpecification(), bookmark);
+            return objectManager.loadObject(protoObject);
         } catch (Exception e){
 
         }
