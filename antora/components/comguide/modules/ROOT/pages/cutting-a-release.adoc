@@ -106,8 +106,8 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 [source,bash,subs="attributes+"]
 ----
 pushd bom
-mvn -Dgithub clean install -DskipTests     # <.>
-mvn -Dgithub license:download-licenses     # <.>
+mvn -Dgithub clean install -T1C -DskipTests # <.>
+mvn -Dgithub license:download-licenses      # <.>
 popd
 groovy scripts/checkmissinglicenses.groovy
 ----
@@ -116,12 +116,13 @@ groovy scripts/checkmissinglicenses.groovy
 It's necessary to have built the framework locally at least once (ok to skip tests).
 +
 The `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
-<.> Captures the missing license information
-<.> Reports on the missing license information using:
-
-
+<.> Captures the missing license information.
++
 The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
-The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
+
+<.> Reports on the missing license information
++
+The script searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
 
 For example, the output could be something like:
 
