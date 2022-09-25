@@ -63,6 +63,7 @@ git pull --ff-only
 The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
 The parent `pom.xml` of each releasable module specifies the RAT Maven plugin, with a number of custom exclusions.
 
+We run the tool runs over all submodules, including non-released modules.
 To run the RAT tool, use:
 
 [source,bash,subs="attributes+"]
@@ -70,25 +71,27 @@ To run the RAT tool, use:
 ----
 pushd bom
 mvn -Dapache-release clean
-mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000
+mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
 popd
 
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
-for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
+for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
+
+cat /tmp/rat-qn.txt
+cat /tmp/rat-al.txt
 ----
 
-NOTE: the parent `pom.xml` in each of these locations has the `apache-rat-plugin` appropriately configured.
+<.> The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
 
-This script runs over all submodules, including non-released modules.
+<.> Collates all the errors.
 
-The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
-The `for` command collates all the errors.
 
-Investigate and fix any reported violations, typically by either:
+Inspect the contents of the two `/tmp/rat-*.txt` files and fix any reported violations, typically by either:
 
 * adding genuinely missing license headers from Java (or other) source files, or
 * updating the `<excludes>` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
-* also look to remove any stale `<exclude>` entries
+
+Also, look to remove any stale `<exclude>` entries
 
 Once you've fixed all issues, run the script again to confirm that all license violations have been fixed.
 
@@ -100,44 +103,21 @@ Without appropriate additional configuration, this would result in the generated
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
 This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
 
-It's first necessary to have built the framework locally at least once.
-
-* switch to the `bom` directory:
-+
 [source,bash,subs="attributes+"]
 ----
 pushd bom
-----
-
-* build the framework (ok to skip tests):
-+
-[source,bash,subs="attributes+"]
-----
-mvn -Dgithub clean install -DskipTests
-----
-+
-NB: the `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
-
-* Capture the missing license information using:
-+
-[source,bash,subs="attributes+"]
-----
-mvn -Dgithub license:download-licenses
-----
-
-* Switch back to the root directory:
-+
-[source,bash,subs="attributes+"]
-----
+mvn -Dgithub clean install -DskipTests     # <.>
+mvn -Dgithub license:download-licenses     # <.>
 popd
-----
-
-* Report on the missing license information using:
-+
-[source,bash,subs="attributes+"]
-----
 groovy scripts/checkmissinglicenses.groovy
 ----
+<.> builds the framework.
++
+It's necessary to have built the framework locally at least once (ok to skip tests).
++
+The `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
+<.> Captures the missing license information
+<.> Reports on the missing license information using:
 
 
 The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
