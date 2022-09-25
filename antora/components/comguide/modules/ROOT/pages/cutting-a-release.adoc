@@ -186,16 +186,6 @@ Check for any Asciidoc errors, and fix.
 Also double-check that the config property files are correctly formatted.
 
 
-=== Commit changes
-
-Commit any changes from the preceding steps:
-
-[source,bash,subs="attributes+"]
-----
-git add ..
-git commit -m "$ISISJIRA: updates to pom.xml etc for release"
-----
-
 
 == Releasing the Framework
 
@@ -225,6 +215,18 @@ env | grep ISIS | sort
 ====
 The branch name is intentionally *not* the same as the eventual tag names (eg `isis-{page-isisrel}`).
 ====
+
+
+=== Commit changes
+
+Commit any changes from the preceding steps:
+
+[source,bash,subs="attributes+"]
+----
+git add ..
+git commit -m "$ISISJIRA: updates to pom.xml etc for release"
+----
+
 
 
 === Create a release branch and worktree
