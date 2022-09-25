@@ -179,7 +179,7 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 +
 [source,bash,subs="attributes+"]
 ----
-bash preview.sh
+sh preview.sh
 ----
 
 Check for any Asciidoc errors, and fix.
@@ -705,7 +705,7 @@ popd
 ----
 cd ../isis-release
 
-bash preview.sh -A
+sh preview.sh -A
 ----
 +
 [WARNING]
@@ -744,7 +744,7 @@ cd ../isis-site
 git add .
 git commit -m "$ISISJIRA : staging changes to website"
 
-bash preview.sh
+sh preview.sh
 ----
 
 * If happy, then push the changes:
