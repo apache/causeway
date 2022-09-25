@@ -24,11 +24,9 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Preparation
 
-[WARNING]
+[IMPORTANT]
 ====
 The release process should be performed on Java 11.
-
-This updated dependency changed as of 2.0.0-M6.
 ====
 
 [IMPORTANT]
