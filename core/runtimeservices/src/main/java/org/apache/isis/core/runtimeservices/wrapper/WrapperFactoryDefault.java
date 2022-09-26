@@ -117,8 +117,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
     @Inject ServiceInjector serviceInjector;
-    @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
+    @Inject _ProxyFactoryService proxyFactoryService;
     @Inject @Lazy CommandDtoFactory commandDtoFactory;
+
+    @Inject Provider<InteractionService> interactionServiceProvider;
+    @Inject Provider<TransactionService> transactionServiceProvider;
+    @Inject Provider<CommandExecutorService> commandExecutorServiceProvider;
+    @Inject Provider<InteractionProvider> interactionProviderProvider;
+    @Inject Provider<BookmarkService> bookmarkServiceProvider;
+    @Inject Provider<RepositoryService> repositoryServiceProvider;
+    @Inject Provider<MetaModelService> metaModelServiceProvider;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -614,14 +622,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
             return wrapperFactory.execute(this);
         }
     }
-
-    @Inject Provider<InteractionService> interactionServiceProvider;
-    @Inject Provider<TransactionService> transactionServiceProvider;
-    @Inject Provider<CommandExecutorService> commandExecutorServiceProvider;
-    @Inject Provider<InteractionProvider> interactionProviderProvider;
-    @Inject Provider<BookmarkService> bookmarkServiceProvider;
-    @Inject Provider<RepositoryService> repositoryServiceProvider;
-    @Inject Provider<MetaModelService> metaModelServiceProvider;
 
 
     public <R> R execute(AsyncCallable<R> asyncCallable) {
