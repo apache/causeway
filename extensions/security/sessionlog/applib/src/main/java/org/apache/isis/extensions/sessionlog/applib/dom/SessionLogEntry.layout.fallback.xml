@@ -38,7 +38,7 @@
                             <cpt:fieldSet name="Identity" id="identity">
                                 <cpt:action id="previous"/>
                                 <cpt:action id="next"/>
-                                <cpt:property id="httpSessionGuid"/>
+                                <cpt:property id="httpSessionId"/>
                             </cpt:fieldSet>
                             <cpt:fieldSet name="" id="who-and-when">
                                 <cpt:property id="username"/>
