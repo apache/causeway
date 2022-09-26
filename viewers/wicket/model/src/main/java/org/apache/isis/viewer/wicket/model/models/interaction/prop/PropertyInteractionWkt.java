@@ -26,6 +26,7 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -73,23 +74,8 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     @Override
     protected PropertyInteraction load() {
-
-        // restore the lazy field - don't evaluate yet
-        propertyNegotiationModel =
-                _Lazy.threadSafe(()->{
-                    val propIa = propertyInteraction();
-                    val prop = propIa.getManagedProperty().orElseThrow();
-                    ManagedObjects.refreshViewmodel(prop.getOwner(), /* bookmark provider*/ null);
-                    return propIa.startPropertyNegotiation()
-                            //.orElseThrow(()->_Exceptions.noSuchElement(memberId))
-                            ;
-                });
-
-        return PropertyInteraction.wrap(
-                ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
-                .orElseThrow(()->_Exceptions.noSuchElement("property '%s' in %s",
-                        memberId,
-                        getBookmarkedOwner().getSpecification())));
+        setupLazyPropertyNegotiationModel();
+        return loadPropertyInteraction();
     }
 
     @Override
@@ -116,14 +102,39 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     private transient _Lazy<Optional<PropertyNegotiationModel>> propertyNegotiationModel;
 
     public final PropertyNegotiationModel propertyNegotiationModel() {
+        if(this.isAttached()) {
+            return propertyNegotiationModel.get()
+                    .orElseThrow(()->_Exceptions.noSuchElement(memberId));
+        }
+
+        _Blackhole.consume(getObject()); // re-attach
         _Assert.assertTrue(this.isAttached(), "model is not attached");
-        return propertyNegotiationModel.get()
-                .orElseThrow(()->_Exceptions.noSuchElement(memberId));
+        return propertyNegotiationModel();
     }
 
     public void resetPropertyToDefault() {
         propertyNegotiationModel.clear();
     }
 
+    private void setupLazyPropertyNegotiationModel() {
+        // restore the lazy field - don't evaluate yet
+        propertyNegotiationModel =
+                _Lazy.threadSafe(()->{
+                    val propIa = propertyInteraction();
+                    val prop = propIa.getManagedProperty().orElseThrow();
+                    ManagedObjects.refreshViewmodel(prop.getOwner(), /* bookmark provider*/ null);
+                    return propIa.startPropertyNegotiation()
+                            //.orElseThrow(()->_Exceptions.noSuchElement(memberId))
+                            ;
+                });
+    }
+
+    private PropertyInteraction loadPropertyInteraction() {
+        return PropertyInteraction.wrap(
+            ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
+            .orElseThrow(()->_Exceptions.noSuchElement("property '%s' in %s",
+                    memberId,
+                    getBookmarkedOwner().getSpecification())));
+    }
 
 }
