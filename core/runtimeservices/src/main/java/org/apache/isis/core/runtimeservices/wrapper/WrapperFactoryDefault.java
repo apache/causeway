@@ -615,22 +615,22 @@ public class WrapperFactoryDefault implements WrapperFactory {
         }
     }
 
-    @Inject InteractionService interactionService;
-    @Inject TransactionService transactionService;
-    @Inject CommandExecutorService commandExecutorService;
+    @Inject Provider<InteractionService> interactionServiceProvider;
+    @Inject Provider<TransactionService> transactionServiceProvider;
+    @Inject Provider<CommandExecutorService> commandExecutorServiceProvider;
     @Inject Provider<InteractionProvider> interactionProviderProvider;
-    @Inject BookmarkService bookmarkService;
-    @Inject RepositoryService repositoryService;
-    @Inject MetaModelService metaModelService;
+    @Inject Provider<BookmarkService> bookmarkServiceProvider;
+    @Inject Provider<RepositoryService> repositoryServiceProvider;
+    @Inject Provider<MetaModelService> metaModelServiceProvider;
 
 
     public <R> R execute(AsyncCallable<R> asyncCallable) {
         serviceInjector.injectServicesInto(this);
-        return interactionService.call(asyncCallable.getInteractionContext(), () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
+        return interactionServiceProvider.get().call(asyncCallable.getInteractionContext(), () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
     }
 
     private <R> R updateDomainObjectHonoringTransactionalPropagation(AsyncCallable<R> asyncCallable) {
-        return transactionService.callTransactional(asyncCallable.getPropagation(), () -> updateDomainObject(asyncCallable))
+        return transactionServiceProvider.get().callTransactional(asyncCallable.getPropagation(), () -> updateDomainObject(asyncCallable))
                 .ifFailureFail()
                 .getValue().orElse(null);
     }
@@ -640,13 +640,13 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
 
-        val bookmark = commandExecutorService.executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
+        val bookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
         if (bookmark == null) {
             return null;
         }
-        R domainObject = bookmarkService.lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
-        if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
-            domainObject = repositoryService.detach(domainObject);
+        R domainObject = bookmarkServiceProvider.get().lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
+        if (metaModelServiceProvider.get().sortOf(bookmark, RELAXED).isEntity()) {
+            domainObject = repositoryServiceProvider.get().detach(domainObject);
         }
         return domainObject;
     }
