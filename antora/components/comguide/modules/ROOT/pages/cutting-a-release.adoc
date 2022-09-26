@@ -332,13 +332,84 @@ git clean -dfx ..
 Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
+==== Prerequisites
+
 [WARNING]
 ====
-make sure that the version of `gpg` on the `$PATH` is correct.
+Make sure that the version of `gpg` on the `$PATH` is correct, because the configuration in the `pom.xml` assumes `gpg` v2.0, rather than v2.1+.
 
-I hit issues running on Windows under git-bash, as I was picking up git's version of gpg in `/usr/bin/gpg`.
-I sorted the issue eventually by running under Powershell, to pick up my gpg4Win.
+The older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg` (and does not use an agent); the newer version uses rather than `pubring.pbx`.
+
+For myself, I hit issues running on Windows under git-bash, because it picked up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
+
 ====
+
+If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites:
+
+* install the correct version of choco:
++
+[source,powershell]
+----
+choco install gnupg -version 2.3.7
+----
++
+so that
++
+[source,powershell]
+----
+gpg --version
+----
++
+returns:
++
+[source,powershell]
+----
+gpg (GnuPG) 2.0.30 (Gpg4win 2.3.4)
+...
+Home: C:/Users/xxx/AppData/Roaming/gnupg
+...
+Compression: Uncompressed, ZIP, ZLIB, BZIP2
+----
+
+* ensure your public key is installed in `pubring.gpg`:
++
+[source,powershell]
+----
+gpg --list-keys
+----
++
+returns:
++
+[source,powershell]
+----
+C:/Users/dan/AppData/Roaming/gnupg/pubring.gpg
+----------------------------------------------
+...
+pub   4096R/77AD2E23 2011-02-01
+uid       [ultimate] Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
+...
+----
+
+* ensure your secret key is installed in `secring.gpg`:
++
+[source,powershell]
+----
+gpg --list-secret-keys
+----
++
+returns:
++
+[source,powershell]
+----
+C:/Users/dan/AppData/Roaming/gnupg/secring.gpg
+----------------------------------------------
+...
+sec   4096R/77AD2E23 2011-02-01
+uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
+...
+----
+
+==== Perform the deploy
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
 
@@ -366,7 +437,7 @@ git tag $ISISART-$ISISREL-$ISISRC
 
 === Check/Close Staging Repo
 
-The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
+The `mvn deploy` commands will have uploaded all the release artifacts into a newly created staging repository on the ASF Nexus repository server.
 
 Log onto https://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
 
