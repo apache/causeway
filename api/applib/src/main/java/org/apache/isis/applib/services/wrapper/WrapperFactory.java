@@ -19,13 +19,19 @@
 package org.apache.isis.applib.services.wrapper;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.isis.applib.exceptions.recoverable.InteractionException;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.springframework.transaction.annotation.Propagation;
 
 /**
  *
@@ -267,6 +273,17 @@ public interface WrapperFactory {
                     InteractionListener listener);
 
     void notifyListeners(InteractionEvent ev);
-    // ...
 
+
+    //
+    // -- SPI for ExecutorServices
+    //
+
+
+    /**
+     * Provides a mechanism for custom implementations of {@link java.util.concurrent.ExecutorService}, as installed
+     * using {@link AsyncControl#with(ExecutorService)}, to actually execute the {@link AsyncCallable} that they
+     * are passed initially during {@link WrapperFactory#asyncWrap(Object, AsyncControl)} and its brethren.
+     */
+    <R> R execute(AsyncCallable<R> asyncCallable);
 }

@@ -74,11 +74,11 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                 log.debug("proposed: \n{}", commandDtoXml);
             }
         } else {
-            val parent = command.getParent();
+            val parentInteractionId = command.getParentInteractionId();
             val parentEntryIfAny =
-                parent != null
+                    parentInteractionId != null
                     ? commandLogEntryRepository
-                        .findByInteractionId(parent.getInteractionId())
+                        .findByInteractionId(parentInteractionId)
                         .orElse(null)
                     : null;
             commandLogEntryRepository.createEntryAndPersist(command, parentEntryIfAny);

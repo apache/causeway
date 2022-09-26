@@ -19,14 +19,9 @@
 package org.apache.isis.core.runtimeservices.wrapper;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.isis.applib.services.wrapper.callable.AsyncCallable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -44,7 +40,6 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
@@ -107,10 +102,7 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import lombok.*;
 
 @Service
 @Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
@@ -395,16 +387,15 @@ public class WrapperFactoryDefault implements WrapperFactory {
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
         val executorService = asyncControl.getExecutorService();
-        val future = executorService.submit(
-                new ExecCommand<R>(
+        AsyncTask<R> task = serviceInjector.injectServicesInto(
+                new AsyncTask<R>(
                         asyncInteractionContext,
                         Propagation.REQUIRES_NEW,
                         commandDto,
                         asyncControl.getReturnType(),
-                        command,
-                        serviceInjector)
+                        command.getInteractionId()) // this command becomes the parent of child command
         );
-
+        val future = executorService.submit(task);
         asyncControl.setFuture(future);
 
         return null;
@@ -580,52 +571,84 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @RequiredArgsConstructor
-    private static class ExecCommand<R> implements Callable<R> {
+    private static class AsyncTask<R> implements Callable<R>, AsyncCallable<R> {
 
-        private final InteractionContext interactionContext;
-        private final Propagation propagation;
-        private final CommandDto commandDto;
-        private final Class<R> returnType;
-        private final Command parentCommand;
-        private final ServiceInjector serviceInjector;
+        @Getter private final InteractionContext interactionContext;
+        @Getter private final Propagation propagation;
+        @Getter private final CommandDto commandDto;
+        @Getter private final Class<R> returnType;
+        @Getter private final UUID parentInteractionId;
 
-        @Inject InteractionService interactionService;
-        @Inject TransactionService transactionService;
-        @Inject CommandExecutorService commandExecutorService;
-        @Inject Provider<InteractionProvider> interactionProviderProvider;
-        @Inject BookmarkService bookmarkService;
-        @Inject RepositoryService repositoryService;
-        @Inject MetaModelService metaModelService;
+        /**
+         * Note that is a <code>transient</code> field in order that {@link org.apache.isis.applib.services.wrapper.callable.AsyncCallable} can be declared as
+         * {@link java.io.Serializable}.
+         *
+         * <p>
+         *  Because this field needs to be populated, the {@link java.util.concurrent.ExecutorService} that ultimately
+         *  executes the task will need to be a custom implementation because it must reinitialize this field first,
+         *  using the {@link ServiceInjector} service.  Alternatively, it could call
+         *  {@link WrapperFactory#execute(AsyncCallable)} directly, which achieves the same thing.
+         * </p>
+         */
+        @Inject transient WrapperFactory wrapperFactory;
 
+        /**
+         * If the {@link java.util.concurrent.ExecutorService} used to execute this task (as defined by
+         * {@link AsyncControl#with(ExecutorService)} is not custom, then it can simply invoke this method, but it is
+         * important that it has not serialized/deserialized the object since important transient state would be lost.
+         *
+         * <p>
+         *  On the other hand, a custom implementation of {@link ExecutorService} is free to serialize this object, and
+         *  deserialize it later.  When deserializing it can either reinitialize the necessary state using the
+         *  {@link ServiceInjector} service, then call this method, or it can instead call
+         *  {@link WrapperFactory#execute(AsyncCallable)} directly, which achieves the same thing.
+         * </p>
+         */
         @Override
         public R call() {
-            serviceInjector.injectServicesInto(this);
-            return interactionService.call(interactionContext, this::updateDomainObjectHonoringTransactionalPropagation);
-        }
-
-        private R updateDomainObjectHonoringTransactionalPropagation() {
-            return transactionService.callTransactional(propagation, this::updateDomainObject)
-                    .ifFailureFail()
-                    .getValue().orElse(null);
-        }
-
-        private R updateDomainObject() {
-
-            val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
-            childCommand.updater().setParent(parentCommand);
-
-            val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
-            if (bookmark == null) {
-                return null;
+            if (wrapperFactory == null) {
+                throw new IllegalStateException(
+                        "The transient wrapperFactory is null; suggests that this async task been serialized and " +
+                        "then deserialized, but is now being executed by an ExecutorService that has not re-injected necessary services.");
             }
-            R domainObject = bookmarkService.lookup(bookmark, returnType).orElse(null);
-            if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
-                domainObject = repositoryService.detach(domainObject);
-            }
-            return domainObject;
-
+            return wrapperFactory.execute(this);
         }
-
-
     }
+
+    @Inject InteractionService interactionService;
+    @Inject TransactionService transactionService;
+    @Inject CommandExecutorService commandExecutorService;
+    @Inject Provider<InteractionProvider> interactionProviderProvider;
+    @Inject BookmarkService bookmarkService;
+    @Inject RepositoryService repositoryService;
+    @Inject MetaModelService metaModelService;
+
+
+    public <R> R execute(AsyncCallable<R> asyncCallable) {
+        serviceInjector.injectServicesInto(this);
+        return interactionService.call(asyncCallable.getInteractionContext(), () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
+    }
+
+    private <R> R updateDomainObjectHonoringTransactionalPropagation(AsyncCallable<R> asyncCallable) {
+        return transactionService.callTransactional(asyncCallable.getPropagation(), () -> updateDomainObject(asyncCallable))
+                .ifFailureFail()
+                .getValue().orElse(null);
+    }
+
+    private <R> R updateDomainObject(AsyncCallable<R> asyncCallable) {
+
+        val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
+        childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
+
+        val bookmark = commandExecutorService.executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
+        if (bookmark == null) {
+            return null;
+        }
+        R domainObject = bookmarkService.lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
+        if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
+            domainObject = repositoryService.detach(domainObject);
+        }
+        return domainObject;
+    }
+
 }
