@@ -107,7 +107,7 @@ _download_app(){
     DIR=$REPO-$VARIANT
 
     rm -rf $DIR
-    curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+    curl "https://codeload.github.com/apache/$REPO/zip/refs/heads/$BRANCH" | jar xv
     mv $REPO-$BRANCH $DIR
 
     pushd $DIR
