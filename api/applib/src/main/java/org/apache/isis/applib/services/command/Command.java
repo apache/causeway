@@ -162,7 +162,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
     /**
      * For async commands created through the {@link WrapperFactory},
-     * captures the parent command.
+     * captures the {@link Command#getInteractionId() interactionId} of the parent command.
      *
      * <p>
      *     Will return <code>null</code> if there is no parent.
@@ -174,7 +174,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      */
     @ToString.Exclude
     @Getter
-    private Command parent;
+    private UUID parentInteractionId;
 
     /**
      * For an command that has actually been executed, holds the date/time at
@@ -309,8 +309,8 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          *     {@link WrapperFactory}.
          * </p>
          */
-        public void setParent(final Command parent) {
-            Command.this.parent = parent;
+        public void setParentInteractionId(final UUID parentInteractionId) {
+            Command.this.parentInteractionId = parentInteractionId;
         }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
