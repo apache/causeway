@@ -128,21 +128,30 @@ class _Util {
         return true;
     }
 
+    //XXX its rather unfortunate, that this method has to deal with 4 different cases
     private Optional<ManagedObject> recoverProposedValue(
             final Object valueObject,
             final ScalarModel scalarModel){
 
         if(valueObject instanceof Collection) {
+
+            if(scalarModel.isSingular()) {
+                // seeing this code-path with FileUpload being wrapped in an ArrayList of size 1
+                // as a more general rule of thumb, use the first element in the ArrayList if present
+                val unpackedValue = ((Collection<?>)valueObject).stream()
+                        .limit(1)
+                        .map(v->scalarModel.getObjectManager()
+                                .adapt(valueObject))
+                        .findFirst();
+                return unpackedValue;
+            }
+
             val unpackedValues = ((Collection<?>)valueObject).stream()
             .map(v->scalarModel
-            .getObjectManager().demementify((ObjectMemento)v))
+                    .getObjectManager().demementify((ObjectMemento)v))
             .collect(Can.toCan());
             return Optional.of(ManagedObject.packed(scalarModel.getScalarTypeSpec(), unpackedValues));
         }
-
-//        if(scalarModel.isPlural()) {
-//            _Assert.assertTrue(valueObject instanceof ObjectMemento, ()->"unexpected code path???");
-//        }
 
         if(valueObject instanceof ObjectMemento) {
             // seeing this code-path particularly with enum choices
@@ -156,6 +165,7 @@ class _Util {
                         .getObjectManager()
                         .adapt(valueObject));
     }
+
 
     // -- HELPER
 
