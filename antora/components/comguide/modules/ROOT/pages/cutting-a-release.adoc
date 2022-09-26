@@ -344,7 +344,7 @@ For myself, I hit issues running on Windows under git-bash, because it picked up
 
 ====
 
-If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites:
+If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites.
 
 * install the correct version of choco:
 +
@@ -371,7 +371,9 @@ Home: C:/Users/xxx/AppData/Roaming/gnupg
 Compression: Uncompressed, ZIP, ZLIB, BZIP2
 ----
 
-* ensure your public key is installed in `pubring.gpg`:
+* ensure your public key is installed in `pubring.gpg`.
++
+For example:
 +
 [source,powershell]
 ----
@@ -390,7 +392,9 @@ uid       [ultimate] Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
 ...
 ----
 
-* ensure your secret key is installed in `secring.gpg`:
+* ensure your secret key is installed in `secring.gpg`
++
+For example:
 +
 [source,powershell]
 ----
@@ -409,6 +413,24 @@ uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
 ...
 ----
 
+* in `~/m2/settings.xml`, ensure that the `gpg.passphrase` server is set:
++
+[source,xml]
+.~/.m2/settings.xml
+----
+<settings>
+  ...
+  <servers>
+    <server>
+      <id>gpg.passphrase</id>
+      <passphrase>XXXX</passphrase>
+    </server>
+    ...
+  </servers>
+</settings>
+----
+
+
 ==== Perform the deploy
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
@@ -419,8 +441,6 @@ Still in the `bom` directory, we deploy (upload the artifacts) using:
 ----
 mvn deploy -Dapache-release -Dgit
 ----
-
-When prompted, enter your GPG passphrase (unless configured in `~/mvn/settings.xml` as the `gpg.passphrase` property)
 
 
 
