@@ -189,6 +189,9 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
      * intended for testing purposes only
      */
     public List<E> findAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot call 'findAll' in production systems");
+        }
         return repositoryService().allInstances(executionLogEntryClass);
     }
 
@@ -198,7 +201,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
      */
     public void removeAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
+            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(executionLogEntryClass);
     }
