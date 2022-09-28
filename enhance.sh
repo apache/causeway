@@ -20,16 +20,17 @@
 #
 
 usage() {
-  echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t] [-u]"         >&2
-  echo "  -a : audit trail (extensions/security)"                             >&2
-  echo "  -c : command log (extensions/core)"                                 >&2
-  echo "  -e : execution log (extensions/core)"                               >&2
-  echo "  -o : execution outbox (extensions/core)"                            >&2
-  echo "  -m : secman (extensions/security)"                                  >&2
-  echo "  -s : session log (extensions/security)"                             >&2
-  echo "  -d : demo (examples/demo/domain)"                                   >&2
-  echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)" >&2
+  echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t] [-u] [-w]"     >&2
+  echo "  -a : audit trail (extensions/security)"                              >&2
+  echo "  -c : command log (extensions/core)"                                  >&2
+  echo "  -e : execution log (extensions/core)"                                >&2
+  echo "  -o : execution outbox (extensions/core)"                             >&2
+  echo "  -m : secman (extensions/security)"                                   >&2
+  echo "  -s : session log (extensions/security)"                              >&2
+  echo "  -d : demo (examples/demo/domain)"                                    >&2
+  echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)"  >&2
   echo "  -u : JDO regression tests (regressiontests/stable-cmdexecauditsess)" >&2
+  echo "  -w : JDO regression tests (regressiontests/core-wrapperfactory)"     >&2
 }
 
 
@@ -39,15 +40,16 @@ COMMANDLOG=""
 DEMO=""
 EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
-REGRESSIONTESTS=""
-REGRESSIONTESTS2=""
+REGRESSIONTESTS_PERSISTENCE_JDO=""
+REGRESSIONTESTS_CMDEXECAUDITSESS=""
+REGRESSIONTESTS_CORE_WRAPPERFACTORY=""
 SECMAN=""
 SESSIONLOG=""
 
 PATHS=()
 ALL_IF_REQUIRED=""
 
-while getopts ":acdeomshtu" arg; do
+while getopts ":acdeomshtuw" arg; do
   case $arg in
     h)
       usage
@@ -82,13 +84,18 @@ while getopts ":acdeomshtu" arg; do
       PATHS+=( "examples/demo/domain" )
       ;;
     t)
-      REGRESSIONTESTS="enhance"
+      REGRESSIONTESTS_PERSISTENCE_JDO="enhance"
       PATHS+=( "regressiontests/stable-persistence-jdo" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     u)
-      REGRESSIONTESTS2="enhance"
+      REGRESSIONTESTS_CMDEXECAUDITSESS="enhance"
       PATHS+=( "regressiontests/stable-cmdexecauditsess/persistence-jdo" )
+      ALL_IF_REQUIRED="-Dmodule-all"
+      ;;
+    w)
+      REGRESSIONTESTS_CORE_WRAPPERFACTORY="enhance"
+      PATHS+=( "regressiontests/stable-core-wrapperfactory" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     *)
@@ -106,8 +113,9 @@ echo "EXECUTIONOUTBOX  : $EXECUTIONOUTBOX"
 echo "SECMAN           : $SECMAN"
 echo "SESSIONLOG       : $SESSIONLOG"
 echo "DEMO             : $DEMO"
-echo "REGRESSIONTESTS  : $REGRESSIONTESTS"
-echo "REGRESSIONTESTS2 : $REGRESSIONTESTS2"
+echo "REGRESSIONTESTS_PERSISTENCE_JDO     : $REGRESSIONTESTS_PERSISTENCE_JDO"
+echo "REGRESSIONTESTS_CMDEXECAUDITSESS    : $REGRESSIONTESTS_CMDEXECAUDITSESS"
+echo "REGRESSIONTESTS_CORE_WRAPPERFACTORY : REGRESSIONTESTS_CORE_WRAPPERFACTORY"
 
 
 printf -v PATHS_SPLATTED '%s,' "${PATHS[@]}"
