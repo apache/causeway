@@ -31,6 +31,7 @@ usage() {
   echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)"  >&2
   echo "  -u : JDO regression tests (regressiontests/stable-cmdexecauditsess)" >&2
   echo "  -w : JDO regression tests (regressiontests/core-wrapperfactory)"     >&2
+  echo "  -A : add -am (also make)"     >&2
 }
 
 
@@ -45,11 +46,12 @@ REGRESSIONTESTS_CMDEXECAUDITSESS=""
 REGRESSIONTESTS_CORE_WRAPPERFACTORY=""
 SECMAN=""
 SESSIONLOG=""
+ALSO_MAKE=""
 
 PATHS=()
 ALL_IF_REQUIRED=""
 
-while getopts ":acdeomshtuw" arg; do
+while getopts ":acdeomshtuwA" arg; do
   case $arg in
     h)
       usage
@@ -98,6 +100,9 @@ while getopts ":acdeomshtuw" arg; do
       PATHS+=( "regressiontests/stable-core-wrapperfactory" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
+    A)
+      ALSO_MAKE="-am"
+      ;;
     *)
       usage
       exit 1
@@ -106,16 +111,18 @@ done
 
 shift $((OPTIND-1))
 
-echo "AUDITTRAIL       : $AUDITTRAIL"
-echo "COMMANDLOG       : $COMMANDLOG"
-echo "EXECUTIONLOG     : $EXECUTIONLOG"
-echo "EXECUTIONOUTBOX  : $EXECUTIONOUTBOX"
-echo "SECMAN           : $SECMAN"
-echo "SESSIONLOG       : $SESSIONLOG"
-echo "DEMO             : $DEMO"
+echo "AUDITTRAIL                          : $AUDITTRAIL"
+echo "COMMANDLOG                          : $COMMANDLOG"
+echo "EXECUTIONLOG                        : $EXECUTIONLOG"
+echo "EXECUTIONOUTBOX                     : $EXECUTIONOUTBOX"
+echo "SECMAN                              : $SECMAN"
+echo "SESSIONLOG                          : $SESSIONLOG"
+echo "DEMO                                : $DEMO"
 echo "REGRESSIONTESTS_PERSISTENCE_JDO     : $REGRESSIONTESTS_PERSISTENCE_JDO"
 echo "REGRESSIONTESTS_CMDEXECAUDITSESS    : $REGRESSIONTESTS_CMDEXECAUDITSESS"
-echo "REGRESSIONTESTS_CORE_WRAPPERFACTORY : REGRESSIONTESTS_CORE_WRAPPERFACTORY"
+echo "REGRESSIONTESTS_CORE_WRAPPERFACTORY : $REGRESSIONTESTS_CORE_WRAPPERFACTORY"
+echo ""
+echo "ALSO_MAKE                           : $ALSO_MAKE"
 
 
 printf -v PATHS_SPLATTED '%s,' "${PATHS[@]}"
@@ -128,5 +135,5 @@ if [ "$PL_ARG" = " " ]; then
   exit 1
 fi
 
-echo mvn install -DskipTests -o -T1C -am -pl $PL_ARG
-mvn install -DskipTests -o -T1C -am -pl $PL_ARG
+echo mvn install -DskipTests -o -T1C $ALSO_MAKE -pl $PL_ARG
+mvn install -DskipTests -o -T1C $ALSO_MAKE -pl $PL_ARG
