@@ -30,6 +30,11 @@ import lombok.val;
 @RequiredArgsConstructor
 public enum ValueShowCase {
 
+    MARKUP(Config.builder()
+            .showcaseName("IsisMarkup")
+            .javaPackage("demoapp.dom.types.isis.markups")
+            .showcaseValueType("org.apache.isis.applib.value.Markup")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics")),
     UUID(Config.builder()
             .showcaseName("JavaUtilUuid")
             .javaPackage("demoapp.dom.types.javautil.uuids")
