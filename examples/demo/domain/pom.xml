@@ -88,6 +88,10 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+		</dependency>
 
 
 		<!-- JDO specific -->

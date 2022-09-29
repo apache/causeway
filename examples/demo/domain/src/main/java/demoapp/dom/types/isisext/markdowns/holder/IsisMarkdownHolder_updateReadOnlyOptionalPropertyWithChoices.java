@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -40,20 +42,22 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
         , named = "Update with choices"
-        , associateWith = "readOnlyProperty"
+        , associateWith = "readOnlyOptionalProperty"
         , sequence = "2")
 @RequiredArgsConstructor
-public class IsisMarkdownHolder_updateReadOnlyPropertyWithChoices {
+public class IsisMarkdownHolder_updateReadOnlyOptionalPropertyWithChoices {
 
     private final IsisMarkdownHolder holder;
 
-    @MemberSupport public IsisMarkdownHolder act(final org.apache.isis.valuetypes.markdown.applib.value.Markdown newValue) {
-        holder.setReadOnlyProperty(newValue);
+    @MemberSupport public IsisMarkdownHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final org.apache.isis.valuetypes.markdown.applib.value.Markdown newValue) {
+        holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
     @MemberSupport public org.apache.isis.valuetypes.markdown.applib.value.Markdown default0Act() {
-        return holder.getReadOnlyProperty();
+        return holder.getReadOnlyOptionalProperty();
     }
 
     @MemberSupport public List<org.apache.isis.valuetypes.markdown.applib.value.Markdown> choices0Act() {
@@ -63,6 +67,5 @@ public class IsisMarkdownHolder_updateReadOnlyPropertyWithChoices {
 
     @Inject
     Samples<org.apache.isis.valuetypes.markdown.applib.value.Markdown> samples;
-
 }
 //end::class[]

@@ -35,6 +35,11 @@ public enum ValueShowCase {
             .javaPackage("demoapp.dom.types.isis.markups")
             .showcaseValueType("org.apache.isis.applib.value.Markup")
             .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics")),
+    MARKDOWN(Config.builder()
+            .showcaseName("IsisMarkdown")
+            .javaPackage("demoapp.dom.types.isisext.markdowns")
+            .showcaseValueType("org.apache.isis.valuetypes.markdown.applib.value.Markdown")
+            .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")),
     UUID(Config.builder()
             .showcaseName("JavaUtilUuid")
             .javaPackage("demoapp.dom.types.javautil.uuids")
