@@ -46,6 +46,11 @@ public enum ValueShowCase {
             .showcaseValueType("org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc")
             .showcaseValueSemantics("org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics")
             .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own AsciiDocSamples
+    VEGA(Config.builder()
+            .showcaseName("IsisVega")
+            .javaPackage("demoapp.dom.types.isisval.vegas")
+            .showcaseValueType("org.apache.isis.valuetypes.vega.applib.value.Vega")
+            .showcaseValueSemantics("org.apache.isis.valuetypes.vega.metamodel.semantics.VegaValueSemantics")),
     UUID(Config.builder()
             .showcaseName("JavaUtilUuid")
             .javaPackage("demoapp.dom.types.javautil.uuids")

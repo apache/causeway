@@ -30,8 +30,6 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.isisext.cal.IsisCalendarEvents;
-import demoapp.dom.types.isisval.asciidocs.IsisAsciiDocs;
-import demoapp.dom.types.isisval.markdowns.IsisMarkdowns;
 
 @Named("demo.IsisExtTypesMenu")
 @DomainService(
@@ -40,18 +38,6 @@ import demoapp.dom.types.isisval.markdowns.IsisMarkdowns;
 @DomainObjectLayout(named="IsisExtTypes")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class IsisExtTypesMenu {
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-fancy")
-    public IsisAsciiDocs asciiDocs(){
-        return new IsisAsciiDocs();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-fancy")
-    public IsisMarkdowns markdowns(){
-        return new IsisMarkdowns();
-    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="far fa-calendar-alt")

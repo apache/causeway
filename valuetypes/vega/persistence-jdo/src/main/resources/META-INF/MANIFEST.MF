@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Isis Value Types Vega Persistence JDO DataNucleus Implementation
+Bundle-SymbolicName: org.apache.isis.valuetypes.vega.persistence.jdo.dn
+Bundle-Version: 2.0.0
+Bundle-Vendor: Apache Isis

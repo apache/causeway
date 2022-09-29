@@ -35,6 +35,9 @@ import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
 import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
+import org.apache.isis.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
+import org.apache.isis.valuetypes.vega.persistence.jpa.IsisModuleValVegaPersistenceJpa;
+import org.apache.isis.valuetypes.vega.ui.wkt.IsisModuleValVegaUiWkt;
 import org.apache.isis.viewer.graphql.viewer.IsisModuleIncViewerGraphqlViewer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
@@ -53,12 +56,14 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
     IsisModuleValMarkdownMetaModel.class,
+    IsisModuleValVegaMetaModel.class,
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
     IsisModuleExtSseWicket.class,
     IsisModuleValAsciidocUiWkt.class,
     IsisModuleValMarkdownUiWkt.class,
+    IsisModuleValVegaUiWkt.class,
     IsisModuleExtPdfjsWicketUi.class,
 
     // GraphQL
@@ -70,6 +75,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     // Persistence/Converters (JPA)
     IsisModuleValAsciidocPersistenceJpa.class,
     IsisModuleValMarkdownPersistenceJpa.class,
+    IsisModuleValVegaPersistenceJpa.class,
 
     //XrayEnable.class // for debugging only
 })

@@ -92,6 +92,10 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-vega-metamodel</artifactId>
+		</dependency>
 
 
 		<!-- JDO specific -->
@@ -127,6 +131,10 @@
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-vega-persistence-jdo</artifactId>
 		</dependency>
 
 
@@ -164,7 +172,10 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-vega-persistence-jpa</artifactId>
+		</dependency>
 
 
 		<!-- OTHER DEPENDENCIES -->
@@ -173,11 +184,6 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-markdown-applib</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
