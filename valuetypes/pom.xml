@@ -128,6 +128,37 @@
 				<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-vega-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-vega-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-vega-ui-vaa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-vega-ui-wkt</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-vega-persistence-jdo</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-vega-persistence-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
 
 			<!-- testing -->
 
@@ -152,6 +183,7 @@
 		<module>jodatime</module>
 		<module>asciidoc</module>
 		<module>markdown</module>
+		<module>vega</module>
 	</modules>
 
 	<profiles>
