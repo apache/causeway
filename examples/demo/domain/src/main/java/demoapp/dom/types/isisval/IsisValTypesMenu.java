@@ -17,7 +17,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isisext;
+package demoapp.dom.types.isisval;
 
 import javax.inject.Named;
 
@@ -29,20 +29,34 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.isisext.cal.IsisCalendarEvents;
+import demoapp.dom.types.isisval.asciidocs.IsisAsciiDocs;
+import demoapp.dom.types.isisval.markdowns.IsisMarkdowns;
+import demoapp.dom.types.isisval.vegas.IsisVegas;
 
-@Named("demo.IsisExtTypesMenu")
+@Named("demo.IsisValTypesMenu")
 @DomainService(
         nature=NatureOfService.VIEW
 )
-@DomainObjectLayout(named="IsisExtTypes")
+@DomainObjectLayout(named="IsisValTypes")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-public class IsisExtTypesMenu {
+public class IsisValTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="far fa-calendar-alt")
-    public IsisCalendarEvents calendarEvents(){
-        return new IsisCalendarEvents();
+    @ActionLayout(cssClassFa="fa-pen-fancy")
+    public IsisAsciiDocs asciiDocs(){
+        return new IsisAsciiDocs();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-pen-fancy")
+    public IsisMarkdowns markdowns(){
+        return new IsisMarkdowns();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-pen-fancy")
+    public IsisVegas vegas(){
+        return new IsisVegas();
     }
 
 }
