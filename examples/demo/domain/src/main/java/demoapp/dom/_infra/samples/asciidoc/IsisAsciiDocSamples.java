@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.isisext.asciidocs.samples;
+package demoapp.dom._infra.samples.asciidoc;
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -34,8 +35,8 @@ public class IsisAsciiDocSamples implements Samples<AsciiDoc> {
 
     @Override
     public Stream<AsciiDoc> stream() {
-        return Stream.of(1,2,3,4,5,6,7,8,9,10)
-                .map(x -> asciiDocReaderService.readFor(getClass(), "sample" + x));
+        return IntStream.rangeClosed(1, 10)
+                .mapToObj(x -> asciiDocReaderService.readFor(getClass(), "sample" + x));
     }
 
     @Inject

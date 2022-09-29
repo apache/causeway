@@ -40,6 +40,12 @@ public enum ValueShowCase {
             .javaPackage("demoapp.dom.types.isisext.markdowns")
             .showcaseValueType("org.apache.isis.valuetypes.markdown.applib.value.Markdown")
             .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")),
+    ASCIIDOC(Config.builder()
+            .showcaseName("IsisAsciiDoc")
+            .javaPackage("demoapp.dom.types.isisext.asciidocs")
+            .showcaseValueType("org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc")
+            .showcaseValueSemantics("org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics")
+            .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own AsciiDocSamples
     UUID(Config.builder()
             .showcaseName("JavaUtilUuid")
             .javaPackage("demoapp.dom.types.javautil.uuids")
