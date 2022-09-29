@@ -29,9 +29,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.isisext.asciidocs.IsisAsciiDocs;
 import demoapp.dom.types.isisext.cal.IsisCalendarEvents;
-import demoapp.dom.types.isisext.markdowns.IsisMarkdowns;
+import demoapp.dom.types.isisval.asciidocs.IsisAsciiDocs;
+import demoapp.dom.types.isisval.markdowns.IsisMarkdowns;
 
 @Named("demo.IsisExtTypesMenu")
 @DomainService(
