@@ -69,6 +69,8 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.valuetypes.vega.applib.value.Vega;
+import org.apache.isis.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -279,6 +281,18 @@ public abstract class ValueTypeExample<T> {
         private Markup value = Markup.valueOf("aMarkup");
         @Getter
         private Markup updateValue = Markup.valueOf("anotherMarkup");
+    }
+
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleVega")
+    @DomainObject(
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleVega
+    extends ValueTypeExample<Vega> {
+        private VegaValueSemantics vegaSemantics = new VegaValueSemantics();
+        @Property @Getter @Setter
+        private Vega value = vegaSemantics.getExamples().getElseFail(0);
+        @Getter
+        private Vega updateValue = vegaSemantics.getExamples().getElseFail(1);
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleUuid")

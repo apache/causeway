@@ -26,11 +26,13 @@ import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarA
 import org.apache.isis.extensions.sse.metamodel.IsisModuleExtSseMetaModel;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
+import org.apache.isis.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
 
 @Configuration
 @Import({
     IsisModuleValAsciidocMetaModel.class,
     IsisModuleValMarkdownMetaModel.class,
+    IsisModuleValVegaMetaModel.class,
     IsisModuleExtSseMetaModel.class,
     IsisModuleExtFullCalendarApplib.class,
 })
