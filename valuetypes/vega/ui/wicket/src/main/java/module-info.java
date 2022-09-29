@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.valuetypes.asciidoc.ui.wkt {
+module org.apache.isis.valuetypes.vega.ui.wkt {
     exports org.apache.isis.valuetypes.vega.ui.wkt;
     exports org.apache.isis.valuetypes.vega.ui.wkt.components;
 
