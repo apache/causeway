@@ -39,7 +39,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * Immutable value type holding pre-rendered HTML.
+ * Immutable value type holding JSON payload to be interpreted as
+ * interactive visualization design as specified by corresponding
+ * visualization grammar.
  *
  * @since 2.0 {@index}
  */
