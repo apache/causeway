@@ -19,11 +19,14 @@
 package demoapp.dom.types.isisval.vegas.jpa;
 
 import javax.inject.Named;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
@@ -34,6 +37,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -70,25 +74,25 @@ public class IsisVegaJpa
 
     @Title(prepend = "org.apache.isis.valuetypes.vega.applib.value.Vega JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(nullable = false)                                                   // <.>
+    @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)                 // <.>
     @Getter @Setter
     private org.apache.isis.valuetypes.vega.applib.value.Vega readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Column(nullable = false)
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1", hidden = Where.ALL_TABLES, multiLine = 5)
+    @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
     private org.apache.isis.valuetypes.vega.applib.value.Vega readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(nullable = true)                                                    // <.>
+    @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)                  // <.>
     @Getter @Setter
     private org.apache.isis.valuetypes.vega.applib.value.Vega readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Column(nullable = true)
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2", hidden = Where.ALL_TABLES, multiLine = 5)
+    @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
     private org.apache.isis.valuetypes.vega.applib.value.Vega readWriteOptionalProperty;
 
