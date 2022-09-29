@@ -50,7 +50,7 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 +
 [source,bash,subs="attributes+"]
 ----
-bash preview.sh
+sh preview.sh
 ----
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].

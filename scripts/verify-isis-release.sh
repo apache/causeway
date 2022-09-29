@@ -91,16 +91,11 @@ _build(){
     rm -rf ~/.m2/repository/org/apache/isis
 
     echo 'Building'
-    
-	# 2.0.0-M8-RC1 verification build hotfix
-	pushd isis*/supplemental-model
-	_execmustpass mvn clean install -Dskip.git -Preleased,-all
-	popd
-    
+
     # previously there were multiple directories, now just the one.
-	pushd isis*/bom
-    _execmustpass mvn clean install -Dskip.git -Preleased,-all
-	popd
+    pushd isis*/bom
+    _execmustpass mvn clean install -DskipTests -T1C -Dgithub
+    popd
 }
 
 _download_app(){
@@ -112,7 +107,7 @@ _download_app(){
     DIR=$REPO-$VARIANT
 
     rm -rf $DIR
-    curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+    curl "https://codeload.github.com/apache/$REPO/zip/refs/heads/$BRANCH" | jar xv
     mv $REPO-$BRANCH $DIR
 
     pushd $DIR

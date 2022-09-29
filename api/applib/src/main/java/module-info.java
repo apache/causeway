@@ -105,6 +105,7 @@ module org.apache.isis.applib {
     exports org.apache.isis.applib.services.userreg.events;
     exports org.apache.isis.applib.services.userreg;
     exports org.apache.isis.applib.services.userui;
+    exports org.apache.isis.applib.services.wrapper.callable;
     exports org.apache.isis.applib.services.wrapper.control;
     exports org.apache.isis.applib.services.wrapper.events;
     exports org.apache.isis.applib.services.wrapper.listeners;

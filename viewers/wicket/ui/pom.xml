@@ -51,17 +51,6 @@
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<!-- overrides defaults as configured in our core pom,
-        			to make javadoc failures non fatal and let the build continue;
-        			this we can set on a per module basis, to apply only to those,
-        			we don't know how to fix otherwise -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -355,7 +344,7 @@
 			<artifactId>isis-core-runtimeservices</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-jodatime-integration</artifactId>

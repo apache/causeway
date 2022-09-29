@@ -312,7 +312,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
-        <project.build.outputTimestamp>2022-08-22T15:28:38Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2022-09-25T11:38:00Z</project.build.outputTimestamp>
 
         <!-- APACHE ISIS customisation 6/21: start -->
 
@@ -322,7 +322,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <archunit.version>0.23.1</archunit.version>
         <asciidoctorj.version>2.5.6</asciidoctorj.version>
         <asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-        <approvaltests.version>18.2.2</approvaltests.version>
+        <approvaltests.version>18.3.0</approvaltests.version>
 
         <assertj-guava.version>3.5.0</assertj-guava.version>
 
@@ -375,7 +375,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.12.0</jmock.version>
-        <joda-time.version>2.11.1</joda-time.version>
+        <joda-time.version>2.11.2</joda-time.version>
         <jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
         <jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
@@ -410,15 +410,15 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <select2.version>4.0.13</select2.version>
         <shiro.version>1.9.1</shiro.version>
         <simpleslackapi.version>1.3.0</simpleslackapi.version>
-        <slf4j-api.version>2.0.2</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+        <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <spring-boot.version>2.7.4</spring-boot.version>
         <summernote.version>0.8.11</summernote.version>
         <surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
-        <swagger-core.version>1.6.6</swagger-core.version>
+        <swagger-core.version>1.6.7</swagger-core.version>
 
         <togglz.version>3.2.1</togglz.version>
 
-        <vaadin.version>23.2.1</vaadin.version>
+        <vaadin.version>23.2.2</vaadin.version>
 
         <wicket.version>9.11.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -557,7 +557,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.4.1</version>
                     <configuration>
                         <notimestamp>true</notimestamp>
                         <!--  avoid noise for svn/gitpubsub  -->
@@ -727,7 +727,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/simple-sidebar.css</exclude>
-                            <exclude>**/bootstrap-growl.js</exclude>
+                            <exclude>**/isis-bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
                             <exclude>**/prism*.js</exclude>
                             <exclude>**/prism*.css</exclude>
@@ -993,6 +993,24 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugins>
                     <!-- APACHE ISIS customisation 17/21: start -->
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
                         <version>1.18.20.0</version>
@@ -1077,8 +1095,24 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 </goals>
                                 <!-- APACHE ISIS customisation 19/21: start -->
                                 <configuration>
+                                    <notimestamp>true</notimestamp>
                                     <sourcepath>${delombok.output}</sourcepath>
                                     <doclint>none</doclint>
+                                    <failOnError>false</failOnError>
+
+                                    <debug>true</debug>
+                                    <minmemory>128m</minmemory>
+                                    <maxmemory>1024m</maxmemory>
+                                    <quiet>true</quiet>
+                                    <doctitle>${project.name} ${project.version}</doctitle>
+                                    <windowtitle>${project.name} ${project.version}</windowtitle>
+                                    <splitindex>true</splitindex>
+                                    <encoding>${project.build.sourceEncoding}</encoding>
+                                    <links>
+                                        <link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+                                    </links>
+                                    <linksource>true</linksource>
+                                    <detectOfflineLinks>false</detectOfflineLinks>
                                 </configuration>
                                 <!-- APACHE ISIS customisation 19/21: end -->
                             </execution>

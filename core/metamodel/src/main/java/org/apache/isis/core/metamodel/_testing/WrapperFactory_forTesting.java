@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel._testing;
 import java.util.List;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -86,6 +87,11 @@ class WrapperFactory_forTesting implements WrapperFactory {
 
     @Override
     public void notifyListeners(InteractionEvent ev) {
+    }
+
+    @Override
+    public <R> R execute(AsyncCallable<R> asyncCallable) {
+        return null;
     }
 
 }

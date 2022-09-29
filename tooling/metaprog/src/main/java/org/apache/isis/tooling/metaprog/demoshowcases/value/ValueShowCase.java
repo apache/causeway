@@ -30,6 +30,22 @@ import lombok.val;
 @RequiredArgsConstructor
 public enum ValueShowCase {
 
+    MARKUP(Config.builder()
+            .showcaseName("IsisMarkup")
+            .javaPackage("demoapp.dom.types.isis.markups")
+            .showcaseValueType("org.apache.isis.applib.value.Markup")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics")),
+    MARKDOWN(Config.builder()
+            .showcaseName("IsisMarkdown")
+            .javaPackage("demoapp.dom.types.isisval.markdowns")
+            .showcaseValueType("org.apache.isis.valuetypes.markdown.applib.value.Markdown")
+            .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")),
+    ASCIIDOC(Config.builder()
+            .showcaseName("IsisAsciiDoc")
+            .javaPackage("demoapp.dom.types.isisval.asciidocs")
+            .showcaseValueType("org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc")
+            .showcaseValueSemantics("org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics")
+            .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own AsciiDocSamples
     UUID(Config.builder()
             .showcaseName("JavaUtilUuid")
             .javaPackage("demoapp.dom.types.javautil.uuids")

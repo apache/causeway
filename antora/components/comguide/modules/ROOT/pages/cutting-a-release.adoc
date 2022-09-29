@@ -24,11 +24,9 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Preparation
 
-[WARNING]
+[IMPORTANT]
 ====
 The release process should be performed on Java 11.
-
-This updated dependency changed as of 2.0.0-M6.
 ====
 
 [IMPORTANT]
@@ -65,6 +63,7 @@ git pull --ff-only
 The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
 The parent `pom.xml` of each releasable module specifies the RAT Maven plugin, with a number of custom exclusions.
 
+We run the tool runs over all submodules, including non-released modules.
 To run the RAT tool, use:
 
 [source,bash,subs="attributes+"]
@@ -72,25 +71,27 @@ To run the RAT tool, use:
 ----
 pushd bom
 mvn -Dapache-release clean
-mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000
+mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
 popd
 
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
-for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
+for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
+
+cat /tmp/rat-qn.txt
+cat /tmp/rat-al.txt
 ----
 
-NOTE: the parent `pom.xml` in each of these locations has the `apache-rat-plugin` appropriately configured.
+<.> The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
 
-This script runs over all submodules, including non-released modules.
+<.> Collates all the errors.
 
-The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
-The `for` command collates all the errors.
 
-Investigate and fix any reported violations, typically by either:
+Inspect the contents of the two `/tmp/rat-*.txt` files and fix any reported violations, typically by either:
 
 * adding genuinely missing license headers from Java (or other) source files, or
 * updating the `<excludes>` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
-* also look to remove any stale `<exclude>` entries
+
+Also, look to remove any stale `<exclude>` entries
 
 Once you've fixed all issues, run the script again to confirm that all license violations have been fixed.
 
@@ -102,48 +103,26 @@ Without appropriate additional configuration, this would result in the generated
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
 This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
 
-It's first necessary to have built the framework locally at least once.
-
-* switch to the `bom` directory:
-+
 [source,bash,subs="attributes+"]
 ----
 pushd bom
-----
-
-* build the framework (ok to skip tests):
-+
-[source,bash,subs="attributes+"]
-----
-mvn -Dgithub clean install -DskipTests
-----
-+
-NB: the `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
-
-* Capture the missing license information using:
-+
-[source,bash,subs="attributes+"]
-----
-mvn -Dgithub license:download-licenses
-----
-
-* Switch back to the root directory:
-+
-[source,bash,subs="attributes+"]
-----
+mvn -Dgithub clean install -T1C -DskipTests # <.>
+mvn -Dgithub license:download-licenses      # <.>
 popd
-----
-
-* Report on the missing license information using:
-+
-[source,bash,subs="attributes+"]
-----
 groovy scripts/checkmissinglicenses.groovy
 ----
-
-
+<.> builds the framework.
++
+It's necessary to have built the framework locally at least once (ok to skip tests).
++
+The `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
+<.> Captures the missing license information.
++
 The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
-The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
+
+<.> Reports on the missing license information
++
+The script searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
 
 For example, the output could be something like:
 
@@ -200,22 +179,12 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 +
 [source,bash,subs="attributes+"]
 ----
-bash preview.sh
+sh preview.sh
 ----
 
 Check for any Asciidoc errors, and fix.
 Also double-check that the config property files are correctly formatted.
 
-
-=== Commit changes
-
-Commit any changes from the preceding steps:
-
-[source,bash,subs="attributes+"]
-----
-git add ..
-git commit -m "$ISISJIRA: updates to pom.xml etc for release"
-----
 
 
 == Releasing the Framework
@@ -248,6 +217,18 @@ The branch name is intentionally *not* the same as the eventual tag names (eg `i
 ====
 
 
+=== Commit changes
+
+Commit any changes from the preceding steps:
+
+[source,bash,subs="attributes+"]
+----
+git add ..
+git commit -m "$ISISJIRA: updates to pom.xml etc for release"
+----
+
+
+
 === Create a release branch and worktree
 
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
@@ -277,13 +258,6 @@ cd ../isis-release
 git push origin $ISISBRANCH -u
 ----
 
-
-[#bump-code-to-isisrel]
-=== Bump code to `$ISISREL`
-
-Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.
-
-At the time of writing there was just one `.java` file that had the release hard-coded (`IsisConfigurationLegacy`).
 
 
 === Switch to the `bom` directory
@@ -358,13 +332,106 @@ git clean -dfx ..
 Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
+==== Prerequisites
+
 [WARNING]
 ====
-make sure that the version of `gpg` on the `$PATH` is correct.
+Make sure that the version of `gpg` on the `$PATH` is correct, because the configuration in the `pom.xml` assumes `gpg` v2.0, rather than v2.1+.
 
-I hit issues running on Windows under git-bash, as I was picking up git's version of gpg in `/usr/bin/gpg`.
-I sorted the issue eventually by running under Powershell, to pick up my gpg4Win.
+The older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg` (and does not use an agent); the newer version uses rather than `pubring.pbx`.
+
+For myself, I hit issues running on Windows under git-bash, because it picked up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
+
 ====
+
+If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites.
+
+* install the correct version of choco:
++
+[source,powershell]
+----
+choco install gnupg -version 2.3.7
+----
++
+so that
++
+[source,powershell]
+----
+gpg --version
+----
++
+returns:
++
+[source,powershell]
+----
+gpg (GnuPG) 2.0.30 (Gpg4win 2.3.4)
+...
+Home: C:/Users/xxx/AppData/Roaming/gnupg
+...
+Compression: Uncompressed, ZIP, ZLIB, BZIP2
+----
+
+* ensure your public key is installed in `pubring.gpg`.
++
+For example:
++
+[source,powershell]
+----
+gpg --list-keys
+----
++
+returns:
++
+[source,powershell]
+----
+C:/Users/dan/AppData/Roaming/gnupg/pubring.gpg
+----------------------------------------------
+...
+pub   4096R/77AD2E23 2011-02-01
+uid       [ultimate] Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
+...
+----
+
+* ensure your secret key is installed in `secring.gpg`
++
+For example:
++
+[source,powershell]
+----
+gpg --list-secret-keys
+----
++
+returns:
++
+[source,powershell]
+----
+C:/Users/dan/AppData/Roaming/gnupg/secring.gpg
+----------------------------------------------
+...
+sec   4096R/77AD2E23 2011-02-01
+uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
+...
+----
+
+* in `~/m2/settings.xml`, ensure that the `gpg.passphrase` server is set:
++
+[source,xml]
+.~/.m2/settings.xml
+----
+<settings>
+  ...
+  <servers>
+    <server>
+      <id>gpg.passphrase</id>
+      <passphrase>XXXX</passphrase>
+    </server>
+    ...
+  </servers>
+</settings>
+----
+
+
+==== Perform the deploy
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
 
@@ -374,8 +441,6 @@ Still in the `bom` directory, we deploy (upload the artifacts) using:
 ----
 mvn deploy -Dapache-release -Dgit
 ----
-
-When prompted, enter your GPG passphrase (unless configured in `~/mvn/settings.xml` as the `gpg.passphrase` property)
 
 
 
@@ -392,7 +457,7 @@ git tag $ISISART-$ISISREL-$ISISRC
 
 === Check/Close Staging Repo
 
-The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
+The `mvn deploy` commands will have uploaded all the release artifacts into a newly created staging repository on the ASF Nexus repository server.
 
 Log onto https://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
 
@@ -526,7 +591,7 @@ git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o
+mvn clean install
 mvn spring-boot:run
 ----
 
@@ -561,7 +626,7 @@ git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o
+mvn clean install
 mvn spring-boot:run
 ----
 
@@ -618,7 +683,7 @@ git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o
+mvn clean install
 mvn -pl webapp spring-boot:run
 ----
 
@@ -654,7 +719,7 @@ git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o
+mvn clean install
 mvn -pl webapp spring-boot:run
 ----
 
@@ -726,7 +791,7 @@ popd
 ----
 cd ../isis-release
 
-bash preview.sh -A
+sh preview.sh -A
 ----
 +
 [WARNING]
@@ -765,7 +830,7 @@ cd ../isis-site
 git add .
 git commit -m "$ISISJIRA : staging changes to website"
 
-bash preview.sh
+sh preview.sh
 ----
 
 * If happy, then push the changes:

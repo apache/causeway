@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
          http://www.apache.org/licenses/LICENSE-2.0
-         
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,7 +31,7 @@
     <name>Apache Isis Viewer - Wicket (Graceful)</name>
 
 	<description>
-		Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository 
+		Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository
 		with mangled variants, that do not include module-info.class entries.
 		This artifact - in its realeased form - is empty.
 	</description>
@@ -40,6 +40,41 @@
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.graceful</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/graceful</git-plugin.propertiesDir>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>patch-wicket</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>
+                             process-sources
+                        </phase>
+                        <configuration>
+                            <target>
+                                <copy
+                                        file="${project.build.testSourceDirectory}/../resources/wicket-artifacts-no-module-info/wicket-core-9.11.0.jar.mangled"
+                                        tofile="${settings.localRepository}/org/apache/wicket/wicket-core/9.11.0/wicket-core-9.11.0.jar"
+                                        overwrite="true"
+                                />
+                                <copy
+                                        file="${project.build.testSourceDirectory}/../resources/wicket-artifacts-no-module-info/wicket-util-9.11.0.jar.mangled"
+                                        tofile="${settings.localRepository}/org/apache/wicket/wicket-util/9.11.0/wicket-util-9.11.0.jar"
+                                        overwrite="true"
+                                />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
 
@@ -67,7 +102,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-	
+
 		<!-- TESTING -->
 
 		<dependency>

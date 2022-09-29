@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
          http://www.apache.org/licenses/LICENSE-2.0
-         
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -53,21 +53,8 @@
                 </excludes>
             </resource>
         </resources>
-        <plugins>
-        	<plugin>
-        		<!-- overrides defaults as configured in our core pom, 
-        			to make javadoc failures non fatal and let the build continue;
-        			this we can set on a per module basis, to apply only to those, 
-        			we don't know how to fix otherwise -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
-        </plugins>
     </build>
-    
+
    	<repositories>
 		<repository>
 			<id>jitpack.io</id>
@@ -103,12 +90,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
-        <!-- Cglib patch START 
+
+        <!-- Cglib patch START
         	as of 2021 Cglib seems inactive - while yet Wicket 8. and 9. rely on it
         	Cglib fails to initialize net.sf.cglib.core.ReflectUtils when running on JVM 16+
-        	we utilize a jitpack.io build that is based on this patch 
-        	https://github.com/rototor/cglib/commit/cc8632ed0930879b929b0d07e4ede5ac15103e9f 
+        	we utilize a jitpack.io build that is based on this patch
+        	https://github.com/rototor/cglib/commit/cc8632ed0930879b929b0d07e4ede5ac15103e9f
         	-->
         <dependency>
 	    	<groupId>com.github.rototor</groupId>
@@ -121,7 +108,7 @@
 	           	</exclusion>
            	</exclusions>
         </dependency>
-		<!-- Cglib patch END -->        
+		<!-- Cglib patch END -->
 
         <dependency>
             <groupId>org.apache.wicket</groupId>

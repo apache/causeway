@@ -569,7 +569,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:19.1.3 +
+io.cucumber:messages:jar:19.1.4 +
 org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
@@ -729,243 +729,7 @@ Artifact: demo-domain
 Type: jar
 Directory: /examples/demo/domain
 ----
-|.Components
-****
-demoapp.dom.AppConfiguration +
-demoapp.dom._infra.LibraryPreloadingService +
-demoapp.dom._infra.resources.AsciiDocConverterService +
-demoapp.dom._infra.resources.AsciiDocReaderService +
-demoapp.dom._infra.resources.AsciiDocValueSemanticsWithPreprocessing +
-demoapp.dom._infra.resources.MarkdownReaderService +
-demoapp.dom._infra.resources.MarkupReaderService +
-demoapp.dom._infra.resources.MarkupVariableResolverService +
-demoapp.dom._infra.resources.ResourceReaderService +
-demoapp.dom._infra.samples.EnumSamples +
-demoapp.dom._infra.samples.NameSamples +
-demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
-demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
-demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault +
-demoapp.dom.domain._interactions.ExecutionListenerToCaptureInteractionsInMemory +
-demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingSeeding +
-demoapp.dom.domain.actions.Action.commandPublishing.jdo.ActionCommandPublishingJdoEntities +
-demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpaEntities +
-demoapp.dom.domain.actions.Action.domainEvent.subscribers.ActionDomainEventControlService +
-demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingSeeding +
-demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdoEntities +
-demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpaEntities +
-demoapp.dom.domain.collections.Collection.domainEvent.subscribers.CollectionDomainEventControlService +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledSeeding +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdoEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpaEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledSeeding +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo.DomainObjectEntityChangePublishingEnabledJdoEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpaEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedSeeding +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenSeeding +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpaEntities +
-demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefSeeding +
-demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo.JaxbRefJdoEntities +
-demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpaEntities +
-demoapp.dom.domain.objects.other.embedded.jdo.ComplexNumberJdoValueSemantics +
-demoapp.dom.domain.objects.other.embedded.jdo.NumberConstantJdoRepository +
-demoapp.dom.domain.objects.other.embedded.jpa.ComplexNumberJpaValueSemantics +
-demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpaRepository +
-demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantSeeding +
-demoapp.dom.domain.objects.other.embedded.samples.ComplexNumberSamples +
-demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingSeeding +
-demoapp.dom.domain.properties.Property.commandPublishing.jdo.PropertyCommandPublishingJdoEntities +
-demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpaEntities +
-demoapp.dom.domain.properties.Property.domainEvent.subscribers.PropertyDomainEventControlService +
-demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingSeeding +
-demoapp.dom.domain.properties.Property.executionPublishing.jdo.PropertyExecutionPublishingJdoEntities +
-demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpaEntities +
-demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities +
-demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpaEntities +
-demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildSeeding +
-demoapp.dom.domain.properties.PropertyLayout.navigable.FileTreeNodeService +
-demoapp.dom.domain.properties.PropertyLayout.repainting.PdfJsViewerAdvisorFallback +
-demoapp.dom.featured.customui.geocoding.GeoapifyClient +
-demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoImplementation +
-demoapp.dom.services.core.eventbusservice.EventLogEntryJdoRepository +
-demoapp.dom.services.core.eventbusservice.EventLogEntryJpaRepository +
-demoapp.dom.services.core.eventbusservice.EventSubscriberDemoImplementation +
-demoapp.dom.services.core.wrapperFactory.WrapperFactorySeeding +
-demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdoEntities +
-demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpaEntities +
-demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo +
-demoapp.dom.services.extensions.secman.apptenancy.jdo.TenantedJdoEntities +
-demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpaEntities +
-demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedSeeding +
-demoapp.dom.services.extensions.secman.appuser.seed.AppUserSeeding +
-demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities +
-demoapp.dom.types.isis.blobs.jpa.IsisBlobJpaEntities +
-demoapp.dom.types.isis.blobs.persistence.IsisBlobSeeding +
-demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples +
-demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities +
-demoapp.dom.types.isis.clobs.jpa.IsisClobJpaEntities +
-demoapp.dom.types.isis.clobs.persistence.IsisClobSeeding +
-demoapp.dom.types.isis.clobs.samples.IsisClobsSamples +
-demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities +
-demoapp.dom.types.isis.localresourcepaths.jpa.IsisLocalResourcePathJpaEntities +
-demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathSeeding +
-demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples +
-demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities +
-demoapp.dom.types.isis.markups.jpa.IsisMarkupJpaEntities +
-demoapp.dom.types.isis.markups.persistence.IsisMarkupSeeding +
-demoapp.dom.types.isis.markups.samples.IsisMarkupSamples +
-demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities +
-demoapp.dom.types.isis.passwords.jpa.IsisPasswordJpaEntities +
-demoapp.dom.types.isis.passwords.persistence.IsisPasswordSeeding +
-demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples +
-demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities +
-demoapp.dom.types.isisext.asciidocs.jpa.IsisAsciiDocJpaEntities +
-demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocSeeding +
-demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples +
-demoapp.dom.types.isisext.cal.jdo.IsisCalendarEventEntities +
-demoapp.dom.types.isisext.cal.jpa.IsisCalendarEventEntities +
-demoapp.dom.types.isisext.cal.persistence.IsisCalendarEventSeeding +
-demoapp.dom.types.isisext.cal.samples.IsisCalendarEventSamples +
-demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities +
-demoapp.dom.types.isisext.markdowns.jpa.IsisMarkdownJpaEntities +
-demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownSeeding +
-demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples +
-demoapp.dom.types.javaawt.images.jdo.JavaAwtBufferedImageJdoEntities +
-demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpaEntities +
-demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageSeeding +
-demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImageService +
-demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImagesSamples +
-demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities +
-demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpaEntities +
-demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanSeeding +
-demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples +
-demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities +
-demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpaEntities +
-demoapp.dom.types.javalang.bytes.persistence.WrapperByteSeeding +
-demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples +
-demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities +
-demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpaEntities +
-demoapp.dom.types.javalang.characters.persistence.WrapperCharacterSeeding +
-demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples +
-demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities +
-demoapp.dom.types.javalang.doubles.jpa.WrapperDoubleJpaEntities +
-demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleSeeding +
-demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples +
-demoapp.dom.types.javalang.enums.jdo.JavaLangEnumJdoEntities +
-demoapp.dom.types.javalang.enums.jpa.JavaLangEnumJpaEntities +
-demoapp.dom.types.javalang.enums.persistence.JavaLangEnumSeeding +
-demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities +
-demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpaEntities +
-demoapp.dom.types.javalang.floats.persistence.WrapperFloatSeeding +
-demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples +
-demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities +
-demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpaEntities +
-demoapp.dom.types.javalang.integers.persistence.WrapperIntegerSeeding +
-demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples +
-demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities +
-demoapp.dom.types.javalang.longs.jpa.WrapperLongJpaEntities +
-demoapp.dom.types.javalang.longs.persistence.WrapperLongSeeding +
-demoapp.dom.types.javalang.longs.samples.WrapperLongSamples +
-demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities +
-demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpaEntities +
-demoapp.dom.types.javalang.shorts.persistence.WrapperShortSeeding +
-demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples +
-demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities +
-demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpaEntities +
-demoapp.dom.types.javalang.strings.persistence.JavaLangStringSeeding +
-demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities +
-demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpaEntities +
-demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalSeeding +
-demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples +
-demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities +
-demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpaEntities +
-demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerSeeding +
-demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples +
-demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities +
-demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpaEntities +
-demoapp.dom.types.javanet.urls.persistence.JavaNetUrlSeeding +
-demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples +
-demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities +
-demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpaEntities +
-demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateSeeding +
-demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples +
-demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities +
-demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpaEntities +
-demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampSeeding +
-demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples +
-demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities +
-demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpaEntities +
-demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDateSeeding +
-demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples +
-demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities +
-demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpaEntities +
-demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeSeeding +
-demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples +
-demoapp.dom.types.javatime.javatimelocaltime.jdo.JavaTimeLocalTimeJdoEntities +
-demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpaEntities +
-demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeSeeding +
-demoapp.dom.types.javatime.javatimelocaltime.samples.JavaTimeLocalTimeSamples +
-demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities +
-demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpaEntities +
-demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeSeeding +
-demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples +
-demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities +
-demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpaEntities +
-demoapp.dom.types.javatime.javatimeoffsettime.persistence.JavaTimeOffsetTimeSeeding +
-demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples +
-demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities +
-demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpaEntities +
-demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZonedDateTimeSeeding +
-demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples +
-demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities +
-demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpaEntities +
-demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateSeeding +
-demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples +
-demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities +
-demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpaEntities +
-demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidSeeding +
-demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples +
-demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities +
-demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeJdoSeeding +
-demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples +
-demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities +
-demoapp.dom.types.jodatime.jodalocaldate.persistence.JodaLocalDateJdoSeeding +
-demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples +
-demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities +
-demoapp.dom.types.jodatime.jodalocaldatetime.persistence.JodaLocalDateTimeSeeding +
-demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples +
-demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdoEntities +
-demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeSeeding +
-demoapp.dom.types.jodatime.jodalocaltime.samples.JodaLocalTimeSamples +
-demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities +
-demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpaEntities +
-demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanSeeding +
-demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities +
-demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpaEntities +
-demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteSeeding +
-demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities +
-demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpaEntities +
-demoapp.dom.types.primitive.chars.persistence.PrimitiveCharSeeding +
-demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities +
-demoapp.dom.types.primitive.doubles.jpa.PrimitiveDoubleJpaEntities +
-demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleSeeding +
-demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities +
-demoapp.dom.types.primitive.floats.jpa.PrimitiveFloatJpaEntities +
-demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatSeeding +
-demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities +
-demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpaEntities +
-demoapp.dom.types.primitive.ints.persistence.PrimitiveIntSeeding +
-demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities +
-demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpaEntities +
-demoapp.dom.types.primitive.longs.persistence.PrimitiveLongSeeding +
-demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities +
-demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpaEntities +
-demoapp.dom.types.primitive.shorts.persistence.PrimitiveShortSeeding +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-audittrail-persistence-jdo:jar:<managed> +
@@ -1051,12 +815,7 @@ Artifact: demo-web
 Type: jar
 Directory: /examples/demo/web
 ----
-|.Components
-****
-demoapp.web._infra.utils.ThereCanBeOnlyOne +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.examples.apps:demo-domain:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
@@ -1074,12 +833,7 @@ Artifact: demo-wicket-common
 Type: jar
 Directory: /examples/demo/wicket/common
 ----
-|.Components
-****
-demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.examples.apps:demo-web:jar:${project.version} +
 org.apache.isis.extensions:isis-extensions-fullcalendar-wicket-ui:jar:<managed> +
@@ -3655,12 +3409,7 @@ Artifact: isis-valuetypes-asciidoc-ui-vaa
 Type: jar
 Directory: /valuetypes/asciidoc/ui/vaadin
 ----
-|.Components
-****
-o.a.i.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
 ****
@@ -6025,12 +5774,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6284,31 +6033,7 @@ Artifact: isis-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Components
-****
-o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jdo.JdoTestFixtures +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.JpaTestFixtures +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
-o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
-o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
-o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
-o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
-o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
@@ -6774,16 +6499,7 @@ Artifact: isis-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Components
-****
-o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
-o.a.i.viewer.graphql.viewer.source.GraphQlServiceForIsis +
-o.a.i.viewer.graphql.viewer.source.GraphQlSourceForIsis +
-o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
-o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-graphql-model:jar:<managed> +
@@ -6885,23 +6601,7 @@ Artifact: isis-viewer-vaadin-ui
 Type: jar
 Directory: /incubator/viewers/vaadin/ui
 ----
-|.Components
-****
-o.a.i.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa +
-o.a.i.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler +
-o.a.i.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa +
-o.a.i.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.text.TextFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory +
-o.a.i.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa +
-o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +
@@ -7020,30 +6720,7 @@ Artifact: isis-viewer-javafx-ui
 Type: jar
 Directory: /incubator/viewers/javafx/ui
 ----
-|.Components
-****
-o.a.i.incubator.viewer.javafx.ui.components.UiComponentFactoryFx +
-o.a.i.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.number.NumberFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.components.text.TextFieldFactory +
-o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton +
-o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField +
-o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled +
-o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem +
-o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault +
-o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton +
-o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField +
-o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider +
-o.a.i.incubator.viewer.javafx.ui.main.MainViewFx +
-o.a.i.incubator.viewer.javafx.ui.main.UiActionHandlerFx +
-o.a.i.incubator.viewer.javafx.ui.main.UiBuilderFx +
-o.a.i.incubator.viewer.javafx.ui.main.UiContextFxDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed> +
@@ -7129,12 +6806,6 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
-.Components
-****
-o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
-o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
-****
-
 .Dependencies
 ****
 org.apache.isis.core:isis-core-config:jar:<managed> +
@@ -7159,15 +6830,6 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
-
-.Components
-****
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
-o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
-o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
-o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
-****
 
 .Dependencies
 ****
