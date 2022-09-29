@@ -39,7 +39,8 @@ public enum ValueShowCase {
             .showcaseName("IsisMarkdown")
             .javaPackage("demoapp.dom.types.isisval.markdowns")
             .showcaseValueType("org.apache.isis.valuetypes.markdown.applib.value.Markdown")
-            .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")),
+            .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")
+            .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own MarkdownSamples
     ASCIIDOC(Config.builder()
             .showcaseName("IsisAsciiDoc")
             .javaPackage("demoapp.dom.types.isisval.asciidocs")
