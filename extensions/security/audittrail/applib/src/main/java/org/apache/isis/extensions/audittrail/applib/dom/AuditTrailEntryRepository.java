@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,7 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
 
     @Inject RepositoryService repositoryService;
     @Inject FactoryService factoryService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
     public Class<E> getEntityClass() {
         return auditTrailEntryClass;
@@ -156,15 +158,6 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
         return repositoryService.allMatches(query);
     }
 
-    /**
-     * intended for testing only
-     */
-    public List<? extends AuditTrailEntry> findAll() {
-        return repositoryService.allMatches(
-                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND)
-        );
-    }
-
     private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, final int daysOffset) {
         return dt!=null
                 ? Timestamp.valueOf(dt.atStartOfDay().plusDays(daysOffset))
@@ -172,10 +165,26 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
     }
 
 
+
+    /**
+     * intended for testing only
+     */
+    public List<? extends AuditTrailEntry> findAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot call 'findAll' in production systems");
+        }
+        return repositoryService.allMatches(
+                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND)
+        );
+    }
+
     /**
      * intended for testing only
      */
     public void removeAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
+        }
         repositoryService.removeAll(auditTrailEntryClass);
     }
 

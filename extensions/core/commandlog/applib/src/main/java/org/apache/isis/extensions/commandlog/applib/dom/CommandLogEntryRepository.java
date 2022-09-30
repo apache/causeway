@@ -396,7 +396,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      */
     public List<C> findAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
+            throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return repositoryService().allInstances(commandLogEntryClass);
     }
@@ -407,7 +407,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      */
     public void removeAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
+            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(commandLogEntryClass);
     }
