@@ -165,6 +165,16 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
     }
 
 
+    public List<E> findMostRecent() {
+        return findMostRecent(100);
+    }
+
+    public List<E> findMostRecent(final int limit) {
+        return repositoryService.allMatches(
+                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
+    }
+
+
 
     /**
      * intended for testing only

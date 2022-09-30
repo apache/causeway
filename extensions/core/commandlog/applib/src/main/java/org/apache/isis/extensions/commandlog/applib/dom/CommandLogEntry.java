@@ -128,6 +128,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         public static final String FIND_BY_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTimestampAfter";
         public static final String FIND_BY_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTimestampBefore";
         public static final String FIND = LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_MOST_RECENT = LOGICAL_TYPE_NAME + ".findMostRecent";
         public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
         public static final String FIND_FIRST = LOGICAL_TYPE_NAME + ".findFirst";
         public static final String FIND_SINCE = LOGICAL_TYPE_NAME + ".findSince";

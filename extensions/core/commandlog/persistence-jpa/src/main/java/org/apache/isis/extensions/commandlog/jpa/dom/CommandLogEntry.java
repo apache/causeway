@@ -157,6 +157,11 @@ import lombok.Setter;
                   + "  FROM CommandLogEntry cl "
                   + " ORDER BY cl.timestamp DESC"),
     @NamedQuery(
+            name = Nq.FIND_MOST_RECENT,
+            query = "SELECT cl "
+                    + "  FROM CommandLogEntry cl "
+                    + " ORDER BY cl.timestamp DESC, cl.pk.interactionId DESC"), // programmatic LIMIT 30
+    @NamedQuery(
             name  = Nq.FIND_RECENT_BY_USERNAME,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "

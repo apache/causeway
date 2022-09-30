@@ -63,7 +63,7 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE target == :target "
-                  + " ORDER BY this.timestamp DESC "
+                  + " ORDER BY timestamp DESC "
                   + " RANGE 0,30"),
     @Query(
             name  = Nq.FIND_RECENT_BY_TARGET_OR_RESULT,
@@ -71,7 +71,7 @@ import lombok.Setter;
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE target == :targetOrResult "
                   + "    || result == :targetOrResult "
-                  + " ORDER BY this.timestamp DESC "
+                  + " ORDER BY timestamp DESC "
                   + " RANGE 0,30"),
     @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
@@ -80,21 +80,21 @@ import lombok.Setter;
                   + " WHERE target == :target "
                   + "    && timestamp >= :from "
                   + "    && timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp >= :from "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET,
             value = "SELECT "
@@ -107,30 +107,36 @@ import lombok.Setter;
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE timestamp >= :from "
                   + "    && timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_AFTER,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE timestamp >= :from "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BEFORE,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_MOST_RECENT,
+            value = "SELECT "
+                  + "  FROM " + CommandLogEntry.FQCN + " "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"
+                  + " RANGE 0,100"),
     @Query(
             name  = Nq.FIND_RECENT_BY_USERNAME,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE username == :username "
-                  + " ORDER BY this.timestamp DESC "
+                  + " ORDER BY timestamp DESC "
                   + " RANGE 0,30"),
     @Query(
             name  = Nq.FIND_BY_PARENT,
@@ -142,20 +148,20 @@ import lombok.Setter;
             value = "SELECT "
                     + "  FROM " + CommandLogEntry.FQCN + " "
                     + " WHERE completedAt == null "
-                    + " ORDER BY this.timestamp DESC"),
+                    + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_COMPLETED,
             value = "SELECT "
                     + "  FROM " + CommandLogEntry.FQCN + " "
                     + " WHERE completedAt != null "
-                    + " ORDER BY this.timestamp DESC"),
+                    + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_FIRST,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE startedAt   != null "
                   + "    && completedAt != null "
-                  + " ORDER BY this.timestamp ASC "
+                  + " ORDER BY timestamp ASC "
                   + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
     @Query(
@@ -165,7 +171,7 @@ import lombok.Setter;
                   + " WHERE timestamp > :timestamp "
                   + "   && startedAt != null "
                   + "   && completedAt != null "
-                  + "ORDER BY this.timestamp ASC"),
+                  + "ORDER BY timestamp ASC"),
 
     // most recent (replayed) command previously replicated from primary to
     // secondary.  This should always exist except for the very first times
@@ -175,7 +181,7 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE (replayState == 'OK' || replayState == 'FAILED') "
-                  + " ORDER BY this.timestamp DESC "
+                  + " ORDER BY timestamp DESC "
                   + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
 
@@ -188,16 +194,15 @@ import lombok.Setter;
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE startedAt   != null "
                   + "    && completedAt != null "
-                  + " ORDER BY this.timestamp DESC "
+                  + " ORDER BY timestamp DESC "
                   + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-
     @Query(
             name  = Nq.FIND_BY_REPLAY_STATE,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE replayState == :replayState "
-                  + " ORDER BY this.timestamp ASC "
+                  + " ORDER BY timestamp ASC "
                   + " RANGE 0,10"),    // same as batch size
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)

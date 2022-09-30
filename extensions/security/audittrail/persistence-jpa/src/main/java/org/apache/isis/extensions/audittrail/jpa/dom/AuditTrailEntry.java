@@ -131,6 +131,11 @@ import lombok.Setter;
                   + "  FROM AuditTrailEntry e "
                   + " ORDER BY e.timestamp DESC"),
     @NamedQuery(
+            name = Nq.FIND_MOST_RECENT,
+            query = "SELECT e "
+                  + "  FROM AuditTrailEntry e "
+                  + " ORDER BY e.timestamp DESC, e.interactionId DESC, e.sequence DESC"),  // programmatic limit 100
+    @NamedQuery(
             name = Nq.FIND_RECENT_BY_TARGET_AND_PROPERTY_ID,
             query = "SELECT e "
                   + "  FROM AuditTrailEntry e "
@@ -176,7 +181,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
 
 
 
-    @Getter @Setter
     private String username;
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
@@ -191,7 +195,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
 
 
 
-    @Getter @Setter
     private java.sql.Timestamp timestamp;
 
     @Column(nullable = Timestamp.NULLABLE)
@@ -205,7 +208,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
     }
 
 
-    @Getter @Setter
     private UUID interactionId;
 
     @Convert(converter = JavaUtilUuidConverter.class)
@@ -220,7 +222,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
     }
 
 
-    @Getter @Setter
     private int sequence;
 
     @Column(nullable = Sequence.NULLABLE)
@@ -235,7 +236,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
 
 
 
-    @Getter @Setter
     private Bookmark target;
 
     @Convert(converter = IsisBookmarkConverter.class)
@@ -250,7 +250,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
     }
 
 
-    @Getter @Setter
     private String logicalMemberIdentifier;
 
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
@@ -264,7 +263,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
     }
 
 
-    @Getter @Setter
     private String propertyId;
 
     @Column(nullable = PropertyId.NULLABLE, length = PropertyId.MAX_LENGTH)
@@ -278,7 +276,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
     }
 
 
-    @Getter @Setter
     private String preValue;
 
     @Column(nullable = PreValue.NULLABLE, length = PreValue.MAX_LENGTH)
@@ -292,7 +289,6 @@ extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
     }
 
 
-    @Getter @Setter
     private String postValue;
 
 
