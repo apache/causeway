@@ -115,10 +115,16 @@ import lombok.Setter;
                   + " WHERE timestamp <= :timestamp "
                   + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
+            name  = Nq.FIND,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " ORDER BY timestamp DESC"),
+    @Query(
             name = Nq.FIND_MOST_RECENT,
             value = "SELECT "
                   + "  FROM " + ExecutionLogEntry.FQCN + " "
-                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"
+                  + " RANGE 0,100"),
     @Query(
             name = Nq.FIND_RECENT_BY_USERNAME,
             value = "SELECT "

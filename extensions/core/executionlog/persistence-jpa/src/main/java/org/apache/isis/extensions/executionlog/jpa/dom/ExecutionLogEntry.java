@@ -118,6 +118,11 @@ import lombok.Setter;
                   + " WHERE ele.timestamp >= :timestamp "
                   + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
     @NamedQuery(
+            name  = Nq.FIND,
+            query = "SELECT ele "
+                  + "  FROM ExecutionLogEntry ele "
+                  + " ORDER BY ele.timestamp DESC"),
+    @NamedQuery(
             name = Nq.FIND_BY_TIMESTAMP_BEFORE,
             query = "SELECT ele "
                   + "  FROM ExecutionLogEntry ele "
@@ -127,7 +132,7 @@ import lombok.Setter;
             name = Nq.FIND_MOST_RECENT,
             query = "SELECT ele "
                   + "  FROM ExecutionLogEntry ele "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
+                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),  // programmatic limit 100
     @NamedQuery(
             name = Nq.FIND_RECENT_BY_USERNAME,
             query = "SELECT ele "

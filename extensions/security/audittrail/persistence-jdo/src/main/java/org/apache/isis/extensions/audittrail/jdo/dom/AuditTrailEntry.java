@@ -91,14 +91,14 @@ import lombok.Setter;
                   + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp >= :from "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
             value = "SELECT "
                   + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET,
             value = "SELECT "
@@ -111,24 +111,30 @@ import lombok.Setter;
                   + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE timestamp >= :from "
                   + "    && timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_AFTER,
             value = "SELECT "
                   + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE timestamp >= :from "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BEFORE,
             value = "SELECT "
                   + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND,
             value = "SELECT "
                   + "  FROM " + AuditTrailEntry.FQCN + " "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_MOST_RECENT,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"
+                  + " RANGE 0,100"),
     @Query(
             name = Nq.FIND_RECENT_BY_TARGET_AND_PROPERTY_ID,
             value = "SELECT "

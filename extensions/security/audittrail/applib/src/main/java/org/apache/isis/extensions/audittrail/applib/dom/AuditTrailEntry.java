@@ -82,6 +82,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         public static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
         public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
         public static final String FIND = "find";
+        public static final String FIND_MOST_RECENT = LOGICAL_TYPE_NAME + ".findMostRecent";
     }
 
     // -- UI & DOMAIN EVENTS
