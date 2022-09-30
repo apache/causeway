@@ -391,6 +391,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
+        <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
         <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
         <node.version>v16.17.0</node.version>
