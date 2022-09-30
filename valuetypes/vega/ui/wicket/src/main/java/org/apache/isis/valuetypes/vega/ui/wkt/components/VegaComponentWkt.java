@@ -18,9 +18,11 @@
  */
 package org.apache.isis.valuetypes.vega.ui.wkt.components;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
+import org.apache.isis.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 public class VegaComponentWkt extends MarkupComponent {
@@ -32,6 +34,12 @@ public class VegaComponentWkt extends MarkupComponent {
                 org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options.builder()
                 .syntaxHighlighter(SyntaxHighlighter.PRISM_COY)
                 .build());
+    }
+
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(VegaJsReference.asHeaderItem());
     }
 
 }

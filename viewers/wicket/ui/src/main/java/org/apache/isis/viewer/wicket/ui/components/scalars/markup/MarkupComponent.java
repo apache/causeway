@@ -77,7 +77,7 @@ public class MarkupComponent extends WebComponent {
     // --
 
     @Override
-    public final void renderHead(final IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         options.highlightBehavior().renderHead(response);
     }
