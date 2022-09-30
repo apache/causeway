@@ -89,7 +89,6 @@ import lombok.experimental.UtilityClass;
         entityChangePublishing = Publishing.DISABLED
 )
 @DomainObjectLayout(
-        named = "CommandLogEntry",
         titleUiEvent = CommandLogEntry.TitleUiEvent.class,
         iconUiEvent = CommandLogEntry.IconUiEvent.class,
         cssClassUiEvent = CommandLogEntry.CssClassUiEvent.class,
