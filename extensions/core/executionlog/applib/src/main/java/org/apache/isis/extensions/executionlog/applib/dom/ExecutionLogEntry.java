@@ -152,7 +152,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
         setLogicalMemberIdentifier(memberExecutionDto.getLogicalMemberIdentifier());
 
-        setTarget( bookmarkService.bookmarkFor(execution.getEvent().getSubject()).orElseThrow() );
+        setTarget(Bookmark.forOidDto(memberExecutionDto.getTarget()));
         setUsername(memberExecutionDto.getUsername());
 
         if(execution instanceof PropertyEdit) {
