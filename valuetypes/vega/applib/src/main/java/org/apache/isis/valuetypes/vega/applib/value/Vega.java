@@ -102,10 +102,6 @@ public final class Vega implements Serializable {
                 : schema.asEmptyJson();
     }
 
-    public String asHtml() {
-        return "Vega.asHtml()"; //TODO[ISIS-3122]
-    }
-
     public boolean isEqualTo(final Vega other) {
         return Objects.equals(this.getJson(), other!=null ? other.getJson() : null);
     }

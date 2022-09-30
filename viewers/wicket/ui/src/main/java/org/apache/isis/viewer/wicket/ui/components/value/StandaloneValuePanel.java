@@ -24,7 +24,7 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.idstringifiers.PredefinedSerializables;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.MmTitleUtil;
+import org.apache.isis.core.metamodel.object.MmRenderUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -51,7 +51,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
         if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
-                MmTitleUtil.htmlStringForValueType(getModel().getObject(), getModel().getObjectMember())
+                MmRenderUtil.htmlStringForValueType(getModel().getObject(), getModel().getObjectMember())
             );
         } else {
             // resort to (textual) title rendering

@@ -43,6 +43,8 @@
 		</dependency>
 
 		<!-- provides VEGA API -->
+		<!-- Unfortunately the webjar {@code org.webjars.npm:vega:5.22.1} cannot be used,
+			as (at time of writing) <i>Maven</i> fails to resolve all its dependencies. -->
 		<!--
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>

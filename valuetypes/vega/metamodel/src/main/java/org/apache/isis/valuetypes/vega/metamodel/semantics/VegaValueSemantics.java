@@ -18,6 +18,8 @@
  */
 package org.apache.isis.valuetypes.vega.metamodel.semantics;
 
+import java.util.UUID;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
@@ -32,6 +34,9 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.vega.applib.IsisModuleValVegaApplib;
 import org.apache.isis.valuetypes.vega.applib.value.Vega;
+
+import lombok.NonNull;
+import lombok.val;
 
 @Component
 @Named(IsisModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
@@ -80,12 +85,34 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Vega vega) {
-        return renderHtml(vega, Vega::asHtml);
+        return renderHtml(vega, this::asHtml);
     }
 
-    @Override
-    public SyntaxHighlighter syntaxHighlighter() {
-        return SyntaxHighlighter.PRISM_COY;
+    /**
+     * see usage examples at https://vega.github.io/vega/usage/
+     */
+    private String asHtml(final @NonNull Vega vega) {
+        val containerId = "vegaContainer" + UUID.randomUUID().toString();
+
+        val htmlFragment = String.format(""
+                + "<div id=\"%1$s\"></div>\n"
+                + "<script type=\"text/javascript\">\n"
+                + "var spec = %2$s;\n"
+                + "document.addEventListener('DOMContentLoaded', (event) => {\n"
+                + "  view = new vega.View(vega.parse(spec), {\n"
+                + "    renderer:  '%3$s',\n"
+                + "    container: '#%1$s',\n"
+                + "    hover:     %4$b    \n"
+                + "  });\n"
+                + "  view.runAsync();\n"
+                + "});"
+                + "</script>",
+                containerId,
+                vega.getJson(),
+                "canvas", // renderer (canvas or svg)
+                true // enable hover processing
+                );
+        return htmlFragment;
     }
 
     // -- PARSER

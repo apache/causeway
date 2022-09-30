@@ -32,7 +32,7 @@ public class VegaComponentWkt extends MarkupComponent {
     public VegaComponentWkt(final String id, final IModel<?> model){
         super(id, model,
                 org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options.builder()
-                .syntaxHighlighter(SyntaxHighlighter.PRISM_COY)
+                .syntaxHighlighter(SyntaxHighlighter.NONE)
                 .build());
     }
 

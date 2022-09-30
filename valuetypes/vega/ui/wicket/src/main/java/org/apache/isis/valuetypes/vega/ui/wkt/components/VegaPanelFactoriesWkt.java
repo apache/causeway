@@ -31,8 +31,7 @@ import lombok.val;
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
  * {@link MarkupPanelFactories}, but specific to
- * the {@link Vega} value-type which requires client-side java-script to be
- * executed to enable syntax highlighting
+ * the {@link Vega} value-type.
  */
 public class VegaPanelFactoriesWkt {
 

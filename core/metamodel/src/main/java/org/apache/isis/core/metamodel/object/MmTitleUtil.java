@@ -20,13 +20,8 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -40,30 +35,6 @@ public class MmTitleUtil {
         return adapter!=null
                 ? adapter.getTitle()
                 : "";
-    }
-
-    public String htmlStringForValueType(
-            final @Nullable ManagedObject adapter,
-            final @Nullable ObjectFeature feature) {
-
-        if(!ManagedObjects.isSpecified(adapter)) {
-            return "";
-        }
-
-        val spec = adapter.getSpecification();
-        val valueFacet = spec.valueFacet().orElse(null);
-
-        if(valueFacet==null) {
-            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
-        }
-
-        @SuppressWarnings("unchecked")
-        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
-        if(renderer==null) {
-            return String.format("missing Renderer %s", spec.getCorrespondingClass());
-        }
-
-        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), adapter.getPojo());
     }
 
     public String getTitleHonoringTitlePartSkipping(
