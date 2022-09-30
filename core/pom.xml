@@ -744,6 +744,12 @@
 				<groupId>com.approvaltests</groupId>
 				<artifactId>approvaltests</artifactId>
 				<version>${approvaltests.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.codehaus.woodstox</groupId>
+						<artifactId>stax2-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
