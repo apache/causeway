@@ -292,6 +292,7 @@
 		<module>stable</module>
 		<module>stable-bootstrapping</module>
 		<module>stable-config</module>
+		<module>stable-core-wrapperfactory</module>
 		<module>stable-cucumber</module>
 		<module>stable-domainmodel</module>
 		<module>stable-eventhandling</module>
