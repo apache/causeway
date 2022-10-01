@@ -109,7 +109,7 @@ pushd bom
 mvn -Dgithub clean install -T1C -DskipTests # <.>
 mvn -Dgithub license:download-licenses      # <.>
 popd
-groovy scripts/checkmissinglicenses.groovy
+groovy scripts/checkmissinglicenses.groovy  # <.>
 ----
 <.> builds the framework.
 +
