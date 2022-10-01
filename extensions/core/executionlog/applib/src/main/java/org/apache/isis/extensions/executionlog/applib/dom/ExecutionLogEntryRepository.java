@@ -19,6 +19,9 @@
 package org.apache.isis.extensions.executionlog.applib.dom;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,8 +36,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.springframework.lang.Nullable;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -97,9 +102,35 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
+    public List<E> findByFromAndTo(
+            final @Nullable LocalDate from,
+            final @Nullable LocalDate to) {
+        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+
+        final Query<E> query;
+        if(from != null) {
+            if(to != null) {
+                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
+            } else {
+                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
+                        .withParameter("from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
+                        .withParameter("to", toTs);
+            } else {
+                query = Query.named(executionLogEntryClass, ExecutionLogEntry.Nq.FIND);
+            }
+        }
+        return repositoryService().allMatches(query);
+    }
+
     public List<E> findMostRecent() {
-        return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_MOST_RECENT));
+        return findMostRecent(100);
     }
 
     public List<E> findMostRecent(final int limit) {
@@ -189,6 +220,9 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
      * intended for testing purposes only
      */
     public List<E> findAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot call 'findAll' in production systems");
+        }
         return repositoryService().allInstances(executionLogEntryClass);
     }
 
@@ -198,9 +232,21 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
      */
     public void removeAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
+            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(executionLogEntryClass);
+    }
+
+
+    private static Timestamp toTimestampStartOfDayWithOffset(
+            final @Nullable LocalDate dt,
+            final int daysOffset) {
+
+        return dt!=null
+                ? new java.sql.Timestamp(
+                Instant.from(dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault()))
+                        .toEpochMilli())
+                : null;
     }
 
 

@@ -43,7 +43,6 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -241,8 +240,10 @@ implements RepositoryService, HasMetaModelContext {
         .specForType(entity.getClass())
         .flatMap(ObjectSpecification::entityFacet)
         .map(entityFacet->entityFacet.detach(entity))
-        .map(detachedEntity->_Assert.assertSameObject(detachedEntity, entity, ()->
-                "expected same (otherwise would need injection points resolved)"))
+        .map(detachedEntity->
+            detachedEntity==entity
+            ? detachedEntity
+            : getServiceInjector().injectServicesInto(detachedEntity))
         .orElse(entity);
     }
 

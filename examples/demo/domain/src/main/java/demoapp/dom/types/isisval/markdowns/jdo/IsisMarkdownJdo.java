@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -58,25 +59,25 @@ public class IsisMarkdownJdo                                          // <.>
 //tag::class[]
     @Title(prepend = "org.apache.isis.valuetypes.markdown.applib.value.Markdown JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false", jdbcType = "CLOB")                            // <.>
     @Getter @Setter
     private org.apache.isis.valuetypes.markdown.applib.value.Markdown readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1", hidden = Where.ALL_TABLES, multiLine = 5)
+    @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private org.apache.isis.valuetypes.markdown.applib.value.Markdown readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                                // <.>
+    @Column(allowsNull = "true", jdbcType = "CLOB")                             // <.>
     @Getter @Setter
     private org.apache.isis.valuetypes.markdown.applib.value.Markdown readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Column(allowsNull = "true")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2", hidden = Where.ALL_TABLES, multiLine = 5)
+    @Column(allowsNull = "true", jdbcType = "CLOB")
     @Getter @Setter
     private org.apache.isis.valuetypes.markdown.applib.value.Markdown readWriteOptionalProperty;
 

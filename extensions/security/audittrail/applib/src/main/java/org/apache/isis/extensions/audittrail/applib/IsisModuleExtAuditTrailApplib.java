@@ -38,7 +38,7 @@ import org.apache.isis.extensions.audittrail.applib.spiimpl.EntityPropertyChange
 })
 public class IsisModuleExtAuditTrailApplib {
 
-    public static final String NAMESPACE = "isis.ext.audittrail";
+    public static final String NAMESPACE = "isis.ext.auditTrail";
     public static final String SCHEMA = "isisExtAuditTrail";
 
     public abstract static class TitleUiEvent<S>

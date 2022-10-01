@@ -20,15 +20,21 @@ package org.apache.isis.applib.services.wrapper.control;
 
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.internal.assertions._Assert;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -192,6 +198,24 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      */
     public void setFuture(final Future<R> future) {
         this.future = future;
+    }
+
+    /**
+     * Waits on the callers thread, for a maximum amount of time,
+     * for the result of the invocation to become available.
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the {@code timeout} argument
+     * @return the invocation result
+     * @throws CancellationException if the computation was cancelled
+     * @throws ExecutionException if the computation threw an exception
+     * @throws InterruptedException if the current thread was interrupted while waiting
+     * @throws TimeoutException if the wait timed out
+     */
+    @SneakyThrows
+    public R waitForResult(final long timeout, final TimeUnit unit) {
+        _Assert.assertNotNull(future,
+                ()->"detected call to waitForResult(..) before future was set");
+        return future.get(timeout, unit);
     }
 
     private String logMessage() {

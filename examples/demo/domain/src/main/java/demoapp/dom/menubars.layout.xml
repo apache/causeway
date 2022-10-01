@@ -230,9 +230,13 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.IsisTypesMenu" id="passwords"/>
             </mb3:section>
             <mb3:section>
+                <mb3:named>Apache Isis Values</mb3:named>
+                <mb3:serviceAction objectType="demo.IsisValTypesMenu" id="asciiDocs"/>
+                <mb3:serviceAction objectType="demo.IsisValTypesMenu" id="markdowns"/>
+                <mb3:serviceAction objectType="demo.IsisValTypesMenu" id="vegaCharts"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>Apache Isis Extensions</mb3:named>
-                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="asciiDocs"/>
-                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="markdowns"/>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="calendarEvents"/>
                 <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
                     <cpt:named>SSE</cpt:named>

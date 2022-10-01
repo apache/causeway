@@ -1,0 +1,83 @@
+= AsyncCallable
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides access to the details of the asynchronous callable (representing a child command to be executed asynchronously) when using _org.apache.isis.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)_ and its brethren.
+
+To explain in a little more depth; we can execute commands (actions etc) asynchronously using _org.apache.isis.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)_ or similar. The xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl] parameter allows various aspects of this to be controlled, one such being the implementation of the _java.util.concurrent.ExecutorService_ (using _AsyncControl#with(ExecutorService)_ ).
+
+The default _ExecutorService_ is just _java.util.concurrent.ForkJoinPool_ , and this and similar implementations will hold the provided callable in memory and execute it in due course. For these out-of-the-box implementations, the _java.util.concurrent.Callable_ is a black box and they have no need to look inside it. So long as the implementation of the Callable is not serialized then deserialized (ie is only ever held in memory), then all will work fine.
+
+This interface, though, is intended to expose the details of the passed _java.util.concurrent.Callable_ , most notably the _CommandDto_ to be executed. The main use case this supports is to allow a custom implementation of _ExecutorService_ to be provided that could do more sophisticated things, for example persisting the callable somewhere, either exploiting the fact that the object is serializable, or perhaps by unpacking the parts and persisting (for example, as a `CommandLogEntry` courtesy of the commandlog extension).
+
+These custom implementations of _ExecutorService_ must however reinitialize the state of the callable, either by injecting in services using _org.apache.isis.applib.services.inject.ServiceInjector_ and then just `call()` ing it, or alternatively and more straightforwardly simply executing it using _org.apache.isis.applib.services.wrapper.WrapperFactory#execute(AsyncCallable)_ .
+
+== API
+
+[source,java]
+.AsyncCallable.java
+----
+interface AsyncCallable<R> {
+  InteractionContext getInteractionContext()     // <.>
+  Propagation getPropagation()     // <.>
+  CommandDto getCommandDto()     // <.>
+  Class<R> getReturnType()     // <.>
+  UUID getParentInteractionId()     // <.>
+}
+----
+
+<.> xref:#getInteractionContext_[getInteractionContext()]
++
+--
+The requested xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to execute the command, as inferred from the xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl] that was used to call _org.apache.isis.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)_ and its ilk.
+--
+<.> xref:#getPropagation_[getPropagation()]
++
+--
+The transaction propagation to use when creating a new _org.apache.isis.applib.services.iactn.Interaction_ in which to execute the child command.
+--
+<.> xref:#getCommandDto_[getCommandDto()]
++
+--
+Details of the actual child command (action or property edit) to be performed.
+--
+<.> xref:#getReturnType_[getReturnType()]
++
+--
+The type of the object returned by the child command once finally executed.
+--
+<.> xref:#getParentInteractionId_[getParentInteractionId()]
++
+--
+The unique _Command#getInteractionId() interactionId_ of the parent xref:refguide:applib:index/services/command/Command.adoc[Command] , which is to say the xref:refguide:applib:index/services/command/Command.adoc[Command] that was active in the original interaction where _org.apache.isis.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)_ (or its brethren) was called.
+--
+
+== Members
+
+[#getInteractionContext_]
+=== getInteractionContext()
+
+The requested xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to execute the command, as inferred from the xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl] that was used to call _org.apache.isis.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)_ and its ilk.
+
+[#getPropagation_]
+=== getPropagation()
+
+The transaction propagation to use when creating a new _org.apache.isis.applib.services.iactn.Interaction_ in which to execute the child command.
+
+[#getCommandDto_]
+=== getCommandDto()
+
+Details of the actual child command (action or property edit) to be performed.
+
+(Ultimately this is handed onto the _org.apache.isis.applib.services.command.CommandExecutorService_ ).
+
+[#getReturnType_]
+=== getReturnType()
+
+The type of the object returned by the child command once finally executed.
+
+[#getParentInteractionId_]
+=== getParentInteractionId()
+
+The unique _Command#getInteractionId() interactionId_ of the parent xref:refguide:applib:index/services/command/Command.adoc[Command] , which is to say the xref:refguide:applib:index/services/command/Command.adoc[Command] that was active in the original interaction where _org.apache.isis.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)_ (or its brethren) was called.
+
+This can be useful for custom implementations of _ExecutorService_ that use the commandlog extension's `CommandLogEntry` , to link parent and child commands together.

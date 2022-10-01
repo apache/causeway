@@ -22,19 +22,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 
-import org.apache.isis.applib.services.wrapper.WrappingObject;
-import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
-import org.apache.isis.applib.services.wrapper.control.SyncControl;
-import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 class WrapperFactoryDefaultTest {
 
@@ -69,10 +71,14 @@ class WrapperFactoryDefaultTest {
 
     @BeforeEach
     public void setUp() throws Exception {
+
+        val mmc = MetaModelContext_forTesting.buildDefault();
+
         wrapperFactory = new WrapperFactoryDefault() {
 
             @Override
             public void init() {
+                this.metaModelContext = mmc;
                 this.proxyFactoryService = Mockito.mock(_ProxyFactoryService.class);
                 super.init();
             }
@@ -85,6 +91,7 @@ class WrapperFactoryDefaultTest {
             }
         };
 
+        wrapperFactory.init();
 
     }
 

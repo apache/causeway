@@ -20,16 +20,17 @@
 #
 
 usage() {
-  echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t] [-u]"         >&2
-  echo "  -a : audit trail (extensions/security)"                             >&2
-  echo "  -c : command log (extensions/core)"                                 >&2
-  echo "  -e : execution log (extensions/core)"                               >&2
-  echo "  -o : execution outbox (extensions/core)"                            >&2
-  echo "  -m : secman (extensions/security)"                                  >&2
-  echo "  -s : session log (extensions/security)"                             >&2
-  echo "  -d : demo (examples/demo/domain)"                                   >&2
-  echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)" >&2
+  echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t] [-u] [-w]"     >&2
+  echo "  -a : audit trail (extensions/security)"                              >&2
+  echo "  -c : command log (extensions/core)"                                  >&2
+  echo "  -e : execution log (extensions/core)"                                >&2
+  echo "  -o : execution outbox (extensions/core)"                             >&2
+  echo "  -m : secman (extensions/security)"                                   >&2
+  echo "  -s : session log (extensions/security)"                              >&2
+  echo "  -d : demo (examples/demo/domain)"                                    >&2
+  echo "  -t : JDO regression tests (regressiontests/stable)"                  >&2
   echo "  -u : JDO regression tests (regressiontests/stable-cmdexecauditsess)" >&2
+  echo "  -A : add -am (also make)"     >&2
 }
 
 
@@ -39,15 +40,16 @@ COMMANDLOG=""
 DEMO=""
 EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
-REGRESSIONTESTS=""
-REGRESSIONTESTS2=""
+REGRESSIONTESTS_STABLE=""
+REGRESSIONTESTS_CMDEXECAUDITSESS=""
 SECMAN=""
 SESSIONLOG=""
+ALSO_MAKE=""
 
 PATHS=()
 ALL_IF_REQUIRED=""
 
-while getopts ":acdeomshtu" arg; do
+while getopts ":acdeomshtuwA" arg; do
   case $arg in
     h)
       usage
@@ -82,14 +84,17 @@ while getopts ":acdeomshtu" arg; do
       PATHS+=( "examples/demo/domain" )
       ;;
     t)
-      REGRESSIONTESTS="enhance"
-      PATHS+=( "regressiontests/stable-persistence-jdo" )
+      REGRESSIONTESTS_STABLE="enhance"
+      PATHS+=( "regressiontests/stable" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     u)
-      REGRESSIONTESTS2="enhance"
+      REGRESSIONTESTS_CMDEXECAUDITSESS="enhance"
       PATHS+=( "regressiontests/stable-cmdexecauditsess/persistence-jdo" )
       ALL_IF_REQUIRED="-Dmodule-all"
+      ;;
+    A)
+      ALSO_MAKE="-am"
       ;;
     *)
       usage
@@ -99,15 +104,17 @@ done
 
 shift $((OPTIND-1))
 
-echo "AUDITTRAIL       : $AUDITTRAIL"
-echo "COMMANDLOG       : $COMMANDLOG"
-echo "EXECUTIONLOG     : $EXECUTIONLOG"
-echo "EXECUTIONOUTBOX  : $EXECUTIONOUTBOX"
-echo "SECMAN           : $SECMAN"
-echo "SESSIONLOG       : $SESSIONLOG"
-echo "DEMO             : $DEMO"
-echo "REGRESSIONTESTS  : $REGRESSIONTESTS"
-echo "REGRESSIONTESTS2 : $REGRESSIONTESTS2"
+echo "AUDITTRAIL                          : $AUDITTRAIL"
+echo "COMMANDLOG                          : $COMMANDLOG"
+echo "EXECUTIONLOG                        : $EXECUTIONLOG"
+echo "EXECUTIONOUTBOX                     : $EXECUTIONOUTBOX"
+echo "SECMAN                              : $SECMAN"
+echo "SESSIONLOG                          : $SESSIONLOG"
+echo "DEMO                                : $DEMO"
+echo "REGRESSIONTESTS_STABLE              : $REGRESSIONTESTS_STABLE"
+echo "REGRESSIONTESTS_CMDEXECAUDITSESS    : $REGRESSIONTESTS_CMDEXECAUDITSESS"
+echo ""
+echo "ALSO_MAKE                           : $ALSO_MAKE"
 
 
 printf -v PATHS_SPLATTED '%s,' "${PATHS[@]}"
@@ -120,5 +127,5 @@ if [ "$PL_ARG" = " " ]; then
   exit 1
 fi
 
-echo mvn install -DskipTests -o -T1C -am -pl $PL_ARG
-mvn install -DskipTests -o -T1C -am -pl $PL_ARG
+echo mvn install -DskipTests -o -T1C $ALSO_MAKE -pl $PL_ARG
+mvn install -DskipTests -o -T1C $ALSO_MAKE -pl $PL_ARG

@@ -105,6 +105,7 @@ public class ValueTypeGenTemplate {
     enum TemplateVariant {
         DEFAULT(""),
         PRIMITIVE("~primitive"),
+        LOB("~lob"),
         ;
         @Getter private final String suffix;
     }

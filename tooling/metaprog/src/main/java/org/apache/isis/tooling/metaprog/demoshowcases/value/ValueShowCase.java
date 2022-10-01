@@ -34,18 +34,28 @@ public enum ValueShowCase {
             .showcaseName("IsisMarkup")
             .javaPackage("demoapp.dom.types.isis.markups")
             .showcaseValueType("org.apache.isis.applib.value.Markup")
-            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics")),
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics")
+            .templateVariant(TemplateVariant.LOB)),
     MARKDOWN(Config.builder()
             .showcaseName("IsisMarkdown")
             .javaPackage("demoapp.dom.types.isisval.markdowns")
             .showcaseValueType("org.apache.isis.valuetypes.markdown.applib.value.Markdown")
-            .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")),
+            .showcaseValueSemantics("org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")
+            .templates(Template.REGULAR_SET_NO_SAMPLES) // demo provides its own MarkdownSamples
+            .templateVariant(TemplateVariant.LOB)),
     ASCIIDOC(Config.builder()
             .showcaseName("IsisAsciiDoc")
             .javaPackage("demoapp.dom.types.isisval.asciidocs")
             .showcaseValueType("org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc")
             .showcaseValueSemantics("org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics")
-            .templates(Template.REGULAR_SET_NO_SAMPLES)), // demo provides its own AsciiDocSamples
+            .templates(Template.REGULAR_SET_NO_SAMPLES) // demo provides its own AsciiDocSamples
+            .templateVariant(TemplateVariant.LOB)),
+    VEGA(Config.builder()
+            .showcaseName("IsisVega")
+            .javaPackage("demoapp.dom.types.isisval.vegas")
+            .showcaseValueType("org.apache.isis.valuetypes.vega.applib.value.Vega")
+            .showcaseValueSemantics("org.apache.isis.valuetypes.vega.metamodel.semantics.VegaValueSemantics")
+            .templateVariant(TemplateVariant.LOB)),
     UUID(Config.builder()
             .showcaseName("JavaUtilUuid")
             .javaPackage("demoapp.dom.types.javautil.uuids")

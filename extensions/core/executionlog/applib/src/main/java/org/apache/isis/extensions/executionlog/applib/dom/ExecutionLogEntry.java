@@ -80,7 +80,6 @@ import lombok.experimental.UtilityClass;
         entityChangePublishing = Publishing.DISABLED
 )
 @DomainObjectLayout(
-        named = "ExecutionLogEntry",
         titleUiEvent = ExecutionLogEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionLogEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionLogEntry.CssClassUiEvent.class,
@@ -114,6 +113,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         public static final String FIND_BY_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTimestampBetween";
         public static final String FIND_BY_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTimestampAfter";
         public static final String FIND_BY_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTimestampBefore";
+        public static final String FIND = LOGICAL_TYPE_NAME + ".find";
         public static final String FIND_MOST_RECENT = LOGICAL_TYPE_NAME + ".findMostRecent";
         public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
         public static final String FIND_RECENT_BY_TARGET = LOGICAL_TYPE_NAME + ".findRecentByTarget";
@@ -151,7 +151,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
         setLogicalMemberIdentifier(memberExecutionDto.getLogicalMemberIdentifier());
 
-        setTarget( bookmarkService.bookmarkFor(execution.getEvent().getSubject()).orElseThrow() );
+        setTarget(Bookmark.forOidDto(memberExecutionDto.getTarget()));
         setUsername(memberExecutionDto.getUsername());
 
         if(execution instanceof PropertyEdit) {

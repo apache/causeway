@@ -141,8 +141,8 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
 
-        final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
+        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        val toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<C> query;
         if(from != null) {
@@ -168,6 +168,17 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         }
         return repositoryService().allMatches(query);
     }
+
+
+    public List<C> findMostRecent() {
+        return findMostRecent(100);
+    }
+
+    public List<C> findMostRecent(final int limit) {
+        return repositoryService().allMatches(
+                Query.named(commandLogEntryClass,  CommandLogEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
+    }
+
 
     public List<C> findRecentByUsername(final String username) {
         return repositoryService().allMatches(
@@ -396,7 +407,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      */
     public List<C> findAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
+            throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return repositoryService().allInstances(commandLogEntryClass);
     }
@@ -407,7 +418,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      */
     public void removeAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {
-            throw new IllegalStateException("Cannot removeAll in production systems");
+            throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(commandLogEntryClass);
     }

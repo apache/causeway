@@ -21,20 +21,15 @@
 package org.apache.isis.extensions.audittrail.applib.app;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.*;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
@@ -44,34 +39,51 @@ import lombok.RequiredArgsConstructor;
 
 
 /**
- * This service exposes a &lt;Sessions&gt; menu to the secondary menu bar for searching for sessions.
+ * @since 2.0 {@index}
  */
 @Named(AuditTrailMenu.LOGICAL_TYPE_NAME)
 @DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        named = "Activity"
+    menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+    named = "Activity"
 )
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class AuditTrailMenu {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailMenu";
+    public static final String LOGICAL_TYPE_NAME =
+            IsisModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailMenu";
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T>
+            extends IsisModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
+
 
     final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
     final ClockService clockService;
 
-    @Action(
-            domainEvent = findAuditEntries.ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE
-    )
-    @ActionLayout(
-            cssClassFa = "fa-search"
-    )
-    public class findAuditEntries {
 
-        public class ActionDomainEvent extends AuditTrailMenu.ActionDomainEvent<findAuditEntries> { }
+    @Action(
+            domainEvent = findMostRecent.DomainEvent.class,
+            semantics = SemanticsOf.SAFE,
+            typeOf = AuditTrailEntry.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="20")
+    public class findMostRecent {
+        public class DomainEvent extends ActionDomainEvent<findMostRecent> { }
+
+        @MemberSupport public List<? extends AuditTrailEntry> act() {
+            return auditTrailEntryRepository.findMostRecent();
+        }
+    }
+
+
+    @Action(
+            domainEvent = findAuditEntries.DomainEvent.class,
+            semantics = SemanticsOf.SAFE,
+            typeOf = AuditTrailEntry.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="30")
+    public class findAuditEntries {
+        public class DomainEvent extends ActionDomainEvent<findAuditEntries> { }
 
         @MemberSupport public List<? extends AuditTrailEntry> act(
                 final @Nullable LocalDate from,
@@ -79,11 +91,34 @@ public class AuditTrailMenu {
             return auditTrailEntryRepository.findByFromAndTo(from, to);
         }
         @MemberSupport public LocalDate default0Act() {
-            return clockService.getClock().nowAsLocalDate().minusDays(7);
+            return now().minusDays(7);
         }
         @MemberSupport public LocalDate default1Act() {
-            return clockService.getClock().nowAsLocalDate();
+            return now();
         }
     }
 
+
+
+    @Action(
+            domainEvent = findAll.DomainEvent.class,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.SAFE,
+            typeOf = AuditTrailEntry.class
+    )
+    @ActionLayout(cssClassFa = "fa-search", sequence="40")
+    public class findAll {
+        public class DomainEvent extends ActionDomainEvent<findAll> { }
+
+        @MemberSupport public List<? extends AuditTrailEntry> act() {
+            return auditTrailEntryRepository.findAll();
+        }
+    }
+
+
+
+
+    private LocalDate now() {
+        return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
+    }
 }

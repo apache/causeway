@@ -43,6 +43,7 @@ interface WrapperFactory {
   boolean addInteractionListener(InteractionListener listener)     // <.>
   boolean removeInteractionListener(InteractionListener listener)     // <.>
   void notifyListeners(InteractionEvent ev)
+  R execute(AsyncCallable<R> asyncCallable)     // <.>
 }
 ----
 
@@ -115,6 +116,11 @@ Registers an xref:refguide:applib:index/services/wrapper/listeners/InteractionLi
 +
 --
 Remove an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
+--
+<.> xref:#execute_AsyncCallable[execute(AsyncCallable)]
++
+--
+Provides a mechanism for custom implementations of _java.util.concurrent.ExecutorService_ , as installed using _AsyncControl#with(ExecutorService)_ , to actually execute the xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable] that they are passed initially during _WrapperFactory#asyncWrap(Object, AsyncControl)_ and its brethren.
 --
 
 == Members
@@ -208,6 +214,11 @@ This is retrospective: the listener will be notified of interactions even on wra
 Remove an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 
 This is retrospective: the listener will no longer be notified of any interactions created on any wrappers, not just on those wrappers created subsequently. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
+
+[#execute_AsyncCallable]
+=== execute(AsyncCallable)
+
+Provides a mechanism for custom implementations of _java.util.concurrent.ExecutorService_ , as installed using _AsyncControl#with(ExecutorService)_ , to actually execute the xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable] that they are passed initially during _WrapperFactory#asyncWrap(Object, AsyncControl)_ and its brethren.
 
 include::hooks/WrapperFactory_010-implementation.adoc[]
 
