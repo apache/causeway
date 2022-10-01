@@ -21,6 +21,7 @@ class AsyncControl<R> {
   AsyncControl<R> withTimeZone(ZoneId timeZone)
   AsyncControl<R> withUser(UserMemento user)     // <.>
   void setFuture(Future<R> future)     // <.>
+  R waitForResult(long timeout, TimeUnit unit)     // <.>
 }
 ----
 
@@ -58,6 +59,11 @@ Specifies the user for the session used to execute the command asynchronously, i
 +
 --
 For framework use only.
+--
+<.> xref:#waitForResult_long_TimeUnit[waitForResult(long, TimeUnit)]
++
+--
+Waits on the callers thread, for a maximum amount of time, for the result of the invocation to become available.
 --
 
 == Members
@@ -102,3 +108,8 @@ If not specified, then the user of the current foreground session is used.
 === setFuture(Future)
 
 For framework use only.
+
+[#waitForResult_long_TimeUnit]
+=== waitForResult(long, TimeUnit)
+
+Waits on the callers thread, for a maximum amount of time, for the result of the invocation to become available.
