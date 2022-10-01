@@ -450,8 +450,8 @@ Finally, tag the release:
 
 [source,bash,subs="attributes+"]
 ----
-git tag $ISISART-$ISISREL
-git tag $ISISART-$ISISREL-$ISISRC
+git tag $ISISART-$ISISREL --force
+git tag $ISISART-$ISISREL-$ISISRC --force
 ----
 
 
