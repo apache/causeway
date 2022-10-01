@@ -31,7 +31,7 @@ The release process should be performed on Java 11.
 
 [IMPORTANT]
 ====
-The deploy process requires `gpg` v2.1 or later.
+The deploy process has been tested only with `gpg` 2.0.x ; you may need to adjust if using a later version.
 ====
 
 === Obtain Consensus
