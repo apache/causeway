@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega-embedded@6.21.0}
+ * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega-embed@6.21.0}
  * <p>
  * LICENSE <a href="https://vega.github.io/vega/vega/blob/main/LICENSE">BSD-3-Clause license</a>
  * @since 2.0
