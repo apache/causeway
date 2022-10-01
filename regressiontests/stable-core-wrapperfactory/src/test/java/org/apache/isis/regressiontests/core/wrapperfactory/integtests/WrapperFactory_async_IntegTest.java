@@ -19,13 +19,18 @@
 package org.apache.isis.regressiontests.core.wrapperfactory.integtests;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -36,6 +41,7 @@ import org.apache.isis.testdomain.wrapperfactory.Counter;
 import org.apache.isis.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.SneakyThrows;
@@ -71,15 +77,16 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
     }
 
     @SneakyThrows
-    @Test
-    void async_using_default_executor_service() {
+    @ParameterizedTest(name = "executorService[{index}]: {0}")
+    @MethodSource("executorServices")
+    void async_using_default_executor_service(final String displayName, final ExecutorService executorService) {
 
         // when - executing regular action
         runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
             val asyncControl = AsyncControl.returning(Counter.class)
-                    .with(ForkJoinPool.commonPool());
+                    .with(executorService);
 
             wrapperFactory.asyncWrap(counter, asyncControl).increment();
 
@@ -99,7 +106,8 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
 
-            val asyncControl = AsyncControl.returning(Counter.class);
+            val asyncControl = AsyncControl.returning(Counter.class)
+                    .with(executorService);
 
             // when
             wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl).act();
@@ -115,6 +123,16 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             assertThat(counter).isNotNull();
             assertThat(counter.getNum()).isEqualTo(2L);
         });
+    }
+
+    // -- HELPER
+
+    private static Stream<Arguments> executorServices() {
+        return Stream.of(
+              Arguments.of("Executors.newSingleThreadExecutor()", Executors.newSingleThreadExecutor()),
+              Arguments.of("ForkJoinPool.commonPool()", ForkJoinPool.commonPool()),
+              Arguments.of("Executors.newFixedThreadPool(4)", Executors.newFixedThreadPool(4))
+        );
     }
 
 }
