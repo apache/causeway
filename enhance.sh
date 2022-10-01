@@ -28,9 +28,8 @@ usage() {
   echo "  -m : secman (extensions/security)"                                   >&2
   echo "  -s : session log (extensions/security)"                              >&2
   echo "  -d : demo (examples/demo/domain)"                                    >&2
-  echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)"  >&2
+  echo "  -t : JDO regression tests (regressiontests/stable)"                  >&2
   echo "  -u : JDO regression tests (regressiontests/stable-cmdexecauditsess)" >&2
-  echo "  -w : JDO regression tests (regressiontests/core-wrapperfactory)"     >&2
   echo "  -A : add -am (also make)"     >&2
 }
 
@@ -41,9 +40,8 @@ COMMANDLOG=""
 DEMO=""
 EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
-REGRESSIONTESTS_PERSISTENCE_JDO=""
+REGRESSIONTESTS_STABLE=""
 REGRESSIONTESTS_CMDEXECAUDITSESS=""
-REGRESSIONTESTS_CORE_WRAPPERFACTORY=""
 SECMAN=""
 SESSIONLOG=""
 ALSO_MAKE=""
@@ -86,18 +84,13 @@ while getopts ":acdeomshtuwA" arg; do
       PATHS+=( "examples/demo/domain" )
       ;;
     t)
-      REGRESSIONTESTS_PERSISTENCE_JDO="enhance"
-      PATHS+=( "regressiontests/stable-persistence-jdo" )
+      REGRESSIONTESTS_STABLE="enhance"
+      PATHS+=( "regressiontests/stable" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     u)
       REGRESSIONTESTS_CMDEXECAUDITSESS="enhance"
       PATHS+=( "regressiontests/stable-cmdexecauditsess/persistence-jdo" )
-      ALL_IF_REQUIRED="-Dmodule-all"
-      ;;
-    w)
-      REGRESSIONTESTS_CORE_WRAPPERFACTORY="enhance"
-      PATHS+=( "regressiontests/stable-core-wrapperfactory" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     A)
@@ -118,9 +111,8 @@ echo "EXECUTIONOUTBOX                     : $EXECUTIONOUTBOX"
 echo "SECMAN                              : $SECMAN"
 echo "SESSIONLOG                          : $SESSIONLOG"
 echo "DEMO                                : $DEMO"
-echo "REGRESSIONTESTS_PERSISTENCE_JDO     : $REGRESSIONTESTS_PERSISTENCE_JDO"
+echo "REGRESSIONTESTS_STABLE              : $REGRESSIONTESTS_STABLE"
 echo "REGRESSIONTESTS_CMDEXECAUDITSESS    : $REGRESSIONTESTS_CMDEXECAUDITSESS"
-echo "REGRESSIONTESTS_CORE_WRAPPERFACTORY : $REGRESSIONTESTS_CORE_WRAPPERFACTORY"
 echo ""
 echo "ALSO_MAKE                           : $ALSO_MAKE"
 
