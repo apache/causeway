@@ -26,27 +26,24 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega@5.22.1}
- * <p>
- * Unfortunately the webjar {@code org.webjars.npm:vega:5.22.1} cannot be used,
- * as (at time of writing) <i>Maven</i> fails to resolve all its dependencies.
+ * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega-lite@5.5.0}
  * <p>
  * LICENSE <a href="https://vega.github.io/vega/vega/blob/main/LICENSE">BSD-3-Clause license</a>
  * @since 2.0
  */
-public class VegaJsReference
+public class VegaLiteJsReference
 extends JavaScriptResourceReference {
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final VegaJsReference instance =
-        new VegaJsReference();
+    private static final VegaLiteJsReference instance =
+        new VegaLiteJsReference();
 
     public static JavaScriptHeaderItem asHeaderItem() {
-        return JavaScriptReferenceHeaderItem.forReference(VegaJsReference.instance());
+        return JavaScriptReferenceHeaderItem.forReference(VegaLiteJsReference.instance());
     }
 
-    private VegaJsReference() {
-        super(VegaJsReference.class, "vega@5.22.1.js");
+    private VegaLiteJsReference() {
+        super(VegaLiteJsReference.class, "vega-lite@5.5.0.js");
     }
 }

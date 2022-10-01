@@ -89,7 +89,8 @@ implements
     }
 
     /**
-     * see usage examples at https://vega.github.io/vega/usage/
+     * see usage examples at <a href="https://vega.github.io/vega/usage/">vega</a>
+     * and <a href="https://vega.github.io/vega-lite/usage/embed.html">vega-lite</a>
      */
     private String asHtml(final @NonNull Vega vega) {
         val containerId = "vegaContainer" + UUID.randomUUID().toString();
@@ -102,9 +103,9 @@ implements
                     + "document.addEventListener('DOMContentLoaded', (event) => {\n"
                     + "  var spec = %2$s;\n"
                     + "  var view = new vega.View(vega.parse(spec), {\n"
-                    + "    renderer:  '%3$s',\n"
+                    + "    renderer: '%3$s',\n"
                     + "    container: '#%1$s',\n"
-                    + "    hover:     %4$b    \n"
+                    + "    hover: %4$b\n"
                     + "  });\n"
                     + "  view.runAsync();\n"
                     + "});"
@@ -118,12 +119,19 @@ implements
         }
         case VEGA_LITE: {
             val htmlFragment = String.format(""
-                    + "<div id=\"%1$s\">VEGA-LITE TODO</div>\n",
-                    containerId);
+                    + "<div id=\"%1$s\"></div>\n"
+                    + "<script type=\"text/javascript\">\n"
+                    + "document.addEventListener('DOMContentLoaded', (event) => {\n"
+                    + "  var spec = %2$s;\n"
+                    + "  vegaEmbed('#%1$s', spec);"
+                    + "});"
+                    + "</script>",
+                    containerId,
+                    vega.getJson());
             return htmlFragment;
         }
         default:
-            return "<!-- emtpy Vega (unsupported schema) -->";
+            return "<!-- empty Vega (unsupported schema) -->";
         }
     }
 

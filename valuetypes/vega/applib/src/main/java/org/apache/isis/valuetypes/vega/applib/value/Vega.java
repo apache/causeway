@@ -59,6 +59,9 @@ public final class Vega implements Serializable {
         VEGA("https://vega.github.io/schema/vega/v5.json"),
         VEGA_LITE("https://vega.github.io/schema/vega-lite/v5.json");
 
+        public boolean isNone() {return this==NONE;}
+        public boolean isVega() {return this==VEGA;}
+        public boolean isVegaLite() {return this==VEGA_LITE;}
         public static String key() { return "$schema"; }
         @Getter @Accessors(fluent = true) private final String value;
         @NonNull String asEmptyJson() {

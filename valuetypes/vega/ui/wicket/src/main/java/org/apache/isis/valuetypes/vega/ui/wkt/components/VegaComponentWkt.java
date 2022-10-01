@@ -18,13 +18,25 @@
  */
 package org.apache.isis.valuetypes.vega.ui.wkt.components;
 
+import java.util.Optional;
+
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
+import org.apache.isis.valuetypes.vega.applib.value.Vega;
+import org.apache.isis.valuetypes.vega.ui.wkt.components.js.VegaEmbedJsReference;
 import org.apache.isis.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
+import org.apache.isis.valuetypes.vega.ui.wkt.components.js.VegaLiteJsReference;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class VegaComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +51,34 @@ public class VegaComponentWkt extends MarkupComponent {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(VegaJsReference.asHeaderItem());
+
+        vegaSchema()
+        .ifPresent(vegaSchema->{
+            if(vegaSchema.isVega()) {
+                response.render(VegaJsReference.asHeaderItem());
+            }
+            else
+            if(vegaSchema.isVegaLite()) {
+                response.render(VegaJsReference.asHeaderItem());
+                response.render(VegaLiteJsReference.asHeaderItem());
+                response.render(VegaEmbedJsReference.asHeaderItem());
+            }
+        });
+    }
+
+    // -- HELPER
+
+    private Optional<Vega.Schema> vegaSchema() {
+        val modelObject = getDefaultModelObject();
+        if(modelObject==null) {
+            return Optional.empty();
+        }
+        if(!(modelObject instanceof ManagedObject)) {
+            log.error("framework bug: unexpected type {}", modelObject.getClass().getName());
+            return Optional.empty();
+        }
+        return _Casts.castTo(Vega.class, MmUnwrapUtil.single((ManagedObject)modelObject))
+                .map(Vega::getSchema);
     }
 
 }
