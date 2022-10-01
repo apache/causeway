@@ -312,7 +312,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
-        <project.build.outputTimestamp>2022-09-25T11:38:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2022-10-01T16:36:00Z</project.build.outputTimestamp>
 
         <!-- APACHE ISIS customisation 6/21: start -->
 
@@ -771,7 +771,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                         one</pattern>
                                 </patterns>
                             </license>
-                            <license 
+                            <license
                                     implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                                 <licenseFamilyCategory>BSD3</licenseFamilyCategory>
                                 <licenseFamilyName>BSD 3-Clause</licenseFamilyName>
