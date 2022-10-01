@@ -165,7 +165,7 @@ The workaround is to rebuild the `core/config` Maven module using `mvn` command 
 +
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -pl core/config
+mvn clean install -pl core/config -DskipTests
 ----
 
 * It's also necessary to make sure the tooling is built:
