@@ -1,6 +1,7 @@
 package org.apache.isis.regressiontests.core.wrapperfactory.integtests;
 
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ import org.apache.isis.testdomain.wrapperfactory.Counter;
 import org.apache.isis.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -54,16 +56,18 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
     @Test
     void async_using_default_executor_service() {
 
-        // when
+        // when - executing regular action
         runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            val asyncControl = AsyncControl.returning(Counter.class);
+            val asyncControl = AsyncControl.returning(Counter.class)
+                    .with(ForkJoinPool.commonPool());
 
-            wrapperFactory.asyncWrap(counter, asyncControl).bumpUsingDeclaredAction();
+            wrapperFactory.asyncWrap(counter, asyncControl).increment();
 
             // let's wait max 5 sec to allow executor to complete before continuing
             asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
+            assertTrue(asyncControl.getFuture().isDone()); // verify execution finished
         });
 
         // then
@@ -72,7 +76,7 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             assertThat(counter.getNum()).isEqualTo(1L);
         });
 
-        // when
+        // when - executing mixed-in action
         runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
@@ -84,6 +88,7 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
 
             // let's wait max 5 sec to allow executor to complete before continuing
             asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
+            assertTrue(asyncControl.getFuture().isDone()); // verify execution finished
         });
 
         // then

@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
@@ -52,10 +51,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
@@ -82,24 +79,22 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.concurrent.AwaitableLatch;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.MixedInMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -108,40 +103,34 @@ import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
-import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.experimental.Accessors;
 
 @Service
 @Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class WrapperFactoryDefault implements WrapperFactory {
+public class WrapperFactoryDefault
+implements WrapperFactory, HasMetaModelContext {
 
     static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntimeServices.NAMESPACE + ".WrapperFactoryDefault";
 
-    @Inject InteractionLayerTracker interactionLayerTracker;
-    @Inject FactoryService factoryService;
-    @Inject MetaModelContext metaModelContext;
-    @Inject SpecificationLoader specificationLoader;
-    @Inject ServiceInjector serviceInjector;
-    @Inject _ProxyFactoryService proxyFactoryService;
-    @Inject @Lazy CommandDtoFactory commandDtoFactory;
+    @Inject private FactoryService factoryService;
+    @Inject @Getter(onMethod_= {@Override}) MetaModelContext metaModelContext; // HasMetaModelContext
+    @Inject protected _ProxyFactoryService proxyFactoryService; // protected: in support of JUnit tests
+    @Inject @Lazy private CommandDtoFactory commandDtoFactory;
 
-    @Inject Provider<InteractionService> interactionServiceProvider;
-    @Inject Provider<TransactionService> transactionServiceProvider;
-    @Inject Provider<CommandExecutorService> commandExecutorServiceProvider;
-    @Inject Provider<InteractionProvider> interactionProviderProvider;
-    @Inject Provider<BookmarkService> bookmarkServiceProvider;
-    @Inject Provider<RepositoryService> repositoryServiceProvider;
-    @Inject Provider<MetaModelService> metaModelServiceProvider;
+    @Inject private Provider<InteractionService> interactionServiceProvider;
+    @Inject private Provider<TransactionService> transactionServiceProvider;
+    @Inject private Provider<CommandExecutorService> commandExecutorServiceProvider;
+    @Inject private Provider<InteractionProvider> interactionProviderProvider;
+    @Inject private Provider<BookmarkService> bookmarkServiceProvider;
+    @Inject private Provider<RepositoryService> repositoryServiceProvider;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -186,13 +175,10 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final @NonNull T domainObject,
             final @NonNull SyncControl syncControl) {
 
-        // skip in support of JUnit tests, that don't inject a SpecificationLoader
-        if(specificationLoader!=null) {
-            val spec = specificationLoader.specForTypeElseFail(domainObject.getClass());
-            if(spec.isMixin()) {
-                throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
-                        + "use WrapperFactory.wrapMixin(...) instead");
-            }
+        val spec = getSpecificationLoader().specForTypeElseFail(domainObject.getClass());
+        if(spec.isMixin()) {
+            throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
+                    + "use WrapperFactory.wrapMixin(...) instead");
         }
 
         if (isWrapper(domainObject)) {
@@ -236,7 +222,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             val executionMode = wrapperObject.__isis_executionModes();
             val underlyingMixee = wrapperObject.__isis_wrapped();
 
-            serviceInjector.injectServicesInto(underlyingMixee);
+            getServiceInjector().injectServicesInto(underlyingMixee);
 
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return mixin;
@@ -244,7 +230,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
         }
 
-        serviceInjector.injectServicesInto(mixee);
+        getServiceInjector().injectServicesInto(mixee);
 
         return createMixinProxy(mixee, mixin, syncControl);
     }
@@ -379,7 +365,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val interactionContext = interactionLayer.getInteractionContext();
         val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
-        val command = interactionLayerTracker.currentInteractionElseFail().getCommand();
+        val command = getInteractionService().currentInteractionElseFail().getCommand();
         val commandInteractionId = command.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
@@ -410,14 +396,13 @@ public class WrapperFactoryDefault implements WrapperFactory {
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
         val executorService = asyncControl.getExecutorService();
-        val asyncTask = serviceInjector.injectServicesInto(new AsyncTask<R>(
+        val asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
             commandDto,
             asyncControl.getReturnType(),
             command.getInteractionId())); // this command becomes the parent of child command
 
-        asyncControl.setAwaitableLatch(AwaitableLatch.of(asyncTask.countDownLatch()));
         val future = executorService.submit(asyncTask);
         asyncControl.setFuture(future);
         return null;
@@ -459,7 +444,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        final ObjectAction targetAction = specificationLoader.specForType(mixeeClass)
+        final ObjectAction targetAction = getSpecificationLoader().specForType(mixeeClass)
         .flatMap(mixeeSpec->mixeeSpec.streamAnyActions(MixedIn.ONLY)
                 .filter(act -> ((MixedInMember)act).hasMixinAction((ObjectAction) mixinMember))
                 .findFirst()
@@ -468,7 +453,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
                 mixinMember.getId(), mixeeClass.getName())));
 
-        return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixee), method);
+        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method);
     }
 
     private static <R> InteractionContext interactionContextFrom(
@@ -518,9 +503,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private ManagedObject[] adaptersFor(final Object[] args) {
-        final ObjectManager objectManager = currentObjectManager();
         return _NullSafe.stream(args)
-                .map(objectManager::adapt)
+                .map(getObjectManager()::adapt)
                 .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 
@@ -557,7 +541,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     private ManagedObject adaptAndGuardAgainstWrappingNotSupported(
             final @NonNull Object domainObject) {
 
-        val adapter = currentObjectManager().adapt(domainObject);
+        val adapter = getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
             throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
@@ -585,11 +569,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private InteractionLayer currentInteractionLayer() {
-        return interactionLayerTracker.currentInteractionLayerElseFail();
-    }
-
-    private ObjectManager currentObjectManager() {
-        return metaModelContext.getObjectManager();
+        return getInteractionService().currentInteractionLayerElseFail();
     }
 
     @RequiredArgsConstructor
@@ -600,11 +580,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Getter private final CommandDto commandDto;
         @Getter private final Class<R> returnType;
         @Getter private final UUID parentInteractionId;
-
-        /** framework internal */
-        @Getter(value = AccessLevel.PACKAGE) @Accessors(fluent=true)
-        private final CountDownLatch countDownLatch = new CountDownLatch(1);
-
 
         /**
          * Note that is a <code>transient</code> field in order that {@link org.apache.isis.applib.services.wrapper.callable.AsyncCallable} can be declared as
@@ -638,18 +613,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
                         "The transient wrapperFactory is null; suggests that this async task been serialized and " +
                         "then deserialized, but is now being executed by an ExecutorService that has not re-injected necessary services.");
             }
-            try {
-                return wrapperFactory.execute(this);
-            } finally {
-                countDownLatch().countDown();
-            }
+            return wrapperFactory.execute(this);
         }
     }
 
 
     @Override
     public <R> R execute(final AsyncCallable<R> asyncCallable) {
-        serviceInjector.injectServicesInto(this);
+        getServiceInjector().injectServicesInto(this);
         final R result = interactionServiceProvider.get()
                 .call(asyncCallable.getInteractionContext(),
                         () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
@@ -674,8 +645,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
         if (bookmark == null) {
             return null;
         }
+        val spec = getSpecificationLoader().specForBookmark(bookmark).orElse(null);
+        if(spec==null) {
+            return null;
+        }
         R domainObject = bookmarkServiceProvider.get().lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
-        if (metaModelServiceProvider.get().sortOf(bookmark, RELAXED).isEntity()) {
+        if(spec.isEntity()) {
             domainObject = repositoryServiceProvider.get().detach(domainObject);
         }
         return domainObject;

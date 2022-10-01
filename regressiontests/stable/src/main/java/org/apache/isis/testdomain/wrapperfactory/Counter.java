@@ -20,15 +20,25 @@
 
 package org.apache.isis.testdomain.wrapperfactory;
 
-import lombok.*;
-
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @PersistenceCapable(
         schema = WrapperTestFixtures.SCHEMA,
@@ -56,11 +66,7 @@ public class Counter implements Comparable<Counter> {
     private Long num2;
 
     @Action(commandPublishing = Publishing.ENABLED)
-    public Counter bumpUsingDeclaredAction() {
-        return doBump();
-    }
-
-    Counter doBump() {
+    public Counter increment() {
         if (getNum() == null) {
             setNum(1L);
         } else {

@@ -20,11 +20,11 @@
 
 package org.apache.isis.testdomain.wrapperfactory;
 
-import lombok.RequiredArgsConstructor;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.services.wrapper.Mixin;
+
+import lombok.RequiredArgsConstructor;
 
 @Action(
         commandPublishing = Publishing.ENABLED,
@@ -36,6 +36,6 @@ public class Counter_bumpUsingMixin implements Mixin<Counter> {
     private final Counter counter;
 
     public Counter act() {
-        return counter.doBump();
+        return counter.increment();
     }
 }
