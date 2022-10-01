@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.apache.isis.extensions</groupId>
         <artifactId>isis-extensions</artifactId>
-        <version>2.0.0-M8</version>
+        <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -35,22 +35,22 @@
             <dependency>
                 <groupId>org.apache.isis.extensions</groupId>
                 <artifactId>isis-extensions-excel-applib</artifactId>
-                <version>2.0.0-M8</version>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.extensions</groupId>
                 <artifactId>isis-extensions-excel-testing</artifactId>
-                <version>2.0.0-M8</version>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.extensions</groupId>
                 <artifactId>isis-extensions-excel-fixtures</artifactId>
-                <version>2.0.0-M8</version>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.extensions</groupId>
                 <artifactId>isis-extensions-excel-integtests</artifactId>
-                <version>2.0.0-M8</version>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
