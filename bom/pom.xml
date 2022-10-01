@@ -771,6 +771,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                         one</pattern>
                                 </patterns>
                             </license>
+                            <license 
+                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>BSD3</licenseFamilyCategory>
+                                <licenseFamilyName>BSD 3-Clause</licenseFamilyName>
+                                <patterns>
+                                    <pattern>BSD-3-Clause license</pattern>
+                                </patterns>
+                            </license>
                             <license
                                     implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                                 <licenseFamilyCategory>MIT</licenseFamilyCategory>
@@ -814,6 +822,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <licenseFamily
                                     implementation="org.apache.rat.license.SimpleLicenseFamily">
                                 <familyName>Apache License 2.0</familyName>
+                            </licenseFamily>
+                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                                <familyName>BSD 3-Clause</familyName>
                             </licenseFamily>
                             <licenseFamily
                                     implementation="org.apache.rat.license.SimpleLicenseFamily">
