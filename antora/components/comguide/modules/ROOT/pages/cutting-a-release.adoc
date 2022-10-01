@@ -338,10 +338,10 @@ We activate the (inherited) `apache-release` profile to bring in the `gpg` plugi
 ====
 Make sure that the version of `gpg` on the `$PATH` is correct, because the configuration in the `pom.xml` assumes `gpg` v2.0, rather than v2.1+.
 
-The older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg` (and does not use an agent); the newer version uses rather than `pubring.pbx`.
+The older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg` (and does not use an agent); the newer version uses `pubring.pbx`.
 
-For myself, I hit issues running on Windows under git-bash, because it picked up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
-
+On Windows, be careful using git-bash as this will pick up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
+Instead, consider building in a Powershell console, described below.
 ====
 
 If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites.
