@@ -54,8 +54,8 @@ public class IsisValTypesMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-fancy")
-    public IsisVegas vegas(){
+    @ActionLayout(cssClassFa="fa-chart-gantt")
+    public IsisVegas vegaCharts(){
         return new IsisVegas();
     }
 

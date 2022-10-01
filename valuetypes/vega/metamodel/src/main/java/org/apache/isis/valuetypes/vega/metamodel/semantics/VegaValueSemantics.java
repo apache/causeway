@@ -94,25 +94,37 @@ implements
     private String asHtml(final @NonNull Vega vega) {
         val containerId = "vegaContainer" + UUID.randomUUID().toString();
 
-        val htmlFragment = String.format(""
-                + "<div id=\"%1$s\"></div>\n"
-                + "<script type=\"text/javascript\">\n"
-                + "var spec = %2$s;\n"
-                + "document.addEventListener('DOMContentLoaded', (event) => {\n"
-                + "  view = new vega.View(vega.parse(spec), {\n"
-                + "    renderer:  '%3$s',\n"
-                + "    container: '#%1$s',\n"
-                + "    hover:     %4$b    \n"
-                + "  });\n"
-                + "  view.runAsync();\n"
-                + "});"
-                + "</script>",
-                containerId,
-                vega.getJson(),
-                "canvas", // renderer (canvas or svg)
-                true // enable hover processing
-                );
-        return htmlFragment;
+        switch (vega.getSchema()) {
+        case VEGA: {
+            val htmlFragment = String.format(""
+                    + "<div id=\"%1$s\"></div>\n"
+                    + "<script type=\"text/javascript\">\n"
+                    + "document.addEventListener('DOMContentLoaded', (event) => {\n"
+                    + "  var spec = %2$s;\n"
+                    + "  var view = new vega.View(vega.parse(spec), {\n"
+                    + "    renderer:  '%3$s',\n"
+                    + "    container: '#%1$s',\n"
+                    + "    hover:     %4$b    \n"
+                    + "  });\n"
+                    + "  view.runAsync();\n"
+                    + "});"
+                    + "</script>",
+                    containerId,
+                    vega.getJson(),
+                    "canvas", // renderer (canvas or svg)
+                    true // enable hover processing
+                    );
+            return htmlFragment;
+        }
+        case VEGA_LITE: {
+            val htmlFragment = String.format(""
+                    + "<div id=\"%1$s\">VEGA-LITE TODO</div>\n",
+                    containerId);
+            return htmlFragment;
+        }
+        default:
+            return "<!-- emtpy Vega (unsupported schema) -->";
+        }
     }
 
     // -- PARSER
