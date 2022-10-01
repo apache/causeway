@@ -53,9 +53,11 @@ public final class AwaitableLatch {
 
     /**
      * {@link AwaitableLatch#await(long, TimeUnit)}
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the {@code timeout} argument
      * @throws RuntimeException when an InterruptedException occurred
      */
-    public boolean await(long timeout, TimeUnit unit) {
+    public boolean await(final long timeout, final TimeUnit unit) {
         try {
             return countDownLatch.await(timeout, unit);
         } catch (InterruptedException e) {

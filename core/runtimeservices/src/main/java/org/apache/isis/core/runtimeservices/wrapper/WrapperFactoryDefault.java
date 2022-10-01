@@ -19,8 +19,16 @@
 package org.apache.isis.core.runtimeservices.wrapper;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
@@ -30,7 +38,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.isis.applib.services.wrapper.callable.AsyncCallable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -52,6 +59,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
@@ -74,6 +82,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.concurrent.AwaitableLatch;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -102,7 +111,13 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.experimental.Accessors;
 
 @Service
 @Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
@@ -395,17 +410,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
         val executorService = asyncControl.getExecutorService();
-        AsyncTask<R> task = serviceInjector.injectServicesInto(
-                new AsyncTask<R>(
-                        asyncInteractionContext,
-                        Propagation.REQUIRES_NEW,
-                        commandDto,
-                        asyncControl.getReturnType(),
-                        command.getInteractionId()) // this command becomes the parent of child command
-        );
-        val future = executorService.submit(task);
-        asyncControl.setFuture(future);
+        val asyncTask = serviceInjector.injectServicesInto(new AsyncTask<R>(
+            asyncInteractionContext,
+            Propagation.REQUIRES_NEW,
+            commandDto,
+            asyncControl.getReturnType(),
+            command.getInteractionId())); // this command becomes the parent of child command
 
+        asyncControl.setAwaitableLatch(AwaitableLatch.of(asyncTask.countDownLatch()));
+        val future = executorService.submit(asyncTask);
+        asyncControl.setFuture(future);
         return null;
     }
 
@@ -587,6 +601,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Getter private final Class<R> returnType;
         @Getter private final UUID parentInteractionId;
 
+        /** framework internal */
+        @Getter(value = AccessLevel.PACKAGE) @Accessors(fluent=true)
+        private final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+
         /**
          * Note that is a <code>transient</code> field in order that {@link org.apache.isis.applib.services.wrapper.callable.AsyncCallable} can be declared as
          * {@link java.io.Serializable}.
@@ -619,28 +638,39 @@ public class WrapperFactoryDefault implements WrapperFactory {
                         "The transient wrapperFactory is null; suggests that this async task been serialized and " +
                         "then deserialized, but is now being executed by an ExecutorService that has not re-injected necessary services.");
             }
-            return wrapperFactory.execute(this);
+            try {
+                return wrapperFactory.execute(this);
+            } finally {
+                countDownLatch().countDown();
+            }
         }
     }
 
 
-    public <R> R execute(AsyncCallable<R> asyncCallable) {
+    @Override
+    public <R> R execute(final AsyncCallable<R> asyncCallable) {
         serviceInjector.injectServicesInto(this);
-        return interactionServiceProvider.get().call(asyncCallable.getInteractionContext(), () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
+        final R result = interactionServiceProvider.get()
+                .call(asyncCallable.getInteractionContext(),
+                        () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
+        return result;
     }
 
-    private <R> R updateDomainObjectHonoringTransactionalPropagation(AsyncCallable<R> asyncCallable) {
-        return transactionServiceProvider.get().callTransactional(asyncCallable.getPropagation(), () -> updateDomainObject(asyncCallable))
+    private <R> R updateDomainObjectHonoringTransactionalPropagation(final AsyncCallable<R> asyncCallable) {
+        return transactionServiceProvider.get()
+                .callTransactional(asyncCallable.getPropagation(),
+                        () -> updateDomainObject(asyncCallable))
                 .ifFailureFail()
                 .getValue().orElse(null);
     }
 
-    private <R> R updateDomainObject(AsyncCallable<R> asyncCallable) {
+    private <R> R updateDomainObject(final AsyncCallable<R> asyncCallable) {
 
         val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
 
-        val bookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
+        val bookmark = commandExecutorServiceProvider.get()
+                .executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
         if (bookmark == null) {
             return null;
         }

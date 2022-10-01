@@ -1,12 +1,12 @@
 package org.apache.isis.regressiontests.core.wrapperfactory.integtests;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -35,13 +35,13 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
     @BeforeEach
     void setup_counter() {
 
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+        runWithNewTransaction(() -> {
             counterRepository.persist(newCounter("fred"));
             List<Counter> counters = counterRepository.find();
             assertThat(counters).hasSize(1);
 
             bookmark = bookmarkService.bookmarkForElseFail(counters.get(0));
-        }).ifFailureFail();
+        });
 
         // given
         assertThat(bookmark).isNotNull();
@@ -55,37 +55,43 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
     void async_using_default_executor_service() {
 
         // when
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+        runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            wrapperFactory.asyncWrap(counter, AsyncControl.returning(Counter.class)).bumpUsingDeclaredAction();
+            val asyncControl = AsyncControl.returning(Counter.class);
 
-            Thread.sleep(1_000);// horrid, but let's just wait 1 sec to allow executor to complete before continuing
-        }).ifFailureFail();
+            wrapperFactory.asyncWrap(counter, asyncControl).bumpUsingDeclaredAction();
+
+            // let's wait max 5 sec to allow executor to complete before continuing
+            asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
+        });
 
         // then
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+        runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
-        }).ifFailureFail();
+        });
 
         // when
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+        runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
 
-            // when
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, AsyncControl.returning(Counter.class)).act();
+            val asyncControl = AsyncControl.returning(Counter.class);
 
-            Thread.sleep(1_000);// horrid, but let's just wait 1 sec to allow executor to complete before continuing
-        }).ifFailureFail();
+            // when
+            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl).act();
+
+            // let's wait max 5 sec to allow executor to complete before continuing
+            asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
+        });
 
         // then
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+        runWithNewTransaction(() -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter).isNotNull();
             assertThat(counter.getNum()).isEqualTo(2L);
-        }).ifFailureFail();
+        });
     }
 
 }

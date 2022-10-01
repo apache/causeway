@@ -23,12 +23,16 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.concurrent.AwaitableLatch;
+import org.apache.isis.commons.internal.assertions._Assert;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -194,6 +198,25 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         this.future = future;
     }
 
+    /**
+     * For framework use only.
+     */
+    @Setter
+    private AwaitableLatch awaitableLatch;
+
+    /**
+     * Waits on the callers thread, for a maximum amount of time,
+     * for the result of the invocation to become available.
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the {@code timeout} argument
+     * @throws RuntimeException when an InterruptedException occurred
+     */
+    public void waitForResult(final long timeout, final TimeUnit unit) {
+        _Assert.assertNotNull(awaitableLatch,
+                ()->"detected call to waitForResult() before awaitableLatch was set");
+        awaitableLatch.await(timeout, unit);
+    }
+
     private String logMessage() {
         StringBuilder buf = new StringBuilder("Failed to execute ");
         if(getMethod() != null) {
@@ -208,5 +231,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         }
         return buf.toString();
     }
+
+
 
 }

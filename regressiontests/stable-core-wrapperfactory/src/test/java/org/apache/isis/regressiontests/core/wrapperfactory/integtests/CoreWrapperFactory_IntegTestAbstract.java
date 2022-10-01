@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Propagation;
 
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
@@ -55,6 +57,10 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends IsisIntegrati
         return Counter.builder().name(name).build();
     }
 
+    protected final void runWithNewTransaction(final ThrowingRunnable runnable) {
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, runnable)
+        .ifFailureFail();
+    }
 
     @Inject protected CounterRepository counterRepository;
 }
