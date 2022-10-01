@@ -2,15 +2,6 @@ package org.apache.isis.regressiontests.core.wrapperfactory.integtests;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
-import org.apache.isis.regressiontests.core.wrapperfactory.integtests.model.Counter;
-import org.apache.isis.regressiontests.core.wrapperfactory.integtests.model.CounterRepository;
-import org.apache.isis.regressiontests.core.wrapperfactory.integtests.model.TestDomainModel;
-import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,6 +10,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
+import org.apache.isis.testdomain.wrapperfactory.Counter;
+import org.apache.isis.testdomain.wrapperfactory.CounterRepository;
+import org.apache.isis.testdomain.wrapperfactory.WrapperTestFixtures;
+import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootTest(
         classes = CoreWrapperFactory_IntegTestAbstract.AppManifest.class
@@ -34,7 +35,7 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends IsisIntegrati
             IsisModulePersistenceJdoDatanucleus.class,
             IsisModuleTestingFixturesApplib.class,
 
-            TestDomainModel.class,
+            WrapperTestFixtures.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
@@ -50,7 +51,7 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends IsisIntegrati
         IsisPresets.forcePrototyping();
     }
 
-    protected Counter newCounter(String name) {
+    protected Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 

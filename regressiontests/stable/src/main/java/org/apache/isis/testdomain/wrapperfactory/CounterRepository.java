@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.regressiontests.core.wrapperfactory.integtests.model;
+package org.apache.isis.testdomain.wrapperfactory;
 
 import java.util.List;
 import java.util.Objects;

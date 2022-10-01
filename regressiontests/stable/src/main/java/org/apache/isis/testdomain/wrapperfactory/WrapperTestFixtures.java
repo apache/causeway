@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.regressiontests.core.wrapperfactory.integtests.model;
+package org.apache.isis.testdomain.wrapperfactory;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Import;
 @Import({
 })
 @ComponentScan
-public class TestDomainModel implements ModuleWithFixtures {
+public class WrapperTestFixtures implements ModuleWithFixtures {
 
     public static final String NAMESPACE = "common.facade.test";
     public static final String SCHEMA = "commonFacadeTest";

@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.regressiontests.core.wrapperfactory.integtests.model;
+package org.apache.isis.testdomain.wrapperfactory;
 
 import lombok.*;
 
@@ -31,11 +31,11 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.apache.isis.applib.annotation.*;
 
 @PersistenceCapable(
-        schema = TestDomainModel.SCHEMA,
+        schema = WrapperTestFixtures.SCHEMA,
         table = "Counter"
 )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named(TestDomainModel.NAMESPACE + ".Counter")
+@Named(WrapperTestFixtures.NAMESPACE + ".Counter")
 @DomainObject(nature = Nature.ENTITY)
 @NoArgsConstructor
 @Builder

@@ -1,24 +1,25 @@
 package org.apache.isis.regressiontests.core.wrapperfactory.integtests;
 
-import lombok.SneakyThrows;
-import lombok.val;
-
 import java.util.List;
 
 import javax.inject.Inject;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.regressiontests.core.wrapperfactory.integtests.model.Counter;
-import org.apache.isis.regressiontests.core.wrapperfactory.integtests.model.Counter_bumpUsingMixin;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Propagation;
+import org.apache.isis.testdomain.wrapperfactory.Counter;
+import org.apache.isis.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * Run "sh enhance.sh -w" first, to enhance the test JDO entities.
