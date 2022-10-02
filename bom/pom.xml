@@ -312,7 +312,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
-        <project.build.outputTimestamp>2022-10-01T16:36:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2022-10-02T09:56:00Z</project.build.outputTimestamp>
 
         <!-- APACHE ISIS customisation 6/21: start -->
 
