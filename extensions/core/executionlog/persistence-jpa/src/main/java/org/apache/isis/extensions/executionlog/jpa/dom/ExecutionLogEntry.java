@@ -108,26 +108,26 @@ import lombok.Setter;
             name = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             query = "SELECT ele "
                   + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.timestamp >= :timestampFrom "
-                  + "   AND ele.timestamp <= :timestampTo "
+                  + " WHERE ele.timestamp >= :from "
+                  + "   AND ele.timestamp <= :to "
                   + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
     @NamedQuery(
             name = Nq.FIND_BY_TIMESTAMP_AFTER,
             query = "SELECT ele "
                   + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.timestamp >= :timestamp "
+                  + " WHERE ele.timestamp >= :from "
                   + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_TIMESTAMP_BEFORE,
+            query = "SELECT ele "
+                  + "  FROM ExecutionLogEntry ele "
+                  + " WHERE ele.timestamp <= :to "
+                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId, ele.pk.sequence DESC"),
     @NamedQuery(
             name  = Nq.FIND,
             query = "SELECT ele "
                   + "  FROM ExecutionLogEntry ele "
                   + " ORDER BY ele.timestamp DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TIMESTAMP_BEFORE,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.timestamp <= :timestamp "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId, ele.pk.sequence DESC"),
     @NamedQuery(
             name = Nq.FIND_MOST_RECENT,
             query = "SELECT ele "
