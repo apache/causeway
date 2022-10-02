@@ -129,7 +129,7 @@ import lombok.Setter;
             name = Nq.FIND_MOST_RECENT,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"
+                  + " ORDER BY timestamp DESC, interactionId DESC"
                   + " RANGE 0,100"),
     @Query(
             name  = Nq.FIND_RECENT_BY_USERNAME,
