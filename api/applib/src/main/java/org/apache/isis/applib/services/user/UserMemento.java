@@ -190,13 +190,13 @@ implements Serializable {
     Locale languageLocale;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "details", sequence = "2")
+    @PropertyLayout(fieldSetId = "regional", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     Locale numberFormatLocale;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "details", sequence = "3")
+    @PropertyLayout(fieldSetId = "regional", sequence = "3")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     Locale timeFormatLocale;
@@ -228,7 +228,7 @@ implements Serializable {
 
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "security", sequence = "2")
+    @PropertyLayout(fieldSetId = "security", sequence = "3")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     boolean impersonating = false;
 
@@ -241,7 +241,7 @@ implements Serializable {
      * </p>
      */
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "security", sequence = "3")
+    @PropertyLayout(fieldSetId = "security", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     String multiTenancyToken;
