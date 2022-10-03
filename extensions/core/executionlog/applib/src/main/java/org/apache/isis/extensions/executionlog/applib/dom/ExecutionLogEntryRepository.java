@@ -29,6 +29,8 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -36,7 +38,6 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import lombok.val;
@@ -63,7 +64,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
     @Inject FactoryService factoryService;
     @Inject IsisSystemEnvironment isisSystemEnvironment;
 
-    protected ExecutionLogEntryRepository(Class<E> executionLogEntryClass) {
+    protected ExecutionLogEntryRepository(final Class<E> executionLogEntryClass) {
         this.executionLogEntryClass = executionLogEntryClass;
     }
 
@@ -75,7 +76,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
     /**
      * for testing only.
      */
-    protected ExecutionLogEntryRepository(Class<E> executionLogEntryClass, Provider<RepositoryService> repositoryServiceProvider, FactoryService factoryService) {
+    protected ExecutionLogEntryRepository(final Class<E> executionLogEntryClass, final Provider<RepositoryService> repositoryServiceProvider, final FactoryService factoryService) {
         this.executionLogEntryClass = executionLogEntryClass;
         this.repositoryServiceProvider = repositoryServiceProvider;
         this.factoryService = factoryService;
@@ -88,13 +89,13 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         return e;
     }
 
-    public List<E> findByInteractionId(UUID interactionId) {
+    public List<E> findByInteractionId(final UUID interactionId) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_INTERACTION_ID)
                         .withParameter("interactionId", interactionId));
     }
 
-    public Optional<E> findByInteractionIdAndSequence(UUID interactionId, int sequence) {
+    public Optional<E> findByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
         return repositoryService().firstMatch(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE)
                         .withParameter("interactionId", interactionId)
@@ -138,13 +139,13 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
     }
 
-    public List<E> findByTarget(Bookmark target) {
+    public List<E> findByTarget(final Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET)
                         .withParameter("target", target));
     }
 
-    public List<E> findByTargetAndTimestampAfter(Bookmark target, Timestamp timestamp) {
+    public List<E> findByTargetAndTimestampAfter(final Bookmark target, final Timestamp timestamp) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER)
                         .withParameter("target", target)
@@ -152,7 +153,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
-    public List<E> findByTargetAndTimestampBefore(Bookmark target, Timestamp timestamp) {
+    public List<E> findByTargetAndTimestampBefore(final Bookmark target, final Timestamp timestamp) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE)
                         .withParameter("target", target)
@@ -160,7 +161,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
-    public List<E> findByTargetAndTimestampBetween(Bookmark target, Timestamp timestampFrom, Timestamp timestampTo) {
+    public List<E> findByTargetAndTimestampBetween(final Bookmark target, final Timestamp timestampFrom, final Timestamp timestampTo) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN)
                         .withParameter("target", target)
@@ -169,29 +170,29 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
-    public List<E> findByTimestampAfter(Timestamp timestamp) {
+    public List<E> findByTimestampAfter(final Timestamp timestamp) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
-                        .withParameter("timestamp", timestamp)
+                        .withParameter("from", timestamp)
         );
     }
 
-    public List<E> findByTimestampBefore(Timestamp timestamp) {
+    public List<E> findByTimestampBefore(final Timestamp timestamp) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
-                        .withParameter("timestamp", timestamp)
+                        .withParameter("to", timestamp)
         );
     }
 
-    public List<E> findByTimestampBetween(Timestamp timestampFrom, Timestamp timestampTo) {
+    public List<E> findByTimestampBetween(final Timestamp timestampFrom, final Timestamp timestampTo) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
-                        .withParameter("timestampFrom", timestampFrom)
-                        .withParameter("timestampTo", timestampTo)
+                        .withParameter("from", timestampFrom)
+                        .withParameter("to", timestampTo)
         );
     }
 
-    public List<E> findRecentByUsername(String username) {
+    public List<E> findRecentByUsername(final String username) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_USERNAME)
                         .withParameter("username", username)
@@ -199,7 +200,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
-    public List<E> findRecentByTarget(Bookmark target) {
+    public List<E> findRecentByTarget(final Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_TARGET)
                         .withParameter("target", target)
