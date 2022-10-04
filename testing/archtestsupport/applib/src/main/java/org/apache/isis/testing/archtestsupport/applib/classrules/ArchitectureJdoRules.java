@@ -57,13 +57,13 @@ public class ArchitectureJdoRules {
                 .that().areAnnotatedWith(DomainObject.class)
                 .and(new DescribedPredicate<>("have a logicalTypeName") {
                     @Override
-                    public boolean apply(final JavaClass javaClass) {
+                    public boolean test(final JavaClass javaClass) {
                         return _LogicalNaming.hasExplicitLogicalName(javaClass);
                     }
                 })
                 .and(new DescribedPredicate<>("have a @Discriminator") {
                     @Override
-                    public boolean apply(final JavaClass javaClass) {
+                    public boolean test(final JavaClass javaClass) {
                         val discriminatorIfAny = javaClass.tryGetAnnotationOfType(Discriminator.class);
                         return discriminatorIfAny.isPresent();
                     }
@@ -200,7 +200,7 @@ public class ArchitectureJdoRules {
     static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_schema() {
         return new DescribedPredicate<>("@PersistenceCapable(schema=...)") {
             @Override
-            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
                     return false;
                 }
@@ -215,7 +215,7 @@ public class ArchitectureJdoRules {
     static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_with_DATASTORE_identityType() {
         return new DescribedPredicate<>("@PersistenceCapable(identityType=DATASTORE)") {
             @Override
-            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
                     return false;
                 }
@@ -251,7 +251,7 @@ public class ArchitectureJdoRules {
     static DescribedPredicate<JavaClass> areEntities() {
         return new DescribedPredicate<>("are entities") {
             @Override
-            public boolean apply(final JavaClass input) {
+            public boolean test(final JavaClass input) {
                 return input.isAnnotatedWith(PersistenceCapable.class);
             }
         };
@@ -260,7 +260,7 @@ public class ArchitectureJdoRules {
     static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
         return new DescribedPredicate<>("are subtype entities ") {
             @Override
-            public boolean apply(final JavaClass input) {
+            public boolean test(final JavaClass input) {
                 val superclassIfAny = input.getSuperclass();
                 if (!superclassIfAny.isPresent()) {
                     return false;
