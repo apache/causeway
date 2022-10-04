@@ -5,6 +5,7 @@
 
 
 As described in the xref:userguide:fun:overview.adoc#mixins[overview], a mixin acts like a trait or extension method, allowing one module to contribute behaviour or derived state to another object.
+This is a *very powerful feature*, but at the same time is  easy to use.
 
 Under the covers, all mixins are basically actions that use the mixee as one of their arguments.
 
@@ -17,13 +18,15 @@ Under the covers, all mixins are basically actions that use the mixee as one of 
 
 Accordingly, a mixin can be defined using the xref:refguide:applib:index/annotation/Action.adoc[@Action], xref:refguide:applib:index/annotation/Property.adoc[@Property] or xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotations, but defined at the domain class level rather than at the method level.
 
-Using xref:refguide:applib:index/annotation/DomainObject.adoc#nature[@DomainObject#nature] attribute (specifying a nature of `Nature.MIXIN`), in combination with the above allows for more fine grained control, eg. nominating the mixin's method name.
+The mixin is expected to follow the naming convention `SomeType_mixinName`, with the name of the contributed member being contributed is inferred from the name of the class itself, being everything after the last '_'.
+For example, if the mixin is called `DocumentHolder_documents`, then the mixee is `DocumentHolder` interface, and `documents` is the name of the contributed collection.
 
-When the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated, and the name of the member being contributed is inferred from the name of the class itself, being everything after the last '_'.
+This example also hints at why mixins are so powerful: the mixee's type is usually an interface, not a concrete class.
+Thus, any class that implements `DocumentHolder`, eg `Customer` or `Order`, will be contributed to.
 
 == Contributed Collection
 
-The example below shows how to contribute a collection, using xref:refguide:applib:index/annotation/Collection.adoc[@Collection].
+The example below shows in more detail how to contribute a collection, using xref:refguide:applib:index/annotation/Collection.adoc[@Collection].
 The method is expected to be called "coll":
 
 [source,java]
@@ -125,15 +128,17 @@ For example, the following refactors the "updateName" action -- of the `SimpleOb
 public class SimpleObject /* ... */ {
 
     // ...
-    public static class UpdateNameActionDomainEvent extends
-            SimpleModule.ActionDomainEvent<SimpleObject.updateName> {}  // <.>
 
     @Action(semantics = IDEMPOTENT,
-	        commandPublishing = Publishing.ENABLED,
-	        executionPublishing = Publishing.ENABLED,
-	        associateWith = "name",
-	        domainEvent = UpdateNameActionDomainEvent.class)
+            commandPublishing = Publishing.ENABLED,
+            executionPublishing = Publishing.ENABLED,
+            associateWith = "name",
+            domainEvent = updateName.DomainEvent.class)                 // <2>
     public class updateName {                                           // <.>
+
+        public class DomainEvent extends
+            SimpleModule.ActionDomainEvent<SimpleObject.updateName> {}  // <.>
+
         public SimpleObject act(@Name final String name) {
             setName(name);                                              // <.>
             return SimpleObject.this;
@@ -145,9 +150,14 @@ public class SimpleObject /* ... */ {
     // ...
 }
 ----
-<.> Domain event is genericised on the mixin, not on the mixee
-<.> Not static.
-Can be camelCase or PascalCase, either will work.
+<.> Mixin class is not `static`, so that the containing object is implicitly available.
++
+Its name can be either "camelCase" or "PascalCase", either will work.
+
+<.> Domain event can be declared within the mixin, again, not `static`.
++
+Note that it is genericised on the mixin, not on the mixee
+
 <.> Acts on the owning instance.
 <.> xref:business-rules.adoc[Supporting methods] follow the same naming convention.
 <.> Acts on the owning instance.
@@ -169,7 +179,7 @@ DocumentHolder_documents mixin =
 ----
 
 Alternatively, you can use xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector] to inject domain services after the mixin has been instantiated.
-You'll need to use this method if using nested non-static mixins:
+You'll need to use this method if using nested non-`static` mixins:
 
 
 [source,java]

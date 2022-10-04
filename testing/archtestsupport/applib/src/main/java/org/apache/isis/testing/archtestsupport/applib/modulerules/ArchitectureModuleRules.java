@@ -30,16 +30,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.library.Architectures;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.lang.Nullable;
 
-import lombok.experimental.UtilityClass;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * A library of architecture tests to ensure correct layering and usage of packages.
@@ -61,7 +60,7 @@ public class ArchitectureModuleRules {
      * @see #code_dependencies_follow_module_Imports(List)
      * @see #code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)
      */
-    public static List<Class<?>> analyzeClasses_packagesOf(Class<?> clazz) {
+    public static List<Class<?>> analyzeClasses_packagesOf(final Class<?> clazz) {
         val analyzeClassesAnnot = AnnotationUtils.findAnnotation(clazz, AnalyzeClasses.class);
         return Arrays.stream(analyzeClassesAnnot.packagesOf())
                 .filter(x -> x.getSimpleName().endsWith("Module"))
@@ -75,7 +74,7 @@ public class ArchitectureModuleRules {
      * @see #code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)
      */
     public static Architectures.LayeredArchitecture code_dependencies_follow_module_Imports(
-            List<Class<?>> moduleClasses) {
+            final List<Class<?>> moduleClasses) {
 
         return code_dependencies_follow_module_Imports_and_subpackage_rules(moduleClasses, Collections.emptyList());
     }
@@ -89,8 +88,8 @@ public class ArchitectureModuleRules {
      * @see #code_dependencies_follow_module_Imports(List)
      */
     public static Architectures.LayeredArchitecture code_dependencies_follow_module_Imports_and_subpackage_rules(
-            List<Class<?>> moduleClasses, List<Subpackage> subpackages) {
-        val layeredArchitecture = Architectures.layeredArchitecture();
+            final List<Class<?>> moduleClasses, final List<Subpackage> subpackages) {
+        val layeredArchitecture = Architectures.layeredArchitecture().consideringAllDependencies();
 
         defineLayers(moduleClasses, layeredArchitecture, subpackages);
 
@@ -114,9 +113,9 @@ public class ArchitectureModuleRules {
     }
 
     private static void defineLayers(
-            List<Class<?>> moduleClasses,
-            Architectures.LayeredArchitecture layeredArchitecture,
-            List<Subpackage> subpackages) {
+            final List<Class<?>> moduleClasses,
+            final Architectures.LayeredArchitecture layeredArchitecture,
+            final List<Subpackage> subpackages) {
         moduleClasses.forEach(moduleClass ->
                 subpackages.forEach(subpackage -> {
                     val subpackageName = subpackage.getName();
@@ -126,9 +125,9 @@ public class ArchitectureModuleRules {
     }
 
     private static void computeDirectDependencies(
-            List<Class<?>> moduleClasses,
-            Map<Class<?>, Set<Class<?>>> directDependenciesByImported,
-            Map<Class<?>, Set<Class<?>>> directDependenciesByImporting) {
+            final List<Class<?>> moduleClasses,
+            final Map<Class<?>, Set<Class<?>>> directDependenciesByImported,
+            final Map<Class<?>, Set<Class<?>>> directDependenciesByImporting) {
         moduleClasses.forEach(
                 moduleClass -> {
                     final Import importAnnotation = AnnotationUtils.findAnnotation(moduleClass, Import.class);
@@ -149,9 +148,9 @@ public class ArchitectureModuleRules {
     }
 
     private static void computeTransitiveDependencies(
-            List<Class<?>> moduleClasses,
-            Map<Class<?>, Set<Class<?>>> directDependenciesByImporting,
-            Map<Class<?>, Set<Class<?>>> transitiveDependenciesByImporting) {
+            final List<Class<?>> moduleClasses,
+            final Map<Class<?>, Set<Class<?>>> directDependenciesByImporting,
+            final Map<Class<?>, Set<Class<?>>> transitiveDependenciesByImporting) {
         moduleClasses.forEach((moduleClass) -> {
             val transitiveDependencies = new LinkedHashSet<Class<?>>();
             accumulateTransitiveDependencies(moduleClass, directDependenciesByImporting,
@@ -161,9 +160,9 @@ public class ArchitectureModuleRules {
     }
 
     private static void checkLayerAccess(
-            Architectures.LayeredArchitecture layeredArchitecture,
-            Map<Class<?>, Set<Class<?>>> transitiveDependenciesByImported,
-            List<Subpackage> subpackages) {
+            final Architectures.LayeredArchitecture layeredArchitecture,
+            final Map<Class<?>, Set<Class<?>>> transitiveDependenciesByImported,
+            final List<Subpackage> subpackages) {
         transitiveDependenciesByImported.forEach((importedModule, importingModules) -> {
 
             subpackages.forEach(subpackage -> {
@@ -203,20 +202,20 @@ public class ArchitectureModuleRules {
     }
 
 
-    static String nameOf(Class<?> moduleClass, final @Nullable String subpackageName) {
+    static String nameOf(final Class<?> moduleClass, final @Nullable String subpackageName) {
         val simpleName = moduleClass.getSimpleName();
         val moduleName = simpleName.replace("Module", "");
         return moduleName + (subpackageName != null ? (" " + subpackageName) : "");
     }
 
-    static String[] namesOf(Class<?> moduleClass, String... subpackageNames) {
+    static String[] namesOf(final Class<?> moduleClass, final String... subpackageNames) {
         val names = Arrays.stream(subpackageNames)
                 .map(subpackageName -> nameOf(moduleClass, subpackageName))
                 .collect(Collectors.toList());
         return names.toArray(new String[] {});
     }
 
-    static String[] namesOf(Set<Class<?>> importingClasses, String... subpackageNames) {
+    static String[] namesOf(final Set<Class<?>> importingClasses, final String... subpackageNames) {
         val names = new ArrayList<String>();
         importingClasses.forEach(importingClass -> {
             Stream.of(subpackageNames).forEach(subpackageName ->
@@ -225,30 +224,30 @@ public class ArchitectureModuleRules {
         return names.toArray(new String[] {});
     }
 
-    static String packageIdentifierFor(Class<?> moduleClass) {
+    static String packageIdentifierFor(final Class<?> moduleClass) {
         return packageIdentifierFor(moduleClass, null);
     }
 
-    static String packageIdentifierFor(Class<?> moduleClass, @Nullable Subpackage subpackage) {
+    static String packageIdentifierFor(final Class<?> moduleClass, @Nullable final Subpackage subpackage) {
         return moduleClass.getPackage().getName() +
                 (subpackage != null ? subpackage.packageIdentifier(): "..");
     }
 
-    static String[] both(String str, String[] arr) {
+    static String[] both(final String str, final String[] arr) {
         val strings = new ArrayList<String>();
         strings.add(str);
         strings.addAll(Arrays.asList(arr));
         return strings.toArray(new String[] {});
     }
 
-    static String[] both(String[] arr1, String[] arr2) {
+    static String[] both(final String[] arr1, final String[] arr2) {
         val strings = new ArrayList<String>();
         strings.addAll(Arrays.asList(arr1));
         strings.addAll(Arrays.asList(arr2));
         return strings.toArray(new String[] {});
     }
 
-    static <T> Map<T, Set<T>> invert(Map<T, Set<T>> valueSetByKey) {
+    static <T> Map<T, Set<T>> invert(final Map<T, Set<T>> valueSetByKey) {
         val inverted = new LinkedHashMap<T, Set<T>>();
         valueSetByKey.forEach((key, values) ->
                 values.forEach(value -> {

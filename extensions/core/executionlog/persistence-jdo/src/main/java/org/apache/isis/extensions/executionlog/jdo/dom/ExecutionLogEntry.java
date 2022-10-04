@@ -99,20 +99,20 @@ import lombok.Setter;
             name = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             value = "SELECT "
                   + "  FROM " + ExecutionLogEntry.FQCN + " "
-                  + " WHERE timestamp >= :timestampFrom "
-                  + "    && timestamp <= :timestampTo "
+                  + " WHERE timestamp >= :from "
+                  + "    && timestamp <= :to "
                   + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
             name = Nq.FIND_BY_TIMESTAMP_AFTER,
             value = "SELECT "
                   + "  FROM " + ExecutionLogEntry.FQCN + " "
-                  + " WHERE timestamp >= :timestamp "
+                  + " WHERE timestamp >= :from "
                   + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
             name = Nq.FIND_BY_TIMESTAMP_BEFORE,
             value = "SELECT "
                   + "  FROM " + ExecutionLogEntry.FQCN + " "
-                  + " WHERE timestamp <= :timestamp "
+                  + " WHERE timestamp <= :to "
                   + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
             name  = Nq.FIND,

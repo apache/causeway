@@ -82,7 +82,6 @@ import lombok.experimental.UtilityClass;
         entityChangePublishing = Publishing.DISABLED
 )
 @DomainObjectLayout(
-        named = "ExecutionLogEntry",
         titleUiEvent = ExecutionOutboxEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionOutboxEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionOutboxEntry.CssClassUiEvent.class,
@@ -143,7 +142,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
 
         setLogicalMemberIdentifier(memberExecutionDto.getLogicalMemberIdentifier());
 
-        setTarget( bookmarkService.bookmarkFor(execution.getEvent().getSubject()).orElseThrow() );
+        setTarget(Bookmark.forOidDto(memberExecutionDto.getTarget()));
         setUsername(memberExecutionDto.getUsername());
 
         if(execution instanceof PropertyEdit) {
@@ -169,7 +168,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
 
 
-    @Type
+    @DomainChangeRecord.Type
     @Override
     public ChangeType getType() {
         return ChangeType.EXECUTION;

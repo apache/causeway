@@ -312,16 +312,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
-        <project.build.outputTimestamp>2022-09-25T11:38:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2022-10-01T16:36:00Z</project.build.outputTimestamp>
 
         <!-- APACHE ISIS customisation 6/21: start -->
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
         <!-- LIBRARY DEPENDENCIES -->
-        <archunit.version>0.23.1</archunit.version>
+        <archunit.version>1.0.0</archunit.version>
         <asciidoctorj.version>2.5.6</asciidoctorj.version>
-        <asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
+        <asm.version>9.4</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.4.0</approvaltests.version>
 
         <assertj-guava.version>3.5.0</assertj-guava.version>
@@ -332,7 +332,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.11.0</commons-io.version>
 
-        <cucumber.version>7.8.0</cucumber.version>
+        <cucumber.version>7.8.1</cucumber.version>
 
         <cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
 
@@ -341,12 +341,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-        <datanucleus-core.version>6.0.1</datanucleus-core.version>
+        <datanucleus-core.version>6.0.2</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
         <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
-        <datanucleus-rdbms.version>6.0.1</datanucleus-rdbms.version>
+        <datanucleus-rdbms.version>6.0.2</datanucleus-rdbms.version>
 
         <datatables.version>1.12.1</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
@@ -419,7 +419,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>3.2.1</togglz.version>
 
-        <vaadin.version>23.2.2</vaadin.version>
+        <vaadin.version>23.2.3</vaadin.version>
 
         <wicket.version>9.11.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -771,7 +771,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                         one</pattern>
                                 </patterns>
                             </license>
-                            <license 
+                            <license
                                     implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                                 <licenseFamilyCategory>BSD3</licenseFamilyCategory>
                                 <licenseFamilyName>BSD 3-Clause</licenseFamilyName>

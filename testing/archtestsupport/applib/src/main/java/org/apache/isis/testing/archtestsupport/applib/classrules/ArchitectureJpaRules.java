@@ -107,7 +107,7 @@ public class ArchitectureJpaRules {
 
     static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener() {
         return new DescribedPredicate<JavaAnnotation<?>>("@EntityListener({IsisEntityListener.class})") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(EntityListeners.class)) {
                     return false;
                 }
@@ -260,7 +260,7 @@ public class ArchitectureJpaRules {
 
     static DescribedPredicate<JavaAnnotation<?>> Table_schema() {
         return new DescribedPredicate<JavaAnnotation<?>>("@Table(schema=...)") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
                     return false;
                 }
@@ -275,7 +275,7 @@ public class ArchitectureJpaRules {
     static DescribedPredicate<JavaClass> areEntities() {
         return new DescribedPredicate<JavaClass>("are entities") {
             @Override
-            public boolean apply(final JavaClass input) {
+            public boolean test(final JavaClass input) {
                 return input.isAnnotatedWith(Entity.class);
             }
         };
@@ -283,7 +283,7 @@ public class ArchitectureJpaRules {
 
     static DescribedPredicate<JavaAnnotation<?>> Table_uniqueConstraints() {
         return new DescribedPredicate<JavaAnnotation<?>>("@Table(uniqueConstraints=...)") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
                     return false;
                 }
@@ -313,7 +313,7 @@ public class ArchitectureJpaRules {
 
     static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
         return new DescribedPredicate<JavaClass>("are subtype entities ") {
-            @Override public boolean apply(final JavaClass input) {
+            @Override public boolean test(final JavaClass input) {
                 val superclassIfAny = input.getSuperclass();
                 if(!superclassIfAny.isPresent()) {
                     return false;

@@ -105,7 +105,7 @@ public class ArchitectureDomainRules {
                 .or().areAnnotatedWith(DomainService.class)
                 .and(new DescribedPredicate<>("have an logicalTypeName") {
                     @Override
-                    public boolean apply(final JavaClass javaClass) {
+                    public boolean test(final JavaClass javaClass) {
                         return _LogicalNaming.hasExplicitLogicalName(javaClass);
                     }
                 })
@@ -157,7 +157,7 @@ public class ArchitectureDomainRules {
     static DescribedPredicate<JavaAnnotation<?>> DomainXxx_logicalTypeName(final Class<? extends Annotation> annotationClass) {
         return new DescribedPredicate<>(String.format("@%s(logicalTypeName=...)", annotationClass.getSimpleName())) {
             @Override
-            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(annotationClass)) {
                     return false;
                 }
@@ -269,8 +269,8 @@ public class ArchitectureDomainRules {
                         }
                         val mixinMethodName = item
                                 .tryGetAnnotationOfType(DomainObject.class)
-                                .transform(DomainObject::mixinMethod)
-                                .or(mixinMethodNameDefault);
+                                .map(DomainObject::mixinMethod)
+                                .orElse(mixinMethodNameDefault);
                         val mixinMethodIfAny = item.getAllMethods().stream()
                                 .filter(function.apply(mixinMethodName)).findAny();
                         if (!mixinMethodIfAny.isPresent()) {
@@ -370,7 +370,7 @@ public class ArchitectureDomainRules {
     private static DescribedPredicate<JavaClass> areJaxbViewModels() {
         return new DescribedPredicate<JavaClass>("are JAXB view models") {
             @Override
-            public boolean apply(final JavaClass input) {
+            public boolean test(final JavaClass input) {
                 return input.isAnnotatedWith(XmlRootElement.class);
             }
         };
@@ -397,7 +397,7 @@ public class ArchitectureDomainRules {
     private static DescribedPredicate<JavaClass> areSerializableViewModels() {
         return new DescribedPredicate<JavaClass>("are serializable view models") {
             @Override
-            public boolean apply(final JavaClass input) {
+            public boolean test(final JavaClass input) {
                 val domainObjectIfAny = input.tryGetAnnotationOfType(DomainObject.class);
                 if(!domainObjectIfAny.isPresent()) {
                     return false;
@@ -438,7 +438,7 @@ public class ArchitectureDomainRules {
     static DescribedPredicate<JavaClass> eitherOptionalOrCollection() {
         return new DescribedPredicate<JavaClass>("either Optional or Collection") {
             @Override
-            public boolean apply(final JavaClass input) {
+            public boolean test(final JavaClass input) {
                 return input.isAssignableTo(java.util.Optional.class)
                         || input.isAssignableTo(java.util.Collection.class);
             }

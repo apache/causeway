@@ -52,8 +52,29 @@ under the License.
                     </bs3:row>
                 </bs3:tab>
             </bs3:tabGroup>
-            <cpt:fieldSet name="Details" id="details"/>
-            <cpt:fieldSet name="Security" id="security"/>
+            <bs3:tabGroup>
+                <bs3:tab name="Details">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="" id="details"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Regional">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="" id="regional"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Security">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="" id="security"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
         </bs3:col>
         <bs3:col span="6">
             <cpt:collection id="roles"/>

@@ -19,11 +19,11 @@
 package org.apache.isis.testing.archtestsupport.applib.classrules;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.base.Optional;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
@@ -45,8 +45,8 @@ class CommonPredicates {
     static DescribedPredicate<JavaClass> notAbstract() {
         return new DescribedPredicate<>("not abstract") {
             @Override
-            public boolean apply(JavaClass javaClass) {
-                val isAbstract = javaClass.getModifiers().stream().anyMatch((JavaModifier x) -> x == JavaModifier.ABSTRACT);
+            public boolean test(final JavaClass javaClass) {
+                val isAbstract = javaClass.getModifiers().stream().anyMatch((final JavaModifier x) -> x == JavaModifier.ABSTRACT);
                 return !isAbstract;
             }
         };
@@ -67,7 +67,7 @@ class CommonPredicates {
     static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature(final Nature expectedNature) {
         return new DescribedPredicate<>(String.format("@DomainObject(nature=%s)", expectedNature.name())) {
             @Override
-            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(DomainObject.class)) {
                     return false;
                 }
@@ -81,7 +81,7 @@ class CommonPredicates {
 
     static DescribedPredicate<JavaAnnotation<?>> XmlJavaTypeAdapter_value_PersistentEntityAdapter() {
         return new DescribedPredicate<JavaAnnotation<?>>("@XmlJavaTypeAdapter(PersistentEntityAdapter.class)") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+            @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(XmlJavaTypeAdapter.class)) {
                     return false;
                 }
@@ -96,7 +96,7 @@ class CommonPredicates {
     static DescribedPredicate<JavaClass> ofAnEnum() {
         return new DescribedPredicate<JavaClass>("that is an enum") {
             @Override
-            public boolean apply(JavaClass input) {
+            public boolean test(final JavaClass input) {
                 return input.isEnum();
             }
         };
@@ -111,7 +111,7 @@ class CommonPredicates {
                 .format("@%s(%s = %s)", annotClass.getSimpleName(), attribute, attributeValue);
         return new DescribedPredicate<JavaAnnotation<?>>(description) {
             @Override
-            public boolean apply(JavaAnnotation<?> input) {
+            public boolean test(final JavaAnnotation<?> input) {
                 if (!input.getRawType().getFullName().equals(annotClass.getName())) {
                     return false;
                 }
@@ -148,8 +148,8 @@ class CommonPredicates {
     static DescribedPredicate<JavaClass> areNotAbstract() {
         return new DescribedPredicate<JavaClass>("are not abstract") {
             @Override
-            public boolean apply(JavaClass javaClass) {
-                val isAbstract = javaClass.getModifiers().stream().anyMatch((JavaModifier x) -> x == JavaModifier.ABSTRACT);
+            public boolean test(final JavaClass javaClass) {
+                val isAbstract = javaClass.getModifiers().stream().anyMatch((final JavaModifier x) -> x == JavaModifier.ABSTRACT);
                 return !isAbstract;
             }
         };
