@@ -19,24 +19,28 @@
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.Method;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.lang.Nullable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
-import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
+import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectInvalidParentAnnot;
+import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectProperAnnot;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
 class NavigableParentAnnotationFacetFactoryTest
@@ -47,13 +51,7 @@ extends AbstractFacetFactoryJupiterTestCase {
     @BeforeEach
     void setUp() throws Exception {
         super.setUpMmc();
-        facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext()) {
-            @Override
-            public void process(final ProcessClassContext processClassContext) {
-                super.process(processClassContext);
-                assertHasNavigableParentFacet(processClassContext.getFacetHolder());
-            }
-        };
+        super.setUpFacetedMethodAndParameter();
     }
 
     @AfterEach
@@ -63,33 +61,47 @@ extends AbstractFacetFactoryJupiterTestCase {
         super.tearDown();
     }
 
-    @Test @SneakyThrows
-    protected void testParentAnnotatedMethod() throws Exception {
 
-        val domainObject = new DomainObjectA();
-        val parentMethodName = "root";
+    static Stream<Arguments> navigableTypeArgs() {
+        return Stream.of(
+                Arguments.of(new DomainObjectProperAnnot(), "root", null),
+                Arguments.of(new DomainObjectInvalidParentAnnot(), "root",
+                        "the object's navigable parent must no be void, plural, vetoed or a value-type; "
+                        + "yet the parent type 'java.math.BigInteger' as discovered was value-type")); }
+
+    @ParameterizedTest
+    @MethodSource("navigableTypeArgs")
+    protected void navigableType(
+            final Object domainObject,
+            final String parentMethodName,
+            final @Nullable String expectedValidationMessage) throws Exception {
+
         val domainClass = domainObject.getClass();
         val facetedMethod = facetedAction(domainClass, parentMethodName);
 
+        facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessClassContext
                 .forTesting(domainClass, defaultMethodRemover(), facetedMethod));
 
-        val navigableParentFacet = assertHasNavigableParentFacet(facetedMethod);
-        assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
+        if(expectedValidationMessage==null) {
 
-        final Method parentMethod = domainClass.getMethod(parentMethodName);
+            val navigableParentFacet = facetedMethod.getFacet(NavigableParentFacet.class);
+            assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
+            assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
 
-        assertEquals(
-                navigableParentFacet.navigableParent(domainObject),
-                parentMethod.invoke(domainObject, _Constants.emptyObjects));
-    }
+            final Method parentMethod = domainClass.getMethod(parentMethodName);
 
-    // -- HELPER
+            assertEquals(
+                    navigableParentFacet.navigableParent(domainObject),
+                    parentMethod.invoke(domainObject, _Constants.emptyObjects));
+        } else {
 
-    NavigableParentFacet assertHasNavigableParentFacet(final FacetHolder facetHolder) {
-        val navigableParentFacet = facetHolder.getFacet(NavigableParentFacet.class);
-        assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
-        return navigableParentFacet;
+            assertNull(facetedMethod.getFacet(NavigableParentFacet.class));
+
+            val validation = getSpecificationLoader().getOrAssessValidationResult();
+            assertTrue(validation.getMessages().stream()
+                    .anyMatch(msg->msg.contains(expectedValidationMessage)));
+        }
     }
 
 }

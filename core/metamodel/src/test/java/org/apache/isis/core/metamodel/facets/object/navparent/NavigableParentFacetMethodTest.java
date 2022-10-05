@@ -29,20 +29,23 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
+import lombok.val;
+
 class NavigableParentFacetMethodTest {
 
-    private NavigableParentFacetViaMethod facet;
-    private FacetHolder mockFacetHolder;
+    private NavigableParentFacet facet;
+    private FacetHolder simpleFacetHolder;
     private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInNavigableParentMethod pojo;
 
     public static class DomainObjectWithProblemInNavigableParentMethod {
-        public String parent() {
+        public Object parent() {
             throw new NullPointerException();
         }
     }
@@ -50,11 +53,15 @@ class NavigableParentFacetMethodTest {
     @BeforeEach
     public void setUp() throws Exception {
 
+        val mmc = MetaModelContext_forTesting.buildDefault();
+        simpleFacetHolder = FacetHolder.forTesting(mmc);
+
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
-        mockFacetHolder = Mockito.mock(FacetHolder.class);
+
         mockOwningAdapter = Mockito.mock(ManagedObject.class);
         final Method navigableParentMethod = DomainObjectWithProblemInNavigableParentMethod.class.getMethod("parent");
-        facet = new NavigableParentFacetViaMethod(navigableParentMethod, mockFacetHolder);
+        facet = NavigableParentFacetViaMethod.create(pojo.getClass(), navigableParentMethod, simpleFacetHolder)
+                .orElse(null);
 
         Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
     }

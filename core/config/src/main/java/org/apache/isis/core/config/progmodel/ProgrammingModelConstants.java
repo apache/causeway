@@ -481,6 +481,9 @@ public final class ProgrammingModelConstants {
         VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
                 "${type}: ViewModel contract violation: missing single (String) arg constructor "
                 + "(for de-serialization from memento string)."),
+        DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT("${type}: the object's navigable parent must no be void, "
+                + "plural, vetoed or a value-type; "
+                + "yet the parent type '${parentType}' as discovered was ${parentTypeDeficiency}; "),
         DOMAIN_OBJECT_MISSING_A_NAMESPACE("${type}: the object type must declare a namespace, "
                 + "yet there was none found in '${logicalTypeName}'; "
                 + "eg. @Named(\"Customer\") is considered invalid, "
@@ -504,6 +507,7 @@ public final class ProgrammingModelConstants {
                 + "mapped to multiple non-abstract classes:\n"
                 + "${csv}"),
         ;
+
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {
             return getMessageForTypeAndMemberId(
