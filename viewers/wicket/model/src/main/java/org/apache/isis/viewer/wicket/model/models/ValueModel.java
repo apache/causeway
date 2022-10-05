@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -42,7 +40,7 @@ extends ModelAbstract<ManagedObject> {
     public static ValueModel of(
             final @NonNull  MetaModelContext commonContext,
             final @NonNull  ObjectMember objectMember,
-            final @Nullable ManagedObject valueAdapter) {
+            final @NonNull ManagedObject valueAdapter) {
         return new ValueModel(commonContext, objectMember, valueAdapter);
     }
 
@@ -53,7 +51,7 @@ extends ModelAbstract<ManagedObject> {
     private ValueModel(
             final MetaModelContext commonContext,
             final @NonNull  ObjectMember objectMember,
-            final @Nullable ManagedObject valueAdapter) {
+            final @NonNull ManagedObject valueAdapter) {
         super(commonContext);
         this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
         adapterMemento = valueAdapter.getMemento().orElseThrow();
