@@ -484,7 +484,7 @@ public final class ProgrammingModelConstants {
         VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
                 "${type}: ViewModel contract violation: missing single (String) arg constructor "
                 + "(for de-serialization from memento string)."),
-        VIEWMODEL_MISSING_SERIALIZATION_STRATEGY( // draft: not used yet
+        VIEWMODEL_MISSING_SERIALIZATION_STRATEGY(
                 "${type}: Missing ViewModel serialization strategy encountered; "
                 + "for ViewModels one of those must be true: "
                 + "(1) implements the ViewModel interface, "
