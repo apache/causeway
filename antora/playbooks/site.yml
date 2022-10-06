@@ -98,7 +98,7 @@ content:
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: antora/components/tutorials # tutorials
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
 
 # extensions
     - url: .
@@ -107,19 +107,19 @@ content:
 
     - url: .
       start_path: extensions/core/commandlog/adoc # userguide
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/core/excel/adoc # userguide
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/core/executionlog/adoc # userguide
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/core/executionoutbox/adoc # userguide
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/core/executionrepublisher/adoc # userguide
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
@@ -129,19 +129,19 @@ content:
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/security/secman/adoc # security
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: extensions/security/sessionlog/adoc # security
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: extensions/security/spring-oauth2/src/main/adoc # security
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
 
     - url: .
       start_path: extensions/vro/cors/adoc # vro
@@ -161,7 +161,7 @@ content:
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: extensions/vw/sse/adoc # vw
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
 
 # incubator
     - url: .
@@ -172,10 +172,10 @@ content:
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: incubator/extensions/core/commandreplay/adoc # incubator
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
     - url: .
       start_path: incubator/viewers/graphql/adoc # incubator
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M8]
 #    - url: .
 #      start_path: incubator/viewers/javafx/adoc # incubator
 #      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
@@ -230,7 +230,7 @@ content:
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: testing/archtestsupport/adoc # testing
-      branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+      branches: [2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
     - url: .
       start_path: testing/fakedata/adoc # testing
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
@@ -268,9 +268,15 @@ content:
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+#    - url: .
+#      start_path: valuetypes/jodatime/adoc # valuetypes
+#      branches: [2.0.0-M8]
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
       branches: [2.0.0-M5, 2.0.0-M6, 2.0.0-M7, 2.0.0-M8]
+    - url: .
+      start_path: valuetypes/vega/adoc # valuetypes
+      branches: [2.0.0-M8]
 
 # viewers
     - url: .
