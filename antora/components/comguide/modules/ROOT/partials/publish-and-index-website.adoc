@@ -74,7 +74,7 @@ We use the Algolia-provided link:https://hub.docker.com/r/algolia/docsearch-scra
 [source,bash]
 ----
 cd content
-docker run -it --env-file=../algolia.env -e "CONFIG=$(cat ../algolia-config.json | jq -r tostring)" algolia/docsearch-scraper
+docker run -it --env-file=../algolia.env -e "CONFIG=$(cat ../algolia-config.json | jq -r tostring)" algolia/docsearch-scraper:v1.16.0
 ----
 
 This posts the index up to the link:https://algolia.com[Algolia] site.
