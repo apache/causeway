@@ -359,10 +359,11 @@ NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[prev
 
 * Now update `site.yml`
 +
-This will reference the new branch (and any previous branches).
+This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: {page-isisrel}`
+** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-isisrel}]`
+
 
 * commit this change, too (there's no need to push):
 +
