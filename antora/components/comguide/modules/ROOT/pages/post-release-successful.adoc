@@ -129,17 +129,6 @@ Create a new JIRA ticket as a catch-all for the _next_ release.
 
 In the main `isis` repo (ie containing the asciidoc source):
 
-* Create a new `relnotes.adoc` file to hold the JIRA-generated release notes generated above.
-+
-This should live in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/relnotes.adoc`
-
-** where `yyyy` is the year
-** where `vvv` is the version number
-
-* Update the `nav.adoc` file to reference these release notes
-+
-In `antora/components/relnotes/ROOT/nav.adoc`
-
 * Generate release notes
 +
 From the root directory, generate the release notes for the current release, in Asciidoc format; eg:
@@ -155,12 +144,23 @@ This script uses 'jq' to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
-* Incorporate the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`
-
-* Update the table in the `about.adoc` summary
+* Create a new `relnotes.adoc` file
 +
-In `antora/components/relnotes/ROOT/pages/about.adoc`.
+in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/relnotes.adoc`
 
+** where `yyyy` is the year
+** `vvv` is the version number
+
++
+Copy the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`, recategorising if necessary
+
+* Update the table in `antora/components/relnotes/ROOT/pages/about.adoc`
++
+Date of release, number of new features, improvements and bugs fixed.
+
+* Update `antora/components/relnotes/ROOT/nav.adoc`
++
+To reference these release notes.
 
 * update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
 Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
@@ -200,61 +200,54 @@ If necessary, checkout this directory structure:
 svn co https://dist.apache.org/repos/dist/release/isis isis-dist
 ----
 
-Next, add the new release into the appropriate directory, and delete any previous release.
+Next, add the new release into the appropriate directory.
 The `upd.sh` script can be used to automate this:
 
 [source,bash]
 ----
-old_ver=$1
-new_ver=$2
+new_ver=$1
 
+if [ $# -lt 1 ]; then
+        echo "usage: $(basename $0) version" 2>&1
+        exit 1
+fi
 
 # constants
+fullname="isis-bom"
 repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
 
+# file suffices
 zip="source-release.zip"
 asc="$zip.asc"
 md5="$zip.md5"
+sha1="$zip.sha1"
 sha512="$zip.sha512"
 
-
-fullname="isis-bom"
-pushd bom
-
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$asc
-svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$md5
-svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$zip
-svn add $fullname-$new_ver-$zip
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$zip
-svn add $fullname-$new_ver-$sha512
-
-if [ "Z${old_ver}Z" == "ZZ" ]; then
-        echo "old_ver not specified, so nothing will be removed"
-else
-        svn delete $fullname-$old_ver-$asc
-        svn delete $fullname-$old_ver-$md5
-        svn delete $fullname-$old_ver-$zip
-        svn delete $fullname-$old_ver-$sha512
-fi
-
-popd
+for suffix in $zip $asc $md5 $sha1 $sha512
+do
+        echo curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
+        curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$suffix
+        svn add $fullname-$new_ver-$suffix
+done
 ----
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh [previous_release] {page-isisrel}
+sh upd.sh{page-isisrel}
 ----
 
-The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
+The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.
+
+Manually delete any old files using `svn delete`.
 
 Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
 It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
 
 [source,bash,subs="attributes+"]
 ----
-vi `find . -name *.md5`
+cat *.md5
+cat *.sha1
+cat *.sha512
 ----
 
 Assuming all is good, commit the changes:
@@ -359,10 +352,11 @@ NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[prev
 
 * Now update `site.yml`
 +
-This will reference the new branch (and any previous branches).
+This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: {page-isisrel}`
+** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-isisrel}]`
+
 
 * commit this change, too (there's no need to push):
 +

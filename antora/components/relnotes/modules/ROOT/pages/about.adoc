@@ -6,6 +6,18 @@
 
 This table summarises all releases of Apache Isis v2.0 to date.
 
+////
+| 2.0.0-RC1
+| not released yet (upcoming)
+| First release candidate for Apache Isis 2.0.0
+| ?
+| ?
+| ?
+|
+* xref:relnotes:ROOT:2022/2.0.0-RC1/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2022/2.0.0-RC1/mignotes.adoc[Migration Notes]
+////
+
 [cols="2,2,4a,>1,>1,>1,3a"]
 |===
 | Version
@@ -16,28 +28,19 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | Bugs
 | Detail
 
-| 2.0.0-RC1
-| not released yet (upcoming)
-| First release candidate for Apache Isis 2.0.0
-| ?
-| ?
-| ?
-|
-* xref:relnotes:ROOT:2022/2.0.0-RC1/relnotes.adoc[Release Notes]
-* xref:relnotes:ROOT:2022/2.0.0-RC1/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M8
-| not released yet (upcoming)
+| 06-Oct-2022
 | Eighth milestone release for Apache Isis 2.0.0
-| ?
-| ?
-| ?
+| 26
+| 79
+| 84
 |
 * xref:relnotes:ROOT:2022/2.0.0-M8/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2022/2.0.0-M8/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M7
-| 28-02-2022
+| 28-Feb-2022
 | Seventh milestone release for Apache Isis 2.0.0
 | 9
 | 17
@@ -47,7 +50,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * xref:relnotes:ROOT:2022/2.0.0-M7/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M6
-| 26-08-2021
+| 26-Aug-2021
 | Sixth milestone release for Apache Isis 2.0.0; now JDK11+
 | 23
 | 92
@@ -57,7 +60,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * xref:relnotes:ROOT:2021/2.0.0-M6/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M5
-| 28-03-2021
+| 28-Mar-2021
 | Fifth milestone release for Apache Isis 2.0.0
 | 4
 | 68
@@ -67,7 +70,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * xref:relnotes:ROOT:2021/2.0.0-M5/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M4
-| 17-10-2020
+| 17-Oct-2020
 | Fourth milestone release for Apache Isis 2.0.0
 | 14
 | 28
@@ -78,7 +81,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * link:https://issues.apache.org/jira/projects/ISIS/versions/12347808[JIRA Rel Notes]
 
 | 2.0.0-M3
-| 27-03-2020
+| 27-Mar-2020
 | Third milestone release for Apache Isis 2.0.0: now re-platformed on top of Spring Boot.
 | 24
 | 149
@@ -89,7 +92,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12344784[JIRA Rel Notes]
 
 | 2.0.0-M2
-| 22-01-2019
+| 22-Jan-2019
 | Second milestone release for Apache Isis 2.0.0: tree support, initial work on simplifying bootstrapping and configuration, removing dependencies
 | 2
 | 36
@@ -99,7 +102,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342393[JIRA Rel Notes]
 
 |2.0.0-M1
-| 31-07-2018
+| 31-Jul-2018
 | First milestone release for Apache Isis 2.0.0: Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
 | 6
 | 55
