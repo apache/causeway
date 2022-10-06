@@ -45,19 +45,14 @@ class MethodFinderUtilsTest {
     @BeforeEach
     public void setup() {
         val methodByClassMap = new MethodByClassMap();
-        this.hasPostConstructMethodCache = new HasPostConstructMethodCache() {
-            @Override
-            public MethodByClassMap getPostConstructMethodsCache() {
-                return methodByClassMap;
-            }
-        };
+        this.hasPostConstructMethodCache = () -> methodByClassMap;
     }
 
     @Test
     public void whenExists() throws Exception {
 
         val cache = hasPostConstructMethodCache.getPostConstructMethodsCache();
-        val method = hasPostConstructMethodCache.postConstructMethodFor(new _TestDummies.WithPostConstruct());
+        val method = hasPostConstructMethodCache.postConstructMethodFor(_TestDummies.WithPostConstruct.class);
 
         assertThat(method, is(not(nullValue())));
         final Optional<Method> actual = cache.get(_TestDummies.WithPostConstruct.class);
@@ -70,7 +65,7 @@ class MethodFinderUtilsTest {
     public void whenDoesNotExist() throws Exception {
 
         val cache = hasPostConstructMethodCache.getPostConstructMethodsCache();
-        val method = hasPostConstructMethodCache.postConstructMethodFor(new NoPostConstruct());
+        val method = hasPostConstructMethodCache.postConstructMethodFor(NoPostConstruct.class);
 
         assertThat(method, is(nullValue()));
         final Optional<Method> actual = cache.get(NoPostConstruct.class);

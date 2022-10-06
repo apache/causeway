@@ -478,9 +478,19 @@ public final class ProgrammingModelConstants {
         UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS("${type}#${member}: "
                 + "has synthesized (effective) annotation @Domain.Include, "
                 + "is assumed to represent or support a property, collection or action."),
+        VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES(
+                "${type}: has multiple incompatible annotations/interfaces indicating that "
+                + "it is a recreatable object of some sort (${facetA} and ${facetB})"),
         VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
                 "${type}: ViewModel contract violation: missing single (String) arg constructor "
                 + "(for de-serialization from memento string)."),
+        VIEWMODEL_MISSING_SERIALIZATION_STRATEGY( // draft: not used yet
+                "${type}: Missing ViewModel serialization strategy encountered; "
+                + "for ViewModels one of those must be true: "
+                + "(1) implements the ViewModel interface, "
+                + "(2) implements Serializable, "
+                + "(3) uses JAXB semantics, "
+                + "(4) has explicit VIEW_MODEL nature via DomainObject annotation."),
         DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT("${type}: the object's navigable parent must no be void, "
                 + "plural, vetoed or a value-type; "
                 + "yet the parent type '${parentType}' as discovered was ${parentTypeDeficiency}; "),
