@@ -129,17 +129,6 @@ Create a new JIRA ticket as a catch-all for the _next_ release.
 
 In the main `isis` repo (ie containing the asciidoc source):
 
-* Create a new `relnotes.adoc` file to hold the JIRA-generated release notes generated above.
-+
-This should live in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/relnotes.adoc`
-
-** where `yyyy` is the year
-** where `vvv` is the version number
-
-* Update the `nav.adoc` file to reference these release notes
-+
-In `antora/components/relnotes/ROOT/nav.adoc`
-
 * Generate release notes
 +
 From the root directory, generate the release notes for the current release, in Asciidoc format; eg:
@@ -155,12 +144,23 @@ This script uses 'jq' to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
-* Incorporate the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`
-
-* Update the table in the `about.adoc` summary
+* Create a new `relnotes.adoc` file
 +
-In `antora/components/relnotes/ROOT/pages/about.adoc`.
+in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/relnotes.adoc`
 
+** where `yyyy` is the year
+** `vvv` is the version number
+
++
+Copy the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`, recategorising if necessary
+
+* Update the table in `antora/components/relnotes/ROOT/pages/about.adoc`
++
+Date of release, number of new features, improvements and bugs fixed.
+
+* Update `antora/components/relnotes/ROOT/nav.adoc`
++
+To reference these release notes.
 
 * update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
 Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
