@@ -34,7 +34,7 @@ public interface Renderer<T> {
      * The value rendered as HTML.
      * <p>
      * Default implementation uses the 'escaped' titlePresentation.
-     * Override for custom HTML, but be aware of potential XSS attack risks.
+     * Override for custom HTML, but be aware of potential XSS attack vectors.
      */
     default String htmlPresentation(final ValueSemanticsProvider.Context context, final T value) {
         return _Strings.htmlEscape(titlePresentation(context, value));

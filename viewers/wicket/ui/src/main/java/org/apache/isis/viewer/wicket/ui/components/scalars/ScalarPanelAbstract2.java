@@ -163,7 +163,7 @@ extends ScalarPanelAbstract {
     private boolean isUsingTextarea() {
         if(getRenderScenario().isCompact()
                 || getFormatModifiers().contains(FormatModifier.MARKUP)
-                || !getFormatModifiers().contains(FormatModifier.MULITLINE)) {
+                || !getFormatModifiers().contains(FormatModifier.MULTILINE)) {
             return false;
         }
         // only render a text-area if it has content

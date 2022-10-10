@@ -37,7 +37,7 @@ extends ScalarPanelTextFieldTextualAbstract {
 
     @Override
     protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.MULITLINE);
+        modifiers.add(FormatModifier.MULTILINE);
     }
 
 }

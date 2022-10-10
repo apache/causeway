@@ -89,7 +89,7 @@ implements ScalarModelChangeListener {
 
     public enum FormatModifier {
         MARKUP,
-        MULITLINE,
+        MULTILINE,
         BADGE,
     }
 
