@@ -99,8 +99,17 @@ implements
     @Override
     public Can<Markup> getExamples() {
         return Can.of(
-                Markup.valueOf("a Markup"),
-                Markup.valueOf("another Markup"));
+                Markup.valueOf("<a href=\"https://isis.apache.org/\">"
+                        + "Link Name"
+                        + "</a> is a link"),
+                Markup.valueOf("<h1>This is a Header</h1>"),
+                Markup.valueOf("<h2>This is a Medium Header</h2>"),
+                Markup.valueOf("<p>This is a new paragraph!</p>\n"
+                        + "<p>\n"
+                        + "  <b>This is a new paragraph!</b> <br>\n"
+                        + "  <b><i>This is a new\n"
+                        + "    sentence without a paragraph break, in bold italics.</i></b>\n"
+                        + "</p>"));
     }
 
 
