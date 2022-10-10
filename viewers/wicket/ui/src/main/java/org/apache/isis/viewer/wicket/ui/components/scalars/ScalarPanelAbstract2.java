@@ -141,9 +141,7 @@ extends ScalarPanelAbstract {
         }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
-                        getFormatModifiers().contains(FormatModifier.NO_OUTPUT_ESCAPE)
-                            ? markupComponent(scalarValueId, this::outputFormatAsString)
-                            : Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
+                        Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
     }
 
 
