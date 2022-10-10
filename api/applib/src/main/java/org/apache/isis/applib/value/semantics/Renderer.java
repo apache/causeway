@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 /**
  * @since 2.x {@index}
  */
@@ -30,9 +32,12 @@ public interface Renderer<T> {
 
     /**
      * The value rendered as HTML.
+     * <p>
+     * Default implementation uses the 'escaped' titlePresentation.
+     * Override for custom HTML, but be aware of potential XSS attack risks.
      */
     default String htmlPresentation(final ValueSemanticsProvider.Context context, final T value) {
-        return titlePresentation(context, value);
+        return _Strings.htmlEscape(titlePresentation(context, value));
     }
 
     public static enum SyntaxHighlighter {
