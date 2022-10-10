@@ -189,9 +189,8 @@ extends ScalarPanelAbstract {
                     getPlaceholderRenderService()
                     .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
         }
-        val useText = isUsingTextarea()
-                || getFormatModifiers().contains(FormatModifier.BADGE);
-        return useText
+        return isUsingTextarea()
+                || getFormatModifiers().contains(FormatModifier.TEXT_ONLY)
                         ? UiString.text(proposedValue.getValueAsTitle().getValue())
                         : UiString.markup(proposedValue.getValueAsHtml().getValue());
     }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.EnumSet;
+
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
@@ -39,6 +41,12 @@ extends ScalarPanelTextFieldAbstract<String> {
     protected ScalarPanelTextFieldTextualAbstract(
             final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, String.class);
+    }
+
+    @Override
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
+        // enforce use of text representation
+        modifiers.add(FormatModifier.TEXT_ONLY);
     }
 
     @Override
