@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.composite;
 
-import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
@@ -42,11 +41,6 @@ extends ScalarPanelFormFieldAbstract<T> {
             final ScalarModel scalarModel,
             final Class<T> valueType) {
         super(id, scalarModel, valueType);
-    }
-
-    @Override
-    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.COMPOSITE);
     }
 
     @Override
