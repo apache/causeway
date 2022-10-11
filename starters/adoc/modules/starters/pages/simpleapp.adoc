@@ -399,7 +399,7 @@ Change as required.
 <.> The `dom` subpackage holds the "domain object model" for this module.
 Modules may have other subpackages, common ones include ``types`` and ``fixture``s (as below), also ``api``s, ``contribution``s, ``spi``s
 
-<.> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding domin services (`SimpleObjects` and `SimpleObjectRepository`).
+<.> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding domain services (`SimpleObjects` and `SimpleObjectRepository`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
 
 <.> For the `jpa` branch only, uses Spring Data JPA to automatically provide the query implementation.
@@ -584,11 +584,14 @@ public abstract class SimpleModuleIntegTestAbstract
 
 <.> The `TestApp` (defined as a nested static class below) lists the modules needed to bootstrap the integration test.
 
-<.> Actives the "test" profile, which reads in additional configuratoin in `application-test.yml"
+<.> Activates the "test" profile, which reads in additional configuration in `application-test.yml"
+
+<.> Tests typically inherit from `IsisIntegrationTestAbstract`, which provides some convenience methods to inherit from.
+In this case, the test inherits from the `IsisIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
 <.> Specifies the modules that make up Apache Isis framework itself.
-These include core, security set to the bypass implementation (effecively is ignored) and JDO/DataNucleus for persistence.
-Note that there no viewers are bootstrapped because the tests are run through Spring's integration testing framework, rather than (say) as Selenium tests.
+These include core, security set to the bypass implementation (effectively is ignored) and JDO/DataNucleus for persistence.
+Note that no viewers are bootstrapped because the tests are run through Spring's integration testing framework, rather than (say) as Selenium tests.
 
 <.> Disables security checks.
 
@@ -609,9 +612,6 @@ A unique schema allows tests to potentially be run in parallel
 This may be required because the application might otherwise be configured to use the xref:userguide:flyway:about.adoc[Flyway integration].
 
 <.> Sets up logging to use the configuration defined in the `log4j2-test.xml` file
-
-<.> Tests typically inherit from `IsisIntegrationTestAbstract`, which provides some convenience methods to inherit from.
-In this case, the test inherits from the `IsisIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
 
 

@@ -199,7 +199,7 @@ The process to raise the pull request, broadly speaking:
 
 == If your pull request is accepted
 
-To double check that your pull request is accepted, update your `master` branch from the `upstream` remote:
+To double-check that your pull request is accepted, update your `master` branch from the `upstream` remote:
 
 You can then use `gitk --all` (or `git log` if you prefer the command line) to check your contribution has been added.
 
