@@ -23,8 +23,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
-import org.apache.isis.client.kroviz.to.Represention
-import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.diagram.Tree
@@ -66,7 +65,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
             val link = it.link!!
             ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
         }
- //FIXME
+        //FIXME
         if (dm.grid == null) {
             dm.addGrid(grid)
             dm.properties.propertyLayoutList.forEach { p ->
@@ -97,6 +96,19 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     protected fun invokeIconLink(obj: TObject, aggregator: AggregatorWithLayout, referrer: String) {
         val l = obj.getIconLink()!!
         invoke(l, aggregator, referrer = referrer)
+    }
+
+    protected fun Property.descriptionLink(): Link? {
+        return links.find {
+            it.relation() == Relation.ELEMENT_TYPE
+        }
+    }
+
+    protected fun Property.isPropertyDescription(): Boolean {
+        val selfLink = this.links.find {
+            it.relation() == Relation.SELF
+        }
+        return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }
 
 }

@@ -124,7 +124,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 ResourceProxy().fetch(it, this, referrer = referrer)
             }
         }
-        collection.value!!.forEach {
+        collection.value.forEach {
             ResourceProxy().fetch(it, this, referrer = referrer)
         }
     }
@@ -132,19 +132,6 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     override fun reset(): CollectionAggregator {
         dpm.reset()
         return this
-    }
-
-    private fun Property.descriptionLink(): Link? {
-        return links.find {
-            it.relation() == Relation.ELEMENT_TYPE
-        }
-    }
-
-    private fun Property.isPropertyDescription(): Boolean {
-        val selfLink = this.links.find {
-            it.relation() == Relation.SELF
-        }
-        return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }
 
 }

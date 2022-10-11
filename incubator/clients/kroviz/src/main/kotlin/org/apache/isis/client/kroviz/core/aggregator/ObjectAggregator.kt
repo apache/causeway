@@ -50,7 +50,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
                 is TObject -> handleObject(obj, referrer)
                 is ResultObject -> handleResultObject(obj)
                 is ResultValue -> handleResultValue(obj)
-                is Property -> handleProperty(obj)
+                is Property -> handleProperty(obj, referrer)
                 is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
                 is Grid -> handleGrid(obj, dpm as ObjectDM, referrer)
                 is HttpError -> ErrorDialog(logEntry).open()
@@ -74,7 +74,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         }
     }
 
-    fun handleObject(obj: TObject, referrer: String) {
+    private fun handleObject(obj: TObject, referrer: String) {
         // After ~/action/invoke is called, the actual object instance (containing properties) needs to be invoked as well.
         // Note that rel.self/href is identical and both are of type TObject. logEntry.url is different, though.
         if (obj.getProperties().size == 0) {
@@ -95,11 +95,11 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         invoke(selfLink!!, this, referrer = referrer)
     }
 
-    fun handleResultObject(resultObject: ResultObject) {
+    private fun handleResultObject(resultObject: ResultObject) {
         (dpm as ObjectDM).addResult(resultObject)
     }
 
-    fun handleResultValue(resultValue: ResultValue) {
+    private fun handleResultValue(resultValue: ResultValue) {
 // TODO       (dpm as ObjectDM).addResult(resultObject)
         console.log("[OA.handleResultValue]")
         console.log(resultValue)
@@ -113,16 +113,27 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         obj.getCollections().forEach {
             val key = it.id
             val aggregator = CollectionAggregator(key, this)
-            collectionMap.put(key, aggregator)
+            collectionMap[key] = aggregator
             val link = it.links.first()
             ResourceProxy().fetch(link, aggregator, referrer = referrer)
         }
     }
 
-    private fun handleProperty(property: Property) {
-        console.log("[OA.handleProperty]")
-        console.log(property)
-//        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
+    private fun handleProperty(p: Property, referrer: String) {
+        val dm = dpm as ObjectDM
+        if (p.isPropertyDescription()) {
+            console.log("[OA.handleProperty].isPropertyDescription")
+            dm.addPropertyDescription(p)
+        } else {
+            console.log("[OA.handleProperty].isNotPropertyDescription")
+            console.log(p)
+            console.log(dm)
+            dm.addProperty(p)
+            val pdl = p.descriptionLink()
+            if (pdl != null) {
+                invoke(pdl, this, referrer = referrer)
+            }
+        }
     }
 
     override fun reset(): ObjectAggregator {

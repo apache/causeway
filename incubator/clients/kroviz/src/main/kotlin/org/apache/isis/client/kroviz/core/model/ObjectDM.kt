@@ -28,48 +28,17 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     val collections = mutableMapOf<String, CollectionDM>()
     private var dirty: Boolean = false
 
-    override fun canBeDisplayed(): Boolean {
-        //       debug()
-        return when {
-            isRendered -> false
-            (layout == null) && (grid == null) -> false
-            else -> true
-        }
-    }
-
-    private fun debug() {
-        console.log("[]")
-        console.log("[ODM.debug] data / collections / layout / grid / properties / icon / aggregator / logEntries")
-        console.log(data)
-        console.log(collections)
-        console.log(layout)
-        console.log(grid)
-        console.log(properties)
-        console.log(icon)
-        if (data != null) {
-            val delegate = (data as Exposer).delegate
-            val selfLink = delegate.getSelfLink()
-            val rs = ResourceSpecification(selfLink.href)
-            val es = SessionManager.getEventStore()
-            val le = es.findBy(rs)!!
-            val aggt = le.getAggregator()
-            console.log(aggt)
-            val logEntries = es.findAllBy(aggt!!)
-            logEntries.forEach {
-                console.log(it)
-            }
-        }
-    }
-
     fun setDirty(value: Boolean) {
         dirty = value
     }
 
     fun addCollection(key: String, value: CollectionDM) {
-        collections.put(key, value)
+        collections[key] = value
     }
 
     override fun addData(obj: TransferObject) {
+        console.log("[ODM.addData]")
+        console.log(obj)
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer

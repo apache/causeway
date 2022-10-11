@@ -36,7 +36,8 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
     override fun canBeDisplayed(): Boolean {
         return when {
             isRendered -> false
-            layout == null && grid == null -> false
+            layout != null -> true
+            grid != null -> true
             else -> properties.readyForDisplay()
         }
     }
@@ -47,6 +48,8 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
     }
 
     fun addGrid(grid: Grid) {
+        console.log("[DMWL.initGrid]")
+        console.log(grid)
         this.grid = grid
         initPropertyGridList(grid)
     }
