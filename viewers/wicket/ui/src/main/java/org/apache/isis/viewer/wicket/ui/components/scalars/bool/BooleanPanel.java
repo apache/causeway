@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.bool;
 
-import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
@@ -50,13 +49,6 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     public BooleanPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Boolean.class);
-    }
-
-    @Override
-    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        if(!scalarModel().isRequired()) {
-            modifiers.add(FormatModifier.TRISTATE);
-        }
     }
 
     @Override

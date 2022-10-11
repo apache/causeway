@@ -6,3 +6,28 @@
 
 (This page will be updated once the release candidate is released).
 
+
+////
+Highlights of this release:
+
+== New Feature
+
+== Improvement
+
+== Bug
+
+== Docs and Website
+
+== Dependency Upgrade
+
+== Demo and Starter Apps
+
+== Tooling
+
+== Task
+
+== Won't Fix / Not a Problem / Duplicates
+
+== Incubating Features
+////
+

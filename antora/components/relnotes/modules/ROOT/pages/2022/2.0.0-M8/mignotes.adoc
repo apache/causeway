@@ -3,7 +3,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-(This page will be added to as development progresses).
 
 == Programming Model
 
@@ -14,7 +13,7 @@
 | previously
 | new
 
-| For _Domain Objects_ we had support for (direct) _Collection_ modification (`addTo`, `removeFrom`). 
+| For _Domain Objects_ we had support for (direct) _Collection_ modification (`addTo`, `removeFrom`).
 
 As this is part of _Restful Object Specification 1.0_, it was implemented for the _RO Viewer_ and also the _WrapperFactory_.
 
@@ -24,7 +23,7 @@ DomainObjectResource
   addToSet(...)
   addToList(...)
   removeFromCollection(...)
----- 
+----
 Events (removed)
 ----
 CollectionAddToEvent
@@ -40,7 +39,7 @@ Thus, one would make the _Collection_ read only and then define _Actions_ that e
 | `@DomainService.logicalTypeName` deprecated for removal
 | use `@Named` or any other semantics supported by Spring
 +
-Behavioral change: `@DomainService.logicalTypeName` can now be left empty, which is interpreted as _unspecified/indifferent_ 
+Behavioral change: `@DomainService.logicalTypeName` can now be left empty, which is interpreted as _unspecified/indifferent_
 
 | `RecreatableDomainObject` interface removed
 | use `ViewModel` interface instead
@@ -61,7 +60,7 @@ public class SeedService implements MetamodelListener {
         // seed database entities
     }
 }
----- 
+----
 
 | Factory method `Identifier.propertyOrCollectionIdentifier(..)`
 | was slit up into `Identifier.propertyIdentifier(..)` and `Identifier.collectionIdentifier(..)`
@@ -79,8 +78,8 @@ The following changed:
 | new
 
 | `Result<T>` removed
-| replaced by `Try<T>`; also promoting `Either<L, R>` to non-internal, 
-and introducing `Railway<F, S>` 
+| replaced by `Try<T>`; also promoting `Either<L, R>` to non-internal,
+and introducing `Railway<F, S>`
 
 |===
 
@@ -94,25 +93,25 @@ The following changed:
 | previously
 | new
 
-| (non-essential) object meta-data mixins were split out of `IsisModuleApplib` 
+| (non-essential) object meta-data mixins were split out of `IsisModuleApplib`
 | need to be explicitly imported via `IsisModuleApplibObjectMetadataMixins`
 
-| default logging subscribers were split out of `IsisModuleApplib` 
+| default logging subscribers were split out of `IsisModuleApplib`
 | need to be explicitly imported via `IsisModuleApplibChangeAndExecutionLoggers`
 
 |===
 
 == Other
 
-=== Placeholder Rendering (UI) 
+=== Placeholder Rendering (UI)
 
-The UI now renders placeholders `(none)` when representing `null` references. 
-To customize behavior you may want to implement your own `PlaceholderRenderService`. 
-(See `PlaceholderRenderServiceDefault`, the default implementation.)  
+The UI now renders placeholders `(none)` when representing `null` references.
+To customize behavior you may want to implement your own `PlaceholderRenderService`.
+(See `PlaceholderRenderServiceDefault`, the default implementation.)
 
 === Bill of Material / Parent POM
 
-Folder moved `/isis-parent` -> `/bom` 
+Folder moved `/isis-parent` -> `/bom`
 
 [source, xml]
 .Bill of Material
@@ -139,8 +138,8 @@ Folder moved `/isis-parent` -> `/bom`
 <artifactId>isis-extensions-secman-delegated-shiro</artifactId>
 ----
 
-Classes `IsisModuleExtSecmanShiroRealm` and 
-`AuthenticationStrategyForIsisModuleSecurityRealm` 
+Classes `IsisModuleExtSecmanShiroRealm` and
+`AuthenticationStrategyForIsisModuleSecurityRealm`
 were moved and renamed. (see shiro.ini)
 
 [source, ini]
@@ -181,7 +180,7 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 [source, java]
 .Restclient Usage
 ----
-// DigestResponse is no longer publicly visible, instead returning Try<T>  
+// DigestResponse is no longer publicly visible, instead returning Try<T>
 <T> Try<T> digest(Response response, Class<T> entityType);
 
 // DigestResponse is no longer publicly visible, instead returning Try<Can<T>>
@@ -279,6 +278,6 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 
 IsisModuleValSseApplib renamed to IsisModuleExtSseApplib
 IsisModuleValSseMetaModel renamed to IsisModuleExtSseMetaModel
-IsisModuleValSseUiWkt renamed to IsisModuleExtSseWicket 
+IsisModuleValSseUiWkt renamed to IsisModuleExtSseWicket
 ----
 

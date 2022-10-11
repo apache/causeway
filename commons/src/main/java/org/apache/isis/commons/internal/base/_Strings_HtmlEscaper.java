@@ -26,17 +26,17 @@ package org.apache.isis.commons.internal.base;
 final class _Strings_HtmlEscaper {
 
     // as declared int guava's com.google.common.html.HtmlEscapers
+    // order matters: replace '&' first
     private static final _Strings.KeyValuePair[] replacements = {
-            _Strings.pair("\"", "&quot;"),
-            // Note: "&apos;" is not defined in HTML 4.01.
-            _Strings.pair("'", "&#39;"),
             _Strings.pair("&", "&amp;"),
             _Strings.pair("<", "&lt;"),
             _Strings.pair(">", "&gt;"),
-
+            _Strings.pair("\"", "&quot;"),
+            // Note: "&apos;" is not defined in HTML 4.01.
+            _Strings.pair("'", "&#39;"),
     };
 
-    static String htmlEscape(String input) {
+    static String htmlEscape(final String input) {
         if(_Strings.isEmpty(input)) {
             return input;
         }

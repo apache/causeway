@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,11 +58,6 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected abstract IModel<List<FileUpload>> fileUploadModel();
     protected abstract IResource newResource(final T namedWithMimeType);
 
-
-    @Override
-    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.BLOB);
-    }
 
     // -- INPUT FORMAT
 

@@ -18,9 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -90,22 +93,28 @@ implements
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            objectSpec.lookupFacet(ViewModelFacet.class)
+            // ensure concrete viewmodel types have a ViewModelFacet
+            if(!objectSpec.isAbstract()
+                    && objectSpec.getBeanSort().isViewModel()
+                    && !objectSpec.viewmodelFacet().isPresent()) {
+                ValidationFailure.raiseFormatted(objectSpec,
+                        ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
+                            .getMessageForType(objectSpec.getCorrespondingClass().getName()));
+            }
+
+            objectSpec.viewmodelFacet()
             .map(ViewModelFacet::getSharedFacetRankingElseFail)
-            .ifPresent(facetRanking->facetRanking
-                    .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
-
-                            ValidationFailure.raiseFormatted(
-                                    objectSpec,
-                                    "%s: has multiple incompatible annotations/interfaces indicating that " +
-                                            "it is a recreatable object of some sort (%s and %s)",
-                                            objectSpec.getFullIdentifier(),
-                                            a.getClass().getSimpleName(),
-                                            b.getClass().getSimpleName());
-
-
-                    }));
-
+            .ifPresent(facetRanking->{
+                facetRanking
+                .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
+                    ValidationFailure.raiseFormatted(objectSpec,
+                            ProgrammingModelConstants.Validation.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
+                                .getMessage(Map.of(
+                                        "type", objectSpec.getFullIdentifier(),
+                                        "facetA", a.getClass().getSimpleName(),
+                                        "facetB", b.getClass().getSimpleName())));
+                });
+            });
         });
     }
 

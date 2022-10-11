@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Optional;
 import java.util.Vector;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,13 +35,16 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 class SpecificationLoaderTest_nonScalar {
 
-    class ArrayTest extends SpecificationLoaderTestAbstract {
+    @Nested @Disabled("reflection on plain array objects does not work") //FIXME
+    static class ArrayTest extends SpecificationLoaderTestAbstract {
 
         @Override
-        protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-            return reflector.loadSpecification(ReflectorTestPojo[].class);
+        protected ObjectSpecification loadSpecification(final SpecificationLoader specLoader) {
+            return specLoader.loadSpecification(ReflectorTestPojo[].class);
         }
 
         @Test void testType() throws Exception {
@@ -51,25 +56,25 @@ class SpecificationLoaderTest_nonScalar {
         }
 
         @Test @Override public void testCollectionFacet() throws Exception {
-            final Facet facet = specification.getFacet(CollectionFacet.class);
-            assertNotNull(facet);
+            val collectionFacet = specification.getFacet(CollectionFacet.class);
+            assertNotNull(collectionFacet);
         }
 
         @Test @Override public void testTypeOfFacet() throws Exception {
-            final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
-            assertNotNull(facet);
-            assertEquals(Optional.of(ReflectorTestPojo[].class), facet.value().getContainerType());
-            assertEquals(ReflectorTestPojo.class, facet.value().getElementType());
+            val typeOfFacet = specification.getFacet(TypeOfFacet.class);
+            assertNotNull(typeOfFacet);
+            assertEquals(Optional.of(ReflectorTestPojo[].class), typeOfFacet.value().getContainerType());
+            assertEquals(ReflectorTestPojo.class, typeOfFacet.value().getElementType());
         }
 
     }
 
-
+    @Nested
     static class CanTest extends SpecificationLoaderTestAbstract {
 
         @Override
-        protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-            return reflector.loadSpecification(Can.class);
+        protected ObjectSpecification loadSpecification(final SpecificationLoader specLoader) {
+            return specLoader.loadSpecification(Can.class);
         }
 
         @Test void testType() throws Exception {
@@ -94,11 +99,12 @@ class SpecificationLoaderTest_nonScalar {
 
     }
 
+    @Nested
     static class VectorTest extends SpecificationLoaderTestAbstract {
 
         @Override
-        protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-            return reflector.loadSpecification(Vector.class);
+        protected ObjectSpecification loadSpecification(final SpecificationLoader specLoader) {
+            return specLoader.loadSpecification(Vector.class);
         }
 
         @Test void testType() throws Exception {

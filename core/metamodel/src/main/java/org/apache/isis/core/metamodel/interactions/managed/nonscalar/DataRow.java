@@ -25,6 +25,7 @@ import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 public class DataRow {
 
@@ -33,7 +34,9 @@ public class DataRow {
     @Getter private final BooleanBindable selectToggle;
     @Getter private final DataTableModel parentTable;
 
-    public DataRow(final DataTableModel parentTable, final ManagedObject rowElement) {
+    public DataRow(
+            final @NonNull DataTableModel parentTable,
+            final @NonNull ManagedObject rowElement) {
         this.parentTable = parentTable;
         this.rowElement = rowElement;
 
@@ -56,7 +59,7 @@ public class DataRow {
         return rowElement;
     }
 
-    public ManagedObject getCellElement(final DataColumn column) {
+    public ManagedObject getCellElement(final @NonNull DataColumn column) {
         return column.getPropertyMetaModel().get(getRowElement());
     }
 

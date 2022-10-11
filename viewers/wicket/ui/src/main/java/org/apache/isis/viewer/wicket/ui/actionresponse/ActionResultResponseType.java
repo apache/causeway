@@ -22,6 +22,7 @@ import java.net.URL;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -47,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCol
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
@@ -57,7 +59,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             determineScalarAdapter(actionModel.getMetaModelContext(), resultAdapter); // intercepts collections
             return toEntityPage(resultAdapter);
@@ -75,7 +77,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
 
@@ -93,7 +95,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final var commonContext = actionModel.getMetaModelContext();
             final var valueModel = ValueModel.of(commonContext, actionModel.getAction(), resultAdapter);
@@ -107,7 +109,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final Object value = resultAdapter.getPojo();
             IRequestHandler handler =
@@ -120,7 +122,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final Object value = resultAdapter.getPojo();
             IRequestHandler handler =
@@ -133,7 +135,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
             final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
@@ -146,7 +148,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
@@ -160,7 +162,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final URL url = (URL)resultAdapter.getPojo();
             return ActionResultResponse
@@ -172,7 +174,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @NonNull ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
@@ -186,7 +188,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @Nullable ManagedObject resultAdapter, // arg is not used
                 final Can<ManagedObject> args) {
             final var commonContext = actionModel.getMetaModelContext();
             final VoidModel voidModel = new VoidModel(commonContext);
@@ -199,7 +201,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
-                final ManagedObject resultAdapter,
+                final @Nullable ManagedObject resultAdapter, // arg is not used
                 final Can<ManagedObject> args) {
             val signInPage = actionModel.getMetaModelContext()
                     .lookupServiceElseFail(PageClassRegistry.class)
@@ -224,15 +226,15 @@ public enum ActionResultResponseType {
     public static ActionResultResponse determineAndInterpretResult(
             final ActionModel model,
             final AjaxRequestTarget targetIfAny,
-            final ManagedObject resultAdapter,
+            final @Nullable ManagedObject resultAdapter,
             final Can<ManagedObject> args) {
 
         val typeAndAdapter = determineFor(resultAdapter, targetIfAny);
-        return typeAndAdapter.type
+        return typeAndAdapter.type // mapped to VOID if adapter is unspecified or null
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
     }
 
-    public static ActionResultResponse toEntityPage(final ManagedObject entityOrViewmodel) {
+    public static ActionResultResponse toEntityPage(final @NonNull ManagedObject entityOrViewmodel) {
         entityOrViewmodel.invalidateBookmark();
         return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmark().orElseThrow());
     }
@@ -240,8 +242,8 @@ public enum ActionResultResponseType {
     // -- HELPER
 
     private static ManagedObject determineScalarAdapter(
-            final MetaModelContext commonContext,
-            final ManagedObject resultAdapter) {
+            final @NonNull MetaModelContext commonContext,
+            final @NonNull ManagedObject resultAdapter) {
 
         if (resultAdapter.getSpecification().isSingular()) {
             return resultAdapter;

@@ -133,12 +133,15 @@ implements
     }
 
     private final Can<String> htmlTemplate = _Text.readLinesFromResource(this.getClass(),
-            "CalendarEvent.html", StandardCharsets.UTF_8);
+            "CalendarEvent.html", StandardCharsets.UTF_8)
+            .stream()
+            .skip(20)
+            .collect(Can.toCan());
 
     @Override
     public String htmlPresentation(final Context context, final CalendarEvent value) {
         return renderHtml(value, v->{
-            val html = new _StringInterpolation(toMap(context, value))
+            val html = new _StringInterpolation(toMapHtmlEscaped(context, value))
                     .applyTo(htmlTemplate)
                     .stream()
                     .collect(Collectors.joining());
@@ -146,7 +149,9 @@ implements
         });
     }
 
-    private Map<String, @NonNull String> toMap(final Context context, final CalendarEvent v) {
+    private Map<String, @NonNull String> toMap(
+            final Context context,
+            final CalendarEvent v) {
         return Map.of(
                 "title", v.getTitle(),
                 "calendar-name", v.getCalendarName(),
@@ -155,6 +160,19 @@ implements
                             v.asDateTime(context.getInteractionContext().getTimeZone())),
                 "notes", _Strings.nullToEmpty(v.getNotes()));
     }
+
+    private Map<String, @NonNull String> toMapHtmlEscaped(
+            final Context context,
+            final CalendarEvent v) {
+        return Map.of(
+                "title", _Strings.htmlEscape(v.getTitle()),
+                "calendar-name", _Strings.htmlEscape(v.getCalendarName()),
+                "timestamp", zonedDateTimeValueSemantics
+                    .htmlPresentation(context,
+                            v.asDateTime(context.getInteractionContext().getTimeZone())),
+                "notes", _Strings.htmlEscape(_Strings.nullToEmpty(v.getNotes())));
+    }
+
 
     // -- EXAMPLES
 

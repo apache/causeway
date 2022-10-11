@@ -85,7 +85,7 @@ extends ScalarPanelFormFieldAbstract<T> {
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
         val converter = getConverter(scalarModel());
-        return getFormatModifiers().contains(FormatModifier.MULITLINE)
+        return getFormatModifiers().contains(FormatModifier.MULTILINE)
                 ? Wkt.textAreaWithConverter(
                         id, unwrappedModel(), type, converter)
                 : Wkt.textFieldWithConverter(
@@ -107,14 +107,14 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(getFormatModifiers().contains(FormatModifier.MULITLINE)
+        return Optional.of(getFormatModifiers().contains(FormatModifier.MULTILINE)
                 ? InputFragment.TEXTAREA
                 : InputFragment.TEXT);
     }
 
     @Override
     protected String obtainInlinePromptLinkCssIfAny() {
-        return !getFormatModifiers().contains(FormatModifier.MULITLINE)
+        return !getFormatModifiers().contains(FormatModifier.MULTILINE)
                 ? super.obtainInlinePromptLinkCssIfAny()
                 /* Most other components require 'form-control form-control-sm' on the owning inline prompt link.
                  * For TextArea, however, this instead appears on the TextArea itself.

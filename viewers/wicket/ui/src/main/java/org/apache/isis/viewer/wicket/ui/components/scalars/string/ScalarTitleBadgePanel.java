@@ -42,7 +42,8 @@ public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSeman
 
     @Override
     protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.BADGE);
+        // enforce use of text representation, as the HTML template fragments already have badge specific markup
+        modifiers.add(FormatModifier.TEXT_ONLY);
     }
 
     @Override

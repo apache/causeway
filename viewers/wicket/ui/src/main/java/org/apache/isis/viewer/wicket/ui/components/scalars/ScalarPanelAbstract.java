@@ -89,13 +89,8 @@ implements ScalarModelChangeListener {
 
     public enum FormatModifier {
         MARKUP,
-        MULITLINE,
-        COMPOSITE,
-        TRISTATE,
-        BLOB,
-        BADGE,
-        /** render output un-escaped; careful not to allow XSS vulnerabilities*/
-        NO_OUTPUT_ESCAPE
+        MULTILINE,
+        TEXT_ONLY,
     }
 
     /**

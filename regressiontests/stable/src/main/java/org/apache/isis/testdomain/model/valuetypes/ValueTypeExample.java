@@ -63,6 +63,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.isis.schema.chg.v2.ChangesDto;
@@ -277,10 +278,22 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleMarkup
     extends ValueTypeExample<Markup> {
+        private MarkupValueSemantics markupSemantics = new MarkupValueSemantics();
         @Property @Getter @Setter
-        private Markup value = Markup.valueOf("aMarkup");
+        private Markup value = markupSemantics.getExamples().getElseFail(0);
         @Getter
-        private Markup updateValue = Markup.valueOf("anotherMarkup");
+        private Markup updateValue = markupSemantics.getExamples().getElseFail(1);
+        @Override
+        public Can<ParseExpectation<Markup>> getParseExpectations() {
+            val htmlSample = "<a href=\"https://www.apache.org\" rel=\"nofollow\">link</a>";
+            return Can.of(
+                    ParseExpectation.<Markup>builder()
+                        .value(new Markup(htmlSample))
+                        .inputSample(htmlSample)
+                        .expectedOutput(htmlSample)
+                        .build()
+                );
+        }
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleVega")

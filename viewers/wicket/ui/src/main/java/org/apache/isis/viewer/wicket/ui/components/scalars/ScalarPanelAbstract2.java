@@ -141,9 +141,7 @@ extends ScalarPanelAbstract {
         }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
-                        getFormatModifiers().contains(FormatModifier.NO_OUTPUT_ESCAPE)
-                            ? markupComponent(scalarValueId, this::outputFormatAsString)
-                            : Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
+                        Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
     }
 
 
@@ -165,7 +163,7 @@ extends ScalarPanelAbstract {
     private boolean isUsingTextarea() {
         if(getRenderScenario().isCompact()
                 || getFormatModifiers().contains(FormatModifier.MARKUP)
-                || !getFormatModifiers().contains(FormatModifier.MULITLINE)) {
+                || !getFormatModifiers().contains(FormatModifier.MULTILINE)) {
             return false;
         }
         // only render a text-area if it has content
@@ -191,9 +189,8 @@ extends ScalarPanelAbstract {
                     getPlaceholderRenderService()
                     .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
         }
-        val useText = isUsingTextarea()
-                || getFormatModifiers().contains(FormatModifier.BADGE);
-        return useText
+        return isUsingTextarea()
+                || getFormatModifiers().contains(FormatModifier.TEXT_ONLY)
                         ? UiString.text(proposedValue.getValueAsTitle().getValue())
                         : UiString.markup(proposedValue.getValueAsHtml().getValue());
     }

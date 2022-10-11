@@ -72,8 +72,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-isisprev: "2.0.0-M6"
-    page-isisrel: "2.0.0-M7"
+    page-isisprev: "2.0.0-M7"
+    page-isisrel: "2.0.0-M8"
 
 output:
   dir: antora/target/site

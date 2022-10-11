@@ -21,10 +21,19 @@ package org.apache.isis.core.metamodel.facets.object.navparent.method;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.commons.functional.Either;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * @since 2.0
@@ -34,11 +43,35 @@ extends NavigableParentFacetAbstract {
 
     private final MethodHandle methodHandle;
 
-    public NavigableParentFacetViaMethod(
-            final Method method,
-            final FacetHolder holder) throws IllegalAccessException {
+    public static Optional<NavigableParentFacet> create(
+            final @NonNull Class<?> processedClass,
+            final @NonNull Method method,
+            final @NonNull FacetHolder facetHolder) {
+
+
+        return validateNavigableParentType(processedClass, method, facetHolder)
+        .fold(
+            // success
+            methodHandle->
+                Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder)),
+            // failure
+            deficiency->{
+                val validationResponse =
+                        ProgrammingModelConstants.Validation.DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT;
+                ValidationFailure.raiseFormatted(facetHolder,
+                        validationResponse.getMessage(Map.of(
+                                "type", processedClass.getName(),
+                                "parentType", method.getReturnType().getName(),
+                                "parentTypeDeficiency", deficiency)));
+                return Optional.empty();
+            });
+    }
+
+    protected NavigableParentFacetViaMethod(
+            final MethodHandle methodHandle,
+            final FacetHolder holder) {
         super(holder);
-        this.methodHandle = MethodHandles.lookup().unreflect(method);
+        this.methodHandle = methodHandle;
     }
 
     @Override
@@ -55,6 +88,40 @@ extends NavigableParentFacetAbstract {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("methodHandle", methodHandle);
+    }
+
+    // -- HELPER
+
+    /** Returns either the MethodHandle to use or a deficiency message. */
+    private static Either<MethodHandle, String> validateNavigableParentType(
+            final @NonNull Class<?> processedClass,
+            final @NonNull Method method,
+            final @NonNull FacetHolder holder) {
+
+        val navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.getReturnType());
+        if(navigableParentSpec==null) {
+            return Either.right("vetoed");
+        }
+        if(navigableParentSpec.isPlural()) {
+            return Either.right("plural");
+        }
+        if(navigableParentSpec.isVoid()) {
+            return Either.right("void");
+        }
+        if(navigableParentSpec.isValue()) {
+            return Either.right("value-type");
+        }
+
+        try {
+            val methodHandle = MethodHandles.lookup().unreflect(method);
+            return Either.left(methodHandle);
+        } catch (IllegalAccessException e) {
+            return Either.right(
+                    String.format("'reflection exception while trying to create a method handle for %s'\n"
+                            + "(%s)",
+                            method,
+                            e.getMessage()));
+        }
     }
 
 }

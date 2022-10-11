@@ -113,7 +113,7 @@ implements ManagedObject {
                         : null);
     }
 
-    private ObjectMemento mementoForPacked(@Nullable final PackedManagedObject packedAdapter) {
+    private ObjectMemento mementoForPacked(@NonNull final PackedManagedObject packedAdapter) {
         val listOfMementos = packedAdapter.unpack().stream()
                 .map(this::mementoForScalar)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable

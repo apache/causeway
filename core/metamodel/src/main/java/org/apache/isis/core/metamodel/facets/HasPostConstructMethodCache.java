@@ -35,10 +35,10 @@ public interface HasPostConstructMethodCache {
 
     MethodByClassMap getPostConstructMethodsCache();
 
-    default Method postConstructMethodFor(final Object pojo) {
+    default Method postConstructMethodFor(final Class<?> domainObjectClass) {
         return findAnnotatedMethod(
                 // @PostConstruct is allowed to appear on non-public methods
-                MethodFinder.notNecessarilyPublic(pojo.getClass(), MethodFinder.ANY_NAME)
+                MethodFinder.notNecessarilyPublic(domainObjectClass, MethodFinder.ANY_NAME)
                 .withRequiredReturnType(void.class),
                 PostConstruct.class,
                 getPostConstructMethodsCache());

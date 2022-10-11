@@ -95,7 +95,7 @@ implements ViewModelFacet {
             @NonNull Bookmark bookmark);
 
     private void invokePostConstructMethod(final Object viewModel) {
-        final Method postConstructMethod = postConstructMethodCache.postConstructMethodFor(viewModel);
+        final Method postConstructMethod = postConstructMethodCache.postConstructMethodFor(viewModel.getClass());
         if (postConstructMethod != null) {
             CanonicalInvoker.invoke(postConstructMethod, viewModel);
         }

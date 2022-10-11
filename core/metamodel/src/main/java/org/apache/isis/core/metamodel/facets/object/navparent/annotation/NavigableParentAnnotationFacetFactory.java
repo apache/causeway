@@ -103,12 +103,8 @@ implements MetaModelRefiner {
             return; // no parent resolvable
         }
 
-        try {
-            addFacet(new NavigableParentFacetViaMethod(method, facetHolder));
-        } catch (IllegalAccessException e) {
-            log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}",
-                    method, facetHolder, e);
-        }
+        addFacetIfPresent(
+                NavigableParentFacetViaMethod.create(cls, method, facetHolder));
     }
 
     private static boolean isNavigableParentFlagSet(final AnnotatedElement annotatedElement){
