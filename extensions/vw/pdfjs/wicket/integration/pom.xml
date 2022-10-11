@@ -48,13 +48,6 @@
 		    <version>2.16.105</version>
 		</dependency>
 
-		<!-- pdf.js v1 legacy -->
-		<dependency>
-		    <groupId>org.webjars.bowergithub.mozilla</groupId>
-		    <artifactId>pdfjs-dist</artifactId>
-		    <version>1.10.100</version>
-		</dependency>
-
 	</dependencies>
 
 </project>
