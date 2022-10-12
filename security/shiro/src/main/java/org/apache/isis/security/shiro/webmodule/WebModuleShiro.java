@@ -33,8 +33,10 @@ import javax.servlet.ServletException;
 
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.web.config.ShiroFilterConfiguration;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.apache.shiro.web.env.IniWebEnvironment;
+import org.apache.shiro.web.env.MutableWebEnvironment;
 import org.apache.shiro.web.env.WebEnvironment;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.ShiroFilter;
@@ -46,6 +48,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
@@ -80,7 +83,7 @@ public class WebModuleShiro extends WebModuleAbstract {
 
     // -- CONFIGURATION
 
-    public static void setShiroEnvironmentClass(Class<? extends WebEnvironment> shiroEnvironmentClass) {
+    public static void setShiroEnvironmentClass(final Class<? extends WebEnvironment> shiroEnvironmentClass) {
         if(shiroEnvironmentClass==null) {
             System.setProperty("shiroEnvironmentClass", null);
             return;
@@ -108,7 +111,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         }
     }
 
-    public static void setShiroIniResource(String resourcePath) {
+    public static void setShiroIniResource(final String resourcePath) {
         if(resourcePath==null) {
             System.setProperty("shiroIniResource", null);
             setShiroEnvironmentClass(null);
@@ -128,21 +131,28 @@ public class WebModuleShiro extends WebModuleAbstract {
         @Inject private ServiceInjector serviceInjector;
 
         // testing support
-        public EnvironmentLoaderListenerForIsis(ServiceInjector serviceInjector) {
+        public EnvironmentLoaderListenerForIsis(final ServiceInjector serviceInjector) {
             this.serviceInjector = serviceInjector;
         }
 
         @Override
-        public void contextInitialized(ServletContextEvent sce) {
+        public void contextInitialized(final ServletContextEvent sce) {
             super.contextInitialized(sce);
         }
 
         @Override
-        protected WebEnvironment createEnvironment(ServletContext servletContext) {
+        protected WebEnvironment createEnvironment(final ServletContext servletContext) {
             val shiroEnvironment = super.createEnvironment(servletContext);
             val securityManager = shiroEnvironment.getSecurityManager();
 
             injectServicesIntoRealms(securityManager);
+
+            //[ISIS-3246] Shiro Filter throws NPE on init since Shiro v1.10.0
+            if(shiroEnvironment.getShiroFilterConfiguration()==null) {
+                _Casts.castTo(MutableWebEnvironment.class, shiroEnvironment)
+                .ifPresent(mutableWebEnvironment->
+                    mutableWebEnvironment.setShiroFilterConfiguration(new ShiroFilterConfiguration()));
+            }
 
             return shiroEnvironment;
         }
@@ -150,7 +160,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         @SuppressWarnings("unchecked")
         @SneakyThrows
         public void injectServicesIntoRealms(
-                org.apache.shiro.mgt.SecurityManager securityManager) {
+                final org.apache.shiro.mgt.SecurityManager securityManager) {
 
             // reflective access to SecurityManager.getRealms()
             val realmsGetter = ReflectionUtils
@@ -184,7 +194,7 @@ public class WebModuleShiro extends WebModuleAbstract {
     }
 
     @Override
-    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
             .ifPresent(filterReg -> {
