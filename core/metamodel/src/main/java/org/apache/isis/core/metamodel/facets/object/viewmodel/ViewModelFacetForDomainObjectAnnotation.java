@@ -122,7 +122,6 @@ extends ViewModelFacetAbstract {
                     : ManagedObject.empty(propertySpec);
 
             property.set(viewmodel, propertyValue, InteractionInitiatedBy.PASS_THROUGH);
-
         });
 
         return viewmodel;
