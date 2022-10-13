@@ -174,7 +174,7 @@ implements OneToOneAssociation {
      * ({@link PropertySetterFacet} or {@link PropertyClearFacet}).
      */
     @Override
-    public ManagedObject set(
+    public final ManagedObject set(
             final ManagedObject ownerAdapter,
             final ManagedObject _newValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -184,7 +184,10 @@ implements OneToOneAssociation {
                 ? ManagedObject.empty(getElementType())
                 : _newValue;
 
-        setupCommand(InteractionHead.regular(ownerAdapter), newValue);
+        // don't setup a command DTO, eg. when called in the context of serialization
+        if(!interactionInitiatedBy.isPassThrough()) {
+            setupCommand(InteractionHead.regular(ownerAdapter), newValue);
+        }
 
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
             return clearValue(ownerAdapter, interactionInitiatedBy);
@@ -325,7 +328,7 @@ implements OneToOneAssociation {
         final ToString str = new ToString(this);
         str.append(super.toString());
         str.setAddComma();
-        str.append("persisted", !isNotPersisted());
+        str.append("persisted", isIncludedWithSnapshots());
         str.append("type", getElementType().getShortIdentifier());
         return str.toString();
     }

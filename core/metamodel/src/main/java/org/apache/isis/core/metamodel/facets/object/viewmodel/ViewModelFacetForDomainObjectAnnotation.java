@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -35,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
 import lombok.val;
@@ -106,17 +108,21 @@ extends ViewModelFacetAbstract {
 
         val objectManager = super.getObjectManager();
 
-        viewmodelSpec.streamProperties(MixedIn.EXCLUDED)
-        .filter(property->mementoKeys.contains(property.getId()))
+        streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
 
-            val propertyId = property.getId();
-            val propertyType = property.getElementType().getCorrespondingClass();
-            val propertyValue = memento.get(propertyId, propertyType);
+            // we also explicitly set 'nulled' properties
 
-            if(propertyValue != null) {
-                property.set(viewmodel, objectManager.adapt(propertyValue), InteractionInitiatedBy.FRAMEWORK);
-            }
+            val propertyId = property.getId();
+            val propertySpec = property.getElementType();
+            val propertyType = propertySpec.getCorrespondingClass();
+            val propertyPojo = memento.get(propertyId, propertyType);
+            final ManagedObject propertyValue = propertyPojo!=null
+                    ? objectManager.adapt(propertyPojo)
+                    : ManagedObject.empty(propertySpec);
+
+            property.set(viewmodel, propertyValue, InteractionInitiatedBy.PASS_THROUGH);
+
         });
 
         return viewmodel;
@@ -127,23 +133,14 @@ extends ViewModelFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        /*
-         * ManagedObject that holds the ObjectSpecification used for
-         * interrogating the domain object's metadata.
-         *
-         * Does _not_ perform dependency injection on the domain object. Also bypasses
-         * caching (if any), that is each call to this method creates a new instance.
-         */
-        val spec = viewModel.getSpecification();
+        val viewmodelSpec = viewModel.getSpecification();
 
-        spec.streamProperties(MixedIn.EXCLUDED)
-        // ignore read-only
-        .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
-        // ignore those explicitly annotated as @NotPersisted
-        .filter(property->!property.isNotPersisted())
+        streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
+
             final ManagedObject propertyValue =
-                    property.get(viewModel, InteractionInitiatedBy.FRAMEWORK);
+                    property.get(viewModel, InteractionInitiatedBy.PASS_THROUGH);
+
             if(propertyValue != null
                     && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());
@@ -154,6 +151,15 @@ extends ViewModelFacetAbstract {
     }
 
     // -- HELPER
+
+    private Stream<OneToOneAssociation> streamPersistableProperties(
+            final @NonNull ObjectSpecification viewmodelSpec) {
+        return viewmodelSpec.streamProperties(MixedIn.EXCLUDED)
+                // ignore read-only
+                .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
+                // ignore those explicitly annotated as @Property(snapshot = Snapshot.EXCLUDED)
+                .filter(property->property.isIncludedWithSnapshots());
+    }
 
     private void initDependencies() {
         val serviceRegistry = getServiceRegistry();

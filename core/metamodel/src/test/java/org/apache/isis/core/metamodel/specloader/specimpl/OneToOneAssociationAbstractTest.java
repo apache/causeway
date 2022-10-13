@@ -146,19 +146,19 @@ class OneToOneAssociationAbstractTest {
     public void notPersistedWhenDerived() throws Exception {
         final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isNotPersisted());
+        assertTrue(objectAssociation.isExcludedFromSnapshots());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
         final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
-        assertTrue(objectAssociation.isNotPersisted());
+        assertTrue(objectAssociation.isExcludedFromSnapshots());
     }
 
     @Test
     public void persisted() throws Exception {
-        assertFalse(objectAssociation.isNotPersisted());
+        assertFalse(objectAssociation.isExcludedFromSnapshots());
     }
 
     private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, final Precedence precedence) {

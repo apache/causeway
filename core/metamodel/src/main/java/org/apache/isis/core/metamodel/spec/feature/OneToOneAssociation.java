@@ -55,9 +55,17 @@ extends
     /**
      * Returns true if calculated from other data in the object, that is, should
      * not be persisted.
+     * Corresponds to {@code @Property(snapshot = Snapshot.EXCLUDED)}
      */
-    default boolean isNotPersisted() {
+    default boolean isExcludedFromSnapshots() {
         return containsFacet(SnapshotExcludeFacet.class);
+    }
+
+    /**
+     * Counterpart to {@link #isExcludedFromSnapshots()}.
+     */
+    default boolean isIncludedWithSnapshots() {
+        return !isExcludedFromSnapshots();
     }
 
     default String getCssClass(final String prefix) {

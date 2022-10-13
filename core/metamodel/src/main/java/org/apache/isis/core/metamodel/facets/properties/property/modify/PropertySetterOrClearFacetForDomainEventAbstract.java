@@ -59,7 +59,7 @@ implements
     private final PropertySetterFacet setterFacet;
     private final PropertyClearFacet clearFacet;
 
-    public PropertySetterOrClearFacetForDomainEventAbstract(
+    protected PropertySetterOrClearFacetForDomainEventAbstract(
             final Class<? extends Facet> facetType,
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
@@ -257,6 +257,10 @@ implements
 
         if(!editingVariant.hasCorrespondingFacet(this)) {
             return head.getTarget();
+        }
+
+        if(interactionInitiatedBy.isPassThrough()) {
+
         }
 
         return getMemberExecutor().setOrClearProperty(

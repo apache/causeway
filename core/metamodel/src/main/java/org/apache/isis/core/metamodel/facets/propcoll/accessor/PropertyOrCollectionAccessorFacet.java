@@ -44,7 +44,7 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
      * @param inObject
      * @param interactionInitiatedBy
      */
-    public Object getProperty(
+    Object getProperty(
             final ManagedObject inObject,
             final InteractionInitiatedBy interactionInitiatedBy);
 
