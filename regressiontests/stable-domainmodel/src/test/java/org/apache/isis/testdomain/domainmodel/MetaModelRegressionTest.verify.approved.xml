@@ -25220,7 +25220,7 @@
             </mml:facet>
             <mml:facet id="org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForSerializableInterface">
                 <mml:attr name="facet" value="ViewModelFacetForSerializableInterface"/>
-                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
             <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -26158,7 +26158,7 @@
             </mml:facet>
             <mml:facet id="org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForSerializableInterface">
                 <mml:attr name="facet" value="ViewModelFacetForSerializableInterface"/>
-                <mml:attr name="precedence" value="DEFAULT"/>
+                <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
             <mml:facet id="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
