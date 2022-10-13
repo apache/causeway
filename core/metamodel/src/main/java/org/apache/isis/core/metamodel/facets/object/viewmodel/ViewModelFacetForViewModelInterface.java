@@ -68,7 +68,7 @@ extends ViewModelFacetAbstract {
     protected ViewModelFacetForViewModelInterface(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
-        super(holder, postConstructMethodCache);
+        super(holder, postConstructMethodCache,  Precedence.HIGH);
     }
 
     @Override

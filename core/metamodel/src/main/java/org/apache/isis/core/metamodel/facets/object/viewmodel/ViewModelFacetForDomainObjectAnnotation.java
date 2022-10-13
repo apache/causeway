@@ -88,8 +88,8 @@ extends ViewModelFacetAbstract {
     protected ViewModelFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
-
-        super(holder, postConstructMethodCache, Precedence.LOW); // is overruled by any other ViewModelFacet type
+        // is overruled by any other ViewModelFacet type
+        super(holder, postConstructMethodCache, Precedence.LOW);
     }
 
     @Override
