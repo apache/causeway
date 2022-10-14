@@ -67,6 +67,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 }
             } else {
                 val le = LogEntry(ResourceSpecification(""))
+                //in case of a _parented_collection_ an empty LogEntry is passed on
                 parent.update(le, subType)
             }
         }
@@ -106,15 +107,16 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleProperty(p: Property, referrer: String) {
+        console.log("[CA.handleProperty]")
         val dm = dpm as CollectionDM
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            val pdl = p.descriptionLink()
-            if (pdl != null) {
-                invoke(pdl, this, referrer = referrer)
-            }
+            val pdl = p.getDescriptionLink()
+            console.log(pdl)
+            if (pdl == null) return
+            invoke(pdl, this, referrer = referrer)
         }
     }
 

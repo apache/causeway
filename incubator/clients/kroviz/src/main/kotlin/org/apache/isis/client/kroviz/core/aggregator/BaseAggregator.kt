@@ -28,7 +28,7 @@ import org.apache.isis.client.kroviz.utils.UrlUtils
 
 /**
  * An Aggregator:
- * @item is initially created in ResponseHandlers, displayModels, Menus
+ * @item is initially created in ResponseHandlers, DisplayModels, Menus
  * @item is assigned to at least one LogEntry,
  * @item is passed on to related LogEntries (eg. siblings in a list, Layout),
  * @item is notified about changes to related LogEntries,

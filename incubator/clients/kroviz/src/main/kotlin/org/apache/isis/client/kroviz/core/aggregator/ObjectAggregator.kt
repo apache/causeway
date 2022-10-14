@@ -120,19 +120,18 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleProperty(p: Property, referrer: String) {
+        console.log("[OA.handleProperty]")
         val dm = dpm as ObjectDM
         if (p.isPropertyDescription()) {
-            console.log("[OA.handleProperty].isPropertyDescription")
+            console.log("isPropertyDescription")
             dm.addPropertyDescription(p)
         } else {
-            console.log("[OA.handleProperty].isNotPropertyDescription")
-            console.log(p)
-            console.log(dm)
             dm.addProperty(p)
-            val pdl = p.descriptionLink()
-            if (pdl != null) {
-                invoke(pdl, this, referrer = referrer)
-            }
+            console.log(p)
+            val pdl = p.getDescriptionLink()
+            console.log(pdl)
+            if (pdl == null) return
+            invoke(pdl, this, referrer = referrer)
         }
     }
 

@@ -31,7 +31,7 @@ import org.apache.isis.client.kroviz.ui.diagram.Tree
 abstract class AggregatorWithLayout : BaseAggregator() {
     // parentUrl is to be set in update
     // and to be used in subsequent invocations
-    var parentUrl: String? = null
+    private var parentUrl: String? = null
     var tree: Tree? = null
 
     override fun update(logEntry: LogEntry, subType: String?) {
@@ -98,9 +98,9 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         invoke(l, aggregator, referrer = referrer)
     }
 
-    protected fun Property.descriptionLink(): Link? {
-        return links.find {
-            it.relation() == Relation.ELEMENT_TYPE
+    protected fun Property.getDescriptionLink(): Link? {
+        return this.links.firstOrNull() {
+            it.rel == Relation.DESCRIBED_BY.type
         }
     }
 

@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.layout.PropertyLt
-import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Extensions
+import org.apache.isis.client.kroviz.to.Property
 
 class CollectionProperties() {
     val list = mutableListOf<ColumnProperties>()
@@ -33,7 +33,7 @@ class CollectionProperties() {
         val pls = propertyLayoutList.size
         val pds = propertyDescriptionList.size
         val descriptionsComplete = (pds >= pls) && (ps >= pls)
-        return descriptionsComplete
+        return descriptionsComplete && pds > 0
     }
 
     fun addProperty(property: Property) {
