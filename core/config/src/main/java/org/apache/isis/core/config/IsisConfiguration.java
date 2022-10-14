@@ -34,6 +34,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import javax.activation.DataSource;
 import javax.inject.Named;
 import javax.validation.Constraint;
@@ -65,20 +71,14 @@ import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEdi
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.metamodel.facets.ActionConfigOptions;
-import org.apache.isis.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.isis.core.config.metamodel.facets.DomainObjectConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;
@@ -2011,6 +2011,16 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean clearOriginalDestination = false;
+
+            /**
+             * Whether the clear-field-button, that allows to clear a null-able (optional) field
+             * (a property or a dialog argument) is enabled for rendering or not.
+             *
+             * <p>
+             *     The default is to enable (show) the clear-field-button.
+             * </p>
+             */
+            private boolean clearFieldButtonEnabled = true;
 
             /**
              * Whether the dialog mode rendered when invoking actions on domain objects should be to use
