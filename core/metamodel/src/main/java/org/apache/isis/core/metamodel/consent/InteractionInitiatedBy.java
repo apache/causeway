@@ -37,22 +37,24 @@ public enum InteractionInitiatedBy {
     FRAMEWORK,
 
     /**
-     * always authorized, no transactions, no publishing, no domain events
+     * always authorized, no transactions, no publishing, no domain events;
+     * eg. used for serialization and de-serialization
      */
     PASS_THROUGH;
 
     /**
      * @see #USER
      */
-    public boolean isUser() {
-        return this==USER;
-    }
+    public boolean isUser() { return this==USER; }
+
+    /**
+     * @see #FRAMEWORK
+     */
+    public boolean isFramework() { return this==FRAMEWORK; }
 
     /**
      * @see #PASS_THROUGH
      */
-    public boolean isPassThrough() {
-        return this==PASS_THROUGH;
-    }
+    public boolean isPassThrough() { return this==PASS_THROUGH; }
 
 }

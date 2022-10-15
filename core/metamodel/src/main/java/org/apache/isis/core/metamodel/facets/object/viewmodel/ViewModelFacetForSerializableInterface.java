@@ -57,7 +57,7 @@ extends ViewModelFacetAbstract {
     protected ViewModelFacetForSerializableInterface(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
-        super(holder, postConstructMethodCache);
+        super(holder, postConstructMethodCache, Precedence.HIGH);
     }
 
     @SneakyThrows

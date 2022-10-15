@@ -495,7 +495,7 @@ public class XmlSnapshot implements Snapshot {
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
 
-            if(oneToOneAssociation.isNotPersisted()) {
+            if(oneToOneAssociation.isExcludedFromSnapshots()) {
                 return false;
             }
             final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
@@ -693,7 +693,7 @@ public class XmlSnapshot implements Snapshot {
                 }
 
                 final OneToOneAssociation valueAssociation = ((OneToOneAssociation) field);
-                if(valueAssociation.isNotPersisted()) {
+                if(valueAssociation.isExcludedFromSnapshots()) {
                     continue eachField;
                 }
                 final Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name

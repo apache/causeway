@@ -103,7 +103,7 @@ public final class MmVisibilityUtil {
                 return false;
             }
         }
-        if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) {
+        if(!interactionInitiatedBy.isUser()) {
             return true;
         }
         val visibilityContext = createVisibleInteractionContext(

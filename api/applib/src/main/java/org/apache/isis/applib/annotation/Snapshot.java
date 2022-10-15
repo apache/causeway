@@ -21,6 +21,9 @@ package org.apache.isis.applib.annotation;
 /**
  * Whether the property is included if the domain object graph is serialized
  * into a snapshot.
+ * <p>
+ * This also affects viewmodel serialization, when using the 'fallback' serialization strategy.
+ *
  * @since 2.x {@index}
  */
 public enum Snapshot {

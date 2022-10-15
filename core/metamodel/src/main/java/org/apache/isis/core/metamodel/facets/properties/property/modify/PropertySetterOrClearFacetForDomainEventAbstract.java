@@ -59,7 +59,7 @@ implements
     private final PropertySetterFacet setterFacet;
     private final PropertyClearFacet clearFacet;
 
-    public PropertySetterOrClearFacetForDomainEventAbstract(
+    protected PropertySetterOrClearFacetForDomainEventAbstract(
             final Class<? extends Facet> facetType,
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
@@ -255,8 +255,17 @@ implements
 
         // similar code in ActionInvocationFacetFDEA
 
+        val domainObject = head.getTarget();
+
         if(!editingVariant.hasCorrespondingFacet(this)) {
-            return head.getTarget();
+            return domainObject;
+        }
+
+        if(interactionInitiatedBy.isPassThrough()) {
+            /* directly access property setter to prevent triggering of domain events
+             * or change tracking, eg. when called in the context of serialization */
+            editingVariant.invoke(this, owningProperty, domainObject, newValueAdapter, interactionInitiatedBy);
+            return domainObject;
         }
 
         return getMemberExecutor().setOrClearProperty(

@@ -322,7 +322,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <archunit.version>1.0.0</archunit.version>
         <asciidoctorj.version>2.5.6</asciidoctorj.version>
         <asm.version>9.4</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-        <approvaltests.version>18.4.0</approvaltests.version>
+        <approvaltests.version>18.5.0</approvaltests.version>
 
         <assertj-guava.version>3.5.0</assertj-guava.version>
 
@@ -334,7 +334,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <cucumber.version>7.8.1</cucumber.version>
 
-        <cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
+        <cxf-rt-rs-client.version>3.5.4</cxf-rt-rs-client.version>
 
         <danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
         <danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
@@ -353,7 +353,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>4.3</easymock.version>
-        <error_prone_annotations.version>2.15.0</error_prone_annotations.version>
+        <error_prone_annotations.version>2.16</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <guava.version>31.1-jre</guava.version>
@@ -375,7 +375,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.12.0</jmock.version>
-        <joda-time.version>2.11.2</joda-time.version>
+        <joda-time.version>2.12.0</joda-time.version>
         <jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
         <jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
@@ -419,7 +419,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>3.2.1</togglz.version>
 
-        <vaadin.version>23.2.3</vaadin.version>
+        <vaadin.version>23.2.4</vaadin.version>
 
         <wicket.version>9.11.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->

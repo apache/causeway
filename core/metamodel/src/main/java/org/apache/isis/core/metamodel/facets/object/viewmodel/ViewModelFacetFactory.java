@@ -65,25 +65,23 @@ implements
         val type = processClassContext.getCls();
         val postConstructMethodCache = this;
 
-        // (with default precedence)
+        // XmlRootElement annotation (with default precedence)
+        val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
         FacetUtil
         .addFacetIfPresent(
-            // either ViewModel interface
+                ViewModelFacetForXmlRootElementAnnotation
+                .create(xmlRootElementIfAny, facetHolder, postConstructMethodCache));
+
+        // (with high precedence)
+        FacetUtil
+        .addFacetIfPresent(
+            // either ViewModel interface (highest precedence)
             ViewModelFacetForViewModelInterface.create(type, facetHolder, postConstructMethodCache)
             // or Serializable interface (if any)
             .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder, postConstructMethodCache)));
 
-        // XmlRootElement annotation (with higher precedence)
-        val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
-        if(xmlRootElementIfAny.isPresent()) {
-            FacetUtil.addFacet(
-                    new ViewModelFacetForXmlRootElementAnnotation(
-                            facetHolder, postConstructMethodCache));
-        }
-
-        // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory
+        // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }
-
 
 
     // //////////////////////////////////////

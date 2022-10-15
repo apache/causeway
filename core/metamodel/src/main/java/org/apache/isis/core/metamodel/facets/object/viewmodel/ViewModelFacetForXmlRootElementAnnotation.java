@@ -18,6 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
+import java.util.Optional;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -35,11 +39,21 @@ import lombok.val;
 public class ViewModelFacetForXmlRootElementAnnotation
 extends ViewModelFacetAbstract {
 
-    public ViewModelFacetForXmlRootElementAnnotation(
-            final FacetHolder holder,
+    public static Optional<ViewModelFacet> create(
+            final Optional<XmlRootElement> xmlRootElementIfAny,
+            final FacetHolder facetHolder,
             final HasPostConstructMethodCache postConstructMethodCache) {
 
-        super(holder, postConstructMethodCache, Precedence.HIGH); // overrules any other ViewModelFacet type
+        return xmlRootElementIfAny.map(xmlRootElement->
+            new ViewModelFacetForXmlRootElementAnnotation(
+                    facetHolder, postConstructMethodCache));
+    }
+
+    private ViewModelFacetForXmlRootElementAnnotation(
+            final FacetHolder facetHolder,
+            final HasPostConstructMethodCache postConstructMethodCache) {
+        // overruled by other non fallback ViewModelFacet types
+        super(facetHolder, postConstructMethodCache, Precedence.DEFAULT);
     }
 
     @Override
