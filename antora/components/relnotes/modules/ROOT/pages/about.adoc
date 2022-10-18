@@ -29,9 +29,21 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | Detail
 
 
+| 2.0.0-M9
+| 18-Oct-2022
+|
+Ninth milestone release for Apache Isis 2.0.0 +
+Fixes CVE-2022-42466.
+| 2
+| 3
+| 2
+|
+* xref:relnotes:ROOT:2022/2.0.0-M9/relnotes.adoc[Release Notes]
+
 | 2.0.0-M8
 | 06-Oct-2022
-| Eighth milestone release for Apache Isis 2.0.0
+| Eighth milestone release for Apache Isis 2.0.0 +
+Fixes CVE-2022-42467.
 | 26
 | 79
 | 84

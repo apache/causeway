@@ -41,6 +41,8 @@ The value in its read-only summarizing text presentation form. (title form)
 
 The value rendered as HTML.
 
+Default implementation uses the 'escaped' titlePresentation. Override for custom HTML, but be aware of potential XSS attack vectors.
+
 [#syntaxHighlighter_]
 === syntaxHighlighter()
 

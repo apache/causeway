@@ -3,6 +3,8 @@
 
 Whether the property is included if the domain object graph is serialized into a snapshot.
 
+This also affects viewmodel serialization, when using the 'fallback' serialization strategy.
+
 == API
 
 [source,java]
