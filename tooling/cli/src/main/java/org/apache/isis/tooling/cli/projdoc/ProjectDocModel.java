@@ -33,12 +33,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import com.structurizr.model.Container;
 import com.structurizr.view.AutomaticLayout.RankDirection;
+
 import org.apache.commons.lang3.builder.EqualsExclude;
 import org.asciidoctor.ast.Document;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
@@ -87,7 +87,7 @@ public class ProjectDocModel {
     private final ProjectNode projTree;
     private SortedSet<ProjectNode> modules;
 
-    public ProjectDocModel(ProjectNode projTree) {
+    public ProjectDocModel(final ProjectNode projTree) {
         this.projTree = projTree;
     }
 
@@ -109,7 +109,7 @@ public class ProjectDocModel {
                 .formatterFactory(new Function<>() {
                     @SneakyThrows
                     @Override
-                    public UnitFormatter apply(J2AdocContext j2AdocContext) {
+                    public UnitFormatter apply(final J2AdocContext j2AdocContext) {
                         final CliConfig.Commands.Index.Formatter formatter = cliConfig.getCommands().getIndex().getFormatter();
                         final Class<? extends UnitFormatter> clz = formatter.getUnitFormatterClass();
                         final Constructor<? extends UnitFormatter> constructor = clz.getConstructor(J2AdocContext.class);
@@ -188,7 +188,7 @@ public class ProjectDocModel {
             return matchingProjectNodes.stream();
         }
 
-        void addProjectNode(ProjectNode projectNode) {
+        void addProjectNode(final ProjectNode projectNode) {
             matchingProjectNodes.add(projectNode);
         }
 
@@ -199,7 +199,7 @@ public class ProjectDocModel {
             return groupIdArtifactIdPattern.contains(":");
         }
 
-        void removeProjectNodes(Collection<ProjectNode> projectNodes) {
+        void removeProjectNodes(final Collection<ProjectNode> projectNodes) {
             matchingProjectNodes.removeAll(projectNodes);
         }
 
@@ -222,18 +222,20 @@ public class ProjectDocModel {
 
         private final C4 c4;
         private final List<ProjectNode> projectNodes = new ArrayList<>();
+        private final String diagramKey;
 
-        public GroupDiagram(C4 c4) {
+        public GroupDiagram(final C4 c4) {
             this.c4 = c4;
+            this.diagramKey = c4.getWorkspaceName().replace(':', '~');
         }
 
-        public void collect(ProjectNode module) {
+        public void collect(final ProjectNode module) {
             projectNodes.add(module);
         }
 
         //XXX lombok issues, not using val here
-        public String toPlantUml(String softwareSystemName) {
-            val key = c4.getWorkspaceName();
+        public String toPlantUml(final String softwareSystemName) {
+
             val softwareSystem = c4.softwareSystem(softwareSystemName, null);
 
             final Can<ProjectAndContainerTuple> tuples = Can.<ProjectNode>ofCollection(projectNodes)
@@ -257,7 +259,7 @@ public class ProjectDocModel {
             });
 
             val containerView = c4.getViewSet()
-                    .createContainerView(softwareSystem, key, "Artifact Hierarchy (Maven)");
+                    .createContainerView(softwareSystem, c4.getWorkspaceName(), "Artifact Hierarchy (Maven)");
             containerView.addAllContainers();
 
             containerView.enableAutomaticLayout(RankDirection.LeftRight);
@@ -266,12 +268,10 @@ public class ProjectDocModel {
             return plantUmlSource;
         }
 
-        public String toAsciiDoc(String softwareSystemName) {
-            val key = c4.getWorkspaceName();
-
+        public String toAsciiDoc(final String softwareSystemName) {
             return AsciiDocFactory.toString(doc->
                         AsciiDocFactory.DiagramFactory
-                        .plantumlSvg(doc, toPlantUml(softwareSystemName), key, null));
+                        .plantumlSvg(doc, toPlantUml(softwareSystemName), diagramKey, null));
         }
     }
 
@@ -364,7 +364,7 @@ public class ProjectDocModel {
         descriptionBlock.setSource(groupDiagram.toAsciiDoc(sectionName));
     }
 
-    private boolean matchesGroupId(ProjectNode module, String groupIdPattern) {
+    private boolean matchesGroupId(final ProjectNode module, final String groupIdPattern) {
         val moduleCoords = module.getArtifactCoordinates();
 
         if(_Strings.isNullOrEmpty(moduleCoords.getGroupId())) {
@@ -406,7 +406,7 @@ public class ProjectDocModel {
     //    Type: jar
     //    Directory: /commons
     //    ----
-    private String coordinates(ProjectNode module, String projRelativePath) {
+    private String coordinates(final ProjectNode module, final String projRelativePath) {
         val coors = new StringBuilder();
         appendKeyValue(coors, "Group", module.getArtifactCoordinates().getGroupId());
         appendKeyValue(coors, "Artifact", module.getArtifactCoordinates().getArtifactId());
@@ -418,11 +418,11 @@ public class ProjectDocModel {
                     AsciiDocFactory.SourceFactory.yaml(doc, coors.toString(), null)));
     }
 
-    private void appendKeyValue(StringBuilder sb, String key, String value) {
+    private void appendKeyValue(final StringBuilder sb, final String key, final String value) {
         sb.append(String.format("%s: %s\n", key, value));
     }
 
-    private String details(ProjectNode module, J2AdocContext j2aContext) {
+    private String details(final ProjectNode module, final J2AdocContext j2aContext) {
         val description = sanitizeDescription(module.getDescription());
         val dependencyList = module.getDependencies()
                 .stream()
@@ -464,13 +464,13 @@ public class ProjectDocModel {
         return sb.toString();
     }
 
-    static String sanitizeDescription(String str) {
+    static String sanitizeDescription(final String str) {
         return Arrays.stream(str.split("\n"))
                 .map(String::trim)
                 .reduce("", (x, y) -> x + (x.isEmpty() ? "" : "\n") + y);
     }
 
-    private static String toAdocSection(String title, String content) {
+    private static String toAdocSection(final String title, final String content) {
 
         //XXX collapsible will be supported with antora 3
         //        return AsciiDocFactory.toString(doc->{
@@ -482,19 +482,20 @@ public class ProjectDocModel {
         return String.format(".%s\n****\n%s\n****\n\n", title, content);
     }
 
-    private static String toAdocListItem(String element) {
+    private static String toAdocListItem(final String element) {
         return String.format("* %s\n", element);
     }
 
-    private static String toAdocCompactListItem(String element) {
+    private static String toAdocCompactListItem(final String element) {
         return String.format("%s +\n", element);
     }
 
-    private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2AdocContext j2aContext) {
+    private SortedSet<String> gatherGlobalDocIndexXrefs(final File projDir, final J2AdocContext j2aContext) {
 
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
         final SortedSet<String> docIndexXrefs = analyzerConfig.getSources(JAVA).stream()
+        .filter(file->!file.getName().equals("module-info.java"))
         .flatMap(j2aContext::add)
         .map(unit->unit.getAsciiDocXref(j2aContext))
         .collect(Collectors.toCollection(TreeSet::new));
@@ -502,7 +503,7 @@ public class ProjectDocModel {
         return docIndexXrefs;
     }
 
-    private SortedSet<String> gatherSpringComponents(File projDir) {
+    private SortedSet<String> gatherSpringComponents(final File projDir) {
 
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
@@ -520,7 +521,7 @@ public class ProjectDocModel {
         return components;
     }
 
-    private void gatherAdocFiles(File projDir, Consumer<File> onFile) {
+    private void gatherAdocFiles(final File projDir, final Consumer<File> onFile) {
 
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.ADOC).main();
 
