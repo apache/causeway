@@ -14,7 +14,7 @@ Start learning about Apache Isis using the https://github.com/apache/isis-app-he
 Explore features with our daily built demo docker image https://github.com/apache/isis/blob/master/examples/demo/domain/src/main/adoc/modules/demo/pages/about.adoc["DemoApp"].
 Build your own apps using our https://github.com/apache/isis-app-simpleapp["SimpleApp"] starter app.
 
-For help and support, join our https://isis.apache.org/docs/2.0.0-M7/support/slack-channel.html[Slack channel] or https://isis.apache.org/docs/2.0.0-M7/support/mailing-list.html[mailing list].
+For help and support, join our https://isis.apache.org/docs/2.0.0-M9/support/slack-channel.html[Slack channel] or https://isis.apache.org/docs/2.0.0-M7/support/mailing-list.html[mailing list].
 
 toc::[]
 
