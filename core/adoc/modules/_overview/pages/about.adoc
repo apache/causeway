@@ -3843,7 +3843,12 @@ Artifact: isis-valuetypes-asciidoc-ui-vaa
 Type: jar
 Directory: /valuetypes/asciidoc/ui/vaadin
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa +
+****
+
+.Dependencies
 ****
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
 ****
@@ -5520,7 +5525,7 @@ xref:refguide:extensions:index/sse/wicket/IsisModuleExtSseWicket.adoc[IsisModule
 
 === Applib: Excel
 
-[plantuml,Applib: Excel,svg]
+[plantuml,Applib~ Excel,svg]
 ----
 @startuml(id=Applib:_Excel)
 title Applib: Excel - Containers
@@ -5726,7 +5731,7 @@ xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/IsisModuleExtExcel
 
 === Core: Command Log
 
-[plantuml,Core: Command Log,svg]
+[plantuml,Core~ Command Log,svg]
 ----
 @startuml(id=Core:_Command_Log)
 title Core: Command Log - Containers
@@ -5877,7 +5882,7 @@ xref:refguide:extensions:index/commandlog/jpa/IsisModuleExtCommandLogPersistence
 
 === Core: Quartz
 
-[plantuml,Core: Quartz,svg]
+[plantuml,Core~ Quartz,svg]
 ----
 @startuml(id=Core:_Quartz)
 title Core: Quartz - Containers
@@ -6212,17 +6217,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<11>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6232,12 +6232,17 @@ skinparam rectangle<<23>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6317,12 +6322,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6985,7 +6990,16 @@ Artifact: isis-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
+o.a.i.viewer.graphql.viewer.source.GraphQlServiceForIsis +
+o.a.i.viewer.graphql.viewer.source.GraphQlSourceForIsis +
+o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
+o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-graphql-model:jar:<managed> +
@@ -7087,7 +7101,23 @@ Artifact: isis-viewer-vaadin-ui
 Type: jar
 Directory: /incubator/viewers/vaadin/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa +
+o.a.i.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler +
+o.a.i.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa +
+o.a.i.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.text.TextFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa +
+o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
+****
+
+.Dependencies
 ****
 com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +
@@ -7206,7 +7236,30 @@ Artifact: isis-viewer-javafx-ui
 Type: jar
 Directory: /incubator/viewers/javafx/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.incubator.viewer.javafx.ui.components.UiComponentFactoryFx +
+o.a.i.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.number.NumberFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.text.TextFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton +
+o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider +
+o.a.i.incubator.viewer.javafx.ui.main.MainViewFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiActionHandlerFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiBuilderFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiContextFxDefault +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed> +
@@ -7292,6 +7345,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.isis.core:isis-core-config:jar:<managed> +
@@ -7316,6 +7375,15 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+****
 
 .Dependencies
 ****
