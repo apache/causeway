@@ -22,6 +22,7 @@ import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.causeway.viewer.graphql.viewer.IsisModuleIncViewerGraphqlViewer;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.TestDomainModule;
 import org.springframework.boot.SpringBootConfiguration;
@@ -33,8 +34,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
-
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootTest(
         classes = {
