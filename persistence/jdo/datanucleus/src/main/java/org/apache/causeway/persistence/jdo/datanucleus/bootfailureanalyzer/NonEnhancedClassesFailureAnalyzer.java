@@ -39,7 +39,7 @@ public class NonEnhancedClassesFailureAnalyzer extends AbstractFailureAnalyzer<o
     }
 
     private String descriptionOf(NucleusUserException cause) {
-        // Found Meta-Data for class org.apache.isis.extensions.audittrail.jdo.integtests.model.Counter but this class is either not enhanced or you have multiple copies of the persistence API jar in your CLASSPATH!! Make sure all persistable classes are enhanced before running DataNucleus and/or the CLASSPATH is correct.
+        // Found Meta-Data for class org.apache.causeway.extensions.audittrail.jdo.integtests.model.Counter but this class is either not enhanced or you have multiple copies of the persistence API jar in your CLASSPATH!! Make sure all persistable classes are enhanced before running DataNucleus and/or the CLASSPATH is correct.
         String buf = nonEnhancedMessage(cause);
         if (buf != null) return buf;
         return cause.getLocalizedMessage();
