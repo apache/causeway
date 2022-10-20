@@ -16,16 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.bypass {
-    exports org.apache.causeway.security.bypass;
-    exports org.apache.causeway.security.bypass.authentication;
-    exports org.apache.causeway.security.bypass.authorization;
+package org.apache.causeway.security.shiro;
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.core.runtimeservices;
-    requires java.annotation;
-    requires java.inject;
-    requires spring.beans;
-    requires spring.context;
+import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.security.shiro.authentication.AuthenticatorShiro;
+import org.apache.causeway.security.shiro.authorization.AuthorizorShiro;
+import org.apache.causeway.security.shiro.webmodule.WebModuleShiro;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+/**
+ * Configuration Bean to support Isis Security using Shiro.
+ *
+ * @since 1.x {@index}
+ */
+@Configuration
+@Import({
+        // modules
+        IsisModuleCoreRuntimeServices.class,
+
+        // @Service's
+        AuthenticatorShiro.class,
+        AuthorizorShiro.class,
+        WebModuleShiro.class,
+
+})
+public class IsisModuleSecurityShiro {
+
 }

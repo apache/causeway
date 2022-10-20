@@ -16,16 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.bypass {
-    exports org.apache.causeway.security.bypass;
-    exports org.apache.causeway.security.bypass.authentication;
-    exports org.apache.causeway.security.bypass.authorization;
+package org.apache.causeway.security.shiro;
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.core.runtimeservices;
-    requires java.annotation;
-    requires java.inject;
-    requires spring.beans;
-    requires spring.context;
+import org.apache.causeway.applib.id.LogicalType;
+
+final class TypeIdentifierTestFactory {
+
+    static LogicalType customer() {
+        return LogicalType.fqcn(Customer.class);
+    }
+    
+    static LogicalType order() {
+        return LogicalType.fqcn(Order.class);
+    }
+    
 }
+
+final class Customer {}
+final class Order {};

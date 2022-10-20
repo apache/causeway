@@ -16,16 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.bypass {
-    exports org.apache.causeway.security.bypass;
-    exports org.apache.causeway.security.bypass.authentication;
-    exports org.apache.causeway.security.bypass.authorization;
+package org.apache.causeway.security.shiro.authorization;
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.core.runtimeservices;
-    requires java.annotation;
-    requires java.inject;
-    requires spring.beans;
-    requires spring.context;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.PermissionResolver;
+
+/**
+ * @since 1.x {@index}
+ */
+public class IsisPermissionResolver implements PermissionResolver {
+
+    public IsisPermissionResolver(){
+    }
+
+    @Override
+    public Permission resolvePermission(String permissionString) {
+        return new IsisPermission(permissionString);
+    }
+
 }

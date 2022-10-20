@@ -16,16 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.security.bypass {
-    exports org.apache.causeway.security.bypass;
-    exports org.apache.causeway.security.bypass.authentication;
-    exports org.apache.causeway.security.bypass.authorization;
+package org.apache.causeway.security.shiro.authorization;
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.security.api;
-    requires org.apache.causeway.core.runtimeservices;
-    requires java.annotation;
-    requires java.inject;
-    requires spring.beans;
-    requires spring.context;
+import org.apache.causeway.security.shiro.authorization.IsisPermission;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+
+public class IsisPermissionTest_equals {
+
+    @Test
+    public void differentByPermGroup() throws Exception {
+        final IsisPermission perm1 = new IsisPermission("adm/*");
+        final IsisPermission perm2 = new IsisPermission("aba/*");
+
+        Assert.assertThat(perm1.equals(perm2), is(false));
+    }
+
+
 }
