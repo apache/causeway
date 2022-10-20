@@ -82,7 +82,7 @@ import lombok.extern.log4j.Log4j2;
       name = "findAffordableBooks",
       language = "JDOQL",
       value = "SELECT "
-              + "FROM org.apache.isis.testdomain.jdo.entities.JdoBook "
+              + "FROM org.apache.causeway.testdomain.jdo.entities.JdoBook "
               + "WHERE price <= :priceUpperBound")
 
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

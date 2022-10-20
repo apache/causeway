@@ -28,32 +28,32 @@ import org.apache.causeway.commons.internal.base._Strings;
  */
 public final class IsisPresets  {
 
-    public static final String NoTranslations = "classpath:/org/apache/isis/core/config/presets/NoTranslations.properties";
-    public static final String IntrospectLazily = "classpath:/org/apache/isis/core/config/presets/IntrospectLazily.properties";
-    public static final String IntrospectFully = "classpath:/org/apache/isis/core/config/presets/IntrospectFully.properties";
+    public static final String NoTranslations = "classpath:/org/apache/causeway/core/config/presets/NoTranslations.properties";
+    public static final String IntrospectLazily = "classpath:/org/apache/causeway/core/config/presets/IntrospectLazily.properties";
+    public static final String IntrospectFully = "classpath:/org/apache/causeway/core/config/presets/IntrospectFully.properties";
 
-    public static final String DatanucleusAutocreateNoValidate = "classpath:/org/apache/isis/core/config/presets/DatanucleusAutocreateNoValidate.properties";
-    public static final String DatanucleusEagerlyCreateTables = "classpath:/org/apache/isis/core/config/presets/DatanucleusEagerlyCreateTables.properties";
+    public static final String DatanucleusAutocreateNoValidate = "classpath:/org/apache/causeway/core/config/presets/DatanucleusAutocreateNoValidate.properties";
+    public static final String DatanucleusEagerlyCreateTables = "classpath:/org/apache/causeway/core/config/presets/DatanucleusEagerlyCreateTables.properties";
 
-    public static final String DebugPersistence = "classpath:/org/apache/isis/core/config/presets/DebugPersistence.properties";
-    public static final String DebugRequestScopedServices = "classpath:/org/apache/isis/core/config/presets/DebugRequestScopedServices.properties";
-    public static final String DebugTransactionScopedServices = "classpath:/org/apache/isis/core/config/presets/DebugTransactionScopedServices.properties";
+    public static final String DebugPersistence = "classpath:/org/apache/causeway/core/config/presets/DebugPersistence.properties";
+    public static final String DebugRequestScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugRequestScopedServices.properties";
+    public static final String DebugTransactionScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugTransactionScopedServices.properties";
 
-    public static final String DebugDiscovery = "classpath:/org/apache/isis/core/config/presets/DebugDiscovery.properties";
+    public static final String DebugDiscovery = "classpath:/org/apache/causeway/core/config/presets/DebugDiscovery.properties";
 
-    public static final String DebugProgrammingModel = "classpath:/org/apache/isis/core/config/presets/DebugProgrammingModel.properties";
-    public static final String SilenceProgrammingModel = "classpath:/org/apache/isis/core/config/presets/SilenceProgrammingModel.properties";
+    public static final String DebugProgrammingModel = "classpath:/org/apache/causeway/core/config/presets/DebugProgrammingModel.properties";
+    public static final String SilenceProgrammingModel = "classpath:/org/apache/causeway/core/config/presets/SilenceProgrammingModel.properties";
 
-    public static final String DebugMetaModel = "classpath:/org/apache/isis/core/config/presets/DebugMetaModel.properties";
-    public static final String SilenceMetaModel = "classpath:/org/apache/isis/core/config/presets/SilenceMetaModel.properties";
+    public static final String DebugMetaModel = "classpath:/org/apache/causeway/core/config/presets/DebugMetaModel.properties";
+    public static final String SilenceMetaModel = "classpath:/org/apache/causeway/core/config/presets/SilenceMetaModel.properties";
 
-    public static final String DebugIsisInteraction = "classpath:/org/apache/isis/core/config/presets/DebugIsisInteraction.properties";
-    public static final String DebugVaadin = "classpath:/org/apache/isis/core/config/presets/DebugVaadin.properties";
+    public static final String DebugIsisInteraction = "classpath:/org/apache/causeway/core/config/presets/DebugIsisInteraction.properties";
+    public static final String DebugVaadin = "classpath:/org/apache/causeway/core/config/presets/DebugVaadin.properties";
 
-    public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
-    public static final String UseLog4j2Test = "classpath:/org/apache/isis/core/config/presets/UseLog4j2Test.properties";
+    public static final String SilenceWicket = "classpath:/org/apache/causeway/core/config/presets/SilenceWicket.properties";
+    public static final String UseLog4j2Test = "classpath:/org/apache/causeway/core/config/presets/UseLog4j2Test.properties";
 
-    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/isis/core/config/presets/H2InMemory_withUniqueSchema.properties";
+    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/causeway/core/config/presets/H2InMemory_withUniqueSchema.properties";
 
     /**
      * Use PROTOTYPING mode as the default. Does not override if the system-property
