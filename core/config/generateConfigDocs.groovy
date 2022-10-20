@@ -74,85 +74,85 @@ class PropertyGroup {
 
 List<PropertyGroup> groups = []
 groups+= new PropertyGroup() {{
-    prefix = "isis.applib"
+    prefix = "causeway.applib"
     name = "Applib"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.config"
+    prefix = "causeway.core.config"
     name = "Core Configuration"
     searchOrder = 100
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.meta-model"
+    prefix = "causeway.core.meta-model"
     name = "Core MetaModel"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.meta-model.introspector"
+    prefix = "causeway.core.meta-model.introspector"
     name = "Core MetaModel Introspection"
     searchOrder = 100
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.meta-model.validator"
+    prefix = "causeway.core.meta-model.validator"
     name = "MetaModel Validator"
     searchOrder = 101
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.runtime"
+    prefix = "causeway.core.runtime"
     name = "Core Runtime"
     properties: []
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.runtime-services"
+    prefix = "causeway.core.runtime-services"
     name = "Core Runtime Services"
     properties: []
     searchOrder = 101
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.persistence.schema"
+    prefix = "causeway.persistence.schema"
     name = "Core Persistence Schema"
     properties: []
     searchOrder = 100
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.security.shiro"
+    prefix = "causeway.security.shiro"
     name = "Shiro Security Implementation"
     properties: []
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.security.keycloak"
+    prefix = "causeway.security.keycloak"
     name = "Keycloak Security Implementation"
     properties: []
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.security.spring"
+    prefix = "causeway.security.spring"
     name = "Spring Security Implementation"
     properties: []
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.viewer.restfulobjects"
+    prefix = "causeway.viewer.restfulobjects"
     name = "Restful Objects Viewer"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.viewer.wicket"
+    prefix = "causeway.viewer.wicket"
     name = "Wicket Viewer"
     searchOrder = 501
 }}
@@ -183,49 +183,49 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.extensions"
+    prefix = "causeway.extensions"
     name = "Extensions"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.value-types"
+    prefix = "causeway.value-types"
     name = "Value types"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.subdomains"
+    prefix = "causeway.subdomains"
     name = "Subdomains"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.testing"
+    prefix = "causeway.testing"
     name = "Testing"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.mappings"
+    prefix = "causeway.mappings"
     name = "Bounded Context Mappings"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.incubator"
+    prefix = "causeway.incubator"
     name = "Incubator"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.legacy"
+    prefix = "causeway.legacy"
     name = "Legacy"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "" // 'isis.objects', 'isis.environment'
+    prefix = "" // 'causeway.objects', 'causeway.environment'
     name = "Other"
     searchOrder = 999
 }}
@@ -240,8 +240,8 @@ def data = jsonSlurper.parse(inputFile)
 
 eachProperty:
 for (property in data.properties) {
-    if(['isis.raw-key-value-map',
-        'isis.environment'].contains(property.name)) {
+    if(['causeway.raw-key-value-map',
+        'causeway.environment'].contains(property.name)) {
         // ignore these special cases
         continue
     }

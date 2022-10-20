@@ -20,12 +20,11 @@ package org.apache.isis.core.internaltestsupport.contract;
 
 import java.util.List;
 
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.hamcrest.Matchers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.isis.commons.internal.collections._Lists;
 
 public class ComparableContractTester<T extends Comparable<T>> {
 

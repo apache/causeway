@@ -21,18 +21,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core</artifactId>
+        <groupId>org.apache.causeway.core</groupId>
+        <artifactId>causeway-core</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-runtimeservices</artifactId>
-    <name>Apache Isis Core - Runtime Services</name>
+    <artifactId>causeway-core-runtimeservices</artifactId>
+    <name>Apache Causeway Core - Runtime Services</name>
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtimeservices</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core.runtimeservices</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.core.runtimeservices</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/core.runtimeservices</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -73,20 +73,20 @@
     <dependencies>
 	
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtime</artifactId>
         </dependency>
       
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-codegen-bytebuddy</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-codegen-bytebuddy</artifactId>
         </dependency>
         
 		<!-- TESTING -->
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
