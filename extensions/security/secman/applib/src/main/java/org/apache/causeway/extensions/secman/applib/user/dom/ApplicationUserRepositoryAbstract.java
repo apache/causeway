@@ -80,7 +80,7 @@ implements ApplicationUserRepository {
 
     /**
      * Uses the {@link QueryResultsCache} in order to support
-     * multiple lookups from <code>org.apache.isis.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
+     * multiple lookups from <code>org.apache.causeway.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
      * <p>
      * <p>
      * If the user does not exist, it will be automatically created.

@@ -125,7 +125,7 @@ import lombok.ToString;
 })
 public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, CalendarEventable, Locatable*/ {
 
-    public static final String FQCN = "org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem";
+    public static final String FQCN = "org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem";
 
     @Inject private MessageService messageService;
     @Inject private RepositoryService repositoryService;

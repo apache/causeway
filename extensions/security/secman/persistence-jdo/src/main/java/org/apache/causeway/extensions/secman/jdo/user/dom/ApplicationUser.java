@@ -98,7 +98,7 @@ import lombok.Setter;
 public class ApplicationUser
     extends org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser {
 
-    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser";
+    protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.user.dom.ApplicationUser";
 
 
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)

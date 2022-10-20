@@ -140,7 +140,7 @@ import lombok.Setter;
 )
 public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry {
 
-    public static final String FQCN = "org.apache.isis.extensions.sessionlog.jdo.dom.SessionLogEntry";
+    public static final String FQCN = "org.apache.causeway.extensions.sessionlog.jdo.dom.SessionLogEntry";
 
     public SessionLogEntry(
             final UUID sessionGuid,

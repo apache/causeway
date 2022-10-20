@@ -86,7 +86,7 @@ import lombok.Setter;
 public class ApplicationRole
     extends org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole {
 
-    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
+    protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.role.dom.ApplicationRole";
 
 
     @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)

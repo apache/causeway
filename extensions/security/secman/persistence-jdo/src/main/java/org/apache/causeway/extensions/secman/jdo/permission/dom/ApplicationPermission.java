@@ -66,7 +66,7 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + ApplicationPermission.FQCN
                   + " WHERE (u.roles.contains(role) && u.username == :username) "
-                  + " VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
+                  + " VARIABLES org.apache.causeway.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
             name = Nq.FIND_BY_ROLE_NAMES,
             value = "SELECT "
@@ -106,7 +106,7 @@ import lombok.Setter;
 public class ApplicationPermission
     extends org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
 
-    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission";
+    protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.permission.dom.ApplicationPermission";
 
 
     @Column(name = Role.NAME, allowsNull = Role.ALLOWS_NULL)

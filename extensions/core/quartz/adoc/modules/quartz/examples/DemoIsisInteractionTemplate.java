@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.quartz.jobs;
+package org.apache.causeway.extensions.quartz.jobs;
 
 
 import java.util.Arrays;

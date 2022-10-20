@@ -122,7 +122,7 @@ implements ApplicationPermissionRepository {
     // -- findByUserAndPermissionValue (programmatic)
     /**
      * Uses the {@link QueryResultsCache} in order to support
-     * multiple lookups from <code>org.apache.isis.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
+     * multiple lookups from <code>org.apache.causeway.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
      */
     @Override
     public Optional<ApplicationPermission> findByUserAndPermissionValue(final String username, final ApplicationPermissionValue permissionValue) {

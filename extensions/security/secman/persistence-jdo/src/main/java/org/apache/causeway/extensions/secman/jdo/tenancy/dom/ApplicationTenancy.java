@@ -90,7 +90,7 @@ import lombok.Setter;
 public class ApplicationTenancy
     extends org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
-    protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
+    protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
 
 
     @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)

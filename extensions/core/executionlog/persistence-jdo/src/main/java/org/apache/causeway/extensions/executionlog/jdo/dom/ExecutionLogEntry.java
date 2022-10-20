@@ -149,7 +149,7 @@ import lombok.Setter;
 public class ExecutionLogEntry extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry {
 
 
-    public static final String FQCN = "org.apache.isis.extensions.executionlog.jdo.dom.ExecutionLogEntry";
+    public static final String FQCN = "org.apache.causeway.extensions.executionlog.jdo.dom.ExecutionLogEntry";
     @PrimaryKey
     @InteractionId
     @Column(allowsNull = InteractionId.ALLOWS_NULL, length=InteractionId.MAX_LENGTH)
