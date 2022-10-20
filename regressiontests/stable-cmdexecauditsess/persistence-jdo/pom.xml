@@ -14,61 +14,61 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.regressiontests</groupId>
-        <artifactId>isis-regressiontests-cmdexecauditsess</artifactId>
+        <groupId>org.apache.causeway.regressiontests</groupId>
+        <artifactId>causeway-regressiontests-cmdexecauditsess</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-regressiontests-cmdexecauditsess-persistence-jdo</artifactId>
-    <name>Apache Isis - Regression Tests (stable) - Cmd/Exec/Audit/Session - JDO</name>
+    <artifactId>causeway-regressiontests-cmdexecauditsess-persistence-jdo</artifactId>
+    <name>Apache Causeway - Regression Tests (stable) - Cmd/Exec/Audit/Session - JDO</name>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.regressiontests</groupId>
-            <artifactId>isis-regressiontests-cmdexecauditsess-generic</artifactId>
+            <groupId>org.apache.causeway.regressiontests</groupId>
+            <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+            <groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-commandlog-persistence-jdo</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-executionlog-persistence-jdo</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionlog-persistence-jdo</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-security-bypass</artifactId>
+            <groupId>org.apache.causeway.security</groupId>
+            <artifactId>causeway-security-bypass</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -32,13 +32,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.testdomain.wrapperfactory.Counter;
-import org.apache.isis.testdomain.wrapperfactory.Counter_bumpUsingMixin;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.testdomain.wrapperfactory.Counter;
+import org.apache.causeway.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThat;
