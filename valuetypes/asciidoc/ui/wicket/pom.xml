@@ -15,29 +15,29 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
+		<groupId>org.apache.causeway.valuetypes</groupId>
+		<artifactId>causeway-valuetypes-asciidoc-ui</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
-	<name>Apache Isis Val - Asciidoctor (ui wicket)</name>
+	<artifactId>causeway-valuetypes-asciidoc-ui-wkt</artifactId>
+	<name>Apache Causeway Val - Asciidoctor (ui wicket)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui.wkt</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/ui/wkt</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.asciidoc.ui.wkt</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/valuetypes/asciidoc/ui/wkt</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-wicket-ui</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-wicket-ui</artifactId>
             <scope>provided</scope>
         </dependency>
 

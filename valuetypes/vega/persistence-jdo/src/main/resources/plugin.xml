@@ -18,7 +18,7 @@
     under the License.
 -->
 <plugin
-   id="org.apache.isis.valuetypes.vega.persistence.jdo"
+   id="org.apache.causeway.valuetypes.vega.persistence.jdo"
    name="Apache Isis Value Types Vega Persistence JDO DataNucleus Implementation"
    provider-name="Apache Isis">
 
@@ -29,7 +29,7 @@
 
     <extension point="org.datanucleus.java_type">
         <java-type
-                name="org.apache.isis.valuetypes.vega.applib.value.Vega"
+                name="org.apache.causeway.valuetypes.vega.applib.value.Vega"
                 dfg="false"
                 converter-name="isis.ext.vega-string" />
     </extension>
@@ -40,9 +40,9 @@
     <extension point="org.datanucleus.type_converter">
         <type-converter
                 name="isis.ext.vega-string"
-                member-type="org.apache.isis.valuetypes.vega.applib.value.Vega"
+                member-type="org.apache.causeway.valuetypes.vega.applib.value.Vega"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.valuetypes.vega.persistence.jdo.dn.converters.IsisVegaConverter"/>
+                converter-class="org.apache.causeway.valuetypes.vega.persistence.jdo.dn.converters.IsisVegaConverter"/>
     </extension>
 
 

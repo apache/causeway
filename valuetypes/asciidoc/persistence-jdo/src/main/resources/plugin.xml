@@ -18,7 +18,7 @@
     under the License.
 -->
 <plugin
-   id="org.apache.isis.valuetypes.asciidoc.persistence.jdo"
+   id="org.apache.causeway.valuetypes.asciidoc.persistence.jdo"
    name="Apache Isis Value Types AsciiDoc Persistence JDO DataNucleus Implementation"
    provider-name="Apache Isis">
 
@@ -29,7 +29,7 @@
 
     <extension point="org.datanucleus.java_type">
         <java-type
-                name="org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc"
+                name="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc"
                 dfg="false"
                 converter-name="isis.ext.asciidoc-string" />
     </extension>
@@ -40,9 +40,9 @@
     <extension point="org.datanucleus.type_converter">
         <type-converter
                 name="isis.ext.asciidoc-string"
-                member-type="org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc"
+                member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn.converters.IsisAsciiDocConverter"/>
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters.IsisAsciiDocConverter"/>
     </extension>
 
 

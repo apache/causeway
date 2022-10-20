@@ -15,25 +15,25 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.valuetypes</groupId>
-	<artifactId>isis-valuetypes</artifactId>
+	<groupId>org.apache.causeway.valuetypes</groupId>
+	<artifactId>causeway-valuetypes</artifactId>
 
-	<name>Apache Isis Value types</name>
+	<name>Apache Causeway Value types</name>
 	<description>
-        Value types for use within Apache Isis applications.
+        Value types for use within Apache Causeway applications.
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/valuetypes</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -62,109 +62,109 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-jodatime-applib</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-jodatime-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-jodatime-integration</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-jodatime-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-applib</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-ui-vaa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-ui-wkt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-applib</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-markdown-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-markdown-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-ui-wkt</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-markdown-ui-wkt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-markdown-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-vega-applib</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-vega-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-vega-metamodel</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-vega-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-vega-ui-vaa</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-vega-ui-vaa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-vega-ui-wkt</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-vega-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-vega-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-vega-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<!-- testing -->
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fixtures-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

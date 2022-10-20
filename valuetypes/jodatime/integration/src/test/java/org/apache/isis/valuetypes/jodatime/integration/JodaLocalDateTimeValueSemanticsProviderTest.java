@@ -26,9 +26,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
-import org.apache.isis.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
+import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
 
 import lombok.val;
 
