@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,33 +52,33 @@ public class IsisAsciiDocVm
         implements HasAsciiDocDescription, IsisAsciiDocHolder2 {
 
 //end::class[]
-    public IsisAsciiDocVm(final org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc initialValue) {
+    public IsisAsciiDocVm(final org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc view model: ")
+    @Title(prepend = "org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
-    private org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc readOnlyProperty;
+    private org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc readWriteProperty;
+    private org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
-    private org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc readOnlyOptionalProperty;
+    private org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
-    private org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc readWriteOptionalProperty;
+    private org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc readWriteOptionalProperty;
 
 }
 //end::class[]

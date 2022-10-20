@@ -27,14 +27,14 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 @Profile("demo-jdo")
 @Service
 public class IsisMarkupJdoEntities
-extends ValueHolderRepository<org.apache.isis.applib.value.Markup, IsisMarkupJdo> {
+extends ValueHolderRepository<org.apache.causeway.applib.value.Markup, IsisMarkupJdo> {
 
     protected IsisMarkupJdoEntities() {
         super(IsisMarkupJdo.class);
     }
 
     @Override
-    protected IsisMarkupJdo newDetachedEntity(org.apache.isis.applib.value.Markup value) {
+    protected IsisMarkupJdo newDetachedEntity(org.apache.causeway.applib.value.Markup value) {
         return new IsisMarkupJdo(value);
     }
 

@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.IsisConfiguration;
 
 import lombok.val;
 

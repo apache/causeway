@@ -26,8 +26,8 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.value.Blob;
+import org.apache.causeway.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.applib.value.Blob;
 
 import org.isisaddons.module.fakedata.dom.FakeDataService;
 import org.isisaddons.wicket.pdfjs.fixture.demoapp.demomodule.dom.PdfJsDemoObjectWithBlob;

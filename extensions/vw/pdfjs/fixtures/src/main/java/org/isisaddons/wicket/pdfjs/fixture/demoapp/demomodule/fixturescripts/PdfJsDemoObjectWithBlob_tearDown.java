@@ -18,7 +18,7 @@
  */
 package org.isisaddons.wicket.pdfjs.fixture.demoapp.demomodule.fixturescripts;
 
-import org.apache.isis.applib.fixturescripts.teardown.TeardownFixtureAbstract2;
+import org.apache.causeway.applib.fixturescripts.teardown.TeardownFixtureAbstract2;
 
 import org.isisaddons.wicket.pdfjs.fixture.demoapp.demomodule.dom.PdfJsDemoObjectWithBlob;
 

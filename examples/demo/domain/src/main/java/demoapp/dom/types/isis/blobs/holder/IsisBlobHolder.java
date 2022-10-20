@@ -20,7 +20,7 @@ package demoapp.dom.types.isis.blobs.holder;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.value.Blob;
+import org.apache.causeway.applib.value.Blob;
 
 @Named("demo.IsisBlobHolder")
 //tag::class[]

@@ -22,11 +22,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.services.error.ErrorDetails;
-import org.apache.isis.applib.services.error.ErrorReportingService;
-import org.apache.isis.applib.services.error.SimpleTicket;
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import org.apache.causeway.applib.services.error.ErrorDetails;
+import org.apache.causeway.applib.services.error.ErrorReportingService;
+import org.apache.causeway.applib.services.error.SimpleTicket;
 
 import lombok.Builder;
 

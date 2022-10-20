@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.repainting;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Repainting;
-import org.apache.isis.applib.value.Blob;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Repainting;
+import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 

@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +37,13 @@ public class IsisMarkdownHolder_actionReturningCollection {
 
     private final IsisMarkdownHolder holder;
 
-    public Collection<org.apache.isis.valuetypes.markdown.applib.value.Markdown> act() {
+    public Collection<org.apache.causeway.valuetypes.markdown.applib.value.Markdown> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<org.apache.isis.valuetypes.markdown.applib.value.Markdown> samples;
+    Samples<org.apache.causeway.valuetypes.markdown.applib.value.Markdown> samples;
 
 }
 //end::class[]

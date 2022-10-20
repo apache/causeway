@@ -30,7 +30,7 @@ public class WrapperBooleanSamples implements Samples<java.lang.Boolean> {
 
     @Override
     public Stream<java.lang.Boolean> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.BooleanValueSemantics()
                 .getExamples()
                 .stream();
     }

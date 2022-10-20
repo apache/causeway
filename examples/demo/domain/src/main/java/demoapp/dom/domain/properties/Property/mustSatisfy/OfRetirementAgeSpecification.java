@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.mustSatisfy;
 
-import org.apache.isis.applib.spec.AbstractSpecification;
+import org.apache.causeway.applib.spec.AbstractSpecification;
 
 //tag::class[]
 public class OfRetirementAgeSpecification extends AbstractSpecification<Integer> {

@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.isis.localresourcepaths.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.LocalResourcePath;
 
 import lombok.RequiredArgsConstructor;
 

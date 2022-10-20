@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.Getter;
 import lombok.val;

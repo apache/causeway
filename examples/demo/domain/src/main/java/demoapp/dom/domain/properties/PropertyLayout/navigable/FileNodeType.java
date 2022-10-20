@@ -18,8 +18,8 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.util.Enums;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.util.Enums;
 
 //tag::class[]
 public enum FileNodeType {

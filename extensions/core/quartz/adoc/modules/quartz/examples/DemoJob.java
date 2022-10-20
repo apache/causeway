@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.quartz.jobs;
+package org.apache.causeway.extensions.quartz.jobs;
 
 
 import java.util.Arrays;
@@ -26,12 +26,12 @@ import javax.inject.Inject;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
-import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
+import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
+import org.apache.causeway.core.security.authentication.Authentication;
+import org.apache.causeway.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

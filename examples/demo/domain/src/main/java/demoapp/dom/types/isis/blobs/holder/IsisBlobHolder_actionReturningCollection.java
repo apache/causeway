@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Blob;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 

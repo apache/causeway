@@ -21,13 +21,13 @@ package demoapp.dom.services.core.messageservice;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.services.message.MessageService;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.services.message.MessageService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 

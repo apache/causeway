@@ -21,7 +21,7 @@ package demoapp.dom.types.isis.clobs.jpa;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.Clob;
+import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 

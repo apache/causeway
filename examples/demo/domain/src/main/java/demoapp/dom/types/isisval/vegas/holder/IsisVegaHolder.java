@@ -25,17 +25,17 @@ import javax.inject.Named;
 //tag::class[]
 public interface IsisVegaHolder {
 
-    org.apache.isis.valuetypes.vega.applib.value.Vega getReadOnlyProperty();
-    void setReadOnlyProperty(org.apache.isis.valuetypes.vega.applib.value.Vega c);
+    org.apache.causeway.valuetypes.vega.applib.value.Vega getReadOnlyProperty();
+    void setReadOnlyProperty(org.apache.causeway.valuetypes.vega.applib.value.Vega c);
 
-    org.apache.isis.valuetypes.vega.applib.value.Vega getReadWriteProperty();
-    void setReadWriteProperty(org.apache.isis.valuetypes.vega.applib.value.Vega c);
+    org.apache.causeway.valuetypes.vega.applib.value.Vega getReadWriteProperty();
+    void setReadWriteProperty(org.apache.causeway.valuetypes.vega.applib.value.Vega c);
 
-    org.apache.isis.valuetypes.vega.applib.value.Vega getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(org.apache.isis.valuetypes.vega.applib.value.Vega c);
+    org.apache.causeway.valuetypes.vega.applib.value.Vega getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(org.apache.causeway.valuetypes.vega.applib.value.Vega c);
 
-    org.apache.isis.valuetypes.vega.applib.value.Vega getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(org.apache.isis.valuetypes.vega.applib.value.Vega c);
+    org.apache.causeway.valuetypes.vega.applib.value.Vega getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(org.apache.causeway.valuetypes.vega.applib.value.Vega c);
 
 }
 //end::class[]

@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.RestrictTo;
 
 //tag::class[]
 @Action(restrictTo = RestrictTo.NO_RESTRICTIONS)    // <.>

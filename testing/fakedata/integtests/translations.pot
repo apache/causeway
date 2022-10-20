@@ -30,43 +30,43 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 
-#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel(java.lang.String)
+#: org.apache.causeway.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel(java.lang.String)
 msgid ".csv file name"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
+#: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
 msgid ".pot file name"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml(java.util.List,java.lang.String)
+#: org.apache.causeway.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml(java.util.List,java.lang.String)
 msgid ".xml file name"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup#act()
-#: org.apache.isis.applib.services.dto.Dto_downloadXml#act()
-#: org.apache.isis.applib.services.dto.Dto_downloadXsd#act()
-#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml#act()
-#: org.apache.isis.applib.services.layout.Object_openRestApi#act()
-#: org.apache.isis.applib.services.layout.Object_rebuildMetamodel#act()
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act()
+#: org.apache.causeway.applib.services.bookmark.BookmarkHolder_lookup#act()
+#: org.apache.causeway.applib.services.dto.Dto_downloadXml#act()
+#: org.apache.causeway.applib.services.dto.Dto_downloadXsd#act()
+#: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml#act()
+#: org.apache.causeway.applib.services.layout.Object_openRestApi#act()
+#: org.apache.causeway.applib.services.layout.Object_rebuildMetamodel#act()
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act()
 msgid "Act"
 msgstr ""
 
 
-#: org.apache.isis.applib.domain.DomainObjectList#actionArguments
+#: org.apache.causeway.applib.domain.DomainObjectList#actionArguments
 msgid "Action Arguments"
 msgstr ""
 
 
-#: org.apache.isis.applib.domain.DomainObjectList#actionId
+#: org.apache.causeway.applib.domain.DomainObjectList#actionId
 msgid "Action Id"
 msgstr ""
 
 
-#: org.apache.isis.applib.domain.DomainObjectList#actionOwningType
+#: org.apache.causeway.applib.domain.DomainObjectList#actionOwningType
 msgid "Action Owning Type"
 msgstr ""
 
@@ -76,12 +76,12 @@ msgid "Amex"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+#: org.apache.causeway.core.runtime.system.session.IsisSessionFactoryBuilder
 msgid "Are you sure?"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#AUDIT_ENTRY
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#AUDIT_ENTRY
 msgid "Audit Entry"
 msgstr ""
 
@@ -91,37 +91,37 @@ msgid "Blobs and Clobs"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+#: org.apache.causeway.core.runtime.system.session.IsisSessionFactoryBuilder
 msgid "Cancel"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetClass
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetClass
 msgid "Class"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
+#: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
 msgid "Clear translation cache"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#COMMAND
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#COMMAND
 msgid "Command"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.LayoutService$Style#COMPLETE
+#: org.apache.causeway.applib.services.layout.LayoutService$Style#COMPLETE
 msgid "Complete"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.config.ConfigurationServiceMenu#configuration()
+#: org.apache.causeway.applib.services.config.ConfigurationServiceMenu#configuration()
 msgid "Configuration"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
+#: org.apache.causeway.core.runtime.system.session.IsisSessionFactoryBuilder
 msgid "Confirm"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgid "Create Demo Object With All"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.LayoutService$Style#CURRENT
+#: org.apache.causeway.applib.services.layout.LayoutService$Style#CURRENT
 msgid "Current"
 msgstr ""
 
@@ -141,7 +141,7 @@ msgid "Dates and Times"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.menu.MenuBarsService$Type#DEFAULT
+#: org.apache.causeway.applib.services.menu.MenuBarsService$Type#DEFAULT
 msgid "Default"
 msgstr ""
 
@@ -151,12 +151,12 @@ msgid "Demo"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
 msgid "Detail"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
 msgid "Domain Change"
 msgstr ""
 
@@ -166,14 +166,14 @@ msgid "Download Jdo Metadata"
 msgstr ""
 
 
-#: org.apache.isis.applib.AbstractViewModel#downloadLayoutXml()
-#: org.apache.isis.applib.ViewModel#downloadLayoutXml()
-#: org.apache.isis.applib.domain.DomainObjectList#downloadLayoutXml()
-#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#downloadLayoutXml()
-#: org.apache.isis.applib.fixturescripts.FixtureResult#downloadLayoutXml()
-#: org.apache.isis.applib.fixturescripts.FixtureScript#downloadLayoutXml()
-#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#downloadLayoutXml()
-#: org.apache.isis.applib.services.config.ConfigurationProperty#downloadLayoutXml()
+#: org.apache.causeway.applib.AbstractViewModel#downloadLayoutXml()
+#: org.apache.causeway.applib.ViewModel#downloadLayoutXml()
+#: org.apache.causeway.applib.domain.DomainObjectList#downloadLayoutXml()
+#: org.apache.causeway.applib.fixturescripts.DiscoverableFixtureScript#downloadLayoutXml()
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#downloadLayoutXml()
+#: org.apache.causeway.applib.fixturescripts.FixtureScript#downloadLayoutXml()
+#: org.apache.causeway.applib.fixturescripts.SimpleFixtureScript#downloadLayoutXml()
+#: org.apache.causeway.applib.services.config.ConfigurationProperty#downloadLayoutXml()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#downloadLayoutXml()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3#downloadLayoutXml()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData#downloadLayoutXml()
@@ -182,98 +182,98 @@ msgid "Download Layout Xml"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout()
+#: org.apache.causeway.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout()
 msgid "Download Menu Bars Layout (XML)"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel()
+#: org.apache.causeway.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel()
 msgid "Download Meta Model (CSV)"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml()
+#: org.apache.causeway.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml()
 msgid "Download Meta Model (XML)"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadLayouts()
+#: org.apache.causeway.applib.services.layout.LayoutServiceMenu#downloadLayouts()
 msgid "Download Object Layouts (ZIP)"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSchemaDefinition()
+#: org.apache.causeway.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSchemaDefinition()
 msgid "Download Swagger Schema Definition"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
+#: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
 msgid "Download Translations"
 msgstr ""
 
 
-#: org.apache.isis.applib.domain.DomainObjectList#elementObjectType
+#: org.apache.causeway.applib.domain.DomainObjectList#elementObjectType
 msgid "Element Object Type"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.menu.MenuBarsService$Type#FALLBACK
+#: org.apache.causeway.applib.services.menu.MenuBarsService$Type#FALLBACK
 msgid "Fallback"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.dto.Dto_downloadXml#act(java.lang.String)
-#: org.apache.isis.applib.services.dto.Dto_downloadXsd#act(java.lang.String,org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas)
-#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout(java.lang.String,org.apache.isis.applib.services.menu.MenuBarsService$Type)
-#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act(java.lang.String)
+#: org.apache.causeway.applib.services.dto.Dto_downloadXml#act(java.lang.String)
+#: org.apache.causeway.applib.services.dto.Dto_downloadXsd#act(java.lang.String,org.apache.causeway.applib.services.jaxb.JaxbService$IsisSchemas)
+#: org.apache.causeway.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout(java.lang.String,org.apache.causeway.applib.services.menu.MenuBarsService$Type)
+#: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.causeway.applib.services.layout.LayoutService$Style)
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act(java.lang.String)
 msgid "File name"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSchemaDefinition(java.lang.String,org.apache.isis.applib.services.swagger.SwaggerService$Visibility,org.apache.isis.applib.services.swagger.SwaggerService$Format)
+#: org.apache.causeway.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSchemaDefinition(java.lang.String,org.apache.causeway.applib.services.swagger.SwaggerService$Visibility,org.apache.causeway.applib.services.swagger.SwaggerService$Format)
 msgid "Filename"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureResult#fixtureScriptClassName
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#fixtureScriptClassName
 msgid "Fixture script"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.hsqldb.HsqlDbManagerMenu#hsqlDbManager()
+#: org.apache.causeway.applib.services.hsqldb.HsqlDbManagerMenu#hsqlDbManager()
 msgid "HSQL DB Manager"
 msgstr ""
 
 
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#prop()
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#prop()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#datanucleusIdLong()
 msgid "Id"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
 msgid "Identifiers"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#IGNORE
+#: org.apache.causeway.applib.services.jaxb.JaxbService$IsisSchemas#IGNORE
 msgid "Ignore"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#INCLUDE
+#: org.apache.causeway.applib.services.jaxb.JaxbService$IsisSchemas#INCLUDE
 msgid "Include"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerService$Format#JSON
+#: org.apache.causeway.applib.services.swagger.SwaggerService$Format#JSON
 msgid "Json"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.config.ConfigurationProperty#key
+#: org.apache.causeway.applib.services.config.ConfigurationProperty#key
 msgid "Key"
 msgstr ""
 
@@ -293,19 +293,19 @@ msgid "Math"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetAction
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetAction
 msgid "Member"
 msgstr ""
 
 
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
 msgid "Metadata"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.LayoutService$Style#MINIMAL
+#: org.apache.causeway.applib.services.layout.LayoutService$Style#MINIMAL
 msgid "Minimal"
 msgstr ""
 
@@ -320,35 +320,35 @@ msgid "Name"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.LayoutService$Style#NORMALIZED
+#: org.apache.causeway.applib.services.layout.LayoutService$Style#NORMALIZED
 msgid "Normalized"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetStr
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetStr
 msgid "Object"
 msgstr ""
 
 
-#: org.apache.isis.applib.domain.DomainObjectList#objects
+#: org.apache.causeway.applib.domain.DomainObjectList#objects
 msgid "Objects"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#openTargetObject()
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#openTargetObject()
 msgid "Open"
 msgstr ""
 
 
-#: org.apache.isis.applib.AbstractViewModel#openRestApi()
-#: org.apache.isis.applib.ViewModel#openRestApi()
-#: org.apache.isis.applib.domain.DomainObjectList#openRestApi()
-#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#openRestApi()
-#: org.apache.isis.applib.fixturescripts.FixtureResult#openRestApi()
-#: org.apache.isis.applib.fixturescripts.FixtureScript#openRestApi()
-#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#openRestApi()
-#: org.apache.isis.applib.services.config.ConfigurationProperty#openRestApi()
-#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openRestApi()
+#: org.apache.causeway.applib.AbstractViewModel#openRestApi()
+#: org.apache.causeway.applib.ViewModel#openRestApi()
+#: org.apache.causeway.applib.domain.DomainObjectList#openRestApi()
+#: org.apache.causeway.applib.fixturescripts.DiscoverableFixtureScript#openRestApi()
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#openRestApi()
+#: org.apache.causeway.applib.fixturescripts.FixtureScript#openRestApi()
+#: org.apache.causeway.applib.fixturescripts.SimpleFixtureScript#openRestApi()
+#: org.apache.causeway.applib.services.config.ConfigurationProperty#openRestApi()
+#: org.apache.causeway.applib.services.swagger.SwaggerServiceMenu#openRestApi()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#openRestApi()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3#openRestApi()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData#openRestApi()
@@ -357,29 +357,29 @@ msgid "Open Rest Api"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openSwaggerUi()
+#: org.apache.causeway.applib.services.swagger.SwaggerServiceMenu#openSwaggerUi()
 msgid "Open Swagger Ui"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml(java.util.List,java.lang.String)
+#: org.apache.causeway.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModelXml(java.util.List,java.lang.String)
 msgid "Packages"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.causeway.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.causeway.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.causeway.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.causeway.applib.fixturescripts.FixtureScript,java.lang.String)
 msgid "Parameters"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#postValue
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#postValue
 msgid "Post Value"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#preValue
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#preValue
 msgid "Pre Value"
 msgstr ""
 
@@ -389,59 +389,59 @@ msgid "Primitives"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE
+#: org.apache.causeway.applib.services.swagger.SwaggerService$Visibility#PRIVATE
 msgid "Private"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE_WITH_PROTOTYPING
+#: org.apache.causeway.applib.services.swagger.SwaggerService$Visibility#PRIVATE_WITH_PROTOTYPING
 msgid "Private With Prototyping"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.bookmark.BookmarkHolder_object#prop()
+#: org.apache.causeway.applib.services.bookmark.BookmarkHolder_object#prop()
 msgid "Prop"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#propertyId
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#propertyId
 msgid "Property Id"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault
-#: org.apache.isis.applib.services.hsqldb.HsqlDbManagerMenu
-#: org.apache.isis.applib.services.layout.LayoutServiceMenu
-#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
-#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu
-#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault
+#: org.apache.causeway.applib.services.hsqldb.HsqlDbManagerMenu
+#: org.apache.causeway.applib.services.layout.LayoutServiceMenu
+#: org.apache.causeway.applib.services.metamodel.MetaModelServicesMenu
+#: org.apache.causeway.applib.services.swagger.SwaggerServiceMenu
+#: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu
 msgid "Prototyping"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PUBLIC
+#: org.apache.causeway.applib.services.swagger.SwaggerService$Visibility#PUBLIC
 msgid "Public"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_EVENT
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_EVENT
 msgid "Published Event"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_INTERACTION
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_INTERACTION
 msgid "Published Interaction"
 msgstr ""
 
 
-#: org.apache.isis.applib.AbstractViewModel#rebuildMetamodel()
-#: org.apache.isis.applib.ViewModel#rebuildMetamodel()
-#: org.apache.isis.applib.domain.DomainObjectList#rebuildMetamodel()
-#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#rebuildMetamodel()
-#: org.apache.isis.applib.fixturescripts.FixtureResult#rebuildMetamodel()
-#: org.apache.isis.applib.fixturescripts.FixtureScript#rebuildMetamodel()
-#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#rebuildMetamodel()
-#: org.apache.isis.applib.services.config.ConfigurationProperty#rebuildMetamodel()
+#: org.apache.causeway.applib.AbstractViewModel#rebuildMetamodel()
+#: org.apache.causeway.applib.ViewModel#rebuildMetamodel()
+#: org.apache.causeway.applib.domain.DomainObjectList#rebuildMetamodel()
+#: org.apache.causeway.applib.fixturescripts.DiscoverableFixtureScript#rebuildMetamodel()
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#rebuildMetamodel()
+#: org.apache.causeway.applib.fixturescripts.FixtureScript#rebuildMetamodel()
+#: org.apache.causeway.applib.fixturescripts.SimpleFixtureScript#rebuildMetamodel()
+#: org.apache.causeway.applib.services.config.ConfigurationProperty#rebuildMetamodel()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#rebuildMetamodel()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3#rebuildMetamodel()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData#rebuildMetamodel()
@@ -450,7 +450,7 @@ msgid "Rebuild Metamodel"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#recreateObjectsAndReturnFirst()
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#recreateObjectsAndReturnFirst()
 msgid "Recreate Objects And Return First"
 msgstr ""
 
@@ -482,31 +482,31 @@ msgid "Reset"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureResult#object
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#object
 msgid "Result"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureResult#className
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#className
 msgid "Result class"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureResult#key
+#: org.apache.causeway.applib.fixturescripts.FixtureResult#key
 msgid "Result key"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript()
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript()
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete()
+#: org.apache.causeway.applib.fixturescripts.FixtureScripts#runFixtureScript()
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript()
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete()
 msgid "Run Fixture Script"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript
-#: org.apache.isis.applib.fixturescripts.FixtureScript
-#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript
+#: org.apache.causeway.applib.fixturescripts.DiscoverableFixtureScript
+#: org.apache.causeway.applib.fixturescripts.FixtureScript
+#: org.apache.causeway.applib.fixturescripts.SimpleFixtureScript
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_create3
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_update_withFakeData
@@ -514,9 +514,9 @@ msgid "Script"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.causeway.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.causeway.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.causeway.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.causeway.applib.fixturescripts.FixtureScript,java.lang.String)
 msgid "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)"
 msgstr ""
 
@@ -681,37 +681,37 @@ msgid "Strings and Passwords"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
+#: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
 msgid "Switch To Reading Translations"
 msgstr ""
 
 
-#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToWritingTranslations()
+#: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToWritingTranslations()
 msgid "Switch To Writing Translations"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
 msgid "Target"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
 msgid "TargetStr"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#timestamp
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#timestamp
 msgid "Timestamp"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#transactionId
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#transactionId
 msgid "Transaction Id"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#type
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#type
 msgid "Type"
 msgstr ""
 
@@ -783,18 +783,18 @@ msgid "Update Some Short"
 msgstr ""
 
 
-#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#user
+#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#user
 msgid "User"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.config.ConfigurationProperty#value
+#: org.apache.causeway.applib.services.config.ConfigurationProperty#value
 msgid "Value"
 msgstr ""
 
 
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#prop()
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#prop()
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#prop()
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#prop()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#datanucleusVersionLong()
 #: org.isisaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#datanucleusVersionTimestamp()
 msgid "Version"
@@ -811,15 +811,15 @@ msgid "Wrappers"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.swagger.SwaggerService$Format#YAML
+#: org.apache.causeway.applib.services.swagger.SwaggerService$Format#YAML
 msgid "Yaml"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml
-#: org.apache.isis.applib.services.layout.Object_openRestApi
-#: org.apache.isis.applib.services.layout.Object_rebuildMetamodel
-#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
+#: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml
+#: org.apache.causeway.applib.services.layout.Object_openRestApi
+#: org.apache.causeway.applib.services.layout.Object_rebuildMetamodel
+#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
 msgid "datanucleusIdLong"
 msgstr ""
 

@@ -16,24 +16,24 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.incubator.viewer</groupId>
-		<artifactId>isis-viewer-javafx</artifactId>
+		<groupId>org.apache.causeway.incubator.viewer</groupId>
+		<artifactId>causeway-viewer-javafx</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-viewer-javafx-viewer</artifactId>
-	<name>Apache Isis Inc - Viewer JavaFX (Viewer)</name>
+	<artifactId>causeway-viewer-javafx-viewer</artifactId>
+	<name>Apache Causeway Inc - Viewer JavaFX (Viewer)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.javafx.viewer</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/javafx/model/viewer</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.javafx.viewer</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/javafx/model/viewer</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 		
 		<dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-			<artifactId>isis-viewer-javafx-ui</artifactId>
+			<groupId>org.apache.causeway.incubator.viewer</groupId>
+			<artifactId>causeway-viewer-javafx-ui</artifactId>
 		</dependency>
 
 	</dependencies>

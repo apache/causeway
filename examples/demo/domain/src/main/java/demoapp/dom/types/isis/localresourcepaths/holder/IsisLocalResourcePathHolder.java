@@ -20,7 +20,7 @@ package demoapp.dom.types.isis.localresourcepaths.holder;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.value.LocalResourcePath;
 
 @Named("demo.IsisLocalResourcePathHolder")
 //tag::class[]

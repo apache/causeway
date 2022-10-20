@@ -20,13 +20,13 @@ package demoapp.dom.types.isis.blobs.samples;
 
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 
 import lombok.Getter;
 import lombok.SneakyThrows;

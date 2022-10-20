@@ -15,23 +15,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.commons</groupId>
-	<artifactId>isis-commons</artifactId>
+	<groupId>org.apache.causeway.commons</groupId>
+	<artifactId>causeway-commons</artifactId>
 
-	<name>Apache Isis Commons</name>
+	<name>Apache Causeway Commons</name>
 	<description>
-		Apache Isis Commons is a library with utilities, that are shared with the entire Apache Isis ecosystem.
+		Apache Causeway Commons is a library with utilities, that are shared with the entire Apache Causeway ecosystem.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.commons</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/commons</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.commons</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/commons</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -58,14 +58,14 @@
 		<!-- JDK11+ SUPPORT AND JEE API -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-jdk-supplemental</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-jdk-supplemental</artifactId>
 			<type>pom</type>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-privileged</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-privileged</artifactId>
 		</dependency>
 		
 		<!-- provides @Nullable that's required by Spring 5.x (as Spring is on the module path) -->

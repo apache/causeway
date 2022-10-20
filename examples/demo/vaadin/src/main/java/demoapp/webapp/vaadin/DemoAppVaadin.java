@@ -23,11 +23,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.sse.wicket.IsisModuleExtSseWicket;
+import org.apache.causeway.extensions.sse.wicket.IsisModuleExtSseWicket;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
-import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
+import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.dom.DemoModuleCommon;
 import demoapp.web.DemoAppManifestJdo;

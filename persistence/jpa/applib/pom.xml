@@ -14,21 +14,21 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.persistence</groupId>
-		<artifactId>isis-persistence-jpa</artifactId>
+		<groupId>org.apache.causeway.persistence</groupId>
+		<artifactId>causeway-persistence-jpa</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jpa-applib</artifactId>
+	<artifactId>causeway-persistence-jpa-applib</artifactId>
 
-	<name>Apache Isis Persistence - JPA (applib)</name>
+	<name>Apache Causeway Persistence - JPA (applib)</name>
 	<description>
 		Supplementary applib for JPA persistence
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jpa.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jpa/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jpa.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/persistence/jpa/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -69,12 +69,12 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.commons</groupId>
-			<artifactId>isis-commons</artifactId>
+			<groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
 		</dependency>
 
 		<dependency>
@@ -83,8 +83,8 @@
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-transaction</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-transaction</artifactId>
 			<scope>provided</scope>
         </dependency>
 

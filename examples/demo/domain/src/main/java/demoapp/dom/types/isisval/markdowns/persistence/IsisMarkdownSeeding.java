@@ -31,7 +31,7 @@ public class IsisMarkdownSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public IsisMarkdownSeeding(ValueHolderRepository<org.apache.isis.valuetypes.markdown.applib.value.Markdown, ? extends IsisMarkdownEntity> entities) {
+    public IsisMarkdownSeeding(ValueHolderRepository<org.apache.causeway.valuetypes.markdown.applib.value.Markdown, ? extends IsisMarkdownEntity> entities) {
         super(entities);
     }
 

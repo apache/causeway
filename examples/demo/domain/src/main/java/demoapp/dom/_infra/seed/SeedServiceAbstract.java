@@ -22,9 +22,9 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.events.metamodel.MetamodelListener;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.causeway.applib.events.metamodel.MetamodelListener;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.NonNull;
 

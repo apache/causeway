@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 
 import lombok.AccessLevel;
 import lombok.NonNull;

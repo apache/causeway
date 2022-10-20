@@ -20,8 +20,8 @@ package org.isisaddons.wicket.pdfjs.fixture;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.apache.causeway.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 import org.isisaddons.wicket.pdfjs.fixture.demoapp.demomodule.fixturescripts.PdfJsDemoObjectWithBlob_tearDown;
 

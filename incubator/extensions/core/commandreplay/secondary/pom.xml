@@ -15,13 +15,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.incubator.extensions</groupId>
-		<artifactId>isis-extensions-commandreplay</artifactId>
+		<groupId>org.apache.causeway.incubator.extensions</groupId>
+		<artifactId>causeway-extensions-commandreplay</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-extensions-commandreplay-secondary</artifactId>
-	<name>Apache Isis Ext - Command Replay for Secondary</name>
+	<artifactId>causeway-extensions-commandreplay-secondary</artifactId>
+	<name>Apache Causeway Ext - Command Replay for Secondary</name>
 
 	<packaging>jar</packaging>
 
@@ -31,58 +31,58 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator.extensions.commandreplay.secondary</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator/extensions/core/commandreplay/secondary</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.extensions.commandreplay.secondary</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/incubator/extensions/core/commandreplay/secondary</git-plugin.propertiesDir>
 		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-config</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-schema</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtime</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-schema</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-client</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-fixtures-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-applib</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-client</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-quartz-impl</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-commandlog-applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-quartz-impl</artifactId>
 		</dependency>
 
 		<!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy4</artifactId>
 			<scope>test</scope>
 		</dependency>
 

@@ -23,10 +23,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.ValueSemantics;
-import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.schema.chg.v2.ChangesDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

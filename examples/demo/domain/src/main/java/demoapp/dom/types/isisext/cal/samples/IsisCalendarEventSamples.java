@@ -24,8 +24,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 
 import demoapp.dom.types.Samples;
 import demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples;

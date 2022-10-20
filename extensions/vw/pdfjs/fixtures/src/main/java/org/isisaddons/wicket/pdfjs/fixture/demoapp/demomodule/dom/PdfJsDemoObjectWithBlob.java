@@ -27,20 +27,20 @@ import javax.jdo.annotations.VersionStrategy;
 
 import org.wicketstuff.pdfjs.Scale;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.Blob;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberOrder;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.value.Blob;
 
 import org.isisaddons.wicket.pdfjs.cpt.applib.PdfJsViewer;
 
@@ -62,7 +62,7 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
 
 
     public static class CssClassUiEvent
-            extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<PdfJsDemoObjectWithBlob> {}
+            extends org.apache.causeway.applib.services.eventbus.CssClassUiEvent<PdfJsDemoObjectWithBlob> {}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")

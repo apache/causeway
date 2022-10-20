@@ -41,8 +41,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 
 import lombok.val;
 

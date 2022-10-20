@@ -20,7 +20,7 @@ package demoapp.dom.types.isisext.cal.holder;
 
 import javax.inject.Named;
 
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 @Named("demo.IsisCalendarEventHolder")
 //tag::class[]

@@ -16,17 +16,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.incubator.viewer</groupId>
-		<artifactId>isis-viewer-vaadin</artifactId>
+		<groupId>org.apache.causeway.incubator.viewer</groupId>
+		<artifactId>causeway-viewer-vaadin</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-viewer-vaadin-ui</artifactId>
-	<name>Apache Isis Inc - Viewer Vaadin (UI Components)</name>
+	<artifactId>causeway-viewer-vaadin-ui</artifactId>
+	<name>Apache Causeway Inc - Viewer Vaadin (UI Components)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.vaadin.ui</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/vaadin/ui</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.vaadin.ui</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/vaadin/ui</git-plugin.propertiesDir>
 		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
@@ -113,23 +113,23 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-			<artifactId>isis-viewer-vaadin-model</artifactId>
+			<groupId>org.apache.causeway.incubator.viewer</groupId>
+			<artifactId>causeway-viewer-vaadin-model</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-commons-services</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-commons-services</artifactId>
         </dependency>
         
         <dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-commons-prism</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-commons-prism</artifactId>
         </dependency>
 
 		<dependency>

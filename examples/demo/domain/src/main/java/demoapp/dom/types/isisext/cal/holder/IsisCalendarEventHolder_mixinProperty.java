@@ -18,10 +18,10 @@
  */
 package demoapp.dom.types.isisext.cal.holder;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import lombok.RequiredArgsConstructor;
 

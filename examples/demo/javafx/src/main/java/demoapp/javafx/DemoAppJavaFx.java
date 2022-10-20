@@ -18,18 +18,17 @@
  */
 package demoapp.javafx;
 
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
+import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
+import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
+import org.apache.causeway.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
+import org.apache.causeway.incubator.viewer.javafx.viewer.JavafxViewer;
+import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-
-import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
-import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
-import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
-import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
-import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 import demoapp.dom.DemoModuleJpa;
 

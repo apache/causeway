@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
@@ -47,22 +47,22 @@ public class IsisMarkupHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisMarkupHolder holder;
 
-    @MemberSupport public IsisMarkupHolder act(final org.apache.isis.applib.value.Markup newValue) {
+    @MemberSupport public IsisMarkupHolder act(final org.apache.causeway.applib.value.Markup newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.apache.isis.applib.value.Markup default0Act() {
+    @MemberSupport public org.apache.causeway.applib.value.Markup default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List<org.apache.isis.applib.value.Markup> choices0Act() {
+    @MemberSupport public List<org.apache.causeway.applib.value.Markup> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<org.apache.isis.applib.value.Markup> samples;
+    Samples<org.apache.causeway.applib.value.Markup> samples;
 
 }
 //end::class[]

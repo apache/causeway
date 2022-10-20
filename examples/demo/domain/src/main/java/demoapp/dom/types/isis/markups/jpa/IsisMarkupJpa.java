@@ -31,14 +31,14 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,7 +62,7 @@ public class IsisMarkupJpa
         extends IsisMarkupEntity {
 
 //end::class[]
-    public IsisMarkupJpa(final org.apache.isis.applib.value.Markup initialValue) {
+    public IsisMarkupJpa(final org.apache.causeway.applib.value.Markup initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -72,29 +72,29 @@ public class IsisMarkupJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "org.apache.isis.applib.value.Markup JPA entity: ")
+    @Title(prepend = "org.apache.causeway.applib.value.Markup JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)                 // <.>
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readOnlyProperty;
+    private org.apache.causeway.applib.value.Markup readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1", hidden = Where.ALL_TABLES, multiLine = 5)
     @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readWriteProperty;
+    private org.apache.causeway.applib.value.Markup readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)                  // <.>
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readOnlyOptionalProperty;
+    private org.apache.causeway.applib.value.Markup readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2", hidden = Where.ALL_TABLES, multiLine = 5)
     @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readWriteOptionalProperty;
+    private org.apache.causeway.applib.value.Markup readWriteOptionalProperty;
 
 }
 //end::class[]

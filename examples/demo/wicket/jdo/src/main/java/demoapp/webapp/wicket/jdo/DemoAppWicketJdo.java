@@ -18,27 +18,27 @@
  */
 package demoapp.webapp.wicket.jdo;
 
+import org.apache.causeway.commons.internal.os._OsUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.internal.os._OsUtil;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.config.util.SpringProfileUtil;
-import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
-import org.apache.isis.extensions.sse.wicket.IsisModuleExtSseWicket;
-import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn.IsisModuleValAsciidocPersistenceJdoDn;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
-import org.apache.isis.valuetypes.markdown.persistence.jdo.dn.IsisModuleValMarkdownPersistenceJdoDn;
-import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
-import org.apache.isis.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
-import org.apache.isis.valuetypes.vega.persistence.jdo.dn.IsisModuleValVegaPersistenceJdoDn;
-import org.apache.isis.valuetypes.vega.ui.wkt.IsisModuleValVegaUiWkt;
-import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.util.SpringProfileUtil;
+import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
+import org.apache.causeway.extensions.sse.wicket.IsisModuleExtSseWicket;
+import org.apache.causeway.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
+import org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.IsisModuleValAsciidocPersistenceJdoDn;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
+import org.apache.causeway.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
+import org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.IsisModuleValMarkdownPersistenceJdoDn;
+import org.apache.causeway.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
+import org.apache.causeway.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
+import org.apache.causeway.valuetypes.vega.persistence.jdo.dn.IsisModuleValVegaPersistenceJdoDn;
+import org.apache.causeway.valuetypes.vega.ui.wkt.IsisModuleValVegaUiWkt;
+import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJdo;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;

@@ -15,21 +15,21 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-core-webapp</artifactId>
-	<name>Apache Isis Core - WebApp</name>
+	<artifactId>causeway-core-webapp</artifactId>
+	<name>Apache Causeway Core - WebApp</name>
 	<description>
         Bundles all the web specific classes a srequired by viewers.
         Introduced to keep the 'runtime' package concise.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.webapp</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/webapp</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.core.webapp</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/core/webapp</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -54,18 +54,18 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtime</artifactId>
 		</dependency>
 		
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-transaction</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-transaction</artifactId>
         </dependency>
 
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-interaction</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-interaction</artifactId>
         </dependency>
 
 		<dependency>
@@ -104,8 +104,8 @@
 		<!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>

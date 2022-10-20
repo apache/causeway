@@ -14,40 +14,40 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.persistence</groupId>
-		<artifactId>isis-persistence-jpa</artifactId>
+		<groupId>org.apache.causeway.persistence</groupId>
+		<artifactId>causeway-persistence-jpa</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jpa-metamodel</artifactId>
+	<artifactId>causeway-persistence-jpa-metamodel</artifactId>
 
-	<name>Apache Isis Persistence - JPA (metamodel)</name>
+	<name>Apache Causeway Persistence - JPA (metamodel)</name>
 	<description>
         JPA Metamodel Facets / Programming Model
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jpa.metamodel</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jpa/metamodel</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jpa.metamodel</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/persistence/jpa/metamodel</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jpa-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jpa-applib</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtime</artifactId>
 		</dependency>
 
 		<!-- TESTING -->
 		
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

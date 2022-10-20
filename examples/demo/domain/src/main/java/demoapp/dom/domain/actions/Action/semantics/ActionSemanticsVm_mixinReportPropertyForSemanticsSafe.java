@@ -20,10 +20,10 @@ package demoapp.dom.domain.actions.Action.semantics;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.message.MessageService;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -25,17 +25,17 @@ import javax.inject.Named;
 //tag::class[]
 public interface IsisMarkupHolder {
 
-    org.apache.isis.applib.value.Markup getReadOnlyProperty();
-    void setReadOnlyProperty(org.apache.isis.applib.value.Markup c);
+    org.apache.causeway.applib.value.Markup getReadOnlyProperty();
+    void setReadOnlyProperty(org.apache.causeway.applib.value.Markup c);
 
-    org.apache.isis.applib.value.Markup getReadWriteProperty();
-    void setReadWriteProperty(org.apache.isis.applib.value.Markup c);
+    org.apache.causeway.applib.value.Markup getReadWriteProperty();
+    void setReadWriteProperty(org.apache.causeway.applib.value.Markup c);
 
-    org.apache.isis.applib.value.Markup getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(org.apache.isis.applib.value.Markup c);
+    org.apache.causeway.applib.value.Markup getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(org.apache.causeway.applib.value.Markup c);
 
-    org.apache.isis.applib.value.Markup getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(org.apache.isis.applib.value.Markup c);
+    org.apache.causeway.applib.value.Markup getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(org.apache.causeway.applib.value.Markup c);
 
 }
 //end::class[]

@@ -20,8 +20,8 @@ package demoapp.dom.types.isis.clobs.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.value.Clob;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

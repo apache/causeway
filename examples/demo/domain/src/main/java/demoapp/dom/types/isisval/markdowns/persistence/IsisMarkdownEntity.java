@@ -20,7 +20,7 @@ package demoapp.dom.types.isisval.markdowns.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
@@ -33,10 +33,10 @@ public abstract class IsisMarkdownEntity
 implements
     HasAsciiDocDescription,
     IsisMarkdownHolder2,
-    ValueHolder<org.apache.isis.valuetypes.markdown.applib.value.Markdown> {
+    ValueHolder<org.apache.causeway.valuetypes.markdown.applib.value.Markdown> {
 
     @Override
-    public org.apache.isis.valuetypes.markdown.applib.value.Markdown value() {
+    public org.apache.causeway.valuetypes.markdown.applib.value.Markdown value() {
         return getReadOnlyProperty();
     }
 

@@ -20,12 +20,12 @@ package demoapp.dom._infra.resources;
 
 import javax.inject.Named;
 
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Refs.StringReference;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.base._Refs.StringReference;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

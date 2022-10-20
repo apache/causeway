@@ -19,12 +19,12 @@
 package demoapp.web;
 
 
-import org.apache.isis.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
-import org.apache.isis.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
-import org.apache.isis.extensions.executionoutbox.jdo.IsisModuleExtExecutionOutboxPersistenceJdo;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
+import org.apache.causeway.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
+import org.apache.causeway.extensions.executionoutbox.jdo.IsisModuleExtExecutionOutboxPersistenceJdo;
+import org.apache.causeway.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

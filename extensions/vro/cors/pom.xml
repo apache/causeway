@@ -15,14 +15,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions</artifactId>
+		<groupId>org.apache.causeway.extensions</groupId>
+		<artifactId>causeway-extensions</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-cors</artifactId>
-	<name>Apache Isis Ext - CORS (parent)</name>
+	<artifactId>causeway-extensions-cors</artifactId>
+	<name>Apache Causeway Ext - CORS (parent)</name>
 	<description>
 		Implementation of CORS Filter (using ebay filter)
 	</description>
@@ -32,8 +32,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-cors-impl</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-cors-impl</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

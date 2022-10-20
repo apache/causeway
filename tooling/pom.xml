@@ -15,18 +15,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-bom</artifactId>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-bom</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.tooling</groupId>
-	<artifactId>isis-tooling</artifactId>
+	<groupId>org.apache.causeway.tooling</groupId>
+	<artifactId>causeway-tooling</artifactId>
 
-	<name>Apache Isis - Tooling</name>
+	<name>Apache Causeway - Tooling</name>
 	<description>
-        Libraries and tools not depending on the _Apache Isis Core_ ecosystem,
+        Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
         (Targeted for JVM 11+)
     </description>
@@ -37,8 +37,8 @@
 
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.8.6</maven-model-builder.version>
 		<picocli.version>4.6.3</picocli.version>
@@ -86,7 +86,7 @@
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
 
-				<!-- APACHE ISIS customisation 4/7: start -->
+				<!-- APACHE CAUSEWAY customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 					<excludeSubProjects>true</excludeSubProjects>
@@ -127,8 +127,8 @@
 
 						<exclude>**/intellij/launch/*.xml</exclude>
 
-						<exclude>**/org/apache/isis/tooling/adocmodel/test/attributed-table.adoc</exclude>
-						<exclude>**/org/apache/isis/tooling/adocmodel/test/simple-table.adoc</exclude>
+						<exclude>**/org/apache/causeway/tooling/adocmodel/test/attributed-table.adoc</exclude>
+						<exclude>**/org/apache/causeway/tooling/adocmodel/test/simple-table.adoc</exclude>
 
 						<exclude>**/META-INF/services/**</exclude>
 					</excludes>
@@ -162,38 +162,38 @@
 			<!-- INTERNAL -->
 
 			<dependency>
-				<groupId>org.apache.isis.commons</groupId>
-				<artifactId>isis-commons</artifactId>
+				<groupId>org.apache.causeway.commons</groupId>
+				<artifactId>causeway-commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-c4modeling</artifactId>
+				<groupId>org.apache.causeway.tooling</groupId>
+				<artifactId>causeway-tooling-c4modeling</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-model4adoc</artifactId>
+				<groupId>org.apache.causeway.tooling</groupId>
+				<artifactId>causeway-tooling-model4adoc</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-projectmodel</artifactId>
+				<groupId>org.apache.causeway.tooling</groupId>
+				<artifactId>causeway-tooling-projectmodel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-javamodel</artifactId>
+				<groupId>org.apache.causeway.tooling</groupId>
+				<artifactId>causeway-tooling-javamodel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-java2adoc</artifactId>
+				<groupId>org.apache.causeway.tooling</groupId>
+				<artifactId>causeway-tooling-java2adoc</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -298,8 +298,8 @@
 		<!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 			<version>${project.version}</version>
 		</dependency>

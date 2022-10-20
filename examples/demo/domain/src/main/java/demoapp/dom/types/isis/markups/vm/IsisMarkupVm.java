@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,33 +52,33 @@ public class IsisMarkupVm
         implements HasAsciiDocDescription, IsisMarkupHolder2 {
 
 //end::class[]
-    public IsisMarkupVm(final org.apache.isis.applib.value.Markup initialValue) {
+    public IsisMarkupVm(final org.apache.causeway.applib.value.Markup initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "org.apache.isis.applib.value.Markup view model: ")
+    @Title(prepend = "org.apache.causeway.applib.value.Markup view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readOnlyProperty;
+    private org.apache.causeway.applib.value.Markup readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readWriteProperty;
+    private org.apache.causeway.applib.value.Markup readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readOnlyOptionalProperty;
+    private org.apache.causeway.applib.value.Markup readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
-    private org.apache.isis.applib.value.Markup readWriteOptionalProperty;
+    private org.apache.causeway.applib.value.Markup readWriteOptionalProperty;
 
 }
 //end::class[]

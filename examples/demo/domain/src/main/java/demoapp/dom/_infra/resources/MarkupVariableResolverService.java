@@ -24,11 +24,11 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.IsisConfiguration;
 
 import lombok.val;
 

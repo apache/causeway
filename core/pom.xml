@@ -15,18 +15,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-bom</artifactId>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-bom</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>isis-core</artifactId>
+	<groupId>org.apache.causeway.core</groupId>
+	<artifactId>causeway-core</artifactId>
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis Core</name>
+	<name>Apache Causeway Core</name>
 
 	<url>https://isis.apache.org</url>
 
@@ -41,8 +41,8 @@
 
 		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
 
-		<jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.core</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
@@ -54,7 +54,7 @@
 		<checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
 		<pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
 
-		<license.additional-notes>In addition, Apache Isis uses some
+		<license.additional-notes>In addition, Apache Causeway uses some
 			JavaScript libraries:
 
 			* Twitter Bootstrap, licensed under MIT [1]
@@ -273,15 +273,15 @@
 							</manifest>
 							<manifestEntries>
 								<Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
-								<Implementation-Vendor-Id>org.apache.isis</Implementation-Vendor-Id>
-								<Implementation-Vendor>Apache Isis™ Project</Implementation-Vendor>
+								<Implementation-Vendor-Id>org.apache.causeway</Implementation-Vendor-Id>
+								<Implementation-Vendor>Apache Causeway™ Project</Implementation-Vendor>
 								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
 								<SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
 								<!-- required for DN plugin.xml loading -->
 								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
 								<!-- no requirement as of yet. <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
 									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>2.0.0-SNAPSHOT</Bundle-Version>
-									<Bundle-Vendor>Apache Isis™ Project</Bundle-Vendor> -->
+									<Bundle-Vendor>Apache Causeway™ Project</Bundle-Vendor> -->
 							</manifestEntries>
 						</archive>
 					</configuration>
@@ -416,285 +416,285 @@
 
 			<!-- CHILD MODULES -->
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-jdk-supplemental</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-jdk-supplemental</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.commons</groupId>
-				<artifactId>isis-commons</artifactId>
+				<groupId>org.apache.causeway.commons</groupId>
+				<artifactId>causeway-commons</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-privileged</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-config</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-privileged</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-schema</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-config</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-interaction</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-internaltestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-internaltestvintage</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-metamodel</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-schema</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-interaction</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtimeservices</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-internaltestsupport</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-transaction</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-internaltestvintage</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-webapp</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-runtime</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-commons-applib</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-runtimeservices</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-commons-model</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-transaction</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-commons-prism</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-webapp</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-commons-services</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-commons-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-commons-model</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-commons-prism</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-commons-services</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-testing</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-security</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-bypass</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-keycloak</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-testing</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-shiro</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-security</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-spring</artifactId>
+				<groupId>org.apache.causeway.security</groupId>
+				<artifactId>causeway-security-bypass</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-codegen-bytebuddy</artifactId>
+				<groupId>org.apache.causeway.security</groupId>
+				<artifactId>causeway-security-keycloak</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-commons</artifactId>
+				<groupId>org.apache.causeway.security</groupId>
+				<artifactId>causeway-security-shiro</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-applib</artifactId>
+				<groupId>org.apache.causeway.security</groupId>
+				<artifactId>causeway-security-spring</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-provider</artifactId>
+				<groupId>org.apache.causeway.core</groupId>
+				<artifactId>causeway-core-codegen-bytebuddy</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-integration</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-commons</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-metamodel</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-provider</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-spring</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jpa-applib</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jpa-metamodel</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jpa-integration</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-spring</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jpa-eclipselink</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jpa-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jpa-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-wicket-applib</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jpa-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-wicket-graceful</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-wicket-model</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy4</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-wicket-ui</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-wicket-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-wicket-viewer</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-wicket-graceful</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-graphql-applib</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-wicket-model</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-graphql-model</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-wicket-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-graphql-viewer</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-wicket-viewer</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-unittestsupport-applib</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-graphql-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-integtestsupport-applib</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-graphql-model</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fakedata-applib</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-graphql-viewer</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-unittestsupport-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-webapp</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-integtestsupport-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fakedata-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fixtures-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.mavendeps</groupId>
+				<artifactId>causeway-mavendeps-webapp</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>test</scope>

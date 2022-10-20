@@ -15,29 +15,29 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-schema</artifactId>
+	<artifactId>causeway-schema</artifactId>
 
 	<packaging>jar</packaging>
-	<name>Apache Isis Api - Schemas</name>
+	<name>Apache Causeway Api - Schemas</name>
 	<description>
-        Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
+        Apache Causeway schemas, for conversion into canonical DTOs (for use in integration scenarios).
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.schema</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/schema</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.schema</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/schema</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-jdk-supplemental</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-jdk-supplemental</artifactId>
 			<type>pom</type>
 		</dependency>
 		<dependency>
@@ -71,7 +71,7 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<schemaDirectory>src/main/resources/org/apache/isis/schema</schemaDirectory>
+									<schemaDirectory>src/main/resources/org/apache/causeway/schema</schemaDirectory>
 									<schemaIncludes>
 										<schemaInclude>common/common-2.0.xsd</schemaInclude>
 										<schemaInclude>cmd/cmd-2.0.xsd</schemaInclude>
@@ -79,7 +79,7 @@
 										<schemaInclude>chg/chg-2.0.xsd</schemaInclude>
 										<schemaInclude>metamodel/metamodel-2.0.xsd</schemaInclude>
 									</schemaIncludes>
-									<bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
+									<bindingDirectory>src/main/resources/org/apache/causeway/schema</bindingDirectory>
 									<bindingIncludes>
 										<bindingInclude>bindings.xml</bindingInclude>
 									</bindingIncludes>

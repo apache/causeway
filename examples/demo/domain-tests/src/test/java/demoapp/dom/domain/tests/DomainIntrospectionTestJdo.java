@@ -27,11 +27,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;

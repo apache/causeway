@@ -15,7 +15,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.examples.apps</groupId>
+		<groupId>org.apache.causeway.examples.apps</groupId>
 		<artifactId>demo-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
@@ -55,126 +55,126 @@
 		<!-- EXTENSIONS -->
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-pdfjs-applib</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-pdfjs-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-integration</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-secman-integration</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-encryption-spring</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-secman-encryption-spring</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-h2console-ui</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-h2console-ui</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-sse-applib</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-sse-applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-markdown-metamodel</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-vega-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-vega-metamodel</artifactId>
 		</dependency>
 
 
 		<!-- JDO specific -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-commandlog-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-executionlog-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-executionlog-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-markdown-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-vega-persistence-jdo</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-vega-persistence-jdo</artifactId>
 		</dependency>
 
 
 		<!-- JPA specific -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-executionlog-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-executionoutbox-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-vega-persistence-jpa</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
 		</dependency>
 
 
@@ -186,14 +186,14 @@
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-fullcalendar-applib</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-fullcalendar-applib</artifactId>
         </dependency>
 
 		<!-- test -->
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-unittestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
 

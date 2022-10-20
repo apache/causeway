@@ -20,7 +20,7 @@ package demoapp.dom.types.isis.passwords.holder;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.value.Password;
+import org.apache.causeway.applib.value.Password;
 
 @Named("demo.IsisPasswordHolder")
 //tag::class[]

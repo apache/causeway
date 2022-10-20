@@ -25,17 +25,17 @@ import javax.inject.Named;
 //tag::class[]
 public interface IsisMarkdownHolder {
 
-    org.apache.isis.valuetypes.markdown.applib.value.Markdown getReadOnlyProperty();
-    void setReadOnlyProperty(org.apache.isis.valuetypes.markdown.applib.value.Markdown c);
+    org.apache.causeway.valuetypes.markdown.applib.value.Markdown getReadOnlyProperty();
+    void setReadOnlyProperty(org.apache.causeway.valuetypes.markdown.applib.value.Markdown c);
 
-    org.apache.isis.valuetypes.markdown.applib.value.Markdown getReadWriteProperty();
-    void setReadWriteProperty(org.apache.isis.valuetypes.markdown.applib.value.Markdown c);
+    org.apache.causeway.valuetypes.markdown.applib.value.Markdown getReadWriteProperty();
+    void setReadWriteProperty(org.apache.causeway.valuetypes.markdown.applib.value.Markdown c);
 
-    org.apache.isis.valuetypes.markdown.applib.value.Markdown getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(org.apache.isis.valuetypes.markdown.applib.value.Markdown c);
+    org.apache.causeway.valuetypes.markdown.applib.value.Markdown getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(org.apache.causeway.valuetypes.markdown.applib.value.Markdown c);
 
-    org.apache.isis.valuetypes.markdown.applib.value.Markdown getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(org.apache.isis.valuetypes.markdown.applib.value.Markdown c);
+    org.apache.causeway.valuetypes.markdown.applib.value.Markdown getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(org.apache.causeway.valuetypes.markdown.applib.value.Markdown c);
 
 }
 //end::class[]

@@ -16,28 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.security.api {
-    exports org.apache.isis.core.security;
-    exports org.apache.isis.core.security._testing;
-    exports org.apache.isis.core.security.authentication.fixtures;
-    exports org.apache.isis.core.security.authentication.login;
-    exports org.apache.isis.core.security.authentication.logout;
-    exports org.apache.isis.core.security.authentication.manager;
-    exports org.apache.isis.core.security.authentication.singleuser;
-    exports org.apache.isis.core.security.authentication.standard;
-    exports org.apache.isis.core.security.authentication;
-    exports org.apache.isis.core.security.authorization.manager;
-    exports org.apache.isis.core.security.authorization.standard;
-    exports org.apache.isis.core.security.authorization;
-    exports org.apache.isis.core.security.util;
+module org.apache.causeway.security.api {
+    exports org.apache.causeway.core.security;
+    exports org.apache.causeway.core.security._testing;
+    exports org.apache.causeway.core.security.authentication.fixtures;
+    exports org.apache.causeway.core.security.authentication.login;
+    exports org.apache.causeway.core.security.authentication.logout;
+    exports org.apache.causeway.core.security.authentication.manager;
+    exports org.apache.causeway.core.security.authentication.singleuser;
+    exports org.apache.causeway.core.security.authentication.standard;
+    exports org.apache.causeway.core.security.authentication;
+    exports org.apache.causeway.core.security.authorization.manager;
+    exports org.apache.causeway.core.security.authorization.standard;
+    exports org.apache.causeway.core.security.authorization;
+    exports org.apache.causeway.core.security.util;
 
     requires java.annotation;
     requires java.desktop;
     requires java.inject;
     requires lombok;
-    requires org.apache.isis.applib;
-    requires org.apache.isis.commons;
-    requires org.apache.isis.schema;
+    requires org.apache.causeway.applib;
+    requires org.apache.causeway.commons;
+    requires org.apache.causeway.schema;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

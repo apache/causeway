@@ -14,45 +14,45 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.persistence</groupId>
-		<artifactId>isis-persistence-jdo</artifactId>
+		<groupId>org.apache.causeway.persistence</groupId>
+		<artifactId>causeway-persistence-jdo</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jdo-metamodel</artifactId>
+	<artifactId>causeway-persistence-jdo-metamodel</artifactId>
 
-	<name>Apache Isis Persistence - JDO (metamodel)</name>
+	<name>Apache Causeway Persistence - JDO (metamodel)</name>
 	<description>
         JDO Metamodel Facets / Programming Model
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.metamodel</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/metamodel</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jdo.metamodel</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/persistence/jdo/metamodel</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-applib</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-provider</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-provider</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtime</artifactId>
 		</dependency>
 
 		<!-- TESTING -->
 		
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestvintage</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestvintage</artifactId>
             <scope>test</scope>
         </dependency>
 

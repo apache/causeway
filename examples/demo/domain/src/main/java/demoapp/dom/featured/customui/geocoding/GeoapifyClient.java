@@ -30,9 +30,8 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.causeway.commons.internal.base._Bytes;
 import org.springframework.stereotype.Service;
-
-import org.apache.isis.commons.internal.base._Bytes;
 
 import lombok.Builder;
 import lombok.Data;

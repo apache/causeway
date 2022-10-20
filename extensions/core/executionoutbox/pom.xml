@@ -15,14 +15,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions</artifactId>
+		<groupId>org.apache.causeway.extensions</groupId>
+		<artifactId>causeway-extensions</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-executionoutbox</artifactId>
-	<name>Apache Isis Ext - Execution Outbox</name>
+	<artifactId>causeway-extensions-executionoutbox</artifactId>
+	<name>Apache Causeway Ext - Execution Outbox</name>
 	<description>Logs executions into an outbox, REST Client to consume</description>
 
 	<packaging>pom</packaging>
@@ -30,44 +30,44 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
 				<type>test-jar</type>
 				<scope>test</scope>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
 				<type>test-jar</type>
 				<scope>test</scope>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
 				<type>test-jar</type>
 				<scope>test</scope>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-restclient</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

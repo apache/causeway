@@ -20,8 +20,8 @@ package demoapp.dom.types.isis.blobs.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.value.Blob;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.value.Blob;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

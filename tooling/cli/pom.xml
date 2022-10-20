@@ -15,16 +15,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.tooling</groupId>
-		<artifactId>isis-tooling</artifactId>
+		<groupId>org.apache.causeway.tooling</groupId>
+		<artifactId>causeway-tooling</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-tooling-cli</artifactId>
+	<artifactId>causeway-tooling-cli</artifactId>
 
-	<name>Apache Isis - Tooling - CLI (Command Line Interface)</name>
+	<name>Apache Causeway - Tooling - CLI (Command Line Interface)</name>
 	<description>
-		Command Line Interface for the _Apache Isis Tooling_ ecosystem.
+		Command Line Interface for the _Apache Causeway Tooling_ ecosystem.
     </description>
 
 	<properties>
@@ -32,7 +32,7 @@
 	</properties>
 
 	<build>
-		<finalName>isis-tooling-cli</finalName>
+		<finalName>causeway-tooling-cli</finalName>
 		<plugins>
 
 <!--
@@ -48,7 +48,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>org.apache.isis.tooling.cli.Cli</mainClass>
+									<mainClass>org.apache.causeway.tooling.cli.Cli</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
@@ -70,7 +70,7 @@
 						</goals>
 						<configuration>
 							<classifier>spring-boot</classifier>
-							<mainClass>org.apache.isis.tooling.cli.Cli</mainClass>
+							<mainClass>org.apache.causeway.tooling.cli.Cli</mainClass>
 						</configuration>
 					</execution>
 				</executions>
@@ -81,33 +81,33 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.commons</groupId>
-			<artifactId>isis-commons</artifactId>
+			<groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.tooling</groupId>
-			<artifactId>isis-tooling-model4adoc</artifactId>
+			<groupId>org.apache.causeway.tooling</groupId>
+			<artifactId>causeway-tooling-model4adoc</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.tooling</groupId>
-			<artifactId>isis-tooling-projectmodel</artifactId>
+			<groupId>org.apache.causeway.tooling</groupId>
+			<artifactId>causeway-tooling-projectmodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.tooling</groupId>
-			<artifactId>isis-tooling-javamodel</artifactId>
+			<groupId>org.apache.causeway.tooling</groupId>
+			<artifactId>causeway-tooling-javamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.tooling</groupId>
-			<artifactId>isis-tooling-java2adoc</artifactId>
+			<groupId>org.apache.causeway.tooling</groupId>
+			<artifactId>causeway-tooling-java2adoc</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.tooling</groupId>
-			<artifactId>isis-tooling-c4modeling</artifactId>
+			<groupId>org.apache.causeway.tooling</groupId>
+			<artifactId>causeway-tooling-c4modeling</artifactId>
 		</dependency>
 
 		<dependency>

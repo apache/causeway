@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
+import static org.apache.causeway.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

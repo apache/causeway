@@ -23,18 +23,18 @@ import java.util.Date;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.causeway.applib.ViewModel;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+import org.apache.causeway.applib.util.TitleBuffer;
+import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
+import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
+import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

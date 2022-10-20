@@ -20,9 +20,10 @@ package demoapp.dom.types.primitive.floats.holder;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.functional.IndexedConsumer;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;

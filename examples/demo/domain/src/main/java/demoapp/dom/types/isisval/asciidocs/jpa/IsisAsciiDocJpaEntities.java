@@ -27,14 +27,14 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 @Profile("demo-jpa")
 @Service
 public class IsisAsciiDocJpaEntities
-extends ValueHolderRepository<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc, IsisAsciiDocJpa> {
+extends ValueHolderRepository<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc, IsisAsciiDocJpa> {
 
     protected IsisAsciiDocJpaEntities() {
         super(IsisAsciiDocJpa.class);
     }
 
     @Override
-    protected IsisAsciiDocJpa newDetachedEntity(org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc value) {
+    protected IsisAsciiDocJpa newDetachedEntity(org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc value) {
         return new IsisAsciiDocJpa(value);
     }
 

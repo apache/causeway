@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.apache.isis.extensions.secman.integration.authenticator.AuthenticatorSecmanAutoConfiguration
+  org.apache.causeway.extensions.secman.integration.authenticator.AuthenticatorSecmanAutoConfiguration

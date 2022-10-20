@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.viewer.commons.applib {
-    exports org.apache.isis.viewer.commons.applib.services.userprof;
-    exports org.apache.isis.viewer.commons.applib.services.header;
-    exports org.apache.isis.viewer.commons.applib.services.branding;
-    exports org.apache.isis.viewer.commons.applib.services.menu;
-    exports org.apache.isis.viewer.commons.applib;
-    exports org.apache.isis.viewer.commons.applib.mixins;
+module org.apache.causeway.viewer.commons.applib {
+    exports org.apache.causeway.viewer.commons.applib.services.userprof;
+    exports org.apache.causeway.viewer.commons.applib.services.header;
+    exports org.apache.causeway.viewer.commons.applib.services.branding;
+    exports org.apache.causeway.viewer.commons.applib.services.menu;
+    exports org.apache.causeway.viewer.commons.applib;
+    exports org.apache.causeway.viewer.commons.applib.mixins;
 
     requires java.inject;
     requires lombok;
-    requires org.apache.isis.applib;
-    requires org.apache.isis.commons;
-    requires org.apache.isis.core.config;
-    requires org.apache.isis.core.metamodel;
+    requires org.apache.causeway.applib;
+    requires org.apache.causeway.commons;
+    requires org.apache.causeway.core.config;
+    requires org.apache.causeway.core.metamodel;
     requires spring.context;
     requires spring.core;
 }

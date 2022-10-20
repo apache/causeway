@@ -20,9 +20,9 @@ package demoapp.dom.types.isisext.cal.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

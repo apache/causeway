@@ -24,17 +24,18 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Lists;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.MinLength;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

@@ -28,16 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -55,15 +55,15 @@ import demoapp.dom.types.isis.markups.vm.IsisMarkupVm;
 public class IsisMarkups implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "org.apache.isis.applib.value.Markup data type";
+        return "org.apache.causeway.applib.value.Markup data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public IsisMarkupVm openViewModel(final org.apache.isis.applib.value.Markup initialValue) {
+    public IsisMarkupVm openViewModel(final org.apache.causeway.applib.value.Markup initialValue) {
         return new IsisMarkupVm(initialValue);
     }
-    @MemberSupport public org.apache.isis.applib.value.Markup default0OpenViewModel() {
+    @MemberSupport public org.apache.causeway.applib.value.Markup default0OpenViewModel() {
         return samples.single();
     }
 
@@ -74,10 +74,10 @@ public class IsisMarkups implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    ValueHolderRepository<org.apache.isis.applib.value.Markup, ? extends IsisMarkupEntity> entities;
+    ValueHolderRepository<org.apache.causeway.applib.value.Markup, ? extends IsisMarkupEntity> entities;
 
     @Inject
     @XmlTransient
-    Samples<org.apache.isis.applib.value.Markup> samples;
+    Samples<org.apache.causeway.applib.value.Markup> samples;
 
 }

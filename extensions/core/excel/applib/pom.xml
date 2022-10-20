@@ -13,34 +13,34 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-excel</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-excel</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-excel-applib</artifactId>
-    <name>Apache Isis Ext - Excel (applib)</name>
+    <artifactId>causeway-extensions-excel-applib</artifactId>
+    <name>Apache Causeway Ext - Excel (applib)</name>
 
     <properties>
-    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.excel.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/excel/applib</git-plugin.propertiesDir>
+    	<jar-plugin.automaticModuleName>org.apache.causeway.extensions.excel.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/extensions/excel/applib</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jdo-applib</artifactId>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jdo-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtime</artifactId>
             <!-- so as not to pollute the classpath of the domain model in the IDE -->
             <optional>true</optional>
         </dependency>
@@ -81,8 +81,8 @@
 
         <!-- test -->
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-             <artifactId>isis-core-internaltestvintage</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+             <artifactId>causeway-core-internaltestvintage</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -28,9 +28,9 @@ import com.vaadin.flow.spring.SpringServlet;
 
 import org.springframework.context.ApplicationContext;
 
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
+import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
 import lombok.NonNull;
 import lombok.val;

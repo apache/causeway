@@ -18,8 +18,8 @@
  */
 package demoapp.dom.types.isisval.vegas.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class IsisVegaHolder_actionReturning {
 
     private final IsisVegaHolder holder;
 
-    public org.apache.isis.valuetypes.vega.applib.value.Vega act() {
+    public org.apache.causeway.valuetypes.vega.applib.value.Vega act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -15,25 +15,25 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.incubator</groupId>
-	<artifactId>isis-incubator</artifactId>
+	<groupId>org.apache.causeway.incubator</groupId>
+	<artifactId>causeway-incubator</artifactId>
 
-	<name>Apache Isis Incubator</name>
+	<name>Apache Causeway Incubator</name>
 	<description>
-        Collection of Apache Isis artifacts, currently incubating.
+        Collection of Apache Causeway artifacts, currently incubating.
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.incubator</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/incubator</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -141,53 +141,53 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>org.apache.isis.incubator.extensions</groupId>
-				<artifactId>isis-extensions-commandreplay</artifactId>
+				<groupId>org.apache.causeway.incubator.extensions</groupId>
+				<artifactId>causeway-extensions-commandreplay</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.extensions</groupId>
-				<artifactId>isis-extensions-commandreplay-primary</artifactId>
+				<groupId>org.apache.causeway.incubator.extensions</groupId>
+				<artifactId>causeway-extensions-commandreplay-primary</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.extensions</groupId>
-				<artifactId>isis-extensions-commandreplay-secondary</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-graphql</artifactId>
+				<groupId>org.apache.causeway.incubator.extensions</groupId>
+				<artifactId>causeway-extensions-commandreplay-secondary</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-javafx</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-graphql</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-vaadin</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-javafx</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-vaadin</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-vaadin-model</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-vaadin-model</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-vaadin-ui</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-vaadin-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.incubator.viewer</groupId>
-				<artifactId>isis-viewer-vaadin-viewer</artifactId>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-vaadin-viewer</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -195,8 +195,8 @@
 			<!-- TESTING -->
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fixtures-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

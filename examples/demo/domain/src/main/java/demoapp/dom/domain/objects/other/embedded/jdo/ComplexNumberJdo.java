@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Value;
 
 import lombok.AccessLevel;
 import lombok.val;

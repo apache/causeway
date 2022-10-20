@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
 import demoapp.dom._infra.resources.MarkdownReaderService;
 import demoapp.dom.types.Samples;

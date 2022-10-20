@@ -20,15 +20,14 @@ package demoapp.javafx.integtest;
 
 import javax.sql.DataSource;
 
+import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 
 import lombok.val;
 
@@ -41,7 +40,7 @@ import javafx.application.HostServices;
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema)
 })
 public class DemoFxTestConfig_usingJdo {
-    
+
     //XXX why is the H2InMemory_withUniqueSchema preset not working?
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
@@ -57,12 +56,12 @@ public class DemoFxTestConfig_usingJdo {
     public JavaFxViewerConfig viewerConfig() {
         return new DemoAppJavaFx().viewerConfig();
     }
-    
+
     @Bean
     public HostServices hostServices() {
         return  null;
     }
 
-    
-    
+
+
 }

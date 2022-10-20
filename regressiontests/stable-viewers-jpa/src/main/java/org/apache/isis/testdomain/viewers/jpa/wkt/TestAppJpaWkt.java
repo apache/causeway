@@ -21,27 +21,27 @@ package org.apache.isis.testdomain.viewers.jpa.wkt;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.commons.internal.os._OsUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.internal.os._OsUtil;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJpa;
-import org.apache.isis.testdomain.conf.Configuration_usingWicket;
-import org.apache.isis.testdomain.jpa.JpaInventoryJaxbVm;
-import org.apache.isis.testdomain.jpa.JpaTestFixtures;
-import org.apache.isis.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
-import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.HomePage;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
+import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
+import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
+import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 /**
  * Bootstrap the test application.

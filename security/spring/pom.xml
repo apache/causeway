@@ -15,35 +15,35 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.security</groupId>
-	<artifactId>isis-security-spring</artifactId>
+	<groupId>org.apache.causeway.security</groupId>
+	<artifactId>causeway-security-spring</artifactId>
 
-	<name>Apache Isis Security - Spring</name>
+	<name>Apache Causeway Security - Spring</name>
 	<description>
         Authentication using Spring Security
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.security.spring</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/security/spring</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.security.spring</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/security/spring</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-webapp</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-webapp</artifactId>
 		</dependency>
 
 		<dependency>
@@ -59,8 +59,8 @@
 
 		<!-- test -->
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 

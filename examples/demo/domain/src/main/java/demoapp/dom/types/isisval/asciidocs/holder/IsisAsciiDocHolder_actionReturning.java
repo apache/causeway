@@ -18,8 +18,8 @@
  */
 package demoapp.dom.types.isisval.asciidocs.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class IsisAsciiDocHolder_actionReturning {
 
     private final IsisAsciiDocHolder holder;
 
-    public org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc act() {
+    public org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc act() {
         return holder.getReadOnlyProperty();
     }
 

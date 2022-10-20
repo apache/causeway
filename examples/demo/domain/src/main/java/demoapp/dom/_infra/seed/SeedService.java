@@ -18,7 +18,7 @@
  */
 package demoapp.dom._infra.seed;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 
 public interface SeedService {

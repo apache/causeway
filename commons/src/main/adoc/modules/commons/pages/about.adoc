@@ -23,7 +23,7 @@ Package structure distinguishes classes either for _internal_ or _public_ use.
 
 [source]
 ----
-org.apache.isis.commons.* // excluding ...internal.*
+org.apache.causeway.commons.* // excluding ...internal.*
 ----
 
 Classes meant for public use. For any changes, that break compatibility with older code, 
@@ -33,7 +33,7 @@ we will write migration or release notes to inform developers how to migrate.
 
 [source]
 ----
-org.apache.isis.commons.internal.* // internal
+org.apache.causeway.commons.internal.* // internal
 ----
 
 Classes meant for framework internal use. By convention these classes are prefixed with 
@@ -48,7 +48,7 @@ because these may be changed or removed without notice!
 .Maven
 ----
 <dependency>
-    <groupId>org.apache.isis.commons</groupId>
+    <groupId>org.apache.causeway.commons</groupId>
     <artifactId>isis-commons</artifactId>
     <version>xxx</version>
 </dependency>

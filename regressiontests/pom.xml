@@ -15,16 +15,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.app</groupId>
-		<artifactId>isis-app-starter-parent</artifactId>
+		<groupId>org.apache.causeway.app</groupId>
+		<artifactId>causeway-app-starter-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../starters/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.regressiontests</groupId>
-	<artifactId>isis-regressiontests</artifactId>
+	<groupId>org.apache.causeway.regressiontests</groupId>
+	<artifactId>causeway-regressiontests</artifactId>
 
-	<name>Apache Isis - Regression Tests</name>
+	<name>Apache Causeway - Regression Tests</name>
 	<description>
         Collection of JUnit tests covering core functionalities of the framework.
         (Targeted for JVM 11+)
@@ -154,13 +154,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-unittestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -170,79 +170,79 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>org.apache.isis.regressiontests</groupId>
-				<artifactId>isis-regressiontests-stable</artifactId>
+				<groupId>org.apache.causeway.regressiontests</groupId>
+				<artifactId>causeway-regressiontests-stable</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-shiro</artifactId>
+				<groupId>org.apache.causeway.security</groupId>
+				<artifactId>causeway-security-shiro</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-commons-model</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-commons-model</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jpa-eclipselink</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.persistence</groupId>
-				<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fixtures-applib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-client</artifactId>
+				<groupId>org.apache.causeway.viewer</groupId>
+				<artifactId>causeway-viewer-restfulobjects-client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-integration</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-integration</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				 <groupId>org.apache.isis.extensions</groupId>
-				 <artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+				 <groupId>org.apache.causeway.extensions</groupId>
+				 <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
 			 </dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -264,15 +264,15 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-specsupport-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-specsupport-applib</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.tooling</groupId>
-				<artifactId>isis-tooling-model4adoc</artifactId>
+				<groupId>org.apache.causeway.tooling</groupId>
+				<artifactId>causeway-tooling-model4adoc</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
