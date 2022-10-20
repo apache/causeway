@@ -27,14 +27,14 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 @Profile("demo-jdo")
 @Service
 public class IsisVegaJdoEntities
-extends ValueHolderRepository<org.apache.isis.valuetypes.vega.applib.value.Vega, IsisVegaJdo> {
+extends ValueHolderRepository<org.apache.causeway.valuetypes.vega.applib.value.Vega, IsisVegaJdo> {
 
     protected IsisVegaJdoEntities() {
         super(IsisVegaJdo.class);
     }
 
     @Override
-    protected IsisVegaJdo newDetachedEntity(org.apache.isis.valuetypes.vega.applib.value.Vega value) {
+    protected IsisVegaJdo newDetachedEntity(org.apache.causeway.valuetypes.vega.applib.value.Vega value) {
         return new IsisVegaJdo(value);
     }
 

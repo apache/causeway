@@ -25,17 +25,17 @@ import javax.inject.Named;
 //tag::class[]
 public interface IsisAsciiDocHolder {
 
-    org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc getReadOnlyProperty();
-    void setReadOnlyProperty(org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc c);
+    org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc getReadOnlyProperty();
+    void setReadOnlyProperty(org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc c);
 
-    org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc getReadWriteProperty();
-    void setReadWriteProperty(org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc c);
+    org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc getReadWriteProperty();
+    void setReadWriteProperty(org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc c);
 
-    org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc c);
+    org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc c);
 
-    org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc c);
+    org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc c);
 
 }
 //end::class[]

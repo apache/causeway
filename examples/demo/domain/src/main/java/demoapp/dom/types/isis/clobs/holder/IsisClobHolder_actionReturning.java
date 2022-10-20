@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.isis.clobs.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Clob;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 

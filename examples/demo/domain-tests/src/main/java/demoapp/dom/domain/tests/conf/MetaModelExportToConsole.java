@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.tests.conf;
 
-import org.apache.isis.applib.services.metamodel.DomainModel;
+import org.apache.causeway.applib.services.metamodel.DomainModel;
 
 import lombok.val;
 

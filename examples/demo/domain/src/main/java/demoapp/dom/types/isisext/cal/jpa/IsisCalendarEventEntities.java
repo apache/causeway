@@ -21,7 +21,7 @@ package demoapp.dom.types.isisext.cal.jpa;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 

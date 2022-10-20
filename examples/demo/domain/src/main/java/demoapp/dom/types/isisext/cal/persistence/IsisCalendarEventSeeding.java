@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;

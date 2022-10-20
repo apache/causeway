@@ -31,7 +31,7 @@ public class IsisVegaSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public IsisVegaSeeding(ValueHolderRepository<org.apache.isis.valuetypes.vega.applib.value.Vega, ? extends IsisVegaEntity> entities) {
+    public IsisVegaSeeding(ValueHolderRepository<org.apache.causeway.valuetypes.vega.applib.value.Vega, ? extends IsisVegaEntity> entities) {
         super(entities);
     }
 

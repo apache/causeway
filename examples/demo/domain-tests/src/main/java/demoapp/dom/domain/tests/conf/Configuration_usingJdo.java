@@ -25,10 +25,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 import demoapp.web.DemoAppManifestJdo;
 

@@ -18,8 +18,8 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.typicalLength;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 

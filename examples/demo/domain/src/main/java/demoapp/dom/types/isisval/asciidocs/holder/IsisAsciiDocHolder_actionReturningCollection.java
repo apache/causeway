@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +37,13 @@ public class IsisAsciiDocHolder_actionReturningCollection {
 
     private final IsisAsciiDocHolder holder;
 
-    public Collection<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc> act() {
+    public Collection<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc> samples;
+    Samples<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc> samples;
 
 }
 //end::class[]

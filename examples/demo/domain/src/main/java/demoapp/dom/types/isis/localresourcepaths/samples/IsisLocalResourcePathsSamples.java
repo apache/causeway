@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.value.LocalResourcePath;
 
 import demoapp.dom.types.Samples;
 

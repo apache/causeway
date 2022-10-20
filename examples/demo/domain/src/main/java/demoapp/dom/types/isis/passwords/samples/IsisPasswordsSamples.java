@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.Password;
+import org.apache.causeway.applib.value.Password;
 
 import demoapp.dom.types.Samples;
 

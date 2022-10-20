@@ -21,11 +21,11 @@ package demoapp.dom._infra;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
+import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
-import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
 

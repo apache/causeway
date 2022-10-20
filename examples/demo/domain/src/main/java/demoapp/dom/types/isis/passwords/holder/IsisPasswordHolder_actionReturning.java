@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.isis.passwords.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Password;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
 

@@ -21,7 +21,7 @@ package demoapp.dom.types.isis.passwords.jpa;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.Password;
+import org.apache.causeway.applib.value.Password;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 

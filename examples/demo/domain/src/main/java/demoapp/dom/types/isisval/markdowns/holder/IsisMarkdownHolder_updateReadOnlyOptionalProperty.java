@@ -18,13 +18,13 @@
  */
 package demoapp.dom.types.isisval.markdowns.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,13 +45,13 @@ public class IsisMarkdownHolder_updateReadOnlyOptionalProperty {
 
     @MemberSupport public IsisMarkdownHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final org.apache.isis.valuetypes.markdown.applib.value.Markdown newValue
+            final org.apache.causeway.valuetypes.markdown.applib.value.Markdown newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.apache.isis.valuetypes.markdown.applib.value.Markdown default0Act() {
+    @MemberSupport public org.apache.causeway.valuetypes.markdown.applib.value.Markdown default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

@@ -15,7 +15,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.examples.apps</groupId>
+		<groupId>org.apache.causeway.examples.apps</groupId>
 		<artifactId>demo-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -57,52 +57,52 @@
 		<!-- DEMO DOMAIN -->
 
 		<dependency>
-			<groupId>org.apache.isis.examples.apps</groupId>
+			<groupId>org.apache.causeway.examples.apps</groupId>
 			<artifactId>demo-domain</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 			<exclusions>
 				<exclusion>
-					<groupId>org.apache.isis.mavendeps</groupId>
-					<artifactId>isis-mavendeps-webapp</artifactId>
+					<groupId>org.apache.causeway.mavendeps</groupId>
+					<artifactId>causeway-mavendeps-webapp</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>org.apache.isis.testing</groupId>
-					<artifactId>isis-testing-h2console-ui</artifactId>
+					<groupId>org.apache.causeway.testing</groupId>
+					<artifactId>causeway-testing-h2console-ui</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 		
 		<!-- SECURITY -->
 		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-security</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-bypass</artifactId>
+			<groupId>org.apache.causeway.security</groupId>
+			<artifactId>causeway-security-bypass</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-shiro</artifactId>
+			<groupId>org.apache.causeway.security</groupId>
+			<artifactId>causeway-security-shiro</artifactId>
 		</dependency>
 
 		<!-- INCUBATOR: JAVAFX VIEWER -->
 
 		<dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-			<artifactId>isis-viewer-javafx-viewer</artifactId>
+			<groupId>org.apache.causeway.incubator.viewer</groupId>
+			<artifactId>causeway-viewer-javafx-viewer</artifactId>
 			<!-- incubator version is not managed by app starter bundles -->
 			<version>${project.version}</version>
 		</dependency>
@@ -110,25 +110,25 @@
 		<!-- EXTENSIONS -->
 		
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-ui</artifactId>
 			<type>pom</type>
 			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-markdown-metamodel</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-ui</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-markdown-ui</artifactId>
 			<type>pom</type>
 			<version>${project.version}</version>
 		</dependency>
@@ -136,8 +136,8 @@
 		<!-- INTEGRATION TESTING -->
 		
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
 

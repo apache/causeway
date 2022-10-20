@@ -20,8 +20,8 @@ package demoapp.dom.types.isis.localresourcepaths.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.value.LocalResourcePath;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

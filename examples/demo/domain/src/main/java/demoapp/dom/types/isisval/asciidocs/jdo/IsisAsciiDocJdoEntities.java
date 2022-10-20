@@ -27,14 +27,14 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 @Profile("demo-jdo")
 @Service
 public class IsisAsciiDocJdoEntities
-extends ValueHolderRepository<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc, IsisAsciiDocJdo> {
+extends ValueHolderRepository<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc, IsisAsciiDocJdo> {
 
     protected IsisAsciiDocJdoEntities() {
         super(IsisAsciiDocJdo.class);
     }
 
     @Override
-    protected IsisAsciiDocJdo newDetachedEntity(org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc value) {
+    protected IsisAsciiDocJdo newDetachedEntity(org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc value) {
         return new IsisAsciiDocJdo(value);
     }
 

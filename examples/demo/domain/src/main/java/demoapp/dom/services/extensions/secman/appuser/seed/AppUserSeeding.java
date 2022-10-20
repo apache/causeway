@@ -21,18 +21,18 @@ package demoapp.dom.services.extensions.secman.appuser.seed;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.causeway.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
-import static org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode.CHANGING;
-import static org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule.ALLOW;
+import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode.CHANGING;
+import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule.ALLOW;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 

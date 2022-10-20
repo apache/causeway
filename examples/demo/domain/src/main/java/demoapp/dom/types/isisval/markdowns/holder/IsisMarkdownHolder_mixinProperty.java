@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.isisval.markdowns.holder;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class IsisMarkdownHolder_mixinProperty {
 
     private final IsisMarkdownHolder holder;
 
-    public org.apache.isis.valuetypes.markdown.applib.value.Markdown prop() {
+    public org.apache.causeway.valuetypes.markdown.applib.value.Markdown prop() {
         return holder.getReadOnlyProperty();
     }
 

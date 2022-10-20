@@ -30,7 +30,7 @@ public class WrapperIntegerSamples implements Samples<java.lang.Integer> {
 
     @Override
     public Stream<java.lang.Integer> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics()
                 .getExamples()
                 .stream();
     }

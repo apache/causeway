@@ -20,7 +20,7 @@ package demoapp.dom._infra.values;
 
 import java.util.function.Supplier;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.NonNull;
 

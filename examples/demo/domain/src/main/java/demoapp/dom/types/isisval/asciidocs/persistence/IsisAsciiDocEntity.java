@@ -20,7 +20,7 @@ package demoapp.dom.types.isisval.asciidocs.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
@@ -33,10 +33,10 @@ public abstract class IsisAsciiDocEntity
 implements
     HasAsciiDocDescription,
     IsisAsciiDocHolder2,
-    ValueHolder<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc> {
+    ValueHolder<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc> {
 
     @Override
-    public org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc value() {
+    public org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc value() {
         return getReadOnlyProperty();
     }
 

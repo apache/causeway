@@ -20,7 +20,7 @@ package demoapp.dom.types.isis.markups.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
@@ -33,10 +33,10 @@ public abstract class IsisMarkupEntity
 implements
     HasAsciiDocDescription,
     IsisMarkupHolder2,
-    ValueHolder<org.apache.isis.applib.value.Markup> {
+    ValueHolder<org.apache.causeway.applib.value.Markup> {
 
     @Override
-    public org.apache.isis.applib.value.Markup value() {
+    public org.apache.causeway.applib.value.Markup value() {
         return getReadOnlyProperty();
     }
 

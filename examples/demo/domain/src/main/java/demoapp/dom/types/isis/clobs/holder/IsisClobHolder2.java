@@ -18,11 +18,11 @@
  */
 package demoapp.dom.types.isis.clobs.holder;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.Clob;
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.value.Clob;
 
 //tag::class[]
 public interface IsisClobHolder2 extends IsisClobHolder {

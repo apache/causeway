@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.value.Markup;
-import org.apache.isis.extensions.sse.applib.annotations.ServerSentEvents;
-import org.apache.isis.extensions.sse.applib.service.SseService;
-import org.apache.isis.extensions.sse.applib.service.SseService.ExecutionBehavior;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.value.Markup;
+import org.apache.causeway.extensions.sse.applib.annotations.ServerSentEvents;
+import org.apache.causeway.extensions.sse.applib.service.SseService;
+import org.apache.causeway.extensions.sse.applib.service.SseService.ExecutionBehavior;
 
 import lombok.Getter;
 import lombok.Setter;

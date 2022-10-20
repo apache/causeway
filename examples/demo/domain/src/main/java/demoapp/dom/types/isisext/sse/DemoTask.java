@@ -22,13 +22,14 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.commons.internal.concurrent._ThreadSleep;
-import org.apache.isis.extensions.sse.applib.annotations.SseSource;
-import org.apache.isis.extensions.sse.applib.service.SseChannel;
+import org.apache.causeway.commons.internal.concurrent._ThreadSleep;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
+import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 
 import lombok.RequiredArgsConstructor;
 

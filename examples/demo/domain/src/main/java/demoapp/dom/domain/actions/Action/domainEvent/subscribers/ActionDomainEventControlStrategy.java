@@ -20,9 +20,9 @@ package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
 
 import java.util.List;
 
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;

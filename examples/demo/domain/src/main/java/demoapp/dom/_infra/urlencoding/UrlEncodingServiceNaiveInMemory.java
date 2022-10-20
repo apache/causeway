@@ -26,18 +26,18 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.hash._Hashes;
+import org.apache.causeway.commons.internal.hash._Hashes.Algorithm;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.exceptions.UnrecoverableException;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.hash._Hashes;
-import org.apache.isis.commons.internal.hash._Hashes.Algorithm;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

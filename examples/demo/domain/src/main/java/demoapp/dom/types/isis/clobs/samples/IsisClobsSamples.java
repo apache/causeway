@@ -21,12 +21,12 @@ package demoapp.dom.types.isis.clobs.samples;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 
 import lombok.SneakyThrows;
 import lombok.val;

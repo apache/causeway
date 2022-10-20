@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import lombok.RequiredArgsConstructor;
 

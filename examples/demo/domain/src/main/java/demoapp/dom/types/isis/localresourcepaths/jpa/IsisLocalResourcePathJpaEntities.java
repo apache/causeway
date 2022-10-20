@@ -21,7 +21,7 @@ package demoapp.dom.types.isis.localresourcepaths.jpa;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.causeway.applib.value.LocalResourcePath;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 

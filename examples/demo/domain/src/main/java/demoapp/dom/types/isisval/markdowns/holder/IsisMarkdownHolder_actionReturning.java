@@ -18,8 +18,8 @@
  */
 package demoapp.dom.types.isisval.markdowns.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class IsisMarkdownHolder_actionReturning {
 
     private final IsisMarkdownHolder holder;
 
-    public org.apache.isis.valuetypes.markdown.applib.value.Markdown act() {
+    public org.apache.causeway.valuetypes.markdown.applib.value.Markdown act() {
         return holder.getReadOnlyProperty();
     }
 

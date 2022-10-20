@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,33 +52,33 @@ public class IsisMarkdownVm
         implements HasAsciiDocDescription, IsisMarkdownHolder2 {
 
 //end::class[]
-    public IsisMarkdownVm(final org.apache.isis.valuetypes.markdown.applib.value.Markdown initialValue) {
+    public IsisMarkdownVm(final org.apache.causeway.valuetypes.markdown.applib.value.Markdown initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "org.apache.isis.valuetypes.markdown.applib.value.Markdown view model: ")
+    @Title(prepend = "org.apache.causeway.valuetypes.markdown.applib.value.Markdown view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
-    private org.apache.isis.valuetypes.markdown.applib.value.Markdown readOnlyProperty;
+    private org.apache.causeway.valuetypes.markdown.applib.value.Markdown readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private org.apache.isis.valuetypes.markdown.applib.value.Markdown readWriteProperty;
+    private org.apache.causeway.valuetypes.markdown.applib.value.Markdown readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
-    private org.apache.isis.valuetypes.markdown.applib.value.Markdown readOnlyOptionalProperty;
+    private org.apache.causeway.valuetypes.markdown.applib.value.Markdown readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
-    private org.apache.isis.valuetypes.markdown.applib.value.Markdown readWriteOptionalProperty;
+    private org.apache.causeway.valuetypes.markdown.applib.value.Markdown readWriteOptionalProperty;
 
 }
 //end::class[]

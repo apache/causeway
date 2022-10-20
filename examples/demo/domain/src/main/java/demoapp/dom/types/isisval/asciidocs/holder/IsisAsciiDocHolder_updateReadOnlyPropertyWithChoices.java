@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
@@ -47,22 +47,22 @@ public class IsisAsciiDocHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisAsciiDocHolder holder;
 
-    @MemberSupport public IsisAsciiDocHolder act(final org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc newValue) {
+    @MemberSupport public IsisAsciiDocHolder act(final org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc default0Act() {
+    @MemberSupport public org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc> choices0Act() {
+    @MemberSupport public List<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc> samples;
+    Samples<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc> samples;
 
 }
 //end::class[]

@@ -30,7 +30,7 @@ public class WrapperCharacterSamples implements Samples<java.lang.Character> {
 
     @Override
     public Stream<java.lang.Character> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.CharacterValueSemantics()
                 .getExamples()
                 .stream();
     }

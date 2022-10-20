@@ -27,14 +27,14 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 @Profile("demo-jpa")
 @Service
 public class IsisMarkupJpaEntities
-extends ValueHolderRepository<org.apache.isis.applib.value.Markup, IsisMarkupJpa> {
+extends ValueHolderRepository<org.apache.causeway.applib.value.Markup, IsisMarkupJpa> {
 
     protected IsisMarkupJpaEntities() {
         super(IsisMarkupJpa.class);
     }
 
     @Override
-    protected IsisMarkupJpa newDetachedEntity(org.apache.isis.applib.value.Markup value) {
+    protected IsisMarkupJpa newDetachedEntity(org.apache.causeway.applib.value.Markup value) {
         return new IsisMarkupJpa(value);
     }
 

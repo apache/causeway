@@ -20,7 +20,7 @@ package demoapp.dom.types.isisval.vegas.persistence;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
@@ -33,10 +33,10 @@ public abstract class IsisVegaEntity
 implements
     HasAsciiDocDescription,
     IsisVegaHolder2,
-    ValueHolder<org.apache.isis.valuetypes.vega.applib.value.Vega> {
+    ValueHolder<org.apache.causeway.valuetypes.vega.applib.value.Vega> {
 
     @Override
-    public org.apache.isis.valuetypes.vega.applib.value.Vega value() {
+    public org.apache.causeway.valuetypes.vega.applib.value.Vega value() {
         return getReadOnlyProperty();
     }
 

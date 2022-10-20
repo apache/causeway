@@ -23,13 +23,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.commons.model.hints.RenderingHint;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.SneakyThrows;
 import lombok.val;

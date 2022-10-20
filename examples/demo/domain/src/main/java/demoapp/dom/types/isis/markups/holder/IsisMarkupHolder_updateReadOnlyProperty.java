@@ -18,11 +18,11 @@
  */
 package demoapp.dom.types.isis.markups.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,12 +41,12 @@ public class IsisMarkupHolder_updateReadOnlyProperty {
 
     private final IsisMarkupHolder holder;
 
-    @MemberSupport public IsisMarkupHolder act(final org.apache.isis.applib.value.Markup newValue) {
+    @MemberSupport public IsisMarkupHolder act(final org.apache.causeway.applib.value.Markup newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.apache.isis.applib.value.Markup default0Act() {
+    @MemberSupport public org.apache.causeway.applib.value.Markup default0Act() {
         return holder.getReadOnlyProperty();
     }
 

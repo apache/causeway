@@ -28,16 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -55,15 +55,15 @@ import demoapp.dom.types.isisval.vegas.vm.IsisVegaVm;
 public class IsisVegas implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "org.apache.isis.valuetypes.vega.applib.value.Vega data type";
+        return "org.apache.causeway.valuetypes.vega.applib.value.Vega data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public IsisVegaVm openViewModel(final org.apache.isis.valuetypes.vega.applib.value.Vega initialValue) {
+    public IsisVegaVm openViewModel(final org.apache.causeway.valuetypes.vega.applib.value.Vega initialValue) {
         return new IsisVegaVm(initialValue);
     }
-    @MemberSupport public org.apache.isis.valuetypes.vega.applib.value.Vega default0OpenViewModel() {
+    @MemberSupport public org.apache.causeway.valuetypes.vega.applib.value.Vega default0OpenViewModel() {
         return samples.single();
     }
 
@@ -74,10 +74,10 @@ public class IsisVegas implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    ValueHolderRepository<org.apache.isis.valuetypes.vega.applib.value.Vega, ? extends IsisVegaEntity> entities;
+    ValueHolderRepository<org.apache.causeway.valuetypes.vega.applib.value.Vega, ? extends IsisVegaEntity> entities;
 
     @Inject
     @XmlTransient
-    Samples<org.apache.isis.valuetypes.vega.applib.value.Vega> samples;
+    Samples<org.apache.causeway.valuetypes.vega.applib.value.Vega> samples;
 
 }

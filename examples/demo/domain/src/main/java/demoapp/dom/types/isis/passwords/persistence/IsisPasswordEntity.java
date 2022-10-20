@@ -21,13 +21,13 @@ package demoapp.dom.types.isis.passwords.persistence;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.value.Password;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.Password;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

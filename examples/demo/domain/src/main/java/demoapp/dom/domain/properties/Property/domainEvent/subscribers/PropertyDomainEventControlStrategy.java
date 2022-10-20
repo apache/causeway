@@ -18,8 +18,8 @@
  */
 package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
 
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 

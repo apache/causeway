@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.isisval.vegas.holder;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class IsisVegaHolder_mixinProperty {
 
     private final IsisVegaHolder holder;
 
-    public org.apache.isis.valuetypes.vega.applib.value.Vega prop() {
+    public org.apache.causeway.valuetypes.vega.applib.value.Vega prop() {
         return holder.getReadOnlyProperty();
     }
 

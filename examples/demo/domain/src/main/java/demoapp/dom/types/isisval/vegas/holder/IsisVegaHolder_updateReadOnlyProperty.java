@@ -18,11 +18,11 @@
  */
 package demoapp.dom.types.isisval.vegas.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,12 +41,12 @@ public class IsisVegaHolder_updateReadOnlyProperty {
 
     private final IsisVegaHolder holder;
 
-    @MemberSupport public IsisVegaHolder act(final org.apache.isis.valuetypes.vega.applib.value.Vega newValue) {
+    @MemberSupport public IsisVegaHolder act(final org.apache.causeway.valuetypes.vega.applib.value.Vega newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.apache.isis.valuetypes.vega.applib.value.Vega default0Act() {
+    @MemberSupport public org.apache.causeway.valuetypes.vega.applib.value.Vega default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -25,9 +25,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.spec.AbstractSpecification;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.spec.AbstractSpecification;
 
 @Property(mustSatisfy = Zoom.Specification.class)
 @Parameter(mustSatisfy = Zoom.Specification.class)

@@ -18,10 +18,10 @@
  */
 package demoapp.dom.types.isis.passwords.holder;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.Password;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
 

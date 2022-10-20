@@ -31,7 +31,7 @@ public class IsisAsciiDocSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public IsisAsciiDocSeeding(ValueHolderRepository<org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc, ? extends IsisAsciiDocEntity> entities) {
+    public IsisAsciiDocSeeding(ValueHolderRepository<org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc, ? extends IsisAsciiDocEntity> entities) {
         super(entities);
     }
 

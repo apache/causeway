@@ -27,8 +27,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.graph.tree.TreeNode;
-import org.apache.isis.applib.graph.tree.TreePath;
+import org.apache.causeway.applib.graph.tree.TreeNode;
+import org.apache.causeway.applib.graph.tree.TreePath;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
