@@ -13,30 +13,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-archtestsupport</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-archtestsupport</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-testing-archtestsupport-applib</artifactId>
-    <name>Apache Isis Tst - Architecture Test Support (applib)</name>
+    <artifactId>causeway-testing-archtestsupport-applib</artifactId>
+    <name>Apache Causeway Tst - Architecture Test Support (applib)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.testing.archtestsupport.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/testing/archtestsupport/applib</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.testing.archtestsupport.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/testing/archtestsupport/applib</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-jdk-supplemental</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-jdk-supplemental</artifactId>
 			<type>pom</type>
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-applib</artifactId>
         </dependency>
 
         <!-- SPRING -->
@@ -100,14 +100,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jpa-integration</artifactId>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jpa-integration</artifactId>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jdo-integration</artifactId>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jdo-integration</artifactId>
             <scope>test</scope>
         </dependency>
 

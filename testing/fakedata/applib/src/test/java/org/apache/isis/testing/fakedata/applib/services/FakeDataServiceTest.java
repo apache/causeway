@@ -31,6 +31,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.testing.fakedata.applib.services.FakeDataService;
+import org.apache.causeway.testing.fakedata.applib.services.IsisBlobs;
+import org.apache.causeway.testing.fakedata.applib.services.IsisClobs;
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -39,15 +45,12 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.clock.VirtualClock;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
+import org.apache.causeway.applib.clock.VirtualClock;
+import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.Password;
 
 public class FakeDataServiceTest {
 
