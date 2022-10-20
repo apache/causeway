@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -31,8 +31,8 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
+import org.apache.causeway.core.metamodel.facets.FacetHolder;
 
 
 

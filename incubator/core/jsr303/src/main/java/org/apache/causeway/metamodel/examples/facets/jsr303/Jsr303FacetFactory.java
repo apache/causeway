@@ -17,15 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.facets.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.MethodRemover;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class Jsr303FacetFactory implements FacetFactory {

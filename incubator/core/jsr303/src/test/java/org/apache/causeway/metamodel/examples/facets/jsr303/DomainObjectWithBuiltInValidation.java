@@ -17,20 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.validation.Pattern;
+import javax.validation.Patterns;
 
 
-@Documented
-@Target( { ElementType.METHOD, FIELD })
-@Retention(RUNTIME)
-public @interface CustomPatterns {
-    CustomPattern[] value();
+public class DomainObjectWithBuiltInValidation {
+
+    private String serialNumber;
+
+    @Patterns( { @Pattern(regex = "^[A-Z0-9-]+$", message = "must contain alphabetical characters only"),
+            @Pattern(regex = "^....-....-....$", message = "must match ....-....-....") })
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(final String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
 }

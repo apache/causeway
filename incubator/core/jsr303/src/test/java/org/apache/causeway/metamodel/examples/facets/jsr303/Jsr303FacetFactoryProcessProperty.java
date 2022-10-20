@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import java.lang.reflect.Method;
 
@@ -31,12 +31,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
-import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
+import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
+import org.apache.causeway.core.metamodel.facets.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.MethodRemover;
 
-import static org.apache.isis.core.metamodel.commons.matchers.NofMatchers.anInstanceOf;
+import static org.apache.causeway.core.metamodel.commons.matchers.NofMatchers.anInstanceOf;
 
 @RunWith(JMock.class)
 public class Jsr303FacetFactoryProcessProperty {

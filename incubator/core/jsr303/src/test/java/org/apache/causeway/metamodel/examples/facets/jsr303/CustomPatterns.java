@@ -17,31 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import javax.validation.ConstraintValidator;
 
 
 @Documented
-@ConstraintValidator(CustomPatternValidator.class)
-@Target( { METHOD, FIELD })
+@Target( { ElementType.METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface CustomPattern {
-    /** regular expression */
-    String regex();
-
-    /** Flags parameter for Pattern.compile() */
-    int flags() default 0;
-
-    String message() default "{beancheck.pattern}";
-
-    String[] groups() default {};
+public @interface CustomPatterns {
+    CustomPattern[] value();
 }

@@ -17,19 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
+import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
+import org.apache.causeway.core.metamodel.facets.FacetHolderImpl;
 
 
-public class Jsr303FacetFactoryInstantiation {
+public class Jsr303FacetInstantiation {
 
+    private FacetHolderImpl holder;
+
+    @Before
+    public void setUp() throws Exception {
+        holder = new FacetHolderImpl();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        holder = null;
+    }
 
     @Test
     public void canInstantiate() {
-        new Jsr303FacetFactory();
+        new Jsr303PropertyValidationFacet(holder);
     }
 
 }

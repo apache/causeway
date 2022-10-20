@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -31,9 +31,9 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.fail;
 
-import org.apache.isis.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
+import org.apache.causeway.core.metamodel.facets.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.MethodRemover;
 
 
 @RunWith(JMock.class)

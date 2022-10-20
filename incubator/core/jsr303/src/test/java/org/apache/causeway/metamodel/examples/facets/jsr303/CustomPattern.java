@@ -17,24 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
-import javax.validation.Pattern;
-import javax.validation.Patterns;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import javax.validation.ConstraintValidator;
 
 
-public class DomainObjectWithBuiltInValidation {
+@Documented
+@ConstraintValidator(CustomPatternValidator.class)
+@Target( { METHOD, FIELD })
+@Retention(RUNTIME)
+public @interface CustomPattern {
+    /** regular expression */
+    String regex();
 
-    private String serialNumber;
+    /** Flags parameter for Pattern.compile() */
+    int flags() default 0;
 
-    @Patterns( { @Pattern(regex = "^[A-Z0-9-]+$", message = "must contain alphabetical characters only"),
-            @Pattern(regex = "^....-....-....$", message = "must match ....-....-....") })
-    public String getSerialNumber() {
-        return serialNumber;
-    }
+    String message() default "{beancheck.pattern}";
 
-    public void setSerialNumber(final String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
+    String[] groups() default {};
 }

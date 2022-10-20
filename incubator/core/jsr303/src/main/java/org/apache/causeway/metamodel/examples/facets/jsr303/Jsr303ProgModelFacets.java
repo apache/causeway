@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
+import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
+import org.apache.causeway.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 
 
 /**

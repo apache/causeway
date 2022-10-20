@@ -17,26 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
-import javax.validation.Constraint;
+import org.apache.causeway.applib.AbstractDomainObject;
 
+public class DomainObjectVanilla extends AbstractDomainObject {
 
-public class CustomPatternValidator implements Constraint<CustomPattern> {
-    private java.util.regex.Pattern pattern;
+    private String firstName;
 
-    public void initialize(final CustomPattern params) {
-        pattern = java.util.regex.Pattern.compile(params.regex(), params.flags());
+    public String getFirstName() {
+        resolve(firstName);
+        return firstName;
     }
 
-    public boolean isValid(final Object ovalue) {
-        if (ovalue == null) {
-            return true;
-        }
-        if (!(ovalue instanceof String)) {
-            return false;
-        }
-        final String value = (String) ovalue;
-        return pattern.matcher(value).matches();
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        objectChanged();
     }
+    
 }

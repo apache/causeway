@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.examples.facets.jsr303;
+package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import java.util.Set;
 
@@ -25,15 +25,15 @@ import javax.validation.InvalidConstraint;
 import javax.validation.ValidationProviderFactory;
 import javax.validation.Validator;
 
-import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.causeway.applib.events.ValidityEvent;
+import org.apache.causeway.core.metamodel.adapter.ObjectAdapter;
+import org.apache.causeway.core.metamodel.facets.Facet;
+import org.apache.causeway.core.metamodel.facets.FacetAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetHolder;
+import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
+import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.spec.identifier.Identified;
 
 
 public class Jsr303PropertyValidationFacet extends FacetAbstract implements ValidatingInteractionAdvisor {
