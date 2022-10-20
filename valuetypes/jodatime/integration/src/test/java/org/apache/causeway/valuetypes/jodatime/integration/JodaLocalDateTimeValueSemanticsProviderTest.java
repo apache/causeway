@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.jodatime.integration;
+package org.apache.causeway.valuetypes.jodatime.integration;
 
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;

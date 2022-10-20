@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.jodatime.applib.value;
+package org.apache.causeway.valuetypes.jodatime.applib.value;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
