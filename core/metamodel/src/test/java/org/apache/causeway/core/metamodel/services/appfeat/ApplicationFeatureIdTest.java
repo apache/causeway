@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
+import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
 import lombok.val;
 

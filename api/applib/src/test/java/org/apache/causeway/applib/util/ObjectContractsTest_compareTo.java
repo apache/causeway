@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import org.apache.isis.core.internaltestsupport.contract.ComparableContractTest_compareTo;
+import org.apache.causeway.core.internaltestsupport.contract.ComparableContractTest_compareTo;
 
 class ObjectContractsTest_compareTo extends ComparableContractTest_compareTo<InvoiceItem> {
 
