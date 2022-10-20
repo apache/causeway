@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
+import org.apache.causeway.viewer.wicket.ui.IsisModuleViewerWicketUi;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.viewer.wicket.ui.IsisModuleViewerWicketUi;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;

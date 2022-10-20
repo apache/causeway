@@ -20,6 +20,11 @@ package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.List;
 
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.wicket.model.IModel;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,12 +33,7 @@ import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.viewer.commons.model.components.UiComponentType;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
 import lombok.val;
 

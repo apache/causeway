@@ -26,6 +26,8 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -50,23 +52,22 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
-import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
-import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.HasPageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
+import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.pages.HasPageClassRegistry;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
+
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;

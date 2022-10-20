@@ -22,9 +22,9 @@ import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.Oid;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.Oid;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

@@ -26,17 +26,17 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.webapp.modules.WebModuleAbstract;
-import org.apache.isis.core.webapp.modules.WebModuleContext;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
+import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
 

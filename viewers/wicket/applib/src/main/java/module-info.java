@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.viewer.wicket.applib {
-    exports org.apache.isis.viewer.wicket.applib;
-    exports org.apache.isis.viewer.wicket.applib.mixins;
+module org.apache.causeway.viewer.wicket.applib {
+    exports org.apache.causeway.viewer.wicket.applib;
+    exports org.apache.causeway.viewer.wicket.applib.mixins;
 
     requires java.inject;
     requires lombok;
-    requires org.apache.isis.applib;
+    requires org.apache.causeway.applib;
     requires spring.beans;
     requires spring.context;
 }

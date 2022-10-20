@@ -31,18 +31,18 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.linking.DeepLinkService;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.linking.DeepLinkService;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
+ * An implementation of {@link org.apache.causeway.applib.services.linking.DeepLinkService}
  * for Wicket Viewer
  */
 @Service

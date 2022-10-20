@@ -32,11 +32,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

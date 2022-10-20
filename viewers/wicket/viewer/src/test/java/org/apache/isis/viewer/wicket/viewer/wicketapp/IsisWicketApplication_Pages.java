@@ -18,6 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.junit.jupiter.api.Test;
@@ -28,11 +32,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 
 @ExtendWith(MockitoExtension.class)
 class IsisWicketApplication_Pages {

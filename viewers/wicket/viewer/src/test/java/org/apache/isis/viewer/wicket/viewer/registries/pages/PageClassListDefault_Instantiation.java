@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassList;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistrySpi;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -26,9 +28,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 
 @RunWith(JMock.class)
 public class PageClassListDefault_Instantiation {

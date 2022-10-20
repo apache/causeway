@@ -23,7 +23,7 @@ import javax.inject.Provider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 
 import lombok.extern.log4j.Log4j2;
 

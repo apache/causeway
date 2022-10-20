@@ -18,20 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
-import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
-import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
-import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassList;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistrySpi;
+import org.apache.causeway.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
+import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
+import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
+import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
+import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 import org.apache.wicket.Page;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

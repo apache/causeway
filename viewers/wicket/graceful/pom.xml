@@ -22,13 +22,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.viewer</groupId>
-        <artifactId>isis-viewer-wicket</artifactId>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-wicket</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-viewer-wicket-graceful</artifactId>
-    <name>Apache Isis Viewer - Wicket (Graceful)</name>
+    <artifactId>causeway-viewer-wicket-graceful</artifactId>
+    <name>Apache Causeway Viewer - Wicket (Graceful)</name>
 
 	<description>
 		Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository
@@ -37,8 +37,8 @@
 	</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.graceful</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/graceful</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.graceful</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/graceful</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -106,8 +106,8 @@
 		<!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 

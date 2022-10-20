@@ -24,6 +24,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -34,19 +35,18 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.functional.ThrowingRunnable;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.security._testing.InteractionService_forTesting;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.core.security.authentication.InteractionContextFactory;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.security._testing.InteractionService_forTesting;
+import org.apache.causeway.core.security.authentication.AuthenticationRequest;
+import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.causeway.core.security.authentication.Authenticator;
+import org.apache.causeway.core.security.authentication.InteractionContextFactory;
+import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
 public class AuthenticatedWebSessionForIsis_SignIn {
 

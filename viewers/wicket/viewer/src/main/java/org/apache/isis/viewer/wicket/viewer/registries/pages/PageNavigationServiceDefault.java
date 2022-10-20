@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RestartResponseException;

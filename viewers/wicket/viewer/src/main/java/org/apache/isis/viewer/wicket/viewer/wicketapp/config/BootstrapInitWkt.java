@@ -25,9 +25,9 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport;
 
 import lombok.val;
 

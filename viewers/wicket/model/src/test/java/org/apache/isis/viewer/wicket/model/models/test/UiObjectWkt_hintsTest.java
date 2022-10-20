@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models.test;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -37,13 +38,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.hint.HintStore;
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

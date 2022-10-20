@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
 
 import lombok.val;
 

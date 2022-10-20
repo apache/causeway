@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 
 import lombok.val;
 
