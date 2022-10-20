@@ -15,26 +15,26 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>isis-extensions</artifactId>
+	<groupId>org.apache.causeway.extensions</groupId>
+	<artifactId>causeway-extensions</artifactId>
 
-	<name>Apache Isis Extensions</name>
+	<name>Apache Causeway Extensions</name>
 	<description>
-        Extensions to the Apache Isis framework itself.
-		These are _not_ intended to be called by the domain logic of an Apache Isis application (see instead org.apache.isis.platform).
+        Extensions to the Apache Causeway framework itself.
+		These are _not_ intended to be called by the domain logic of an Apache Causeway application (see instead org.apache.causeway.platform).
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.extensions</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/extensions</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -67,398 +67,398 @@
 
 			<!-- core -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-commandlog</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-commandlog</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-commandlog-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-commandlog-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-commandlog-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-commandlog-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-commandlog-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-commandlog-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-integtests</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-testing</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionlog</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-excel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionlog-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-excel-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionlog-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-excel-fixtures</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-excel-integtests</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-excel-testing</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionlog</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionlog-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionlog-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionlog-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionlog-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionlog-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-restclient</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionrepublisher</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutrepublisher-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-flyway</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionrepublisher</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-flyway-impl</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionoutrepublisher-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-quartz</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-flyway</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-quartz-impl</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-flyway-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-quartz</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-quartz-impl</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 
 			<!-- security -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-audittrail</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-audittrail-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-audittrail-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-applib</artifactId>
 				<scope>test</scope>
 				<type>test-jar</type>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-delegated-springoauth2</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-delegated-springoauth2</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-encryption-spring</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-encryption-spring</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-integration</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sessionlog</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sessionlog-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sessionlog-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-shiro-realm-ldap</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-spring-security-oauth2</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-spring-security-oauth2</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 
 			<!-- vro -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-cors</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-cors</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-cors-impl</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-cors-impl</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 
 			<!-- vw -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-exceldownload</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-fullcalendar</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-fullcalendar</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-fullcalendar-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-fullcalendar-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-fullcalendar-wicket</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-fullcalendar-wicket-integration</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-fullcalendar-wicket-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-fullcalendar-wicket-ui</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-fixtures</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs-fixtures</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-metamodel</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-wicket</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs-wicket</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-wicket-integration</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sse</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sse</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sse-applib</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sse-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sse-metamodel</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sse-metamodel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sse-wicket</artifactId>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-sse-wicket</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

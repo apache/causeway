@@ -14,13 +14,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.incubator.extensions</groupId>
-        <artifactId>isis-extensions-commandreplay</artifactId>
+        <groupId>org.apache.causeway.incubator.extensions</groupId>
+        <artifactId>causeway-extensions-commandreplay</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-commandreplay-primary</artifactId>
-    <name>Apache Isis Ext - Command Replay for Primary</name>
+    <artifactId>causeway-extensions-commandreplay-primary</artifactId>
+    <name>Apache Causeway Ext - Command Replay for Primary</name>
 
     <packaging>jar</packaging>
 
@@ -29,34 +29,34 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.incubator.extensions.commandreplay.primary</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/incubator/extensions/core/commandreplay/primary</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.incubator.extensions.commandreplay.primary</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/incubator/extensions/core/commandreplay/primary</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-config</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-config</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-schema</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtime</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.testing</groupId>
-            <artifactId>isis-testing-fixtures-applib</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-schema</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-commandlog-applib</artifactId>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-fixtures-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-commandlog-applib</artifactId>
         </dependency>
 
     </dependencies>

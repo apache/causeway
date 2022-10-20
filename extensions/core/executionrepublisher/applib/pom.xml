@@ -14,17 +14,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-executionrepublisher</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-executionrepublisher</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-executionrepublisher-applib</artifactId>
-    <name>Apache Isis Ext - Execution Outbox Republisher</name>
+    <artifactId>causeway-extensions-executionrepublisher-applib</artifactId>
+    <name>Apache Causeway Ext - Execution Outbox Republisher</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.executionrepublisher.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/executionrepublisher/applib</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.executionrepublisher.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/extensions/executionrepublisher/applib</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -49,32 +49,32 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-executionlog-applib</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionlog-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-executionoutbox-applib</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionoutbox-applib</artifactId>
         </dependency>
 
 
         <!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-unittestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
             <scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
 

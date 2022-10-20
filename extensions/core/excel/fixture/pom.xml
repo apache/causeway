@@ -21,18 +21,18 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-excel-fixtures</artifactId>
-    <name>Apache Isis Ext - Excel (Fixtures)</name>
+    <artifactId>causeway-extensions-excel-fixtures</artifactId>
+    <name>Apache Causeway Ext - Excel (Fixtures)</name>
 
     <properties>
-    	<jar-plugin.automaticModuleName>org.apache.isis.extensions.excel.fixture</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/excel/fixture</git-plugin.propertiesDir>
+    	<jar-plugin.automaticModuleName>org.apache.causeway.extensions.excel.fixture</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/extensions/excel/fixture</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -73,28 +73,28 @@ under the License.
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-excel-applib</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-excel-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-excel-testing</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-excel-testing</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-applib</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.testing</groupId>
-            <artifactId>isis-testing-fixtures-applib</artifactId>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-fixtures-applib</artifactId>
         </dependency>
 
 		<dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+            <groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
         </dependency>
 
         <dependency>

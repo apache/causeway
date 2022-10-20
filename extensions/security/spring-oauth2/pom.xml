@@ -15,29 +15,29 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions</artifactId>
+		<groupId>org.apache.causeway.extensions</groupId>
+		<artifactId>causeway-extensions</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-spring-security-oauth2</artifactId>
+	<artifactId>causeway-extensions-spring-security-oauth2</artifactId>
 
-	<name>Apache Isis Ext - Security - Spring Oauth2</name>
+	<name>Apache Causeway Ext - Security - Spring Oauth2</name>
 	<description>
         Authentication Converter, using Spring Security's OAuth2 client
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.springoauth2</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/springoauth2</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.springoauth2</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/extensions/springoauth2</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-spring</artifactId>
+			<groupId>org.apache.causeway.security</groupId>
+			<artifactId>causeway-security-spring</artifactId>
 		</dependency>
 
 		<dependency>
@@ -53,8 +53,8 @@
 
 		<!-- test -->
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 

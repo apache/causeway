@@ -15,34 +15,34 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions-pdfjs-wicket</artifactId>
+		<groupId>org.apache.causeway.extensions</groupId>
+		<artifactId>causeway-extensions-pdfjs-wicket</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
-	<name>Apache Isis Ext - pdf.js - Wicket (UI)</name>
+	<artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
+	<name>Apache Causeway Ext - pdf.js - Wicket (UI)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.wicket.ui</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/pdfjs/wicket/ui</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.pdfjs.wicket.ui</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/extensions/pdfjs/wicket/ui</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-pdfjs-metamodel</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-pdfjs-wicket-integration</artifactId>
+			<groupId>org.apache.causeway.extensions</groupId>
+			<artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-wicket-ui</artifactId>
 		</dependency>
 	</dependencies>
 
