@@ -16,23 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.viewer.integration;
 
-import java.io.Serializable;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import org.apache.wicket.request.resource.ResourceReference;
+public class AuthenticatedWebSessionForIsis_DownCastsInheritedFunctionality {
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+    @Before
+    public void setUp() throws Exception {
+    }
 
-/**
- * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.isis</tt>
- * package, however to do so would break existing API (gmap3 has a dependency on this, for example).
- */
-public interface ImageResourceCache extends Serializable {
+    @Ignore("thread-safe downcast of inherited functionality")
+    @Test
+    public void testGet() {
+    }
 
-    ResourceReference resourceReferenceFor(ManagedObject adapter);
-
-    ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
+    @Ignore("thread-safe downcast of inherited functionality")
+    @Test
+    public void testGetClientInfo() {
+    }
 
 }

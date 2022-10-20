@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import java.io.Serializable;
+import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.springframework.context.annotation.Configuration;
 
-import org.apache.wicket.request.resource.ResourceReference;
+import lombok.val;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+@Configuration
+public class Select2InitWkt implements WicketApplicationInitializer {
 
-/**
- * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.isis</tt>
- * package, however to do so would break existing API (gmap3 has a dependency on this, for example).
- */
-public interface ImageResourceCache extends Serializable {
-
-    ResourceReference resourceReferenceFor(ManagedObject adapter);
-
-    ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
+    @Override
+    public void init(final WebApplication webApplication) {
+        val select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
+        //select2Settings.setCssReference(new Select2BootstrapCssReference());
+        //select2Settings.setJavascriptReferenceFull(new Select2JsReference());
+        select2Settings.setIncludeJavascriptFull(true);
+    }
 
 }

@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
  * Defines an API for registering {@link ComponentFactory}s.
  *
  * <p>
- * As used by {@link org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault}.
+ * As used by {@link org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault}.
  */
 public interface ComponentFactoryRegistrar {
 

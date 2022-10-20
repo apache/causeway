@@ -70,7 +70,7 @@ import lombok.val;
 //        initParams={
 //        @WebInitParam(
 //                name="authenticationStrategy",
-//                value="org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationStrategyBasicAuth"), // authentication required for REST
+//                value="org.apache.causeway.viewer.restfulobjects.server.authentication.AuthenticationStrategyBasicAuth"), // authentication required for REST
 //        @WebInitParam(
 //                name="whenNoSession", // what to do if no session was found ...
 //                value="auto"), // ... 401 and a basic authentication challenge if request originates from web browser

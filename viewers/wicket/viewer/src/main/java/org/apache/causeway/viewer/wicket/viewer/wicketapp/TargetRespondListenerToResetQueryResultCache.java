@@ -16,23 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 
-import java.io.Serializable;
+import javax.inject.Inject;
+import javax.inject.Provider;
 
-import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 
-/**
- * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.isis</tt>
- * package, however to do so would break existing API (gmap3 has a dependency on this, for example).
- */
-public interface ImageResourceCache extends Serializable {
+import lombok.extern.log4j.Log4j2;
 
-    ResourceReference resourceReferenceFor(ManagedObject adapter);
+@Log4j2
+class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
 
-    ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
+    @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
+
+    @Override
+    public void onTargetRespond(final AjaxRequestTarget target) {
+
+        if(log.isDebugEnabled()) {
+            log.debug("RESPOND PHASE STARTED: resetting cache");
+        }
+
+        queryResultsCacheProvider.get().onTransactionEnded();
+    }
+
 
 }
