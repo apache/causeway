@@ -32,7 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 
-import org.apache.isis.testdomain.viewers.jdo.wkt.TestAppJdoWkt;
+import org.apache.causeway.testdomain.viewers.jdo.wkt.TestAppJdoWkt;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;

@@ -24,7 +24,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.sse.wicket.IsisModuleExtSseWicket;
-import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
+import org.apache.causeway.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.causeway.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
 import org.apache.causeway.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;

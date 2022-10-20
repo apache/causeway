@@ -34,7 +34,7 @@ import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.Enti
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.testdomain.viewers.jpa.wkt.TestAppJpaWkt;
+import org.apache.causeway.testdomain.viewers.jpa.wkt.TestAppJpaWkt;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

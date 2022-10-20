@@ -46,7 +46,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 import lombok.val;
 
-//import org.apache.isis.testdomain.Incubating;
+//import org.apache.causeway.testdomain.Incubating;
 
 @SpringBootTest(
         classes = { 

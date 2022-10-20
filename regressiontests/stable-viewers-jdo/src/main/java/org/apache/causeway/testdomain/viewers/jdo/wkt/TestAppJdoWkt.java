@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers.jpa.wkt;
+package org.apache.causeway.testdomain.viewers.jdo.wkt;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.os._OsUtil;
+import org.apache.causeway.commons.internal.debug.xray.XrayEnable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -36,10 +36,10 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
-import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
-import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
+import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
 import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
@@ -48,16 +48,16 @@ import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
  */
 @SpringBootApplication
 @Import({
-    Configuration_usingJpa.class,
+    Configuration_usingJdo.class,
     Configuration_usingWicket.class,
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
     //IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
-    //XrayEnable.class // for debugging only
+    XrayEnable.class // for debugging only
 })
-public class TestAppJpaWkt extends SpringBootServletInitializer {
+public class TestAppJdoWkt extends SpringBootServletInitializer {
 
     /**
      *
@@ -67,20 +67,17 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
      */
     public static void main(final String[] args) {
         IsisPresets.prototyping();
-
-        _OsUtil.thereCanBeOnlyOne();
-
-        SpringApplication.run(new Class[] { TestAppJpaWkt.class }, args);
+        SpringApplication.run(new Class[] { TestAppJdoWkt.class }, args);
     }
 
-    @Named("testdomain.jpa.TestHomePage")
+    @Named("testdomain.jdo.TestHomePage")
     @DomainObject(
             nature=Nature.VIEW_MODEL)
     @HomePage
     public static class TestHomePage {
 
         @Inject UserService userService;
-        @Inject JpaTestFixtures testFixtures;
+        @Inject JdoTestFixtures testFixtures;
         @Inject FactoryService factoryService;
 
         @ObjectSupport public String title() {
@@ -93,7 +90,7 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
         }
 
         @Action @ActionLayout(sequence = "0.2")
-        public JpaInventoryJaxbVm openSamplePage() {
+        public JdoInventoryJaxbVm openSamplePage() {
             return testFixtures.setUpViewmodelWith3Books();
         }
 
