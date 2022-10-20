@@ -1858,7 +1858,7 @@ public class IsisConfiguration {
             @Data
             public static class Authentication {
                 /**
-                 * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
+                 * Defaults to <code>org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
                  */
                 private Optional<String> strategyClassName = Optional.empty();
             }
@@ -1981,14 +1981,14 @@ public class IsisConfiguration {
 
             /**
              * Specifies the subclass of
-             * <code>org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication</code> that is used to
+             * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication</code> that is used to
              * bootstrap Wicket.
              *
              * <p>
              *     There is usually very little reason to change this from its default.
              * </p>
              */
-            private String app = "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication";
+            private String app = "org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication";
 
             /**
              * Whether the Ajax debug should be shown, by default this is disabled.
@@ -2721,7 +2721,7 @@ public class IsisConfiguration {
              *     as well if required).
              * </p>
              */
-            @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
+            @AssignableFrom("org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript")
             private Class<?> initialScript = null;
 
             private final FixtureScriptsSpecification fixtureScriptsSpecification = new FixtureScriptsSpecification();
@@ -2853,10 +2853,10 @@ public class IsisConfiguration {
                  */
                 private NonPersistedObjectsStrategy nonPersistedObjectsStrategy = NonPersistedObjectsStrategy.PERSIST;
 
-                @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
+                @AssignableFrom("org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript")
                 private Class<?> recreate = null;
 
-                @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
+                @AssignableFrom("org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript")
                 private Class<?> runScriptDefault = null;
 
             }

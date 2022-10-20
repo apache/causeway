@@ -23,7 +23,7 @@
  * <p>
  * Used in two different ways:
  * <ul>
- * <li>in prototyping or single user, used by the {@link org.apache.isis.core.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryImpl facet factory}
+ * <li>in prototyping or single user, used by the {@link org.apache.causeway.core.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryImpl facet factory}
  *     implementations, that is, enforcing authorization on the "client-side".
  *     </li>
  * <li>In client/server mode, used by a {@link org.apache.causeway.core.metamodel.facetdecorator.FacetDecorator} for proxy authorization,

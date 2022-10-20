@@ -95,7 +95,7 @@ public interface MetaModelAnnotator {
             return (""+input)
                     .replace("org.apache.causeway.core.metamodel.facets.", "».c.m.f.")
                     .replace("org.apache.causeway.core.metamodel.", "».c.m.")
-                    .replace("org.apache.isis.core.", "».c.")
+                    .replace("org.apache.causeway.core.", "».c.")
                     .replace("org.apache.causeway.applib.", "».a.")
                     .replace("org.apache.isis.", "».")
                     .replace("java.lang.", "");

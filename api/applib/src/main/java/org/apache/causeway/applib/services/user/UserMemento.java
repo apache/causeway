@@ -78,7 +78,7 @@ implements Serializable {
 
     /** Also used by the wicket-viewer and its AuthorizeInstantiation(...) annotations;
      *  the actual value is arbitrary; however, we use namespace style to clarify the origin*/
-    public static final String AUTHORIZED_USER_ROLE = "org.apache.isis.security.AUTHORIZED_USER_ROLE";
+    public static final String AUTHORIZED_USER_ROLE = "org.apache.causeway.security.AUTHORIZED_USER_ROLE";
 
     private static final long serialVersionUID = 7190090455587885367L;
     private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system");

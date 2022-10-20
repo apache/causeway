@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.isis.core.privileged._Privileged;
+import org.apache.causeway.core.privileged._Privileged;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

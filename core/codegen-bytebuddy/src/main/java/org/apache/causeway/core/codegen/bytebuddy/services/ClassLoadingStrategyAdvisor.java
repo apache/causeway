@@ -20,7 +20,7 @@ package org.apache.causeway.core.codegen.bytebuddy.services;
 
 import java.lang.invoke.MethodHandle;
 
-import org.apache.isis.core.privileged._Privileged;
+import org.apache.causeway.core.privileged._Privileged;
 
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
