@@ -29,7 +29,7 @@ commands:
       Examples: org.apache.isis.examples.*
 
       Root: org.apache.isis
-      Commons: org.apache.isis.commons.*
+      Commons: org.apache.causeway.commons.*
 
       Core: org.apache.isis.core.*
 
