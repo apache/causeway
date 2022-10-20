@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fakedata.applib.services;
+package org.apache.causeway.testing.fakedata.applib.services;
 
 import java.net.URL;
 import java.sql.Timestamp;

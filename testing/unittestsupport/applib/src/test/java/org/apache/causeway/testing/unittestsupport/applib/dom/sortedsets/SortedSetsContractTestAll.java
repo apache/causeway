@@ -23,7 +23,7 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.sortedsets.SortedS
 public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
     public SortedSetsContractTestAll() {
-        super("org.apache.isis.core.unittestsupport.sortedsets");
+        super("org.apache.causeway.core.unittestsupport.sortedsets");
         withLoggingTo(System.out);
     }
 
