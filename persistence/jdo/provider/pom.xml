@@ -14,33 +14,33 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.persistence</groupId>
-		<artifactId>isis-persistence-jdo</artifactId>
+		<groupId>org.apache.causeway.persistence</groupId>
+		<artifactId>causeway-persistence-jdo</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jdo-provider</artifactId>
+	<artifactId>causeway-persistence-jdo-provider</artifactId>
 
-	<name>Apache Isis Persistence - JDO (provider)</name>
+	<name>Apache Causeway Persistence - JDO (provider)</name>
 	<description>
         JDO Provider to be implemented by any actual JDO provider eg. DataNucleus.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.provider</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/provider</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jdo.provider</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/persistence/jdo/provider</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-applib</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-metamodel</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-metamodel</artifactId>
 		</dependency>
 
 	</dependencies>
