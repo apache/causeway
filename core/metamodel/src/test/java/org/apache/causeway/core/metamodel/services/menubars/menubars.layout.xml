@@ -18,9 +18,9 @@
   under the License.
 -->
 <mb3:menuBars
-        xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd"
-        xmlns:cpt="http://isis.apache.org/applib/layout/component"
-        xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
+        xsi:schemaLocation="http://causeway.apache.org/applib/layout/menubars/bootstrap3 http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd http://causeway.apache.org/applib/layout/component http://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:cpt="http://causeway.apache.org/applib/layout/component"
+        xmlns:mb3="http://causeway.apache.org/applib/layout/menubars/bootstrap3"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>
         <mb3:menu>
@@ -45,59 +45,59 @@
         <mb3:menu>
             <mb3:named>Prototyping</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.applib.FixtureScriptsDefault" id="runFixtureScript">
+                <mb3:serviceAction objectType="causeway.applib.FixtureScriptsDefault" id="runFixtureScript">
                     <cpt:named>Run Fixture Script</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.FixtureScriptsDefault" id="runFixtureScriptWithAutoComplete">
+                <mb3:serviceAction objectType="causeway.applib.FixtureScriptsDefault" id="runFixtureScriptWithAutoComplete">
                     <cpt:named>Run Fixture Script</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.FixtureScriptsDefault" id="recreateObjectsAndReturnFirst">
+                <mb3:serviceAction objectType="causeway.applib.FixtureScriptsDefault" id="recreateObjectsAndReturnFirst">
                     <cpt:named>Recreate Objects And Return First</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadLayouts">
+                <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadLayouts">
                     <cpt:named>Download Object Layouts (ZIP)</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadMenuBarsLayout">
+                <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout">
                     <cpt:named>Download Menu Bars Layout (XML)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-				<mb3:serviceAction objectType="isis.applib.MetaModelServicesMenu" id="downloadMetaModelXml">
+				<mb3:serviceAction objectType="causeway.applib.MetaModelServicesMenu" id="downloadMetaModelXml">
                     <cpt:named>Download Meta Model (XML)</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.MetaModelServicesMenu" id="downloadMetaModelCsv">
+                <mb3:serviceAction objectType="causeway.applib.MetaModelServicesMenu" id="downloadMetaModelCsv">
                     <cpt:named>Download Meta Model (CSV)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.applib.SwaggerServiceMenu" id="openSwaggerUi">
+                <mb3:serviceAction objectType="causeway.applib.SwaggerServiceMenu" id="openSwaggerUi">
                     <cpt:named>Open Swagger Ui</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.SwaggerServiceMenu" id="openRestApi">
+                <mb3:serviceAction objectType="causeway.applib.SwaggerServiceMenu" id="openRestApi">
                     <cpt:named>Open Rest Api</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition">
+                <mb3:serviceAction objectType="causeway.applib.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition">
                     <cpt:named>Download Swagger Schema Definition</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="downloadTranslations">
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="downloadTranslations">
                     <cpt:named>Download Translations</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="resetTranslationCache">
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache">
                     <cpt:named>Clear translation cache</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToReadingTranslations">
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations">
                     <cpt:named>Switch To Reading Translations</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToWritingTranslations">
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations">
                     <cpt:named>Switch To Writing Translations</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.applib.HsqlDbManagerMenu" id="hsqlDbManager">
+                <mb3:serviceAction objectType="causeway.applib.HsqlDbManagerMenu" id="hsqlDbManager">
                     <cpt:named>HSQL DB Manager</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -107,7 +107,7 @@
         <mb3:menu>
             <mb3:named>Configuration Service Menu</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.applib.ConfigurationServiceMenu" id="configuration">
+                <mb3:serviceAction objectType="causeway.applib.ConfigurationServiceMenu" id="configuration">
                     <cpt:named>Configuration</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
