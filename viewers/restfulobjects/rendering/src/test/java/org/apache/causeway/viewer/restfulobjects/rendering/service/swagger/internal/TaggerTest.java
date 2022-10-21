@@ -63,14 +63,14 @@ public class TaggerTest {
 
         @Test
         public void internals() throws Exception {
-            String tag = taggerDefault.tagForLogicalTypeName("org.apache.isis.Xxx", null);
-            assertThat(tag, is(equalTo(". apache isis internals")));
+            String tag = taggerDefault.tagForLogicalTypeName("org.apache.causeway.Xxx", null);
+            assertThat(tag, is(equalTo(". apache causeway internals")));
         }
 
         @Test
         public void applib() throws Exception {
-            String tag = taggerDefault.tagForLogicalTypeName("isis.conf.ConfigurationServiceMenu", null);
-            assertThat(tag, is(equalTo(". apache isis conf")));
+            String tag = taggerDefault.tagForLogicalTypeName("causeway.conf.ConfigurationServiceMenu", null);
+            assertThat(tag, is(equalTo(". apache causeway conf")));
         }
 
     }

@@ -28,7 +28,7 @@ public class ResourceUtil {
 
     public static InputStream getResourceAsStream(final String resource) {
 
-        // try Isis's classloader
+        // try Causeway's classloader
         ClassLoader classLoader = _Context.getDefaultClassLoader();
         InputStream is = classLoader.getResourceAsStream(resource);
         if (is != null) {

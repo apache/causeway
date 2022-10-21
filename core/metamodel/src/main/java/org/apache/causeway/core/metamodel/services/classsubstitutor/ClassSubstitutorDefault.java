@@ -33,7 +33,7 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
     public ClassSubstitutorDefault() {
         ignoreCglib();
         ignoreJavassist();
-        ignoreApacheIsisInternals();
+        ignoreApacheCausewayInternals();
         ignoreSpringFramework();
         ignoreJacksonAndGson();
         skipDataNucleusProxy();
@@ -55,7 +55,7 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         ignorePackage("org.springframework.");
     }
 
-    private void ignoreApacheIsisInternals() {
+    private void ignoreApacheCausewayInternals() {
         ignoreClass("org.apache.causeway.commons.internal.ioc.spring.BeanAdapterSpring");
         ignoreClass(TreeAdapter.class.getName());
     }

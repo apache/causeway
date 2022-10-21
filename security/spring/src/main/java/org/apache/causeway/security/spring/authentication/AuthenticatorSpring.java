@@ -34,7 +34,7 @@ import org.apache.causeway.core.security.authentication.Authenticator;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.security.AuthenticatorSpring")
+@Named("causeway.security.AuthenticatorSpring")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {

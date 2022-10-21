@@ -53,14 +53,14 @@ public class InteractionNpmDemo_biArgEnabled {
 
     // -- PARAM 0
 
-    // [ISIS-2362] parameter supporting methods, to be referenced by param name
+    // [CAUSEWAY-2362] parameter supporting methods, to be referenced by param name
     @MemberSupport public int defaultA(Parameters params) {
         return 5;
     }
 
     // -- PARAM 1
 
-    // [ISIS-2362] parameter supporting methods, to be referenced by param name
+    // [CAUSEWAY-2362] parameter supporting methods, to be referenced by param name
     @MemberSupport public int[] choicesB(Parameters params) {
         return new int[] {1, 2, 3, 4};
     }

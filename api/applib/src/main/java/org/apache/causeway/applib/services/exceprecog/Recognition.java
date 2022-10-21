@@ -66,7 +66,7 @@ public class Recognition {
      * This lets the viewer act accordingly.
      *
      * If the implementation recognizes the exception then it returns a user-friendly message to be rendered (by the viewer) back to the user; otherwise it returns `null`.
-     * There is no need for the implementation to check for exception causes; the casual chain is unwrapped by Apache Isis core and each exception in the chain will also be passed through to the recognizer (from most specific to least).
+     * There is no need for the implementation to check for exception causes; the casual chain is unwrapped by Apache Causeway core and each exception in the chain will also be passed through to the recognizer (from most specific to least).
      * The recognizer implementation can therefore be as fine-grained or as coarse-grained as it wishes.
      * </p>
      * <p>

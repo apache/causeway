@@ -34,7 +34,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @SpringBootTest(
@@ -43,7 +43,7 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ContextConfiguration
 @Transactional
-public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
+public abstract class ExcelModuleIntegTestAbstract extends CausewayIntegrationTestAbstractWithFixtures {
 
     @Configuration
     @PropertySources({

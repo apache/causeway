@@ -170,7 +170,7 @@ public class ProperMemberSupport {
         return null;
     }
 
-    // [ISIS-2561] should be detected as Action (despite the prefix, which normally suggests otherwise)
+    // [CAUSEWAY-2561] should be detected as Action (despite the prefix, which normally suggests otherwise)
     @Action
     public String hideMe() {
         return null;

@@ -34,7 +34,7 @@ import org.apache.causeway.core.webapp.health.HealthIndicatorUsingHealthCheckSer
 import org.apache.causeway.core.webapp.keyvaluestore.KeyValueStoreUsingHttpSession;
 import org.apache.causeway.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.causeway.core.webapp.modules.templresources.WebModuleTemplateResources;
-import org.apache.causeway.core.webapp.webappctx.IsisWebAppContextInitializer;
+import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
 @Configuration
 @Import({
@@ -52,7 +52,7 @@ import org.apache.causeway.core.webapp.webappctx.IsisWebAppContextInitializer;
         KeyValueStoreUsingHttpSession.class,
 
         // (not annotated)
-        IsisWebAppContextInitializer.class,
+        CausewayWebAppContextInitializer.class,
 
 })
 public class CausewayModuleCoreWebapp {

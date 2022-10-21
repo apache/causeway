@@ -50,8 +50,8 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleExtCommandLogApplib {
 
-    public static final String NAMESPACE = "isis.ext.commandLog";
-    public static final String SCHEMA = "isisExtCommandLog";
+    public static final String NAMESPACE = "causeway.ext.commandLog";
+    public static final String SCHEMA = "causewayExtCommandLog";
 
     public abstract static class TitleUiEvent<S>
         extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }
@@ -74,8 +74,8 @@ public class CausewayModuleExtCommandLogApplib {
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> { }
 
-    public static final String NAMESPACE_REPLAY_PRIMARY = "isis.ext.commandReplayPrimary";
-    public static final String NAMESPACE_REPLAY_SECONDARY = "isis.ext.commandReplaySecondary";
+    public static final String NAMESPACE_REPLAY_PRIMARY = "causeway.ext.commandReplayPrimary";
+    public static final String NAMESPACE_REPLAY_SECONDARY = "causeway.ext.commandReplaySecondary";
 
     public static final String SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL =
             NAMESPACE_REPLAY_PRIMARY + ".CommandRetrievalOnPrimaryService";

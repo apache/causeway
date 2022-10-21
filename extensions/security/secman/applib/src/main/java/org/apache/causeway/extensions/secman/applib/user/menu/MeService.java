@@ -112,11 +112,11 @@ public class MeService {
     @RequiredArgsConstructor
     public static class UserMenuMeActionAdvisor {
 
-        final CausewayConfiguration isisConfiguration;
+        final CausewayConfiguration causewayConfiguration;
 
         @EventListener(UserMenu.me.ActionDomainEvent.class)
         public void on(final UserMenu.me.ActionDomainEvent event) {
-            switch (isisConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
+            switch (causewayConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
                 case HIDE:
                     event.hide();
                     break;

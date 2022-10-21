@@ -70,7 +70,7 @@ public class Object_logicalTypeName {
     extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_logicalTypeName> {}
 
     @Action(
-            domainEvent = ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (ISIS-2650)
+            domainEvent = ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (CAUSEWAY-2650)
     )
     @MemberSupport public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);

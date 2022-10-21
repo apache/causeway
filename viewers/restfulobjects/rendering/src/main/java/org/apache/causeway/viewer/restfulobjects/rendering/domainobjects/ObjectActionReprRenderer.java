@@ -203,7 +203,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     @Override
-    protected void putExtensionsIsisProprietary() {
+    protected void putExtensionsCausewayProprietary() {
         getExtensions().mapPutString("actionScope", objectMember.getScope().name().toLowerCase());
 
         final SemanticsOf semantics = objectMember.getSemantics();

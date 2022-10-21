@@ -126,7 +126,7 @@ public interface InteractionListener {
      */
     void collectionAccessed(CollectionAccessEvent ev);
 
-//XXX[ISIS-3084] - removal of collection modification events
+//XXX[CAUSEWAY-3084] - removal of collection modification events
 //    /**
 //     * An object was added to the collection (or an attempt to add it was made).
 //     *

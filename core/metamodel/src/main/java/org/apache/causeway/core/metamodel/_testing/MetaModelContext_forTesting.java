@@ -63,10 +63,10 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -128,7 +128,7 @@ implements MetaModelContext {
         .build();
 
     @Builder.Default
-    private CausewaySystemEnvironment systemEnvironment = newIsisSystemEnvironment();
+    private CausewaySystemEnvironment systemEnvironment = newCausewaySystemEnvironment();
 
     @Builder.Default
     private CausewayConfiguration configuration = newCausewayConfiguration();
@@ -175,9 +175,9 @@ implements MetaModelContext {
 
     private TransactionState transactionState;
 
-    private CausewayBeanTypeClassifier isisBeanTypeClassifier;
+    private CausewayBeanTypeClassifier causewayBeanTypeClassifier;
 
-    private CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @Builder.Default
     private PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
@@ -213,8 +213,8 @@ implements MetaModelContext {
                 getConfiguration(),
                 getObjectManager(),
                 getWrapperFactory(),
-                getIsisBeanTypeClassifier(),
-                getIsisBeanTypeRegistry(),
+                getCausewayBeanTypeClassifier(),
+                getCausewayBeanTypeRegistry(),
                 systemEnvironment,
                 classSubstitutorRegistry,
                 serviceInjector,
@@ -260,7 +260,7 @@ implements MetaModelContext {
                 );
     }
 
-    private static CausewaySystemEnvironment newIsisSystemEnvironment() {
+    private static CausewaySystemEnvironment newCausewaySystemEnvironment() {
         val env = new CausewaySystemEnvironment();
         env.setUnitTesting(true);
         return env;
@@ -318,21 +318,21 @@ implements MetaModelContext {
         return valueSemanticsResolver;
     }
 
-    private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring =
-            new IsisBeanFactoryPostProcessorForSpring();
+    private final CausewayBeanFactoryPostProcessorForSpring causewayBeanFactoryPostProcessorForSpring =
+            new CausewayBeanFactoryPostProcessorForSpring();
 
-    public CausewayBeanTypeClassifier getIsisBeanTypeClassifier() {
-        if(isisBeanTypeClassifier==null) {
-            isisBeanTypeClassifier = isisBeanFactoryPostProcessorForSpring.getIsisBeanTypeClassifier();
+    public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
+        if(causewayBeanTypeClassifier==null) {
+            causewayBeanTypeClassifier = causewayBeanFactoryPostProcessorForSpring.getCausewayBeanTypeClassifier();
         }
-        return isisBeanTypeClassifier;
+        return causewayBeanTypeClassifier;
     }
 
-    public CausewayBeanTypeRegistry getIsisBeanTypeRegistry() {
-        if(isisBeanTypeRegistry==null) {
-            isisBeanTypeRegistry = new IsisBeanTypeRegistryDefault(Can.empty());
+    public CausewayBeanTypeRegistry getCausewayBeanTypeRegistry() {
+        if(causewayBeanTypeRegistry==null) {
+            causewayBeanTypeRegistry = new CausewayBeanTypeRegistryDefault(Can.empty());
         }
-        return isisBeanTypeRegistry;
+        return causewayBeanTypeRegistry;
     }
 
     private final _Lazy<ProgrammingModel> programmingModelRef =
@@ -356,8 +356,8 @@ implements MetaModelContext {
             @SuppressWarnings("unused")
             val serviceInjector = requireNonNull(getServiceInjector());
             val programmingModel = requireNonNull(getProgrammingModel());
-            val isisBeanTypeClassifier = requireNonNull(getIsisBeanTypeClassifier());
-            val isisBeanTypeRegistry = requireNonNull(getIsisBeanTypeRegistry());
+            val causewayBeanTypeClassifier = requireNonNull(getCausewayBeanTypeClassifier());
+            val causewayBeanTypeRegistry = requireNonNull(getCausewayBeanTypeRegistry());
             val classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
@@ -365,8 +365,8 @@ implements MetaModelContext {
                     environment,
                     serviceRegistry,
                     programmingModel,
-                    isisBeanTypeClassifier,
-                    isisBeanTypeRegistry,
+                    causewayBeanTypeClassifier,
+                    causewayBeanTypeRegistry,
                     classSubstitutorRegistry);
 
         }

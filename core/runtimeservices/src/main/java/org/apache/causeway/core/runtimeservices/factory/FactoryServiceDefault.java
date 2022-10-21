@@ -55,7 +55,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Inject InteractionService interactionService; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
     private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
 
@@ -71,7 +71,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T get(final @NonNull Class<T> requiredType) {
-        return isisSystemEnvironment.getIocContainer()
+        return causewaySystemEnvironment.getIocContainer()
                 .get(requiredType)
                 .orElseThrow(()->_Exceptions.noSuchElement("not an injectable type %s", requiredType));
     }

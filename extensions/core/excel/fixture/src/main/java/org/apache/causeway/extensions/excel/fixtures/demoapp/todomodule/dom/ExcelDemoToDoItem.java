@@ -219,7 +219,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
 
 
-    // no getter/setter (therefore persisted but not part of Isis' metamodel)
+    // no getter/setter (therefore persisted but not part of Causeway' metamodel)
     private Double locationLatitude;
     private Double locationLongitude;
 

@@ -79,7 +79,7 @@ implements HasCommonContext {
     public void renderFeedbackMessages(final IHeaderResponse response) {
         response.render(
                 JavaScriptHeaderItem
-                .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/isis-bootstrap-growl.js")));
+                .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/causeway-bootstrap-growl.js")));
 
         val configuration = getMetaModelContext().getConfiguration();
         getMessageBroker().ifPresent(messageBroker->{

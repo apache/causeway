@@ -91,7 +91,7 @@ implements
                                 + "Use @Discriminator, @Named or "
                                 + "@PersistenceCapable(schema=...) to specify explicitly.",
                         objectSpec.getFullIdentifier(),
-                        "isis.core.meta-model.validator.explicit-logical-type-names");
+                        "causeway.core.meta-model.validator.explicit-logical-type-names");
             }
 
             });

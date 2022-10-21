@@ -43,7 +43,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.TreeNodeValueSemantics")
+@Named("causeway.val.TreeNodeValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class TreeNodeValueSemantics
 extends ValueSemanticsAbstract<TreeNode<?>>

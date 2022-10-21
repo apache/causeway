@@ -99,7 +99,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class XmlSnapshot implements Snapshot {
 
-    private final IsisSchema isisMetaModel;
+    private final CausewaySchema causewayMetaModel;
 
     private final Place rootPlace;
 
@@ -143,7 +143,7 @@ public class XmlSnapshot implements Snapshot {
                     andlog("addOids", "" + true));
         }
 
-        this.isisMetaModel = new IsisSchema();
+        this.causewayMetaModel = new CausewaySchema();
         this.xsMeta = new XsMetaModel();
 
         this.schema = schema;
@@ -255,7 +255,7 @@ public class XmlSnapshot implements Snapshot {
      * instead.
      *
      * The parentElement must have an owner document, and should define the
-     * &quot;isis&quot; namespace. Additionally, the supplied schemaManager must be
+     * &quot;causeway&quot; namespace. Additionally, the supplied schemaManager must be
      * populated with any application-level namespaces referenced in the document
      * that the parentElement resides within. (Normally this is achieved simply by
      * using appendXml passing in a rootElement and a new schemaManager - see
@@ -475,7 +475,7 @@ public class XmlSnapshot implements Snapshot {
 
         if (names.size() == 0 && annotation != null) {
             // nothing left in the path, so we will apply the annotation now
-            isisMetaModel.setAnnotationAttribute(xmlFieldElement, annotation);
+            causewayMetaModel.setAnnotationAttribute(xmlFieldElement, annotation);
         }
 
         final Place fieldPlace = new Place(object, xmlFieldElement);
@@ -573,7 +573,7 @@ public class XmlSnapshot implements Snapshot {
             log.debug("mergeTree({}{})", log("parent", parentElement), andlog("child", childElement));
         }
 
-        final String childElementOid = isisMetaModel.getAttribute(childElement, "oid");
+        final String childElementOid = causewayMetaModel.getAttribute(childElement, "oid");
 
         if (log.isDebugEnabled()) {
             log.debug("mergeTree(El,El): {}", log("childOid", childElementOid));
@@ -589,7 +589,7 @@ public class XmlSnapshot implements Snapshot {
             for (final Enumeration<Element> childEnum = existingChildElements.elements(); childEnum.hasMoreElements();) {
                 final Element possibleMatchingElement = childEnum.nextElement();
 
-                final String possibleMatchOid = isisMetaModel.getAttribute(possibleMatchingElement, "oid");
+                final String possibleMatchOid = causewayMetaModel.getAttribute(possibleMatchingElement, "oid");
                 if (possibleMatchOid == null || !possibleMatchOid.equals(childElementOid)) {
                     continue;
                 }
@@ -631,14 +631,14 @@ public class XmlSnapshot implements Snapshot {
         final ObjectSpecification spec = adapter.getSpecification();
 
         if (log.isDebugEnabled()) {
-            log.debug("objectToElement(NO): create element and isis:title");
+            log.debug("objectToElement(NO): create element and causeway:title");
         }
         final Element element = schema.createElement(getXmlDocument(), spec.getShortIdentifier(),
                 spec.getFullIdentifier(), spec.getSingularName(), spec.getPluralName());
-        isisMetaModel.appendIsisTitle(element, adapter.getTitle());
+        causewayMetaModel.appendCausewayTitle(element, adapter.getTitle());
 
         if (log.isDebugEnabled()) {
-            log.debug("objectToElement(NO): create XS element for Isis class");
+            log.debug("objectToElement(NO): create XS element for Causeway class");
         }
         final Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten,
                 FacetUtil.getFacetsByType(spec));
@@ -649,7 +649,7 @@ public class XmlSnapshot implements Snapshot {
 
         final Place place = new Place(adapter, element);
 
-        isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
+        causewayMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
         final List<ObjectAssociation> fields = spec.streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
@@ -705,7 +705,7 @@ public class XmlSnapshot implements Snapshot {
                     val valueSpec = value.getSpecification();
 
                     // XML
-                    isisMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
+                    causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
 
                     // value as JSON
                     @SuppressWarnings("unchecked")
@@ -715,7 +715,7 @@ public class XmlSnapshot implements Snapshot {
                     if (_Strings.isNotEmpty(valueStr)) {
                         xmlValueElement.appendChild(getXmlDocument().createTextNode(valueStr));
                     } else {
-                        isisMetaModel.setIsEmptyAttribute(xmlValueElement, true);
+                        causewayMetaModel.setIsEmptyAttribute(xmlValueElement, true);
                     }
 
                 } catch (final Exception ex) {
@@ -743,13 +743,13 @@ public class XmlSnapshot implements Snapshot {
                     referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
 
                     // XML
-                    isisMetaModel.setAttributesForReference(xmlReferenceElement, schema.getPrefix(),
+                    causewayMetaModel.setAttributesForReference(xmlReferenceElement, schema.getPrefix(),
                             fullyQualifiedClassName);
 
                     if (referencedObjectAdapter != null) {
-                        isisMetaModel.appendIsisTitle(xmlReferenceElement, referencedObjectAdapter.getTitle());
+                        causewayMetaModel.appendCausewayTitle(xmlReferenceElement, referencedObjectAdapter.getTitle());
                     } else {
-                        isisMetaModel.setIsEmptyAttribute(xmlReferenceElement, true);
+                        causewayMetaModel.setIsEmptyAttribute(xmlReferenceElement, true);
                     }
 
                 } catch (final Exception ex) {
@@ -778,7 +778,7 @@ public class XmlSnapshot implements Snapshot {
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 
                     // XML
-                    isisMetaModel.setIsisCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName,
+                    causewayMetaModel.setCausewayCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName,
                             collection);
                 } catch (final Exception ex) {
                     log.warn("objectToElement(NO): {}: get(obj) threw exception - skipping XML generation",

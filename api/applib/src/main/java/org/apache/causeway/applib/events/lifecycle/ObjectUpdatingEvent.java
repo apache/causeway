@@ -31,7 +31,7 @@ public abstract class ObjectUpdatingEvent<S> extends AbstractLifecycleEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.causeway.applib.annotation.DomainObject#updatingLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.updating-lifecycle-event.post-for-default</tt>
+     * raises an event or not depends upon the <tt>causeway.core.meta-model.annotation.domain-object.updating-lifecycle-event.post-for-default</tt>
      * configuration property.
      */
     public static class Default extends ObjectUpdatingEvent<Object> {}

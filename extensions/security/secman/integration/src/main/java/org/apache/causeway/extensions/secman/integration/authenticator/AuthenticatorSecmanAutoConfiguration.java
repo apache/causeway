@@ -36,7 +36,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 @Configuration
 public class AuthenticatorSecmanAutoConfiguration  {
 
-    @Bean("isis.ext.secman.AuthenticatorSecman")
+    @Bean("causeway.ext.secman.AuthenticatorSecman")
     @ConditionalOnMissingBean(Authenticator.class)
     @Qualifier("Secman")
     public Authenticator authenticatorSecman(

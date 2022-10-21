@@ -318,7 +318,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
     boolean isJpa() {
-        return isisBeanTypeRegistry.determineCurrentPersistenceStack().isJpa();
+        return causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJpa();
     }
 
 
@@ -333,6 +333,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
 
-    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
 }

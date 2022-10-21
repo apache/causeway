@@ -89,8 +89,8 @@ import lombok.extern.log4j.Log4j2;
 public class MenuBarsServiceBS
 implements MenuBarsService {
 
-    public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
-    public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
+    public static final String MB3_TNS = "http://causeway.apache.org/applib/layout/menubars/bootstrap3";
+    public static final String MB3_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
 
     public static final String COMPONENT_TNS = GridServiceDefault.COMPONENT_TNS;
     public static final String COMPONENT_SCHEMA_LOCATION = GridServiceDefault.COMPONENT_SCHEMA_LOCATION;
@@ -101,7 +101,7 @@ implements MenuBarsService {
     private final MenuBarsLoaderService menuBarsLoaderService;
     private final MessageService messageService;
     private final JaxbService jaxbService;
-    private final CausewaySystemEnvironment isisSystemEnvironment;
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
     private final MetaModelContext metaModelContext;
 
     private final _Lazy<BSMenuBars> menuBarsFromAnnotationsOnly = _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
@@ -271,7 +271,7 @@ implements MenuBarsService {
 
         menuBars.setMetadataError(
                 "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
-        if(isisSystemEnvironment.isPrototyping()) {
+        if(causewaySystemEnvironment.isPrototyping()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
         log.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
@@ -396,7 +396,7 @@ implements MenuBarsService {
             final List<ServiceAndAction> serviceActions) {
         final Set<String> serviceNameOrder = _Sets.newLinkedHashSet();
 
-        // first, order as defined in isis.properties
+        // first, order as defined in causeway.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
             val serviceSpec = serviceAdapter.getSpecification();
             // assuming services always provide singular NounForm

@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Domain.Exclude // managed by isis
+@Domain.Exclude // managed by causeway
 @RequiredArgsConstructor
 @Log4j2
 public class JdoLifecycleListener
@@ -140,9 +140,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         final Persistable pojo = _Utils.persistableFor(event);
         final Runnable doPreDirty = ()->doPreDirty(pojo);
 
-        // [ISIS-3126] pre-dirty nested loop prevention,
+        // [CAUSEWAY-3126] pre-dirty nested loop prevention,
         // assuming we can cast the DN StateManager to the custom one as provided by the framework
-        DnObjectProviderForIsis.extractFrom(pojo).ifPresentOrElse(
+        DnObjectProviderForCauseway.extractFrom(pojo).ifPresentOrElse(
                 stateManager->
                     stateManager.acquirePreDirtyPropagationLock(pojo.dnGetObjectId())
                     .ifPresent(lock->lock.releaseAfter(doPreDirty)),
@@ -178,7 +178,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     }
 
     /**
-     * Does nothing, not important event for Isis to track.
+     * Does nothing, not important event for Causeway to track.
      */
     @Override
     public void preClear(final InstanceLifecycleEvent event) {
@@ -186,7 +186,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     }
 
     /**
-     * Does nothing, not important event for Isis to track.
+     * Does nothing, not important event for Causeway to track.
      */
     @Override
     public void postClear(final InstanceLifecycleEvent event) {

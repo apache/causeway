@@ -37,7 +37,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.ClobValueSemantics")
+@Named("causeway.val.ClobValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ClobValueSemantics
 extends ValueSemanticsAbstract<Clob>

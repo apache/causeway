@@ -62,7 +62,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
 
     protected ExecutionOutboxEntryRepository(Class<E> executionOutboxEntryClass) {
         this.executionOutboxEntryClass = executionOutboxEntryClass;
@@ -174,7 +174,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
      * for testing purposes only
      */
     public List<E> findAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         return repositoryService().allInstances(executionOutboxEntryClass);
@@ -184,7 +184,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
      * for testing purposes only
      */
     public void removeAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         repositoryService().removeAll(executionOutboxEntryClass);

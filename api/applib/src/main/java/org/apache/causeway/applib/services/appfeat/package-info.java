@@ -20,7 +20,7 @@
 /**
  * The {@link org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository} provides the access to string
  * representations of the packages, classes and class members (collectively: "application features") of the
- * domain classes within the Apache Isis' internal metamodel.
+ * domain classes within the Apache Causeway' internal metamodel.
  *
  *
  */

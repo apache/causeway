@@ -217,7 +217,7 @@ implements
 
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
-     * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+     * wrapperFactory#unwrap(...) method, which is otherwise broken in Causeway 1.6.0
      */
     @ObjectSupport public String title() {
         val buf = new TitleBuffer();
@@ -379,7 +379,7 @@ implements
 
     public boolean contains(final @NonNull ApplicationFeatureId otherFeatureId) {
         // be aware of this seemingly inverted semantics eg.:
-        // 'isis' contains 'isis.xxx'
+        // 'causeway' contains 'causeway.xxx'
         return otherFeatureId.getPathIds().contains(this);
     }
 

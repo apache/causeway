@@ -53,13 +53,13 @@ public class VaadinLoginView extends VerticalLayout {
 
     @Inject
     public VaadinLoginView(
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final WebAppContextPath webAppContextPath,
             final VaadinAuthenticationHandler vaadinAuthenticationHandler) {
 
         this.vaadinAuthenticationHandler = vaadinAuthenticationHandler;
 
-        addTitleAndLogo(isisConfiguration, webAppContextPath);
+        addTitleAndLogo(causewayConfiguration, webAppContextPath);
 
         val usernameField = new TextField("Username");
         val passwordField = new PasswordField("Password");
@@ -102,10 +102,10 @@ public class VaadinLoginView extends VerticalLayout {
         doLogin("sven", "pass");
     }
 
-    private void addTitleAndLogo(CausewayConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {
+    private void addTitleAndLogo(CausewayConfiguration causewayConfiguration, WebAppContextPath webAppContextPath) {
         //TODO application name/logo borrowed from Wicket's configuration
-        val applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-        val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin();
+        val applicationName = causewayConfiguration.getViewer().getWicket().getApplication().getName();
+        val applicationLogo = causewayConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin();
 
         applicationLogo.ifPresent(logoUrl->{
             add(new Image(webAppContextPath.prependContextPathIfLocal(logoUrl), "logo"));

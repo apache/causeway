@@ -47,7 +47,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
  *
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the
  * annotated type.
- * For more details see <code>org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring</code>
+ * For more details see <code>org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring</code>
  *
  * @see Action
  * @see Property

@@ -49,11 +49,11 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GridServiceDefault implements GridService {
 
-    public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";
-    public static final String COMPONENT_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
+    public static final String COMPONENT_TNS = "http://causeway.apache.org/applib/layout/component";
+    public static final String COMPONENT_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/component/component.xsd";
 
-    public static final String LINKS_TNS = "http://isis.apache.org/applib/layout/links";
-    public static final String LINKS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/links/links.xsd";
+    public static final String LINKS_TNS = "http://causeway.apache.org/applib/layout/links";
+    public static final String LINKS_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/links/links.xsd";
 
     private final GridLoaderService gridLoaderService;
     private final List<GridSystemService<? extends Grid>> gridSystemServices;

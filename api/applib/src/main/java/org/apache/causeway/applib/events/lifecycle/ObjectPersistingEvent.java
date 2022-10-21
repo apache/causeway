@@ -34,7 +34,7 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
     /**
      * This class is the default for the
      * {@link org.apache.causeway.applib.annotation.DomainObject#persistingLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.persisting-lifecycle-event.post-for-default</tt>
+     * raises an event or not depends upon the <tt>causeway.core.meta-model.annotation.domain-object.persisting-lifecycle-event.post-for-default</tt>
      * configuration property.
      */
     public static class Default extends ObjectPersistingEvent<Object> {}

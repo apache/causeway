@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
         },
         properties = {
 //                "logging.level.org.apache.causeway.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
-//                "logging.level.org.apache.isis.testdomain.injecting.jdo.JdoEntityInjectingTest=DEBUG"
+//                "logging.level.org.apache.causeway.testdomain.injecting.jdo.JdoEntityInjectingTest=DEBUG"
         }
 )
 @TestPropertySource(CausewayPresets.UseLog4j2Test)

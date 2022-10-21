@@ -270,7 +270,7 @@ implements HasDynamicallyVisibleContent {
             div.add(collectionRv);
             visible = visible || collectionRv.isVisible();
 
-            //XXX ISIS-1698 restore original state after trampling over
+            //XXX CAUSEWAY-1698 restore original state after trampling over
             entityModel.setCollectionLayoutData(snapshot);
 
         } else {

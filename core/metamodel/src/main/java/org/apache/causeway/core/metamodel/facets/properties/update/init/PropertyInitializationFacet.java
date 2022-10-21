@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * changes; hence it will not be made part of a transaction.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * mutator method for a property.
  *
  * @see PropertyOrCollectionAccessorFacet

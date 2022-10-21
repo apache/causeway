@@ -27,7 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.webapp.webappctx.IsisWebAppContextInitializer;
+import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -37,7 +37,7 @@ import lombok.val;
 /**
  * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p>
- * WebModule instances are used by the {@link IsisWebAppContextInitializer} to setup
+ * WebModule instances are used by the {@link CausewayWebAppContextInitializer} to setup
  * the ServletContext programmatically.
  * </p>
  * <p>
@@ -74,8 +74,8 @@ public interface WebModule {
      * @return optionally any listeners to be registered
      * @apiNote don't add {@link ServletContextListener}s to given {@code ctx} directly, because
      * when on a JEE container, we have no means to veto it to be getting managed by the container;
-     * {@link ServletContextListener}s should only be known to the {@link IsisWebAppContextInitializer}
-     * and not any of the containers, since the {@link IsisWebAppContextInitializer} acts as a delegator,
+     * {@link ServletContextListener}s should only be known to the {@link CausewayWebAppContextInitializer}
+     * and not any of the containers, since the {@link CausewayWebAppContextInitializer} acts as a delegator,
      * that passes over any events to the registered {@link WebModule}s.
      */
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException;

@@ -62,7 +62,7 @@ import lombok.val;
                 SpringServiceInjectPriorityTest.DummyService.class
         },
         properties = {
-                // "isis.core.meta-model.introspector.parallelize=false",
+                // "causeway.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({

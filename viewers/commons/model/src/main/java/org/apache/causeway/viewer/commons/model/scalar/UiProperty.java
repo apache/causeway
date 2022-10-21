@@ -49,7 +49,7 @@ public interface UiProperty extends UiScalar {
 
     @Override
     default String getCssClass() {
-        return getMetaModel().getCssClass("isis-");
+        return getMetaModel().getCssClass("causeway-");
     }
 
     @Override

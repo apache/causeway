@@ -58,7 +58,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -68,11 +68,11 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 
-import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
+import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
-import org.apache.causeway.viewer.wicket.viewer.integration.IsisResourceSettings;
-import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
+import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
+import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
 import lombok.val;
@@ -80,7 +80,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
- * bootstrapping Isis.
+ * bootstrapping Causeway.
  *
  * <p>
  * Its main responsibility is to allow the set of {@link ComponentFactory}s used
@@ -141,7 +141,7 @@ implements
         // replace with custom implementation of ResourceSettings that changes the order
         // in which search for i18n properties, to search for the application-specific
         // settings before any other.
-        setResourceSettings(new IsisResourceSettings(this));
+        setResourceSettings(new CausewayResourceSettings(this));
 
         super.internalInit();
 
@@ -164,7 +164,7 @@ implements
     }
 
     /**
-     * Initializes the application; in particular, bootstrapping the Isis
+     * Initializes the application; in particular, bootstrapping the Causeway
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
      * for rendering.
      */
@@ -180,7 +180,7 @@ implements
 
         // gather configuration plugins into a list of named tasks
         val initializationTasks =
-                _ConcurrentTaskList.named("Isis Application Initialization Tasks");
+                _ConcurrentTaskList.named("Causeway Application Initialization Tasks");
         applicationInitializers
             .forEach(initializer->initializationTasks
                     .addRunnable(String
@@ -198,10 +198,10 @@ implements
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
-            getRequestCycleListeners().add(createWebRequestCycleListenerForIsis());
+            getRequestCycleListeners().add(createWebRequestCycleListenerForCauseway());
             getRequestCycleListeners().add(new PageRequestHandlerTracker());
 
-            //XXX ISIS-2530, don't recreate expired pages
+            //XXX CAUSEWAY-2530, don't recreate expired pages
             getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
             getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
@@ -236,7 +236,7 @@ implements
      */
     @Override
     public Session newSession(final Request request, final Response response) {
-        val newSession = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
+        val newSession = (AuthenticatedWebSessionForCauseway) super.newSession(request, response);
         newSession.init(getMetaModelContext());
         return newSession;
     }
@@ -249,7 +249,7 @@ implements
         getCspSettings().blocking().disabled();
         getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
 
-        // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
+        // TODO CAUSEWAY-987 Either make the API better (no direct access to the map) or use DB records
         final int maxEntries = 1000;
         setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.ofDays(1)));
     }
@@ -281,10 +281,10 @@ implements
     /**
      * Factored out for easy (informal) pluggability.
      */
-    protected IRequestCycleListener createWebRequestCycleListenerForIsis() {
-        val webRequestCycleForIsis = new WebRequestCycleForIsis();
-        webRequestCycleForIsis.setPageClassRegistry(getPageClassRegistry());
-        return webRequestCycleForIsis;
+    protected IRequestCycleListener createWebRequestCycleListenerForCauseway() {
+        val webRequestCycleForCauseway = new WebRequestCycleForCauseway();
+        webRequestCycleForCauseway.setPageClassRegistry(getPageClassRegistry());
+        return webRequestCycleForCauseway;
     }
 
 
@@ -355,21 +355,21 @@ implements
     // -- WICKET HOOKS
 
     /**
-     * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
+     * Installs a {@link AuthenticatedWebSessionForCauseway custom implementation}
      * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
-     * the Wicket session with the Isis's equivalent session object.
+     * the Wicket session with the Causeway's equivalent session object.
      *
      * <p>
      * In general, it shouldn't be necessary to override this method.
      */
     @Override
     protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
-        return AuthenticatedWebSessionForIsis.class;
+        return AuthenticatedWebSessionForCauseway.class;
     }
 
     /**
      * Installs a {@link ConverterLocator} preconfigured with a number of
-     * implementations to support Isis specific objects.
+     * implementations to support Causeway specific objects.
      */
     @Override
     protected IConverterLocator newConverterLocator() {

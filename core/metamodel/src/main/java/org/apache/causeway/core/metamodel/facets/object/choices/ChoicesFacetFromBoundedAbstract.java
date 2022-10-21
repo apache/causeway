@@ -47,7 +47,7 @@ import lombok.val;
  * of the class in a drop-down list box or similar widget.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
  * member with {@link org.apache.causeway.applib.annotation.Bounding Bounding} annotation.
  */
 public abstract class ChoicesFacetFromBoundedAbstract

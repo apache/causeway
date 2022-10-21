@@ -40,7 +40,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
  *
  * @implNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the
  * annotated type.
- * For more details see {@code org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * For more details see {@code org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring}.
  *
  * @see DomainObject
  * @see DomainServiceLayout
@@ -86,7 +86,7 @@ public @interface DomainService {
      * @see Named
      */
     @Deprecated(forRemoval = true, since = "2.0.0-M8")
-    // commented out: let the IsisBeanFactoryPostProcessorForSpring take care of that!
+    // commented out: let the CausewayBeanFactoryPostProcessorForSpring take care of that!
     //@AliasFor(annotation = Named.class, attribute = "value")
     String logicalTypeName()
             default "";

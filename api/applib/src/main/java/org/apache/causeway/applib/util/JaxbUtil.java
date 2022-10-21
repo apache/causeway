@@ -42,7 +42,7 @@ import lombok.experimental.UtilityClass;
  * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.
  *
  * <p>
- * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a>
+ * For example usage, see <a href="https://github.com/causewayaddons/causeway-module-publishmq">Causeway addons' publishmq module</a>
  * (non-ASF)
  * </p>
  * @since 2.0 {@index}

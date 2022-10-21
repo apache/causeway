@@ -28,10 +28,10 @@
  * </p>
  */
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://isis.apache.org/applib/layout/grid/bootstrap3",
+        namespace = "http://causeway.apache.org/applib/layout/grid/bootstrap3",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://isis.apache.org/applib/layout/grid/bootstrap3", prefix = "bs")
+                        namespaceURI = "http://causeway.apache.org/applib/layout/grid/bootstrap3", prefix = "bs")
         })
 package org.apache.causeway.applib.layout.grid.bootstrap;

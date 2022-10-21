@@ -194,7 +194,7 @@ extends ReprRendererAbstract<ManagedMember> {
             addMutatorLinksIfEnabled();
 
             if(!mode.isInline() || !resourceContext.config().isSuppressUpdateLink()) {
-                putExtensionsIsisProprietary();
+                putExtensionsCausewayProprietary();
             }
             addLinksToFormalDomainModel();
         }
@@ -287,7 +287,7 @@ extends ReprRendererAbstract<ManagedMember> {
         representation.mapPutString("disabledReason", disabledReasonRep);
     }
 
-    protected abstract void putExtensionsIsisProprietary();
+    protected abstract void putExtensionsCausewayProprietary();
 
     protected abstract void addLinksToFormalDomainModel();
 

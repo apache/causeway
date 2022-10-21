@@ -90,7 +90,7 @@ implements
     }
 
     /**
-     * Executes a piece of code in a new (possibly nested) IsisInteraction, using the
+     * Executes a piece of code in a new (possibly nested) CausewayInteraction, using the
      * current Authentication, as, at this point, should be stored in the
      * current VaadinSession.
      *
@@ -131,7 +131,7 @@ implements
     }
 
     private void beforeLeave(BeforeLeaveEvent event) {
-        //isisInteractionFactory.closeSessionStack();
+        //causewayInteractionFactory.closeSessionStack();
     }
 
 

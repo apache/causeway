@@ -134,7 +134,7 @@ final class ProjectDocWriter {
 
         val destFolderBuilder = _Refs.<File>objectRef(indexFolder);
 
-        // eg org/apache/isis/applib/annotation
+        // eg org/apache/causeway/applib/annotation
         unit.getNamespace().stream()
         // eg applib/annotation
         .skip(index.getNamespacePartsSkipCount())
@@ -150,7 +150,7 @@ final class ProjectDocWriter {
             });
         });
 
-        // eg org/apache/isis/applib/annotation
+        // eg org/apache/causeway/applib/annotation
         unit.getNamespace().stream()
                 // eg applib/annotation
         .skip(index.getNamespacePartsSkipCount() + 1)

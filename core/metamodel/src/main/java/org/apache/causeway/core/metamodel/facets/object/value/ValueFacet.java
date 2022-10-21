@@ -46,7 +46,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
  * Indicates that this class has value semantics.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
+ * In the standard Apache Causeway Programming Model, corresponds to the
  * <tt>@Value</tt> annotation. However, note that value semantics is just a
  * convenient term for a number of mostly optional semantics all of which are
  * defined elsewhere.

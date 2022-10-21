@@ -22,19 +22,19 @@ import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jpa.integration.entity.JpaEntityIntegration;
 import org.apache.causeway.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisLocalResourcePathConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisMarkupConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisPasswordConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayLocalResourcePathConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayMarkupConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayPasswordConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.time.OffsetDateTimeConverterForJpa;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.time.OffsetTimeConverterForJpa;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.time.ZonedDateTimeConverterForJpa;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisChangesDtoConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisCommandDtoConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisInteractionDtoConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisOidDtoConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayChangesDtoConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayCommandDtoConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayOidDtoConverter;
 import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJpaMetamodel;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
@@ -57,14 +57,14 @@ import org.springframework.context.annotation.Import;
 @EntityScan(basePackageClasses = {
 
         // @Converter's
-        IsisBookmarkConverter.class,
-        IsisLocalResourcePathConverter.class,
-        IsisMarkupConverter.class,
-        IsisPasswordConverter.class,
-        IsisChangesDtoConverter.class,
-        IsisCommandDtoConverter.class,
-        IsisInteractionDtoConverter.class,
-        IsisOidDtoConverter.class,
+        CausewayBookmarkConverter.class,
+        CausewayLocalResourcePathConverter.class,
+        CausewayMarkupConverter.class,
+        CausewayPasswordConverter.class,
+        CausewayChangesDtoConverter.class,
+        CausewayCommandDtoConverter.class,
+        CausewayInteractionDtoConverter.class,
+        CausewayOidDtoConverter.class,
         JavaAwtBufferedImageByteArrayConverter.class,
         JavaUtilUuidConverter.class,
         OffsetTimeConverterForJpa.class,

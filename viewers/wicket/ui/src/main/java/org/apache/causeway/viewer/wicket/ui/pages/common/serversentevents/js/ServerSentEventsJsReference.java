@@ -47,7 +47,7 @@ extends JavaScriptResourceReference {
      * Private constructor.
      */
     private ServerSentEventsJsReference() {
-        super(ServerSentEventsJsReference.class, "isis-server-sent-events.js");
+        super(ServerSentEventsJsReference.class, "causeway-server-sent-events.js");
     }
 
 }

@@ -54,7 +54,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
-import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;

@@ -42,7 +42,7 @@ class CliConfigTest {
 
     @Test
     void loadConfigFromYaml() {
-        val config = _Yaml.readYaml(CliConfig.class, this.getClass().getResourceAsStream("isis-tooling.yml"))
+        val config = _Yaml.readYaml(CliConfig.class, this.getClass().getResourceAsStream("causeway-tooling.yml"))
                 .ifFailure(System.err::println)
                 .getValue().orElse(null);
         assertConfigIsPopulated(config);
@@ -55,7 +55,7 @@ class CliConfigTest {
         assertNotNull(config.getGlobal());
         assertNotNull(config.getCommands().getOverview());
         assertNotNull(config.getCommands().getIndex());
-        assertEquals("These tables summarize all Maven artifacts available with _Apache Isis_.", config.getCommands().getOverview().getDescription());
+        assertEquals("These tables summarize all Maven artifacts available with _Apache Causeway_.", config.getCommands().getOverview().getDescription());
         assertNotNull(config.getCommands().getOverview().getSections());
         assertTrue(config.getCommands().getOverview().getSections().size()>5);
 

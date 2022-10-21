@@ -54,7 +54,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
         val textField = new TextFieldWithDateTimePicker<T>(
                 id, scalarModel, type, getConverter(scalarModel));
 
-        /* [ISIS-3201]
+        /* [CAUSEWAY-3201]
          * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.
          * Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
          * also updates the Wicket model for this form component on the server side.

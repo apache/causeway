@@ -42,6 +42,6 @@ public class Rel_getName_Test {
     @Test
     public void impl_namespace() throws Exception {
         String name = Rel.LAYOUT.getName();
-        assertThat(name, is(equalTo("urn:org.apache.isis.restfulobjects:rels/layout")));
+        assertThat(name, is(equalTo("urn:org.apache.causeway.restfulobjects:rels/layout")));
     }
 }

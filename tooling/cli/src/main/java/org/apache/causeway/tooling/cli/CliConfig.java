@@ -96,7 +96,7 @@ public class CliConfig {
 
             private String documentGlobalIndexXrefPageIdFormat = "refguide:%s:index/%s.adoc";
 
-            // when 3 eg. skips first three parts of the package names 'org.apache.isis'
+            // when 3 eg. skips first three parts of the package names 'org.apache.causeway'
             private int namespacePartsSkipCount = 0;
 
             public boolean isDryRun() {

@@ -156,8 +156,8 @@ public class FixtureScripts {
          *
          * <p>
          *     This strategy was introduced in order to better support the <tt>ExcelFixture</tt> fixture script
-         *     (provided by the (non-ASF) Isis Addons'
-         *     <a href="https://github.com/isisaddons/isis-module-excel">Excel module</a>.  The <tt>ExcelFixture</tt>
+         *     (provided by the (non-ASF) Causeway Addons'
+         *     <a href="https://github.com/causewayaddons/causeway-module-excel">Excel module</a>.  The <tt>ExcelFixture</tt>
          *     takes an Excel spreadsheet as the 'what' and loads up each row.  So the 'how' is re-usable (therefore
          *     the {@link #EXECUTE_ONCE_BY_CLASS} doesn't apply) on the other hand we don't want the 'what' to be
          *     loaded more than once (so the {@link #EXECUTE} strategy doesn't apply either).  The solution is for
@@ -210,7 +210,7 @@ public class FixtureScripts {
      *
      * <p>
      *     May be <code>null</code> if no {@link FixtureScriptsSpecificationProvider} was provided either explicitly
-     *     or implicitly by way of configuring the <code>isis.testing.fixtures.fixture-scripts-specification</code>
+     *     or implicitly by way of configuring the <code>causeway.testing.fixtures.fixture-scripts-specification</code>
      *     configuration properties.
      * </p>
      *

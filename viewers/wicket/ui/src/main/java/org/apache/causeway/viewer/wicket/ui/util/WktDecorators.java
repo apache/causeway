@@ -207,7 +207,7 @@ public class WktDecorators {
                     .decorate(uiComponent,
                             TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, describedAs)));
 
-                //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
+                //XXX CAUSEWAY-1626, confirmation dialog for no-parameter menu actions
                 if (actionMeta.isImmediateConfirmationRequired()) {
 
                     val confirmUiModel = ConfirmDecorationModel.areYouSure(translationService, UiPlacementDirection.BOTTOM);

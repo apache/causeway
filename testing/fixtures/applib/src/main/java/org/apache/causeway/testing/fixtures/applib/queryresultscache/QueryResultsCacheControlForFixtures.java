@@ -36,7 +36,7 @@ import org.apache.causeway.testing.fixtures.applib.events.FixturesInstallingEven
  * In separate class because {@link QueryResultsCache} itself is request-scoped
  */
 @Service
-@Named("isis.testing.fixtures.QueryResultsCacheControlForFixtures")
+@Named("causeway.testing.fixtures.QueryResultsCacheControlForFixtures")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForFixtures")
 public class QueryResultsCacheControlForFixtures implements QueryResultsCacheControl {

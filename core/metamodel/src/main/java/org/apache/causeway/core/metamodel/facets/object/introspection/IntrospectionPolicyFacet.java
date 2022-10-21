@@ -37,7 +37,7 @@ public interface IntrospectionPolicyFacet extends Facet {
 
     Introspection getIntrospection();
 
-    default IntrospectionPolicy getIntrospectionPolicy(final CausewayConfiguration isisConfig) {
+    default IntrospectionPolicy getIntrospectionPolicy(final CausewayConfiguration causewayConfig) {
         switch(getIntrospection()) {
         case ENCAPSULATION_ENABLED:
             return IntrospectionPolicy.ENCAPSULATION_ENABLED;
@@ -46,7 +46,7 @@ public interface IntrospectionPolicyFacet extends Facet {
         case ANNOTATION_REQUIRED:
             return IntrospectionPolicy.ANNOTATION_REQUIRED;
         case AS_CONFIGURED:
-            return isisConfig.getCore().getMetaModel().getIntrospector().getPolicy();
+            return causewayConfig.getCore().getMetaModel().getIntrospector().getPolicy();
         case NOT_SPECIFIED:
             throw _Exceptions.unexpectedCodeReach(); // there must be no such facet that returns such a case
         default:

@@ -223,14 +223,14 @@ public class XrayUi extends JFrame {
         {
             val root = xrayModel.getRootNode();
             val env = xrayModel.addDataNode(root,
-                    new XrayDataModel.KeyValue("isis-xray-keys", "X-ray Keybindings", Stickiness.CANNOT_DELETE_NODE));
+                    new XrayDataModel.KeyValue("causeway-xray-keys", "X-ray Keybindings", Stickiness.CANNOT_DELETE_NODE));
             env.getData().put("F5", "Clear Threads");
             env.getData().put("DELETE", "Delete Selected Nodes");
         }
 
 
         this.setDefaultCloseOperation(defaultCloseOperation);
-        this.setTitle("X-ray Viewer (Apache Isis™)");
+        this.setTitle("X-ray Viewer (Apache Causeway™)");
         this.pack();
         this.setSize(800, 600);
 

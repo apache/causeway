@@ -31,7 +31,7 @@ import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForIsis;
+import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForCauseway;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -99,7 +99,7 @@ class AbstractShiroTest {
         val factory = new IniSecurityManagerFactory(ini);
         val securityManager = factory.getInstance();
 
-        val listener = new EnvironmentLoaderListenerForIsis(serviceInjector);
+        val listener = new EnvironmentLoaderListenerForCauseway(serviceInjector);
         listener.injectServicesIntoRealms(securityManager);
         
 //debug        

@@ -23,7 +23,7 @@ import org.apache.causeway.core.metamodel.facets.SingleClassValueFacet;
 import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
 
 /**
- * Corresponds to <tt>@???(observe=...)</tt> annotation in the Isis programming model.
+ * Corresponds to <tt>@???(observe=...)</tt> annotation in the Causeway programming model.
  */
 public interface SseObserveFacet extends SingleClassValueFacet {
 

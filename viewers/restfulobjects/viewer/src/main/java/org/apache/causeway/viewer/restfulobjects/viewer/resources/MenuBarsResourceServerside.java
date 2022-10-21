@@ -55,9 +55,9 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     @Inject
     public MenuBarsResourceServerside(
             final MetaModelContext metaModelContext,
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
     }
 
     @Override

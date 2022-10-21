@@ -255,7 +255,7 @@ public class MethodFinder {
                 : havingAnnotation(method, annotationType, conflictingAnnotations);
     }
 
-    //FIXME[ISIS-2774] if annotation appears on an abstract method that was inherited with given method,
+    //FIXME[CAUSEWAY-2774] if annotation appears on an abstract method that was inherited with given method,
     // its not detected here
     private static boolean havingAnnotation(
             final Method method,

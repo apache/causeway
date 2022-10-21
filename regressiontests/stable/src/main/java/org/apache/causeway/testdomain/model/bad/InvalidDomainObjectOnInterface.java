@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.model.bad;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 
-// not allowed, should fail MM validation ISIS-2938
+// not allowed, should fail MM validation CAUSEWAY-2938
 @DomainObject(nature = Nature.VIEW_MODEL)
 public interface InvalidDomainObjectOnInterface {
 

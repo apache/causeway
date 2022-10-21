@@ -31,7 +31,7 @@ import lombok.NonNull;
  * Obtain defaults for each of the parameters of the action.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>defaultsNXxx(...)</tt> support method for an action (where N is the
  * 0-based parameter number).
  */

@@ -44,7 +44,7 @@ import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry.Nq;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
 import lombok.Getter;
@@ -238,7 +238,7 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
 
     private Bookmark target;
 
-    @Convert(converter = IsisBookmarkConverter.class)
+    @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
     public Bookmark getTarget() {

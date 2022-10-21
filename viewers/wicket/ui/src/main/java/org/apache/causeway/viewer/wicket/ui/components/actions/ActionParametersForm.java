@@ -187,7 +187,7 @@ extends PromptFormAbstract<ActionModel> {
         // target.add(this);
         // ie to update the entire form (in addition to the updates to the individual impacted parameter fields
         // done in the loop above).  However, that logic is wrong, because any values entered in the browser
-        // get trampled over (ISIS-629).
+        // get trampled over (CAUSEWAY-629).
     }
 
     @Override

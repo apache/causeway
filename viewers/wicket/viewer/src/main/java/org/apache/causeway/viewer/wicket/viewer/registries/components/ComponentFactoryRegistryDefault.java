@@ -58,7 +58,7 @@ import lombok.extern.log4j.Log4j2;
  * provided {@link ComponentFactoryRegistrar}.
  */
 @Service
-@Named("isis.viewer.wicket.ComponentFactoryRegistryDefault")
+@Named("causeway.viewer.wicket.ComponentFactoryRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

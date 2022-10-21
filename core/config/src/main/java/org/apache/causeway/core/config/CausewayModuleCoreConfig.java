@@ -22,13 +22,13 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
-import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.converters.PatternsConverter;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
-import org.apache.causeway.core.config.environment.IsisLocaleInitializer;
+import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.config.environment.IsisTimeZoneInitializer;
+import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -43,15 +43,15 @@ import lombok.Data;
 
     // @Component's
     PatternsConverter.class,
-    IsisBeanFactoryPostProcessorForSpring.class,
-    IsisLocaleInitializer.class,
-    IsisTimeZoneInitializer.class,
+    CausewayBeanFactoryPostProcessorForSpring.class,
+    CausewayLocaleInitializer.class,
+    CausewayTimeZoneInitializer.class,
     PatternOptionalStringConstraintValidator.class,
     RestfulPathProvider.class,
 
     // @Service's
     DataSourceIntrospectionService.class,
-    IsisBeanTypeRegistryDefault.class,
+    CausewayBeanTypeRegistryDefault.class,
     CausewaySystemEnvironment.class,
     WebAppContextPath.class,
 
@@ -69,12 +69,12 @@ import lombok.Data;
 })
 public class CausewayModuleCoreConfig {
 
-    public static final String NAMESPACE = "isis.config";
+    public static final String NAMESPACE = "causeway.config";
 
     @ConfigurationProperties(prefix = "", ignoreUnknownFields = true)
     @Data
     public static class ConfigProps {
-        private Map<String, String> isis = Collections.emptyMap();
+        private Map<String, String> causeway = Collections.emptyMap();
         private Map<String, String> resteasy = Collections.emptyMap();
         private Map<String, String> datanucleus = Collections.emptyMap();
         private Map<String, String> eclipselink = Collections.emptyMap();

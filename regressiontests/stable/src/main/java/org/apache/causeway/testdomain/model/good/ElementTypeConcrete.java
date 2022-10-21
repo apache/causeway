@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 
-@Named("isis.testdomain.ElementTypeConcrete")
+@Named("causeway.testdomain.ElementTypeConcrete")
 @DomainObject
 public class ElementTypeConcrete
 extends ElementTypeAbstract

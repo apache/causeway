@@ -149,7 +149,7 @@ final class _CallStackMerger {
         callStackDiagram = new CallStackDiagram(root.print(id->{
             return _Exceptions.abbreviate(
                     executionNodeMap.getOrDefault(id, "root"),
-                    "org.apache.isis");
+                    "org.apache.causeway");
         }).toString());
     }
 

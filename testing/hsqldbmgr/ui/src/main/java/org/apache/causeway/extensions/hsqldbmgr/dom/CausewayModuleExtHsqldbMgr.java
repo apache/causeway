@@ -34,5 +34,5 @@ import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 @ComponentScan
 public class CausewayModuleExtHsqldbMgr {
 
-    public static final String NAMESPACE = "isis.ext.hsqldbMgr";
+    public static final String NAMESPACE = "causeway.ext.hsqldbMgr";
 }

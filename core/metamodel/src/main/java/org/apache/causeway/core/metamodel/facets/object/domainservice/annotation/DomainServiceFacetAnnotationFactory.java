@@ -87,7 +87,7 @@ implements MetaModelRefiner {
                     + "not properties or collections; "
                     + "annotate with @Programmatic if required. Found: %s",
                     spec.getFullIdentifier(),
-                    "'isis.core.meta-model.validator.serviceActionsOnly'",
+                    "'causeway.core.meta-model.validator.serviceActionsOnly'",
                     associationNames);
         });
 

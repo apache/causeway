@@ -29,32 +29,32 @@ public class CausewayBeanMetaData {
 
     public enum ManagedBy {
         NONE,
-        ISIS,
+        CAUSEWAY,
         SPRING,
         /** other Spring managed component, or not managed at all */
         INDIFFERENT,
         /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
         @Deprecated
-        SPRING_NAMED_BY_ISIS,
+        SPRING_NAMED_BY_CAUSEWAY,
         ;
         public boolean isNone() { return this == NONE; }
-        public boolean isIsis() { return this == ISIS; }
+        public boolean isCauseway() { return this == CAUSEWAY; }
         public boolean isSpring() { return this == SPRING; }
 
         /**
          * Whether Spring should make that underlying bean injectable.
-         * @implNote if not managed by Isis, let ultimately Spring decide
+         * @implNote if not managed by Causeway, let ultimately Spring decide
          */
         public boolean isVetoedForInjection() {
-            return isIsis()
+            return isCauseway()
                     || isNone();
         }
         /**
          * Whether we interfere with Spring's naming strategy.
          */
         public boolean isBeanNameOverride() {
-            return this == ISIS
-                    || this == SPRING_NAMED_BY_ISIS;
+            return this == CAUSEWAY
+                    || this == SPRING_NAMED_BY_CAUSEWAY;
         }
     }
 
@@ -92,10 +92,10 @@ public class CausewayBeanMetaData {
 
     /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
     @Deprecated
-    public static CausewayBeanMetaData injectableNamedByIsis(
+    public static CausewayBeanMetaData injectableNamedByCauseway(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_ISIS);
+        return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_CAUSEWAY);
     }
 
     /**
@@ -108,16 +108,16 @@ public class CausewayBeanMetaData {
                 ManagedBy.INDIFFERENT);
     }
 
-    public static CausewayBeanMetaData isisManaged(
+    public static CausewayBeanMetaData causewayManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, logicalType, ManagedBy.ISIS);
+        return of(beanSort, logicalType, ManagedBy.CAUSEWAY);
     }
 
-    public static CausewayBeanMetaData isisManaged(
+    public static CausewayBeanMetaData causewayManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
-        return isisManaged(beanSort, LogicalType.infer(type));
+        return causewayManaged(beanSort, LogicalType.infer(type));
     }
 
 }

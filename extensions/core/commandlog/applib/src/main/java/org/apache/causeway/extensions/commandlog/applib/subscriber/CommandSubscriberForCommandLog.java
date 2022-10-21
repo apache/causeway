@@ -47,13 +47,13 @@ import lombok.extern.log4j.Log4j2;
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
-    final CausewayConfiguration isisConfiguration;
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
     public void onCompleted(final Command command) {
 
         // skip if no changes AND skipping is allowed
-        if (isisConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
+        if (causewayConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
                 && !command.isSystemStateChanged()) {
             return;
         }

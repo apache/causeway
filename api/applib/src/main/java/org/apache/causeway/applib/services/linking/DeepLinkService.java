@@ -41,7 +41,7 @@ public interface DeepLinkService {
 
     /**
      * Creates a URI that can be used to obtain a representation of the provided domain object in one of the
-     * Isis viewers.
+     * Causeway viewers.
      */
     URI deepLinkFor(Object domainObject);
 

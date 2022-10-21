@@ -206,7 +206,7 @@ public class DomainObjectTesterFactory {
                 final String memberName) {
 
             val validateDomainModel =
-                    new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+                    new DomainModelValidator(specificationLoader, configuration, causewaySystemEnvironment);
 
             assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
             validateDomainModel.assertAnyFailuresContaining(
@@ -1113,7 +1113,7 @@ public class DomainObjectTesterFactory {
     private static abstract class Tester<T> {
 
         @Inject protected CausewayConfiguration configuration;
-        @Inject protected CausewaySystemEnvironment isisSystemEnvironment;
+        @Inject protected CausewaySystemEnvironment causewaySystemEnvironment;
         @Inject protected SpecificationLoader specificationLoader;
         @Inject protected InteractionService interactionService;
         @Inject protected FactoryService factoryService;

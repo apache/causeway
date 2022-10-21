@@ -45,12 +45,12 @@ import lombok.val;
 @RequiredArgsConstructor
 public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
 
-    private final CausewayConfiguration isisConfiguration;
+    private final CausewayConfiguration causewayConfiguration;
     private boolean enabled;
 
     @PostConstruct
     public void init() {
-        enabled = isisConfiguration.getExtensions().getCommandReplay().getAnalyser().getException().isEnabled();
+        enabled = causewayConfiguration.getExtensions().getCommandReplay().getAnalyser().getException().isEnabled();
     }
 
     @Override

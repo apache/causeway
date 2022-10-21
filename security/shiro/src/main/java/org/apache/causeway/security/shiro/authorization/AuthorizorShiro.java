@@ -49,7 +49,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.security.AuthorizorShiro")
+@Named("causeway.security.AuthorizorShiro")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {

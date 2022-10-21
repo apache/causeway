@@ -19,7 +19,7 @@
 package org.apache.causeway.applib.annotation;
 
 /**
- * The different sorts of domain services recognized by Isis, as specified in {@link DomainService#nature()}
+ * The different sorts of domain services recognized by Causeway, as specified in {@link DomainService#nature()}
  * @since 1.x {@index}
  */
 public enum NatureOfService {

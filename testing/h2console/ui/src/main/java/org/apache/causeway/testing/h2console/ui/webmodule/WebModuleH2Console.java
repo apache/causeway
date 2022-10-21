@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.test.WebModuleH2Console")
+@Named("causeway.test.WebModuleH2Console")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2
@@ -63,18 +63,18 @@ public class WebModuleH2Console extends WebModuleAbstract {
     @Getter
     private final LocalResourcePath localResourcePathIfEnabled;
 
-    private final CausewaySystemEnvironment isisSystemEnvironment;
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
 
     private final boolean applicable;
 
     @Inject
     public WebModuleH2Console(
             final DataSourceIntrospectionService datasourceIntrospector,
-            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceInjector serviceInjector) {
 
         super(serviceInjector);
-        this.isisSystemEnvironment = isisSystemEnvironment;
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
 
         this.applicable = isPrototyping()
                 && isH2MemConnectionUsed(datasourceIntrospector);
@@ -93,7 +93,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
             .ifPresent(servletReg -> {
                 servletReg.addMapping(CONSOLE_PATH + "/*");
 
-                //[ISIS-3128] presence of "webAllowOthers" is a potential security risk
+                //[CAUSEWAY-3128] presence of "webAllowOthers" is a potential security risk
                 // setting this later based on configuration below ...
                 //servletReg.setInitParameter("webAllowOthers", "true");
 
@@ -115,7 +115,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
         private static String jdbcUrl;
 
-        @Inject private CausewayConfiguration isisConfiguration;
+        @Inject private CausewayConfiguration causewayConfiguration;
         @Inject private RandomCodeGenerator randomCodeGenerator;
 
         @Override
@@ -155,11 +155,11 @@ public class WebModuleH2Console extends WebModuleAbstract {
         }
 
         private boolean isWebAllowRemoteAccess() {
-            return isisConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
+            return causewayConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
         }
 
         private boolean isGenerateRandomWebAdminPassword() {
-            return isisConfiguration.getPrototyping().getH2Console().isGenerateRandomWebAdminPassword();
+            return causewayConfiguration.getPrototyping().getH2Console().isGenerateRandomWebAdminPassword();
         }
 
     }
@@ -167,7 +167,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
     // -- HELPER
 
     private boolean isPrototyping() {
-        return isisSystemEnvironment.getDeploymentType().isPrototyping();
+        return causewaySystemEnvironment.getDeploymentType().isPrototyping();
     }
 
     private boolean isH2MemConnectionUsed(final DataSourceIntrospectionService datasourceIntrospector) {

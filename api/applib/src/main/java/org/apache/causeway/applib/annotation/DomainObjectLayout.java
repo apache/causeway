@@ -81,7 +81,7 @@ public @interface DomainObjectLayout {
      * icon. The icon could be rendered on the left or the right of the object's title.
      *
      * <p>
-     *     This attribute is currently ignored by Isis viewers.
+     *     This attribute is currently ignored by Causeway viewers.
      * </p>
      */
     CssClassFaPosition cssClassFaPosition()

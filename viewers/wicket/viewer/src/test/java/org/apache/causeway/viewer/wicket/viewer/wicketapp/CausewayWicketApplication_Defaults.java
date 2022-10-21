@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
+import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
 class CausewayWicketApplication_Defaults {
@@ -50,11 +50,11 @@ class CausewayWicketApplication_Defaults {
     @Test
     public void usesCustomSubclassOfAuthenticatedWebSession() {
         final Class<? extends AuthenticatedWebSession> webSessionClass = application.getWebSessionClass();
-        assertThat(webSessionClass.equals(AuthenticatedWebSessionForIsis.class), is(true));
+        assertThat(webSessionClass.equals(AuthenticatedWebSessionForCauseway.class), is(true));
     }
 
     @Test
-    public void providesConverterLocatorRegistersIsisSpecificConverters() {
+    public void providesConverterLocatorRegistersCausewaySpecificConverters() {
         final IConverterLocator converterLocator = application.newConverterLocator();
         assertThat(converterLocator.getConverter(ManagedObject.class), is(not(nullValue())));
         assertThat(converterLocator.getConverter(ObjectMemento.class), is(not(nullValue())));

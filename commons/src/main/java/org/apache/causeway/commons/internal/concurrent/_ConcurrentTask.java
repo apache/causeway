@@ -183,7 +183,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
     // -- HELPER
 
     /**
-     * [ISIS-2978]
+     * [CAUSEWAY-2978]
      * see https://stackoverflow.com/a/36228195/9269480
      */
     private void runWithContextClassLoader(final ClassLoader classLoader, final Runnable runnable) {

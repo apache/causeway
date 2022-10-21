@@ -92,7 +92,7 @@ final class _DownloadHandler {
                 new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
 
-        //ISIS-1619, prevent clients from caching the response content
+        //CAUSEWAY-1619, prevent clients from caching the response content
         return action.getSemantics().isIdempotentOrCachable()
                 ? handler
                 : enforceNoCacheOnClientSide(handler);

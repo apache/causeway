@@ -29,7 +29,7 @@ class RepresentationTypeSimplifiedV2Test {
     @Test
     void parseContentTypeHeaderString() {
 
-        val contentTypeHeaderString = "application/json;profile=\"urn:org.apache.isis/v2\";repr-type=value";
+        val contentTypeHeaderString = "application/json;profile=\"urn:org.apache.causeway/v2\";repr-type=value";
 
         val representationType =
                 RepresentationTypeSimplifiedV2

@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  * The mechanism by which the value of the property can be accessed.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * accessor method for a property OR a collection.
  */
 public interface PropertyOrCollectionAccessorFacet extends Facet {

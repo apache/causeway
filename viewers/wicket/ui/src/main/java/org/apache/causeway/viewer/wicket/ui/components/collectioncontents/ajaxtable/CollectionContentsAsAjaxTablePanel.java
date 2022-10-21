@@ -104,7 +104,7 @@ implements CollectionCountProvider {
         addPropertyColumnsIfRequired(columns);
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
-        val dataTable = new IsisAjaxDataTable(
+        val dataTable = new CausewayAjaxDataTable(
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
     }

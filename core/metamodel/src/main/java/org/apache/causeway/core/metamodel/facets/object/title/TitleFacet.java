@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * the instance in the viewer (usually alongside an icon representation).
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to a
+ * In the standard Apache Causeway Programming Model, typically corresponds to a
  * method named <tt>title</tt>.
  *
  * @see IconFacet

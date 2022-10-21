@@ -39,7 +39,7 @@ import java.util.Map;
  * underlying {@link PageClassList}.
  */
 @Service
-@Named("isis.viewer.wicket.PageClassRegistryDefault")
+@Named("causeway.viewer.wicket.PageClassRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {

@@ -56,8 +56,8 @@ import lombok.val;
         },
         properties = {
                 //preparing the CORS filter with specific settings for testing
-                "isis.extensions.cors.allowedMethods=POST",
-                "isis.extensions.cors.allowedOrigins=http://www.google.com",
+                "causeway.extensions.cors.allowedMethods=POST",
+                "causeway.extensions.cors.allowedOrigins=http://www.google.com",
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(CausewayPresets.UseLog4j2Test)

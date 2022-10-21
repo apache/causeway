@@ -35,7 +35,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.commandReplaySecondary.SecondaryConfig")
+@Named("causeway.ext.commandReplaySecondary.SecondaryConfig")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 //@Log4j2
 public class SecondaryConfig {
@@ -49,8 +49,8 @@ public class SecondaryConfig {
     @Getter final String quartzUser;
     @Getter final List<String> quartzRoles;
 
-    public SecondaryConfig(@NotNull final CausewayConfiguration isisConfiguration) {
-        val config = isisConfiguration.getExtensions().getCommandReplay();
+    public SecondaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
+        val config = causewayConfiguration.getExtensions().getCommandReplay();
 
         val primaryAccess = config.getPrimaryAccess();
         primaryUser = primaryAccess.getUser().orElse(null);

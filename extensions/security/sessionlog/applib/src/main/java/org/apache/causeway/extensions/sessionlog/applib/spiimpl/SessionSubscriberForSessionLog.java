@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Implementation of the Isis {@link SessionSubscriber} creates a log
+ * Implementation of the Causeway {@link SessionSubscriber} creates a log
  * entry to the database (the {@link SessionLogEntry} entity) each time a
  * user either logs on or logs out, or if their session expires.
  */

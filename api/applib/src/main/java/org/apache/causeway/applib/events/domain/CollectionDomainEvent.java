@@ -45,7 +45,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.applib.annotation.collection.domain-event.post-for-default</tt>
+     * <tt>causeway.applib.annotation.collection.domain-event.post-for-default</tt>
      * configuration property.
      * </p>
      */

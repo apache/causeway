@@ -138,7 +138,7 @@ extends InteractionTestAbstract {
                 .count());
     }
 
-  //FIXME[ISIS-3207]
+  //FIXME[CAUSEWAY-3207]
     @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void mixinActionValidation() {

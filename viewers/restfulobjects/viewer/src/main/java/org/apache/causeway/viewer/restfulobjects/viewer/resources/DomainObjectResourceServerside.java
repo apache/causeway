@@ -84,9 +84,9 @@ implements DomainObjectResource {
     @Inject
     public DomainObjectResourceServerside(
             final MetaModelContext metaModelContext,
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
         log.debug("<init>");
     }
 
@@ -545,7 +545,7 @@ implements DomainObjectResource {
                 domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.READ));
     }
 
-    //XXX[ISIS-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
+    //XXX[CAUSEWAY-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
 //    @Override
 //    @PUT
 //    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
@@ -697,10 +697,10 @@ implements DomainObjectResource {
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
             final @PathParam("actionId") String actionId,
-            final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
+            final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
 
         final String urlUnencodedQueryString = _UrlDecoderUtil
-                .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
+                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null? xCausewayUrlEncodedQueryString: httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 urlUnencodedQueryString);

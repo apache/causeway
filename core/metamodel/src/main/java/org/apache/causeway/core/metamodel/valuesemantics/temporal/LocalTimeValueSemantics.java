@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.LocalTimeValueSemantics")
+@Named("causeway.val.LocalTimeValueSemantics")
 //@Log4j2
 public class LocalTimeValueSemantics
 extends TemporalValueSemanticsProvider<LocalTime> {

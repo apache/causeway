@@ -42,7 +42,7 @@ class AnalyzerTest {
     @Test
     void testSourceFileListing() {
 
-        val projDir = ProjectSamples.apacheIsisRuntime();
+        val projDir = ProjectSamples.apacheCausewayRuntime();
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
         val commonPath = projDir.getAbsolutePath();
 
@@ -51,7 +51,7 @@ class AnalyzerTest {
                 .map(File::getAbsolutePath)
                 .map(sourceFile->_Files.toRelativePath(commonPath, sourceFile));
 
-        ProjectSamples.assertHasApacheIsisRuntimeSourceFiles(sources);
+        ProjectSamples.assertHasApacheCausewayRuntimeSourceFiles(sources);
     }
 
     @Test @Disabled("work in progress, as of yet a proof of concept")
@@ -90,7 +90,7 @@ class AnalyzerTest {
     @Test @Disabled("fails when run with the CI pipeline")
     void testAnnotationGathering() {
 
-        val projDir = ProjectSamples.apacheIsisRuntime();
+        val projDir = ProjectSamples.apacheCausewayRuntime();
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
         val model = Model.from(analyzerConfig.getClasses()).read();
@@ -104,7 +104,7 @@ class AnalyzerTest {
                         .anyMatch(name->name.startsWith("org.springframework.stereotype.")))
                 .map(CodeClass::getName);
 
-        ProjectSamples.assertHasApacheIsisRuntimeClasses(components);
+        ProjectSamples.assertHasApacheCausewayRuntimeClasses(components);
     }
 
 

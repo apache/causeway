@@ -41,9 +41,9 @@ import org.apache.causeway.testdomain.publishing.stubs.ExecutionPublishingTestAb
         },
         properties = {
                 "logging.level.org.apache.causeway.applib.services.publishing.log.ExecutionLogger=DEBUG",
-                "logging.level.org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener=DEBUG",
+                "logging.level.org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener=DEBUG",
                 "logging.level.org.apache.causeway.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
-                "logging.level.org.apache.causeway.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
+                "logging.level.org.apache.causeway.core.runtimeservices.session.CausewayInteractionFactoryDefault=DEBUG",
         })
 @TestPropertySource({
     CausewayPresets.UseLog4j2Test

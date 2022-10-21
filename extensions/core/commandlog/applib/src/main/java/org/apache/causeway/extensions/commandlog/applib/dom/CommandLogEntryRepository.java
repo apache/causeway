@@ -65,7 +65,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
 
     private final Class<C> commandLogEntryClass;
 
@@ -406,7 +406,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      * intended for testing purposes only
      */
     public List<C> findAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return repositoryService().allInstances(commandLogEntryClass);
@@ -417,7 +417,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      * intended for testing purposes only
      */
     public void removeAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(commandLogEntryClass);

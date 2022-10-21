@@ -74,7 +74,7 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
                 }
             }
 
-            return CausewayBeanMetaData.isisManaged(BeanSort.ENTITY, logicalType);
+            return CausewayBeanMetaData.causewayManaged(BeanSort.ENTITY, logicalType);
         }
 
         return null; // we don't see fit to classify given type

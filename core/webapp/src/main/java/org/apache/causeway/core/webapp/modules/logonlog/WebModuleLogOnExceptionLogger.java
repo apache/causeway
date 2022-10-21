@@ -40,12 +40,12 @@ import lombok.Getter;
  * @since 2.0
  */
 @Service
-@Named("isis.webapp.WebModuleLogOnExceptionLogger")
+@Named("causeway.webapp.WebModuleLogOnExceptionLogger")
 @javax.annotation.Priority(PriorityPrecedence.EARLY - 100)
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 
-    private static final String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
+    private static final String LOGONLOGGER_FILTER_NAME = "CausewayLogOnExceptionFilter";
 
 
     @Getter
@@ -60,7 +60,7 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        registerFilter(ctx, LOGONLOGGER_FILTER_NAME, IsisLogOnExceptionFilter.class)
+        registerFilter(ctx, LOGONLOGGER_FILTER_NAME, CausewayLogOnExceptionFilter.class)
             .ifPresent(filterReg -> {
                 filterReg.addMappingForUrlPatterns(
                         null,

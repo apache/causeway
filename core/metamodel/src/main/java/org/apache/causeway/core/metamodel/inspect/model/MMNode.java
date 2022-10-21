@@ -84,7 +84,7 @@ public abstract class MMNode {
 
     protected String title;
 
-    //FIXME[ISIS-2774] should be picked up also when declared abstract, yet we work around that
+    //FIXME[CAUSEWAY-2774] should be picked up also when declared abstract, yet we work around that
     @ObjectSupport public final String title() {
         return title==null
                 ? title = createTitle()

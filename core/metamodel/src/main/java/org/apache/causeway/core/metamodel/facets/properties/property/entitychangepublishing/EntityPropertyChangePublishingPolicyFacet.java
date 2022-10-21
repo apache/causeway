@@ -59,7 +59,7 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
                     .map(EntityPropertyChangePublishingPolicyFacet::isPublishingAllowed)
                     .orElse(false);
 
-            //XXX ISIS-1488, exclude Bob/Clob from property change publishing unless explicitly allowed
+            //XXX CAUSEWAY-1488, exclude Bob/Clob from property change publishing unless explicitly allowed
             return !isExplictlyAllowed;
         }
 

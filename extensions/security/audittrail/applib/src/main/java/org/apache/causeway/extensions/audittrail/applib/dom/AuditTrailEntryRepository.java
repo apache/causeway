@@ -50,7 +50,7 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
 
     @Inject RepositoryService repositoryService;
     @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
 
     public Class<E> getEntityClass() {
         return auditTrailEntryClass;
@@ -180,7 +180,7 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
      * intended for testing only
      */
     public List<? extends AuditTrailEntry> findAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return repositoryService.allMatches(
@@ -192,7 +192,7 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
      * intended for testing only
      */
     public void removeAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService.removeAll(auditTrailEntryClass);

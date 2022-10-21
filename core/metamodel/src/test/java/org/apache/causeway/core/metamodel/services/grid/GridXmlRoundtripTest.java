@@ -37,7 +37,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.jaxb.IsisSchemas;
+import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 
@@ -144,7 +144,7 @@ extends MetaModelTestAbstract {
     }
 
     protected void dumpXsd(final BSGrid bsPage) {
-        Map<String, String> schemas = jaxbService.toXsd(bsPage, IsisSchemas.INCLUDE);
+        Map<String, String> schemas = jaxbService.toXsd(bsPage, CausewaySchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             println(entry.getKey() + ":");
             println(entry.getValue());

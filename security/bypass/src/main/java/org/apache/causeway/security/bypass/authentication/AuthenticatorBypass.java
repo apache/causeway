@@ -33,7 +33,7 @@ import org.apache.causeway.core.security.authentication.standard.AuthenticatorAb
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.security.AuthenticatorBypass")
+@Named("causeway.security.AuthenticatorBypass")
 @javax.annotation.Priority(PriorityPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthenticatorBypass extends AuthenticatorAbstract {

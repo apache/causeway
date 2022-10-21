@@ -45,24 +45,24 @@ import lombok.val;
                 Configuration_usingInvalidDomain_noActionEnforced.class
         },
         properties = {
-                "isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL",
-                "isis.core.meta-model.introspector.mode=FULL"
+                "causeway.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL",
+                "causeway.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
+    //CausewayPresets.DebugMetaModel,
+    //CausewayPresets.DebugProgrammingModel,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
 class DomainModelTest_usingBadDomain_noAnnotationEnforced {
 
     @Inject private CausewayConfiguration configuration;
-    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private DomainObjectTesterFactory testerFactory;
 
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
-        assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironment));
+        assertTrue(IntrospectionMode.isFullIntrospect(configuration, causewaySystemEnvironment));
     }
 
     @Test

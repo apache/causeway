@@ -35,8 +35,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.hints.IsisActionCompletedEvent;
-import org.apache.causeway.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayPropertyEditCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
@@ -88,7 +88,7 @@ implements ScalarModelChangeListener {
     @Override
     public final void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        /*[ISIS-3217] in the context of a modal dialog with a select2 causes:
+        /*[CAUSEWAY-3217] in the context of a modal dialog with a select2 causes:
          * java.io.IOException: An established connection was aborted by the software in your host machine
          */
 //        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
@@ -124,8 +124,8 @@ implements ScalarModelChangeListener {
         if (outcome.isSuccess()) {
             completePrompt(target);
             okButton.send(target.getPage(), Broadcast.EXACT, getMemberModel().fold(
-                act->new IsisActionCompletedEvent(target),
-                prop->new IsisPropertyEditCompletedEvent(target)));
+                act->new CausewayActionCompletedEvent(target),
+                prop->new CausewayPropertyEditCompletedEvent(target)));
             WktComponents.addToAjaxRequest(target, form);
         }
     }

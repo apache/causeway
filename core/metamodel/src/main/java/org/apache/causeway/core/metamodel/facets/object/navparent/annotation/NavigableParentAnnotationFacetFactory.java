@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * For detailed behavioral specification see
- * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
+ * <a href="https://issues.apache.org/jira/browse/CAUSEWAY-1816">CAUSEWAY-1816</a>.
  *
  * @since 2.0
  *
@@ -117,7 +117,7 @@ implements MetaModelRefiner {
 
     /**
      * For detailed behavior see
-     * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
+     * <a href="https://issues.apache.org/jira/browse/CAUSEWAY-1816">CAUSEWAY-1816</a>.
      */
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {

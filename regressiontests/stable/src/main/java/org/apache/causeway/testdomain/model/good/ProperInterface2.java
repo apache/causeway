@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Property;
 
-@Named("isis.testdomain.ProperInterface2")
+@Named("causeway.testdomain.ProperInterface2")
 public interface ProperInterface2
 extends ProperInterface {
 

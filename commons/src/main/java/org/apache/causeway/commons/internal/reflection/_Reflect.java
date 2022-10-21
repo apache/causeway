@@ -584,7 +584,7 @@ public final class _Reflect {
         final @NonNull Method method;
         final @NonNull Class<?> implementingClass;
         /**
-         * [ISIS-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+         * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
          */
         public Try<MethodAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
             try {

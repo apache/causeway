@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 import java.util.Set;
 
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
@@ -47,7 +47,7 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
         webApplication.getResourceBundles()
         .addCssBundle(
                 CausewayWicketApplication.class,
-                "isis-wicket-viewer-bundle.css",
+                "causeway-wicket-viewer-bundle.css",
                 cssReferences.toArray(new CssResourceReference[]{}));
 
     }
@@ -55,7 +55,7 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
     // -- HELPER
 
     private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
-        // TODO mgrigorov: ISIS-537 temporary disabled to not mess up with Bootstrap styles
+        // TODO mgrigorov: CAUSEWAY-537 temporary disabled to not mess up with Bootstrap styles
         //        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
         return _Sets.newLinkedHashSet(
                 //                Iterables.concat(

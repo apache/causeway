@@ -59,7 +59,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.applib.annotation.property.domain-event.post-for-default</tt>
+     * <tt>causeway.applib.annotation.property.domain-event.post-for-default</tt>
      * configuration property.
      * </p>
      */

@@ -40,7 +40,7 @@ public enum Visibility {
 
     /**
      * Specification for use by third-party clients, ie public use and not
-     * under the control of the authors of the backend Apache Isis application.
+     * under the control of the authors of the backend Apache Causeway application.
      *
      * <p>
      * The generated swagger spec is therefore restricted only to include only

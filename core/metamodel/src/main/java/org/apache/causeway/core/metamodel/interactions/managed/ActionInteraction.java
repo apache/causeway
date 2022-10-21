@@ -266,7 +266,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             }
         }
 
-        //XXX[ISIS-3080] prior to this fix we returned... (which I'm not sure why - makes no sense to me)
+        //XXX[CAUSEWAY-3080] prior to this fix we returned... (which I'm not sure why - makes no sense to me)
         //val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
         //return ActionInteraction.start(paramValue, memberId, where);
 

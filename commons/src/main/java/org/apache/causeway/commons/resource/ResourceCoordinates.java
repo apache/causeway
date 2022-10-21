@@ -78,7 +78,7 @@ implements Comparable<ResourceCoordinates> {
     private final @NonNull Can<String> location;
 
     /**
-     * multi-part (location relative) path like eg. {@code org.apache.isis}
+     * multi-part (location relative) path like eg. {@code org.apache.causeway}
      */
     private final @NonNull Can<String> namespace;
 

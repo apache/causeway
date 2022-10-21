@@ -46,7 +46,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("isis.val.ShortValueSemantics")
+@Named("causeway.val.ShortValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
 extends ValueSemanticsAbstract<Short>

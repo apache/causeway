@@ -31,7 +31,7 @@ import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
  *
  * <p>
  *  The typical use case is to facilitate coarse-grained messaging for
- *  system-to-system interactions, that is from an Apache Isis application to
+ *  system-to-system interactions, that is from an Apache Causeway application to
  *  some other system.  This could be done using a pub/sub bus such as
  *  <a href="http://activemq.apache.org">Apache ActiveMQ</a> with
  *  <a href="http://camel.apache.org">Apache Camel</a>.

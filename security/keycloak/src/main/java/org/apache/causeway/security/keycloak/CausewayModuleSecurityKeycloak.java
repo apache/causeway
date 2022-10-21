@@ -56,7 +56,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Configuration Bean to support Isis Security using Keycloak.
+ * Configuration Bean to support Causeway Security using Keycloak.
  *
  * @since 2.0 {@index}
  */
@@ -78,19 +78,19 @@ public class CausewayModuleSecurityKeycloak {
 
     @Bean
     public WebSecurityConfigurerAdapter webSecurityConfigurer(
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final KeycloakOauth2UserService keycloakOidcUserService,
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers
             ) {
-        //val realm = isisConfiguration.getSecurity().getKeycloak().getRealm();
-        return new KeycloakWebSecurityConfigurerAdapter(keycloakOidcUserService, logoutHandlers, isisConfiguration
+        //val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
+        return new KeycloakWebSecurityConfigurerAdapter(keycloakOidcUserService, logoutHandlers, causewayConfiguration
         );
     }
 
 
     @Bean
-    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration isisConfiguration) {
+    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration causewayConfiguration) {
 
         val jwtDecoder = createNimbusJwtDecoder(
                 oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri(),
@@ -99,7 +99,7 @@ public class CausewayModuleSecurityKeycloak {
         val authoritiesMapper = new SimpleAuthorityMapper();
         authoritiesMapper.setConvertToUpperCase(true);
 
-        return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper, isisConfiguration);
+        return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper, causewayConfiguration);
     }
 
     @RequiredArgsConstructor
@@ -107,13 +107,13 @@ public class CausewayModuleSecurityKeycloak {
 
         private final KeycloakOauth2UserService keycloakOidcUserService;
         private final List<LogoutHandler> logoutHandlers;
-        private final CausewayConfiguration isisConfiguration;
+        private final CausewayConfiguration causewayConfiguration;
 
         @Override
         public void configure(final HttpSecurity http) throws Exception {
 
-            val successUrl = isisConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
-            val realm = isisConfiguration.getSecurity().getKeycloak().getRealm();
+            val successUrl = causewayConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
+            val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
             val loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
                     + "/" + realm;
 
@@ -129,7 +129,7 @@ public class CausewayModuleSecurityKeycloak {
 
                     // responsibility to propagate logout to Keycloak is performed by
                     // LogoutHandlerForKeycloak (called by Causeway' LogoutMenu, not by Spring)
-                    // this is to ensure that Isis can invalidate the http session eagerly and not preserve it in
+                    // this is to ensure that Causeway can invalidate the http session eagerly and not preserve it in
                     // the SecurityContextPersistenceFilter (which uses http session to do its work)
                     .logout()
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));

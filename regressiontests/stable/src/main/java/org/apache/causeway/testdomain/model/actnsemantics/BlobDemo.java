@@ -53,8 +53,8 @@ public class BlobDemo {
     public void initDefaults() {
 
         try {
-            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
-            logo = Blob.of("isis-logo-56x64", CommonMimeType.PNG, bytes);
+            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "causeway-logo-568x286.png"));
+            logo = Blob.of("causeway-logo-56x64", CommonMimeType.PNG, bytes);
         } catch (Exception e) {
             log.error("failed to create Blob from image resource", e);
         }

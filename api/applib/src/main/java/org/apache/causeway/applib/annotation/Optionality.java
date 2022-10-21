@@ -53,7 +53,7 @@ public enum Optionality {
      *
      * <p>
      * This annotation, therefore, is intended to override any objectstore-specific
-     * annotation, so that Isis can apply the constraint even though the objectstore
+     * annotation, so that Causeway can apply the constraint even though the objectstore
      * is unable to do so.
      * </p>
      */

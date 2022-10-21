@@ -25,5 +25,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class CausewayModuleValVegaApplib {
-    public static final String NAMESPACE = "isis.value.vega";
+    public static final String NAMESPACE = "causeway.value.vega";
 }

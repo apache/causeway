@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
 @Component
-@Named("isis.security.RandomCodeGenerator10Chars")
+@Named("causeway.security.RandomCodeGenerator10Chars")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class RandomCodeGeneratorDefault implements RandomCodeGenerator {

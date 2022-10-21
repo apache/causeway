@@ -127,7 +127,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     @Qualifier("local-pmf-proxy")
     @Bean
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final DataSource dataSource,
             final MetaModelContext metaModelContext,
             final ObjectLifecyclePublisher objectLifecyclePublisher,
@@ -136,7 +136,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
         _Assert.assertNotNull(dataSource, "a datasource is required");
 
-        autoCreateSchemas(dataSource, isisConfiguration);
+        autoCreateSchemas(dataSource, causewayConfiguration);
 
         val lpmfBean = new LocalPersistenceManagerFactoryBean() {
             @Override
@@ -254,14 +254,14 @@ public class CausewayModulePersistenceJdoDatanucleus {
     }
 
     /**
-     * integrates with settings from isis.persistence.schema.*
+     * integrates with settings from causeway.persistence.schema.*
      */
     @SneakyThrows
     private static DataSource autoCreateSchemas(
             final DataSource dataSource,
-            final CausewayConfiguration isisConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
+        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 

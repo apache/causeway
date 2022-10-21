@@ -25,17 +25,17 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmarkui.BookmarkUiService;
-import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
+import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 
 @Service
-@Named("isis.viewer.wicket.BookmarkUiServiceWicket")
+@Named("causeway.viewer.wicket.BookmarkUiServiceWicket")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 
     @Override
     public void clear() {
-        final AuthenticatedWebSessionForIsis session = AuthenticatedWebSessionForIsis.get();
+        final AuthenticatedWebSessionForCauseway session = AuthenticatedWebSessionForCauseway.get();
         if (session == null) {
             return;
         }

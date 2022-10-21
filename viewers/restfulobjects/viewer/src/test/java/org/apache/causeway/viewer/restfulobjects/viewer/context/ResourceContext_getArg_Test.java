@@ -55,7 +55,7 @@ public class ResourceContext_getArg_Test {
 
     @Mock private HttpServletRequest mockHttpServletRequest;
     @Mock private ServletContext mockServletContext;
-    @Mock private CausewayInteraction mockIsisInteraction;
+    @Mock private CausewayInteraction mockCausewayInteraction;
     @Mock private InteractionService mockInteractionService;
     @Mock private InteractionLayerTracker mockInteractionLayerTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;

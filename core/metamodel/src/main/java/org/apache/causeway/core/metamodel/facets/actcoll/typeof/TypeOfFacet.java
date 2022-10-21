@@ -34,7 +34,7 @@ import lombok.val;
 /**
  * The type of the collection or the action.
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
  * collection's accessor or the action's invoker method with the
  * {@link Collection#typeOf} annotation.
  */

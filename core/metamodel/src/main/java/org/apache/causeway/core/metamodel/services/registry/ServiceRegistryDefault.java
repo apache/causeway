@@ -51,8 +51,8 @@ import lombok.val;
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
     // enforces provisioning order (this is a depends-on relationship)
-    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
-    @Inject private CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @Override
     public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final LogicalType id) {
@@ -61,7 +61,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Optional<?> lookupBeanById(final String id) {
-        return isisSystemEnvironment.getIocContainer().lookupById(id);
+        return causewaySystemEnvironment.getIocContainer().lookupById(id);
     }
 
     @Override
@@ -71,7 +71,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        val iocContainer = isisSystemEnvironment.getIocContainer();
+        val iocContainer = causewaySystemEnvironment.getIocContainer();
         return iocContainer
                 .select(type, qualifiers);
     }
@@ -88,9 +88,9 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     private Map<String, _ManagedBeanAdapter> enumerateContributingDomainServices() {
         val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
-        val managedBeansContributing = isisBeanTypeRegistry.getManagedBeansContributing().keySet();
+        val managedBeansContributing = causewayBeanTypeRegistry.getManagedBeansContributing().keySet();
 
-        isisSystemEnvironment.getIocContainer()
+        causewaySystemEnvironment.getIocContainer()
         .streamAllBeans()
         .filter(_NullSafe::isPresent)
         .filter(bean->managedBeansContributing.contains(bean.getBeanClass())) // do not register unknown sort

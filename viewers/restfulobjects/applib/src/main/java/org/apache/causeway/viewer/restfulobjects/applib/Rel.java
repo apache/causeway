@@ -78,7 +78,7 @@ public enum Rel {
 
     /**
      * full spec name with rel-def and suffix, eg.
-     * {@code urn:org.apache.isis.restfulobjects:rels/menuBars}
+     * {@code urn:org.apache.causeway.restfulobjects:rels/menuBars}
      */
     public String getName() {
         return relDef.nameOf(relSuffix);

@@ -39,7 +39,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.sub.spring.SpringBeansService")
+@Named("causeway.sub.spring.SpringBeansService")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {

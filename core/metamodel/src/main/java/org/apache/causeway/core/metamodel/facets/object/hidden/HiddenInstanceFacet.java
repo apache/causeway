@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
  * </p>
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to the
+ * In the standard Apache Causeway Programming Model, typically corresponds to the
  * <tt>hidden</tt> method.
  * </p>
  *

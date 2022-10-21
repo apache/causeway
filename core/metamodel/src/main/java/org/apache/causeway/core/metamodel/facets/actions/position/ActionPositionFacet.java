@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * The positioning of an action's button
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating each
+ * In the standard Apache Causeway Programming Model, corresponds to annotating each
  * of the member methods with the <tt>@ActionLayout</tt>.
  */
 public interface ActionPositionFacet extends Facet {

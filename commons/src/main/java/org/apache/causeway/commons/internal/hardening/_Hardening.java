@@ -30,7 +30,7 @@ import org.springframework.lang.Nullable;
 /**
  * Various hardening utilities.
  * <p>
- * Introduced as a consequence of ISIS-3077.
+ * Introduced as a consequence of CAUSEWAY-3077.
  */
 public class _Hardening {
 

@@ -25,5 +25,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class CausewayModuleValAsciidocApplib {
-    public static final String NAMESPACE = "isis.value.asciidoc";
+    public static final String NAMESPACE = "causeway.value.asciidoc";
 }

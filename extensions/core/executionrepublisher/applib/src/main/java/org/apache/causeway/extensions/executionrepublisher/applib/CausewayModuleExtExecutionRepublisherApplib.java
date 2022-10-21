@@ -33,7 +33,7 @@ import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 })
 public class CausewayModuleExtExecutionRepublisherApplib {
 
-    public static final String NAMESPACE = "isis.ext.executionRepublisher";
+    public static final String NAMESPACE = "causeway.ext.executionRepublisher";
 
     public abstract static class TitleUiEvent<S>
         extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }

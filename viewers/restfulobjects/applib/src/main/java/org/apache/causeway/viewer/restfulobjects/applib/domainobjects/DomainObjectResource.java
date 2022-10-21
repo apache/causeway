@@ -164,7 +164,7 @@ public interface DomainObjectResource {
     })
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
 
-//XXX[ISIS-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
+//XXX[CAUSEWAY-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
 //    @PUT
 //    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
 //    @Consumes({ MediaType.WILDCARD })
@@ -228,7 +228,7 @@ public interface DomainObjectResource {
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
+    public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-causeway-querystring") final String xCausewayQueryString);
 
     @PUT
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")

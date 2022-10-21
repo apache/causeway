@@ -53,7 +53,7 @@ import org.springframework.stereotype.Service;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 @Service
-@Named("isis.persistence.jdo.JdoSupportServiceDefault")
+@Named("causeway.persistence.jdo.JdoSupportServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("DN6")
 public class JdoSupportServiceDefault implements JdoSupportService {

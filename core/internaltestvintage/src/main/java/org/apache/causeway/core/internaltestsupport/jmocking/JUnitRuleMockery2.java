@@ -77,7 +77,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
 
-//        _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new)
+//        _Context.computeIfAbsent(CausewaySystemEnvironment.class, CausewaySystemEnvironment::new)
 //        .setUnitTesting(true);
 
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();

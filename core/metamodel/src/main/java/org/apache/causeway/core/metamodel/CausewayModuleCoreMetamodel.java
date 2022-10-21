@@ -202,7 +202,7 @@ import lombok.NonNull;
 })
 public class CausewayModuleCoreMetamodel {
 
-    public static final String NAMESPACE = "isis.metamodel";
+    public static final String NAMESPACE = "causeway.metamodel";
 
     @FunctionalInterface
     public static interface PreloadableTypes {

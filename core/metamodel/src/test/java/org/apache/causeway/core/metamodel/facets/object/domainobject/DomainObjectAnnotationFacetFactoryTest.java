@@ -426,7 +426,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void configured_value_set_to_defaults() {
-                //allowingConfigurationToReturn("isis.objects.editing", "foobar");
+                //allowingConfigurationToReturn("causeway.objects.editing", "foobar");
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
@@ -472,7 +472,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void configured_value_set_to_defaults() {
-                //allowingConfigurationToReturn("isis.objects.editing", "foobar");
+                //allowingConfigurationToReturn("causeway.objects.editing", "foobar");
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));

@@ -47,7 +47,7 @@ public final class CausewayPresets  {
     public static final String DebugMetaModel = "classpath:/org/apache/causeway/core/config/presets/DebugMetaModel.properties";
     public static final String SilenceMetaModel = "classpath:/org/apache/causeway/core/config/presets/SilenceMetaModel.properties";
 
-    public static final String DebugIsisInteraction = "classpath:/org/apache/causeway/core/config/presets/DebugIsisInteraction.properties";
+    public static final String DebugCausewayInteraction = "classpath:/org/apache/causeway/core/config/presets/DebugCausewayInteraction.properties";
     public static final String DebugVaadin = "classpath:/org/apache/causeway/core/config/presets/DebugVaadin.properties";
 
     public static final String SilenceWicket = "classpath:/org/apache/causeway/core/config/presets/SilenceWicket.properties";

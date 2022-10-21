@@ -52,7 +52,7 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
     @SneakyThrows
     private JavaSourceCompilingClassLoader() {
         // purely for the purpose of communicating with the compiler
-        this.root = _Files.tempDir("isis-tooling-cl").toPath();
+        this.root = _Files.tempDir("causeway-tooling-cl").toPath();
         log.info("tmp dir created in {}", root);
 
         Thread printingHook = new Thread(() -> {

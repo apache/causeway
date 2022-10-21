@@ -29,7 +29,7 @@ import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
 @Component
-@Named("isis.val.ChangesDtoValueSemantics")
+@Named("causeway.val.ChangesDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ChangesDtoValueSemantics
 extends XmlValueSemanticsAbstract<ChangesDto> {

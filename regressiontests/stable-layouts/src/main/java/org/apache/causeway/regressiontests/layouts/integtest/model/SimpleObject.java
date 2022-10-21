@@ -67,7 +67,7 @@ import lombok.val;
                         "WHERE so.name LIKE :name"
         )
 })
-//@javax.persistence.EntityListeners(IsisEntityListener.class)
+//@javax.persistence.EntityListeners(CausewayEntityListener.class)
 @DomainObject(logicalTypeName = "simple.SimpleObject", entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)

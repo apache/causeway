@@ -21,7 +21,7 @@ package org.apache.causeway.applib.exceptions.unrecoverable;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 
 /**
- * Thrown when a problem is found with the domain model, and Isis cannot
+ * Thrown when a problem is found with the domain model, and Causeway cannot
  * proceed.
  *
  * @since 1.x {@index}

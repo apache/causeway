@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * Intended to be used by the viewer as a rendering hint.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
+ * In the standard Apache Causeway Programming Model, corresponds to the
  * {@link ValueSemantics#dateRenderAdjustDays()} annotation.
  *
  * @since 2.0 - replacing RenderedAdjustedFacet from 1.x and 2.0.0-M6

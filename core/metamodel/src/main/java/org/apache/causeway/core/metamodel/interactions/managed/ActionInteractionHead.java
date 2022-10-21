@@ -110,7 +110,7 @@ implements HasMetaModel<ObjectAction> {
 
     /**
      * See step 1 'Fill in defaults' in
-     * <a href="https://cwiki.apache.org/confluence/display/ISIS/ActionParameterNegotiation">
+     * <a href="https://cwiki.apache.org/confluence/display/CAUSEWAY/ActionParameterNegotiation">
      * ActionParameterNegotiation (wiki)
      * </a>
      */

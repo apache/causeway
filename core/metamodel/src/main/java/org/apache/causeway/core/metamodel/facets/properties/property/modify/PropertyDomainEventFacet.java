@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
- * Corresponds to <tt>@Property(domainEvent=...)</tt> annotation in the Isis programming model.
+ * Corresponds to <tt>@Property(domainEvent=...)</tt> annotation in the Causeway programming model.
  */
 public interface PropertyDomainEventFacet
 extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {

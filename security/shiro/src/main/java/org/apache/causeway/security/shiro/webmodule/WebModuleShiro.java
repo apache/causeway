@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.security.WebModuleShiro")
+@Named("causeway.security.WebModuleShiro")
 @javax.annotation.Priority(PriorityPrecedence.FIRST + 100)
 @Qualifier("Shiro")
 @Log4j2
@@ -125,13 +125,13 @@ public class WebModuleShiro extends WebModuleAbstract {
      * Adds support for dependency injection into security realms
      * @since 2.0
      */
-    @NoArgsConstructor // don't remove, this is class is managed by Isis
-    public static class EnvironmentLoaderListenerForIsis extends EnvironmentLoaderListener {
+    @NoArgsConstructor // don't remove, this is class is managed by Causeway
+    public static class EnvironmentLoaderListenerForCauseway extends EnvironmentLoaderListener {
 
         @Inject private ServiceInjector serviceInjector;
 
         // testing support
-        public EnvironmentLoaderListenerForIsis(final ServiceInjector serviceInjector) {
+        public EnvironmentLoaderListenerForCauseway(final ServiceInjector serviceInjector) {
             this.serviceInjector = serviceInjector;
         }
 
@@ -147,7 +147,7 @@ public class WebModuleShiro extends WebModuleAbstract {
 
             injectServicesIntoRealms(securityManager);
 
-            //[ISIS-3246] Shiro Filter throws NPE on init since Shiro v1.10.0
+            //[CAUSEWAY-3246] Shiro Filter throws NPE on init since Shiro v1.10.0
             if(shiroEnvironment.getShiroFilterConfiguration()==null) {
                 _Casts.castTo(MutableWebEnvironment.class, shiroEnvironment)
                 .ifPresent(mutableWebEnvironment->
@@ -209,7 +209,7 @@ public class WebModuleShiro extends WebModuleAbstract {
             ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);
         }
 
-        val listener = createListener(EnvironmentLoaderListenerForIsis.class);
+        val listener = createListener(EnvironmentLoaderListenerForCauseway.class);
         return Can.ofSingleton(listener);
 
     }

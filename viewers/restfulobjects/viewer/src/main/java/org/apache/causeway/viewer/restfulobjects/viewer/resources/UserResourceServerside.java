@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
+import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
 import lombok.val;
 
@@ -52,9 +52,9 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Inject
     public UserResourceServerside(
             final MetaModelContext metaModelContext,
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).
         try {
-            final URI location = new URI("?" + IsisRestfulObjectsInteractionFilter.ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT);
+            final URI location = new URI("?" + CausewayRestfulObjectsInteractionFilter.CAUSEWAY_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT);
             return Response.temporaryRedirect(location).build();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * Provides a default value for a property of a newly created object.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
+ * In the standard Apache Causeway Programming Model, corresponds to the
  * <tt>defaultXxx</tt> supporting method for the property with accessor
  * <tt>getXxx</tt>.
  *

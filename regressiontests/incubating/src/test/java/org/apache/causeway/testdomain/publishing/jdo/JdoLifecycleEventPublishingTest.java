@@ -39,9 +39,9 @@ import org.apache.causeway.testdomain.publishing.stubs.LifecycleEventPublishingT
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.testdomain.util.event.LifecycleEventSubscriberForTesting=DEBUG",
+                "logging.level.org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberForTesting=DEBUG",
                 "logging.level.org.springframework.orm.jpa.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.causeway.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
 @TestPropertySource({
     CausewayPresets.UseLog4j2Test

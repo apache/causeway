@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Not used by the framework yet, supposed to be reconsidered in the process of
- * <a href="https://issues.apache.org/jira/browse/ISIS-1695">ISIS-1695</a>
+ * <a href="https://issues.apache.org/jira/browse/CAUSEWAY-1695">CAUSEWAY-1695</a>
  *
  * @apiNote for now any implementing class must also be discovered/managed by Spring,
  * that is, it needs a direct- or meta-annotation of type {@link Component}

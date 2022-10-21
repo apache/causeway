@@ -37,7 +37,7 @@ public final class XmlSchema {
     private final String uriBase;
     private String uri;
 
-    private final IsisSchema isisMeta;
+    private final CausewaySchema causewayMeta;
     private final XsMetaModel xsMeta;
     private final Helper helper;
 
@@ -53,7 +53,7 @@ public final class XmlSchema {
     }
 
     public XmlSchema() {
-        this(IsisSchema.DEFAULT_URI_BASE, XmlSchema.DEFAULT_PREFIX);
+        this(CausewaySchema.DEFAULT_URI_BASE, XmlSchema.DEFAULT_PREFIX);
     }
 
     /**
@@ -63,7 +63,7 @@ public final class XmlSchema {
      *            the prefix for the application namespace's prefix
      */
     public XmlSchema(final String uriBase, final String prefix) {
-        this.isisMeta = new IsisSchema();
+        this.causewayMeta = new CausewaySchema();
         this.xsMeta = new XsMetaModel();
         this.helper = new Helper();
 
@@ -86,11 +86,11 @@ public final class XmlSchema {
         if (XsMetaModel.W3_ORG_XSI_PREFIX.equals(prefix)) {
             throw new IllegalArgumentException("Namespace prefix reserved for w3.org XML schema-instance namespace.");
         }
-        if (IsisSchema.NS_URI.equals(base)) {
-            throw new IllegalArgumentException("Namespace URI reserved for Apache Isis metamodel namespace.");
+        if (CausewaySchema.NS_URI.equals(base)) {
+            throw new IllegalArgumentException("Namespace URI reserved for Apache Causeway metamodel namespace.");
         }
-        if (IsisSchema.NS_PREFIX.equals(prefix)) {
-            throw new IllegalArgumentException("Namespace prefix reserved for Apache Isis metamodel namespace.");
+        if (CausewaySchema.NS_PREFIX.equals(prefix)) {
+            throw new IllegalArgumentException("Namespace prefix reserved for Apache Causeway metamodel namespace.");
         }
         this.uriBase = base;
         this.prefix = prefix;
@@ -103,7 +103,7 @@ public final class XmlSchema {
      * name of the class of the object being referenced.
      *
      * If not specified in the constructor, then
-     * {@link IsisSchema#DEFAULT_URI_BASE}
+     * {@link CausewaySchema#DEFAULT_URI_BASE}
      * is used.
      */
     public String getUriBase() {
@@ -150,10 +150,10 @@ public final class XmlSchema {
      */
     Element createElement(final Document doc, final String localName, final String fullyQualifiedClassName, final String singularName, final String pluralName) {
         final Element element = doc.createElementNS(getUri(), getPrefix() + ":" + localName);
-        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":fqn", fullyQualifiedClassName);
-        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":singular", singularName);
-        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":plural", pluralName);
-        isisMeta.addNamespace(element); // good a place as any
+        element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":fqn", fullyQualifiedClassName);
+        element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":singular", singularName);
+        element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":plural", pluralName);
+        causewayMeta.addNamespace(element); // good a place as any
 
         addNamespace(element, getPrefix(), getUri());
         return element;
@@ -170,7 +170,7 @@ public final class XmlSchema {
             throw new IllegalArgumentException("XSD Document must have <xs:schema> element attached");
         }
 
-        // targetNamespace="http://isis.apache.org/ns/app/<fully qualified class
+        // targetNamespace="http://causeway.apache.org/ns/app/<fully qualified class
         // name>
         xsSchemaElement.setAttribute("targetNamespace", getUri());
 
@@ -195,14 +195,14 @@ public final class XmlSchema {
         // <xs:element name="AO11ConfirmAnimalRegistration">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element ref="isis:title"/>
+        // <xs:element ref="causeway:title"/>
         // <!-- placeholder -->
         // </xs:sequence>
-        // <xs:attribute ref="isis:feature"
+        // <xs:attribute ref="causeway:feature"
         // default="class"/>
-        // <xs:attribute ref="isis:oid"/>
-        // <xs:attribute ref="isis:annotation"/>
-        // <xs:attribute ref="isis:fqn"/>
+        // <xs:attribute ref="causeway:oid"/>
+        // <xs:attribute ref="causeway:annotation"/>
+        // <xs:attribute ref="causeway:fqn"/>
         // </xs:complexType>
         // </xs:element>
 
@@ -215,9 +215,9 @@ public final class XmlSchema {
         final Element xsComplexTypeElement = xsMeta.complexTypeFor(xsElementForNofClassElement);
         final Element xsSequenceElement = xsMeta.sequenceFor(xsComplexTypeElement);
 
-        // xs:element/xs:complexType/xs:sequence/xs:element ref="isis:title"
+        // xs:element/xs:complexType/xs:sequence/xs:element ref="causeway:title"
         final Element xsTitleElement = xsMeta.createXsElement(helper.docFor(xsSequenceElement), "element");
-        xsTitleElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "title");
+        xsTitleElement.setAttribute("ref", CausewaySchema.NS_PREFIX + ":" + "title");
         xsSequenceElement.appendChild(xsTitleElement);
         xsMeta.setXsCardinality(xsTitleElement, 0, 1);
 
@@ -225,12 +225,12 @@ public final class XmlSchema {
         addXsElementForAppExtensions(xsSequenceElement, extensions);
 
         // xs:element/xs:complexType/xs:attribute ...
-        xsMeta.addXsIsisFeatureAttributeElements(xsComplexTypeElement, "class");
-        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "oid");
-        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "fqn");
-        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "singular");
-        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "plural");
-        xsMeta.addXsIsisAttribute(xsComplexTypeElement, "annotation");
+        xsMeta.addXsCausewayFeatureAttributeElements(xsComplexTypeElement, "class");
+        xsMeta.addXsCausewayAttribute(xsComplexTypeElement, "oid");
+        xsMeta.addXsCausewayAttribute(xsComplexTypeElement, "fqn");
+        xsMeta.addXsCausewayAttribute(xsComplexTypeElement, "singular");
+        xsMeta.addXsCausewayAttribute(xsComplexTypeElement, "plural");
+        xsMeta.addXsCausewayAttribute(xsComplexTypeElement, "annotation");
 
         Place.setXsdElement(element, xsElementForNofClassElement);
 
@@ -264,7 +264,7 @@ public final class XmlSchema {
         // </xs:complexType>
         // </xs:element>
 
-        // xs:element name="isis-extensions"
+        // xs:element name="causeway-extensions"
         // xs:element/xs:complexType/xs:sequence
         final Element xsExtensionsSequenceElement = addExtensionsElement(parentXsElementElement);
 
@@ -274,14 +274,14 @@ public final class XmlSchema {
     }
 
     /**
-     * Adds an isis-extensions element and a complexType and sequence elements
+     * Adds an causeway-extensions element and a complexType and sequence elements
      * underneath.
      *
      * <p>
      * Returns the sequence element so that it can be appended to.
      */
     private Element addExtensionsElement(final Element parentXsElement) {
-        final Element xsExtensionsElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsElement), "isis-extensions");
+        final Element xsExtensionsElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsElement), "causeway-extensions");
         parentXsElement.appendChild(xsExtensionsElementElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
@@ -312,7 +312,7 @@ public final class XmlSchema {
             final ExtensionData<T> extensions) {
 
         // gather details from XML element
-        final String datatype = xmlValueElement.getAttributeNS(IsisSchema.NS_URI, "datatype");
+        final String datatype = xmlValueElement.getAttributeNS(CausewaySchema.NS_URI, "datatype");
         final String fieldName = xmlValueElement.getLocalName();
 
         // <xs:element name="%owning object%">
@@ -321,7 +321,7 @@ public final class XmlSchema {
         // <xs:element name="%%field object%%">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element name="isis-extensions">
+        // <xs:element name="causeway-extensions">
         // <xs:complexType>
         // <xs:sequence>
         // <xs:element name="%extensionClassShortName%"
@@ -335,10 +335,10 @@ public final class XmlSchema {
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
-        // <xs:attribute ref="isis:feature" fixed="value"/>
-        // <xs:attribute ref="isis:datatype" fixed="isis:%datatype%"/>
-        // <xs:attribute ref="isis:isEmpty"/>
-        // <xs:attribute ref="isis:annotation"/>
+        // <xs:attribute ref="causeway:feature" fixed="value"/>
+        // <xs:attribute ref="causeway:datatype" fixed="causeway:%datatype%"/>
+        // <xs:attribute ref="causeway:isEmpty"/>
+        // <xs:attribute ref="causeway:annotation"/>
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
@@ -364,14 +364,14 @@ public final class XmlSchema {
         final Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // name="isis-extensions"
+        // name="causeway-extensions"
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
         addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
 
-        xsMeta.addXsIsisFeatureAttributeElements(xsFieldComplexTypeElement, "value");
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "datatype", datatype);
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "isEmpty");
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "annotation");
+        xsMeta.addXsCausewayFeatureAttributeElements(xsFieldComplexTypeElement, "value");
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "datatype", datatype);
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "isEmpty");
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "annotation");
 
         return xsFieldElementElement;
     }
@@ -417,8 +417,8 @@ public final class XmlSchema {
         // <xs:element name="%%field object%%">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element ref="isis:title" minOccurs="0"/>
-        // <xs:element name="isis-extensions">
+        // <xs:element ref="causeway:title" minOccurs="0"/>
+        // <xs:element name="causeway-extensions">
         // <xs:complexType>
         // <xs:sequence>
         // <xs:element name="app:%extension class short name%" minOccurs="0"
@@ -433,10 +433,10 @@ public final class XmlSchema {
         // </xs:element>
         // <xs:sequence minOccurs="0" maxOccurs="1"/>
         // </xs:sequence>
-        // <xs:attribute ref="isis:feature" fixed="reference"/>
-        // <xs:attribute ref="isis:type" default="%%appX%%:%%type%%"/>
-        // <xs:attribute ref="isis:isEmpty"/>
-        // <xs:attribute ref="isis:annotation"/>
+        // <xs:attribute ref="causeway:feature" fixed="reference"/>
+        // <xs:attribute ref="causeway:type" default="%%appX%%:%%type%%"/>
+        // <xs:attribute ref="causeway:isEmpty"/>
+        // <xs:attribute ref="causeway:annotation"/>
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
@@ -457,14 +457,14 @@ public final class XmlSchema {
         final Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // ref="isis:title"
+        // ref="causeway:title"
         final Element xsFieldTitleElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
-        xsFieldTitleElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "title");
+        xsFieldTitleElement.setAttribute("ref", CausewaySchema.NS_PREFIX + ":" + "title");
         xsFieldSequenceElement.appendChild(xsFieldTitleElement);
         xsMeta.setXsCardinality(xsFieldTitleElement, 0, 1);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // name="isis-extensions"
+        // name="causeway-extensions"
         addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:sequence
@@ -473,10 +473,10 @@ public final class XmlSchema {
         final Element xsReferencedElementSequenceElement = xsMeta.sequenceFor(xsFieldSequenceElement);
         xsMeta.setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
-        xsMeta.addXsIsisFeatureAttributeElements(xsFieldComplexTypeElement, "reference");
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "isEmpty");
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "annotation");
+        xsMeta.addXsCausewayFeatureAttributeElements(xsFieldComplexTypeElement, "reference");
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "isEmpty");
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "annotation");
 
         return xsFieldElementElement;
     }
@@ -501,13 +501,13 @@ public final class XmlSchema {
         // <xs:element name="%%field object%%">
         // <xs:complexType>
         // <xs:sequence>
-        // <xs:element ref="isis:oids" minOccurs="0" maxOccurs="1"/>
+        // <xs:element ref="causeway:oids" minOccurs="0" maxOccurs="1"/>
         // <!-- nested element definitions go here -->
         // </xs:sequence>
-        // <xs:attribute ref="isis:feature" fixed="collection"/>
-        // <xs:attribute ref="isis:type" fixed="%%appX%%:%%type%%"/>
-        // <xs:attribute ref="isis:size"/>
-        // <xs:attribute ref="isis:annotation"/>
+        // <xs:attribute ref="causeway:feature" fixed="collection"/>
+        // <xs:attribute ref="causeway:type" fixed="%%appX%%:%%type%%"/>
+        // <xs:attribute ref="causeway:size"/>
+        // <xs:attribute ref="causeway:annotation"/>
         // </xs:complexType>
         // </xs:element>
         // </xs:sequence>
@@ -529,9 +529,9 @@ public final class XmlSchema {
         final Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
 
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
-        // ref="isis:oids"
+        // ref="causeway:oids"
         final Element xsFieldOidsElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
-        xsFieldOidsElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "oids");
+        xsFieldOidsElement.setAttribute("ref", CausewaySchema.NS_PREFIX + ":" + "oids");
         xsFieldSequenceElement.appendChild(xsFieldOidsElement);
         xsMeta.setXsCardinality(xsFieldOidsElement, 0, 1);
 
@@ -551,10 +551,10 @@ public final class XmlSchema {
         // sequenceFor(xsFieldSequenceElement);
         // setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
-        xsMeta.addXsIsisFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "size");
-        xsMeta.addXsIsisAttribute(xsFieldComplexTypeElement, "annotation");
+        xsMeta.addXsCausewayFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "size");
+        xsMeta.addXsCausewayAttribute(xsFieldComplexTypeElement, "annotation");
 
         return xsFieldElementElement;
     }
@@ -563,7 +563,7 @@ public final class XmlSchema {
      *
      * <pre>
      *     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-     *     xsi:schemaLocation=&quot;http://isis.apache.org/ns/app/sdm.common.fixture.schemes.ao.communications ddd.xsd&quot;
+     *     xsi:schemaLocation=&quot;http://causeway.apache.org/ns/app/sdm.common.fixture.schemes.ao.communications ddd.xsd&quot;
      * </pre>
      *
      * Assumes that the URI has been specified.
@@ -581,7 +581,7 @@ public final class XmlSchema {
         // xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         addNamespace(rootElement, XsMetaModel.W3_ORG_XSI_PREFIX, XsMetaModel.W3_ORG_XSI_URI);
 
-        // xsi:schemaLocation="http://isis.apache.org/ns/app/<fully qualified
+        // xsi:schemaLocation="http://causeway.apache.org/ns/app/<fully qualified
         // class name>
         // sdm.common.fixture.schemes.ao.communications
         // sdm.common.fixture.schemes.ao.communications.AO11ConfirmAnimalRegistration.xsd"

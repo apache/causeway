@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * before the action itself is invoked.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>validateNXxx</tt> support method for an action.
  *
  * <p>

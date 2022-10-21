@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
-@Named("isis.val.JodaLocalDateValueSemantics")
+@Named("causeway.val.JodaLocalDateValueSemantics")
 public class JodaLocalDateValueSemantics
 extends TemporalSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  {
 

@@ -263,7 +263,7 @@ public interface FacetFactory {
          * Annotation lookup on this context's method, if not found, extends search to type in case
          * the predicate {@link #isMixinMain} evaluates {@code true}.
          * <p>
-         * As of [ISIS-2604] we also make sure the annotation type does not appear in both places
+         * As of [CAUSEWAY-2604] we also make sure the annotation type does not appear in both places
          * (method and type). Hence the 2nd parameter is a callback that fires if the annotation
          * is found in both places.
          *

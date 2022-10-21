@@ -100,7 +100,7 @@ public class CausewayModuleIncViewerVaadinViewer {
                     makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(
-                new IsisServletForVaadin(interactionService, context, isRootMapping),
+                new CausewayServletForVaadin(interactionService, context, isRootMapping),
                 urlMapping);
         registration.setInitParameters(initParameters);
         registration.setAsyncSupported(configurationProperties.isAsyncSupported());

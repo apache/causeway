@@ -36,7 +36,7 @@ public enum RelDefinition {
     /**
      * Proprietary rel defined by implementation.
      */
-    IMPL("urn:org.apache.isis.restfulobjects:rels/", true);
+    IMPL("urn:org.apache.causeway.restfulobjects:rels/", true);
 
     private final String relPrefix;
     private final boolean addParams;

@@ -1568,7 +1568,7 @@ public class JsonRepresentation {
 
     public JsonRepresentation putExtendedFormat(final @Nullable String format) {
         if(format != null) {
-            mapPutString("extensions.x-isis-format", format);
+            mapPutString("extensions.x-causeway-format", format);
         }
         return this;
     }

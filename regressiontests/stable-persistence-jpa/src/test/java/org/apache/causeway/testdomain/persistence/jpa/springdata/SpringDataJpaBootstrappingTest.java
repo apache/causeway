@@ -62,7 +62,7 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
-// @Disabled // ISIS-2789 revert
+// @Disabled // CAUSEWAY-2789 revert
 class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager;

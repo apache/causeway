@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.x {@index}
  */
 @Service
-@Named("isis.testing.fixtures.ModuleWithFixturesService")
+@Named("causeway.testing.fixtures.ModuleWithFixturesService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

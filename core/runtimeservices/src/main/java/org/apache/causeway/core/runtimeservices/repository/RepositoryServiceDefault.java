@@ -72,7 +72,7 @@ implements RepositoryService, HasMetaModelContext {
     final FactoryService factoryService;
     final WrapperFactory wrapperFactory;
     final TransactionService transactionService;
-    final CausewayConfiguration isisConfiguration;
+    final CausewayConfiguration causewayConfiguration;
 
     @Getter(onMethod_ = {@Override})
     final MetaModelContext metaModelContext;
@@ -81,7 +81,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @PostConstruct
     public void init() {
-        val disableAutoFlush = isisConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
+        val disableAutoFlush = causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 

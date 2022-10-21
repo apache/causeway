@@ -61,7 +61,7 @@ extends ViewModelFacetAbstract {
                         return null;
                     case NOT_SPECIFIED:
 
-                        //[ISIS-3068] consider what the BeanTypeClassifier has come up with
+                        //[CAUSEWAY-3068] consider what the BeanTypeClassifier has come up with
                         final boolean isClassifiedAsViewModel =
                             _Casts.castTo(ObjectSpecification.class, holder)
                             .map(ObjectSpecification::getBeanSort)

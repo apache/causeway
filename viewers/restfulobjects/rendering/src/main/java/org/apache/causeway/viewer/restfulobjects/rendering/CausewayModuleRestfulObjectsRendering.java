@@ -23,8 +23,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRest
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV2;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV1;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV2;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
@@ -55,8 +55,8 @@ import org.springframework.context.annotation.Import;
         // @Service's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
-        ContentNegotiationServiceOrgApacheIsisV2.class,
-        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported)
+        ContentNegotiationServiceOrgApacheCausewayV2.class,
+        ContentNegotiationServiceOrgApacheCausewayV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported)
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoderServiceDefault.class,
         RepresentationService.class,
@@ -66,5 +66,5 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleRestfulObjectsRendering {
 
-    public static final String NAMESPACE = "isis.viewer.restfulobjects";
+    public static final String NAMESPACE = "causeway.viewer.restfulobjects";
 }

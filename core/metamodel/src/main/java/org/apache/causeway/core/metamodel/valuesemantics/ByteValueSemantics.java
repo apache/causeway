@@ -46,7 +46,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("isis.val.ByteValueSemantics")
+@Named("causeway.val.ByteValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ByteValueSemantics
 extends ValueSemanticsAbstract<Byte>

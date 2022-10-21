@@ -70,7 +70,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
         if (mode.isStandalone() || mode.isMutated()) {
             addChoices();
-            addExtensionsIsisProprietaryChangedObjects();
+            addExtensionsCausewayProprietaryChangedObjects();
         }
 
         return representation;
@@ -206,7 +206,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     }
 
     @Override
-    protected void putExtensionsIsisProprietary() {
+    protected void putExtensionsCausewayProprietary() {
         // none
     }
 

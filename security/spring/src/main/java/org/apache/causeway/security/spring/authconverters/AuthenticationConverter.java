@@ -35,7 +35,7 @@ import lombok.val;
 
 /**
  * Defines an SPI to attempt to convert a Spring {@link Authentication} into
- * an Apache Isis {@link UserMemento}.
+ * an Apache Causeway {@link UserMemento}.
  *
  * <p>
  *     The {@link Authentication} will have already been verified as having been

@@ -34,8 +34,8 @@ import java.util.function.Predicate;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.testing.fakedata.applib.services.FakeDataService;
-import org.apache.causeway.testing.fakedata.applib.services.IsisBlobs;
-import org.apache.causeway.testing.fakedata.applib.services.IsisClobs;
+import org.apache.causeway.testing.fakedata.applib.services.CausewayBlobs;
+import org.apache.causeway.testing.fakedata.applib.services.CausewayClobs;
 import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -78,20 +78,20 @@ public class FakeDataServiceTest {
         }});
     }
 
-    public static class IsisBlobsTest extends FakeDataServiceTest {
+    public static class CausewayBlobsTest extends FakeDataServiceTest {
 
-        IsisBlobs isisBlobs;
+        CausewayBlobs causewayBlobs;
 
         @Before
         public void setUp() throws Exception {
             super.setUp();
-            isisBlobs = fakeDataService.isisBlobs();
+            causewayBlobs = fakeDataService.causewayBlobs();
         }
 
         @Test
         public void any() throws Exception {
 
-            final Blob blob = isisBlobs.any();
+            final Blob blob = causewayBlobs.any();
 
             assertThat(blob).isNotNull();
             assertThat(blob.getName()).isNotNull();
@@ -103,7 +103,7 @@ public class FakeDataServiceTest {
         @Test
         public void anyJpg() throws Exception {
 
-            final Blob blob = isisBlobs.anyJpg();
+            final Blob blob = causewayBlobs.anyJpg();
 
             assertThat(blob).isNotNull();
             assertThat(blob.getName()).endsWith(".jpg");
@@ -116,7 +116,7 @@ public class FakeDataServiceTest {
         @Test
         public void anyPdf() throws Exception {
 
-            final Blob blob = isisBlobs.anyPdf();
+            final Blob blob = causewayBlobs.anyPdf();
 
             assertThat(blob).isNotNull();
             assertThat(blob.getName()).endsWith(".pdf");
@@ -127,20 +127,20 @@ public class FakeDataServiceTest {
 
     }
 
-    public static class IsisClobsTest extends FakeDataServiceTest {
+    public static class CausewayClobsTest extends FakeDataServiceTest {
 
-        IsisClobs isisClobs;
+        CausewayClobs causewayClobs;
 
         @Before
         public void setUp() throws Exception {
             super.setUp();
-            isisClobs = fakeDataService.isisClobs();
+            causewayClobs = fakeDataService.causewayClobs();
         }
 
         @Test
         public void any() throws Exception {
 
-            final Clob clob = isisClobs.any();
+            final Clob clob = causewayClobs.any();
 
             assertThat(clob).isNotNull();
             assertThat(clob.getName()).isNotNull();
@@ -152,7 +152,7 @@ public class FakeDataServiceTest {
         @Test
         public void anyRtf() throws Exception {
 
-            final Clob clob = isisClobs.anyRtf();
+            final Clob clob = causewayClobs.anyRtf();
 
             assertThat(clob).isNotNull();
             assertThat(clob.getName()).endsWith(".rtf");
@@ -165,7 +165,7 @@ public class FakeDataServiceTest {
         @Test
         public void anyXml() throws Exception {
 
-            final Clob clob = isisClobs.anyXml();
+            final Clob clob = causewayClobs.anyXml();
 
             assertThat(clob).isNotNull();
             assertThat(clob.getName()).endsWith(".xml");
@@ -209,7 +209,7 @@ public class FakeDataServiceTest {
 
     @Test
     public void passwords_any() throws Exception {
-        final Password pwd = fakeDataService.isisPasswords().any();
+        final Password pwd = fakeDataService.causewayPasswords().any();
         assertThat(pwd.getPassword()).isNotNull();
         assertThat(pwd.getPassword().length()).isEqualTo(12);
     }
@@ -217,7 +217,7 @@ public class FakeDataServiceTest {
   //TODO[2249] deprecated    
 //    @Test
 //    public void moneys_any() throws Exception {
-//        final Money pwd = fakeDataService.isisMoneys().any();
+//        final Money pwd = fakeDataService.causewayMoneys().any();
 //        assertThat(pwd.getAmount()).isNotNull();
 //        assertThat(pwd.getCurrency()).isNotNull();
 //    }

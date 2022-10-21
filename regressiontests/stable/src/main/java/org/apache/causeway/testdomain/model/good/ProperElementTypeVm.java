@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @see <a href="https://issues.apache.org/jira/browse/ISIS-2499">ISIS-2499</a>
+ * @see <a href="https://issues.apache.org/jira/browse/CAUSEWAY-2499">CAUSEWAY-2499</a>
  */
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperElementTypeVm

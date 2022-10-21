@@ -63,6 +63,6 @@ import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsSe
 
 
 })
-@EnableVaadin("org.apache.isis.incubator.viewer.vaadin.ui") // scan for vaadin annotations
+@EnableVaadin("org.apache.causeway.incubator.viewer.vaadin.ui") // scan for vaadin annotations
 public class CausewayModuleIncViewerVaadinUi {
 }

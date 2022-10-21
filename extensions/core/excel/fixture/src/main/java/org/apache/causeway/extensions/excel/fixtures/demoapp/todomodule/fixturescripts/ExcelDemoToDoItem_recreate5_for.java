@@ -74,7 +74,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, daysFromToday(7), null, executionContext).setComplete(true);
         createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, daysFromToday(14), null, executionContext);
         createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, daysFromToday(21), null, executionContext);
-        createToDoItemForUser("Stage Isis release", Category.Professional, Subcategory.OpenSource, user, null, null, executionContext);
+        createToDoItemForUser("Stage Causeway release", Category.Professional, Subcategory.OpenSource, user, null, null, executionContext);
 
         t1.add(t2);
         t1.add(t3);
@@ -106,7 +106,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
 
 
     @Inject private ExcelDemoToDoItemMenu demoToDoItemMenu;
-    //@Inject private IsisJdoSupport isisJdoSupport;
+    //@Inject private CausewayJdoSupport causewayJdoSupport;
     @Inject private ClockService clockService;
 
 }

@@ -51,11 +51,11 @@ public interface CausewayBeanTypeClassifier {
      * in support of JUnit testing
      */
     static CausewayBeanTypeClassifier createInstance() {
-        return new IsisBeanTypeClassifierDefault(Can.empty());
+        return new CausewayBeanTypeClassifierDefault(Can.empty());
     }
 
     static CausewayBeanTypeClassifier createInstance(final @NonNull ApplicationContext applicationContext) {
-        return new IsisBeanTypeClassifierDefault(
+        return new CausewayBeanTypeClassifierDefault(
                 Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()));
     }
 

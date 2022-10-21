@@ -275,11 +275,11 @@ public final class _fx {
         _fx.backround(component, Color.FLORALWHITE);
     }
 
-    public static void visistDepthFirst(Node component, Predicate<Node> onNode) {
+    public static void vcausewaytDepthFirst(Node component, Predicate<Node> onNode) {
         val doContinue = onNode.test(component);
         if(doContinue && (component instanceof Pane)) {
             ((Pane) component).getChildrenUnmodifiable()
-            .forEach(child->visistDepthFirst(child, onNode));
+            .forEach(child->vcausewaytDepthFirst(child, onNode));
         }
     }
 
@@ -320,7 +320,7 @@ public final class _fx {
 //
 //            _Probe.errOut("event %s", ""+e);
 //
-//            visistDepthFirst(component, node->{
+//            vcausewaytDepthFirst(component, node->{
 //                _Probe.errOut("node %s", ""+node);
 //                return true;
 //            });

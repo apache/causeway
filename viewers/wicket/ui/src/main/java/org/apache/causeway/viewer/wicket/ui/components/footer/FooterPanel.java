@@ -153,7 +153,7 @@ extends PanelAbstract<String, Model<String>> {
         }
 
         PageParameters parameters = getPage().getPageParameters();
-        setVisible(parameters.get(PageParameterUtils.ISIS_NO_FOOTER_PARAMETER_NAME).isNull());
+        setVisible(parameters.get(PageParameterUtils.CAUSEWAY_NO_FOOTER_PARAMETER_NAME).isNull());
     }
 
     private void addAboutLink() {

@@ -78,9 +78,9 @@ public interface JdoSupportService {
      * a bulk deletion with a single <tt>SQL DELETE</tt>, use {@link #executeUpdate(String)}.
      *
      * <p>
-     * Implementation note: It can occasionally be the case that Isis' internal adapter for the domain object is
+     * Implementation note: It can occasionally be the case that Causeway' internal adapter for the domain object is
      * still in memory.  JDO/DataNucleus seems to bump up the version of the object prior to its deletion,
-     * which under normal circumstances would cause Isis to throw a concurrency exception.  Therefore
+     * which under normal circumstances would cause Causeway to throw a concurrency exception.  Therefore
      * To prevent this from happening (ie to <i>force</i> the deletion of all instances), concurrency checking
      * is temporarily disabled while this method is performed.
      */

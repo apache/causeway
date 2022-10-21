@@ -59,10 +59,10 @@ public class DomainObjectMemberRepresentation extends DomainRepresentation  {
     }
 
     /**
-     * Isis-specific extension; not part of the RO API;
+     * Causeway-specific extension; not part of the RO API;
      */
-    public String getXIsisFormat() {
-        return getString("extensions.x-isis-format");
+    public String getXCausewayFormat() {
+        return getString("extensions.x-causeway-format");
     }
 
 }

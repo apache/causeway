@@ -29,7 +29,7 @@ import lombok.NonNull;
 
 /**
  * Represents a nullable scalar value,
- * as used by ContentNegotiationServiceOrgApacheIsisV2 and its clients.
+ * as used by ContentNegotiationServiceOrgApacheCausewayV2 and its clients.
  *
  * @since 2.0 {@index}
  */

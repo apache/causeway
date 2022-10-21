@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * {@link ManagedObject object}.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>hideXxx</tt> support method for the member.
  */
 public interface HideForContextFacet extends Facet, HidingInteractionAdvisor {

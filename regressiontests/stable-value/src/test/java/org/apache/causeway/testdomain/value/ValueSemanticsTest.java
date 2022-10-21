@@ -84,7 +84,7 @@ import lombok.val;
                 Configuration_usingValueTypes.class,
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL"
+                "causeway.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
@@ -137,7 +137,7 @@ class ValueSemanticsTest {
         final Set<Class<?>> valueTypesKnown = valueSemanticsResolver.streamClassesWithValueSemantics()
         .collect(Collectors.toSet());
 
-        //TODO[ISIS-2877] yet excluded from coverage ...
+        //TODO[CAUSEWAY-2877] yet excluded from coverage ...
         valueTypesKnown.remove(TreeNode.class);
         valueTypesKnown.remove(Markdown.class);
         valueTypesKnown.remove(AsciiDoc.class);

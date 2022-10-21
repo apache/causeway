@@ -155,7 +155,7 @@ public class ValueSemanticsTester<T> {
         val xmlRef = _Refs.stringRef(rawXml);
         xmlRef.cutAtIndexOf("<ValueWithTypeDto");
         return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
-                .replace(" null=\"false\" xmlns:com=\"http://isis.apache.org/schema/common\" xmlns:cmd=\"http://isis.apache.org/schema/cmd\"", "")
+                .replace(" null=\"false\" xmlns:com=\"http://causeway.apache.org/schema/common\" xmlns:cmd=\"http://causeway.apache.org/schema/cmd\"", "")
                 + "</ValueWithTypeDto>";
 
     }

@@ -64,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateStopMenu {
 
-    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ImpersonateStopMenu";   // deliberately IS part of isis.applib
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ImpersonateStopMenu";   // deliberately IS part of causeway.applib
 
     final UserService userService;
     final MessageService messageService;

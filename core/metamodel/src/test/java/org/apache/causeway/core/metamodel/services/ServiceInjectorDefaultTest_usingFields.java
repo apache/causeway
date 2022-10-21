@@ -34,7 +34,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,7 +44,7 @@ import lombok.Getter;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
-        IsisBeanFactoryPostProcessorForSpring.class,
+        CausewayBeanFactoryPostProcessorForSpring.class,
         CausewayModuleCoreConfig.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
@@ -52,7 +52,7 @@ import lombok.Getter;
         ServiceInjectorDefaultTest_usingFields.Producers.class,
 },
 properties = {
-        "isis.services.injector.setPrefix=true"
+        "causeway.services.injector.setPrefix=true"
 })
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 class ServiceInjectorDefaultTest_usingFields {

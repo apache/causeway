@@ -101,7 +101,7 @@ if(digest.isSuccess()) {
 @Log4j2
 public class RestfulClient {
 
-    private static final String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=\"urn:org.apache.isis/v2\"";
+    private static final String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=\"urn:org.apache.causeway/v2\"";
 
     private RestfulClientConfig clientConfig;
     private Client client;

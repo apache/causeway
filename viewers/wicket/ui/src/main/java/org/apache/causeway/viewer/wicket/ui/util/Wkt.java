@@ -87,8 +87,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.causeway.viewer.wicket.model.hints.IsisActionCompletedEvent;
-import org.apache.causeway.viewer.wicket.model.hints.IsisEnvelopeEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
@@ -279,7 +279,7 @@ public class Wkt {
                 return dynamicVisibility.getAsBoolean();
             }
 
-            //XXX ISIS[3022] adds support for CTRL down behavior, that is, opens URL in new tab if CTRL pressed
+            //XXX CAUSEWAY[3022] adds support for CTRL down behavior, that is, opens URL in new tab if CTRL pressed
             @Override protected CharSequence getOnClickScript(final CharSequence url) {
                 return "var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; "
                         + "if (win == window) {"
@@ -451,15 +451,15 @@ public class Wkt {
             @Override protected void onUpdate(final AjaxRequestTarget target) {
                 onUpdate.accept(target); }
             /**
-             * XXX[ISIS-3005] Any action dialog submission on the same page will
+             * XXX[CAUSEWAY-3005] Any action dialog submission on the same page will
              * result in a new {@link DataTableModel}, where any previously rendered check-boxes
              * run out of sync with their DataRowToggle model.
              * Hence we intercept such events and reset check-boxes to un-checked.
              */
             @Override public void onEvent(final IEvent<?> event) {
-                _Casts.castTo(IsisEnvelopeEvent.class, event.getPayload())
+                _Casts.castTo(CausewayEnvelopeEvent.class, event.getPayload())
                 .ifPresent(envelopeEvent->{
-                    if(envelopeEvent.getLetter() instanceof IsisActionCompletedEvent) {
+                    if(envelopeEvent.getLetter() instanceof CausewayActionCompletedEvent) {
                         if(Boolean.TRUE.equals(this.getModelObject())) {
                             this.setModelObject(false);
                             envelopeEvent.getTarget().add(this);
@@ -544,7 +544,7 @@ public class Wkt {
 
     public static String cssNormalize(final Identifier identifier) {
         val sb = new StringBuilder();
-        sb.append("isis-");
+        sb.append("causeway-");
         sb.append(identifier.getLogicalType().getLogicalTypeName());
         if(_Strings.isNullOrEmpty(identifier.getMemberLogicalName())) {
             sb.append("-");
@@ -578,7 +578,7 @@ public class Wkt {
 //            public void convertInput() {
 //                super.convertInput(); // keep side-effects
 //                if(!isRequired()) {return;}
-//                /*[ISIS-3203]: in the context of mandatory property or action parameter negotiation,
+//                /*[CAUSEWAY-3203]: in the context of mandatory property or action parameter negotiation,
 //                 * we need to set the converted input to something other than null, even an empty list will do
 //                 */
 //                if(isConvertedInputNull()
@@ -595,7 +595,7 @@ public class Wkt {
 //            private boolean isConvertedInputNull() { return getConvertedInput()==null; }
             @Override
             public boolean isRequired() {
-                //FIXME[ISIS-3203]
+                //FIXME[CAUSEWAY-3203]
                 return false; // nothing else worked yet
             }
         };
@@ -986,7 +986,7 @@ public class Wkt {
     // -- FOCUS UTILITY
 
     /**
-     * If the container has any child with the marker attribute {@code data-isis-focus},
+     * If the container has any child with the marker attribute {@code data-causeway-focus},
      * then the first one found will receive focus (in the browser).
      * @implNote HTML allows for custom attributes with naming convention {@code data-}.
      */
@@ -995,7 +995,7 @@ public class Wkt {
             final AjaxRequestTarget target) {
 
         container.streamChildren()
-        .filter(child->child.getMarkupAttributes().containsKey("data-isis-focus"))
+        .filter(child->child.getMarkupAttributes().containsKey("data-causeway-focus"))
         .findFirst()
         .ifPresent(child->{
             target.focusComponent(child);
@@ -1022,8 +1022,8 @@ public class Wkt {
 
     private String javaScriptFor(final EventTopic topic, final String containerId) {
         return _Strings.isNotEmpty(containerId)
-                ? String.format("Wicket.Event.publish(Isis.Topic.%s, '%s')", topic.name(), containerId)
-                : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
+                ? String.format("Wicket.Event.publish(Causeway.Topic.%s, '%s')", topic.name(), containerId)
+                : String.format("Wicket.Event.publish(Causeway.Topic.%s)", topic.name());
     }
 
     // -- TABBING UTILITY
@@ -1077,7 +1077,7 @@ public class Wkt {
 
         maxLength.get()
         .ifPresent(maxLen->{
-            // for TextArea in conjunction with javascript in IsisWicketViewerJsResourceReference
+            // for TextArea in conjunction with javascript in CausewayWicketViewerJsResourceReference
             // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
 
             Wkt.attributeReplace(formComponent, "maxlength", maxLen);

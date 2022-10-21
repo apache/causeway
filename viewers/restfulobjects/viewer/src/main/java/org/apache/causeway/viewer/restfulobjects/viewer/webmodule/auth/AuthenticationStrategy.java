@@ -25,7 +25,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 
 /**
- * Decouples the <code>IsisRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
+ * Decouples the <code>CausewayRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
  * {@link InteractionContext}.
  *
  * @since 2.0 {@index}

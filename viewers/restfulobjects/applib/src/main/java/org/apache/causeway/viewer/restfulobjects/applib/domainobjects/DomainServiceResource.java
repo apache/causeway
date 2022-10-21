@@ -113,7 +113,7 @@ public interface DomainServiceResource {
 
     /**
      * Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead
-     * we provide an additional syntax of passing an Isis-defined query param <tt>x-isis-querystring</tt>.
+     * we provide an additional syntax of passing an Causeway-defined query param <tt>x-causeway-querystring</tt>.
      *
      * <p>
      * The content of this is taken to be the URL encoded map of arguments.
@@ -125,7 +125,7 @@ public interface DomainServiceResource {
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
+    public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-causeway-querystring") final String xCausewayQueryString);
 
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")

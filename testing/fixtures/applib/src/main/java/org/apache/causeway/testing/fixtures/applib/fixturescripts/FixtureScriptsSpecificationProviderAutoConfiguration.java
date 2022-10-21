@@ -40,16 +40,16 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
 
     /**
      * Returns an implementation of {@link FixtureScriptsSpecificationProvider} that
-     * uses configuration properties under <code>isis.testing.fixtures.fixture-scripts-specification</code>.
+     * uses configuration properties under <code>causeway.testing.fixtures.fixture-scripts-specification</code>.
      *
      * @return
      */
-    @Bean("isis.testing.fixtures.FixtureScriptsSpecificationProviderDefault")
+    @Bean("causeway.testing.fixtures.FixtureScriptsSpecificationProviderDefault")
     @ConditionalOnMissingBean(FixtureScriptsSpecificationProvider.class)
     @Qualifier("Default")
-    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final CausewayConfiguration isisConfiguration) {
+    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final CausewayConfiguration causewayConfiguration) {
 
-        val fixturesConfig = isisConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
+        val fixturesConfig = causewayConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
         val builder = builderFrom(fixturesConfig);
 
         builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.getNonPersistedObjectsStrategy().name()));

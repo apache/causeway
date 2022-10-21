@@ -40,7 +40,7 @@ import lombok.Getter;
  * @since 2.0
  */
 @Service
-@Named("isis.webapp.WebModuleTemplateResources")
+@Named("causeway.webapp.WebModuleTemplateResources")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("TemplateResources")
 public final class WebModuleTemplateResources extends WebModuleAbstract {

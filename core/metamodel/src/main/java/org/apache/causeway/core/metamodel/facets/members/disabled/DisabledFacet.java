@@ -31,7 +31,7 @@ import lombok.NonNull;
  * Disable a property, collection or action.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
  * member with <tt>@Disabled</tt>.
  */
 public interface DisabledFacet

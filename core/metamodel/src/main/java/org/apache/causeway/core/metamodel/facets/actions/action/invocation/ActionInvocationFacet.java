@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * Represents the mechanism by which the action should be invoked.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * actual action method itself (a <tt>public</tt> method that does not represent
  * a property, a collection or any of the supporting methods).
  */

@@ -41,6 +41,6 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleViewerCommonsServices {
 
-    public static final String NAMESPACE = "isis.viewer.commons";
+    public static final String NAMESPACE = "causeway.viewer.commons";
 
 }

@@ -116,16 +116,16 @@ public interface JaxbService {
      *     A JAXB-annotated domain object will live in its own XSD namespace
      *     and may reference multiple other XSD schemas.
      *     In particular, many JAXB domain objects will reference the common
-     *     isis schemas.  The {@link IsisSchemas} paramter indicates whether
+     *     causeway schemas.  The {@link CausewaySchemas} paramter indicates whether
      *     these schemas should be included or excluded from the map.
      * </p>
      *
      * @param domainObject
-     * @param isisSchemas
+     * @param causewaySchemas
      */
     Map<String, String> toXsd(
             Object domainObject,
-            IsisSchemas isisSchemas);
+            CausewaySchemas causewaySchemas);
 
 
     class Simple implements JaxbService {
@@ -243,11 +243,11 @@ public interface JaxbService {
         @SneakyThrows
         public final Map<String, String> toXsd(
                 final @NonNull Object domainObject,
-                final @NonNull IsisSchemas isisSchemas) {
+                final @NonNull CausewaySchemas causewaySchemas) {
 
             val jaxbContext = jaxbContextForObject(domainObject);
 
-            val outputResolver = new CatalogingSchemaOutputResolver(isisSchemas);
+            val outputResolver = new CatalogingSchemaOutputResolver(causewaySchemas);
             jaxbContext.generateSchema(outputResolver);
 
             return outputResolver.asMap();

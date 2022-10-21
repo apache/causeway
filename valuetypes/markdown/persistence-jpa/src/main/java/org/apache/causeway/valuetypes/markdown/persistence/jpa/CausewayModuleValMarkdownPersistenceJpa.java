@@ -19,7 +19,7 @@
 package org.apache.causeway.valuetypes.markdown.persistence.jpa;
 
 import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
-import org.apache.causeway.valuetypes.markdown.persistence.jpa.converters.IsisMarkdownConverter;
+import org.apache.causeway.valuetypes.markdown.persistence.jpa.converters.CausewayMarkdownConverter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 @EntityScan(basePackageClasses = {
 
         // @Converter's
-        IsisMarkdownConverter.class
+        CausewayMarkdownConverter.class
 })
 public class CausewayModuleValMarkdownPersistenceJpa {
 }

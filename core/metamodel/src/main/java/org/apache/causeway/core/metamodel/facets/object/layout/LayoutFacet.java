@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * Layout for an object.
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to a method named <tt>layout</tt>.
+ * In the standard Apache Causeway Programming Model, typically corresponds to a method named <tt>layout</tt>.
  *
  * @see TitleFacet
  * @see IconFacet

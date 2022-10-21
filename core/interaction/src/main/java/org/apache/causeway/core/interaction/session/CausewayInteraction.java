@@ -51,7 +51,7 @@ implements InteractionInternal {
     public CausewayInteraction(final @NonNull UUID interactionId) {
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.command = new Command(interactionId);
-        log.debug("new IsisInteraction id={}", interactionId);
+        log.debug("new CausewayInteraction id={}", interactionId);
     }
 
     @Getter(onMethod_ = {@Override})

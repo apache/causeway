@@ -137,7 +137,7 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 })
 public class CausewayModuleCoreRuntimeServices {
 
-    public static final String NAMESPACE = "isis.runtimeservices";
+    public static final String NAMESPACE = "causeway.runtimeservices";
 
     @Bean @Singleton // also used by _Spring utility
     public OrderComparator orderComparator() {

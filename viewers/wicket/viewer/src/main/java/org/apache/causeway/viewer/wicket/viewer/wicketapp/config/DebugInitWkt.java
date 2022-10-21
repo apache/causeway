@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
 @Configuration
 public class DebugInitWkt implements WicketApplicationInitializer {

@@ -187,8 +187,8 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 })
 public class CausewayModuleExtSecmanApplib {
 
-    public static final String NAMESPACE = "isis.ext.secman";
-    public static final String SCHEMA = "isisExtSecman";
+    public static final String NAMESPACE = "causeway.ext.secman";
+    public static final String SCHEMA = "causewayExtSecman";
 
     public abstract static class TitleUiEvent<S>
             extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }

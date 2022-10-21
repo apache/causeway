@@ -41,11 +41,11 @@ public class SessionLogServiceInitializer implements MetamodelListener {
     final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
     final InteractionService interactionService;
     final ClockService clockService;
-    final CausewayConfiguration isisConfiguration;
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
     public void onMetamodelLoaded() {
-        if (!isisConfiguration.getExtensions().getSessionLog().isAutoLogoutOnRestart()) {
+        if (!causewayConfiguration.getExtensions().getSessionLog().isAutoLogoutOnRestart()) {
             return;
         }
 

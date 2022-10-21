@@ -45,7 +45,7 @@ implements EntityPropertyChangeSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @PostConstruct
     public void init() {
@@ -55,7 +55,7 @@ implements EntityPropertyChangeSubscriber {
     @Override
     public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        PersistenceStack persistenceStack = isisBeanTypeRegistry.determineCurrentPersistenceStack();
+        PersistenceStack persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
 
         val target = entityPropertyChange.getTarget();
         val targetLogicalTypeName = target.getLogicalTypeName();

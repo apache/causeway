@@ -40,7 +40,7 @@ import lombok.val;
  * hence fail validation on 'overloading'
  *
  * @since 2.0
- * @see <a href="https://issues.apache.org/jira/browse/ISIS-2493">ISIS-2493</a>
+ * @see <a href="https://issues.apache.org/jira/browse/CAUSEWAY-2493">CAUSEWAY-2493</a>
  */
 public class ActionOverloadingValidator
 extends MetaModelVisitingValidatorAbstract {

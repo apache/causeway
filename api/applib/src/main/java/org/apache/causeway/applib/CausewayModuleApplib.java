@@ -115,10 +115,10 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleApplib {
 
-    public static final String NAMESPACE = "isis.applib";
-    public static final String NAMESPACE_CONF = "isis.conf";    // for configuration; to minimize the risk of granting perms accidentally
-    public static final String NAMESPACE_SUDO = "isis.sudo";    // for impersonation
-    public static final String NAMESPACE_FEAT = "isis.feat";    // for app features
+    public static final String NAMESPACE = "causeway.applib";
+    public static final String NAMESPACE_CONF = "causeway.conf";    // for configuration; to minimize the risk of granting perms accidentally
+    public static final String NAMESPACE_SUDO = "causeway.sudo";    // for impersonation
+    public static final String NAMESPACE_FEAT = "causeway.feat";    // for app features
 
     // -- UI EVENT CLASSES
 

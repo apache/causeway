@@ -34,9 +34,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContexts;
@@ -53,13 +53,13 @@ import lombok.val;
         classes = {
                 CausewaySystemEnvironment.class,
                 MetaModelContexts.class,
-                IsisBeanFactoryPostProcessorForSpring.class,
-                IsisBeanTypeRegistryDefault.class,
+                CausewayBeanFactoryPostProcessorForSpring.class,
+                CausewayBeanTypeRegistryDefault.class,
                 Configuration_usingStereotypes.class,
                 ServiceRegistryDefault.class
         },
         properties = {
-                // "isis.core.meta-model.introspector.parallelize=false",
+                // "causeway.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
@@ -70,8 +70,8 @@ import lombok.val;
 class AutoConfigurationTest {
 
     @Inject private ApplicationContext applicationContext;
-    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
-    @Inject private CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
     @Inject private ServiceRegistry serviceRegistry;
 
     //XXX for debugging and experimenting
@@ -94,13 +94,13 @@ class AutoConfigurationTest {
     @BeforeEach
     void beforeEach() {
         assertNotNull(applicationContext);
-        assertNotNull(isisSystemEnvironment);
+        assertNotNull(causewaySystemEnvironment);
     }
 
     @Test
     void domainObjects_shouldBeDiscovered() {
         for(val cls : nonManaged()) {
-            val type = isisBeanTypeRegistry.lookupIntrospectableType(cls);
+            val type = causewayBeanTypeRegistry.lookupIntrospectableType(cls);
             assertTrue(type.isPresent());
         }
     }

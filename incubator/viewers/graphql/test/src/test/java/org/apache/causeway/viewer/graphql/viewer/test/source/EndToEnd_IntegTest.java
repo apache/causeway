@@ -56,7 +56,7 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForIsis;
+import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E1;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E2;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.GQLTestDomainMenu;
@@ -72,9 +72,9 @@ import lombok.val;
 public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
     @Inject TransactionService transactionService;
-    @Inject CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject SpecificationLoader specificationLoader;
-    @Inject GraphQlSourceForIsis graphQlSourceForIsis;
+    @Inject GraphQlSourceForCauseway graphQlSourceForCauseway;
 
     @Inject TestEntityRepository testEntityRepository;
     @Inject GQLTestDomainMenu gqlTestDomainMenu;
@@ -85,9 +85,9 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
     @BeforeEach
     void beforeEach(final TestInfo testInfo) {
         this.testInfo = testInfo;
-        assertNotNull(isisSystemEnvironment);
+        assertNotNull(causewaySystemEnvironment);
         assertNotNull(specificationLoader);
-        assertNotNull(graphQlSourceForIsis);
+        assertNotNull(graphQlSourceForCauseway);
     }
 
     @AfterEach
@@ -110,7 +110,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
     }
 
     //TODO started to fail on 2022-04-22, with missing
-    //"name" : "_gql_input__org_apache_isis_applib_services_inject_ServiceInjector"
+    //"name" : "_gql_input__org_apache_causeway_applib_services_inject_ServiceInjector"
     //disabled to rescue CI build
     @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @UseReporter(TextWebReporter.class)

@@ -162,7 +162,7 @@ public enum ActionResultResponseHandlingStrategy {
     }
 
     private static String javascriptFor_newWindow(final CharSequence url) {
-        return "function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
+        return "function(){Wicket.Event.publish(Causeway.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
     }
 
     private static String javascriptFor_sameWindow(final CharSequence url) {

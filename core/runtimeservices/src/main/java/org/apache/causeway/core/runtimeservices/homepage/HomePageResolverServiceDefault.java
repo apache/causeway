@@ -43,22 +43,22 @@ import lombok.val;
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;
-    private final CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     private Optional<Class<?>> viewModelTypeForHomepage;
 
     @Inject
     public HomePageResolverServiceDefault(
             final FactoryService factoryService,
-            final CausewayBeanTypeRegistry isisBeanTypeRegistry) {
+            final CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
 
         this.factoryService = factoryService;
-        this.isisBeanTypeRegistry = isisBeanTypeRegistry;
+        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
     }
 
     @PostConstruct
     public void init() {
-        val viewModelTypes = isisBeanTypeRegistry.getViewModelTypes();
+        val viewModelTypes = causewayBeanTypeRegistry.getViewModelTypes();
         viewModelTypeForHomepage = viewModelTypes.keySet().stream()
                 .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class))
                 .findFirst();

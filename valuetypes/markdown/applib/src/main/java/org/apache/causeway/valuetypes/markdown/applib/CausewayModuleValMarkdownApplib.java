@@ -25,5 +25,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class CausewayModuleValMarkdownApplib {
-    public static final String NAMESPACE = "isis.value.markdown";
+    public static final String NAMESPACE = "causeway.value.markdown";
 }

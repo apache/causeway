@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.causeway.schema.common.v2.OidDto;
 
 @Component
-@Named("isis.val.OidDtoValueSemantics")
+@Named("causeway.val.OidDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class OidDtoValueSemantics
 extends ValueSemanticsAdapter<OidDto, Bookmark, Void> {

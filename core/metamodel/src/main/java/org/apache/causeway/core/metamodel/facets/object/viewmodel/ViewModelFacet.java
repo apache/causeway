@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  * some sort (for the domain layer, that is: an external or synthetic entity).
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to
+ * In the standard Apache Causeway Programming Model, corresponds to
  * applying either {@link org.apache.causeway.applib.annotation.DomainObject} annotation with
  * {@link Nature} = {@link Nature#VIEW_MODEL}  or
  * {@link org.apache.causeway.applib.ViewModel} interface (for a view model), or by annotating
@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  * <p>
  * Note: this facet is called &quot;ViewModelFacet&quot; for historical reasons; a better name would be
  * &quot;RecreatableObjectFacet&quot;.  The old name has been retained only to avoid unnecessarily breaking
- * some add-ons (eg Isis Addons Excel Module) that use this facet.
+ * some add-ons (eg Causeway Addons Excel Module) that use this facet.
  */
 public interface ViewModelFacet extends Facet {
 

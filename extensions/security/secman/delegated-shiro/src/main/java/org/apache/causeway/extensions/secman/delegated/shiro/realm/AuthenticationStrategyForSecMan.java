@@ -38,7 +38,7 @@ public class AuthenticationStrategyForSecMan extends AllSuccessfulStrategy {
      *
      * <p>
      *    The default implementation uses a {@link org.apache.shiro.subject.SimplePrincipalCollection},
-     *    however this doesn't play well with the Isis security module which ends up chaining
+     *    however this doesn't play well with the Causeway security module which ends up chaining
      *    together multiple instances of {@link PrincipalForApplicationUser} for each login.
      *    This is probably because of it doing double duty with holding authorization information.
      *    There may be a better design here, but for now the solution I've chosen is to use a different

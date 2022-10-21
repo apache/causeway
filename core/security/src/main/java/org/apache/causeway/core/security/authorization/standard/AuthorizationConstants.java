@@ -20,7 +20,7 @@ package org.apache.causeway.core.security.authorization.standard;
 
 public final class AuthorizationConstants {
 
-    private static final String ROOT = "isis.authorization.";
+    private static final String ROOT = "causeway.authorization.";
 
     public static final String LEARN = ROOT + "learn";
     public static final boolean LEARN_DEFAULT = false;

@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.jaxb.IsisSchemas;
+import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.util.ZipWriter;
@@ -75,8 +75,8 @@ public class Dto_downloadXsd {
     extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Dto_downloadXsd> {}
 
     /**
-     * The {@link IsisSchemas} parameter can be used to optionally ignore the
-     * common Apache Isis schemas; useful if there is only one other XSD schema
+     * The {@link CausewaySchemas} parameter can be used to optionally ignore the
+     * common Apache Causeway schemas; useful if there is only one other XSD schema
      * referenced by the DTO.
      */
     @MemberSupport public Object act(
@@ -86,9 +86,9 @@ public class Dto_downloadXsd {
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
 
-            final IsisSchemas isisSchemas) {
+            final CausewaySchemas causewaySchemas) {
 
-        val schemaMap = jaxbService.toXsd(holder, isisSchemas);
+        val schemaMap = jaxbService.toXsd(holder, causewaySchemas);
 
         if(schemaMap.isEmpty()) {
             val msg = String.format(
@@ -125,10 +125,10 @@ public class Dto_downloadXsd {
     }
 
     /**
-     * Defaults to {@link IsisSchemas#IGNORE}
+     * Defaults to {@link CausewaySchemas#IGNORE}
      */
-    @MemberSupport public IsisSchemas default1Act() {
-        return IsisSchemas.IGNORE;
+    @MemberSupport public CausewaySchemas default1Act() {
+        return CausewaySchemas.IGNORE;
     }
 
     private static String zipEntryNameFor(final String namespaceUri) {

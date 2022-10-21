@@ -80,7 +80,7 @@ extends PanelAbstract<String, Model<String>> {
         super.onConfigure();
 
         PageParameters parameters = getPage().getPageParameters();
-        setVisible(parameters.get(PageParameterUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
+        setVisible(parameters.get(PageParameterUtils.CAUSEWAY_NO_HEADER_PARAMETER_NAME).isNull());
     }
 
     protected void addApplicationName(final BrandingUiModel branding) {

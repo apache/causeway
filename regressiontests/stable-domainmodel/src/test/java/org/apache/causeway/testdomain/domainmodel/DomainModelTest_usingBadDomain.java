@@ -79,11 +79,11 @@ import lombok.val;
                 Configuration_usingInvalidDomain.class
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL"
+                "causeway.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
+    //CausewayPresets.DebugMetaModel,
+    //CausewayPresets.DebugProgrammingModel,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
@@ -91,7 +91,7 @@ class DomainModelTest_usingBadDomain {
 
     @Inject private CausewayConfiguration configuration;
     @Inject private InteractionService interactionService;
-    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private DomainObjectTesterFactory testerFactory;
 
@@ -100,7 +100,7 @@ class DomainModelTest_usingBadDomain {
     @BeforeEach
     void setup() {
         interactionService.runAnonymous(() -> {
-            validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+            validator = new DomainModelValidator(specificationLoader, configuration, causewaySystemEnvironment);
             assertThrows(DomainModelException.class, validator::throwIfInvalid);
         });
     }
@@ -108,7 +108,7 @@ class DomainModelTest_usingBadDomain {
 
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
-        assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironment));
+        assertTrue(IntrospectionMode.isFullIntrospect(configuration, causewaySystemEnvironment));
     }
 
     @Test
@@ -166,12 +166,12 @@ class DomainModelTest_usingBadDomain {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidServiceWithAlias.class)),
                 "Logical type name (or alias) testdomain.InvalidServiceWithAlias mapped to multiple non-abstract classes:");
-                //org.apache.isis.testdomain.model.bad.InvalidObjectWithAlias, org.apache.isis.testdomain.model.bad.InvalidServiceWithAlias
+                //org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias, org.apache.causeway.testdomain.model.bad.InvalidServiceWithAlias
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidObjectWithAlias.class)),
                 "Logical type name (or alias) testdomain.InvalidObjectWithAlias mapped to multiple non-abstract classes:");
-                //org.apache.isis.testdomain.model.bad.InvalidObjectWithAlias, org.apache.isis.testdomain.model.bad.InvalidServiceWithAlias
+                //org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias, org.apache.causeway.testdomain.model.bad.InvalidServiceWithAlias
     }
 
     @Test
@@ -229,7 +229,7 @@ class DomainModelTest_usingBadDomain {
 //
 //        validator.assertAnyOfContainingAnyFailures(
 //                classIdentifiers,
-//                "Logical type name 'isis.testdomain.InvalidLogicalTypeNameClash' "
+//                "Logical type name 'causeway.testdomain.InvalidLogicalTypeNameClash' "
 //                        + "mapped to multiple non-abstract classes:\n"
 //                        + typeLiteralList);
 //    }

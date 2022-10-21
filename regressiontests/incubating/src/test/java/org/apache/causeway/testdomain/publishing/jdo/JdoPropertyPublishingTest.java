@@ -40,7 +40,7 @@ import org.apache.causeway.testdomain.publishing.stubs.PropertyPublishingTestAbs
         },
         properties = {
                 "logging.level.org.apache.causeway.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.causeway.testdomain.util.rest.KVStoreForTesting=DEBUG",
                 "logging.level.org.apache.causeway.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
                 "logging.level.org.apache.causeway.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
         })

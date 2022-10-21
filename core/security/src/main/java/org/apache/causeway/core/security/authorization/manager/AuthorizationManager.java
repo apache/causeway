@@ -43,7 +43,7 @@ import org.apache.causeway.core.security.authorization.Authorizor;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.security.AuthorizationManager")
+@Named("causeway.security.AuthorizationManager")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class AuthorizationManager {

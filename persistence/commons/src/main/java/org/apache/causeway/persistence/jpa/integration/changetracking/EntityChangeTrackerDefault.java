@@ -91,7 +91,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.persistence.commons.EntityChangeTrackerDefault")
+@Named("causeway.persistence.commons.EntityChangeTrackerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("default")
 @InteractionScope   // see note above regarding this
@@ -203,7 +203,7 @@ implements
      * </p>
      */
     @Component
-    @Named("isis.persistence.commons.EntityChangeTrackerDefault.TransactionSubscriber")
+    @Named("causeway.persistence.commons.EntityChangeTrackerDefault.TransactionSubscriber")
     @Priority(PriorityPrecedence.EARLY)
     @Qualifier("default")
     @RequiredArgsConstructor(onConstructor_ = {@Inject})

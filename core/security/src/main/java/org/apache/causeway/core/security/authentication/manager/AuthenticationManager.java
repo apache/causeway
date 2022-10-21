@@ -50,7 +50,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isis.security.AuthenticationManager")
+@Named("causeway.security.AuthenticationManager")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class AuthenticationManager {

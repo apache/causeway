@@ -69,7 +69,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenu {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of causeway.applib
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 

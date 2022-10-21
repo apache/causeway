@@ -23,7 +23,7 @@ package org.apache.causeway.core.metamodel.facets.object.callbacks;
  * persisted to the object store for the first time.
  *
  * <p>
- * In the standard Apache Isis Programming Model, this is represented by a
+ * In the standard Apache Causeway Programming Model, this is represented by a
  * <tt>saving</tt> method. Called only if the object is known to be in a valid
  * state.
  *

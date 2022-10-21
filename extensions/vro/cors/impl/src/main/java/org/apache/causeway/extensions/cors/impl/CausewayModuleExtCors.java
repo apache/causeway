@@ -47,7 +47,7 @@ public class CausewayModuleExtCors {
 
     @Bean
     public FilterRegistrationBean<Filter> createCorsFilterRegistration(
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final RestEasyConfiguration restEasyConfiguration) {
 
         String resteasyBase = restEasyConfiguration.getJaxrs().getDefaultPath();
@@ -56,10 +56,10 @@ public class CausewayModuleExtCors {
         }
         log.info("Setting up CORS to filter resteasy-base at '{}' with {}",
                 resteasyBase,
-                isisConfiguration.getExtensions().getCors());
+                causewayConfiguration.getExtensions().getCors());
 
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(createCorsFilter(isisConfiguration));
+        filterRegistrationBean.setFilter(createCorsFilter(causewayConfiguration));
         filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
         filterRegistrationBean.setOrder(PriorityPrecedence.EARLY - 100);
 
@@ -68,14 +68,14 @@ public class CausewayModuleExtCors {
 
     private CorsFilter createCorsFilter(CausewayConfiguration configuration) {
 
-        val isisCorsConfig = configuration.getExtensions().getCors();
+        val causewayCorsConfig = configuration.getExtensions().getCors();
 
         val corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(isisCorsConfig.isAllowCredentials());
-        corsConfiguration.setAllowedHeaders(isisCorsConfig.getAllowedHeaders());
-        corsConfiguration.setAllowedMethods(isisCorsConfig.getAllowedMethods());
-        corsConfiguration.setAllowedOrigins(isisCorsConfig.getAllowedOrigins());
-        corsConfiguration.setExposedHeaders(isisCorsConfig.getExposedHeaders());
+        corsConfiguration.setAllowCredentials(causewayCorsConfig.isAllowCredentials());
+        corsConfiguration.setAllowedHeaders(causewayCorsConfig.getAllowedHeaders());
+        corsConfiguration.setAllowedMethods(causewayCorsConfig.getAllowedMethods());
+        corsConfiguration.setAllowedOrigins(causewayCorsConfig.getAllowedOrigins());
+        corsConfiguration.setExposedHeaders(causewayCorsConfig.getExposedHeaders());
 
         val source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

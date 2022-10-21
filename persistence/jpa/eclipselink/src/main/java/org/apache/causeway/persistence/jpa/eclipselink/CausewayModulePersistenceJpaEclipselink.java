@@ -70,14 +70,14 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     @Inject private ElSettings elSettings;
 
     protected CausewayModulePersistenceJpaEclipselink(
-            CausewayConfiguration isisConfiguration,
+            CausewayConfiguration causewayConfiguration,
             DataSource dataSource,
             JpaProperties properties,
             ObjectProvider<JtaTransactionManager> jtaTransactionManager) {
 
         super(
-                autoCreateSchemas(dataSource, isisConfiguration),
-                addAdditionalOrmFiles(properties, isisConfiguration),
+                autoCreateSchemas(dataSource, causewayConfiguration),
+                addAdditionalOrmFiles(properties, causewayConfiguration),
                 jtaTransactionManager);
     }
 
@@ -100,14 +100,14 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     }
 
     /**
-     * integrates with settings from isis.persistence.schema.*
+     * integrates with settings from causeway.persistence.schema.*
      */
     @SneakyThrows
     protected static DataSource autoCreateSchemas(
             final DataSource dataSource,
-            final CausewayConfiguration isisConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
+        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
@@ -128,13 +128,13 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     }
 
     /**
-     * integrates with settings from isis.persistence.schema.*
+     * integrates with settings from causeway.persistence.schema.*
      */
     protected static JpaProperties addAdditionalOrmFiles(
             JpaProperties properties,
-            CausewayConfiguration isisConfiguration) {
+            CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
+        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
         persistenceSchemaConf.getAdditionalOrmFiles()
         .forEach(schema->properties.getMappingResources()

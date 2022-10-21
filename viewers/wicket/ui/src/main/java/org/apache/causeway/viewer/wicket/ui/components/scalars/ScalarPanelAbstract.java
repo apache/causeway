@@ -53,7 +53,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobOrClobPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ObjectChoicesSelect2Panel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ValueChoicesSelect2Panel;
@@ -201,7 +201,7 @@ implements ScalarModelChangeListener {
     /**
      * Used by most subclasses
      * ({@link ScalarPanelAbstract}, {@link ObjectChoicesSelect2Panel}, {@link ValueChoicesSelect2Panel})
-     * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
+     * but not all ({@link CausewayBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
     @Getter(AccessLevel.PROTECTED)
     private WebMarkupContainer formFrame;

@@ -25,18 +25,18 @@ package org.apache.causeway.core.runtimeservices.i18n.po;
  *     For example, with this <i>.pot</i> file:
  * </p>
  * <pre>
- * #: org.isisaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions()
+ * #: org.causewayaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions()
  msgid: "Active Sessions"
 
- #: org.isisaddons.module.audit.dom.AuditingServiceMenu
- #: org.isisaddons.module.command.dom.CommandServiceMenu
- #: org.isisaddons.module.publishing.dom.PublishingServiceMenu
+ #: org.causewayaddons.module.audit.dom.AuditingServiceMenu
+ #: org.causewayaddons.module.command.dom.CommandServiceMenu
+ #: org.causewayaddons.module.publishing.dom.PublishingServiceMenu
  msgid: "Activity"
 
  * </pre>
  *
  * <p>
- *     the combination of <code>{org.isisaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions(), "Active Sessions"}</code> represents such a key, as does <code>{org.isisaddons.module.audit.dom.AuditingServiceMenu, "Activity"}</code>
+ *     the combination of <code>{org.causewayaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions(), "Active Sessions"}</code> represents such a key, as does <code>{org.causewayaddons.module.audit.dom.AuditingServiceMenu, "Activity"}</code>
  * </p>
  */
 public class ContextAndMsgId implements Comparable<ContextAndMsgId> {

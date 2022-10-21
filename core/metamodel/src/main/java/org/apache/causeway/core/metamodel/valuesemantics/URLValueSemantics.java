@@ -41,7 +41,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
-@Named("isis.val.URLValueSemantics")
+@Named("causeway.val.URLValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class URLValueSemantics
 extends ValueSemanticsAbstract<java.net.URL>

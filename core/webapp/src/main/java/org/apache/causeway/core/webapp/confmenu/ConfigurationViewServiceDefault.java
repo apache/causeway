@@ -60,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Service
-@Named("isis.webapp.ConfigurationViewServiceDefault")
+@Named("causeway.webapp.ConfigurationViewServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
@@ -108,7 +108,7 @@ implements
 
         val sb = new StringBuilder();
 
-        String head = String.format("APACHE ISIS %s (%s) ",
+        String head = String.format("APACHE CAUSEWAY %s (%s) ",
                 configuration.getViewer().getWicket().getApplication().getVersion(),
                 systemEnvironment.getDeploymentType().name());
 
@@ -138,7 +138,7 @@ implements
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-        add("Isis Version", configuration.getViewer().getWicket().getApplication().getVersion(), map);
+        add("Causeway Version", configuration.getViewer().getWicket().getApplication().getVersion(), map);
         add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 
@@ -173,7 +173,7 @@ implements
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
 
-            configProps.getIsis().forEach((k, v)->add("isis." + k, v, map));
+            configProps.getCauseway().forEach((k, v)->add("causeway." + k, v, map));
             configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
             configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
             configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));

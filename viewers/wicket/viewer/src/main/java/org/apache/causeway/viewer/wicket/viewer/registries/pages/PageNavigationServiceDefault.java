@@ -38,7 +38,7 @@ import javax.inject.Named;
  * Default implementation of {@link org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService}
  */
 @Service
-@Named("isis.viewer.wicket.PageNavigationServiceDefault")
+@Named("causeway.viewer.wicket.PageNavigationServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class PageNavigationServiceDefault implements PageNavigationService {

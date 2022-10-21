@@ -34,8 +34,8 @@
  *      that will be used to actually process and build up the metamodel.
  * <li> the {@link FacetDecoratorInstaller} API specifies how {@link org.apache.causeway.core.metamodel.facetapi.Facet}, once created,
  *      can be additionally decorated to modify their behaviour.  A number of other components are implemented as
- *      {@link org.apache.causeway.core.metamodel.facetdecorator.FacetDecorator}s, such as {@link org.apache.isis.authorization.AuthorisationFacetDecorator authorisation},
- *      {@link org.apache.isis.help.HelpFacetDecorator help}, and {@link org.apache.isis.transaction.facetdecorator.TransactionFacetDecorator transactions}.  However
+ *      {@link org.apache.causeway.core.metamodel.facetdecorator.FacetDecorator}s, such as {@link org.apache.causeway.authorization.AuthorisationFacetDecorator authorisation},
+ *      {@link org.apache.causeway.help.HelpFacetDecorator help}, and {@link org.apache.causeway.transaction.facetdecorator.TransactionFacetDecorator transactions}.  However
  *      it is possible for other {@link org.apache.causeway.core.metamodel.facetdecorator.FacetDecorator}s to be defined and installed also (such as <tt>i18n</tt>).
  * </ul>
  *

@@ -38,13 +38,13 @@ final class _Xray {
             val root = model.getRootNode();
 
             val env = model.addDataNode(
-                    root, new XrayDataModel.KeyValue("isis-env", "Environment", Stickiness.CANNOT_DELETE_NODE));
+                    root, new XrayDataModel.KeyValue("causeway-env", "Environment", Stickiness.CANNOT_DELETE_NODE));
             configurationService.getEnvironmentProperties().forEach(item->{
                 env.getData().put(item.getKey(), item.getValue());
             });
 
             val config = model.addDataNode(
-                    root, new XrayDataModel.KeyValue("isis-conf", "Config", Stickiness.CANNOT_DELETE_NODE));
+                    root, new XrayDataModel.KeyValue("causeway-conf", "Config", Stickiness.CANNOT_DELETE_NODE));
             configurationService.getVisibleConfigurationProperties().forEach(item->{
                 config.getData().put(item.getKey(), item.getValue());
             });

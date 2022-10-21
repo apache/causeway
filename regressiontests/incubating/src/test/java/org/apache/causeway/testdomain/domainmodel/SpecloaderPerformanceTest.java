@@ -51,13 +51,13 @@ import lombok.extern.log4j.Log4j2;
                 Configuration_usingValidDomain.class
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL",
-                "isis.core.meta-model.validator.explicit-logical-type-names=FALSE", // does not override any of the imports
+                "causeway.core.meta-model.introspector.mode=FULL",
+                "causeway.core.meta-model.validator.explicit-logical-type-names=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel,
-    //IsisPresets.DebugProgrammingModel,
+    //CausewayPresets.DebugProgrammingModel,
 })
 //XXX not a real test, just for performance tuning
 @Log4j2

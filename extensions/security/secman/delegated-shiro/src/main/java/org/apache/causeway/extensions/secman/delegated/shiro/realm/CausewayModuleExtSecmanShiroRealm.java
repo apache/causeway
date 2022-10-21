@@ -62,7 +62,7 @@ import lombok.val;
  */
 public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
 
-    private static final String SECMAN_UNLOCK_DELEGATED_USERS = "isis.ext.secman.unlockDelegatedUsers";
+    private static final String SECMAN_UNLOCK_DELEGATED_USERS = "causeway.ext.secman.unlockDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionService interactionService;
     @Inject protected PlatformTransactionManager txMan;
@@ -73,11 +73,11 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
 
     /**
      * Configures a {@link org.apache.shiro.authz.permission.PermissionResolver} that knows how to process the
-     * permission strings that are provided by Isis'
+     * permission strings that are provided by Causeway'
      * {@link Authorizor} for Shiro.
      */
     public CausewayModuleExtSecmanShiroRealm() {
-        setPermissionResolver(new PermissionResolverForIsisShiroAuthorizor());
+        setPermissionResolver(new PermissionResolverForCausewayShiroAuthorizor());
     }
 
     /**

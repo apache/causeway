@@ -58,17 +58,17 @@ public class PageParameterUtils {
      * The name of the special request parameter that controls whether the page header/navigation bar
      * should be shown or not
      */
-    public static final String ISIS_NO_HEADER_PARAMETER_NAME = "isis.no.header";
+    public static final String CAUSEWAY_NO_HEADER_PARAMETER_NAME = "causeway.no.header";
 
     /**
      * The name of the special request parameter that controls whether the page footer
      * should be shown or not
      */
-    public static final String ISIS_NO_FOOTER_PARAMETER_NAME = "isis.no.footer";
+    public static final String CAUSEWAY_NO_FOOTER_PARAMETER_NAME = "causeway.no.footer";
 
     /**
      * Creates a new instance of PageParameters that preserves some special request parameters
-     * which should propagate in all links created by Isis
+     * which should propagate in all links created by Causeway
      *
      * @return a new PageParameters instance
      */
@@ -80,13 +80,13 @@ public class PageParameterUtils {
             Optional.ofNullable(PageRequestHandlerTracker.getFirstHandler(requestCycle))
             .map(IPageRequestHandler::getPageParameters)
             .ifPresent(currentPageParameters->{
-                final StringValue noHeader = currentPageParameters.get(ISIS_NO_HEADER_PARAMETER_NAME);
+                final StringValue noHeader = currentPageParameters.get(CAUSEWAY_NO_HEADER_PARAMETER_NAME);
                 if (!noHeader.isNull()) {
-                    newPageParameters.set(ISIS_NO_HEADER_PARAMETER_NAME, noHeader.toString());
+                    newPageParameters.set(CAUSEWAY_NO_HEADER_PARAMETER_NAME, noHeader.toString());
                 }
-                final StringValue noFooter = currentPageParameters.get(ISIS_NO_FOOTER_PARAMETER_NAME);
+                final StringValue noFooter = currentPageParameters.get(CAUSEWAY_NO_FOOTER_PARAMETER_NAME);
                 if (!noFooter.isNull()) {
-                    newPageParameters.set(ISIS_NO_FOOTER_PARAMETER_NAME, noFooter.toString());
+                    newPageParameters.set(CAUSEWAY_NO_FOOTER_PARAMETER_NAME, noFooter.toString());
                 }
 
             });

@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 
-import static org.apache.causeway.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
+import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
 import lombok.val;
 

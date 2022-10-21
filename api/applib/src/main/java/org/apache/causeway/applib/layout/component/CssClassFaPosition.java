@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  * @since 1.x {@index}
  */
 @XmlType(
-        namespace = "http://isis.apache.org/applib/layout/component"
+        namespace = "http://causeway.apache.org/applib/layout/component"
         )
 public enum CssClassFaPosition {
     LEFT, RIGHT;

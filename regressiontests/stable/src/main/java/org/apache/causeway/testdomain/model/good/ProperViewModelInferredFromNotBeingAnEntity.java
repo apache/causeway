@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 
-//[ISIS-3068] if nature is no specified, consider what the BeanTypeClassifier has come up with
+//[CAUSEWAY-3068] if nature is no specified, consider what the BeanTypeClassifier has come up with
 @Named("testdomain.ProperViewModelInferredFromNotBeingAnEntity")
 @DomainObject
 public class ProperViewModelInferredFromNotBeingAnEntity {

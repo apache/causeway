@@ -108,52 +108,52 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
     @SuppressWarnings("unchecked")
     public <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls) {
         final Element chldEl = xmlService.getChildElement(el, tagname);
-        final String dataType = chldEl.getAttribute("isis:datatype");
+        final String dataType = chldEl.getAttribute("causeway:datatype");
         if(dataType == null) {
             throw new IllegalArgumentException(String.format("unable to locate %s/@datatype attribute", tagname));
         }
-        if("isis:String".equals(dataType)) {
+        if("causeway:String".equals(dataType)) {
             return (T)xmlService.getChildTextValue(chldEl);
         }
-        if("isis:LocalDate".equals(dataType)) {
+        if("causeway:LocalDate".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             final DateTimeFormatter parser = DateTimeFormatter
                     .ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
             return (T)parser.parse(str, LocalDate::from);
         }
-        if("isis:Byte".equals(dataType)) {
+        if("causeway:Byte".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T)Byte.valueOf(str);
         }
-        if("isis:Short".equals(dataType)) {
+        if("causeway:Short".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T)Short.valueOf(str);
         }
-        if("isis:Integer".equals(dataType)) {
+        if("causeway:Integer".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T)Integer.valueOf(str);
         }
-        if("isis:Long".equals(dataType)) {
+        if("causeway:Long".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T)Long.valueOf(str);
         }
-        if("isis:Float".equals(dataType)) {
+        if("causeway:Float".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T)Float.valueOf(str);
         }
-        if("isis:Double".equals(dataType)) {
+        if("causeway:Double".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T)Double.valueOf(str);
         }
-        if("isis:BigDecimal".equals(dataType)) {
+        if("causeway:BigDecimal".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T) new BigDecimal(str);
         }
-        if("isis:BigInteger".equals(dataType)) {
+        if("causeway:BigInteger".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T) new BigInteger(str);
         }
-        if("isis:Boolean".equals(dataType)) {
+        if("causeway:Boolean".equals(dataType)) {
             final String str = xmlService.getChildTextValue(chldEl);
             return (T) Boolean.valueOf(str);
         }

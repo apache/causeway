@@ -30,5 +30,5 @@ import org.springframework.context.annotation.Import;
     CalendarEventSemantics.class
 })
 public class CausewayModuleExtFullCalendarApplib {
-    public static final String NAMESPACE = "isis.ext.fullcalendar";
+    public static final String NAMESPACE = "causeway.ext.fullcalendar";
 }

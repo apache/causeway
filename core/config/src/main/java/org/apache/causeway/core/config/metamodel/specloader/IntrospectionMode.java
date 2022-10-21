@@ -59,9 +59,9 @@ public enum IntrospectionMode {
 
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
 
-    public static boolean isFullIntrospect(CausewayConfiguration configuration, CausewaySystemEnvironment isisSystemEnvironment) {
+    public static boolean isFullIntrospect(CausewayConfiguration configuration, CausewaySystemEnvironment causewaySystemEnvironment) {
         val introspectionMode = configuration.getCore().getMetaModel().getIntrospector().getMode();
-        return introspectionMode.isFullIntrospect(isisSystemEnvironment.getDeploymentType());
+        return introspectionMode.isFullIntrospect(causewaySystemEnvironment.getDeploymentType());
     }
 
 }

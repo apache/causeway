@@ -21,22 +21,22 @@ package org.apache.causeway.extensions.secman.applib.seed.scripts;
 import javax.inject.Inject;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisAppFeatureRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayAppFeatureRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtAuditTrailRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtCommandLogRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtExecutionLogRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtExecutionOutboxRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtH2ConsoleRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtSecmanAdminRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtSecmanRegularUserRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtSessionLogRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisPersistenceJdoMetaModelRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisSudoImpersonateRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtAuditTrailRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtCommandLogRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionLogRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionOutboxRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtH2ConsoleRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanAdminRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanRegularUserRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSessionLogRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenceJdoMetaModelRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewaySudoImpersonateRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayViewerRestfulObjectsSwaggerRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.seed.SeedSecurityModuleService;
 import org.apache.causeway.extensions.secman.applib.tenancy.seed.GlobalTenancy;
-import org.apache.causeway.extensions.secman.applib.user.seed.IsisExtSecmanAdminUser;
+import org.apache.causeway.extensions.secman.applib.user.seed.CausewayExtSecmanAdminUser;
 
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
@@ -68,34 +68,34 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
         // modules
         executionContext.executeChildren(this,
-                new IsisAppFeatureRoleAndPermissions(),
-                new IsisPersistenceJdoMetaModelRoleAndPermissions(),
-                new IsisExtAuditTrailRoleAndPermissions(),
-                new IsisExtCommandLogRoleAndPermissions(),
-                new IsisExtExecutionLogRoleAndPermissions(),
-                new IsisExtExecutionOutboxRoleAndPermissions(),
-                new IsisExtSessionLogRoleAndPermissions(),
-                new IsisExtH2ConsoleRoleAndPermissions(),
-                new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
-                new IsisSudoImpersonateRoleAndPermissions(),
+                new CausewayAppFeatureRoleAndPermissions(),
+                new CausewayPersistenceJdoMetaModelRoleAndPermissions(),
+                new CausewayExtAuditTrailRoleAndPermissions(),
+                new CausewayExtCommandLogRoleAndPermissions(),
+                new CausewayExtExecutionLogRoleAndPermissions(),
+                new CausewayExtExecutionOutboxRoleAndPermissions(),
+                new CausewayExtSessionLogRoleAndPermissions(),
+                new CausewayExtH2ConsoleRoleAndPermissions(),
+                new CausewayViewerRestfulObjectsSwaggerRoleAndPermissions(),
+                new CausewaySudoImpersonateRoleAndPermissions(),
                 new CausewayConfigurationRoleAndPermissions()
                 );
 
         // secman module (admin and regular users role, and secman-admin superuser)
         executionContext.executeChildren(this,
-                new IsisExtSecmanAdminRoleAndPermissions(secmanConfig),
-                new IsisExtSecmanRegularUserRoleAndPermissions(secmanConfig),
-                new IsisExtSecmanAdminUser(secmanConfig,
-                        IsisAppFeatureRoleAndPermissions.ROLE_NAME,
-                        IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME,
-                        IsisExtAuditTrailRoleAndPermissions.ROLE_NAME,
-                        IsisExtCommandLogRoleAndPermissions.ROLE_NAME,
-                        IsisExtExecutionLogRoleAndPermissions.ROLE_NAME,
-                        IsisExtExecutionOutboxRoleAndPermissions.ROLE_NAME,
-                        IsisExtSessionLogRoleAndPermissions.ROLE_NAME,
-                        IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME,
-                        IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME,
-                        IsisSudoImpersonateRoleAndPermissions.ROLE_NAME,
+                new CausewayExtSecmanAdminRoleAndPermissions(secmanConfig),
+                new CausewayExtSecmanRegularUserRoleAndPermissions(secmanConfig),
+                new CausewayExtSecmanAdminUser(secmanConfig,
+                        CausewayAppFeatureRoleAndPermissions.ROLE_NAME,
+                        CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME,
+                        CausewayExtAuditTrailRoleAndPermissions.ROLE_NAME,
+                        CausewayExtCommandLogRoleAndPermissions.ROLE_NAME,
+                        CausewayExtExecutionLogRoleAndPermissions.ROLE_NAME,
+                        CausewayExtExecutionOutboxRoleAndPermissions.ROLE_NAME,
+                        CausewayExtSessionLogRoleAndPermissions.ROLE_NAME,
+                        CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME,
+                        CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME,
+                        CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME,
                         CausewayConfigurationRoleAndPermissions.ROLE_NAME)
                 );
 

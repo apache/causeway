@@ -61,7 +61,7 @@ class PoReaderTest {
 
     @Test
     public void properMockeryOfNonPublicMethods() {
-        //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+,
+        //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Causeway runs on JDK 11+,
         // we explicitly test proper mockery of non-public methods here ...
         assertNotNull(mockTranslationServicePo.getLanguageProvider());
         assertNotNull(mockTranslationServicePo.getTranslationsResolver());

@@ -46,5 +46,5 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleCoreRuntime {
 
-    public static final String NAMESPACE = "isis.runtime";
+    public static final String NAMESPACE = "causeway.runtime";
 }

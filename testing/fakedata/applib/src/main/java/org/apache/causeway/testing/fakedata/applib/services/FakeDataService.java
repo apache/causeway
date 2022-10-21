@@ -50,7 +50,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.test.FakeDataService")
+@Named("causeway.test.FakeDataService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FakeDataService {
@@ -121,10 +121,10 @@ public class FakeDataService {
         this.urls = new Urls(this);
         this.uuids = new Uuids(this);
 
-        this.isisPasswords = new IsisPasswords(this);
-        //this.isisMoneys = new IsisMoneys(this);
-        this.isisBlobs = new IsisBlobs(this);
-        this.isisClobs = new IsisClobs(this);
+        this.causewayPasswords = new CausewayPasswords(this);
+        //this.causewayMoneys = new CausewayMoneys(this);
+        this.causewayBlobs = new CausewayBlobs(this);
+        this.causewayClobs = new CausewayClobs(this);
     }
 
     private Names names;
@@ -164,10 +164,10 @@ public class FakeDataService {
     private Urls urls;
     private Uuids uuids;
 
-    private IsisPasswords isisPasswords;
-    //private IsisMoneys isisMoneys;
-    private IsisBlobs isisBlobs;
-    private IsisClobs isisClobs;
+    private CausewayPasswords causewayPasswords;
+    //private CausewayMoneys causewayMoneys;
+    private CausewayBlobs causewayBlobs;
+    private CausewayClobs causewayClobs;
 
 
     /**
@@ -296,16 +296,16 @@ public class FakeDataService {
         return uuids;
     }
 
-    public IsisPasswords isisPasswords() {
-        return isisPasswords;
+    public CausewayPasswords causewayPasswords() {
+        return causewayPasswords;
     }
 
-    public IsisBlobs isisBlobs() {
-        return isisBlobs;
+    public CausewayBlobs causewayBlobs() {
+        return causewayBlobs;
     }
 
-    public IsisClobs isisClobs() {
-        return isisClobs;
+    public CausewayClobs causewayClobs() {
+        return causewayClobs;
     }
 
 

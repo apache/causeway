@@ -46,7 +46,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("isis.val.LongValueSemantics")
+@Named("causeway.val.LongValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LongValueSemantics
 extends ValueSemanticsAbstract<Long>

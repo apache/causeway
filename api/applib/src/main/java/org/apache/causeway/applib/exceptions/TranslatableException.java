@@ -39,7 +39,7 @@ public interface TranslatableException extends HasTranslationContext {
      *
      * <p>
      *     If returns <code>null</code>, then {@link Exception#getMessage()} will be used as a fallback.
-     *     This design allows the Isis-provided {@link org.apache.causeway.applib.exceptions.RecoverableException} and
+     *     This design allows the Causeway-provided {@link org.apache.causeway.applib.exceptions.RecoverableException} and
      *     {@link org.apache.causeway.applib.exceptions.UnrecoverableException} to provide constructors that
      *     accept a {@link org.apache.causeway.applib.services.i18n.TranslatableString}, but can be left as null for any existing code.
      * </p>

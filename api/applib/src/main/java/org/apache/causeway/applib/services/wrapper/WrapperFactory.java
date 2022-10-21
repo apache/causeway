@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Propagation;
  *
  * Provides the ability to 'wrap' a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implied by
- * the Apache Isis programming model.
+ * the Apache Causeway programming model.
  *
  * <p>
  * This capability goes beyond enforcing the (imperative) constraints within

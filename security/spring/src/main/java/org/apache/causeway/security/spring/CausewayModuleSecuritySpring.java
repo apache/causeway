@@ -66,11 +66,11 @@ public class CausewayModuleSecuritySpring {
 
     @Qualifier("springSecurityFilterChain")
     @Inject private Filter springSecurityFilterChain;
-    @Inject private CausewayConfiguration isisConfiguration;
+    @Inject private CausewayConfiguration causewayConfiguration;
 
     @PostConstruct
     public void disableCsrf() {
-        if(isisConfiguration.getSecurity().getSpring().isAllowCsrfFilters()) {
+        if(causewayConfiguration.getSecurity().getSpring().isAllowCsrfFilters()) {
             return; // don't interfere
         }
         log.debug("About to disable any CSRF filters.");

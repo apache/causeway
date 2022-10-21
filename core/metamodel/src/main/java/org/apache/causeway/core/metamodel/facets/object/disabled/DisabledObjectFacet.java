@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
  * could be reasons to disable the object.
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to the
+ * In the standard Apache Causeway Programming Model, typically corresponds to the
  * <tt>disabled</tt> method.
  *
  * @see ImmutableFacet

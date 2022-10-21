@@ -48,8 +48,8 @@ import lombok.val;
                 InteractionBoundaryProbe.class,
         },
         properties = {
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.causeway.persistence.jdo.datanucleus.persistence.IsisTransactionJdo=DEBUG"
+                "logging.level.org.apache.causeway.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.causeway.persistence.jdo.datanucleus.persistence.CausewayTransactionJdo=DEBUG"
         })
 @TestPropertySource({
     CausewayPresets.SilenceWicket

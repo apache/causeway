@@ -202,7 +202,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                 val resultAdapter = objectAction.execute(head, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                // flush any Isis PersistenceCommands pending
+                // flush any Causeway PersistenceCommands pending
                 // (else might get transient objects for the return value)
                 transactionService.flushTransaction();
 

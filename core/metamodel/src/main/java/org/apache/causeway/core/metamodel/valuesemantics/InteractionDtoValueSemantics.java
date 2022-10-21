@@ -29,7 +29,7 @@ import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
 @Component
-@Named("isis.val.InteractionDtoValueSemantics")
+@Named("causeway.val.InteractionDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class InteractionDtoValueSemantics
 extends XmlValueSemanticsAbstract<InteractionDto> {

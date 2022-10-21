@@ -192,7 +192,7 @@ implements IResourceContext {
             return false;
         }
         for(String paramName: params.keySet()) {
-            if("x-isis-querystring".equals(paramName) || paramName.startsWith("{")) {
+            if("x-causeway-querystring".equals(paramName) || paramName.startsWith("{")) {
                 return false;
             }
         }

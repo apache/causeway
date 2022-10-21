@@ -28,27 +28,27 @@ import lombok.val;
 
 class ProjectSamples {
 
-    static File apacheIsisRoot() {
+    static File apacheCausewayRoot() {
         final File projRootFolder = new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
         return projRootFolder;
     }
     
-    static File apacheIsisApplib() {
-        return new File(apacheIsisRoot(), "api/applib");
+    static File apacheCausewayApplib() {
+        return new File(apacheCausewayRoot(), "api/applib");
     }
     
-    static File apacheIsisRuntime() {
-        return new File(apacheIsisRoot(), "core/runtime");
+    static File apacheCausewayRuntime() {
+        return new File(apacheCausewayRoot(), "core/runtime");
     }
     
     static File self() {
         return new File("./").getAbsoluteFile();
     }
     
-    static void assertHasApacheIsisRuntimeClasses(Stream<String> classNames) {
+    static void assertHasApacheCausewayRuntimeClasses(Stream<String> classNames) {
         
         val components = classNames
-        .map(s->s.replace("org.apache.isis.", "o.a.i."))
+        .map(s->s.replace("org.apache.causeway.", "o.a.i."))
         //.peek(System.out::println) //debug
         .collect(Collectors.toSet());
         
@@ -58,16 +58,16 @@ class ProjectSamples {
         assertTrue(components.contains("o.a.i.core.runtime.events.RuntimeEventService"));
     }
     
-    static void assertHasApacheIsisRuntimeSourceFiles(Stream<String> sourcePaths) {
+    static void assertHasApacheCausewayRuntimeSourceFiles(Stream<String> sourcePaths) {
         
         val sources = sourcePaths
         .map(s->s.replace("\\", "/"))
-        .map(s->s.replace("/src/main/java/org/apache/isis/", "o.a.i/"))
+        .map(s->s.replace("/src/main/java/org/apache/causeway/", "o.a.i/"))
         //.peek(System.out::println) //debug
         .collect(Collectors.toSet());
         
         assertTrue(sources.contains("o.a.i/core/runtime/context/MetaModelContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/IsisContext.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/context/CausewayContext.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMemento.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoCollection.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoForEmpty.java"));
@@ -75,17 +75,17 @@ class ProjectSamples {
         assertTrue(sources.contains("o.a.i/core/runtime/context/RuntimeContext.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/context/RuntimeContextBase.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/events/app/AppLifecycleEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/iactn/IsisInteractionLifecycleEvent.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/events/iactn/CausewayInteractionLifecycleEvent.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/PostStoreEvent.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/PreStoreEvent.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/TimestampService.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/events/RuntimeEventService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/IsisInteraction.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/iactn/CausewayInteraction.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionService.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionTracker.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScope.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeBeanFactoryPostProcessor.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeCloseListener.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/CausewayInteractionScope.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/CausewayInteractionScopeBeanFactoryPostProcessor.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/CausewayInteractionScopeCloseListener.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/CausewayModuleCoreRuntime.java"));
         
     }

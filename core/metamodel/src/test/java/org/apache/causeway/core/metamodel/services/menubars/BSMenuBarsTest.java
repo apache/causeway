@@ -27,7 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.jaxb.IsisSchemas;
+import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
 
@@ -50,7 +50,7 @@ class BSMenuBarsTest {
         BSMenuBars menuBars = jaxbService.fromXml(BSMenuBars.class,
                 _Resources.loadAsString(getClass(), "menubars.layout.xml", StandardCharsets.UTF_8));
 
-        Map<String, String> schemas = jaxbService.toXsd(menuBars, IsisSchemas.INCLUDE);
+        Map<String, String> schemas = jaxbService.toXsd(menuBars, CausewaySchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             println(entry.getKey() + ":");
             println(entry.getValue());

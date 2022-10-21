@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  * TODO ... or (ideally) let Spring handle translations
  */
 @Service
-@Named("isis.viewer.wicket.TranslationsResolverWicket")
+@Named("causeway.viewer.wicket.TranslationsResolverWicket")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -60,13 +60,13 @@ import lombok.extern.log4j.Log4j2;
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     private final ServletContext servletContext;
-    private final CausewayConfiguration isisConfiguration;
+    private final CausewayConfiguration causewayConfiguration;
 
     @Override
     public List<String> readLines(final String fileName) {
 
         final String configLocation =
-                isisConfiguration.getCore().getRuntimeServices().getTranslation().getResourceLocation();
+                causewayConfiguration.getCore().getRuntimeServices().getTranslation().getResourceLocation();
 
         try {
             if(configLocation != null) {

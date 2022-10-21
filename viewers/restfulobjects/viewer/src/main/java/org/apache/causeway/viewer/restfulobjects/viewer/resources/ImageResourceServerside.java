@@ -45,9 +45,9 @@ public class ImageResourceServerside extends ResourceAbstract {
     @Inject
     public ImageResourceServerside(
             final MetaModelContext metaModelContext,
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
         log.debug("<init>");
     }
 

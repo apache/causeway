@@ -59,14 +59,14 @@ implements MenuBarsLoaderService {
 
     @Inject
     public MenuBarsLoaderServiceDefault(
-            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
             final JaxbService jaxbService,
-            final CausewayConfiguration isisConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
         this.jaxbService = jaxbService;
-        this.supportsReloading = isisSystemEnvironment.isPrototyping();
+        this.supportsReloading = causewaySystemEnvironment.isPrototyping();
 
         val menubarsLayoutXmlResource =
-                new ClassPathResource(isisConfiguration.getViewer().getWicket().getApplication().getMenubarsLayoutXml());
+                new ClassPathResource(causewayConfiguration.getViewer().getWicket().getApplication().getMenubarsLayoutXml());
         this.menubarsLayoutXmlResourceRef = new AtomicReference<>(menubarsLayoutXmlResource);
     }
 

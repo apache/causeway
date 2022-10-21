@@ -85,7 +85,7 @@ public class ArchitectureJdoRules {
 
     /**
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
-     * must also be annotated with the Apache Isis {@link DomainObject} annotation specifying that its
+     * must also be annotated with the Apache Causeway {@link DomainObject} annotation specifying that its
      * {@link DomainObject#nature() nature} is an {@link org.apache.causeway.applib.annotation.Nature#ENTITY entity}.
      */
     public static ArchRule every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY() {
@@ -113,7 +113,7 @@ public class ArchitectureJdoRules {
 
     /**
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
-     * must also be annotated with the Apache Isis {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
+     * must also be annotated with the Apache Causeway {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
      * with a value of {@link org.apache.causeway.applib.jaxb.PersistentEntityAdapter}<code>.class</code>.
      *
      * <p>

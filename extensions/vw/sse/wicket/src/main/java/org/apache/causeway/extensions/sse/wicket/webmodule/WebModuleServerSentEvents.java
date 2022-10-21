@@ -40,7 +40,7 @@ import lombok.Getter;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.val.WebModuleServerSentEvents")
+@Named("causeway.val.WebModuleServerSentEvents")
 @Qualifier("ServerSentEvents")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public final class WebModuleServerSentEvents extends WebModuleAbstract {

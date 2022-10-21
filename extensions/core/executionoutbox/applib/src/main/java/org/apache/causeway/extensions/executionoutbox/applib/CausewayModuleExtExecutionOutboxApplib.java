@@ -42,8 +42,8 @@ import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 })
 public class CausewayModuleExtExecutionOutboxApplib {
 
-    public static final String NAMESPACE = "isis.ext.executionOutbox";
-    public static final String SCHEMA = "isisExtExecutionOutbox";
+    public static final String NAMESPACE = "causeway.ext.executionOutbox";
+    public static final String SCHEMA = "causewayExtExecutionOutbox";
 
     public abstract static class TitleUiEvent<S>
         extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }

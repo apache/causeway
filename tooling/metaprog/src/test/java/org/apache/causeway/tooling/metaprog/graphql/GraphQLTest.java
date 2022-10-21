@@ -46,11 +46,11 @@ class GraphQLTest {
         String schema = _Strings.readFromResource(
                 getClass(), getClass().getSimpleName() + ".graphqls", StandardCharsets.UTF_8);
 
-        val isisSchema = GraphQLToJavaSourceConverter.parseGraphQL(schema);
+        val causewaySchema = GraphQLToJavaSourceConverter.parseGraphQL(schema);
 
         val dslClassNames = _Lists.<String>newArrayList();
 
-        isisSchema.streamAsJavaModels("testdummies")
+        causewaySchema.streamAsJavaModels("testdummies")
         .forEach(javaModel->{
 
                 String className = javaModel.getName().canonicalName();

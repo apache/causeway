@@ -91,7 +91,7 @@ public final class JsonMapper {
 
     private static ObjectMapper createObjectMapper(final PrettyPrinting prettyPrinting) {
         final ObjectMapper objectMapper = new ObjectMapper();
-        final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null, "org.apache", "isis"));
+        final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null, "org.apache", "causeway"));
         jsonModule.addDeserializer(JsonRepresentation.class, new JsonRepresentationDeserializer());
         jsonModule.addSerializer(JsonRepresentation.class, new JsonRepresentationSerializer());
         objectMapper.registerModule(jsonModule);

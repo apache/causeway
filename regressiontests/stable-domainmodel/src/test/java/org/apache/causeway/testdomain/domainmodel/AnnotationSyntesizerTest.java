@@ -50,11 +50,11 @@ import lombok.val;
                 Configuration_usingInvalidDomain.class
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL"
+                "causeway.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
+    //CausewayPresets.DebugMetaModel,
+    //CausewayPresets.DebugProgrammingModel,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
@@ -82,7 +82,7 @@ class AnnotationSyntesizerTest {
     void debug() {
 
         val config = Config.builder().build()
-                .withNamespacePrefix("org.apache.isis.testdomain.model.");
+                .withNamespacePrefix("org.apache.causeway.testdomain.model.");
 
         System.out.println("!!! listing MM");
         val metamodelDto = metaModelService.exportMetaModel(config);

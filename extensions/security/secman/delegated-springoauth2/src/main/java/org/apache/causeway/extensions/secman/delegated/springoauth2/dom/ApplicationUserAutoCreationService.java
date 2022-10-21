@@ -53,7 +53,7 @@ public class ApplicationUserAutoCreationService
     private final ApplicationUserRepository applicationUserRepository;
     private final ApplicationRoleRepository applicationRoleRepository;
     private final InteractionService interactionService;
-    private final CausewayConfiguration isisConfiguration;
+    private final CausewayConfiguration causewayConfiguration;
     private final FactoryService factoryService;
 
     @Override
@@ -74,7 +74,7 @@ public class ApplicationUserAutoCreationService
                 val applicationUser = applicationUserRepository.newDelegateUser(username, status);
                 factoryService.mixin(ApplicationUser_updateEmailAddress.class, applicationUser).act(email);
 
-                val initialRoleNames = isisConfiguration.getExtensions().getSecman().getDelegatedUsers().getInitialRoleNames();
+                val initialRoleNames = causewayConfiguration.getExtensions().getSecman().getDelegatedUsers().getInitialRoleNames();
                 if (notEmpty(initialRoleNames)) {
                     for (String initialRoleName : initialRoleNames) {
                         addRoleIfExists(applicationUser, initialRoleName);

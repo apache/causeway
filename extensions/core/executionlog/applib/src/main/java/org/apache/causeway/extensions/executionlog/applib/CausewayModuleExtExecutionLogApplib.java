@@ -48,8 +48,8 @@ import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 public class CausewayModuleExtExecutionLogApplib
 implements ModuleWithFixtures {
 
-    public static final String NAMESPACE = "isis.ext.executionLog";
-    public static final String SCHEMA = "isisExtExecutionLog";
+    public static final String NAMESPACE = "causeway.ext.executionLog";
+    public static final String SCHEMA = "causewayExtExecutionLog";
 
     public abstract static class TitleUiEvent<S>
         extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }

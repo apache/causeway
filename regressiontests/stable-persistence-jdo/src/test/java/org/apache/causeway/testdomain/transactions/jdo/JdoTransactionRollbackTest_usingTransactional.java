@@ -55,7 +55,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 
         })
 @Transactional
-//@TestPropertySource(IsisPresets.UseLog4j2Test)
+//@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoTransactionRollbackTest_usingTransactional {
 

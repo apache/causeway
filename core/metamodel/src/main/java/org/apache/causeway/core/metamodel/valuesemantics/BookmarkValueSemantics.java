@@ -38,7 +38,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("isis.val.BookmarkValueSemantics")
+@Named("causeway.val.BookmarkValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BookmarkValueSemantics
 extends ValueSemanticsAbstract<Bookmark>

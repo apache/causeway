@@ -25,11 +25,11 @@ import javax.xml.bind.annotation.XmlType;
  * @since 1.x {@index}
  */
 @XmlType(
-        namespace = "http://isis.apache.org/applib/layout/component"
+        namespace = "http://causeway.apache.org/applib/layout/component"
         )
 public enum PromptStyle {
     /**
-     * Prompt using the style configured by <tt>isis.viewer.wicket.promptStyle</tt>.
+     * Prompt using the style configured by <tt>causeway.viewer.wicket.promptStyle</tt>.
      *
      * <p>
      *      If no style is configured, then {@link #INLINE} is assumed.
@@ -42,7 +42,7 @@ public enum PromptStyle {
      * <p>
      *     This will be either modal dialog (same as if {@link #DIALOG_MODAL} was selected) or sidebar (same as if
      *     {@link #DIALOG_SIDEBAR} was selected) depending on the value of the
-     *     <code>isis.viewer.wicket.dialogMode</code> configuration property.
+     *     <code>causeway.viewer.wicket.dialogMode</code> configuration property.
      * </p>
      */
     DIALOG,

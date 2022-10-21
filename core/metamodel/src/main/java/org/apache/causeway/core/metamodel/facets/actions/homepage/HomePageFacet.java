@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * and the contents used for the home page.
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
+ * In the standard Apache Causeway Programming Model, typically corresponds to
  * applying the <tt>@HomePage</tt> annotation at the class level.
  */
 public interface HomePageFacet extends Facet {

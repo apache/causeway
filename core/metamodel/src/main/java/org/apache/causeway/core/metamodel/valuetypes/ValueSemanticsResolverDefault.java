@@ -71,7 +71,7 @@ implements ValueSemanticsResolver {
     public <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(
             final @NonNull Identifier featureIdentifier,
             final Class<T> valueType) {
-        //FIXME[ISIS-2877] honor customizations
+        //FIXME[CAUSEWAY-2877] honor customizations
         return streamValueSemantics(valueType)
                 .collect(Can.toCan());
     }
@@ -100,7 +100,7 @@ implements ValueSemanticsResolver {
             : Stream.empty();
     }
 
-    // managed by Isis
+    // managed by Causeway
     @SuppressWarnings("rawtypes")
     private Map<Class<?>, ValueSemanticsProvider> enumSemantics = _Maps.newConcurrentHashMap();
 

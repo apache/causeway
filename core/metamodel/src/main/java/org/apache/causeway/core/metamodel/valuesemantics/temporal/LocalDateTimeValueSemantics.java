@@ -31,7 +31,7 @@ import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.LocalDateTimeValueSemantics")
+@Named("causeway.val.LocalDateTimeValueSemantics")
 //@Log4j2
 public class LocalDateTimeValueSemantics
 extends TemporalValueSemanticsProvider<LocalDateTime>

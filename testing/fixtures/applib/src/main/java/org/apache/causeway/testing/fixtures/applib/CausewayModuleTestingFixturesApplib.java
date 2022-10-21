@@ -41,5 +41,5 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleTestingFixturesApplib {
 
-    public static final String NAMESPACE = "isis.testing.fixtures";
+    public static final String NAMESPACE = "causeway.testing.fixtures";
 }

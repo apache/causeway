@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.hint.HintStore;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.viewer.wicket.HintStoreUsingWicketSession")
+@Named("causeway.viewer.wicket.HintStoreUsingWicketSession")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 @Log4j2

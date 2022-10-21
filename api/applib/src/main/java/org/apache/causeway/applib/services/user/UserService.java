@@ -82,7 +82,7 @@ public class UserService {
     /**
      * Default returned from {@link #currentUserNameElseNobody()}.
      */
-    public static final String NOBODY = "__isis_nobody";
+    public static final String NOBODY = "__causeway_nobody";
 
     private final Provider<InteractionLayerTracker> iInteractionLayerTrackerProvider;
     private final List<ImpersonatedUserHolder> impersonatedUserHolders;

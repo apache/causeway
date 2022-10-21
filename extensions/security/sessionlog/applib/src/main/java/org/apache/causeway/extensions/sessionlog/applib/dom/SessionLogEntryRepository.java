@@ -46,7 +46,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     @Inject RepositoryService repositoryService;
     @Inject TransactionService transactionService;
     @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
 
     private final Class<E> sessionLogEntryClass;
 
@@ -210,7 +210,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
      * for testing purposes only
      */
     public List<E> findAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         return repositoryService.allInstances(sessionLogEntryClass);
@@ -220,7 +220,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
      * for testing purposes only
      */
     public void removeAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         repositoryService.removeAll(sessionLogEntryClass);

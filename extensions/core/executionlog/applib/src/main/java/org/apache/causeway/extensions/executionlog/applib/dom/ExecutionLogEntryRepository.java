@@ -62,7 +62,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
-    @Inject CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment causewaySystemEnvironment;
 
     protected ExecutionLogEntryRepository(final Class<E> executionLogEntryClass) {
         this.executionLogEntryClass = executionLogEntryClass;
@@ -221,7 +221,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
      * intended for testing purposes only
      */
     public List<E> findAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return repositoryService().allInstances(executionLogEntryClass);
@@ -232,7 +232,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
      * intended for testing purposes only
      */
     public void removeAll() {
-        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(executionLogEntryClass);

@@ -66,10 +66,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     public GridLoaderServiceDefault(
            final GridReaderUsingJaxb gridReader,
            final MessageService messageService,
-           final CausewaySystemEnvironment isisSystemEnvironment) {
+           final CausewaySystemEnvironment causewaySystemEnvironment) {
         this.gridReader = gridReader;
         this.messageService = messageService;
-        this.supportsReloading = isisSystemEnvironment.isPrototyping();
+        this.supportsReloading = causewaySystemEnvironment.isPrototyping();
     }
 
     @Value
@@ -99,7 +99,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return supportsReloading;//isisSystemEnvironment.isPrototyping();
+        return supportsReloading;//causewaySystemEnvironment.isPrototyping();
     }
 
     @Override

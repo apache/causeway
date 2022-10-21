@@ -34,7 +34,7 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForIsis;
+import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForCauseway;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E1;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E2;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.GQLTestDomainMenu;
@@ -59,19 +59,19 @@ import graphql.schema.GraphQLTypeReference;
 public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
 
     @Inject
-    private CausewaySystemEnvironment isisSystemEnvironment;
+    private CausewaySystemEnvironment causewaySystemEnvironment;
 
     @Inject
     private SpecificationLoader specificationLoader;
 
     @Inject
-    private GraphQlSourceForIsis graphQlSourceForIsis;
+    private GraphQlSourceForCauseway graphQlSourceForCauseway;
 
     @BeforeEach
     void beforeEach() {
-        assertNotNull(isisSystemEnvironment);
+        assertNotNull(causewaySystemEnvironment);
         assertNotNull(specificationLoader);
-        assertNotNull(graphQlSourceForIsis);
+        assertNotNull(graphQlSourceForCauseway);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
 
         GraphQLSchema x;
 
-//        _IocContainer iocContainer = isisSystemEnvironment.getIocContainer();
+//        _IocContainer iocContainer = causewaySystemEnvironment.getIocContainer();
 //        iocContainer.streamAllBeans().forEach(b->{
 //            System.out.println(b.getId());
 //        });
@@ -96,7 +96,7 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
         ObjectSpecification objectSpecification3 = specificationLoader.specForType(GQLTestDomainMenu.class).get();
         assertNotNull(objectSpecification3);
 
-        GraphQL graphQL = graphQlSourceForIsis.graphQl();
+        GraphQL graphQL = graphQlSourceForCauseway.graphQl();
         GraphQLSchema graphQLSchema = graphQL.getGraphQLSchema();
 //        List<GraphQLNamedType> allTypesAsList = graphQLSchema.getAllTypesAsList();
 //        allTypesAsList.forEach(t->{
@@ -147,7 +147,7 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
         assertEquals(GraphQLList.class, f9TypeClass);
         GraphQLList list4 = (GraphQLList) f9.getType();
         GraphQLTypeReference originalWrappedType4 = (GraphQLTypeReference) list4.getOriginalWrappedType();
-        assertEquals("org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity", originalWrappedType4.getName());
+        assertEquals("org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity", originalWrappedType4.getName());
 
         GraphQLFieldDefinition f10 = fields.get(9);
         assertEquals("_gql_mutations", f10.getName());

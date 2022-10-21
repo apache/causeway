@@ -40,7 +40,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("isis.val.DoubleValueSemantics")
+@Named("causeway.val.DoubleValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class DoubleValueSemantics
 extends ValueSemanticsAbstract<Double>

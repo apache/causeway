@@ -25,14 +25,14 @@ import javax.xml.bind.annotation.XmlType;
  * @since 1.x {@index}
  */
 @XmlType(
-        namespace = "http://isis.apache.org/applib/layout/component"
+        namespace = "http://causeway.apache.org/applib/layout/component"
         )
 public enum Repainting {
 
     REPAINT,
 
     /**
-     * Equivalent to <tt>@PropertyLayout(unchanging=true)</tt> prior to Isis 2.x
+     * Equivalent to <tt>@PropertyLayout(unchanging=true)</tt> prior to Causeway 2.x
      */
     NO_REPAINT,
 

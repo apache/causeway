@@ -222,7 +222,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public MetamodelDto exportMetaModel(final Config config) {
 
-        /*TODO[ISIS-3206] refactor: ideally config would provide the list, but unfortunately
+        /*TODO[CAUSEWAY-3206] refactor: ideally config would provide the list, but unfortunately
          * MetaModelAnnotator type is not know to Config, which lives in applib.
          */
         val metaModelAnnotators = _Lists.<MetaModelAnnotator>newArrayList();

@@ -28,11 +28,11 @@
  *
  */
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://isis.apache.org/applib/layout/links",
+        namespace = "http://causeway.apache.org/applib/layout/links",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://isis.apache.org/applib/layout/links", prefix = "lnk")
+                        namespaceURI = "http://causeway.apache.org/applib/layout/links", prefix = "lnk")
         }
         )
 package org.apache.causeway.applib.layout.links;

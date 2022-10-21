@@ -36,17 +36,17 @@ import lombok.val;
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
-    private CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @Inject
-    public ClassSubstitutorForDomainObjects(final CausewayBeanTypeRegistry isisBeanTypeRegistry) {
-        this.isisBeanTypeRegistry = isisBeanTypeRegistry;
+    public ClassSubstitutorForDomainObjects(final CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
+        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
     }
 
     @Override
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
-        val beanSort = isisBeanTypeRegistry.lookupIntrospectableType(cls)
+        val beanSort = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
         .map(CausewayBeanMetaData::getBeanSort)
         .orElse(null);
 

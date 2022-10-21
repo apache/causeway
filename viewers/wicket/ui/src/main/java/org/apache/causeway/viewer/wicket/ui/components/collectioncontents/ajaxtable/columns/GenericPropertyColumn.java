@@ -94,7 +94,7 @@ extends GenericColumnAbstract {
         return (_Strings.isNotEmpty(cssClass)
                         ? (cssClass + " ")
                         : "")
-                + Wkt.cssNormalize("isis-" + parentTypeName + "-" + propertyId);
+                + Wkt.cssNormalize("causeway-" + parentTypeName + "-" + propertyId);
     }
 
     @Override

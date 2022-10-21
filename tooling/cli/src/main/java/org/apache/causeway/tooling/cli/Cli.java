@@ -35,7 +35,7 @@ import picocli.CommandLine.Option;
         name = "cli",
         mixinStandardHelpOptions = true,
         version = "0.1",
-        description = "CLI for the Apache Isis Tooling Ecosystem",
+        description = "CLI for the Apache Causeway Tooling Ecosystem",
         subcommands = {
                 Cli.ProjectDocCommand.class,
                 Cli.SystemOverviewCommand.class,
@@ -60,8 +60,8 @@ class Cli implements Callable<Integer> {
 
     private _Lazy<CliConfig> configRef = _Lazy.threadSafe(()->CliConfig
             .read(projectRootPath!=null
-                    ? new File(projectRootPath, "isis-tooling.yml")
-                    : new File("isis-tooling.yml")));
+                    ? new File(projectRootPath, "causeway-tooling.yml")
+                    : new File("causeway-tooling.yml")));
 
     public CliConfig getConfig() {
         return configRef.get();

@@ -58,14 +58,14 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryS
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.IsisClobPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayClobPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ChoicesSelect2PanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.composite.CompositeValuePanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.passwd.CausewayPasswordPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
@@ -94,7 +94,7 @@ import lombok.extern.log4j.Log4j2;
  * implementations discovered by the IoC container.
  */
 @Service
-@Named("isis.viewer.wicket.ComponentFactoryRegistrarDefault")
+@Named("causeway.viewer.wicket.ComponentFactoryRegistrarDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
@@ -218,10 +218,10 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new JavaAwtImagePanelFactory());
 
-        componentFactories.add(new IsisPasswordPanelFactory());
+        componentFactories.add(new CausewayPasswordPanelFactory());
 
-        componentFactories.add(new IsisBlobPanelFactory());
-        componentFactories.add(new IsisClobPanelFactory());
+        componentFactories.add(new CausewayBlobPanelFactory());
+        componentFactories.add(new CausewayClobPanelFactory());
 
         // install after explicit values, but before fallbacks
         addGenericComponentFactoriesForScalar(componentFactories);

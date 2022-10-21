@@ -101,7 +101,7 @@ public enum JpaTestDomainPersona
                 @Override
                 protected void execute(final ExecutionContext ec) {
 
-                    val regularUserRoleName = isisConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
+                    val regularUserRoleName = causewayConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
                     val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
                     val username = LdapConstants.SVEN_PRINCIPAL;
                     ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);
@@ -118,7 +118,7 @@ public enum JpaTestDomainPersona
 
                 @Inject private ApplicationUserRepository applicationUserRepository;
                 @Inject private ApplicationRoleRepository applicationRoleRepository;
-                @Inject private CausewayConfiguration isisConfig;
+                @Inject private CausewayConfiguration causewayConfig;
 
             };
         }

@@ -40,7 +40,7 @@ import lombok.Getter;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.security.WebModuleSpringSecurity")
+@Named("causeway.security.WebModuleSpringSecurity")
 @javax.annotation.Priority(PriorityPrecedence.FIRST + 100)
 @Qualifier("Spring")
 public final class WebModuleSpringSecurity extends WebModuleAbstract {

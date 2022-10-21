@@ -56,14 +56,14 @@ import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapperF
  * Sample config for <tt>shiro.ini</tt>:
  * <p/>
  * <pre>
- * contextFactory = org.apache.causeway.extensions.shirorealmldap.realm.impl.IsisLdapContextFactory
+ * contextFactory = org.apache.causeway.extensions.shirorealmldap.realm.impl.CausewayLdapContextFactory
  * contextFactory.url = ldap://localhost:10389
  * contextFactory.authenticationMechanism = CRAM-MD5
  * contextFactory.systemAuthenticationMechanism = simple
  * contextFactory.systemUsername = uid=admin,ou=system
  * contextFactory.systemPassword = secret
  *
- * ldapRealm = org.apache.causeway.extensions.shirorealmldap.realm.impl.IsisLdapRealm
+ * ldapRealm = org.apache.causeway.extensions.shirorealmldap.realm.impl.CausewayLdapRealm
  * ldapRealm.contextFactory = $contextFactory
  *
  * ldapRealm.searchBase = ou=groups,o=mojo

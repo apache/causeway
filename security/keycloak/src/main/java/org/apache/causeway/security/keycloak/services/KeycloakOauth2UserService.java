@@ -56,7 +56,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
     final JwtDecoder jwtDecoder;
     final GrantedAuthoritiesMapper authoritiesMapper;
-    final CausewayConfiguration isisConfiguration;
+    final CausewayConfiguration causewayConfiguration;
 
     /**
      * Augments {@link OidcUserService#loadUser(OidcUserRequest)} to add authorities
@@ -91,7 +91,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         List<String> combinedRoles = new ArrayList<>();
 
-        if(isisConfiguration.getSecurity().getKeycloak().isExtractClientRoles()) {
+        if(causewayConfiguration.getSecurity().getKeycloak().isExtractClientRoles()) {
 
             // attempt to parse out 'resource_access.${client_id}.roles'
 
@@ -111,7 +111,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
                             @SuppressWarnings("unchecked")
                             val clientRoles = (List<Object>) clientRolesObj;
                             if (!CollectionUtils.isEmpty(clientRoles)) {
-                                val prefix = Optional.ofNullable(isisConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
+                                val prefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
                                 clientRoles.stream()
                                         .filter(Objects::nonNull)
                                         .map(clientRole -> prefix + clientRole)
@@ -123,7 +123,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
             }
         }
 
-        if (isisConfiguration.getSecurity().getKeycloak().isExtractRealmRoles()) {
+        if (causewayConfiguration.getSecurity().getKeycloak().isExtractRealmRoles()) {
             // attempt to parse out 'realm_access.roles'
             val realmAccessObj = token.getClaims().get("realm_access");
             if (realmAccessObj instanceof Map) {
@@ -133,7 +133,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
                 if (realmRolesObj instanceof List) {
                     @SuppressWarnings("unchecked")
                     val realmRoles = (List<Object>) realmRolesObj;
-                    val prefix = Optional.ofNullable(isisConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
+                    val prefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
                     realmRoles.stream()
                             .filter(Objects::nonNull)
                             .map(realmRole -> prefix + realmRole)
@@ -142,13 +142,13 @@ public class KeycloakOauth2UserService extends OidcUserService {
             }
         }
 
-        if (isisConfiguration.getSecurity().getKeycloak().isExtractRoles()) {
+        if (causewayConfiguration.getSecurity().getKeycloak().isExtractRoles()) {
             // attempt to parse out 'roles'
             val rolesObj = token.getClaims().get("roles");
             if (rolesObj instanceof List) {
                 @SuppressWarnings("unchecked")
                 val roles = (List<Object>) rolesObj;
-                val prefix = Optional.ofNullable(isisConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
+                val prefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
                 roles.stream()
                         .filter(Objects::nonNull)
                         .map(role -> prefix + role)

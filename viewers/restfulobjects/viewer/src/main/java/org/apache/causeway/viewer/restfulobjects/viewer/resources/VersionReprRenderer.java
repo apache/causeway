@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsS
 public class VersionReprRenderer
 extends ReprRendererAbstract<Void> {
 
-    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/isis-viewer-restfulobjects-server/pom.properties";
+    private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.causeway.viewer/causeway-viewer-restfulobjects-server/pom.properties";
 
     VersionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.VERSION, representation);

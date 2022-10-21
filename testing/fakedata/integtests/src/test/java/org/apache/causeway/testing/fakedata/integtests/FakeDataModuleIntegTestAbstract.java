@@ -25,7 +25,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fakedata.fixtures.CausewayModuleTestingFakeDataFixtures;
-import org.apache.causeway.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
+import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ContextConfiguration
 @Transactional
-public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
+public abstract class FakeDataModuleIntegTestAbstract extends CausewayIntegrationTestAbstractWithFixtures {
 
         @Configuration
         @PropertySources({

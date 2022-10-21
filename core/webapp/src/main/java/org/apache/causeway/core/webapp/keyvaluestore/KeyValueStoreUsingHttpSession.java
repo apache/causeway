@@ -41,7 +41,7 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  */
 @Component
-@Named("isis.webapp.KeyValueStoreUsingHttpSession")
+@Named("causeway.webapp.KeyValueStoreUsingHttpSession")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class KeyValueStoreUsingHttpSession implements KeyValueSessionStore {
 

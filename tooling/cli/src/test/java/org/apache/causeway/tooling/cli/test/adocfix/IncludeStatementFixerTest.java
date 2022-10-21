@@ -38,7 +38,7 @@ class IncludeStatementFixerTest {
     @Test @Disabled("to reinstate after changing to refguide format")
     void adocDocMining() throws IOException {
 
-        val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
+        val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheCausewayRoot());
 
         val names = _Sets.<String>newTreeSet();
 

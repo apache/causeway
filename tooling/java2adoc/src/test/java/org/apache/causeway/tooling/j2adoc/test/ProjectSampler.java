@@ -32,12 +32,12 @@ final class ProjectSampler {
         return new File("./").getAbsoluteFile();
     }
     
-    static File apacheIsisRoot() {
+    static File apacheCausewayRoot() {
         return new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
     }
     
-    static File apacheIsisApplib() {
-        return new File(apacheIsisRoot(), "api/applib");
+    static File apacheCausewayApplib() {
+        return new File(apacheCausewayRoot(), "api/applib");
     }
 
     @SneakyThrows

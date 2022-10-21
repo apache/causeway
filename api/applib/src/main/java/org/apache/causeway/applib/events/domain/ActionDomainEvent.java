@@ -66,7 +66,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.applib.annotation.action.domain-event.post-for-default</tt>
+     * <tt>causeway.applib.annotation.action.domain-event.post-for-default</tt>
      * configuration property.
      * </p>
      */

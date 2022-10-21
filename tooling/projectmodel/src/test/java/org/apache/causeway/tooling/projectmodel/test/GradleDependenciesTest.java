@@ -32,7 +32,7 @@ class GradleDependenciesTest extends ProjectModelTestAbstract {
 
     @Test //@Disabled("activate only if you want to see the dependencies.gradle written to stdout")
     void writeGradleDependenciesToStdout() throws IOException {
-        GradleDependencies gradleDependencies = GradleDependenciesFactory.generateFromMaven(projRootFolder, "isis");
+        GradleDependencies gradleDependencies = GradleDependenciesFactory.generateFromMaven(projRootFolder, "causeway");
         assertNotNull(gradleDependencies);
         
         System.out.println();

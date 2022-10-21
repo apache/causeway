@@ -44,8 +44,8 @@ public final class CodeClasses {
         return codeClass->codeClass.getName().startsWith(packagePrefix);
     }
 
-    public static Predicate<CodeClass> isApacheIsisPackage() {
-        return packageNameStartsWith("org.apache.isis.");
+    public static Predicate<CodeClass> isApacheCausewayPackage() {
+        return packageNameStartsWith("org.apache.causeway.");
     }
 
     public static boolean hasSourceFile(final @NonNull CodeClass codeClass) {

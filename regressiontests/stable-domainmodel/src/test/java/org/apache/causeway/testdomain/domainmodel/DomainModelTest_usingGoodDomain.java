@@ -104,14 +104,14 @@ import lombok.val;
 
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL",
-                "isis.applib.annotation.domain-object.editing=TRUE",
-                "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
+                "causeway.core.meta-model.introspector.mode=FULL",
+                "causeway.applib.annotation.domain-object.editing=TRUE",
+                "causeway.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
                 "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
+    //CausewayPresets.DebugMetaModel,
+    //CausewayPresets.DebugProgrammingModel,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
@@ -122,12 +122,12 @@ class DomainModelTest_usingGoodDomain {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
-    @Inject private CausewayConfiguration isisConfig;
+    @Inject private CausewayConfiguration causewayConfig;
     @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
         val config = Config.builder().build()
-                .withNamespacePrefix("org.apache.isis.testdomain.");
+                .withNamespacePrefix("org.apache.causeway.testdomain.");
 
         System.out.println("=== listing MM");
         val metamodelDto = metaModelService.exportMetaModel(config);
@@ -655,7 +655,7 @@ class DomainModelTest_usingGoodDomain {
         val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
         assertNotNull(introspectionPolicyFacet);
 
-        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(isisConfig);
+        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
         assertEquals(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());
@@ -705,7 +705,7 @@ class DomainModelTest_usingGoodDomain {
         val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
         assertNotNull(introspectionPolicyFacet);
 
-        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(isisConfig);
+        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
         assertEquals(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());

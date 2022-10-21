@@ -61,7 +61,7 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 class ShiroSecmanTest extends AbstractShiroTest {
 
-    @Inject CausewayConfiguration isisConfig;
+    @Inject CausewayConfiguration causewayConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
@@ -85,8 +85,8 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertFalse(subject.isAuthenticated());
 
         val token = new UsernamePasswordToken(
-                isisConfig.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
-                isisConfig.getExtensions().getSecman().getSeed().getAdmin().getPassword());
+                causewayConfig.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
+                causewayConfig.getExtensions().getSecman().getSeed().getAdmin().getPassword());
 
         subject.login(token);
         assertTrue(subject.isAuthenticated());
@@ -107,7 +107,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertFalse(subject.isAuthenticated());
 
         val token = new UsernamePasswordToken(
-                isisConfig.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
+                causewayConfig.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
                 "invalid-pass");
 
         assertThrows(CredentialsException.class, ()->{

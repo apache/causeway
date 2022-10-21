@@ -38,7 +38,7 @@ import javax.xml.bind.Unmarshaller;
  * test use only (the {@link JAXBContext} is not cached).
  *
  * <p>
- * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> (non-ASF)
+ * For example usage, see <a href="https://github.com/causewayaddons/causeway-module-publishmq">Causeway addons' publishmq module</a> (non-ASF)
  * </p>
  */
 class _Jaxb {

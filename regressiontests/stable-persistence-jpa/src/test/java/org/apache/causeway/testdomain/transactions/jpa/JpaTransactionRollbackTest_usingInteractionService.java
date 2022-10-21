@@ -68,7 +68,7 @@ import lombok.val;
 @DirtiesContext
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionRollbackTest_usingInteractionService
-//extends IsisIntegrationTestAbstract
+//extends CausewayIntegrationTestAbstract
 {
 
     @Inject private FixtureScripts fixtureScripts;

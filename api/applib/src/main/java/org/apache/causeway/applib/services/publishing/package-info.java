@@ -24,7 +24,7 @@
  * (when enabled for publishing), as a set of pre- and post-values.
  * 
  * The {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} API is intended 
- * for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis 
+ * for coarse-grained publish/subscribe for system-to-system interactions, from Apache Causeway 
  * to some other system. Events that can be published are action invocations/property edits, 
  * and changed objects. A typical use case is to publish onto a pub/sub bus such as 
  * ActiveMQ with Camel to keep other systems up to date.

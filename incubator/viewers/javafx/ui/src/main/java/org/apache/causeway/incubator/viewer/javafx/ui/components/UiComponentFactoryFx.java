@@ -54,11 +54,11 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     @Inject
     private UiComponentFactoryFx(
-            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
             final UiContextFx uiContext,
             final List<UiComponentHandlerFx> handlers) {
 
-        this.isPrototyping = isisSystemEnvironment.isPrototyping();
+        this.isPrototyping = causewaySystemEnvironment.isPrototyping();
         this.uiContext = uiContext;
         this.chainOfHandlers = ChainOfResponsibility.named("Component Mapper", handlers);
         this.registeredHandlers = handlers.stream()

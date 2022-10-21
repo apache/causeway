@@ -58,7 +58,7 @@ implements
         Object instance;
         Runnable destructionCallback;
         void preDestroy() {
-            log.debug("destroy isis-interaction scoped {}", name);
+            log.debug("destroy causeway-interaction scoped {}", name);
             if(destructionCallback!=null) {
                 destructionCallback.run();
             }
@@ -123,7 +123,7 @@ implements
         val newScopedObject = ScopedObject.of(name);
         scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
 
-        log.debug("create new isis-interaction scoped {}", name);
+        log.debug("create new causeway-interaction scoped {}", name);
         newScopedObject.setInstance(objectFactory.getObject()); // triggers call to registerDestructionCallback
 
         if(log.isDebugEnabled()) {
@@ -138,7 +138,7 @@ implements
 
     @Override
     public Object remove(final String name) {
-        throw new UnsupportedOperationException("use IsisInteractionScope.removeAll instead");
+        throw new UnsupportedOperationException("use CausewayInteractionScope.removeAll instead");
     }
 
     @Override

@@ -31,6 +31,6 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleExtExcelApplib {
 
-    public static final String NAMESPACE = "isis.sub.excel";
+    public static final String NAMESPACE = "causeway.sub.excel";
 
 }

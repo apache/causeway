@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.OffsetDateTimeValueSemantics")
+@Named("causeway.val.OffsetDateTimeValueSemantics")
 //@Log4j2
 public class OffsetDateTimeValueSemantics
 extends TemporalValueSemanticsProvider<OffsetDateTime> {

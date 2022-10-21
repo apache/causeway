@@ -98,7 +98,7 @@ extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabelFactory forParameter(
             final ScalarParameterModel parameterModel) {
-        //XXX[ISIS-3080] only supported, when parameter type is a singular composite value-type
+        //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
         val param = parameterModel.getMetaModel();
         if(param.isSingular()
                 && param.getElementType().isCompositeValue()) {

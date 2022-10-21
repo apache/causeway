@@ -47,7 +47,7 @@ public enum ApplicationPermissionMode {
      * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
      * <p>
-     * Note: as of ISIS-3084 the notion of mutable collections was removed
+     * Note: as of CAUSEWAY-3084 the notion of mutable collections was removed
      */
     CHANGING;
 

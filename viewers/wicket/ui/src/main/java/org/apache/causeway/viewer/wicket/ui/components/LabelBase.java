@@ -45,7 +45,7 @@ implements HasMetaModelContext {
         super(id, model);
     }
 
-    private transient CausewayConfiguration isisConfiguration;
+    private transient CausewayConfiguration causewayConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient MetaModelContext commonContext;
 
@@ -55,7 +55,7 @@ implements HasMetaModelContext {
     }
 
     public CausewayConfiguration getCausewayConfiguration() {
-        return isisConfiguration = computeIfAbsent(CausewayConfiguration.class, isisConfiguration);
+        return causewayConfiguration = computeIfAbsent(CausewayConfiguration.class, causewayConfiguration);
     }
 
     public WebAppContextPath getWebAppContextPath() {

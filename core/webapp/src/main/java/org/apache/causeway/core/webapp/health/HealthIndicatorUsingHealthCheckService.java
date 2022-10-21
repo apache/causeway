@@ -34,7 +34,7 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 import lombok.val;
 
 @Component
-@Named("isis.webapp.HealthCheckService") // logical name appears in the endpoint
+@Named("causeway.webapp.HealthCheckService") // logical name appears in the endpoint
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
     private final InteractionService interactionService;

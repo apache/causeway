@@ -37,7 +37,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.BlobValueSemantics")
+@Named("causeway.val.BlobValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BlobValueSemantics
 extends ValueSemanticsAbstract<Blob>

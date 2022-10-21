@@ -28,7 +28,7 @@ import org.apache.causeway.testing.archtestsupport.applib.entity.jpa.dom.JpaDomM
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_be_annotated_as_Table_with_schema;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints;
-import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener;
+import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.ArchitectureJpaRules.every_jpa_Entity_must_have_a_version_field;
@@ -44,8 +44,8 @@ import static org.apache.causeway.testing.archtestsupport.applib.classrules.Arch
 public class JpaEntityArchTests {
 
   @ArchTest
-  public static ArchRule every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener =
-      every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener();
+  public static ArchRule every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener =
+      every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener();
 
   @ArchTest
   public static ArchRule every_jpa_Entity_must_also_implement_Comparable =

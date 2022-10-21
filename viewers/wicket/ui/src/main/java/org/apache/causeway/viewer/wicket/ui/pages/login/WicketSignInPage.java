@@ -68,7 +68,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     }
 
 
-    protected IsisSignInPanel createSignInPanel() {
+    protected CausewaySignInPanel createSignInPanel() {
 
         final boolean rememberMeSuppress = getWicketViewerSettings().getRememberMe().isSuppress();
         final boolean suppressRememberMe = rememberMeSuppress;
@@ -81,7 +81,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         final boolean passwordReset = !suppressPasswordResetLink;
         final boolean continueToOriginalDestination = !clearOriginalDestination;
         val signInPanel =
-                new IsisSignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
+                new CausewaySignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
         return signInPanel;
     }
 

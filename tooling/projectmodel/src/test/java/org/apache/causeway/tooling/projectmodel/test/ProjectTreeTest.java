@@ -79,10 +79,10 @@ class ProjectTreeTest extends ProjectModelTestAbstract {
     
     private void assertHasSomeArtifactKeys(Set<String> artifactKeys) {
         assertTrue(artifactKeys.size()>50);
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core:pom"));
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-config:jar"));
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-metamodel:jar"));
-        assertTrue(artifactKeys.contains("org.apache.isis.core:isis-core-runtime:jar"));
+        assertTrue(artifactKeys.contains("org.apache.causeway.core:causeway-core:pom"));
+        assertTrue(artifactKeys.contains("org.apache.causeway.core:causeway-core-config:jar"));
+        assertTrue(artifactKeys.contains("org.apache.causeway.core:causeway-core-metamodel:jar"));
+        assertTrue(artifactKeys.contains("org.apache.causeway.core:causeway-core-runtime:jar"));
         
         for(val key : artifactKeys) {
             assertFalse(key.startsWith("?"), ()->"incomplete key " + key);

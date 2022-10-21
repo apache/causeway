@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 
-import static org.apache.causeway.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
+import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
 import lombok.val;
 

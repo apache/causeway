@@ -72,10 +72,10 @@ implements
 
     /**
      * Key of the key-value pair into the map of the PM's user objects,
-     * we store the Isis MetaModelContext to.
+     * we store the Causeway MetaModelContext to.
      * @see PersistenceManager#putUserObject(Object, Object)
      */
-    public static final String MMC_USER_OBJECT_KEY = "isis.mmc";
+    public static final String MMC_USER_OBJECT_KEY = "causeway.mmc";
 
 	private PersistenceManagerFactory target;
 

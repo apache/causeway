@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.user.UserService;
 import lombok.val;
 
 @Service
-@Named("isis.transaction.TimestampService")
+@Named("causeway.transaction.TimestampService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class TimestampService {

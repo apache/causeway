@@ -29,7 +29,7 @@ import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 @Component
-@Named("isis.val.CommandDtoValueSemantics")
+@Named("causeway.val.CommandDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class CommandDtoValueSemantics
 extends XmlValueSemanticsAbstract<CommandDto> {

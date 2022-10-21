@@ -210,8 +210,8 @@ class Generation {
                     && objectCollections.isEmpty()) {
                 continue;
             }
-            final ModelImpl isisModel = appendObjectPathAndModelDefinitions(objectSpec);
-            updateObjectModel(isisModel, objectSpec, objectProperties, objectCollections);
+            final ModelImpl causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
+            updateObjectModel(causewayModel, objectSpec, objectProperties, objectCollections);
 
             for (final OneToManyAssociation objectCollection : objectCollections) {
                 appendCollectionTo(objectSpec, objectCollection);
@@ -391,18 +391,18 @@ class Generation {
             swagger.addDefinition(restfulObjectsModelDefinition, roSpecModel);
         }
 
-        final String isisModelDefinition = logicalTypeName + "Repr";
+        final String causewayModelDefinition = logicalTypeName + "Repr";
         operation
         .response(200,
                 newResponse(Caching.TRANSACTIONAL)
-                .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
-                .schema(newRefProperty(isisModelDefinition)));
+                .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
+                .schema(newRefProperty(causewayModelDefinition)));
 
-        final ModelImpl isisModel = new ModelImpl();
-        addDefinition(isisModelDefinition, isisModel);
+        final ModelImpl causewayModel = new ModelImpl();
+        addDefinition(causewayModelDefinition, causewayModel);
 
         // return so can be appended to
-        return isisModel;
+        return causewayModel;
     }
 
     // UNUSED
@@ -464,7 +464,7 @@ class Generation {
             }
             if(!parameters.isEmpty()) {
                 invokeOperation.parameter(new QueryParameter()
-                        .name("x-isis-querystring")
+                        .name("x-causeway-querystring")
                         .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
                         .required(false)
                         .type("string"));
@@ -506,7 +506,7 @@ class Generation {
         invokeOperation
         .response(
                 200, new Response()
-                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
+                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
                 .schema(actionReturnTypeFor(serviceAction))
                 );
     }
@@ -535,7 +535,7 @@ class Generation {
         collectionOperation
         .response(
                 200, new Response()
-                .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v2")
+                .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
                 .schema(modelFor(collection))
                 );
     }
@@ -583,7 +583,7 @@ class Generation {
             }
             if(!parameters.isEmpty()) {
                 invokeOperation.parameter(new QueryParameter()
-                        .name("x-isis-querystring")
+                        .name("x-causeway-querystring")
                         .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
                         .required(false)
                         .type("string"));
@@ -845,8 +845,8 @@ class Generation {
 
         if(supportsV1) {
             operation = operation
-                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v2" + DQ)
-                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v2;suppress=all" + DQ);
+                .produces("application/json;profile=" + DQ + "urn:org.apache.causeway/v2" + DQ)
+                .produces("application/json;profile=" + DQ + "urn:org.apache.causeway/v2;suppress=all" + DQ);
         }
 
         return operation;

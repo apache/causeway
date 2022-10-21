@@ -51,16 +51,16 @@ class WrapperFactoryDefaultTest {
         private final ImmutableEnumSet<ExecutionMode> modes;
 
         @Override
-        public void __isis_save() {
+        public void __causeway_save() {
         }
 
         @Override
-        public Object __isis_wrapped() {
+        public Object __causeway_wrapped() {
             return wrappedObject;
         }
 
         @Override
-        public ImmutableEnumSet<ExecutionMode> __isis_executionModes() {
+        public ImmutableEnumSet<ExecutionMode> __causeway_executionModes() {
             return modes;
         }
     }

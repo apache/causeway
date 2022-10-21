@@ -40,6 +40,6 @@ import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoAp
 })
 public class CausewayModulePersistenceJdoMetamodel {
 
-    public static final String NAMESPACE = "isis.persistence.jdo";
+    public static final String NAMESPACE = "causeway.persistence.jdo";
 
 }

@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 
 @ActiveProfiles("test")
@@ -45,11 +45,11 @@ import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefau
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithSomeId.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithDifferentId.class,
 
-        IsisBeanFactoryPostProcessorForSpring.class
+        CausewayBeanFactoryPostProcessorForSpring.class
 
 },
 properties = {
-        "isis.services.injector.setPrefix=true"
+        "causeway.services.injector.setPrefix=true"
 })
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 class ServiceInjectorDefaultTest_validateServices_happy {

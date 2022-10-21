@@ -98,7 +98,7 @@ implements GridSystemService<G> {
     protected final TranslationService translationService;
     protected final JaxbService jaxbService;
     protected final MessageService messageService;
-    protected final CausewaySystemEnvironment isisSystemEnvironment;
+    protected final CausewaySystemEnvironment causewaySystemEnvironment;
 
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {
@@ -116,7 +116,7 @@ implements GridSystemService<G> {
             }
         } else {
 
-            if(isisSystemEnvironment.isPrototyping()) {
+            if(causewaySystemEnvironment.isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
             log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));

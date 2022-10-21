@@ -19,7 +19,7 @@
 package org.apache.causeway.valuetypes.vega.persistence.jpa;
 
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
-import org.apache.causeway.valuetypes.vega.persistence.jpa.converters.IsisVegaConverter;
+import org.apache.causeway.valuetypes.vega.persistence.jpa.converters.CausewayVegaConverter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 @EntityScan(basePackageClasses = {
 
         // @Converter's
-        IsisVegaConverter.class
+        CausewayVegaConverter.class
 })
 public class CausewayModuleValVegaPersistenceJpa {
 }

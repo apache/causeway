@@ -30,7 +30,7 @@ module org.apache.causeway.viewer.wicket.model {
     exports org.apache.causeway.viewer.wicket.model.util;
     exports org.apache.causeway.viewer.wicket.model.mementos;
     exports org.apache.causeway.viewer.wicket.model.models.interaction.coll;
-    exports org.apache.causeway.viewer.wicket.model.isis;
+    exports org.apache.causeway.viewer.wicket.model.causeway;
 
     requires jakarta.activation;
     requires lombok;

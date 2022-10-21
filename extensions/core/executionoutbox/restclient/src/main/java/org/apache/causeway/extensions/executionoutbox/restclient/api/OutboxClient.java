@@ -97,9 +97,9 @@ public class OutboxClient {
      * Should be called once all properties have been injected.
      */
     public void init() {
-        this.pendingUriBuilder = UriBuilder.fromUri(base + "services/isis.ext.executionOutbox.OutboxRestApi/actions/pending/invoke");
-        this.deleteUriBuilder = UriBuilder.fromUri(base + "services/isis.ext.executionOutbox.OutboxRestApi/actions/delete/invoke");
-        this.deleteManyUriBuilder = UriBuilder.fromUri(base + "services/isis.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke");
+        this.pendingUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/pending/invoke");
+        this.deleteUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/delete/invoke");
+        this.deleteManyUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke");
     }
 
     private void ensureInitialized() {

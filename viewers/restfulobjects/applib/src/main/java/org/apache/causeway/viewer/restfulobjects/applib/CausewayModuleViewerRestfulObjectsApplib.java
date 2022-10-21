@@ -27,5 +27,5 @@ import org.springframework.context.annotation.Configuration;
 public class CausewayModuleViewerRestfulObjectsApplib {
 
 
-    public static final String NAMESPACE = "isis.viewer.ro";
+    public static final String NAMESPACE = "causeway.viewer.ro";
 }

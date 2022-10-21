@@ -99,7 +99,7 @@ public final class ManagedAction extends ManagedMember {
         this.multiselectChoices = multiselectChoices;
     }
 
-    //ISIS-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
+    //CAUSEWAY-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
     ActionInteractionHead interactionHead() {
         return action.interactionHead(getOwner());
     }

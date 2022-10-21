@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
  * {@link org.apache.causeway.core.config.CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification}.
  *
  * <p>
- *     Generally it is easy to just use the <code>isis.testing.fixture.fixture-scripts-specification</code>
+ *     Generally it is easy to just use the <code>causeway.testing.fixture.fixture-scripts-specification</code>
  *     configuration properties rather than providing an implementation of this bean; the framework will
  *     then auto-configure an appropriate bean instance.
  * </p>

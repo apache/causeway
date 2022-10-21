@@ -64,11 +64,11 @@ final class XsMetaModel {
      */
     public static final String W3_ORG_XSI_PREFIX = "xsi";
 
-    private final IsisSchema isisMeta;
+    private final CausewaySchema causewayMeta;
 
     public XsMetaModel() {
         this.helper = new Helper();
-        this.isisMeta = new IsisSchema();
+        this.causewayMeta = new CausewaySchema();
     }
 
     /**
@@ -78,8 +78,8 @@ final class XsMetaModel {
      * In addition:
      * <ul>
      * <li>the elementFormDefault is set
-     * <li>the <i>Apache Isis</i> namespace is set
-     * <li>the <code>xs:import</code> element referencing the <i>Apache Isis</i> namespace is
+     * <li>the <i>Apache Causeway</i> namespace is set
+     * <li>the <code>xs:import</code> element referencing the <i>Apache Causeway</i> namespace is
      * added as a child
      * </ul>
      */
@@ -91,12 +91,12 @@ final class XsMetaModel {
 
         xsSchemaElement.setAttribute("elementFormDefault", "qualified");
 
-        isisMeta.addNamespace(xsSchemaElement);
+        causewayMeta.addNamespace(xsSchemaElement);
 
         xsdDoc.appendChild(xsSchemaElement);
         final Element xsImportElement = createXsElement(xsdDoc, "import");
-        xsImportElement.setAttribute("namespace", IsisSchema.NS_URI);
-        xsImportElement.setAttribute("schemaLocation", IsisSchema.DEFAULT_LOCATION);
+        xsImportElement.setAttribute("namespace", CausewaySchema.NS_URI);
+        xsImportElement.setAttribute("schemaLocation", CausewaySchema.DEFAULT_LOCATION);
 
         xsSchemaElement.appendChild(xsImportElement);
 
@@ -139,50 +139,50 @@ final class XsMetaModel {
     // }
 
     /**
-     * Creates an xs:attribute ref="isis:xxx" element, and appends to specified
+     * Creates an xs:attribute ref="causeway:xxx" element, and appends to specified
      * owning element.
      */
-    Element addXsIsisAttribute(final Element parentXsElement, final String isisAttributeRef) {
-        return addXsIsisAttribute(parentXsElement, isisAttributeRef, null);
+    Element addXsCausewayAttribute(final Element parentXsElement, final String causewayAttributeRef) {
+        return addXsCausewayAttribute(parentXsElement, causewayAttributeRef, null);
     }
 
     /**
-     * Adds <code>xs:attribute ref="isis:xxx" fixed="yyy"</code> element, and
+     * Adds <code>xs:attribute ref="causeway:xxx" fixed="yyy"</code> element, and
      * appends to specified parent XSD element.
      */
-    Element addXsIsisAttribute(final Element parentXsElement, final String isisAttributeRef, final String fixedValue) {
-        return addXsIsisAttribute(parentXsElement, isisAttributeRef, fixedValue, true);
+    Element addXsCausewayAttribute(final Element parentXsElement, final String causewayAttributeRef, final String fixedValue) {
+        return addXsCausewayAttribute(parentXsElement, causewayAttributeRef, fixedValue, true);
     }
 
     /**
-     * Adds <code>xs:attribute ref="isis:xxx" default="yyy"</code> element, and
+     * Adds <code>xs:attribute ref="causeway:xxx" default="yyy"</code> element, and
      * appends to specified parent XSD element.
      *
      * The last parameter determines whether to use <code>fixed="yyy"</code>
      * rather than <code>default="yyy"</code>.
      */
-    Element addXsIsisAttribute(final Element parentXsElement, final String isisAttributeRef, final String value, final boolean useFixed) {
-        final Element xsIsisAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
-        xsIsisAttributeElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + isisAttributeRef);
-        parentXsElement.appendChild(xsIsisAttributeElement);
+    Element addXsCausewayAttribute(final Element parentXsElement, final String causewayAttributeRef, final String value, final boolean useFixed) {
+        final Element xsCausewayAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
+        xsCausewayAttributeElement.setAttribute("ref", CausewaySchema.NS_PREFIX + ":" + causewayAttributeRef);
+        parentXsElement.appendChild(xsCausewayAttributeElement);
         if (value != null) {
             if (useFixed) {
-                xsIsisAttributeElement.setAttribute("fixed", value);
+                xsCausewayAttributeElement.setAttribute("fixed", value);
             } else {
-                xsIsisAttributeElement.setAttribute("default", value);
+                xsCausewayAttributeElement.setAttribute("default", value);
             }
         }
         return parentXsElement;
     }
 
     /**
-     * Adds <code>xs:attribute ref="isis:feature" fixed="(feature)"</code>
+     * Adds <code>xs:attribute ref="causeway:feature" fixed="(feature)"</code>
      * element as child to supplied XSD element, presumed to be an
      * <xs:complexType</code>.
      */
-    Element addXsIsisFeatureAttributeElements(final Element parentXsElement, final String feature) {
+    Element addXsCausewayFeatureAttributeElements(final Element parentXsElement, final String feature) {
         final Element xsNofFeatureAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
-        xsNofFeatureAttributeElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":feature");
+        xsNofFeatureAttributeElement.setAttribute("ref", CausewaySchema.NS_PREFIX + ":feature");
         xsNofFeatureAttributeElement.setAttribute("fixed", feature);
         parentXsElement.appendChild(xsNofFeatureAttributeElement);
         return xsNofFeatureAttributeElement;

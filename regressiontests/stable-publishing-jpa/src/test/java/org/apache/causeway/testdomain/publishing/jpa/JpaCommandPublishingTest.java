@@ -42,8 +42,8 @@ import org.apache.causeway.testdomain.publishing.stubs.CommandPublishingTestAbst
         properties = {
                 "logging.level.org.apache.causeway.applib.services.publishing.log.CommandLogger=DEBUG",
                 "logging.level.org.springframework.orm.jpa.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.causeway.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG"
+                "logging.level.org.apache.causeway.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.causeway.core.runtimeservices.session.CausewayInteractionFactoryDefault=DEBUG"
         })
 @TestPropertySource({
     CausewayPresets.UseLog4j2Test

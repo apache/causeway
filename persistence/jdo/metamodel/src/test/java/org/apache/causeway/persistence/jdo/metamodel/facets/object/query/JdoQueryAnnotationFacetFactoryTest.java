@@ -54,7 +54,7 @@ public class JdoQueryAnnotationFacetFactoryTest {
         @Test
         public void no_match() throws Exception {
 
-            String query = "UPDATE org.isisaddons.module.sessionlogger.dom.SessionLogEntry "
+            String query = "UPDATE org.causewayaddons.module.sessionlogger.dom.SessionLogEntry "
                     + "   SET logoutTimestamp == :logoutTimestamp "
                     + "      ,causedBy2 == :causedBy2 "
                     + " WHERE causedBy2 == null";

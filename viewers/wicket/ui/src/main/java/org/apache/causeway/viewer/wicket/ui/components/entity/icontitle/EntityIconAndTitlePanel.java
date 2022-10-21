@@ -90,7 +90,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private boolean isTitleSuppressed() {
         return getModel().isInlinePrompt()
-                //XXX ISIS-1699 never hide titles of object references in tables
+                //XXX CAUSEWAY-1699 never hide titles of object references in tables
                 && !getModel().getRenderingHint().isInTable();
     }
 

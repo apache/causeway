@@ -58,7 +58,7 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
-// @Disabled // ISIS-2789 revert
+// @Disabled // CAUSEWAY-2789 revert
 class JpaTransactionRollbackTest_usingTransactional
 extends CausewayIntegrationTestAbstract
 {

@@ -45,8 +45,8 @@ import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisInteractionDtoConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
 import static org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.Nq;
@@ -135,7 +135,7 @@ public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executi
     private java.sql.Timestamp timestamp;
 
 
-    @Convert(converter = IsisBookmarkConverter.class)
+    @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
     @Getter @Setter
@@ -150,7 +150,7 @@ public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executi
         this.logicalMemberIdentifier = Util.abbreviated(logicalMemberIdentifier, LogicalMemberIdentifier.MAX_LENGTH);
     }
 
-    @Convert(converter = IsisInteractionDtoConverter.class)
+    @Convert(converter = CausewayInteractionDtoConverter.class)
     @Lob @Basic(fetch = FetchType.LAZY)
     @Column(nullable = InteractionDtoAnnot.NULLABLE, columnDefinition = "CLOB")
     @InteractionDtoAnnot

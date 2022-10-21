@@ -50,7 +50,7 @@ import lombok.val;
  * Searches for a fixed set of suffixes: <code>png, gif, jpeg, jpg, svg</code>.
  */
 @Service
-@Named("isis.viewer.wicket.ImageResourceCacheClassPath")
+@Named("causeway.viewer.wicket.ImageResourceCacheClassPath")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ClassPath")
 //@RequiredArgsConstructor(onConstructor_ = {@Inject})

@@ -99,7 +99,7 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
 
 
     /**
-     * Isis extension.
+     * Causeway extension.
      */
     public String getOid() {
         return getString("extensions.oid");

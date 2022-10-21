@@ -47,7 +47,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 //@Transactional
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 /**
- * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
+ * With this test we manage CausewayInteractions ourselves. (not sub-classing CausewayIntegrationTestAbstract)
  */
 class JdoTransactionScopeListenerTest {
 

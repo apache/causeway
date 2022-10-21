@@ -25,8 +25,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.causeway.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.model.hints.IsisSelectorEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelHidden;
@@ -146,7 +146,7 @@ implements CollectionCountProvider {
     public void onEvent(final IEvent<?> event) {
         super.onEvent(event);
 
-        final IsisSelectorEvent selectorEvent = IsisEnvelopeEvent.openLetter(event, IsisSelectorEvent.class);
+        final CausewaySelectorEvent selectorEvent = CausewayEnvelopeEvent.openLetter(event, CausewaySelectorEvent.class);
         if(selectorEvent == null) {
             return;
         }

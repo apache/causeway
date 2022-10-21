@@ -26,8 +26,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.model.hints.IsisEventLetterAbstract;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.ActionPrompt;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
@@ -54,7 +54,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJa
 import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
 import org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
-import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.IsisWicketViewerJsResourceReference;
+import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicketViewerJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.wicket.Component;
@@ -193,7 +193,7 @@ implements ActionPromptProvider {
             final IDebugBarContributor contributor = iterator.next();
             // the InspectorDebug invokes load on every model found.
             // for ActionModels this has the rather unfortunate effect of invoking them!
-            // https://issues.apache.org/jira/browse/ISIS-1622 raised to refactor and then reinstate this
+            // https://issues.apache.org/jira/browse/CAUSEWAY-1622 raised to refactor and then reinstate this
             if(contributor == InspectorDebugPanel.DEBUG_BAR_CONTRIB) {
                 iterator.remove();
             }
@@ -257,7 +257,7 @@ implements ActionPromptProvider {
         response.render(SidebarCssResourceReference.asHeaderItem());
 
         response.render(LiveQueryJsResourceReference.asHeaderItem());
-        response.render(IsisWicketViewerJsResourceReference.asHeaderItem());
+        response.render(CausewayWicketViewerJsResourceReference.asHeaderItem());
 
         new JGrowlBehaviour(getMetaModelContext())
             .renderFeedbackMessages(response);
@@ -371,7 +371,7 @@ implements ActionPromptProvider {
                 super.onConfigure(component);
 
                 PageParameters parameters = getPageParameters();
-                component.setVisible(parameters.get(PageParameterUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
+                component.setVisible(parameters.get(PageParameterUtils.CAUSEWAY_NO_HEADER_PARAMETER_NAME).isNull());
             }
         });
     }
@@ -466,14 +466,14 @@ implements ActionPromptProvider {
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Propagates all {@link org.apache.causeway.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
-     * all child components, wrapped in an {@link org.apache.causeway.viewer.wicket.model.hints.IsisEnvelopeEvent envelope} event.
+     * Propagates all {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract letter} events down to
+     * all child components, wrapped in an {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent envelope} event.
      */
     @Override
     public void onEvent(final org.apache.wicket.event.IEvent<?> event) {
-        _Casts.castTo(IsisEventLetterAbstract.class, event.getPayload())
+        _Casts.castTo(CausewayEventLetterAbstract.class, event.getPayload())
         .ifPresent(letter->
-            send(PageAbstract.this, Broadcast.BREADTH, new IsisEnvelopeEvent(letter)));
+            send(PageAbstract.this, Broadcast.BREADTH, new CausewayEnvelopeEvent(letter)));
     }
 
     // -- getComponentFactoryRegistry (Convenience)

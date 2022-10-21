@@ -35,11 +35,11 @@ public interface WrappingObject {
      * Programmatic equivalent of invoking save for a transient object .
      *
      * <p>
-     * NOTE: domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
+     * NOTE: domain classes may not have a method with this name.  The <tt>__causeway_</tt> prefix is
      * intended to reduce the risk of a collision.
      * </p>
      */
-    void __isis_save();
+    void __causeway_save();
 
     /**
      * Provide access to the underlying, wrapped object.
@@ -50,7 +50,7 @@ public interface WrappingObject {
      * the original class).
      *
      * <p>
-     * NOTE: domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
+     * NOTE: domain classes may not have a method with this name.  The <tt>__causeway_</tt> prefix is
      * intended to reduce the risk of a collision.
      * </p>
      *
@@ -58,16 +58,16 @@ public interface WrappingObject {
      * <b>NOTE: there is a string-literal reference to this name
      * <tt>DomainObjectInvocationHandler</tt>, so it should not be changed.</b>.
      */
-    Object __isis_wrapped();
+    Object __causeway_wrapped();
 
     /**
      * The {@link ExecutionMode}(s) inferred from the
      * {@link SyncControl} with which this wrapper was
      * {@link WrapperFactory#wrap(Object, SyncControl) created}.
      *
-     * @implNote domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
+     * @implNote domain classes may not have a method with this name.  The <tt>__causeway_</tt> prefix is
      * intended to reduce the risk of a collision.
      */
-    ImmutableEnumSet<ExecutionMode> __isis_executionModes();
+    ImmutableEnumSet<ExecutionMode> __causeway_executionModes();
 
 }

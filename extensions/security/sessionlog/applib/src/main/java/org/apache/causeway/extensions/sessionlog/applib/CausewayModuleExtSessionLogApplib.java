@@ -35,8 +35,8 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleExtSessionLogApplib {
 
-    public static final String NAMESPACE = "isis.ext.sessionLog";
-    public static final String SCHEMA = "isisExtSessionLog";
+    public static final String NAMESPACE = "causeway.ext.sessionLog";
+    public static final String SCHEMA = "causewayExtSessionLog";
 
     public abstract static class TitleUiEvent<S>
             extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }

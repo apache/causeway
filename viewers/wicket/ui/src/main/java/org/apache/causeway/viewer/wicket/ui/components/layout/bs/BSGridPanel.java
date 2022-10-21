@@ -43,7 +43,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     public static Optional<BSGridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
 
-        //[ISIS-3210] EntityModel.ofAdapter(commonContext, targetAdapterForMixin); not supported for mixins
+        //[CAUSEWAY-3210] EntityModel.ofAdapter(commonContext, targetAdapterForMixin); not supported for mixins
         return Optional.empty();
 
 //        val action = actionModel.getAction();

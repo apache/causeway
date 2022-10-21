@@ -56,7 +56,7 @@ public class TemplateResourceCachingFilter implements Filter {
      * caching filter.
      *
      * <p>
-     * For example, the <tt>IsisRestfulObjectsInteractionFilter</tt> uses this in order to skip
+     * For example, the <tt>CausewayRestfulObjectsInteractionFilter</tt> uses this in order to skip
      * any session handling.
      */
     public static boolean isCachedResource(final HttpServletRequest request) {

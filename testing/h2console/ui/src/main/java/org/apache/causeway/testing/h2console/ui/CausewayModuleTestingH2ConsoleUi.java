@@ -37,5 +37,5 @@ import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
 })
 public class CausewayModuleTestingH2ConsoleUi {
 
-    public static final String NAMESPACE = "isis.ext.h2Console";
+    public static final String NAMESPACE = "causeway.ext.h2Console";
 }

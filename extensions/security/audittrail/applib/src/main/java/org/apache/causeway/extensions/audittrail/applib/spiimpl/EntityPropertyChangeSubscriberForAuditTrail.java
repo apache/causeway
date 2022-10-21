@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Implementation of the Isis {@link EntityPropertyChangeSubscriber} creates a log
+ * Implementation of the Causeway {@link EntityPropertyChangeSubscriber} creates a log
  * entry to the database (the {@link AuditTrailEntry} entity) each time a
  * user either logs on or logs out, or if their session expires.
  */

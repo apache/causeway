@@ -138,12 +138,12 @@ implements
     @EventListener
     public void init(final ContextRefreshedEvent event) {
 
-        log.info("Initialising Isis System");
+        log.info("Initialising Causeway System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
         runtimeEventService.fireBeforeMetamodelLoading();
 
-        val taskList = _ConcurrentTaskList.named("IsisInteractionFactoryDefault Init")
+        val taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
                 .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
                 .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
@@ -187,7 +187,7 @@ implements
     public InteractionLayer openInteraction(
             final @NonNull InteractionContext interactionContextToUse) {
 
-        val isisInteraction = getOrCreateIsisInteraction();
+        val causewayInteraction = getOrCreateCausewayInteraction();
 
         // check whether we should reuse any current authenticationLayer,
         // that is, if current authentication and authToUse are equal
@@ -201,12 +201,12 @@ implements
             return interactionLayerStack.get().peek();
         }
 
-        val interactionLayer = new InteractionLayer(isisInteraction, interactionContextToUse);
+        val interactionLayer = new InteractionLayer(causewayInteraction, interactionContextToUse);
 
         interactionLayerStack.get().push(interactionLayer);
 
         if(isAtTopLevel()) {
-        	postInteractionOpened(isisInteraction);
+        	postInteractionOpened(causewayInteraction);
         }
 
         if(log.isDebugEnabled()) {
@@ -223,7 +223,7 @@ implements
         return interactionLayer;
     }
 
-    private CausewayInteraction getOrCreateIsisInteraction() {
+    private CausewayInteraction getOrCreateCausewayInteraction() {
 
         final Stack<InteractionLayer> interactionLayers = interactionLayerStack.get();
         return interactionLayers.isEmpty()

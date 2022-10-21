@@ -401,7 +401,7 @@ public class ProjectDocModel {
     //    [source,yaml]
     //    ----
     //    Group: org.apache.causeway.commons
-    //    Artifact: isis-commons
+    //    Artifact: causeway-commons
     //    Type: jar
     //    Directory: /commons
     //    ----
@@ -432,7 +432,7 @@ public class ProjectDocModel {
                 .trim();
         val componentList = gatherSpringComponents(module.getProjectDirectory())
                 .stream()
-                .map(s->s.replace("org.apache.isis.", "o.a.i."))
+                .map(s->s.replace("org.apache.causeway.", "o.a.i."))
                 .map(ProjectDocModel::toAdocCompactListItem)
                 .collect(Collectors.joining())
                 .trim();

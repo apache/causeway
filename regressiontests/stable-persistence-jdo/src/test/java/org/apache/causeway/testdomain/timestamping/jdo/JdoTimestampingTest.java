@@ -62,7 +62,7 @@ class JdoTimestampingTest extends CausewayIntegrationTestAbstract {
         assertNotNull(comment.getUpdatedAt());
         assertNotNull(comment.getUpdatedBy());
 
-        //[ISIS-3126] see if we can update the persistent entity,
+        //[CAUSEWAY-3126] see if we can update the persistent entity,
         // without triggering a nested loop
         val firstUpdate = comment.getUpdatedAt();
         comment.setComment("Awesome Book, really!");

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
  * objects.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
  * action method using <tt>@NotContributed</tt>.
  */
 public interface NotInServiceMenuFacet extends Facet {

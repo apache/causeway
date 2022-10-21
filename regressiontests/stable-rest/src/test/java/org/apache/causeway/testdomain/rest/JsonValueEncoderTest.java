@@ -67,7 +67,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("value"), is("aString"));
 
         assertThat(representation.getString("format"), is(nullValue()));
-        assertThat(representation.getString("extensions.x-isis-format"), is("string"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("string"));
     }
 
     @Test
@@ -101,7 +101,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getByte("value"), is(Byte.valueOf((byte)123)));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("byte"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("byte"));
     }
 
     @Test
@@ -113,7 +113,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getByte("value"), is((byte)123));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("byte"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("byte"));
     }
 
     @Test
@@ -125,7 +125,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getShort("value"), is(Short.valueOf((short)12345)));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("short"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("short"));
     }
 
     @Test
@@ -137,7 +137,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getShort("value"), is((short)12345));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("short"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("short"));
     }
 
     @Test
@@ -149,7 +149,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getInt("value"), is(Integer.valueOf(12345678)));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("int"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("int"));
     }
 
     @Test
@@ -161,7 +161,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getInt("value"), is(12345678));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("int"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("int"));
     }
 
     @Test
@@ -173,7 +173,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getLong("value"), is(Long.valueOf(12345678901234L)));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("long"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("long"));
     }
 
     @Test
@@ -185,7 +185,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getLong("value"), is(12345678901234L));
 
         assertThat(representation.getString("format"), is("int"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("long"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("long"));
     }
 
     @Test
@@ -197,7 +197,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getFloat("value"), is(Float.valueOf((float)123.45)));
 
         assertThat(representation.getString("format"), is("decimal"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("float"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("float"));
     }
 
     @Test
@@ -209,7 +209,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getFloat("value"), is((float)123.45));
 
         assertThat(representation.getString("format"), is("decimal"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("float"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("float"));
     }
 
     @Test
@@ -221,7 +221,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getDouble("value"), is(Double.valueOf(12345.6789)));
 
         assertThat(representation.getString("format"), is("decimal"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("double"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("double"));
     }
 
     @Test
@@ -233,7 +233,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getDouble("value"), is(12345.6789));
 
         assertThat(representation.getString("format"), is("decimal"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("double"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("double"));
     }
 
     @Test
@@ -245,7 +245,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getChar("value"), is(Character.valueOf('a')));
 
         assertThat(representation.getString("format"), is(nullValue()));
-        assertThat(representation.getString("extensions.x-isis-format"), is("char"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("char"));
     }
 
     @Test
@@ -257,7 +257,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getChar("value"), is('a'));
 
         assertThat(representation.getString("format"), is(nullValue()));
-        assertThat(representation.getString("extensions.x-isis-format"), is("char"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("char"));
     }
 
     @Test
@@ -271,7 +271,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getLong("value"), is(epochMilli));
 
         assertThat(representation.getString("format"), is("utc-millisec"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("javasqltimestamp"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("javasqltimestamp"));
     }
 
     @Test
@@ -285,7 +285,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getBigInteger("value"), is(new BigInteger("12345678901234567890")));
 
         assertThat(representation.getString("format"), is("big-integer(22)"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("javamathbiginteger"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("javamathbiginteger"));
     }
 
     @Test
@@ -299,7 +299,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getBigDecimal("value"), is(new BigDecimal("12345678901234567890.1234")));
 
         assertThat(representation.getString("format"), is("big-decimal(27,4)"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("javamathbigdecimal"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("javamathbigdecimal"));
     }
 
     // -- TEMPORALS
@@ -313,7 +313,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
         assertThat(representation.getString("format"), is("date-time"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("javautildate"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("javautildate"));
     }
 
     @Test
@@ -325,7 +325,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("value"), is("2014-04-25"));
 
         assertThat(representation.getString("format"), is("date"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("javasqldate"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("javasqldate"));
     }
 
     @Test
@@ -337,7 +337,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
         assertThat(representation.getString("format"), is("date-time"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("jodadatetime"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("jodadatetime"));
     }
 
     @Test
@@ -349,7 +349,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
         assertThat(representation.getString("format"), is("date-time"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("jodalocaldatetime"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("jodalocaldatetime"));
     }
 
     @Test
@@ -361,7 +361,7 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("value"), is("2014-04-25"));
 
         assertThat(representation.getString("format"), is("date"));
-        assertThat(representation.getString("extensions.x-isis-format"), is("jodalocaldate"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("jodalocaldate"));
     }
 
 
@@ -374,7 +374,7 @@ class JsonValueEncoderTest {
                             "bytes", "AQID").toString(),
                     osObj.toString()));
 
-        assertThat(representation.getString("extensions.x-isis-format"), is("blob"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("blob"));
     }
 
     @Test
@@ -386,7 +386,7 @@ class JsonValueEncoderTest {
                             "chars", "abc").toString(),
                     osObj.toString()));
 
-        assertThat(representation.getString("extensions.x-isis-format"), is("clob"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("clob"));
     }
 
     static enum SampleEnum {
@@ -409,7 +409,7 @@ class JsonValueEncoderTest {
         // assert emum is amended with "enumTitle"
         assertThat(representation.getString("value.enumTitle"), is(value.title()));
 
-        assertThat(representation.getString("extensions.x-isis-format"), is("enum"));
+        assertThat(representation.getString("extensions.x-causeway-format"), is("enum"));
     }
 
     private JsonRepresentation representationFor(final Object value) {

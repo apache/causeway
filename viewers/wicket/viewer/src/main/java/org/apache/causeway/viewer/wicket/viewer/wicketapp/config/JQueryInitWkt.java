@@ -24,7 +24,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
 import lombok.val;
 

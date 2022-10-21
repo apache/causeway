@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * lines.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
+ * In the standard Apache Causeway Programming Model, corresponds to the
  * <tt>@MultiLine</tt> annotation.
  */
 public interface MultiLineFacet extends Facet {

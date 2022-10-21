@@ -42,10 +42,10 @@ implements BrandingUiService {
     private final Application appConfig;
 
     @Inject
-    public BrandingUiServiceDefault(final CausewayConfiguration isisConfiguration) {
+    public BrandingUiServiceDefault(final CausewayConfiguration causewayConfiguration) {
         //TODO application name/logo borrowed from Wicket's configuration,
         // we might generalize this config option to all viewers
-        this.appConfig = isisConfiguration.getViewer().getWicket().getApplication();
+        this.appConfig = causewayConfiguration.getViewer().getWicket().getApplication();
     }
 
     @Override

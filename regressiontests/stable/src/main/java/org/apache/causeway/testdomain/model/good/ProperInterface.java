@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Property;
 
-@Named("isis.testdomain.ProperInterface")
+@Named("causeway.testdomain.ProperInterface")
 public interface ProperInterface {
 
     // -- read/write exemplar

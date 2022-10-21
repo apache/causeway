@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.facets.SingleClassValueFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Corresponds to <tt>@Collection(domainEvent=...)</tt> annotation in the Isis programming model.
+ * Corresponds to <tt>@Collection(domainEvent=...)</tt> annotation in the Causeway programming model.
  */
 public interface CollectionDomainEventFacet
 extends SingleClassValueFacet, HidingInteractionAdvisor {

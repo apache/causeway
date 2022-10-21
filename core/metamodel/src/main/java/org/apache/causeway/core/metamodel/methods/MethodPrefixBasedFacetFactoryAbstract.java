@@ -115,7 +115,7 @@ implements MethodPrefixBasedFacetFactory {
                                             && (MemberSupportPrefix.HIDE.getMethodNamePrefixes().contains(prefix)
                                                     || MemberSupportPrefix.DISABLE.getMethodNamePrefixes().contains(prefix))
                                             ? " (such methods must not have parameters, '"
-                                                + "isis.core.meta-model.validator.no-params-only"
+                                                + "causeway.core.meta-model.validator.no-params-only"
                                                 + "' config property)"
                                             : "";
 

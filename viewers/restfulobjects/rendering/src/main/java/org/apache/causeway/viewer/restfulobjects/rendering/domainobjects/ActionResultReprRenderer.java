@@ -92,7 +92,7 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
 
         addResult(representation);
 
-        addExtensionsIsisProprietaryChangedObjects();
+        addExtensionsCausewayProprietaryChangedObjects();
 
         return representation;
     }

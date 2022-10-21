@@ -65,9 +65,9 @@ public class DomainModelValidator {
     public DomainModelValidator(
             final SpecificationLoader specificationLoader,
             final CausewayConfiguration configuration,
-            final CausewaySystemEnvironment isisSystemEnvironment) {
+            final CausewaySystemEnvironment causewaySystemEnvironment) {
 
-        val recreateRequired = isRecreateRequired(configuration, isisSystemEnvironment);
+        val recreateRequired = isRecreateRequired(configuration, causewaySystemEnvironment);
         if(recreateRequired) {
             specificationLoader.createMetaModel();
             if(log.isDebugEnabled()) {
@@ -81,13 +81,13 @@ public class DomainModelValidator {
     }
 
 
-    private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment isisSystemEnvironment) {
+    private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment causewaySystemEnvironment) {
         final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         switch (mode) {
             case FULL:
                 return false;
             case LAZY_UNLESS_PRODUCTION:
-                return isisSystemEnvironment.isPrototyping();
+                return causewaySystemEnvironment.isPrototyping();
             case LAZY:
             default:
                 return true;

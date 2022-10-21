@@ -25,7 +25,7 @@ import org.springframework.cglib.proxy.Mixin;
 import org.apache.causeway.applib.ViewModel;
 
 /**
- * The different sorts of domain objects recognized by Isis.
+ * The different sorts of domain objects recognized by Causeway.
  *
  * @since 1.x {@index}
  */
@@ -39,7 +39,7 @@ public enum Nature {
     NOT_SPECIFIED,
 
     /**
-     * A domain entity whose persistence is managed internally by Isis,
+     * A domain entity whose persistence is managed internally by Causeway,
      * using JPA or JDO as the persistence implementation.
      * <p>
      * Domain entities are considered to be part of the domain model layer.

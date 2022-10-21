@@ -45,7 +45,7 @@ import lombok.val;
  * @since 2.0
  */
 @Configuration
-@Named("isis.persistence.jpa.ElSettings")
+@Named("causeway.persistence.jpa.ElSettings")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Eclipselink")
 @ConfigurationProperties(

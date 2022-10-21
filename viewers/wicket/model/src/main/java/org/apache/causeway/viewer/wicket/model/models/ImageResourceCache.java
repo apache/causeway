@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.isis</tt>
+ * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.causeway</tt>
  * package, however to do so would break existing API (gmap3 has a dependency on this, for example).
  */
 public interface ImageResourceCache extends Serializable {

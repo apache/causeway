@@ -29,7 +29,7 @@ class Block {
 
     private enum State {
         /**
-         * XXX[ISIS-2987] in support of (not providing any context) ...
+         * XXX[CAUSEWAY-2987] in support of (not providing any context) ...
          * <pre>
          * #:
          * msgid "Anonymous"

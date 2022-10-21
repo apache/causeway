@@ -96,7 +96,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
             if(method != null) {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Isis v2
+                // ignoring stuff which is deprecated for Causeway v2
 
                 final Property propertyAnnot =
                         _Annotations.synthesize(method, Property.class)
@@ -137,7 +137,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
             if(method != null) {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Isis v2
+                // ignoring stuff which is deprecated for Causeway v2
 
                 final Collection collectionAnnot =
                         _Annotations.synthesize(method, Collection.class)

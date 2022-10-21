@@ -40,7 +40,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import lombok.NonNull;
 
 @Component
-@Named("isis.val.BigIntegerValueSemantics")
+@Named("causeway.val.BigIntegerValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BigIntegerValueSemantics
 extends ValueSemanticsAbstract<BigInteger>

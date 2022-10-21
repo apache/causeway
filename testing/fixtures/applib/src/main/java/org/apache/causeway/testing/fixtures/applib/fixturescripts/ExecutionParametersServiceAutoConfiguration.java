@@ -44,7 +44,7 @@ public class ExecutionParametersServiceAutoConfiguration {
      *
      * @return
      */
-    @Bean("isis.testing.fixtures.ExecutionParametersServiceDefault")
+    @Bean("causeway.testing.fixtures.ExecutionParametersServiceDefault")
     @ConditionalOnMissingBean(ExecutionParametersService.class)
     @Qualifier("Default")
     ExecutionParametersService executionParametersService() {

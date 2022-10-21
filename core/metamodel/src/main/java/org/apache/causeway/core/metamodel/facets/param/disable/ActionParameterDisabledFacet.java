@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * The mechanism by which a single parameter of the action can be disabled.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>disableNXxx</tt> support method for an action.
  */
 public interface ActionParameterDisabledFacet extends Facet, DisablingInteractionAdvisor {

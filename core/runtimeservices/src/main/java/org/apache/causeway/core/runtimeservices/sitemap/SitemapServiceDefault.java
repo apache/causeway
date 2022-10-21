@@ -152,8 +152,8 @@ public class SitemapServiceDefault implements SitemapService {
                                 .ifPresent(describedAs->{
                                     adoc.append(String.format("_%s_\n\n", describedAs));
                                 });
-                                //FIXME[ISIS-2883] break down into element type as well
-                                //FIXME[ISIS-2883] also visit associated actions
+                                //FIXME[CAUSEWAY-2883] break down into element type as well
+                                //FIXME[CAUSEWAY-2883] also visit associated actions
                             });
                         }
                         @Override public void visit(final FieldSet fieldSet) {

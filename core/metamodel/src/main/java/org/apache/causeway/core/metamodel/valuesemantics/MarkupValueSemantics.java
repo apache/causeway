@@ -35,7 +35,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.MarkupValueSemantics")
+@Named("causeway.val.MarkupValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class MarkupValueSemantics
 extends ValueSemanticsAbstract<Markup>
@@ -99,7 +99,7 @@ implements
     @Override
     public Can<Markup> getExamples() {
         return Can.of(
-                Markup.valueOf("<a href=\"https://isis.apache.org/\">"
+                Markup.valueOf("<a href=\"https://causeway.apache.org/\">"
                         + "Link Name"
                         + "</a> is a link"),
                 Markup.valueOf("<h1>This is a Header</h1>"),

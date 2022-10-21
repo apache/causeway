@@ -46,7 +46,7 @@ class J2AdocTest {
     void testJavaDoc2AsciiDoc() throws IOException {
 
         val analyzerConfig = AnalyzerConfigFactory
-                .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
+                .maven(ProjectSampler.apacheCausewayApplib(), Language.JAVA)
                 .main();
 
         val j2aContext = J2AdocContext
@@ -82,7 +82,7 @@ class J2AdocTest {
     @Test// @Disabled
     void adocDocMining() throws IOException {
 
-        val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
+        val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheCausewayRoot());
 
         val names = _Sets.<String>newTreeSet();
 
@@ -115,13 +115,13 @@ class J2AdocTest {
     void removeAdocExampleTags() throws IOException {
 
         val analyzerConfig = AnalyzerConfigFactory
-                .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
+                .maven(ProjectSampler.apacheCausewayApplib(), Language.JAVA)
                 .main();
 
         analyzerConfig.getSources(JAVA)
         .stream()
         .peek(source->System.out.println("parsing source: " + source))
-        .filter(source->source.toString().contains("\\isis\\applib\\"))
+        .filter(source->source.toString().contains("\\causeway\\applib\\"))
         .forEach(AsciiDocIncludeTagFilter::removeAdocExampleTags);
 
     }
@@ -129,7 +129,7 @@ class J2AdocTest {
     @Test @Disabled("DANGER!")
     void adocExampleProcessing() throws IOException {
 
-        val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
+        val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheCausewayRoot());
 
         Can.ofCollection(adocFiles)
         .stream()

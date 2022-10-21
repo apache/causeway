@@ -90,7 +90,7 @@ public class CausewayModuleExtCommandReplaySecondary {
             extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> { }
 
     @Inject ApplicationContext applicationContext;
-    @Inject CausewayConfiguration isisConfiguration;
+    @Inject CausewayConfiguration causewayConfiguration;
 
     @Bean(name = "ReplicateAndReplayJob")
     public JobDetailFactoryBean replicateAndReplayJobDetailFactory() {
@@ -105,7 +105,7 @@ public class CausewayModuleExtCommandReplaySecondary {
     public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(@Qualifier("ReplicateAndReplayJob") final JobDetail job) {
         val triggerFactory = new SimpleTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
-        val config = isisConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();
+        val config = causewayConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();
         triggerFactory.setRepeatInterval(config.getRepeatInterval());
         triggerFactory.setStartDelay(config.getStartDelay());
         triggerFactory.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);

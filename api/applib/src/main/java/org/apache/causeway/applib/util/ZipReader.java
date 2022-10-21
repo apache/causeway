@@ -49,7 +49,7 @@ public class ZipReader {
      * <p>
      * The passed in {@link ZipInputStream} corresponds to given {@link ZipEntry} and must not be closed.
      */
-    public static interface ZipVisistor extends BiPredicate<ZipEntry, ZipInputStream> {
+    public static interface ZipVcausewaytor extends BiPredicate<ZipEntry, ZipInputStream> {
     }
     
     /**
@@ -63,7 +63,7 @@ public class ZipReader {
     @SneakyThrows
     public static void read(
             final @Nullable InputStream inputStream, 
-            final @NonNull ZipVisistor zipVisistor) {
+            final @NonNull ZipVcausewaytor zipVcausewaytor) {
         
         if(inputStream==null) {
             return; // no-op
@@ -72,7 +72,7 @@ public class ZipReader {
         try(ZipInputStream in = new ZipInputStream(new BufferedInputStream(inputStream, 64*1024), ENTRY_NAME_CHARSET)){
             ZipEntry entry;
             while((entry=in.getNextEntry())!=null) {
-                if(!zipVisistor.test(entry, in)) {
+                if(!zipVcausewaytor.test(entry, in)) {
                     return; // break request from visitor
                 }
             }

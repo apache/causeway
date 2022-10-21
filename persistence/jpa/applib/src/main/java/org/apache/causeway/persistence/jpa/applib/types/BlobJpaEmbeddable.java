@@ -47,7 +47,7 @@ import lombok.val;
  * </p>
  *
  * <p>
- * This class provides support for an alternative approach, where the Isis {@link Blob} is marshalled in and out of
+ * This class provides support for an alternative approach, where the Causeway {@link Blob} is marshalled in and out of
  * this class.
  * </p>
  *

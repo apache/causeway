@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * capability (for example, query by example).
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
  * property with the <tt>@Searchable</tt> annotation.
  *
  * <p>

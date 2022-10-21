@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * pending approval, approved, rejected).
  *
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to a method named {@code iconName}.
+ * In the standard Apache Causeway Programming Model, typically corresponds to a method named {@code iconName}.
  *
  * @see TitleFacet
  */

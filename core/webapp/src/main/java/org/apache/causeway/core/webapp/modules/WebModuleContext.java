@@ -57,7 +57,7 @@ public class WebModuleContext {
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
     /**
-     *  Adds to the list of protected path names (<tt>isis.protected</tt> context param)
+     *  Adds to the list of protected path names (<tt>causeway.protected</tt> context param)
      * @param path
      */
     public void addProtectedPath(String path) {
@@ -68,7 +68,7 @@ public class WebModuleContext {
     }
 
     /**
-     * immutable list of protected path names (<tt>isis.protected</tt> context param)
+     * immutable list of protected path names (<tt>causeway.protected</tt> context param)
      */
     public Can<String> getProtectedPaths() {
         final String listLiteral = protectedPath.toString();

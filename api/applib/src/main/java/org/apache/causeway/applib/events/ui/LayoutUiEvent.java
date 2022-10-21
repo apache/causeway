@@ -55,7 +55,7 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default</tt>
+     * <tt>causeway.applib.annotation.domain-object-layout.layout-ui-event.post-for-default</tt>
      * configuration property.
      * </p>
      */

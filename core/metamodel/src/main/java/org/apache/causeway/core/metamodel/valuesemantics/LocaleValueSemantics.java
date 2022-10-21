@@ -39,7 +39,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("isis.val.LocaleValueSemantics")
+@Named("causeway.val.LocaleValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LocaleValueSemantics
 extends ValueSemanticsAbstract<Locale>

@@ -51,12 +51,12 @@ extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject @Getter transient private IsisWicketThemeSupport themeSupport;
+    @Inject @Getter transient private CausewayWicketThemeSupport themeSupport;
 
     /**
      * The name of the cookie that stores the last user selection
      */
-    private static final String ISIS_THEME_COOKIE_NAME = "isis.viewer.wicket.themes.selected";
+    private static final String CAUSEWAY_THEME_COOKIE_NAME = "causeway.viewer.wicket.themes.selected";
 
     /**
      * Constructor
@@ -106,12 +106,12 @@ extends PanelAbstract<Void, IModel<Void>> {
 
     private void saveActiveThemeToCookie(final String themeName) {
         CookieUtils cookieUtils = new CookieUtils();
-        cookieUtils.save(ISIS_THEME_COOKIE_NAME, themeName);
+        cookieUtils.save(CAUSEWAY_THEME_COOKIE_NAME, themeName);
     }
 
     private void initializeActiveThemeFromCookie() {
         CookieUtils cookieUtils = new CookieUtils();
-        String activeTheme = cookieUtils.load(ISIS_THEME_COOKIE_NAME);
+        String activeTheme = cookieUtils.load(CAUSEWAY_THEME_COOKIE_NAME);
         if (!Strings.isEmpty(activeTheme)) {
 
             val isAvailable = getThemeSupport().getThemeProvider().available().stream()

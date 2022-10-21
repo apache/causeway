@@ -182,9 +182,9 @@ implements ReprRenderer<T> {
      * Convenience for representations that are returned from objects that
      * mutate state.
      */
-    protected final void addExtensionsIsisProprietaryChangedObjects() {
+    protected final void addExtensionsCausewayProprietaryChangedObjects() {
 
-        // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction
+        // TODO: have removed UpdateNotifier, plan is to re-introduce using the CausewayTransaction
         // enlisted objects (which would also allow newly-created objects to be shown)
         final List<ManagedObject> changedObjects = _Lists.newArrayList(); // updateNotifier.getChangedObjects();
         final List<ManagedObject> disposedObjects = _Lists.newArrayList(); // updateNotifier.getDisposedObjects();

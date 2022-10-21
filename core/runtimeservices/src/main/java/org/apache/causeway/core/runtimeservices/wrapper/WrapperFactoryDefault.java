@@ -151,7 +151,7 @@ implements WrapperFactory, HasMetaModelContext {
         putDispatcher(CollectionVisibilityEvent.class, InteractionListener::collectionVisible);
         putDispatcher(CollectionUsabilityEvent.class, InteractionListener::collectionUsable);
         putDispatcher(CollectionAccessEvent.class, InteractionListener::collectionAccessed);
-//XXX[ISIS-3084] - removal of collection modification events
+//XXX[CAUSEWAY-3084] - removal of collection modification events
 //        putDispatcher(CollectionAddToEvent.class, InteractionListener::collectionAddedTo);
 //        putDispatcher(CollectionRemoveFromEvent.class, InteractionListener::collectionRemovedFrom);
         putDispatcher(ActionVisibilityEvent.class, InteractionListener::actionVisible);
@@ -183,11 +183,11 @@ implements WrapperFactory, HasMetaModelContext {
 
         if (isWrapper(domainObject)) {
             val wrapperObject = (WrappingObject) domainObject;
-            val executionMode = wrapperObject.__isis_executionModes();
+            val executionMode = wrapperObject.__causeway_executionModes();
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return domainObject;
             }
-            val underlyingDomainObject = wrapperObject.__isis_wrapped();
+            val underlyingDomainObject = wrapperObject.__causeway_wrapped();
             return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
         }
         return createProxy(domainObject, syncControl);
@@ -219,8 +219,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         if (isWrapper(mixee)) {
             val wrapperObject = (WrappingObject) mixee;
-            val executionMode = wrapperObject.__isis_executionModes();
-            val underlyingMixee = wrapperObject.__isis_wrapped();
+            val executionMode = wrapperObject.__causeway_executionModes();
+            val underlyingMixee = wrapperObject.__causeway_wrapped();
 
             getServiceInjector().injectServicesInto(underlyingMixee);
 
@@ -255,7 +255,7 @@ implements WrapperFactory, HasMetaModelContext {
     public <T> T unwrap(final T possibleWrappedDomainObject) {
         if(isWrapper(possibleWrappedDomainObject)) {
             val wrappingObject = (WrappingObject) possibleWrappedDomainObject;
-            return _Casts.uncheckedCast(wrappingObject.__isis_wrapped());
+            return _Casts.uncheckedCast(wrappingObject.__causeway_wrapped());
         }
         return possibleWrappedDomainObject;
     }

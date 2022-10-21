@@ -84,19 +84,19 @@ extends DelegatingInvocationHandlerDefault<T> {
     protected Method titleMethod;
 
     /**
-     * The <tt>__isis_save()</tt> method from {@link WrappingObject#__isis_save()}.
+     * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
      */
-    protected Method __isis_saveMethod;
+    protected Method __causeway_saveMethod;
 
     /**
-     * The <tt>__isis_wrapped()</tt> method from {@link WrappingObject#__isis_wrapped()}.
+     * The <tt>__causeway_wrapped()</tt> method from {@link WrappingObject#__causeway_wrapped()}.
      */
-    protected Method __isis_wrappedMethod;
+    protected Method __causeway_wrappedMethod;
 
     /**
-     * The <tt>__isis_executionModes()</tt> method from {@link WrappingObject#__isis_executionModes()}.
+     * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
      */
-    protected Method __isis_executionModes;
+    protected Method __causeway_executionModes;
 
     private final EntityFacet entityFacet;
     private final ManagedObject mixeeAdapter;
@@ -118,9 +118,9 @@ extends DelegatingInvocationHandlerDefault<T> {
             // ignore
         }
         try {
-            __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", _Constants.emptyClasses);
-            __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", _Constants.emptyClasses);
-            __isis_executionModes = WrappingObject.class.getMethod("__isis_executionModes", _Constants.emptyClasses);
+            __causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
+            __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
+            __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
 
 
         } catch (final NoSuchMethodException nsme) {
@@ -166,15 +166,15 @@ extends DelegatingInvocationHandlerDefault<T> {
         final ObjectSpecification targetSpec = targetAdapter.getSpecification();
 
         // save method, through the proxy
-        if (method.equals(__isis_saveMethod)) {
+        if (method.equals(__causeway_saveMethod)) {
             return handleSaveMethod(targetAdapter, targetSpec);
         }
 
-        if (method.equals(__isis_wrappedMethod)) {
+        if (method.equals(__causeway_wrappedMethod)) {
             return getDelegate();
         }
 
-        if (method.equals(__isis_executionModes)) {
+        if (method.equals(__causeway_executionModes)) {
             return getSyncControl().getExecutionModes();
         }
 
@@ -510,7 +510,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     private Object underlying(final Object arg) {
         if (arg instanceof WrappingObject) {
             val argViewObject = (WrappingObject) arg;
-            return argViewObject.__isis_wrapped();
+            return argViewObject.__causeway_wrapped();
         } else {
             return arg;
         }

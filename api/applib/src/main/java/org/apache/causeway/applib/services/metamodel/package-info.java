@@ -19,7 +19,7 @@
 
 /**
  * The {@link org.apache.causeway.applib.services.metamodel.MetaModelService} service provides access to a number of
- * aspects of Apache Isis' internal metamodel.
+ * aspects of Apache Causeway' internal metamodel.
  *
  *
  */

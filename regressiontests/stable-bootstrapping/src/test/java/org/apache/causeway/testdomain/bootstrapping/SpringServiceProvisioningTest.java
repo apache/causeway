@@ -53,11 +53,11 @@ import lombok.val;
                 Configuration_headless.class, 
         },
         properties = {
-                // "isis.core.meta-model.introspector.parallelize=false",
+                // "causeway.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    //IsisPresets.DebugDiscovery
+    //CausewayPresets.DebugDiscovery
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel,
     CausewayPresets.UseLog4j2Test,
@@ -66,7 +66,7 @@ import lombok.val;
 class SpringServiceProvisioningTest {
     
     @Inject private ServiceRegistry serviceRegistry; 
-    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
 
     @BeforeEach
     void beforeEach() {
@@ -76,13 +76,13 @@ class SpringServiceProvisioningTest {
     @Test
     void dump_all() throws IOException {
 
-        final List<String> beans = isisSystemEnvironment.getIocContainer().streamAllBeans()
+        final List<String> beans = causewaySystemEnvironment.getIocContainer().streamAllBeans()
                 .map(_ManagedBeanAdapter::getId)
                 .sorted()
                 .collect(Collectors.toList());
 
         val beansFound = toStringJoiningNewLine(beans);
-        System.out.println("--- Beans discovered by Isis ---");
+        System.out.println("--- Beans discovered by Causeway ---");
         System.out.println(beansFound);
         System.out.println("--------------------------------");
     }
@@ -98,13 +98,13 @@ class SpringServiceProvisioningTest {
         val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
         val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
                 .filter(entry->!entry.startsWith("#"))
-                .filter(entry->!entry.startsWith("org.apache.isis.testdomain."))
+                .filter(entry->!entry.startsWith("org.apache.causeway.testdomain."))
                 .collect(Collectors.toCollection(TreeSet::new));
         
         assertFalse(expectedSingletons.isEmpty());
         
         val servicesFound = toStringJoiningNewLine(managedServices);
-        System.out.println("--- Services discovered by Isis ---");
+        System.out.println("--- Services discovered by Causeway ---");
         System.out.println(servicesFound);
         System.out.println("--------------------------------");
         

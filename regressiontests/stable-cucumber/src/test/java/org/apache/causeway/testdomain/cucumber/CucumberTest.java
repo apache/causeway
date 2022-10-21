@@ -26,12 +26,12 @@ import org.junit.platform.suite.api.Suite;
 /**
  * Cucumber will scan the package of a class annotated with @Cucumber for feature files.
  * <p>
- * Make sure this class name ends with Test, as Surefire when bundled with Apache Isis
+ * Make sure this class name ends with Test, as Surefire when bundled with Apache Causeway
  * filters JUnit tests also by class name.
  */
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("org/apache/isis/testdomain/cucumber")
+@SelectClasspathResource("org/apache/causeway/testdomain/cucumber")
 public class CucumberTest {
 
     // See 7.x:

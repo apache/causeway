@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * value}.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>validateXxx</tt> method for a property with an accessor of
  * <tt>getXxx</tt>.
  *

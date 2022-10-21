@@ -45,15 +45,15 @@ import lombok.Getter;
  * @since 2.0
  */
 @Service
-@Named("isis.viewer.wicket.WebModuleWicket")
+@Named("causeway.viewer.wicket.WebModuleWicket")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
 public final class WebModuleWicket extends WebModuleAbstract {
 
     private static final String WICKET_FILTER_NAME = "WicketFilter";
 
-    private final CausewaySystemEnvironment isisSystemEnvironment;
-    private final CausewayConfiguration isisConfiguration;
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
+    private final CausewayConfiguration causewayConfiguration;
 
     private final String wicketBasePath;
     private final String deploymentMode;
@@ -62,24 +62,24 @@ public final class WebModuleWicket extends WebModuleAbstract {
 
     @Inject
     public WebModuleWicket(
-            final CausewaySystemEnvironment isisSystemEnvironment,
-            final CausewayConfiguration isisConfiguration,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final CausewayConfiguration causewayConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
 
-        this.isisSystemEnvironment = isisSystemEnvironment;
-        this.isisConfiguration = isisConfiguration;
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
+        this.causewayConfiguration = causewayConfiguration;
 
-        this.wicketBasePath = this.isisConfiguration.getViewer().getWicket().getBasePath();
+        this.wicketBasePath = this.causewayConfiguration.getViewer().getWicket().getBasePath();
 
-        deploymentMode = this.isisSystemEnvironment.isPrototyping()
+        deploymentMode = this.causewaySystemEnvironment.isPrototyping()
                 ? "development"
                 : "deployment";
 
-        wicketApp = isisConfiguration.getViewer().getWicket().getApp();
+        wicketApp = causewayConfiguration.getViewer().getWicket().getApp();
 
-        requireNonNull(wicketBasePath, "Config property 'isis.viewer.wicket.base-path' is required.");
-        requireNonNull(wicketApp, "Config property 'isis.viewer.wicket.app' is required.");
+        requireNonNull(wicketBasePath, "Config property 'causeway.viewer.wicket.base-path' is required.");
+        requireNonNull(wicketApp, "Config property 'causeway.viewer.wicket.app' is required.");
 
         this.urlPattern = wicketBasePath + "*";
     }

@@ -66,7 +66,7 @@ public class ArchitectureJpaRules {
 
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
-     * annotated with the Apache Isis {@link DomainObject} annotation specifying that its
+     * annotated with the Apache Causeway {@link DomainObject} annotation specifying that its
      * {@link DomainObject#nature() nature} is an {@link org.apache.causeway.applib.annotation.Nature#ENTITY entity}.
      */
     public static ArchRule every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY() {
@@ -77,7 +77,7 @@ public class ArchitectureJpaRules {
 
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
-     * annotated with the Apache Isis {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
+     * annotated with the Apache Causeway {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
      * with a value of {@link org.apache.causeway.applib.jaxb.PersistentEntityAdapter}<code>.class</code>.
      *
      * <p>
@@ -93,30 +93,30 @@ public class ArchitectureJpaRules {
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
      * annotated with the {@link javax.persistence.EntityListeners} annotation that includes
-     * a value of <code>org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener.class</code>.
+     * a value of <code>org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class</code>.
      *
      * <p>
      * Tnis is so that entities can be transparently referenced from XML-style view models.
      * </p>
      */
-    public static ArchRule every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener() {
+    public static ArchRule every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener() {
         return classes()
                 .that().areAnnotatedWith(Entity.class)
-                .should().beAnnotatedWith(EntityListeners_with_IsisEntityListener());
+                .should().beAnnotatedWith(EntityListeners_with_CausewayEntityListener());
     }
 
-    static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@EntityListener({IsisEntityListener.class})") {
+    static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_CausewayEntityListener() {
+        return new DescribedPredicate<JavaAnnotation<?>>("@EntityListener({CausewayEntityListener.class})") {
             @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(EntityListeners.class)) {
                     return false;
                 }
                 val properties = javaAnnotation.getProperties();
                 val listeners = properties.get("value");
-                return listeners instanceof JavaClass[] && containsIsisEntityListener((JavaClass[]) listeners);
+                return listeners instanceof JavaClass[] && containsCausewayEntityListener((JavaClass[]) listeners);
             }
 
-            private boolean containsIsisEntityListener(final JavaClass[] classes) {
+            private boolean containsCausewayEntityListener(final JavaClass[] classes) {
                 //noinspection deprecation
                 return Arrays.stream(classes)
                         .anyMatch(x -> Objects.equals(x.getFullName(), CausewayEntityListener.class.getName())

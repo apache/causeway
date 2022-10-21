@@ -42,7 +42,7 @@ import lombok.val;
         },
         webEnvironment = SpringBootTest.WebEnvironment.NONE,
         properties = {
-                // "isis.core.meta-model.introspector.parallelize=false",
+                // "causeway.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({

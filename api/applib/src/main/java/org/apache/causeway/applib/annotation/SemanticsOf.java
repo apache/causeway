@@ -25,7 +25,7 @@ import org.apache.causeway.applib.util.Enums;
 
 /**
  * @since 1.x {@index}
- * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
+ * @see <a href="https://causeway.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
 @Named(CausewayModuleApplib.NAMESPACE + ".annotation.SemanticsOf")
 @Value

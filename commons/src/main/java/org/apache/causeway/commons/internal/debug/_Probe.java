@@ -38,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  * <p>EXAMPLE:<br/><pre>{@code
  * _Probe probe =
- *    _Probe.maxCallsThenExitWithStacktrace(1).label("IsisInteractionFactoryDefault");
+ *    _Probe.maxCallsThenExitWithStacktrace(1).label("CausewayInteractionFactoryDefault");
  * probe.println("Hallo World!");
  * }
  * </pre></p>
@@ -216,7 +216,7 @@ public class _Probe {
 
     private static final Map<String, String> abbreviations =
             Map.of(
-                    "org.apache.isis", "~",
+                    "org.apache.causeway", "~",
                     "core", "c",
                     "applib", "alib",
                     "metamodel", "mm",
@@ -225,7 +225,7 @@ public class _Probe {
                     );
     public static String compact(final Class<?> cls) {
         String[] name = {cls.getName()};
-        // pre-process for isis
+        // pre-process for causeway
         abbreviations.forEach((k, v)->{
             if(name[0].startsWith(k)) {
                 name[0] = v + name[0].substring(k.length());

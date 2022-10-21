@@ -35,7 +35,7 @@ import static org.mockito.Mockito.calls;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
-import org.apache.causeway.core.metamodel.commons.matchers.IsisMatchers;
+import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
@@ -170,7 +170,7 @@ extends AbstractFacetFactoryJupiterTestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
-            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
         }
 
         @Test
@@ -200,7 +200,7 @@ extends AbstractFacetFactoryJupiterTestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacet);
-            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
             assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
         }
 
@@ -231,7 +231,7 @@ extends AbstractFacetFactoryJupiterTestCase {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetFromFeature);
-            assertThat(facet.value().getElementType(), IsisMatchers.classEqualTo(Order.class));
+            assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
         }
 
     }

@@ -71,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.security.AuthenticatorShiro")
+@Named("causeway.security.AuthenticatorShiro")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Shiro")
 @Log4j2
@@ -117,7 +117,7 @@ public class AuthenticatorShiro implements Authenticator {
             } else {
 
                 // TODO: should we verify the code passed in that this session is still alive?
-                // TODO: perhaps we should cache Isis' Authentication inside the Shiro Session, and just retrieve it?
+                // TODO: perhaps we should cache Causeway' Authentication inside the Shiro Session, and just retrieve it?
 
                 return authenticationFor(request, code, token, currentSubject);
             }

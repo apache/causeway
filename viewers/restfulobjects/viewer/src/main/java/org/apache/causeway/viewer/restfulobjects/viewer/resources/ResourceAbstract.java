@@ -59,7 +59,7 @@ import lombok.val;
 public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
-    protected final CausewayConfiguration isisConfiguration;
+    protected final CausewayConfiguration causewayConfiguration;
     protected final InteractionLayerTracker iInteractionLayerTracker;
 
     @Context HttpHeaders httpHeaders;
@@ -75,11 +75,11 @@ public abstract class ResourceAbstract {
     @Inject
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
 
         this.metaModelContext = metaModelContext;
-        this.isisConfiguration = isisConfiguration;
+        this.causewayConfiguration = causewayConfiguration;
         this.iInteractionLayerTracker = iInteractionLayerTracker;
     }
 
@@ -115,7 +115,7 @@ public abstract class ResourceAbstract {
         }
 
         // eg. http://localhost:8080/ctx/restful/
-        final String restfulAbsoluteBase = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
+        final String restfulAbsoluteBase = causewayConfiguration.getViewer().getRestfulobjects().getBaseUri()
                                     .orElseGet(()->uriInfo.getBaseUri().toString());
 
         // eg. /ctx/restful/
@@ -149,7 +149,7 @@ public abstract class ResourceAbstract {
                 resourceDescriptor, "", "/restful", /*urlUnencodedQueryString*/ null, requestParams);
     }
 
-    // -- ISIS INTEGRATION
+    // -- CAUSEWAY INTEGRATION
 
     protected ManagedObject getObjectAdapterElseThrowNotFound(
             final String domainType,

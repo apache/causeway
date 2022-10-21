@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
  * for Wicket Viewer
  */
 @Service
-@Named("isis.viewer.wicket.DeepLinkServiceWicket")
+@Named("causeway.viewer.wicket.DeepLinkServiceWicket")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

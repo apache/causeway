@@ -57,7 +57,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
 
     private final ApplicationUserRepository applicationUserRepository;
     private final ApplicationRoleRepository applicationRoleRepository;
-    private final CausewayConfiguration isisConfiguration;
+    private final CausewayConfiguration causewayConfiguration;
 
     @Override
     public boolean usernameExists(final String username) {
@@ -79,7 +79,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
             applicationUser.setEmailAddress(emailAddress);
         }
 
-        isisConfiguration.getExtensions().getSecman().getUserRegistration().getInitialRoleNames().stream()
+        causewayConfiguration.getExtensions().getSecman().getUserRegistration().getInitialRoleNames().stream()
                 .map(applicationRoleRepository::findByName)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

@@ -35,7 +35,7 @@ import lombok.Getter;
  * This exception should only be thrown for &quot;recoverable&quot; exceptions, that is, those which
  * could be anticipated by the application. It should not be thrown for fatal, unanticipated exceptions.
  * <p>
- * The framework attempts to apply some heuristics; if the underlying Isis transaction has been aborted
+ * The framework attempts to apply some heuristics; if the underlying Causeway transaction has been aborted
  * (for example as the result of a problem persisting some data) but then the application attempts to
  * throw this exception, the exception will be promoted to a fatal exception.
  *

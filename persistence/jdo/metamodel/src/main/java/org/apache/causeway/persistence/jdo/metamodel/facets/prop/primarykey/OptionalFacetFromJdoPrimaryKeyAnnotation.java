@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDef
  * By default mandatory properties are initialized using the
  * {@link PropertyDefaultFacet} facet. We don't want this, so this facet marks
  * the property as optional, meaning that the {@link PrimaryKey} property is left
- * untouched by Isis.
+ * untouched by Causeway.
  */
 public class OptionalFacetFromJdoPrimaryKeyAnnotation
 extends MandatoryFacetAbstract {

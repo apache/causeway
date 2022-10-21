@@ -186,7 +186,7 @@ implements FormExecutor, HasCommonContext {
         } catch (Throwable ex) {
 
             // there's no need to set the abort cause on the transaction, it will have already been done
-            // (in IsisTransactionManager#executeWithinTransaction(...)).
+            // (in CausewayTransactionManager#executeWithinTransaction(...)).
 
             // attempt to recognize this exception using the ExceptionRecognizers (but only when not in inline prompt context!?)
             if(!formExecutorContext.isWithinInlinePrompt()
@@ -194,7 +194,7 @@ implements FormExecutor, HasCommonContext {
                 return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
-            // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
+            // throwing an exception will get caught by WebRequestCycleForCauseway#onException(...)
             throw ex; // redirect to the error page.
         }
     }
@@ -216,7 +216,7 @@ implements FormExecutor, HasCommonContext {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
-        //[ISIS-2419] for a consistent user experience with action dialog validation messages,
+        //[CAUSEWAY-2419] for a consistent user experience with action dialog validation messages,
         //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
         val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
                 ? recognition.toMessageNoCategory(getTranslationService())

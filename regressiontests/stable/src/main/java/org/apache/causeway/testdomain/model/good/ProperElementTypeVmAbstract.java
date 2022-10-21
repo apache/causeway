@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
 /**
- * @see <a href="https://issues.apache.org/jira/browse/ISIS-3164">ISIS-3164</a>
+ * @see <a href="https://issues.apache.org/jira/browse/CAUSEWAY-3164">CAUSEWAY-3164</a>
  */
 public abstract class ProperElementTypeVmAbstract {
 

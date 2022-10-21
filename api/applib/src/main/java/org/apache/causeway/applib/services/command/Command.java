@@ -48,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
  * intention per (web) request, so a command is in effect interaction-scoped.
  *
  * <p>
- * Each Command holds a {@link CommandDto} (see Apache Isis <a href="http://isis.apache.org/schema/cmd/">cmd</a> schema)
+ * Each Command holds a {@link CommandDto} (see Apache Causeway <a href="http://causeway.apache.org/schema/cmd/">cmd</a> schema)
  * which reifies all the details in a serializable form.
  * </p>
  *
@@ -250,7 +250,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * </p>
      *
      * <p>
-     *     See also the <code>isis.extensions.command-log.publish-policy</code> configuration property, that controls
+     *     See also the <code>causeway.extensions.command-log.publish-policy</code> configuration property, that controls
      *     whether the <i>Command Log</i> extension checks this flag or not.
      * </p>
      *

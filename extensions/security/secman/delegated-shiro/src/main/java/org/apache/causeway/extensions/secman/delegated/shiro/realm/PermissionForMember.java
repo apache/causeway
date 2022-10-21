@@ -25,8 +25,8 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 
 /**
- * As created by {@link PermissionResolverForIsisShiroAuthorizor}, interprets the
- * permission strings formatted by <code>IsisShiroAuthorizor</code>.
+ * As created by {@link PermissionResolverForCausewayShiroAuthorizor}, interprets the
+ * permission strings formatted by <code>CausewayShiroAuthorizor</code>.
  */
 class PermissionForMember implements org.apache.shiro.authz.Permission {
 

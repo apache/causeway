@@ -41,8 +41,8 @@ public class PrimaryConfig {
 
     @Getter final String secondaryBaseUrlWicket;
 
-    public PrimaryConfig(@NotNull final CausewayConfiguration isisConfiguration) {
-        val config = isisConfiguration.getExtensions().getCommandReplay();
+    public PrimaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
+        val config = causewayConfiguration.getExtensions().getCommandReplay();
 
         val secondaryAccess = config.getSecondaryAccess();
         secondaryBaseUrlWicket = secondaryAccess.getBaseUrlWicket().orElse(null);

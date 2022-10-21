@@ -43,29 +43,29 @@ public class TaggerDefault implements Tagger {
     @Programmatic
     public String tagForLogicalTypeName(final String logicalTypeName, final String fallback) {
 
-        if (logicalTypeName.startsWith("org.apache.isis.")) {
-            return ". apache isis internals";
+        if (logicalTypeName.startsWith("org.apache.causeway.")) {
+            return ". apache causeway internals";
         }
-        if (logicalTypeName.startsWith("isis.applib.")) {
-            return ". apache isis applib";
+        if (logicalTypeName.startsWith("causeway.applib.")) {
+            return ". apache causeway applib";
         }
-        if (logicalTypeName.startsWith("isis.conf.")) {
-            return ". apache isis conf";
+        if (logicalTypeName.startsWith("causeway.conf.")) {
+            return ". apache causeway conf";
         }
-        if (logicalTypeName.startsWith("isis.sudo.")) {
-            return ". apache isis sudo";
+        if (logicalTypeName.startsWith("causeway.sudo.")) {
+            return ". apache causeway sudo";
         }
-        if (logicalTypeName.startsWith("isis.persistence.")) {
-            return ". apache isis persistence - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("causeway.persistence.")) {
+            return ". apache causeway persistence - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        if (logicalTypeName.startsWith("isis.security.")) {
-            return ". apache isis security";
+        if (logicalTypeName.startsWith("causeway.security.")) {
+            return ". apache causeway security";
         }
-        if (logicalTypeName.startsWith("isis.ext.")) {
-            return ". apache isis extensions - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("causeway.ext.")) {
+            return ". apache causeway extensions - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
-        if (logicalTypeName.startsWith("isis.sub.")) {
-            return ". apache isis subdomains - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
+        if (logicalTypeName.startsWith("causeway.sub.")) {
+            return ". apache causeway subdomains - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
         if (logicalTypeName.startsWith("org.springframework.")) {
             return "> spring framework " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));

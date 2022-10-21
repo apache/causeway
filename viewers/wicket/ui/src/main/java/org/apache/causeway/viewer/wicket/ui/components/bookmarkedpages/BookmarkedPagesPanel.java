@@ -149,7 +149,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             } catch(ObjectNotFoundException ex) {
                 // ignore
                 // this is a partial fix for an infinite redirect loop.
-                // should be a bit smarter here, though; see ISIS-596.
+                // should be a bit smarter here, though; see CAUSEWAY-596.
             }
         });
     }

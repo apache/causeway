@@ -47,8 +47,8 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
-import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisCommandDtoConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayCommandDtoConverter;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import static org.apache.causeway.extensions.commandlog.jpa.dom.CommandLogEntry.Nq;
@@ -259,7 +259,7 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     private java.sql.Timestamp timestamp;
 
 
-    @Convert(converter = IsisBookmarkConverter.class)
+    @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
     @Getter @Setter
@@ -285,7 +285,7 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     private String logicalMemberIdentifier;
 
 
-    @Convert(converter = IsisCommandDtoConverter.class)
+    @Convert(converter = CausewayCommandDtoConverter.class)
     @Lob @Basic(fetch = FetchType.LAZY)
     @Column(nullable = CommandDtoAnnot.NULLABLE, columnDefinition = "CLOB")
     @CommandDtoAnnot
@@ -305,7 +305,7 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     private java.sql.Timestamp completedAt;
 
 
-    @Convert(converter = IsisBookmarkConverter.class)
+    @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Result.NULLABLE, length = Result.MAX_LENGTH)
     @Result
     @Getter @Setter

@@ -584,7 +584,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeBlob()).isNull();
 
-            final Blob theBlob = fakeDataService.isisBlobs().anyPdf();
+            final Blob theBlob = fakeDataService.causewayBlobs().anyPdf();
 
 
             //
@@ -615,7 +615,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeClob()).isNull();
 
-            final Clob theClob = fakeDataService.isisClobs().anyXml();
+            final Clob theClob = fakeDataService.causewayClobs().anyXml();
 
 
             //
@@ -800,7 +800,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
 
-            java.net.URL theUrl = new java.net.URL("http://isis.apache.org");
+            java.net.URL theUrl = new java.net.URL("http://causeway.apache.org");
 
             //
             // when

@@ -420,7 +420,7 @@ public final class _Exceptions {
     // -- STACKTRACE FORMATTING UTILITY
 
     private final static Map<String, String> packageReplacements = Map.of(
-            //"org.apache.isis", "", // unfortunately no IDE support for this (click on StackTraceElement links)
+            //"org.apache.causeway", "", // unfortunately no IDE support for this (click on StackTraceElement links)
             "org.apache.wicket", "{wkt}",
             "org.springframework", "{spring}",
             "org.apache.tomcat", "{tomcat}",

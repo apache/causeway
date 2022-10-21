@@ -19,7 +19,7 @@
 package org.apache.causeway.core.metamodel.spec;
 
 /**
- * A runtime exception indicating an problem has occurred within the Apache Isis
+ * A runtime exception indicating an problem has occurred within the Apache Causeway
  * framework.
  */
 public class ObjectSpecificationException extends RuntimeException {

@@ -66,7 +66,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         setVisible(renderingHint == RenderingHint.REGULAR && mode == ScalarRepresentation.VIEWING);
 
         // disable, since currently not honoured if used as a URL (think that session hints are taking precedence).
-        // (see ISIS-1660 to resurrect)
+        // (see CAUSEWAY-1660 to resurrect)
         setVisibilityAllowed(false);
     }
 

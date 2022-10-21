@@ -138,10 +138,10 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
         this.defaultParam("someDouble", executionContext, fakeDataService.doubles().any());
 
         this.defaultParam("someString", executionContext, fakeDataService.lorem().sentence());
-        this.defaultParam("somePassword", executionContext, fakeDataService.isisPasswords().any());
+        this.defaultParam("somePassword", executionContext, fakeDataService.causewayPasswords().any());
 
-        this.defaultParam("someBlob", executionContext, fakeDataService.isisBlobs().any());
-        this.defaultParam("someClob", executionContext, fakeDataService.isisClobs().any());
+        this.defaultParam("someBlob", executionContext, fakeDataService.causewayBlobs().any());
+        this.defaultParam("someClob", executionContext, fakeDataService.causewayClobs().any());
 
         this.defaultParam("someJavaUtilDate", executionContext, fakeDataService.javaUtilDates().any());
         this.defaultParam("someJavaSqlDate", executionContext, fakeDataService.javaSqlDates().any());
@@ -155,7 +155,7 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
         this.defaultParam("someUrl", executionContext, fakeDataService.urls().any());
         this.defaultParam("someUuid", executionContext, fakeDataService.uuids().any());
         //TODO[2249] deprecated
-        //this.defaultParam("someMoney", executionContext, fakeDataService.isisMoneys().any());
+        //this.defaultParam("someMoney", executionContext, fakeDataService.causewayMoneys().any());
         this.defaultParam("someEnumOf3", executionContext, fakeDataService.enums().anyOf(EnumOf3.class));
 
         // updates

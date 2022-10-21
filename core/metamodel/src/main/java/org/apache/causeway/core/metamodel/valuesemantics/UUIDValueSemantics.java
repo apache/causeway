@@ -40,7 +40,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named("isis.val.UUIDValueSemantics")
+@Named("causeway.val.UUIDValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class UUIDValueSemantics
 extends ValueSemanticsAbstract<UUID>

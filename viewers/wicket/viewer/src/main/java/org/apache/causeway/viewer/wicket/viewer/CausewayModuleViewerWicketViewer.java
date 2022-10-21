@@ -72,5 +72,5 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
 })
 public class CausewayModuleViewerWicketViewer {
 
-    public static final String NAMESPACE = "isis.viewer.wicket";
+    public static final String NAMESPACE = "causeway.viewer.wicket";
 }

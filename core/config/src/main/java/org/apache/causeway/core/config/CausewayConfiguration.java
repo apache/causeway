@@ -100,7 +100,7 @@ import lombok.val;
 @Validated
 public class CausewayConfiguration {
 
-    public static final String ROOT_PREFIX = "isis";
+    public static final String ROOT_PREFIX = "causeway";
 
     private final ConfigurableEnvironment environment;
     public CausewayConfiguration(final ConfigurableEnvironment environment) {
@@ -146,7 +146,7 @@ public class CausewayConfiguration {
         @Data
         public static class Keycloak {
             /**
-             * The name of the realm for the Apache Isis application, as configured in
+             * The name of the realm for the Apache Causeway application, as configured in
              * Keycloak.
              */
             private String realm;
@@ -1406,7 +1406,7 @@ public class CausewayConfiguration {
                  *     For now this is <i>experimental</i>. Leave this disabled (the default).
                  * </p>
                  */
-                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is experimental
+                private boolean parallelize = false; //TODO[CAUSEWAY-2382] concurrent spec-loading is experimental
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
@@ -1733,7 +1733,7 @@ public class CausewayConfiguration {
                  * <p>
                  * If {@code null} uses {@code servletContext.getResource("/WEB-INF/")}.
                  * <p>
-                 * Replaces the former Servlet context parameter 'isis.config.dir';
+                 * Replaces the former Servlet context parameter 'causeway.config.dir';
                  */
                 private String resourceLocation = null;
 
@@ -1917,7 +1917,7 @@ public class CausewayConfiguration {
             private boolean suppressMemberDisabledReason = false;
 
             /**
-             * If set, then the <code>x-isis-format</code> key (under <code>extensions</code>) for properties will be
+             * If set, then the <code>x-causeway-format</code> key (under <code>extensions</code>) for properties will be
              * suppressed.
              *
              * <p>
@@ -2338,7 +2338,7 @@ public class CausewayConfiguration {
                  * (unless a {@link Application#brandLogoHeader header} image is configured).
                  */
                 @NotNull @NotEmpty
-                private String name = "Apache Isis ™";
+                private String name = "Apache Causeway ™";
 
                 /**
                  * The version of the application, eg 1.0, 1.1, etc.
@@ -2519,7 +2519,7 @@ public class CausewayConfiguration {
                  * If the &quot;remember me&quot; feature is available, specifies the key to hold the encrypted
                  * credentials in the cookie.
                  */
-                private String cookieKey = "isisWicketRememberMe";
+                private String cookieKey = "causewayWicketRememberMe";
                 /**
                  * If the &quot;remember me&quot; feature is available, optionally specifies an encryption key
                  * (a complex string acting as salt to the encryption algorithm) for computing the encrypted
@@ -2804,8 +2804,8 @@ public class CausewayConfiguration {
                      *
                      * <p>
                      *     This strategy was introduced in order to better support the <tt>ExcelFixture</tt> fixture script
-                     *     (provided by the (non-ASF) Isis Addons'
-                     *     <a href="https://github.com/isisaddons/isis-module-excel">Excel module</a>.  The <tt>ExcelFixture</tt>
+                     *     (provided by the (non-ASF) Causeway Addons'
+                     *     <a href="https://github.com/causewayaddons/causeway-module-excel">Excel module</a>.  The <tt>ExcelFixture</tt>
                      *     takes an Excel spreadsheet as the 'what' and loads up each row.  So the 'how' is re-usable (therefore
                      *     the {@link #EXECUTE_ONCE_BY_CLASS} doesn't apply) on the other hand we don't want the 'what' to be
                      *     loaded more than once (so the {@link #EXECUTE} strategy doesn't apply either).  The solution is for
@@ -3000,8 +3000,8 @@ public class CausewayConfiguration {
                 /**
                  * The user that runs the replay session secondary.
                  */
-                private String user = "isisModuleExtCommandReplaySecondaryUser";
-                private List<String> roles = listOf("isisModuleExtCommandReplaySecondaryRole");
+                private String user = "causewayModuleExtCommandReplaySecondaryUser";
+                private List<String> roles = listOf("causewayModuleExtCommandReplaySecondaryRole");
             }
 
             private final QuartzReplicateAndReplayJob quartzReplicateAndReplayJob = new QuartzReplicateAndReplayJob();
@@ -3043,20 +3043,20 @@ public class CausewayConfiguration {
 
                 public static final String ADMIN_USER_NAME_DEFAULT = "secman-admin";
                 public static final String ADMIN_PASSWORD_DEFAULT = "pass";
-                public static final String ADMIN_ROLE_NAME_DEFAULT = "isis-ext-secman-admin";
+                public static final String ADMIN_ROLE_NAME_DEFAULT = "causeway-ext-secman-admin";
                 public static final List<String> ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT =
                         Collections.unmodifiableList(listOf(
                                 CausewayModuleApplib.NAMESPACE,
                                 CausewayModuleApplib.NAMESPACE_SUDO,
                                 CausewayModuleApplib.NAMESPACE_CONF,
                                 CausewayModuleApplib.NAMESPACE_FEAT,
-                                "isis.security",
-                                "isis.ext.h2Console",
-                                "isis.ext.secman"
+                                "causeway.security",
+                                "causeway.ext.h2Console",
+                                "causeway.ext.secman"
                         ));
                 public static final List<String> ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS =
                         Collections.unmodifiableList(listOf());
-                public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "isis-ext-secman-user";
+                public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "causeway-ext-secman-user";
                 public static final boolean AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT = false;
 
                 @Getter
@@ -3171,7 +3171,7 @@ public class CausewayConfiguration {
                      *
                      * <p>
                      *     The exact set of permissions is hard-wired in the
-                     *     <code>IsisExtSecmanRegularUserRoleAndPermissions</code> fixture.
+                     *     <code>CausewayExtSecmanRegularUserRoleAndPermissions</code> fixture.
                      * </p>
                      */
                     private String roleName = REGULAR_USER_ROLE_NAME_DEFAULT;
@@ -3210,8 +3210,8 @@ public class CausewayConfiguration {
                  * The set of roles that users that have been automatically created are granted automatically.
                  *
                  * <p>
-                 *     Typically the regular user role (as per <code>isis.secman.seed.regular-user.role-name</code>,
-                 *     default value of <code>isis-ext-secman-user</code>) will be one of the roles listed here, to
+                 *     Typically the regular user role (as per <code>causeway.secman.seed.regular-user.role-name</code>,
+                 *     default value of <code>causeway-ext-secman-user</code>) will be one of the roles listed here, to
                  *     provide the ability for the end-user to logout, among other things (!).
                  * </p>
                  */
@@ -3244,7 +3244,7 @@ public class CausewayConfiguration {
                  *
                  * <p>
                  *     If using the wicket viewer, also requires
-                 *     {@link Viewer.Wicket#isSuppressSignUp() isis.viewer.wicket.suppress-signup} to be set
+                 *     {@link Viewer.Wicket#isSuppressSignUp() causeway.viewer.wicket.suppress-signup} to be set
                  *     <code>false</code>, along with any other of its other prereqs.
                  * </p>
                  */

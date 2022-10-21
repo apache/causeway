@@ -73,9 +73,9 @@ implements DomainServiceResource {
     @Inject
     public DomainServiceResourceServerside(
             final MetaModelContext metaModelContext,
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
         log.debug("<init>");
     }
 
@@ -273,10 +273,10 @@ implements DomainServiceResource {
     public Response invokeActionQueryOnly(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
-            final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
+            final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
 
         final String urlUnencodedQueryString = _UrlDecoderUtil
-                .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
+                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null? xCausewayUrlEncodedQueryString: httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 urlUnencodedQueryString);

@@ -716,7 +716,7 @@ implements ObjectSpecification {
         if (isInjectable() || isValue()) {
             return;
         }
-        val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
+        val mixinTypes = getCausewayBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
@@ -759,7 +759,7 @@ implements ObjectSpecification {
      * Creates all mixed in actions for this spec.
      */
     private void createMixedInActions(final Consumer<ObjectAction> onNewMixedInAction) {
-        val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
+        val mixinTypes = getCausewayBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
@@ -892,7 +892,7 @@ implements ObjectSpecification {
     }
 
     @Getter(lazy = true)
-    private final CausewayBeanTypeRegistry isisBeanTypeRegistry =
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry =
         getServiceRegistry()
                 .lookupServiceElseFail(CausewayBeanTypeRegistry.class);
 

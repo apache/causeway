@@ -81,7 +81,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         }
 
         if (mode.isStandalone() || mode.isMutated()) {
-            addExtensionsIsisProprietaryChangedObjects();
+            addExtensionsCausewayProprietaryChangedObjects();
         }
 
         return representation;
@@ -170,7 +170,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     }
 
     @Override
-    protected void putExtensionsIsisProprietary() {
+    protected void putExtensionsCausewayProprietary() {
         final CollectionSemantics semantics = CollectionSemantics.valueOf(objectMember);
         getExtensions().mapPutString("collectionSemantics", semantics.name().toLowerCase());
     }

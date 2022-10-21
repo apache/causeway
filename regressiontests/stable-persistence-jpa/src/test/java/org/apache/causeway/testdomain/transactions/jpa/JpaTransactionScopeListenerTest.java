@@ -50,7 +50,7 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHa
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 /**
- * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
+ * With this test we manage CausewayInteractions ourselves. (not sub-classing CausewayIntegrationTestAbstract)
  */
 @DirtiesContext
 @ExtendWith(CausewayInteractionHandler.class)
@@ -75,7 +75,7 @@ class JpaTransactionScopeListenerTest {
     @BeforeEach
     void setUp() {
 
-        // new IsisInteractionScope with a new transaction (#1)
+        // new CausewayInteractionScope with a new transaction (#1)
         interactionService.runAnonymous(()->{
 
             // cleanup
@@ -92,7 +92,7 @@ class JpaTransactionScopeListenerTest {
     @Test
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
 
-        // new IsisInteractionScope with a new transaction (#2)
+        // new CausewayInteractionScope with a new transaction (#2)
         interactionService.runAnonymous(()->{
 
             // expected pre condition

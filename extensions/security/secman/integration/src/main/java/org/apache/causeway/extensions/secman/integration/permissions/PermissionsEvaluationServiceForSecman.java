@@ -62,9 +62,9 @@ implements PermissionsEvaluationService {
     private final @NonNull PermissionsEvaluationPolicy policy; // serializable
 
     @Inject
-    public PermissionsEvaluationServiceForSecman(final CausewayConfiguration isisConfiguration) {
+    public PermissionsEvaluationServiceForSecman(final CausewayConfiguration causewayConfiguration) {
         this.policy = Optional.ofNullable(
-                isisConfiguration.getExtensions().getSecman().getPermissionsEvaluationPolicy())
+                causewayConfiguration.getExtensions().getSecman().getPermissionsEvaluationPolicy())
                 .orElseGet(()->new Secman().getPermissionsEvaluationPolicy()); // use config defaults as fallback
         _Assert.assertNotNull(policy);
     }

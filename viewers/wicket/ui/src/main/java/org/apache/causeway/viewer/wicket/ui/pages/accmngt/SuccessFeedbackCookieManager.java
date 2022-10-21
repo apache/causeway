@@ -36,7 +36,7 @@ public class SuccessFeedbackCookieManager {
      * The name of a special cookie that is used as a temporary container for
      * stateless session scoped success feedback messages.
      */
-    static final String FEEDBACK_COOKIE_NAME = "isis.feedback.success";
+    static final String FEEDBACK_COOKIE_NAME = "causeway.feedback.success";
 
 
     /**

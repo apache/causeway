@@ -44,7 +44,7 @@ import org.apache.causeway.applib.value.Blob;
 
 
 @Service
-@Named("isis.sub.excel.ExcelServiceDefault")
+@Named("causeway.sub.excel.ExcelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExcelServiceDefault implements ExcelService {

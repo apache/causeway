@@ -34,7 +34,7 @@ import lombok.val;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s
- * required by the Apache Isis framework itself.
+ * required by the Apache Causeway framework itself.
  *
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract {

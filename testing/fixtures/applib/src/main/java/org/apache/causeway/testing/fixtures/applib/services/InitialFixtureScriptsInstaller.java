@@ -41,7 +41,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.testing.fixtures.InitialFixtureScriptsInstaller")
+@Named("causeway.testing.fixtures.InitialFixtureScriptsInstaller")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
@@ -53,12 +53,12 @@ public class InitialFixtureScriptsInstaller {
 
     @Inject
     public InitialFixtureScriptsInstaller(
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final FixtureScripts fixtureScripts) {
 
         this.fixtureScripts = fixtureScripts;
 
-        final Class<?> initialScript = isisConfiguration.getTesting().getFixtures().getInitialScript();
+        final Class<?> initialScript = causewayConfiguration.getTesting().getFixtures().getInitialScript();
         if (initialScript != null
                 && FixtureScript.class.isAssignableFrom(initialScript)) {
             try {

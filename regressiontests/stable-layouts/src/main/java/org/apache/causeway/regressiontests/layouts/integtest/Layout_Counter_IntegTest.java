@@ -774,6 +774,6 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     @Inject SpecificationLoader specificationLoader;
     @Inject BookmarkService bookmarkService;
 
-    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
 }

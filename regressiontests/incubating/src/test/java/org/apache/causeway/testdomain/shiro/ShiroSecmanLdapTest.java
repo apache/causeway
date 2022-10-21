@@ -61,7 +61,7 @@ import lombok.val;
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
-                //IsisPresets.DebugPersistence,
+                //CausewayPresets.DebugPersistence,
                 //"datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({

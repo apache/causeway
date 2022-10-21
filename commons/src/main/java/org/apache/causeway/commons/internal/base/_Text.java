@@ -281,7 +281,7 @@ public final class _Text {
             return input;
         }
         var s = input;
-        s = s.replace("org.apache.isis.", "..isis.");
+        s = s.replace("org.apache.causeway.", "..causeway.");
         s = s.replace(".viewer.wicket.", "..wkt.");
         return s;
     }

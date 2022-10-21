@@ -32,7 +32,7 @@ import org.apache.causeway.core.security.authorization.Authorizor;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.security.AuthorizorBypass")
+@Named("causeway.security.AuthorizorBypass")
 @javax.annotation.Priority(PriorityPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthorizorBypass implements Authorizor {

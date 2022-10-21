@@ -26,8 +26,8 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport;
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupport;
 
 import lombok.val;
 
@@ -54,7 +54,7 @@ public class BootstrapInitWkt implements WicketApplicationInitializer {
             }
         });
 
-        serviceRegistry.select(IsisWicketThemeSupport.class)
+        serviceRegistry.select(CausewayWicketThemeSupport.class)
         .getFirst()
         .ifPresent(themeSupport->{
             bsSettings.setThemeProvider(themeSupport.getThemeProvider());

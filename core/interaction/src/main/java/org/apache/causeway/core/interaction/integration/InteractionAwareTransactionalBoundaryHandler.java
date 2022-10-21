@@ -47,7 +47,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.interaction.InteractionAwareTransactionalBoundaryHandler")
+@Named("causeway.interaction.InteractionAwareTransactionalBoundaryHandler")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

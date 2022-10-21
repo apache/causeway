@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * property.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
+ * In the standard Apache Causeway Programming Model, corresponds to the
  * <tt>autoCompletexx</tt> supporting method for the property with accessor
  * <tt>getXxx</tt>.
  */

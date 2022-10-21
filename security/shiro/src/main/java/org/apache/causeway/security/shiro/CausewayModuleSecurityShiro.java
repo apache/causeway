@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Configuration Bean to support Isis Security using Shiro.
+ * Configuration Bean to support Causeway Security using Shiro.
  *
  * @since 1.x {@index}
  */

@@ -192,7 +192,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-//XXX[ISIS-3026] this is a bad idea
+//XXX[CAUSEWAY-3026] this is a bad idea
 //        if(scalarNameAndValueComponent instanceof MarkupContainer) {
 //            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
 //        }

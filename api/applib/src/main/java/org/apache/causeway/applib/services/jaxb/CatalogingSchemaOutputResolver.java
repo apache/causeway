@@ -49,14 +49,14 @@ import org.xml.sax.InputSource;
  */
 class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
 
-    private static final String SCHEMA_LOCATION_INCORRECT = "http://isis.apache.org/schema/common";
-    private static final String SCHEMA_LOCATION_CORRECT = "http://isis.apache.org/schema/common/common.xsd";
+    private static final String SCHEMA_LOCATION_INCORRECT = "http://causeway.apache.org/schema/common";
+    private static final String SCHEMA_LOCATION_CORRECT = "http://causeway.apache.org/schema/common/common.xsd";
 
-    private final IsisSchemas isisSchemas;
+    private final CausewaySchemas causewaySchemas;
     private final List<String> namespaceUris = _Lists.newArrayList();
 
-    public CatalogingSchemaOutputResolver(final IsisSchemas isisSchemas) {
-        this.isisSchemas = isisSchemas;
+    public CatalogingSchemaOutputResolver(final CausewaySchemas causewaySchemas) {
+        this.causewaySchemas = causewaySchemas;
     }
 
     public List<String> getNamespaceUris() {
@@ -92,8 +92,8 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
         return xsd;
     }
 
-    // replace <xs:import namespace="..." schemaLocation="http://isis.apache.org/schema/common"/>
-    // with    <xs:import namespace="..." schemaLocation="http://isis.apache.org/schema/common/common.xsd"/>
+    // replace <xs:import namespace="..." schemaLocation="http://causeway.apache.org/schema/common"/>
+    // with    <xs:import namespace="..." schemaLocation="http://causeway.apache.org/schema/common/common.xsd"/>
     private static void replaceCommonSchemaLocationIfAny(final Node node) {
         if(schemaLocationReplacedIn(node)) {
             return;
@@ -131,7 +131,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
 
         result.setSystemId(namespaceUri);
 
-        if (isisSchemas.shouldIgnore(namespaceUri)) {
+        if (causewaySchemas.shouldIgnore(namespaceUri)) {
             // skip
         } else {
             namespaceUris.add(namespaceUri);

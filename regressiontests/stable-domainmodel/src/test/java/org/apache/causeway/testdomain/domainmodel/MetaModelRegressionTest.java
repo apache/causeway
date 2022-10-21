@@ -52,9 +52,9 @@ import lombok.val;
 
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL",
-                "isis.applib.annotation.domain-object.editing=TRUE",
-                "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
+                "causeway.core.meta-model.introspector.mode=FULL",
+                "causeway.applib.annotation.domain-object.editing=TRUE",
+                "causeway.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
           })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
@@ -78,7 +78,7 @@ class MetaModelRegressionTest {
     void verify() {
 
         // disable if rename, as the .zip file needs to be updated.
-        // Assumptions.assumeThat(getClass().getName()).contains("isis");
+        // Assumptions.assumeThat(getClass().getName()).contains("causeway");
 
         Blob metaModelZip = factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class,
                 metaModelServiceMenu).act("metamodel.xml", namespaces(), true);

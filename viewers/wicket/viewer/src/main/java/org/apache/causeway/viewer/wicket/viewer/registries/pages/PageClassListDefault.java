@@ -44,7 +44,7 @@ import javax.inject.Named;
  * for each of the {@link PageType}s.
  */
 @Service
-@Named("isis.viewer.wicket.PageClassListDefault")
+@Named("causeway.viewer.wicket.PageClassListDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class PageClassListDefault implements PageClassList {

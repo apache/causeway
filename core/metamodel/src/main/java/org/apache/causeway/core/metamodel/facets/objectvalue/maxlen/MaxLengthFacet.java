@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * certain length.
  *
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
+ * In the standard Apache Causeway Programming Model, corresponds to the
  * <tt>@MaxLength</tt> annotation.
  */
 public interface MaxLengthFacet extends SingleIntValueFacet, ValidatingInteractionAdvisor {

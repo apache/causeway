@@ -60,7 +60,7 @@ extends ScalarPanelAbstract2 {
     private MarkupContainer createTreeComponent(final String id) {
         val container = getScalarFrameContainer();
         val scalarModel = scalarModel();
-        val tree = IsisToWicketTreeAdapter.adapt(id, scalarModel);
+        val tree = CausewayToWicketTreeAdapter.adapt(id, scalarModel);
         container.add(tree);
         // adds the tree-theme behavior to the tree's parent
         container.add(getTreeThemeProvider().treeThemeFor(scalarModel));

@@ -175,6 +175,6 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
     @Inject SpecificationLoader specificationLoader;
     @Inject BookmarkService bookmarkService;
 
-    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
 }

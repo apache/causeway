@@ -52,7 +52,7 @@ class GradleSettingsTest extends ProjectModelTestAbstract {
 
     @Test @Disabled("activate only if you want to see the settings.gradle written to stdout")
     void writeGradleSettingsToStdout() throws IOException {
-        GradleSettings gradleSettings = GradleSettingsFactory.generateFromMaven(projRootFolder, "isis");
+        GradleSettings gradleSettings = GradleSettingsFactory.generateFromMaven(projRootFolder, "causeway");
         assertNotNull(gradleSettings);
 
         System.out.println();
@@ -65,7 +65,7 @@ class GradleSettingsTest extends ProjectModelTestAbstract {
 
     @Test
     void testGradleSettingGenerator() throws IOException {
-        GradleSettings gradleSettings = GradleSettingsFactory.generateFromMaven(projRootFolder, "isis");
+        GradleSettings gradleSettings = GradleSettingsFactory.generateFromMaven(projRootFolder, "causeway");
 
         assertNotNull(gradleSettings);
 
@@ -115,7 +115,7 @@ class GradleSettingsTest extends ProjectModelTestAbstract {
         }
     }
 
-    //    compile project(':isis-bom:isis-schema')
+    //    compile project(':causeway-bom:causeway-schema')
     private String parseBuildArtifactName(final String line) {
         int p = line.indexOf("project('");
         if(p<0) {

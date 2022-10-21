@@ -110,11 +110,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
-    private final CausewayConfiguration isisConfiguration;
-    private final CausewaySystemEnvironment isisSystemEnvironment;
+    private final CausewayConfiguration causewayConfiguration;
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
     private final ServiceRegistry serviceRegistry;
-    private final CausewayBeanTypeClassifier isisBeanTypeClassifier;
-    private final CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    private final CausewayBeanTypeClassifier causewayBeanTypeClassifier;
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
     private final ProgrammingModel programmingModel;
@@ -140,57 +140,57 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Inject
     public SpecificationLoaderDefault(
             final ProgrammingModelService programmingModelService,
-            final CausewayConfiguration isisConfiguration,
-            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration causewayConfiguration,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final CausewayBeanTypeClassifier isisBeanTypeClassifier,
-            final CausewayBeanTypeRegistry isisBeanTypeRegistry,
+            final CausewayBeanTypeClassifier causewayBeanTypeClassifier,
+            final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
             final Provider<ValueSemanticsResolver> valueTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this(
                 programmingModelService.getProgrammingModel(),
-                isisConfiguration,
-                isisSystemEnvironment,
+                causewayConfiguration,
+                causewaySystemEnvironment,
                 serviceRegistry,
-                isisBeanTypeClassifier,
-                isisBeanTypeRegistry,
+                causewayBeanTypeClassifier,
+                causewayBeanTypeRegistry,
                 valueTypeRegistry,
                 classSubstitutorRegistry);
     }
 
     SpecificationLoaderDefault(
             final ProgrammingModel programmingModel,
-            final CausewayConfiguration isisConfiguration,
-            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration causewayConfiguration,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final CausewayBeanTypeClassifier isisBeanTypeClassifier,
-            final CausewayBeanTypeRegistry isisBeanTypeRegistry,
+            final CausewayBeanTypeClassifier causewayBeanTypeClassifier,
+            final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
             final Provider<ValueSemanticsResolver> valueSemanticsRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this.programmingModel = programmingModel;
         this.postProcessor = new PostProcessor(programmingModel);
-        this.isisConfiguration = isisConfiguration;
-        this.isisSystemEnvironment = isisSystemEnvironment;
+        this.causewayConfiguration = causewayConfiguration;
+        this.causewaySystemEnvironment = causewaySystemEnvironment;
         this.serviceRegistry = serviceRegistry;
-        this.isisBeanTypeClassifier = isisBeanTypeClassifier;
-        this.isisBeanTypeRegistry = isisBeanTypeRegistry;
+        this.causewayBeanTypeClassifier = causewayBeanTypeClassifier;
+        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
         this.valueSemanticsResolver = valueSemanticsRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance(
-            final CausewayConfiguration isisConfiguration,
-            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration causewayConfiguration,
+            final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
-            final CausewayBeanTypeClassifier isisBeanTypeClassifier,
-            final CausewayBeanTypeRegistry isisBeanTypeRegistry,
+            final CausewayBeanTypeClassifier causewayBeanTypeClassifier,
+            final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         val instance = new SpecificationLoaderDefault(
-                programmingModel, isisConfiguration, isisSystemEnvironment,
-                serviceRegistry, isisBeanTypeClassifier, isisBeanTypeRegistry,
+                programmingModel, causewayConfiguration, causewaySystemEnvironment,
+                serviceRegistry, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
                 ()->new ValueSemanticsResolverDefault(List.of(), null),
                 classSubstitutorRegistry);
 
@@ -243,7 +243,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         Stream
             .concat(
-                isisBeanTypeRegistry.getDiscoveredValueTypes().keySet().stream(),
+                causewayBeanTypeRegistry.getDiscoveredValueTypes().keySet().stream(),
                 valueSemanticsResolver.get().streamClassesWithValueSemantics())
             .forEach(valueClass -> {
                 val valueSpec = loadSpecification(valueClass, IntrospectionState.NOT_INTROSPECTED);
@@ -258,7 +258,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
         val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
 
-        isisBeanTypeRegistry.streamIntrospectableTypes()
+        causewayBeanTypeRegistry.streamIntrospectableTypes()
         .forEach(typeMeta->{
 
             val spec = primeSpecification(typeMeta);
@@ -279,7 +279,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         });
 
-        //XXX[ISIS-2382] when parallel introspecting, make sure we have the mixins before their holders
+        //XXX[CAUSEWAY-2382] when parallel introspecting, make sure we have the mixins before their holders
         // (observation by experiment, no real understanding as to why)
 
         _Util.logBefore(log, cache, knownSpecs);
@@ -290,17 +290,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
         introspect(Can.ofCollection(valueTypeSpecs.values()), IntrospectionState.FULLY_INTROSPECTED);
 
-        log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
+        log.info(" - introspecting {} mixins", causewayBeanTypeRegistry.getMixinTypes().size());
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
         log.info(" - introspecting {} managed beans contributing (domain services)",
-                isisBeanTypeRegistry.getManagedBeansContributing().size());
+                causewayBeanTypeRegistry.getManagedBeansContributing().size());
 
         log.info(" - introspecting {} entities ({})",
-                isisBeanTypeRegistry.getEntityTypes().size(),
-                isisBeanTypeRegistry.determineCurrentPersistenceStack().name());
+                causewayBeanTypeRegistry.getEntityTypes().size(),
+                causewayBeanTypeRegistry.determineCurrentPersistenceStack().name());
 
-        log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
+        log.info(" - introspecting {} view models", causewayBeanTypeRegistry.getViewModelTypes().size());
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 
@@ -347,7 +347,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     /**
-     * [ISIS-3066] wait for validation (if any) to finish (max 5s)
+     * [CAUSEWAY-3066] wait for validation (if any) to finish (max 5s)
      */
     @SneakyThrows
     private void waitForValidationToFinish() {
@@ -373,7 +373,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * deployment mode and configuration
      */
     private boolean isFullIntrospect() {
-        return IntrospectionMode.isFullIntrospect(isisConfiguration, isisSystemEnvironment);
+        return IntrospectionMode.isFullIntrospect(causewayConfiguration, causewaySystemEnvironment);
     }
 
     // -- SPEC LOADING
@@ -410,7 +410,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             // getValidationResult() is lazily populated later on first request anyway
             return;
         }
-        if(!isisConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
+        if(!causewayConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
             // re-validation after the initial one can be turned off by means of above config option
             return;
         }
@@ -452,7 +452,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public void forEach(final Consumer<ObjectSpecification> onSpec) {
-        val shouldRunConcurrent = isisConfiguration.getCore().getMetaModel().getValidator().isParallelize();
+        val shouldRunConcurrent = causewayConfiguration.getCore().getMetaModel().getValidator().isParallelize();
         if(shouldRunConcurrent) {
             cache.forEachConcurrent(onSpec);
         } else {
@@ -542,12 +542,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * here.
      */
     private CausewayBeanMetaData classify(final @Nullable Class<?> type) {
-        return isisBeanTypeRegistry
+        return causewayBeanTypeRegistry
                 .lookupIntrospectableType(type)
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
-                    ? CausewayBeanMetaData.isisManaged(BeanSort.VALUE, LogicalType.infer(type))
-                    : isisBeanTypeClassifier.classify(type)
+                    ? CausewayBeanMetaData.causewayManaged(BeanSort.VALUE, LogicalType.infer(type))
+                    : causewayBeanTypeClassifier.classify(type)
                 );
     }
 
@@ -588,7 +588,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             && upTo == IntrospectionState.TYPE_INTROSPECTED) {
 
             //XXX[3063] hitting this a couple of times
-            //(~5 see org.apache.isis.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
+            //(~5 see org.apache.causeway.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
             // per spec (with aliases), even though already registered;
             // room for performance optimizations, but at the time of writing
             // don't want to add a ObjectSpecification flag to keep track of alias registered state;
@@ -604,12 +604,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
         if(isMetamodelFullyIntrospected()
-                && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
+                && causewayConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
             val warningMessage = ProgrammingModelConstants.Validation.TYPE_NOT_EAGERLY_DISCOVERED
                 .getMessage(Map.of(
                         "type", cls.getName(),
-                        "beanSort", isisBeanTypeClassifier
+                        "beanSort", causewayBeanTypeClassifier
                             .classify(cls)
                             .getBeanSort()
                             .name()));
@@ -662,7 +662,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private void introspect(
             final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
-        val isConcurrentFromConfig = isisConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
+        val isConcurrentFromConfig = causewayConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
         if(isConcurrentFromConfig) {
             introspectParallel(specs, upTo);
         } else {

@@ -51,7 +51,7 @@ import org.apache.causeway.applib.services.xml.XmlService;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.runtimeservice.XmlService")
+@Named("causeway.runtimeservice.XmlService")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 public class XmlServiceDefault implements XmlService {

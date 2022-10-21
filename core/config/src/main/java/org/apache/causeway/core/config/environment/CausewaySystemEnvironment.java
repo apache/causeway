@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote acts as the framework's bootstrapping entry-point for Spring
  */
 @Service
-@Named(CausewayModuleCoreConfig.NAMESPACE + "..IsisSystemEnvironment")
+@Named(CausewayModuleCoreConfig.NAMESPACE + "..CausewaySystemEnvironment")
 @Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
 @Singleton
@@ -171,14 +171,14 @@ public class CausewaySystemEnvironment {
                 isSet(getProperty("PROTOTYPING"));
 
         anyVoteForPrototyping|=
-                "PROTOTYPING".equalsIgnoreCase(getProperty("isis.deploymentType"));
+                "PROTOTYPING".equalsIgnoreCase(getProperty("causeway.deploymentType"));
 
         // system property override (highest prio)
 
         anyVoteForProduction|= isNotSet(getProperty("PROTOTYPING"));
 
         anyVoteForProduction|=
-                "PRODUCTION".equalsIgnoreCase(getProperty("isis.deploymentType"));
+                "PRODUCTION".equalsIgnoreCase(getProperty("causeway.deploymentType"));
 
         final boolean isPrototyping = anyVoteForPrototyping && !anyVoteForProduction;
 

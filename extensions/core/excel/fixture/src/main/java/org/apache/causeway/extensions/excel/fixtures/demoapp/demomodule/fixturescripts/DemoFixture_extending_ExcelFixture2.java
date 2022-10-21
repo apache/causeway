@@ -30,7 +30,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import lombok.Getter;
 import lombok.Setter;
 
-@Named("isis.sub.excel.DemoFixture_extending_ExcelFixture2")
+@Named("causeway.sub.excel.DemoFixture_extending_ExcelFixture2")
 @DomainObject
 public class DemoFixture_extending_ExcelFixture2 extends ExcelFixture2 {
 

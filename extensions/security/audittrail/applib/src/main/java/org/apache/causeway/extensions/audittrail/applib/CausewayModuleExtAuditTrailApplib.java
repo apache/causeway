@@ -37,8 +37,8 @@ import org.springframework.context.annotation.Import;
 })
 public class CausewayModuleExtAuditTrailApplib {
 
-    public static final String NAMESPACE = "isis.ext.auditTrail";
-    public static final String SCHEMA = "isisExtAuditTrail";
+    public static final String NAMESPACE = "causeway.ext.auditTrail";
+    public static final String SCHEMA = "causewayExtAuditTrail";
 
     public abstract static class TitleUiEvent<S>
             extends org.apache.causeway.applib.events.ui.TitleUiEvent<S> { }

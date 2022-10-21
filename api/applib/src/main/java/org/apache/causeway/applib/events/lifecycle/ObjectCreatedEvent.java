@@ -36,7 +36,7 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default</tt>
+     * <tt>causeway.applib.annotation.domain-object.created-lifecycle-event.post-for-default</tt>
      * configuration property.
      * </p>
      */

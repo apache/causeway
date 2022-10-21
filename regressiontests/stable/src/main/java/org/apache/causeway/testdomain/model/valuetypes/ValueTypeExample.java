@@ -168,7 +168,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - BASIC
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBoolean")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBoolean")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBoolean
@@ -179,7 +179,7 @@ public abstract class ValueTypeExample<T> {
         private Boolean updateValue = Boolean.FALSE;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleCharacter")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleCharacter")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleCharacter
@@ -190,7 +190,7 @@ public abstract class ValueTypeExample<T> {
         private Character updateValue = 'b';
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleString")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleString")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleString
@@ -201,7 +201,7 @@ public abstract class ValueTypeExample<T> {
         private String updateValue = "anotherString";
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExamplePassword")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExamplePassword")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExamplePassword
@@ -212,7 +212,7 @@ public abstract class ValueTypeExample<T> {
         private Password updateValue = Password.of("anotherPassword");
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBufferedImage")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBufferedImage")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBufferedImage
@@ -224,7 +224,7 @@ public abstract class ValueTypeExample<T> {
         private BufferedImage updateValue = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBlob")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBlob")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBlob
@@ -235,7 +235,7 @@ public abstract class ValueTypeExample<T> {
         private Blob updateValue = Blob.of("anotherBlob", CommonMimeType.BIN, new byte[] {3, 4});
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleClob")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleClob")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleClob
@@ -246,7 +246,7 @@ public abstract class ValueTypeExample<T> {
         private Clob updateValue = Clob.of("anotherClob", CommonMimeType.TXT, "ef");
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalResourcePath")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalResourcePath")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalResourcePath
@@ -257,7 +257,7 @@ public abstract class ValueTypeExample<T> {
         private LocalResourcePath updateValue = new LocalResourcePath("img/b");
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleUrl")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleUrl")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleUrl
@@ -272,7 +272,7 @@ public abstract class ValueTypeExample<T> {
         }
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleMarkup")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleMarkup")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleMarkup
@@ -295,7 +295,7 @@ public abstract class ValueTypeExample<T> {
         }
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleVega")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleVega")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleVega
@@ -307,7 +307,7 @@ public abstract class ValueTypeExample<T> {
         private Vega updateValue = vegaSemantics.getExamples().getElseFail(1);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleUuid")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleUuid")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleUuid
@@ -318,7 +318,7 @@ public abstract class ValueTypeExample<T> {
         private UUID updateValue = UUID.randomUUID();
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocale")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocale")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocale
@@ -331,7 +331,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - NUMBERS
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleByte")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleByte")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleByte
@@ -342,7 +342,7 @@ public abstract class ValueTypeExample<T> {
         private Byte updateValue = 0;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleShort")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleShort")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleShort
@@ -353,7 +353,7 @@ public abstract class ValueTypeExample<T> {
         private Short updateValue = 0;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleInteger")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleInteger")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleInteger
@@ -364,7 +364,7 @@ public abstract class ValueTypeExample<T> {
         private Integer updateValue = 0;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleLong")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleLong")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleLong
@@ -375,7 +375,7 @@ public abstract class ValueTypeExample<T> {
         private Long updateValue = 0L;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleFloat")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleFloat")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleFloat
@@ -392,7 +392,7 @@ public abstract class ValueTypeExample<T> {
         }
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleDouble")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleDouble")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleDouble
@@ -411,7 +411,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- BIG INTEGER
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigInteger")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigInteger")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigInteger
@@ -424,7 +424,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- BIG DECIMAL
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigDecimal_default")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigDecimal_default")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigDecimal_default
@@ -435,7 +435,7 @@ public abstract class ValueTypeExample<T> {
         private BigDecimal updateValue = BigDecimal.ZERO;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigDecimal_fixedFractionalDigits")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigDecimal_fixedFractionalDigits")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigDecimal_fixedFractionalDigits
@@ -492,7 +492,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - TEMPORAL - LEGACY
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJavaUtilDate")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaUtilDate")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJavaUtilDate
@@ -503,7 +503,7 @@ public abstract class ValueTypeExample<T> {
         private java.util.Date updateValue = new java.util.Date(0L);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJavaSqlDate")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaSqlDate")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJavaSqlDate
@@ -514,7 +514,7 @@ public abstract class ValueTypeExample<T> {
         private java.sql.Date updateValue = new java.sql.Date(0L);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJavaSqlTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaSqlTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJavaSqlTime
@@ -525,7 +525,7 @@ public abstract class ValueTypeExample<T> {
         private java.sql.Time updateValue = new java.sql.Time(0L);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleTimestamp")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleTimestamp")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleTimestamp
@@ -538,7 +538,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - TEMPORAL - JAVA TIME
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalDate")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalDate")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalDate
@@ -549,7 +549,7 @@ public abstract class ValueTypeExample<T> {
         private LocalDate updateValue = getValue().plusDays(2);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalDateTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalDateTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalDateTime
@@ -560,7 +560,7 @@ public abstract class ValueTypeExample<T> {
         private LocalDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalTime")
     @DomainObject(
 
             nature = Nature.BEAN)
@@ -572,7 +572,7 @@ public abstract class ValueTypeExample<T> {
         private LocalTime updateValue = getValue().plusSeconds(15);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleOffsetDateTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleOffsetDateTime
@@ -583,7 +583,7 @@ public abstract class ValueTypeExample<T> {
         private OffsetDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleOffsetTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleOffsetTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleOffsetTime
@@ -594,7 +594,7 @@ public abstract class ValueTypeExample<T> {
         private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleZonedDateTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleZonedDateTime
@@ -607,7 +607,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - TEMPORAL - JODA TIME
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaDateTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaDateTime
@@ -618,7 +618,7 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.DateTime updateValue = org.joda.time.DateTime.now().plusDays(2).plusSeconds(15);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaLocalDateTime
@@ -629,7 +629,7 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.LocalDateTime updateValue = org.joda.time.LocalDateTime.now().plusDays(2).plusSeconds(15);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDate")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDate")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaLocalDate
@@ -640,7 +640,7 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.LocalDate updateValue = org.joda.time.LocalDate.now().plusDays(2);
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaLocalTime")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalTime")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaLocalTime
@@ -653,7 +653,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - META MODEL
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleApplicationFeatureId
@@ -668,7 +668,7 @@ public abstract class ValueTypeExample<T> {
 
     //TODO    TreeNode
 //    @DomainObject(
-//            @Named("isis.testdomain.valuetypes.ValueTypeExampleTreeNode",
+//            @Named("causeway.testdomain.valuetypes.ValueTypeExampleTreeNode",
 //            nature = Nature.BEAN)
     public static class ValueTypeExampleTreeNode
     extends ValueTypeExample<TreeNode<String>> {
@@ -694,7 +694,7 @@ public abstract class ValueTypeExample<T> {
         HALLO, WORLD
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleEnum")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleEnum")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleEnum
@@ -707,7 +707,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - COMPOSITES
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleCalendarEvent")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleCalendarEvent")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleCalendarEvent
@@ -722,7 +722,7 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - OTHER
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBookmark")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleBookmark")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleBookmark
@@ -733,7 +733,7 @@ public abstract class ValueTypeExample<T> {
         private Bookmark updateValue = Bookmark.parseElseFail("c:d");
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleOidDto")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleOidDto")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleOidDto
@@ -744,7 +744,7 @@ public abstract class ValueTypeExample<T> {
         private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleChangesDto")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleChangesDto")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleChangesDto
@@ -755,7 +755,7 @@ public abstract class ValueTypeExample<T> {
         private ChangesDto updateValue = new ChangesDto();
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleCommandDto")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleCommandDto")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleCommandDto
@@ -766,7 +766,7 @@ public abstract class ValueTypeExample<T> {
         private CommandDto updateValue = new CommandDto();
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleInteractionDto")
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleInteractionDto")
     @DomainObject(
             nature = Nature.BEAN)
     public static class ValueTypeExampleInteractionDto

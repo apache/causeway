@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
+import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
@@ -62,9 +62,9 @@ import lombok.val;
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
-    private static final String INTERACTION_FILTER_NAME = "IsisRestfulObjectsInteractionFilter";
+    private static final String INTERACTION_FILTER_NAME = "CausewayRestfulObjectsInteractionFilter";
 
-    private final CausewayConfiguration isisConfiguration;
+    private final CausewayConfiguration causewayConfiguration;
     private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
@@ -72,11 +72,11 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     @Inject
     public WebModuleJaxrsResteasy4(
-            final CausewayConfiguration isisConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
-        this.isisConfiguration = isisConfiguration;
+        this.causewayConfiguration = causewayConfiguration;
         this.restEasyConfiguration = restEasyConfiguration;
         this.restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
         this.urlPattern = this.restfulPath + "*";
@@ -104,14 +104,14 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        val authenticationStrategyClassName = isisConfiguration.getViewer()
+        val authenticationStrategyClassName = causewayConfiguration.getViewer()
                 .getRestfulobjects().getAuthentication().getStrategyClassName()
                 .orElse(AuthenticationStrategyBasicAuth.class.getName());
 
-        registerFilter(ctx, INTERACTION_FILTER_NAME, IsisRestfulObjectsInteractionFilter.class)
+        registerFilter(ctx, INTERACTION_FILTER_NAME, CausewayRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {
             // this is mapped to the entire application;
-            // however the IsisRestfulObjectsInteractionFilter will
+            // however the CausewayRestfulObjectsInteractionFilter will
             // "notice" if the session filter has already been
             // executed for the request pipeline, and if so will do nothing
             filterReg.addMappingForUrlPatterns(

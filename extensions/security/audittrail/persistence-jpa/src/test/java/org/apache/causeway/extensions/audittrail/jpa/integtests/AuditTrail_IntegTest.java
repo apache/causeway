@@ -42,7 +42,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(
         classes = AuditTrail_IntegTest.AppManifest.class,
         properties = {
-                "logging.level.org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener=DEBUG",
+                "logging.level.org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener=DEBUG",
         }
 )
 @ActiveProfiles("test")
@@ -72,5 +72,5 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
         return Counter.builder().name(name).build();
     }
 
-    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 }

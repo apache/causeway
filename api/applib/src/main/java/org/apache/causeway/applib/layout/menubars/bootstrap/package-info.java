@@ -28,11 +28,11 @@
  *
  */
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://isis.apache.org/applib/layout/menubars/bootstrap3",
+        namespace = "http://causeway.apache.org/applib/layout/menubars/bootstrap3",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://isis.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
+                        namespaceURI = "http://causeway.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
         }
         )
 package org.apache.causeway.applib.layout.menubars.bootstrap;

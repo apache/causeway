@@ -30,7 +30,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.causeway.viewer.wicket.model.hints.IsisSelectorEvent;
+import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
@@ -209,7 +209,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     protected void setViewHintAndBroadcast(final String viewName, final AjaxRequestTarget target) {
         final CollectionPresentationSelectorPanel component = CollectionPresentationSelectorPanel.this;
         send(getPage(), Broadcast.EXACT,
-                new IsisSelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target));
+                new CausewaySelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target));
     }
 
 }

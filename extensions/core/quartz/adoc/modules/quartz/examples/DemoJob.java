@@ -29,7 +29,7 @@ import org.quartz.JobExecutionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
+import org.apache.causeway.core.runtime.iactn.template.AbstractCausewayInteractionTemplate;
 import org.apache.causeway.core.security.authentication.Authentication;
 import org.apache.causeway.core.security.authentication.standard.SimpleAuthentication;
 
@@ -43,20 +43,20 @@ public class DemoJob implements Job {
     public void execute(final JobExecutionContext context) {
 
         final Authentication authentication = newAuthentication(context);
-        new DemoIsisInteractionTemplate().execute(authentication, null);
+        new DemoCausewayInteractionTemplate().execute(authentication, null);
 
     }
 
     protected Authentication newAuthentication(JobExecutionContext context) {
         
         val user = UserMemento.ofNameAndRoleNames(
-                "isisModuleExtQuartzDemoUser", 
-                Stream.of("isisModuleExtQuartzDemoRole")); 
+                "causewayModuleExtQuartzDemoUser", 
+                Stream.of("causewayModuleExtQuartzDemoRole")); 
         
         return SimpleAuthentication.ofValid(user);
     }
 
-    @Inject CausewayConfiguration isisConfiguration;
+    @Inject CausewayConfiguration causewayConfiguration;
 
 }
 //end::class[]
