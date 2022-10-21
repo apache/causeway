@@ -19,9 +19,9 @@
 package org.apache.causeway.tooling.metaprog.demoshowcases.value;
 
 import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config;
+import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config.ConfigBuilder;
 import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Template;
 import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.TemplateVariant;
-import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config.ConfigBuilder;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,28 +31,28 @@ import lombok.val;
 public enum ValueShowCase {
 
     MARKUP(Config.builder()
-            .showcaseName("IsisMarkup")
-            .javaPackage("demoapp.dom.types.isis.markups")
+            .showcaseName("CausewayMarkup")
+            .javaPackage("demoapp.dom.types.causeway.markups")
             .showcaseValueType("org.apache.causeway.applib.value.Markup")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.MarkupValueSemantics")
             .templateVariant(TemplateVariant.LOB)),
     MARKDOWN(Config.builder()
-            .showcaseName("IsisMarkdown")
-            .javaPackage("demoapp.dom.types.isisval.markdowns")
+            .showcaseName("CausewayMarkdown")
+            .javaPackage("demoapp.dom.types.causewayval.markdowns")
             .showcaseValueType("org.apache.causeway.valuetypes.markdown.applib.value.Markdown")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics")
             .templates(Template.REGULAR_SET_NO_SAMPLES) // demo provides its own MarkdownSamples
             .templateVariant(TemplateVariant.LOB)),
     ASCIIDOC(Config.builder()
-            .showcaseName("IsisAsciiDoc")
-            .javaPackage("demoapp.dom.types.isisval.asciidocs")
+            .showcaseName("CausewayAsciiDoc")
+            .javaPackage("demoapp.dom.types.causewayval.asciidocs")
             .showcaseValueType("org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics")
             .templates(Template.REGULAR_SET_NO_SAMPLES) // demo provides its own AsciiDocSamples
             .templateVariant(TemplateVariant.LOB)),
     VEGA(Config.builder()
-            .showcaseName("IsisVega")
-            .javaPackage("demoapp.dom.types.isisval.vegas")
+            .showcaseName("CausewayVega")
+            .javaPackage("demoapp.dom.types.causewayval.vegas")
             .showcaseValueType("org.apache.causeway.valuetypes.vega.applib.value.Vega")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics")
             .templateVariant(TemplateVariant.LOB)),

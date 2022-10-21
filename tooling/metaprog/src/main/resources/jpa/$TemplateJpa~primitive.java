@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
       schema = "demo",
       name = "/*${showcase-name}*/Jpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo./*${showcase-name}*/Entity")
 @DomainObject
 @NoArgsConstructor                                                             // <.>
