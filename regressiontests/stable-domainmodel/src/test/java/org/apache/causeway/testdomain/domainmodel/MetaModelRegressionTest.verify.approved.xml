@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mml:metamodelDto xmlns:mml="http://isis.apache.org/schema/metamodel">
+<mml:metamodelDto xmlns:mml="http://causeway.apache.org/schema/metamodel">
     <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.MixinConcrete">
         <mml:facets>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
