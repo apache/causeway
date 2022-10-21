@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
@@ -43,8 +43,8 @@ import demoapp.web.DemoAppManifestJdo;
     DemoAppManifestJdo.class,
 })
 @PropertySources({
-    @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
+    @PropertySource(CausewayPresets.NoTranslations),
+    @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
 })
 @Profile("demo-jdo")
 public class Configuration_usingJdo {

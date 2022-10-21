@@ -52,11 +52,11 @@ import org.apache.causeway.extensions.executionlog.applib.integtest.model.Counte
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
-public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @BeforeAll
     static void beforeAll() {

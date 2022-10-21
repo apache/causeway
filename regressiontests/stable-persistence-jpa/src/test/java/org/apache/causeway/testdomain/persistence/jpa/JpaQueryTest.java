@@ -46,7 +46,7 @@ import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -58,7 +58,7 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-class JpaQueryTest extends IsisIntegrationTestAbstract {
+class JpaQueryTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JpaTestFixtures testFixtures;
     @Inject private InteractionService interactionService;

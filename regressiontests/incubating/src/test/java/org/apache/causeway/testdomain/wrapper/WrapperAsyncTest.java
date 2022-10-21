@@ -50,7 +50,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryManager;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import static org.apache.causeway.applib.services.wrapper.control.AsyncControl.returning;
 
@@ -65,7 +65,7 @@ import lombok.val;
 )
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @DirtiesContext // because of the temporary installed ActionDomainEventListener
-class WrapperAsyncTest extends IsisIntegrationTestAbstract {
+class WrapperAsyncTest extends CausewayIntegrationTestAbstract {
 
 //    @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

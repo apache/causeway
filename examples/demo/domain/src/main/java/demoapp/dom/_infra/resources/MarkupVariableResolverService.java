@@ -41,10 +41,10 @@ public class MarkupVariableResolverService {
     @Inject
     public MarkupVariableResolverService(CausewayConfiguration configuration) {
         constants = _Maps.unmodifiable(
-                "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
-                "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",
+                "SOURCES_CAUSEWAY", "https://github.com/apache/causeway/blob/master/core/applib/src/main/java",
+                "SOURCES_DEMO", "https://github.com/apache/causeway/tree/master/examples/demo/domain/src/main/java",
                 "ISSUES_DEMO", "https://issues.apache.org/jira/",
-                "ISIS_VERSION", Optional.ofNullable(
+                "CAUSEWAY_VERSION", Optional.ofNullable(
                         configuration.getViewer().getWicket().getApplication().getVersion())
                         .orElse("unkown-version")
             );

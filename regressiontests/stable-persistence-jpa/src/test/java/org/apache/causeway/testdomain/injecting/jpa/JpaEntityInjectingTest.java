@@ -44,7 +44,7 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -61,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
+class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JpaTestFixtures jpaTestFixtures;
     @Inject private RepositoryService repository;

@@ -90,19 +90,19 @@ The resultant XML snapshot is:
 ----
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <app:PropertySnapshotVm
-    xmlns:app="..." xmlns:isis="..." xmlns:xsi="..."
-    isis:feature="class"
-    isis:fqn="demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm"
-    isis:oid="demo.PropertySnapshotVm:..."
-    isis:plural="Property Snapshot Vms"
-    isis:singular="Property Snapshot Vm"
+    xmlns:app="..." xmlns:causeway="..." xmlns:xsi="..."
+    causeway:feature="class"
+    causeway:fqn="demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm"
+    causeway:oid="demo.PropertySnapshotVm:..."
+    causeway:plural="Property Snapshot Vms"
+    causeway:singular="Property Snapshot Vm"
     xsi:schemaLocation="... demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm.xsd">
-  <isis:title>PropertySnapshotVm</isis:title>
-  <app:notSpecifiedProperty isis:datatype="isis:String" isis:feature="value">value</app:notSpecifiedProperty>
-  <app:includedProperty isis:datatype="isis:String" isis:feature="value">value</app:includedProperty>
-  <app:objectType isis:datatype="isis:String" isis:feature="value">demo.PropertySnapshotVm</app:objectType>
-  <app:objectIdentifier isis:datatype="isis:String" isis:feature="value">»3a1ba25e</app:objectIdentifier>
-  <app:text isis:datatype="isis:String" isis:feature="value">value</app:text>
+  <causeway:title>PropertySnapshotVm</causeway:title>
+  <app:notSpecifiedProperty causeway:datatype="causeway:String" causeway:feature="value">value</app:notSpecifiedProperty>
+  <app:includedProperty causeway:datatype="causeway:String" causeway:feature="value">value</app:includedProperty>
+  <app:objectType causeway:datatype="causeway:String" causeway:feature="value">demo.PropertySnapshotVm</app:objectType>
+  <app:objectIdentifier causeway:datatype="causeway:String" causeway:feature="value">»3a1ba25e</app:objectIdentifier>
+  <app:text causeway:datatype="causeway:String" causeway:feature="value">value</app:text>
 </app:PropertySnapshotVm>
 ----
 

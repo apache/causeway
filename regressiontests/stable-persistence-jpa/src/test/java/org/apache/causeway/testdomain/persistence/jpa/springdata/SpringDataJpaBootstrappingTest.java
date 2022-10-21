@@ -49,7 +49,7 @@ import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -63,7 +63,7 @@ import lombok.val;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
 // @Disabled // ISIS-2789 revert
-class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
+class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager;
     @Inject private RepositoryService repository;

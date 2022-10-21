@@ -37,7 +37,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import static org.apache.causeway.applib.services.appfeat.ApplicationFeatureId.newType;
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode.CHANGING;
@@ -45,7 +45,7 @@ import static org.apache.causeway.extensions.secman.applib.permission.dom.Applic
 
 import lombok.val;
 
-public abstract class ApplicationPermissionRepositoryIntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class ApplicationPermissionRepositoryIntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     protected ApplicationUser maryUser, mungoUser, midgeUser;
     protected ApplicationRole girlRole, dogRole, mouseRole, littleRole, flatDwellerRole;

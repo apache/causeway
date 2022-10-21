@@ -233,6 +233,6 @@ include::PropertyLayoutLabelPositionVm_updateVariantNotSpecified.java[tags=annot
 The default position itself can be configured globally, in the `application.yml` or `application.properties` configuration file.
 This is done using:
 
-* `isis.applib.annotation.property-layout.label-position` configuration property for properties, and
-* `isis.applib.annotation.parameter-layout.label-position` configuration property for parameters.
+* `causeway.applib.annotation.property-layout.label-position` configuration property for properties, and
+* `causeway.applib.annotation.parameter-layout.label-position` configuration property for parameters.
 

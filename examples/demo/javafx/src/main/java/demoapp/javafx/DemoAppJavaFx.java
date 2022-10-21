@@ -49,7 +49,7 @@ public class DemoAppJavaFx {
     @Bean
     public JavaFxViewerConfig viewerConfig() {
         return JavaFxViewerConfig.builder()
-                .applicationTitle("Apache Isis Demo")
+                .applicationTitle("Apache Causeway Demo")
                 .applicationIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "icon.png"))
                 .brandingIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "gift_32.png"))
                 .objectFallbackIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "object_fallback_icon.png"))

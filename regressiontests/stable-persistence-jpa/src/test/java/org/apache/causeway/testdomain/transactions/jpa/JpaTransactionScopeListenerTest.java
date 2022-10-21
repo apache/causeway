@@ -41,7 +41,7 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.causeway.testing.integtestsupport.applib.IsisInteractionHandler;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 
 @SpringBootTest(
         classes = {
@@ -53,7 +53,7 @@ import org.apache.causeway.testing.integtestsupport.applib.IsisInteractionHandle
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
 @DirtiesContext
-@ExtendWith(IsisInteractionHandler.class)
+@ExtendWith(CausewayInteractionHandler.class)
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionScopeListenerTest {
 

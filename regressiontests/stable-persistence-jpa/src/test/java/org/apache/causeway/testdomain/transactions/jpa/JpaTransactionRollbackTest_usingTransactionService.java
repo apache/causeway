@@ -48,7 +48,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.causeway.testing.integtestsupport.applib.IsisInteractionHandler;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 
 import lombok.NonNull;
 import lombok.val;
@@ -63,7 +63,7 @@ import lombok.val;
 //                "logging.level.org.springframework.orm.jpa.*=DEBUG",
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
-@ExtendWith({IsisInteractionHandler.class})
+@ExtendWith({CausewayInteractionHandler.class})
 @DirtiesContext
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionRollbackTest_usingTransactionService

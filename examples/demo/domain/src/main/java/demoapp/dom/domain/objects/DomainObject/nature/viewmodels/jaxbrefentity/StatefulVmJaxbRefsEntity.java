@@ -103,7 +103,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
 //end::class[]
 
-    //XXX[ISIS-2384] potentially fails with NPE
+    //XXX[CAUSEWAY-2384] potentially fails with NPE
     @Action(choicesFrom = "children")
     public StatefulVmJaxbRefsEntity suffixSelected(final List<JaxbRefEntity> children) {
         for(JaxbRefEntity child : children) {
@@ -124,7 +124,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         return this;
     }
 
-    //XXX[ISIS-2383] in support of an editable property ...
+    //XXX[CAUSEWAY-2383] in support of an editable property ...
     @MemberSupport public List<JaxbRefEntity> choicesFavoriteChild() {
         return choices0ChangeFavoriteChild(); // reuse logic from above
     }

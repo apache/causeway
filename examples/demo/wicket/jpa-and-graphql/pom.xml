@@ -134,7 +134,7 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/demo-wicket-jpa-and-graphql</image>
+								<image>docker.io/apachecauseway/demo-wicket-jpa-and-graphql</image>
 								<tags>
 									<tag>${env.REVISION}</tag>
 								</tags>

@@ -91,10 +91,10 @@
 						<exclude>**/webpack.generated.js</exclude>
 
 						<exclude>**/CREDITS.TXT</exclude>
-						<exclude>**/domain/src/main/java/demoapp/dom/types/isis/clobs/samples/**</exclude>
-						<exclude>**/domain/src/main/java/demoapp/dom/types/isis/markups/samples/**</exclude>
-						<exclude>**/domain/src/main/java/demoapp/dom/types/isisext/asciidocs/samples/**</exclude>
-						<exclude>**/domain/src/main/java/demoapp/dom/types/isisext/markdowns/samples/**</exclude>
+						<exclude>**/domain/src/main/java/demoapp/dom/types/causeway/clobs/samples/**</exclude>
+						<exclude>**/domain/src/main/java/demoapp/dom/types/causeway/markups/samples/**</exclude>
+						<exclude>**/domain/src/main/java/demoapp/dom/types/causewayext/asciidocs/samples/**</exclude>
+						<exclude>**/domain/src/main/java/demoapp/dom/types/causewayext/markdowns/samples/**</exclude>
 						<exclude>**/domain/src/main/resources/banner.txt</exclude>
 						<exclude>**/domain/src/main/resources/static/**</exclude>
 						<exclude>**/domain/src/test/resources/demoapp/dom/_infra/resources/</exclude>

@@ -6,14 +6,14 @@ JAXB supports `CalendarEvent` out-of-the-box, so no special annotations are requ
 
 [source,java]
 ----
-include::IsisCalendarEventVm.java[tags=class]
+include::CausewayCalendarEventVm.java[tags=class]
 ----
 <.> a no-arg constructor is required by JAXB
 <.> required property as defined to JAXB
-<.> directly editable property as defined to Apache Isis
-<.> optional property as defined to Apache Isis.
+<.> directly editable property as defined to Apache Causeway
+<.> optional property as defined to Apache Causeway.
 +
 This is the default for JAXB so no additional annotation required.
 
 
-include::../IsisCalendarEvents-common.adoc[]
+include::../CausewayCalendarEvents-common.adoc[]

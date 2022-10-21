@@ -65,7 +65,7 @@ public class AsciiDocReaderService {
     }
 
     private String replaceVersion(final String adoc) {
-        return adoc.replace("{isis-version}",
+        return adoc.replace("{causeway-version}",
                 configuration.getViewer().getWicket().getApplication().getVersion());
     }
 

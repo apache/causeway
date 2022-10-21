@@ -15,17 +15,17 @@ Some properties on these domain objects are mandatory, some optional.
 
 The entity and view model types both implement some common interfaces.
 
-=== IsisCalendarEventHolder
+=== CausewayCalendarEventHolder
 
-The `IsisCalendarEventHolder` interface is used to contribute a number of mixins to both types:
+The `CausewayCalendarEventHolder` interface is used to contribute a number of mixins to both types:
 
 [source,java]
 ----
-include::holder/IsisCalendarEventHolder.java[tags=class]
+include::holder/CausewayCalendarEventHolder.java[tags=class]
 ----
 
-=== IsisCalendarEventHolder2
+=== CausewayCalendarEventHolder2
 
-The `IsisCalendarEventHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
+The `CausewayCalendarEventHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
 
 Further details, along with the effect of this annotation, can be seen on the entity and view model object pages.

@@ -32,7 +32,7 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepos
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.CounterRepository;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter_bumpUsingMixin;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.val;
 
-public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @BeforeAll
     static void beforeAll() {

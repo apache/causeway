@@ -5,22 +5,22 @@
 TODO this yet is just a copy from JDO
 ====
 
-Apache Isis implements the relevant JDO extension points to allow the `LocalResourcePath` type to be persisted.
+Apache Causeway implements the relevant JDO extension points to allow the `LocalResourcePath` type to be persisted.
 No special annotations are required, though `@Column` can be used to fine-tune the mapping.
 The most common usage is to indicate whether the column can be null.
 Since the column ultimately maps down to a string, the column's length could also be specified:
 
 [source,java]
 ----
-include::IsisLocalResourcePathJpa.java[tags=class]
+include::CausewayLocalResourcePathJpa.java[tags=class]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> required property as defined to JDO/DataNucleus.
 +
-Apache Isis assumes properties are mandatory, so no additional annotation is required.
-<.> directly editable property as defined to Apache Isis
-<.> optional property as defined to Apache Isis
+Apache Causeway assumes properties are mandatory, so no additional annotation is required.
+<.> directly editable property as defined to Apache Causeway
+<.> optional property as defined to Apache Causeway
 <.> optional property as defined to JDO/DataNucleus
 
 
-include::../IsisLocalResourcePaths-common.adoc[]
+include::../CausewayLocalResourcePaths-common.adoc[]

@@ -14,10 +14,10 @@ include::JavaAwtBufferedImageJpa.java[tags=class]
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> required property as defined to JDO/DataNucleus.
 +
-Apache Isis assumes properties are mandatory, so no additional annotation is required.
+Apache Causeway assumes properties are mandatory, so no additional annotation is required.
 // not yet supported
-//<.> directly editable property as defined to Apache Isis
-<.> optional property as defined to Apache Isis
+//<.> directly editable property as defined to Apache Causeway
+<.> optional property as defined to Apache Causeway
 <.> optional property as defined to JDO/DataNucleus
 
 

@@ -34,9 +34,9 @@ class _Helper {
 
     static Optional<ServiceRegistry> getServiceRegistry(final ExtensionContext extensionContext) {
         return extensionContext.getTestInstance()
-        .filter(IsisIntegrationTestAbstract.class::isInstance)
-        .map(IsisIntegrationTestAbstract.class::cast)
-        .map(IsisIntegrationTestAbstract::getServiceRegistry);
+        .filter(CausewayIntegrationTestAbstract.class::isInstance)
+        .map(CausewayIntegrationTestAbstract.class::cast)
+        .map(CausewayIntegrationTestAbstract::getServiceRegistry);
     }
 
     /**

@@ -55,8 +55,8 @@ under the License.
 
 
 		<!-- debugging -->
-		<Logger name="org.apache.isis.applib.services.command.CommandServiceDefault" level="warn" />
-		<Logger name="org.apache.isis.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands" level="debug" />
+		<Logger name="org.apache.causeway.applib.services.command.CommandServiceDefault" level="warn" />
+		<Logger name="org.apache.causeway.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands" level="debug" />
 
 		<Root level="info">
 			<AppenderRef ref="Console" />

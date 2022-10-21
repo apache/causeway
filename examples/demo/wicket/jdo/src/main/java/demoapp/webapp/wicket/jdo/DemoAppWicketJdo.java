@@ -90,7 +90,7 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
         _OsUtil.thereCanBeOnlyOne();
 
     	CausewayPresets.prototyping();
-        //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
+        //CausewayPresets.logging(WebRequestCycleForCauseway.class, "debug");
 
         SpringProfileUtil.removeActiveProfile("demo-jpa"); // just in case
         SpringProfileUtil.addActiveProfile("demo-jdo");

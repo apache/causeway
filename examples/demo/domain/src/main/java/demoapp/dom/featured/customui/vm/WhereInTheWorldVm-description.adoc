@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The link:https://isis.apache.org/vw/{isis-version}/about.html[Wicket viewer] renders the generic UI for entities and view models using a series of Wicket ``Component``s, with each such `Component` created by a `ComponentFactory`.
+The link:https://causeway.apache.org/vw/{causeway-version}/about.html[Wicket viewer] renders the generic UI for entities and view models using a series of Wicket ``Component``s, with each such `Component` created by a `ComponentFactory`.
 
 You can customise the UI by providing alternate implementations of `ComponentFactory`, for any component on the page, including the top-level component for the entire domain object.
 
@@ -33,7 +33,7 @@ include::WhereInTheWorldVm.java[tags=class]
 
 To provide a custom component, we need to implement the `o.a.i.viewer.wicket.ui.ComponentFactory` interface, as a domain service.
 
-TIP: For more on this topic, see the link:https://isis.apache.org/vw/{isis-version}/extending.html#replacing-page-elements[Wicket viewer documentation].
+TIP: For more on this topic, see the link:https://causeway.apache.org/vw/{causeway-version}/extending.html#replacing-page-elements[Wicket viewer documentation].
 
 There are various subclasses available; as we want to replace the component for the entire entity, we can subclass from `EntityComponentFactoryAbstract`:
 
@@ -137,13 +137,13 @@ It does however mean that we had to tweak the classpath to bring in a dependency
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.viewer</groupId>
-        <artifactId>isis-viewer-wicket-model</artifactId>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-wicket-model</artifactId>
         <optional>true</optional>	<!--1-->
     </dependency>
     <dependency>
-        <groupId>org.apache.isis.viewer</groupId>
-        <artifactId>isis-viewer-wicket-ui</artifactId>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-wicket-ui</artifactId>
         <optional>true</optional>	<!--1-->
     </dependency>
 </dependencies>

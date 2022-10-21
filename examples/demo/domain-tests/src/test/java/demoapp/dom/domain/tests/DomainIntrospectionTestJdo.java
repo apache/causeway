@@ -29,7 +29,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -45,15 +45,15 @@ import lombok.val;
                 Configuration_usingJdo.class,
         },
         properties = {
-                "isis.core.meta-model.introspector.mode=FULL",
-                //"isis.core.config.configuration-property-visibility-policy=ALWAYS_SHOW",
-                "isis.applib.annotation.domain-object.editing=TRUE",
-                "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
+                "causeway.core.meta-model.introspector.mode=FULL",
+                //"causeway.core.config.configuration-property-visibility-policy=ALWAYS_SHOW",
+                "causeway.applib.annotation.domain-object.editing=TRUE",
+                "causeway.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
                 "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 @ActiveProfiles(profiles = "demo-jdo")
 class DomainIntrospectionTestJdo {
@@ -63,7 +63,7 @@ class DomainIntrospectionTestJdo {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
     //@Inject private TitleService titleService;
-    //@Inject private CausewayConfiguration isisConfig;
+    //@Inject private CausewayConfiguration causewayConfig;
     //@Inject private DomainObjectTesterFactory testerFactory;
 
     @Test

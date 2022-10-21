@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ import lombok.val;
         }
 )
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
-class ViewModelFactoryTest extends IsisIntegrationTestAbstract {
+class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
 
     // -- VIEW MODEL SAMPLES
     

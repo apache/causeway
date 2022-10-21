@@ -5,8 +5,8 @@
 
 The framework allows an action to be associated with other properties or
 collections of the same domain object. For complete reference see the
-https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_associateWith[Apache
-Isis Reference Guide]
+https://causeway.apache.org/guides/rgant/rgant.html#_rgant-Action_associateWith[Apache
+Causeway Reference Guide]
 
 We setup a simple `FibonacciNumberVm` class to demonstrate this.
 

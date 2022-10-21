@@ -48,7 +48,7 @@ import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -59,7 +59,7 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 // @DirtiesContext // doesn't seem to tidy up correctly ... I see InteractionService still injected into entities in the _next_ tests run (JpaExceptionTranslationTest_usingTransactional)
-class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
+class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager;
     @Inject private SpecificationLoader specLoader;

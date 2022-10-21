@@ -4,15 +4,15 @@ WARNING: TODO v2 - was copy pasted from UUID
 
 [source,java]
 ----
-include::IsisCalendarEventJdo.java[tags=class]
+include::CausewayCalendarEventJdo.java[tags=class]
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> required property as defined to JDO/DataNucleus.
 +
-Apache Isis assumes properties are mandatory, so no additional annotation is required.
-<.> directly editable property as defined to Apache Isis
-<.> optional property as defined to Apache Isis
+Apache Causeway assumes properties are mandatory, so no additional annotation is required.
+<.> directly editable property as defined to Apache Causeway
+<.> optional property as defined to Apache Causeway
 <.> optional property as defined to JDO/DataNucleus
 
 
-include::../IsisCalendarEvents-common.adoc[]
+include::../CausewayCalendarEvents-common.adoc[]

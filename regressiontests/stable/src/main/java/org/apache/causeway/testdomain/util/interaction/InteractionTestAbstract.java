@@ -43,14 +43,14 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
-public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbstract {
 
     @Inject protected ObjectManager objectManager;
     @Inject protected InteractionService interactionService;

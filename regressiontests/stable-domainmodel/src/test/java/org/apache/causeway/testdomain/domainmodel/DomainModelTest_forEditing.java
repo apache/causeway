@@ -38,7 +38,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -58,7 +58,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
+class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
 
     @Inject private WrapperFactory wrapper;
     @Inject private SpecificationLoader specificationLoader;

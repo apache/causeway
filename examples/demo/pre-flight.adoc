@@ -86,14 +86,14 @@ IMPORTANT: renders an empty object (JAXB serialization is not working as expecte
 [IMPORTANT]
 ====
  Caused by: java.util.NoSuchElementException: sources
- 	at org.apache.isis.commons.internal.exceptions._Exceptions.noSuchElement(_Exceptions.java:110) ~[classes/:?]
-	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.lambda$1(PropertyInteractionWkt.java:80) ~[classes/:?]
+ 	at org.apache.causeway.commons.internal.exceptions._Exceptions.noSuchElement(_Exceptions.java:110) ~[classes/:?]
+	at org.apache.causeway.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.lambda$1(PropertyInteractionWkt.java:80) ~[classes/:?]
 	at java.util.Optional.orElseThrow(Optional.java:408) ~[?:?]
-	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.load(PropertyInteractionWkt.java:80) ~[classes/:?]
-	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.load(PropertyInteractionWkt.java:1) ~[classes/:?]
+	at org.apache.causeway.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.load(PropertyInteractionWkt.java:80) ~[classes/:?]
+	at org.apache.causeway.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.load(PropertyInteractionWkt.java:1) ~[classes/:?]
 	at org.apache.wicket.model.LoadableDetachableModel.getObject(LoadableDetachableModel.java:128) ~[wicket-core-8.13.0.jar:8.13.0]
 	at org.apache.wicket.model.ChainingModel.getObject(ChainingModel.java:95) ~[wicket-core-8.13.0.jar:8.13.0]
-	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt.propertyInteraction(PropertyUiModelWkt.java:61) ~[classes/:?]
+	at org.apache.causeway.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt.propertyInteraction(PropertyUiModelWkt.java:61) ~[classes/:?]
 ==== 
 * [x] Test: remove Child(ren)
 
@@ -207,7 +207,7 @@ _Experimental support for embedded types_
 
 Returns scalar of: `demo.EmbeddedTypeVm`
 
-WARNING: _Work in Progress_ `ISIS-2877` - Support for Value Type Composition
+WARNING: _Work in Progress_ `CAUSEWAY-2877` - Support for Value Type Composition
 
 ===== Collection All Constants
 
@@ -1746,9 +1746,9 @@ Returns scalar of: `demo.WrapperBooleans`
 
 ===== Top-Bar
 
-* [ ] Action `Boolean Boxed Params` _FIXME[ISIS-2387] contrary to the above, second parameter works; however, first parameter is however, first parameter is initialized to null but not rendered as 3-state.  Either we fix rendering or we initialize with FALSE when null_
+* [ ] Action `Boolean Boxed Params` _FIXME[CAUSEWAY-2387] contrary to the above, second parameter works; however, first parameter is however, first parameter is initialized to null but not rendered as 3-state.  Either we fix rendering or we initialize with FALSE when null_
 
-* [ ] Action `Boolean Params` _FIXME[ISIS-2387] even though primitive1 gets initialized with true, the model thinks its null_
+* [ ] Action `Boolean Params` _FIXME[CAUSEWAY-2387] even though primitive1 gets initialized with true, the model thinks its null_
 
 ===== FieldSet 
 
@@ -2136,11 +2136,11 @@ Returns scalar of: `demo.JavaUtilUuids`
 
 * [ ] Property `Description` 
 
-=== Apache Isis Core
+=== Apache Causeway Core
 
 ==== Blobs
 
-Returns scalar of: `demo.IsisBlobs`
+Returns scalar of: `demo.CausewayBlobs`
 
 ===== FieldSet 
 
@@ -2158,7 +2158,7 @@ Returns scalar of: `demo.IsisBlobs`
 
 ==== Clobs
 
-Returns scalar of: `demo.IsisClobs`
+Returns scalar of: `demo.CausewayClobs`
 
 ===== FieldSet 
 
@@ -2176,7 +2176,7 @@ Returns scalar of: `demo.IsisClobs`
 
 ==== Local Resource Paths
 
-Returns scalar of: `demo.IsisLocalResourcePaths`
+Returns scalar of: `demo.CausewayLocalResourcePaths`
 
 ===== FieldSet 
 
@@ -2194,7 +2194,7 @@ Returns scalar of: `demo.IsisLocalResourcePaths`
 
 ==== Markups
 
-Returns scalar of: `demo.IsisMarkups`
+Returns scalar of: `demo.CausewayMarkups`
 
 ===== FieldSet 
 
@@ -2212,7 +2212,7 @@ Returns scalar of: `demo.IsisMarkups`
 
 ==== Passwords
 
-Returns scalar of: `demo.IsisPasswords`
+Returns scalar of: `demo.CausewayPasswords`
 
 ===== FieldSet 
 
@@ -2228,11 +2228,11 @@ Returns scalar of: `demo.IsisPasswords`
 
 * [ ] Property `Description` 
 
-=== Apache Isis Extensions
+=== Apache Causeway Extensions
 
 ==== Ascii Docs
 
-Returns scalar of: `demo.IsisAsciiDocs`
+Returns scalar of: `demo.CausewayAsciiDocs`
 
 ===== FieldSet 
 
@@ -2250,7 +2250,7 @@ Returns scalar of: `demo.IsisAsciiDocs`
 
 ==== Markdowns
 
-Returns scalar of: `demo.IsisMarkdowns`
+Returns scalar of: `demo.CausewayMarkdowns`
 
 ===== FieldSet 
 
@@ -2268,7 +2268,7 @@ Returns scalar of: `demo.IsisMarkdowns`
 
 ==== Calendar Events
 
-Returns scalar of: `demo.IsisCalendarEvents`
+Returns scalar of: `demo.CausewayCalendarEvents`
 
 ===== FieldSet 
 
@@ -2600,7 +2600,7 @@ Returns scalar of: `demo.CustomUiVm`
 
 ==== User Manager
 
-Returns scalar of: `isis.ext.secman.ApplicationUserManager`
+Returns scalar of: `causeway.ext.secman.ApplicationUserManager`
 
 ===== Collection All Users
 
@@ -2614,7 +2614,7 @@ Returns scalar of: `isis.ext.secman.ApplicationUserManager`
 
 ==== Find Users
 
-Returns collection of: `isis.ext.secman.ApplicationUser`
+Returns collection of: `causeway.ext.secman.ApplicationUser`
 
 ===== Top-Bar
 
@@ -2672,7 +2672,7 @@ Returns collection of: `isis.ext.secman.ApplicationUser`
 
 ==== Find Roles
 
-Returns collection of: `isis.ext.secman.ApplicationRole`
+Returns collection of: `causeway.ext.secman.ApplicationRole`
 
 ===== FieldSet Identity
 
@@ -2696,7 +2696,7 @@ Returns collection of: `isis.ext.secman.ApplicationRole`
 
 ==== New Role
 
-Returns scalar of: `isis.ext.secman.ApplicationRole`
+Returns scalar of: `causeway.ext.secman.ApplicationRole`
 
 ===== FieldSet Identity
 
@@ -2720,7 +2720,7 @@ Returns scalar of: `isis.ext.secman.ApplicationRole`
 
 ==== All Roles
 
-Returns collection of: `isis.ext.secman.ApplicationRole`
+Returns collection of: `causeway.ext.secman.ApplicationRole`
 
 ===== FieldSet Identity
 
@@ -2746,7 +2746,7 @@ Returns collection of: `isis.ext.secman.ApplicationRole`
 
 ==== Find Orphaned Permissions
 
-Returns scalar of: `isis.ext.secman.ApplicationOrphanedPermissionManager`
+Returns scalar of: `causeway.ext.secman.ApplicationOrphanedPermissionManager`
 
 ===== Collection Orphaned Permissions
 
@@ -2762,7 +2762,7 @@ Returns scalar of: `isis.ext.secman.ApplicationOrphanedPermissionManager`
 
 ==== Find Tenancies
 
-Returns collection of: `isis.ext.secman.ApplicationTenancy`
+Returns collection of: `causeway.ext.secman.ApplicationTenancy`
 
 ===== FieldSet Identity
 
@@ -2788,7 +2788,7 @@ Returns collection of: `isis.ext.secman.ApplicationTenancy`
 
 ==== New Tenancy
 
-Returns scalar of: `isis.ext.secman.ApplicationTenancy`
+Returns scalar of: `causeway.ext.secman.ApplicationTenancy`
 
 ===== FieldSet Identity
 
@@ -2828,7 +2828,7 @@ Returns scalar of: `isis.ext.secman.ApplicationTenancy`
 
 ==== Configuration
 
-Returns scalar of: `isis.conf.ConfigurationViewmodel`
+Returns scalar of: `causeway.conf.ConfigurationViewmodel`
 
 ===== Collection Configuration
 
@@ -2850,7 +2850,7 @@ Returns scalar of: `isis.conf.ConfigurationViewmodel`
 
 _Looks up ApplicationUser entity corresponding to your user account_
 
-Returns scalar of: `isis.ext.secman.ApplicationUser`
+Returns scalar of: `causeway.ext.secman.ApplicationUser`
 
 ===== Top-Bar
 
@@ -2908,7 +2908,7 @@ Returns scalar of: `isis.ext.secman.ApplicationUser`
 
 _Returns your user account details_
 
-Returns scalar of: `isis.applib.UserMemento`
+Returns scalar of: `causeway.applib.UserMemento`
 
 ===== FieldSet Identity
 

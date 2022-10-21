@@ -36,7 +36,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.DateTimeFormat;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
 
 import lombok.val;
@@ -52,7 +52,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class CustomContextTest extends IsisIntegrationTestAbstract {
+class CustomContextTest extends CausewayIntegrationTestAbstract {
 
     @Inject InteractionService interactionService;
 

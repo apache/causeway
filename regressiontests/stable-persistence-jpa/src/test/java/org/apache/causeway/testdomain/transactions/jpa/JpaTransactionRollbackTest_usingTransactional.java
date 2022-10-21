@@ -38,7 +38,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -60,7 +60,7 @@ import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAb
 @DirtiesContext
 // @Disabled // ISIS-2789 revert
 class JpaTransactionRollbackTest_usingTransactional
-extends IsisIntegrationTestAbstract
+extends CausewayIntegrationTestAbstract
 {
 
     @Inject private FixtureScripts fixtureScripts;

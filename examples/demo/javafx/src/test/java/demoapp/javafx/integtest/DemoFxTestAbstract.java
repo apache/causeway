@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -39,7 +39,7 @@ import demoapp.dom.DemoModuleJdo;
                 CausewayModuleIncViewerJavaFxViewer.class,
         }
 )
-public abstract class DemoFxTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class DemoFxTestAbstract extends CausewayIntegrationTestAbstract {
 
     @Inject protected UiContextFx uiContext;
 

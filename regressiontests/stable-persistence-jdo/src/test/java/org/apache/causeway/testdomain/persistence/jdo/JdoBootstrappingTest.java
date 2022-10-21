@@ -40,7 +40,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -51,7 +51,7 @@ import lombok.val;
 )
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
+class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
 

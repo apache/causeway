@@ -27,7 +27,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 /**
  * @since 2.0 {@index}
  */
-public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCallback {
+public class CausewayInteractionHandler implements BeforeEachCallback, AfterEachCallback {
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) throws Exception {

@@ -55,11 +55,11 @@ import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.mo
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter_bumpUsingMixin;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
-public abstract class CmdExecAuditSessLog_IntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @BeforeAll
     static void beforeAll() {

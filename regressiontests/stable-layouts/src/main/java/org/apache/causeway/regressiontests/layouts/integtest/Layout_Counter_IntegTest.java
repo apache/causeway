@@ -73,7 +73,7 @@ import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.schema.metamodel.v2.FacetAttr;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 
 import lombok.val;
@@ -82,7 +82,7 @@ import lombok.val;
         classes = Layout_Counter_IntegTest.AppManifest.class
 )
 @ActiveProfiles("test")
-public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
+public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration

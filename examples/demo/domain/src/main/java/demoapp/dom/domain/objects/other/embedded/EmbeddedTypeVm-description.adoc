@@ -7,7 +7,7 @@ They can also have custom behaviour.
 However, they are not quite true value types as the ORM needs to update their fields directly.
 Ensuring that The mutator method can be made `private`
 
-CAUTION: This is still work in progress, see link:https://issues.apache.org/jira/browse/ISIS-1695[ISIS-1695].
+CAUTION: This is still work in progress, see link:https://issues.apache.org/jira/browse/CAUSEWAY-1695[CAUSEWAY-1695].
 
 == View model and collection
 

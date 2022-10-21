@@ -4,14 +4,14 @@ JAXB supports `LocalResourcePath` out-of-the-box, so no special annotations are 
 
 [source,java]
 ----
-include::IsisLocalResourcePathVm.java[tags=class]
+include::CausewayLocalResourcePathVm.java[tags=class]
 ----
 <.> a no-arg constructor is required by JAXB
 <.> required property as defined to JAXB
-<.> directly editable property as defined to Apache Isis
-<.> optional property as defined to Apache Isis.
+<.> directly editable property as defined to Apache Causeway
+<.> optional property as defined to Apache Causeway.
 +
 This is the default for JAXB so no additional annotation required.
 
 
-include::../IsisLocalResourcePaths-common.adoc[]
+include::../CausewayLocalResourcePaths-common.adoc[]

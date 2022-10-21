@@ -2,7 +2,7 @@
 
 The framework has built-in support for character large objects, using the `Clob` data type .
 
-NOTE: This is an Apache Isis specific data type.
+NOTE: This is an Apache Causeway specific data type.
 
 From here you can:
 
@@ -15,17 +15,17 @@ Some properties on these domain objects are mandatory, some optional.
 
 The entity and view model types both implement some common interfaces.
 
-=== IsisClobHolder
+=== CausewayClobHolder
 
-The `IsisClobHolder` interface is used to contribute a number of mixins to both types:
+The `CausewayClobHolder` interface is used to contribute a number of mixins to both types:
 
 [source,java]
 ----
-include::holder/IsisClobHolder.java[tags=class]
+include::holder/CausewayClobHolder.java[tags=class]
 ----
 
-=== IsisClobHolder2
+=== CausewayClobHolder2
 
-The `IsisClobHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
+The `CausewayClobHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
 
 Further details, along with the effect of this annotation, can be seen on the entity and view model object pages.

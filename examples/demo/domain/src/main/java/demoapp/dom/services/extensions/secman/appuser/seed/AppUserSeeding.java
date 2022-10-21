@@ -45,7 +45,7 @@ extends SeedServiceAbstract {
             @Override protected void execute(final ExecutionContext executionContext) {
                 executionContext.executeChildren(this,
                         newRole("demo", Can.of(ApplicationFeatureId.newNamespace("demo"))),
-                        newUser("bob", Can.of("isis-ext-secman-admin", "demo"), user->{
+                        newUser("bob", Can.of("causeway-ext-secman-admin", "demo"), user->{
                             user.setLanguage(Locale.GERMAN);
                             user.setNumberFormat(Locale.GERMAN);
                             user.setTimeFormat(Locale.GERMAN);

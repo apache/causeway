@@ -43,7 +43,7 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -61,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
-class JdoEntityInjectingTest extends IsisIntegrationTestAbstract {
+class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;

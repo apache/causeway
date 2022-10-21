@@ -2,7 +2,7 @@
 
 The framework has built-in support for binary large objects, using the `Blob` data type.
 
-NOTE: This is an Apache Isis specific data type.
+NOTE: This is an Apache Causeway specific data type.
 
 From here you can:
 
@@ -15,17 +15,17 @@ Some properties on these domain objects are mandatory, some optional.
 
 The entity and view model types both implement some common interfaces.
 
-=== IsisBlobHolder
+=== CausewayBlobHolder
 
-The `IsisBlobHolder` interface is used to contribute a number of mixins to both types:
+The `CausewayBlobHolder` interface is used to contribute a number of mixins to both types:
 
 [source,java]
 ----
-include::holder/IsisBlobHolder.java[tags=class]
+include::holder/CausewayBlobHolder.java[tags=class]
 ----
 
-=== IsisBlobHolder2
+=== CausewayBlobHolder2
 
-The `IsisBlobHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
+The `CausewayBlobHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
 
 Further details, along with the effect of this annotation, can be seen on the entity and view model object pages.

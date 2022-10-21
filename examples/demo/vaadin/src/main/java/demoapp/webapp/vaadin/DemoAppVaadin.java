@@ -60,10 +60,10 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
      */
     public static void main(final String[] args) {
 
-//        IsisPresets.logging(InteractionServiceDefault.class, "debug");
-//        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
-//        IsisPresets.logging(IsisServletForVaadin.class, "debug");
-//        IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
+//        CausewayPresets.logging(InteractionServiceDefault.class, "debug");
+//        CausewayPresets.logging(VaadinAuthenticationHandler.class, "debug");
+//        CausewayPresets.logging(CausewayServletForVaadin.class, "debug");
+//        CausewayPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
         System.setProperty("spring.profiles.active", "demo-jdo");
 

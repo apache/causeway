@@ -2,7 +2,7 @@
 
 (since 1.18.0 and 2.0.0-M3)
 
-Known issues link:https://issues.apache.org/jira/browse/ISIS-2319[ISIS-2319]
+Known issues link:https://issues.apache.org/jira/browse/CAUSEWAY-2319[CAUSEWAY-2319]
 
 [source,java]
 ----

@@ -47,7 +47,7 @@ import org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter_
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
-import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.val;
 
-public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
 
     @BeforeAll

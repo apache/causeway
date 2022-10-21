@@ -47,8 +47,8 @@ import lombok.RequiredArgsConstructor;
  *
  * @since 2.0 {@index}
  */
-@ExtendWith({ExceptionRecognizerTranslate.class, IsisInteractionHandler.class})
-public abstract class IsisIntegrationTestAbstract {
+@ExtendWith({ExceptionRecognizerTranslate.class, CausewayInteractionHandler.class})
+public abstract class CausewayIntegrationTestAbstract {
 
     /**
      * Hook to interact with
