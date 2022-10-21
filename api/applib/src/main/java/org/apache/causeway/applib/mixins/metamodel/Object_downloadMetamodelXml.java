@@ -70,7 +70,7 @@ public class Object_downloadMetamodelXml {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
     @MemberSupport public Object act(
             @ParameterLayout(

@@ -23,8 +23,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import org.apache.causeway.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
-import org.apache.causeway.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
@@ -86,8 +86,8 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 @Profile("demo-jpa")
 @Import({
     DemoModuleCommon.class,
-    IsisModulePersistenceJpaEclipselink.class,
-    IsisModuleExtCommandLogPersistenceJpa.class,
+    CausewayModulePersistenceJpaEclipselink.class,
+    CausewayModuleExtCommandLogPersistenceJpa.class,
 })
 @EntityScan(basePackageClasses = {
 

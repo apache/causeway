@@ -20,14 +20,14 @@ package org.apache.causeway.applib.services.appfeat;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 
 /**
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
+@Named(CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
 @Value
 public enum ApplicationFeatureSort {
 

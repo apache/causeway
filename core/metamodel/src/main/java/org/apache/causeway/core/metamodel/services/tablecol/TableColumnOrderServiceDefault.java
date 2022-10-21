@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
  * Used as a identity fallback.
@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class TableColumnOrderServiceDefault implements TableColumnOrderService {

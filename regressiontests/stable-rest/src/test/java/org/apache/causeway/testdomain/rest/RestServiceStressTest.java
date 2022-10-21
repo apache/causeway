@@ -39,7 +39,7 @@ import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Import({
     Configuration_usingJdo.class,
-    IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 @Log4j2

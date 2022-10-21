@@ -26,7 +26,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -56,16 +56,16 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 public class ApplicationFeatureMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
+            CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
 
     public static abstract class PropertyDomainEvent<T>
-    extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeatureMenu, T> {}
+    extends CausewayModuleApplib.PropertyDomainEvent<ApplicationFeatureMenu, T> {}
 
     public static abstract class CollectionDomainEvent<T>
-    extends IsisModuleApplib.CollectionDomainEvent<ApplicationFeatureMenu, T> {}
+    extends CausewayModuleApplib.CollectionDomainEvent<ApplicationFeatureMenu, T> {}
 
     public static abstract class ActionDomainEvent
-    extends IsisModuleApplib.ActionDomainEvent<ApplicationFeatureMenu> {}
+    extends CausewayModuleApplib.ActionDomainEvent<ApplicationFeatureMenu> {}
 
 
     // -- ICON NAME

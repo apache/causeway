@@ -24,23 +24,23 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
-import org.apache.causeway.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleusMixins;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleusMixins;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.jdo.JdoTestDomainModule;
 import org.apache.causeway.testdomain.model.stereotypes.MyService;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
     MyService.class, // testing injection into entities
-    IsisModuleCoreRuntimeServices.class,
-    IsisModuleSecurityBypass.class,
-    IsisModulePersistenceJdoDatanucleus.class,
-    IsisModulePersistenceJdoDatanucleusMixins.class,
-    IsisModuleTestingFixturesApplib.class,
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModuleSecurityBypass.class,
+    CausewayModulePersistenceJdoDatanucleus.class,
+    CausewayModulePersistenceJdoDatanucleusMixins.class,
+    CausewayModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 
     JdoTestDomainModule.class

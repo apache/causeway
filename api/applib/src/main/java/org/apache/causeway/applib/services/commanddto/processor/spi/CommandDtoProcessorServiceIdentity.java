@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
@@ -36,7 +36,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 @javax.annotation.Priority(PriorityPrecedence.LAST)
 public class CommandDtoProcessorServiceIdentity implements CommandDtoProcessorService {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".CommandDtoProcessorServiceIdentity";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".CommandDtoProcessorServiceIdentity";
 
     @Override
     public CommandDto process(final Object domainObject, final CommandDto commandDto) {

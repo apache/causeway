@@ -60,7 +60,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MemberDto;
@@ -77,7 +77,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".CommandExecutorServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandExecutorServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

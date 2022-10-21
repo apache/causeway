@@ -23,7 +23,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateDescription.DomainEvent;
 
@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_updateDescription {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_updateDescription> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_updateDescription> {}
 
     private final ApplicationRole target;
 

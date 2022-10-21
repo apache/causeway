@@ -29,12 +29,12 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UserCurrentSessionTimeZoneHolderDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".UserCurrentSessionTimeZoneHolderDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class UserCurrentSessionTimeZoneHolderDefault
 implements UserCurrentSessionTimeZoneHolder {

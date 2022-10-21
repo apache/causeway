@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
+import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
@@ -49,7 +49,7 @@ import lombok.val;
 @DomainService(
     nature = NatureOfService.VIEW
 )
-@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService")
+@Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService")
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
@@ -62,7 +62,7 @@ public class CommandReplayOnSecondaryService {
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject JaxbService jaxbService;
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }
 
     @Action(domainEvent = findMostRecentReplayed.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-bath", sequence="60.1")

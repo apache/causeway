@@ -65,7 +65,7 @@ public class Object_inspectMetamodel {
     private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
 
     @MemberSupport public Object act() {
 

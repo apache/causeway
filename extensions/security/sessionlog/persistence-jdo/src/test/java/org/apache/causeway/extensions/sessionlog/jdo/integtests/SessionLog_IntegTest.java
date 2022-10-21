@@ -28,10 +28,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.extensions.sessionlog.applib.integtests.SessionLogIntegTestAbstract;
-import org.apache.causeway.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
+import org.apache.causeway.extensions.sessionlog.jdo.CausewayModuleExtSessionLogPersistenceJdo;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = SessionLog_IntegTest.AppManifest.class
@@ -43,9 +43,9 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtSessionLogPersistenceJdo.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtSessionLogPersistenceJdo.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test),

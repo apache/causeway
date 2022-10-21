@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.jaxb;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
 
@@ -39,7 +39,7 @@ import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
  *
  * @since 1.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".services.jaxb.IsisSchemas")
+@Named(CausewayModuleApplib.NAMESPACE + ".services.jaxb.IsisSchemas")
 @Value
 public enum IsisSchemas {
     INCLUDE,

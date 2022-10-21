@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
+import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
@@ -55,11 +55,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SessionLogMenu {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLogMenu";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLogMenu";
 
     final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSessionLogApplib.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<T> { }
 
     @Action(
             domainEvent = activeSessions.ActionDomainEvent.class,

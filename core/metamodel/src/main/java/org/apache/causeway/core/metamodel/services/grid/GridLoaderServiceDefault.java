@@ -42,7 +42,7 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridLoaderServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor //JUnit Support

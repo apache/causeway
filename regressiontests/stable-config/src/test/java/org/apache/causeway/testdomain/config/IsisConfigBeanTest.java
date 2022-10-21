@@ -28,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.presets.IsisPresets;
 
 @SpringBootTest(
         classes = {
-                IsisModuleCoreConfig.class
+                CausewayModuleCoreConfig.class
         })
 @TestPropertySource({
     "classpath:/application-config-test.properties",

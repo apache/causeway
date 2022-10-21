@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.userreg.UserDetails;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -49,7 +49,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".UserRegistrationServiceForSecman")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".UserRegistrationServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

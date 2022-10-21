@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote acts as the framework's bootstrapping entry-point for Spring
  */
 @Service
-@Named(IsisModuleCoreConfig.NAMESPACE + "..IsisSystemEnvironment")
+@Named(CausewayModuleCoreConfig.NAMESPACE + "..IsisSystemEnvironment")
 @Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
 @Singleton

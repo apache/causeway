@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.image._Images;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.causeway.applib.util.ZipReader;
@@ -74,7 +74,7 @@ import lombok.extern.log4j.Log4j2;
  * @see Clob
  * @since 1.x {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.Blob")
+@Named(CausewayModuleApplib.NAMESPACE + ".value.Blob")
 @Value
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
 @Log4j2

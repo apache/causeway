@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
+import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class CommandLogEntry_replayQueue {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandReplaySecondary.CollectionDomainEvent<CommandLogEntry_replayQueue, CommandLogEntry> { }
+            extends CausewayModuleExtCommandReplaySecondary.CollectionDomainEvent<CommandLogEntry_replayQueue, CommandLogEntry> { }
 
     final CommandLogEntry commandLogEntry;
 

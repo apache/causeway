@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
@@ -70,7 +70,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceForRestfulObjectsV1_0")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceForRestfulObjectsV1_0")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("RestfulObjectsV1_0")
 public class ContentNegotiationServiceForRestfulObjectsV1_0

@@ -33,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 
@@ -45,7 +45,7 @@ import lombok.Getter;
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
         IsisBeanFactoryPostProcessorForSpring.class,
-        IsisModuleCoreConfig.class,
+        CausewayModuleCoreConfig.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorLegacyTest.Producers.class,

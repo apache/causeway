@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
@@ -58,7 +58,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV2")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV2")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {

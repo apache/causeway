@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
+import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
@@ -57,7 +57,7 @@ import lombok.val;
 //@Log4j2
 public class SessionSubscriberForSessionLog implements SessionSubscriber {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
 
     final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
     final TransactionService transactionService;

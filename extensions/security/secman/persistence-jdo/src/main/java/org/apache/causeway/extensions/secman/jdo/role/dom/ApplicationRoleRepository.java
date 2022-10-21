@@ -20,12 +20,12 @@ package org.apache.causeway.extensions.secman.jdo.role.dom;
 
 import javax.inject.Named;
 
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepositoryAbstract;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleRepository")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleRepository")
 public class ApplicationRoleRepository
 extends ApplicationRoleRepositoryAbstract<ApplicationRole> {
 

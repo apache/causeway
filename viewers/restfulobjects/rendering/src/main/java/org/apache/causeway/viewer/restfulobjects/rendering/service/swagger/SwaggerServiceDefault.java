@@ -32,13 +32,13 @@ import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
 
 import lombok.val;
 
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".swaggerServiceDefault")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".swaggerServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {

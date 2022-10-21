@@ -42,7 +42,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".JaxbServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".JaxbServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

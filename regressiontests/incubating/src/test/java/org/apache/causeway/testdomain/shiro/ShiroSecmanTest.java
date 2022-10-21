@@ -40,10 +40,10 @@ import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 
-import org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm;
-import org.apache.causeway.extensions.secman.encryption.spring.IsisModuleExtSecmanEncryptionSpring;
-import org.apache.causeway.extensions.secman.integration.IsisModuleExtSecmanIntegration;
-import org.apache.causeway.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
+import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
+import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
+import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
 
 import lombok.val;
 
@@ -53,10 +53,10 @@ import lombok.val;
         })
 @Import({
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanIntegration.class,
-    IsisModuleExtSecmanShiroRealm.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSecmanEncryptionSpring.class,
+    CausewayModuleExtSecmanIntegration.class,
+    CausewayModuleExtSecmanShiroRealm.class,
+    CausewayModuleExtSecmanPersistenceJdo.class,
+    CausewayModuleExtSecmanEncryptionSpring.class,
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class ShiroSecmanTest extends AbstractShiroTest {

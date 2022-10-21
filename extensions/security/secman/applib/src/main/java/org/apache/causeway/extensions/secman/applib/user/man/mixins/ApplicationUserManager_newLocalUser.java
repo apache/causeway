@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -56,7 +56,7 @@ import lombok.val;
 public class ApplicationUserManager_newLocalUser {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserManager_newLocalUser> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserManager_newLocalUser> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

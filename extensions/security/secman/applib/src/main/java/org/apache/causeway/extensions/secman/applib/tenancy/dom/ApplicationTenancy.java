@@ -42,7 +42,7 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
 import lombok.experimental.UtilityClass;
 
@@ -62,8 +62,8 @@ import lombok.experimental.UtilityClass;
 )
 public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
-    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
+    public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationTenancy";
 
     @UtilityClass
@@ -76,14 +76,14 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     // -- UI & DOMAIN EVENTS
 
-    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationTenancy> { }
-    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationTenancy> { }
-    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationTenancy> { }
-    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationTenancy> { }
+    public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationTenancy> { }
+    public static class IconUiEvent extends CausewayModuleExtSecmanApplib.IconUiEvent<ApplicationTenancy> { }
+    public static class CssClassUiEvent extends CausewayModuleExtSecmanApplib.CssClassUiEvent<ApplicationTenancy> { }
+    public static class LayoutUiEvent extends CausewayModuleExtSecmanApplib.LayoutUiEvent<ApplicationTenancy> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationTenancy, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationTenancy, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationTenancy, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationTenancy, T> {}
+    public static abstract class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy> {}
 
 
     // -- MODEL

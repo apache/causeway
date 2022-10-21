@@ -23,7 +23,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationRole_removeUsers.DomainEvent;
@@ -52,7 +52,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_removeUsers {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_removeUsers> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_removeUsers> {}
 
     @Inject private MessageService messageService;
     @Inject private ApplicationRoleRepository applicationRoleRepository;

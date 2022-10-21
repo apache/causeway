@@ -40,11 +40,11 @@ import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServi
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository.NotFoundException;
-import org.apache.causeway.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
+import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
@@ -60,7 +60,7 @@ import lombok.RequiredArgsConstructor;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
+@Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")
 @RequiredArgsConstructor
@@ -73,7 +73,7 @@ public class CommandReplayOnPrimaryService {
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
 
     public static abstract class ActionDomainEvent<T>
-    extends IsisModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+    extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
 
     @Action(domainEvent = findCommands.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)

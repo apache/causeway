@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.security.authorization.Authorizor;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -51,7 +51,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman")
 @javax.annotation.Priority(PriorityPrecedence.EARLY - 10)
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
@@ -91,7 +91,7 @@ public class AuthorizorSecman implements Authorizor {
     }
 
     @Component
-    @Named(IsisModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman.PermissionCache")
+    @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman.PermissionCache")
     @InteractionScope
     static class PermissionCache implements DisposableBean {
 

@@ -57,7 +57,7 @@ import lombok.RequiredArgsConstructor;
 public class Object_rebuildMetamodel {
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Object_rebuildMetamodel> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_rebuildMetamodel> {}
 
     private final Object holder;
 

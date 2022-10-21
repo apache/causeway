@@ -21,13 +21,13 @@ package org.apache.causeway.extensions.secman.jdo.util;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.springframework.stereotype.Component;
 
 import lombok.val;
 
 @Component
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".RegexReplacer")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".RegexReplacer")
 public class RegexReplacer implements org.apache.causeway.extensions.secman.applib.util.RegexReplacer {
 
     @Override

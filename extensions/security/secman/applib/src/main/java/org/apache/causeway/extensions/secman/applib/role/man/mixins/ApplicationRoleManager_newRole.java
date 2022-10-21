@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.role.man.ApplicationRoleManager;
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRoleManager_newRole {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleManager_newRole> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleManager_newRole> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
@@ -47,7 +47,7 @@ public class HasUsername_open {
 
     private final HasUsername target;
 
-    public static class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<HasUsername_open> {}
+    public static class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<HasUsername_open> {}
 
     @MemberSupport public ApplicationUser act() {
         if (target == null || target.getUsername() == null) {

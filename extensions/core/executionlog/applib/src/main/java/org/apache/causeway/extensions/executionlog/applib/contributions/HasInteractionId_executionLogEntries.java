@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
@@ -43,7 +43,7 @@ public class HasInteractionId_executionLogEntries {
     private final HasInteractionId hasInteractionId;
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<HasInteractionId_executionLogEntries, ExecutionLogEntry> { }
+            extends CausewayModuleExtExecutionLogApplib.CollectionDomainEvent<HasInteractionId_executionLogEntries, ExecutionLogEntry> { }
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
         return executionLogEntryRepository.findByInteractionId(hasInteractionId.getInteractionId());

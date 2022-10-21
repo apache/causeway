@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
+import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 
 import lombok.Getter;
@@ -55,7 +55,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OutboxEvents  {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxEvents";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxEvents";
 
     @ObjectSupport public String title() {
         return String.format("%d executions", executions.size());

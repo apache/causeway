@@ -32,7 +32,7 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryT
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
-import org.apache.causeway.extensions.executionrepublisher.applib.IsisModuleExtExecutionRepublisherApplib;
+import org.apache.causeway.extensions.executionrepublisher.applib.CausewayModuleExtExecutionRepublisherApplib;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,7 @@ public class ExecutionLogEntry_copyToOutbox {
     private final ExecutionLogEntry executionLogEntry;
 
 
-    public static class ActionDomainEvent extends IsisModuleExtExecutionRepublisherApplib.ActionDomainEvent<ExecutionLogEntry_copyToOutbox> { }
+    public static class ActionDomainEvent extends CausewayModuleExtExecutionRepublisherApplib.ActionDomainEvent<ExecutionLogEntry_copyToOutbox> { }
 
     @MemberSupport public ExecutionLogEntry act() {
 

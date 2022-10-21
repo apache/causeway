@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -39,7 +39,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

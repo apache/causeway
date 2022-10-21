@@ -36,10 +36,10 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MessageServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MessageServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MessageServiceDefault implements MessageService {

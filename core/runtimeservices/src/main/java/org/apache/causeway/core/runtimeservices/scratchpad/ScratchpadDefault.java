@@ -24,7 +24,7 @@ import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".Scratchpad")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".Scratchpad")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @InteractionScope

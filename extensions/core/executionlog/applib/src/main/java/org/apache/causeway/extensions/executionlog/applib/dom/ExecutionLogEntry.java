@@ -33,7 +33,7 @@ import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
 import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -89,18 +89,18 @@ import lombok.experimental.UtilityClass;
 public abstract class ExecutionLogEntry
 implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogEntry";
-    public static final String SCHEMA = IsisModuleExtExecutionLogApplib.SCHEMA;
+    public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogEntry";
+    public static final String SCHEMA = CausewayModuleExtExecutionLogApplib.SCHEMA;
     public static final String TABLE = "ExecutionLogEntry";
 
-    public static class TitleUiEvent extends IsisModuleExtExecutionLogApplib.TitleUiEvent<ExecutionLogEntry> { }
-    public static class IconUiEvent extends IsisModuleExtExecutionLogApplib.IconUiEvent<ExecutionLogEntry> { }
-    public static class CssClassUiEvent extends IsisModuleExtExecutionLogApplib.CssClassUiEvent<ExecutionLogEntry> { }
-    public static class LayoutUiEvent extends IsisModuleExtExecutionLogApplib.LayoutUiEvent<ExecutionLogEntry> { }
+    public static class TitleUiEvent extends CausewayModuleExtExecutionLogApplib.TitleUiEvent<ExecutionLogEntry> { }
+    public static class IconUiEvent extends CausewayModuleExtExecutionLogApplib.IconUiEvent<ExecutionLogEntry> { }
+    public static class CssClassUiEvent extends CausewayModuleExtExecutionLogApplib.CssClassUiEvent<ExecutionLogEntry> { }
+    public static class LayoutUiEvent extends CausewayModuleExtExecutionLogApplib.LayoutUiEvent<ExecutionLogEntry> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtExecutionLogApplib.PropertyDomainEvent<ExecutionLogEntry, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry, T> { }
-    public static abstract class ActionDomainEvent extends IsisModuleExtExecutionLogApplib.ActionDomainEvent<ExecutionLogEntry> { }
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtExecutionLogApplib.PropertyDomainEvent<ExecutionLogEntry, T> { }
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry, T> { }
+    public static abstract class ActionDomainEvent extends CausewayModuleExtExecutionLogApplib.ActionDomainEvent<ExecutionLogEntry> { }
 
     @UtilityClass
     public static class Nq {

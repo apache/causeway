@@ -42,13 +42,13 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {

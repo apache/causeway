@@ -27,12 +27,12 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.core.metamodel.valuesemantics.ChangesDtoValueSemantics;
-import org.apache.causeway.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 
 import lombok.NonNull;
 
 @Component
-@Named(IsisModuleValAsciidocApplib.NAMESPACE + "ChangesDtoValueSemanticsPrettyRender")
+@Named(CausewayModuleValAsciidocApplib.NAMESPACE + "ChangesDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 @Qualifier("pretty-render")
 public class ChangesDtoValueSemanticsPrettyRender

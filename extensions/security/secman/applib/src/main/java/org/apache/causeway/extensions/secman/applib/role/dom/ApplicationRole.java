@@ -44,7 +44,7 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -67,8 +67,8 @@ import lombok.experimental.UtilityClass;
 )
 public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
-    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
+    public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationRole";
 
     @UtilityClass
@@ -82,13 +82,13 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     // -- UI & DOMAIN EVENTS
 
-    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationRole> { }
-    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationRole> { }
-    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationRole> { }
-    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationRole> { }
+    public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationRole> { }
+    public static class IconUiEvent extends CausewayModuleExtSecmanApplib.IconUiEvent<ApplicationRole> { }
+    public static class CssClassUiEvent extends CausewayModuleExtSecmanApplib.CssClassUiEvent<ApplicationRole> { }
+    public static class LayoutUiEvent extends CausewayModuleExtSecmanApplib.LayoutUiEvent<ApplicationRole> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationRole, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationRole, T> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationRole, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationRole, T> {}
 
 
     // -- MODEL

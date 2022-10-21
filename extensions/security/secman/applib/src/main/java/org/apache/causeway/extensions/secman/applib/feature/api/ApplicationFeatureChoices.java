@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.ViewModel;
@@ -124,7 +124,7 @@ public class ApplicationFeatureChoices {
         Comparable<AppFeat>,
         ViewModel {
 
-        public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".AppFeat";
+        public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".AppFeat";
 
         @Property
         @Getter

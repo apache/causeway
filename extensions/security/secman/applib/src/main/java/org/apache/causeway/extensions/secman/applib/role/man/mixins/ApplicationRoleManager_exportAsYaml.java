@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.role.man.ApplicationRoleManager;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -49,7 +49,7 @@ import lombok.val;
 public class ApplicationRoleManager_exportAsYaml {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleManager_exportAsYaml> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleManager_exportAsYaml> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

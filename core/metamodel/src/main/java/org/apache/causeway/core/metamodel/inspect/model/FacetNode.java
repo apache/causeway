@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
@@ -54,7 +54,7 @@ import lombok.val;
 @ToString
 public class FacetNode extends MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".FacetNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".FacetNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Facet facet;

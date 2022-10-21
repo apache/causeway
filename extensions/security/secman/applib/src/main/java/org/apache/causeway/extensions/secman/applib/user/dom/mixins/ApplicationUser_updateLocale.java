@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.locale.LocaleChoiceProvider;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.Locale;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateLocale.DomainEvent;
@@ -49,7 +49,7 @@ import lombok.experimental.Accessors;
 public class ApplicationUser_updateLocale {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updateLocale> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updateLocale> {}
 
     @Inject LocaleChoiceProvider localeChoiceProvider;
 

@@ -32,12 +32,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 import org.apache.causeway.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.wrapperfactory.Counter;
 import org.apache.causeway.testdomain.wrapperfactory.CounterRepository;
 import org.apache.causeway.testdomain.wrapperfactory.WrapperTestFixtures;
@@ -51,10 +51,10 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends IsisIntegrati
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModulePersistenceJdoDatanucleus.class,
-            IsisModuleTestingFixturesApplib.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModulePersistenceJdoDatanucleus.class,
+            CausewayModuleTestingFixturesApplib.class,
 
             WrapperTestFixtures.class,
     })

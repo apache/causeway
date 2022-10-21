@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
+import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 import org.apache.causeway.extensions.commandreplay.primary.config.PrimaryConfig;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ import lombok.val;
 public class Object_openOnSecondary {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<Object_openOnSecondary> { }
+            extends CausewayModuleExtCommandReplayPrimary.ActionDomainEvent<Object_openOnSecondary> { }
 
     final Object object;
 

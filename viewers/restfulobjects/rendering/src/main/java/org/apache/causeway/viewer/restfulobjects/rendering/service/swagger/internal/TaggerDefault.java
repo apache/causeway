@@ -26,13 +26,13 @@ import java.util.stream.Stream;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 
 @Component
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".TaggerDefault")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".TaggerDefault")
 public class TaggerDefault implements Tagger {
 
     static Pattern tagPatternForFqcn = Pattern.compile("^.*\\.([^\\.]+)\\.([^\\.]+)$");

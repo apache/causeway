@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.secman.delegated.shiro.util;
 
 import java.util.Collection;
 
-import org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm;
+import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -49,12 +49,12 @@ public class ShiroUtils {
         return (RealmSecurityManager) securityManager;
     }
 
-    public static IsisModuleExtSecmanShiroRealm getIsisModuleSecurityRealm() {
+    public static CausewayModuleExtSecmanShiroRealm getCausewayModuleSecurityRealm() {
         final RealmSecurityManager securityManager = getSecurityManager();
         final Collection<Realm> realms = securityManager.getRealms();
         for (Realm realm : realms) {
-            if(realm instanceof IsisModuleExtSecmanShiroRealm) {
-                IsisModuleExtSecmanShiroRealm imsr = (IsisModuleExtSecmanShiroRealm) realm;
+            if(realm instanceof CausewayModuleExtSecmanShiroRealm) {
+                CausewayModuleExtSecmanShiroRealm imsr = (CausewayModuleExtSecmanShiroRealm) realm;
                 return imsr;
             }
         }

@@ -30,7 +30,7 @@ import javax.sql.DataSource;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  * @see <a href="https://stackoverflow.com/questions/44446597/where-does-the-default-datasource-url-for-h2-come-from-on-spring-boot">stackoverflow.com</a>
  */
 @Service
-@Named(IsisModuleCoreConfig.NAMESPACE + "..DataSourceIntrospectionService")
+@Named(CausewayModuleCoreConfig.NAMESPACE + "..DataSourceIntrospectionService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

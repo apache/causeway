@@ -23,7 +23,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
 
@@ -41,7 +41,7 @@ public class CommandLogEntry_retry {
     private final CommandLogEntry commandLogEntry;
 
     public static class ActionDomainEvent
-        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_retry> { }
+        extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_retry> { }
 
     @MemberSupport
     public CommandLogEntry act() {

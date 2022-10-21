@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
@@ -50,7 +50,7 @@ import lombok.val;
 @ToString
 public class ActionNode extends MemberNode {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ActionNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ActionNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;

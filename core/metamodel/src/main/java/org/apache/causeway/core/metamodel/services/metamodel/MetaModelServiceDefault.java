@@ -45,7 +45,7 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelAnnotator.ExporterConfig;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -60,7 +60,7 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MetaModelServiceDefault implements MetaModelService {

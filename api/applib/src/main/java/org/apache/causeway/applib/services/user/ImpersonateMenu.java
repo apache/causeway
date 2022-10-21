@@ -25,7 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -69,9 +69,9 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> {}
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
 
     final UserService userService;

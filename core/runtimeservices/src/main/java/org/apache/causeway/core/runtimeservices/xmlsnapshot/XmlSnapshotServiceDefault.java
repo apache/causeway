@@ -38,10 +38,10 @@ import org.apache.causeway.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSnapshot;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".XmlSnapshotServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".XmlSnapshotServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class XmlSnapshotServiceDefault implements XmlSnapshotService {

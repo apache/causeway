@@ -25,19 +25,19 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
-import org.apache.causeway.security.shiro.IsisModuleSecurityShiro;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
+import org.apache.causeway.security.shiro.CausewayModuleSecurityShiro;
 import org.apache.causeway.testdomain.jdo.JdoTestDomainModule;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModuleSecurityShiro.class,
-    IsisModulePersistenceJdoDatanucleus.class,
-    IsisModuleTestingFixturesApplib.class,
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModuleSecurityShiro.class,
+    CausewayModulePersistenceJdoDatanucleus.class,
+    CausewayModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(

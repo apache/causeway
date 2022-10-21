@@ -20,12 +20,12 @@ package org.apache.causeway.extensions.secman.jpa.user.dom;
 
 import javax.inject.Named;
 
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepositoryAbstract;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserRepository")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserRepository")
 public class ApplicationUserRepository
 extends ApplicationUserRepositoryAbstract<ApplicationUser> {
 

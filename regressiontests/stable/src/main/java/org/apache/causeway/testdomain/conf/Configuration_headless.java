@@ -38,8 +38,8 @@ import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
@@ -47,8 +47,8 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModuleSecurityBypass.class,
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModuleSecurityBypass.class,
     Configuration_headless.HeadlessCommandSupport.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
     DomainObjectTesterFactory.class // Helper for JUnit Tests

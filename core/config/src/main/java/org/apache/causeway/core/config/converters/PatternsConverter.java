@@ -27,13 +27,13 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named(IsisModuleCoreConfig.NAMESPACE + "..PatternsConverter")
+@Named(CausewayModuleCoreConfig.NAMESPACE + "..PatternsConverter")
 @ConfigurationPropertiesBinding
 public class PatternsConverter implements Converter<String, Map<Pattern, String>> {
 

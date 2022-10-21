@@ -20,7 +20,7 @@ package org.apache.causeway.core.config.beans.aoppatch;
 
 import javax.inject.Named;
 
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AopPatch implements ApplicationContextAware {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleCoreConfig.NAMESPACE + ".AopPatch";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleCoreConfig.NAMESPACE + ".AopPatch";
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {

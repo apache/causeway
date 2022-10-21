@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
 
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

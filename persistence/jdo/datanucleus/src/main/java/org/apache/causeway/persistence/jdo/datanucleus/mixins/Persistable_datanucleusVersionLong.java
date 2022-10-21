@@ -57,7 +57,7 @@ public class Persistable_datanucleusVersionLong {
     private final Persistable persistable;
 
     public static class PropertyDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.PropertyDomainEvent
+    extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionLong, Long> {}
 
     @MemberSupport public Long prop() {

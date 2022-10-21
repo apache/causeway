@@ -28,14 +28,14 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.services.swagger.Format;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
 import io.swagger.models.Swagger;
 import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 
 @Component
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".SwaggerSpecGenerator")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".SwaggerSpecGenerator")
 public class SwaggerSpecGenerator {
 
     private final SpecificationLoader specificationLoader;

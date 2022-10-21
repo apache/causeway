@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_delete.DomainEvent;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
@@ -46,7 +46,7 @@ import lombok.val;
 public class ApplicationPermission_delete {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_delete> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_delete> {}
 
     @Inject private RepositoryService repository;
 

@@ -25,7 +25,7 @@ import javax.inject.Named;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
@@ -51,9 +51,9 @@ import lombok.val;
 @Value
 public class RoleMemento implements Serializable {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".RoleMemento";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".RoleMemento";
 
-    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<RoleMemento> {}
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<RoleMemento> {}
 
     private static final long serialVersionUID = -3876856609238378274L;
 

@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.user.ImpersonateMenuAdvisor;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
  * This default implementation simply returns empty lists.
@@ -41,7 +41,7 @@ import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
  * </p>
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorDefault")
 @javax.annotation.Priority(PriorityPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {

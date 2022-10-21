@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.graph.Edge;
@@ -50,7 +50,7 @@ import lombok.SneakyThrows;
  *
  * @param <T> type constraint for values contained by this node
  */
-@Named(IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode")
+@Named(CausewayModuleApplib.NAMESPACE + ".graph.tree.TreeNode")
 @Value
 public class TreeNode<T> implements Vertex<T> {
 

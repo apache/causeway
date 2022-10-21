@@ -32,7 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
+import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.mixins.security.HasUsername;
@@ -54,8 +54,8 @@ import lombok.experimental.UtilityClass;
 )
 public abstract class SessionLogEntry implements HasUsername, Comparable<SessionLogEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLogEntry";
-    public static final String SCHEMA = IsisModuleExtSessionLogApplib.SCHEMA;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLogEntry";
+    public static final String SCHEMA = CausewayModuleExtSessionLogApplib.SCHEMA;
     public static final String TABLE = "SessionLogEntry";
 
     @UtilityClass
@@ -78,16 +78,16 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     // -- UI & DOMAIN EVENTS
 
-    public static class TitleUiEvent extends IsisModuleExtSessionLogApplib.TitleUiEvent<SessionLogEntry> { }
-    public static class IconUiEvent extends IsisModuleExtSessionLogApplib.IconUiEvent<SessionLogEntry> { }
-    public static class CssClassUiEvent extends IsisModuleExtSessionLogApplib.CssClassUiEvent<SessionLogEntry> { }
-    public static class LayoutUiEvent extends IsisModuleExtSessionLogApplib.LayoutUiEvent<SessionLogEntry> { }
+    public static class TitleUiEvent extends CausewayModuleExtSessionLogApplib.TitleUiEvent<SessionLogEntry> { }
+    public static class IconUiEvent extends CausewayModuleExtSessionLogApplib.IconUiEvent<SessionLogEntry> { }
+    public static class CssClassUiEvent extends CausewayModuleExtSessionLogApplib.CssClassUiEvent<SessionLogEntry> { }
+    public static class LayoutUiEvent extends CausewayModuleExtSessionLogApplib.LayoutUiEvent<SessionLogEntry> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSessionLogApplib.PropertyDomainEvent<SessionLogEntry, T> { }
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSessionLogApplib.PropertyDomainEvent<SessionLogEntry, T> { }
 
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSessionLogApplib.CollectionDomainEvent<SessionLogEntry, T> { }
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSessionLogApplib.CollectionDomainEvent<SessionLogEntry, T> { }
 
-    public static abstract class ActionDomainEvent extends IsisModuleExtSessionLogApplib.ActionDomainEvent<SessionLogEntry> { }
+    public static abstract class ActionDomainEvent extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<SessionLogEntry> { }
 
 
     protected SessionLogEntry(

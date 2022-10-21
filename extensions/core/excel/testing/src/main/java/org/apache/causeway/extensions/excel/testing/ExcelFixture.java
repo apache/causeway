@@ -43,7 +43,7 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.excel.applib.ExcelService;
-import org.apache.causeway.extensions.excel.applib.IsisModuleExtExcelApplib;
+import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
 
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -63,7 +63,7 @@ import lombok.val;
 @DomainObject
 public class ExcelFixture extends FixtureScript {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExcelApplib.NAMESPACE + ".ExcelFixture";
+    public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExcelApplib.NAMESPACE + ".ExcelFixture";
 
     @Inject SpecificationLoader specLoader;
     @Inject ExcelService excelService;

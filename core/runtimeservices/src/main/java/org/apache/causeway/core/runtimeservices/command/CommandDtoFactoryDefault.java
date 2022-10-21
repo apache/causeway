@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
@@ -60,7 +60,7 @@ import lombok.val;
  * @see org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".CommandDtoFactoryDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandDtoFactoryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class CommandDtoFactoryDefault implements CommandDtoFactory {

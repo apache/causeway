@@ -41,7 +41,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
-import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 /**
  * Bootstrap the test application.
@@ -52,8 +52,8 @@ import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
     Configuration_usingWicket.class,
 
     // UI (Wicket Viewer)
-    IsisModuleViewerWicketViewer.class,
-    //IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
+    CausewayModuleViewerWicketViewer.class,
+    //CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     //XrayEnable.class // for debugging only
 })

@@ -30,7 +30,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
-import org.apache.causeway.core.runtime.IsisModuleCoreRuntime;
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 
 /**
  *
@@ -39,7 +39,7 @@ import org.apache.causeway.core.runtime.IsisModuleCoreRuntime;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named(IsisModuleCoreRuntime.NAMESPACE + ".MetamodelEventService")
+@Named(CausewayModuleCoreRuntime.NAMESPACE + ".MetamodelEventService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MetamodelEventService {

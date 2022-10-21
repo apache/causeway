@@ -26,7 +26,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Query;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -94,9 +94,9 @@ extends JdoProduct
 implements IBook {
 
     // -- DOMAIN EVENTS
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<JdoBook> {};
-    public static class PropertyDomainEvent extends IsisModuleApplib.PropertyDomainEvent<JdoBook, Object> {};
-    public static class CollectionDomainEvent extends IsisModuleApplib.CollectionDomainEvent<JdoBook, Object> {};
+    public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<JdoBook> {};
+    public static class PropertyDomainEvent extends CausewayModuleApplib.PropertyDomainEvent<JdoBook, Object> {};
+    public static class CollectionDomainEvent extends CausewayModuleApplib.CollectionDomainEvent<JdoBook, Object> {};
 
     // -- LIFE CYCLE EVENTS
     public static class CreatedLifecycleEvent extends ObjectCreatedEvent<JdoBook> {};

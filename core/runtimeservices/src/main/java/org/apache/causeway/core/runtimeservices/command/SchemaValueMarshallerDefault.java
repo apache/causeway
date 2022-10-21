@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshallerAbstract;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.common.v2.CollectionDto;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SchemaValueMarshallerDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SchemaValueMarshallerDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor

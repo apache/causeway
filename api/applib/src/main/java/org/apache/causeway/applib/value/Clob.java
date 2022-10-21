@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
 
@@ -63,7 +63,7 @@ import lombok.val;
  * @see Blob
  * @since 1.x {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.Clob")
+@Named(CausewayModuleApplib.NAMESPACE + ".value.Clob")
 @Value
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
 //@Log4j2

@@ -60,7 +60,7 @@ public class Dto_downloadXml {
     private final Dto holder;
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Dto_downloadXml> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Dto_downloadXml> {}
 
     @MemberSupport public Object act(
 

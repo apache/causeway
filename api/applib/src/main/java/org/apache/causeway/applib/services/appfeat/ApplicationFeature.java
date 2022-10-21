@@ -25,7 +25,7 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Value;
 
@@ -33,7 +33,7 @@ import org.apache.causeway.applib.annotation.Value;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE_SUDO + ".ApplicationFeature")
+@Named(CausewayModuleApplib.NAMESPACE_SUDO + ".ApplicationFeature")
 @Value
 public interface ApplicationFeature {
 

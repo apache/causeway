@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_delete.DomainEvent;
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_delete {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_delete> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_delete> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private RepositoryService repository;

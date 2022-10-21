@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
@@ -61,7 +61,7 @@ import lombok.val;
 * @see org.apache.causeway.core.runtimeservices.command.CommandDtoFactoryDefault
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".InteractionDtoServiceInternalDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionDtoServiceInternalDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class InteractionDtoFactoryDefault implements InteractionDtoFactory {

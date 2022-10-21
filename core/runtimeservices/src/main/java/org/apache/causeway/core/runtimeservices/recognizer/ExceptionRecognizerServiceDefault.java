@@ -27,7 +27,7 @@ import javax.inject.Named;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +46,7 @@ import lombok.val;
  *
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ExceptionRecognizerServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ExceptionRecognizerServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerServiceDefault

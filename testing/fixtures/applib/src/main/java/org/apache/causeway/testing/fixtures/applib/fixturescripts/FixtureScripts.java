@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstallingEvent;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
@@ -84,7 +84,7 @@ import lombok.val;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class FixtureScripts {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
     @Inject private TitleService titleService;
     @Inject private JaxbService jaxbService;

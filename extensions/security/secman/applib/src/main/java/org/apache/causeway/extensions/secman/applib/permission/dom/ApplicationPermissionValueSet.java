@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -46,11 +46,11 @@ public class ApplicationPermissionValueSet implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermissionValueSet, T> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermissionValueSet, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermissionValueSet, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermissionValueSet, T> {}
 
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermissionValueSet> {}
+    public static abstract class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermissionValueSet> {}
 
 
 

@@ -44,10 +44,10 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.causeway.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.ldap.LdapServerService;
-import org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm;
-import org.apache.causeway.extensions.secman.encryption.spring.IsisModuleExtSecmanEncryptionSpring;
-import org.apache.causeway.extensions.secman.integration.IsisModuleExtSecmanIntegration;
-import org.apache.causeway.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
+import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
+import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
+import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
 import org.apache.causeway.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.jdo.user.dom.ApplicationUserRepository;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -70,10 +70,10 @@ import lombok.val;
     LdapServerService.class,
 
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanIntegration.class,
-    IsisModuleExtSecmanShiroRealm.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSecmanEncryptionSpring.class,
+    CausewayModuleExtSecmanIntegration.class,
+    CausewayModuleExtSecmanShiroRealm.class,
+    CausewayModuleExtSecmanPersistenceJdo.class,
+    CausewayModuleExtSecmanEncryptionSpring.class,
 })
 @PropertySources({
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)

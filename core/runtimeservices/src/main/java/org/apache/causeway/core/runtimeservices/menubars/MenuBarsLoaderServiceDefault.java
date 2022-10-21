@@ -40,13 +40,13 @@ import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsLoaderServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

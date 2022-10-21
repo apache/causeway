@@ -66,7 +66,7 @@ import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.Getter;
@@ -77,7 +77,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

@@ -41,7 +41,7 @@ import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
@@ -61,11 +61,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class MeService {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".MeService";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".MeService";
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<MeService, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<MeService, T> {}
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<MeService, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<MeService, T> {}
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     final ApplicationUserRepository applicationUserRepository;
     final UserService userService;

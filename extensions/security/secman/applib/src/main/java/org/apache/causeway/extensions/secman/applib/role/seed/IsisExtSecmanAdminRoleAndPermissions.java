@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
@@ -62,7 +62,7 @@ public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermiss
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.of(IsisModuleExtSecmanApplib.NAMESPACE).addAll(Can.ofCollection(adminInitialPackagePermissions))
+                Can.of(CausewayModuleExtSecmanApplib.NAMESPACE).addAll(Can.ofCollection(adminInitialPackagePermissions))
                     .map(ApplicationFeatureId::newNamespace)
         );
     }

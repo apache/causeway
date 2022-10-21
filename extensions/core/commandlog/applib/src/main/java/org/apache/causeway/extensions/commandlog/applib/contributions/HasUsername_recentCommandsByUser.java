@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.mixins.security.HasUsername;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
@@ -48,7 +48,7 @@ import lombok.val;
 public class HasUsername_recentCommandsByUser {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<HasUsername_recentCommandsByUser, CommandLogEntry> { }
+            extends CausewayModuleExtCommandLogApplib.CollectionDomainEvent<HasUsername_recentCommandsByUser, CommandLogEntry> { }
 
     private final HasUsername hasUsername;
     public HasUsername_recentCommandsByUser(final HasUsername hasUsername) {

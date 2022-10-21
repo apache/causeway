@@ -37,7 +37,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.user.ImpersonateMenuAdvisor;
 import org.apache.causeway.applib.services.user.UserService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -108,7 +108,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     // -- CACHE
 
     @Component
-    @Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman.Cache")
+    @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman.Cache")
     @InteractionScope
     static class Cache implements DisposableBean {
 

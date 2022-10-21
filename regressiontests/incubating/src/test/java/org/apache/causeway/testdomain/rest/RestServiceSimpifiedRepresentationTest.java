@@ -64,7 +64,7 @@ import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 import org.apache.causeway.viewer.restfulobjects.client.ActionParameterListBuilder;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.doc;
@@ -88,7 +88,7 @@ import lombok.val;
 @Import({
     Configuration_headless.class,
     Configuration_usingRoSpec.class,
-    IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,
 })
 @TestMethodOrder(OrderAnnotation.class) // run tests in sequence for reporting
 class RestServiceSimpifiedRepresentationTest {

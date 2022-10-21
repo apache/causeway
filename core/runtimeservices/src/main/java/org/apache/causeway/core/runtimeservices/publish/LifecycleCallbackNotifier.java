@@ -51,7 +51,7 @@ import org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatingCallba
 import org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.causeway.core.transaction.changetracking.events.PreStoreEvent;
 
@@ -63,7 +63,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Component
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".LifecycleCallbackNotifier")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".LifecycleCallbackNotifier")
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Qualifier("Default")

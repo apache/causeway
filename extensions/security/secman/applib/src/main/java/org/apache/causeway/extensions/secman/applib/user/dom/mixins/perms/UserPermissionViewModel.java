@@ -32,7 +32,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.resources._Serializables;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -77,9 +77,9 @@ import lombok.val;
 )
 public class UserPermissionViewModel implements ViewModel {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".UserPermissionViewModel";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".UserPermissionViewModel";
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<UserPermissionViewModel, T> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<UserPermissionViewModel, T> {}
 
 
     @Inject ApplicationUserRepository applicationUserRepository;

@@ -28,7 +28,7 @@ import javax.inject.Named;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ import lombok.val;
  * @see PredefinedSerializables
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SerializingAdapterDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SerializingAdapterDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SerializingAdapterDefault implements SerializingAdapter {

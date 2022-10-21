@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
@@ -49,7 +49,7 @@ import lombok.ToString;
 @ToString
 public class AnnotationNode extends MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".AnnotationNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".AnnotationNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Annotation annotation;

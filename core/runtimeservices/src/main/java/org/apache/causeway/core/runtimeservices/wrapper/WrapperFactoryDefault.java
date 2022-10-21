@@ -95,7 +95,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
@@ -118,7 +118,7 @@ import lombok.val;
 public class WrapperFactoryDefault
 implements WrapperFactory, HasMetaModelContext {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntimeServices.NAMESPACE + ".WrapperFactoryDefault";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleCoreRuntimeServices.NAMESPACE + ".WrapperFactoryDefault";
 
     @Inject private FactoryService factoryService;
     @Inject @Getter(onMethod_= {@Override}) MetaModelContext metaModelContext; // HasMetaModelContext

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
-import org.apache.causeway.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
+import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
@@ -40,7 +40,7 @@ extends WebjarsJavaScriptResourceReference {
 
     private PdfJsCmapsReference() {
         super(String.format("%s/cmaps/_.bcmap",
-                IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
     }
 
     public static String cmapsUrl() {

@@ -24,9 +24,9 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Component
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 

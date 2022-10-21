@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
+import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalyserResult")
+@Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalyserResult")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserResult implements CommandReplayAnalyser {

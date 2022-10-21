@@ -20,7 +20,7 @@ package org.apache.causeway.applib.graph;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 
 
@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.Value;
  * @param <T> type constraint for values contained by this edge's vertices
  */
 @lombok.Value(staticConstructor = "of")
-@Named(IsisModuleApplib.NAMESPACE + ".graph.SimpleEdge")
+@Named(CausewayModuleApplib.NAMESPACE + ".graph.SimpleEdge")
 @Value
 public class SimpleEdge<T> implements Edge<T> {
 

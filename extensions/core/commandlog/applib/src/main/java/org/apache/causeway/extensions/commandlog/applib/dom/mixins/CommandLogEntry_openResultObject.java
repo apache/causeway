@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ import lombok.val;
 public class CommandLogEntry_openResultObject {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_openResultObject> { }
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_openResultObject> { }
 
     private final CommandLogEntry commandLogEntry;
 

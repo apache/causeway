@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.schema.common.v2.OidDto;
 
@@ -49,7 +49,7 @@ import lombok.val;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".Bookmark";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".Bookmark";
 
     private static final long serialVersionUID = 3L;
 

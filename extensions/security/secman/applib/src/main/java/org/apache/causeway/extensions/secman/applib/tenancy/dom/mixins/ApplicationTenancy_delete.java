@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_delete.DomainEvent;
@@ -51,7 +51,7 @@ import lombok.val;
 public class ApplicationTenancy_delete {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_delete> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_delete> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

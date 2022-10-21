@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Json;
-import org.apache.causeway.valuetypes.vega.applib.IsisModuleValVegaApplib;
+import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.jaxb.VegaJaxbAdapter;
 import org.springframework.lang.Nullable;
 
@@ -44,7 +44,7 @@ import lombok.experimental.Accessors;
  *
  * @since 2.0 {@index}
  */
-@Named(IsisModuleValVegaApplib.NAMESPACE + ".Vega")
+@Named(CausewayModuleValVegaApplib.NAMESPACE + ".Vega")
 @org.apache.causeway.applib.annotation.Value
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(VegaJaxbAdapter.class)  // for JAXB view model support

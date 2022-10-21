@@ -27,7 +27,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
 import lombok.val;
@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SessionLogger implements SessionSubscriber {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".SessionLogger";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".SessionLogger";
 
     @Override
     public void log(

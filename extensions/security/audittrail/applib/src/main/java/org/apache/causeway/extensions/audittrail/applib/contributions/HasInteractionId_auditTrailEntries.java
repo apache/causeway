@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class HasInteractionId_auditTrailEntries {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtAuditTrailApplib.CollectionDomainEvent<HasInteractionId_auditTrailEntries, AuditTrailEntry> { }
+            extends CausewayModuleExtAuditTrailApplib.CollectionDomainEvent<HasInteractionId_auditTrailEntries, AuditTrailEntry> { }
 
     private final HasInteractionId hasInteractionId;
 

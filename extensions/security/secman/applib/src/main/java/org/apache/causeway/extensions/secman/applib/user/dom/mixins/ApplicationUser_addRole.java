@@ -23,7 +23,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -49,7 +49,7 @@ import lombok.val;
 public class ApplicationUser_addRole {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_addRole> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_addRole> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

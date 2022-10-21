@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.springframework.lang.Nullable;
@@ -48,10 +48,10 @@ import lombok.RequiredArgsConstructor;
 public class ExecutionLogMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogMenu";
+            CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogMenu";
 
     public static abstract class ActionDomainEvent<T>
-            extends IsisModuleExtExecutionLogApplib.ActionDomainEvent<T> { }
+            extends CausewayModuleExtExecutionLogApplib.ActionDomainEvent<T> { }
 
 
     final ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.commons.internal.base._Objects;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -55,7 +55,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ConfigurationProperty implements Comparable<ConfigurationProperty> {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
 
     public ConfigurationProperty(final String key, final String value){
         this.key = key;

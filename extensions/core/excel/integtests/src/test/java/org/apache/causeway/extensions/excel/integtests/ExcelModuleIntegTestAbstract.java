@@ -28,14 +28,14 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.extensions.excel.fixtures.IsisModuleExtExcelFixtures;
+import org.apache.causeway.extensions.excel.fixtures.CausewayModuleExtExcelFixtures;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import org.apache.causeway.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @SpringBootTest(
         classes = ExcelModuleIntegTestAbstract.AppManifest.class
@@ -51,12 +51,12 @@ public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAb
             @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
     })
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModulePersistenceJdoApplib.class,
-            IsisModuleTestingFixturesApplib.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModulePersistenceJdoApplib.class,
+            CausewayModuleTestingFixturesApplib.class,
 
-            IsisModuleExtExcelFixtures.class
+            CausewayModuleExtExcelFixtures.class
     })
     public static class AppManifest {
     }

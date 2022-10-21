@@ -48,7 +48,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -72,7 +72,7 @@ import lombok.extern.log4j.Log4j2;
 public class ApplicationFeatureRepositoryDefault
 implements ApplicationFeatureRepository, MetamodelListener {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleCoreMetamodel.NAMESPACE + ".ApplicationFeatureRepositoryDefault";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleCoreMetamodel.NAMESPACE + ".ApplicationFeatureRepositoryDefault";
 
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;

@@ -20,7 +20,7 @@ package org.apache.causeway.core.runtimeservices.eventbus;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EventBusServiceSpring")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EventBusServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
 public class EventBusServiceSpring implements EventBusService {

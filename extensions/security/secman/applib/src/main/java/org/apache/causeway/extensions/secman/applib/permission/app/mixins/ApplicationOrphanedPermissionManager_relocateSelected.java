@@ -33,7 +33,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.app.ApplicationOrphanedPermissionManager;
 import org.apache.causeway.extensions.secman.applib.permission.app.mixins.ApplicationOrphanedPermissionManager_relocateSelected.DomainEvent;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
@@ -54,7 +54,7 @@ import lombok.val;
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationOrphanedPermissionManager_relocateSelected> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationOrphanedPermissionManager_relocateSelected> {}
 
     @Inject private ApplicationFeatureRepository featureRepository;
 

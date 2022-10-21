@@ -74,14 +74,14 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsServiceBS")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsServiceBS")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

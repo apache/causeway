@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
@@ -77,7 +77,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class UserService {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserService";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".UserService";
 
     /**
      * Default returned from {@link #currentUserNameElseNobody()}.

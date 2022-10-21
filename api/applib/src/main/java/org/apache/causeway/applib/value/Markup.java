@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,7 @@ import lombok.EqualsAndHashCode;
  *
  * @since 2.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.Markup")
+@Named(CausewayModuleApplib.NAMESPACE + ".value.Markup")
 @Value
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 @EqualsAndHashCode

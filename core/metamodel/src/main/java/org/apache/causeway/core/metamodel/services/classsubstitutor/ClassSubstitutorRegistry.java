@@ -30,7 +30,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 
 import lombok.val;
@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
  * Aggregates all {@link ClassSubstitutor}s.
  */
 @Component
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class ClassSubstitutorRegistry {

@@ -63,7 +63,7 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -85,7 +85,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Bootstrap")
 @Log4j2

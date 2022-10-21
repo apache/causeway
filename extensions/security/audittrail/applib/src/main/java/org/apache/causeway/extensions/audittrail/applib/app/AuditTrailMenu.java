@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.*;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
@@ -51,10 +51,10 @@ import lombok.RequiredArgsConstructor;
 public class AuditTrailMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailMenu";
+            CausewayModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailMenu";
 
     public static abstract class ActionDomainEvent<T>
-            extends IsisModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
+            extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<T> { }
 
 
     final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;

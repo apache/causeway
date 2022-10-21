@@ -37,7 +37,7 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.extensions.secman.applib.tenancy.man.ApplicationTenancyManager;
@@ -53,9 +53,9 @@ import org.apache.causeway.extensions.secman.applib.tenancy.man.ApplicationTenan
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationTenancyMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyMenu";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyMenu";
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private FactoryService factory;

@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ import lombok.val;
  */
 @Service
 @Singleton
-@Named(IsisModuleCoreConfig.NAMESPACE + "..WebAppContextPath")
+@Named(CausewayModuleCoreConfig.NAMESPACE + "..WebAppContextPath")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class WebAppContextPath implements Serializable {

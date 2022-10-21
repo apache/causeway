@@ -23,11 +23,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.sse.wicket.IsisModuleExtSseWicket;
-import org.apache.causeway.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
-import org.apache.causeway.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
-import org.apache.causeway.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.apache.causeway.incubator.viewer.vaadin.viewer.CausewayModuleIncViewerVaadinViewer;
+import org.apache.causeway.valuetypes.asciidoc.ui.vaa.CausewayModuleValAsciidocUiVaa;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.CausewayModuleValAsciidocUiWkt;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.dom.DemoModuleCommon;
 import demoapp.web.DemoAppManifestJdo;
@@ -41,13 +41,13 @@ import demoapp.web.DemoAppManifestJdo;
     DemoAppManifestJdo.class,
 
     // INCUBATING
-    IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
-    IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
+    CausewayModuleIncViewerVaadinViewer.class, // vaadin viewer
+    CausewayModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
 
     // WICKET INTEGRATION ... to allow side by side comparison
-    IsisModuleViewerWicketViewer.class, // wicket viewer
-    IsisModuleExtSseWicket.class, // server sent events
-    IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
+    CausewayModuleViewerWicketViewer.class, // wicket viewer
+    CausewayModuleExtSseWicket.class, // server sent events
+    CausewayModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
 
 })
 public class DemoAppVaadin extends SpringBootServletInitializer {

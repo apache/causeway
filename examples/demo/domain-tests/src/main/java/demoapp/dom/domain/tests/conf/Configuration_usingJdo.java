@@ -26,18 +26,18 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 import demoapp.web.DemoAppManifestJdo;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModulePersistenceJdoDatanucleus.class,
-    IsisModuleTestingFixturesApplib.class,
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModulePersistenceJdoDatanucleus.class,
+    CausewayModuleTestingFixturesApplib.class,
 
     // demo domain
     DemoAppManifestJdo.class,

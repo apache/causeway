@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
@@ -55,7 +55,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceXRoDomainType")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceXRoDomainType")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("XRoDomainType")
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {

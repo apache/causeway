@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
@@ -59,7 +59,7 @@ import lombok.RequiredArgsConstructor;
 public class Object_recentExecutions {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtExecutionLogApplib.ActionDomainEvent<Object_recentExecutions> { }
+            extends CausewayModuleExtExecutionLogApplib.ActionDomainEvent<Object_recentExecutions> { }
 
     private final Object domainObject;
 

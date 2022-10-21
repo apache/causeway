@@ -32,13 +32,13 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiService;
-import org.apache.causeway.viewer.commons.services.IsisModuleViewerCommonsServices;
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".UserProfileUiServiceDefault")
+@Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".UserProfileUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

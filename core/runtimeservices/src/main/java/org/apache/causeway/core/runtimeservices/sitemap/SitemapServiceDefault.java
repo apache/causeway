@@ -45,13 +45,13 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SitemapServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SitemapServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

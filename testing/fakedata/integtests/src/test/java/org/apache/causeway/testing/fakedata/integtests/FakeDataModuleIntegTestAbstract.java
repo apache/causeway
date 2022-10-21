@@ -21,12 +21,12 @@ package org.apache.causeway.testing.fakedata.integtests;
 import javax.transaction.Transactional;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
-import org.apache.causeway.testing.fakedata.fixtures.IsisModuleTestingFakeDataFixtures;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fakedata.fixtures.CausewayModuleTestingFakeDataFixtures;
 import org.apache.causeway.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -49,11 +49,11 @@ public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTes
                 @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
         })
         @Import({
-                IsisModuleCoreRuntimeServices.class,
-                IsisModuleSecurityBypass.class,
-                IsisModulePersistenceJdoApplib.class,
-                IsisModuleTestingFixturesApplib.class,
-                IsisModuleTestingFakeDataFixtures.class
+                CausewayModuleCoreRuntimeServices.class,
+                CausewayModuleSecurityBypass.class,
+                CausewayModulePersistenceJdoApplib.class,
+                CausewayModuleTestingFixturesApplib.class,
+                CausewayModuleTestingFakeDataFixtures.class
         })
         public static class TestManifest {
         }

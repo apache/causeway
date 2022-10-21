@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
@@ -42,7 +42,7 @@ import lombok.val;
  *
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

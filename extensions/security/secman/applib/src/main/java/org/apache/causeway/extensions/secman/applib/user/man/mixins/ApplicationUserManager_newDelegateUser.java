@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -51,7 +51,7 @@ import lombok.val;
 public class ApplicationUserManager_newDelegateUser {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserManager_newDelegateUser> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserManager_newDelegateUser> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

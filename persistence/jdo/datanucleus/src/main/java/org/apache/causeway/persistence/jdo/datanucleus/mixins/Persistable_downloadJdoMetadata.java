@@ -67,7 +67,7 @@ public class Persistable_downloadJdoMetadata {
 
     private final Persistable persistable;
 
-    public static class ActionDomainEvent extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
+    public static class ActionDomainEvent extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
     @MemberSupport public Clob act(
             final String fileName) throws JAXBException, IOException {

@@ -36,11 +36,11 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository.NotFoundException;
-import org.apache.causeway.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
+import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 /**
@@ -49,13 +49,13 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 @DomainService(
     nature = NatureOfService.REST
 )
-@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalOnPrimaryService")
+@Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")
 public class CommandRetrievalOnPrimaryService {
 
     public static abstract class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandRetrievalOnPrimaryService> { }
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<CommandRetrievalOnPrimaryService> { }
 
     public static class FindCommandsOnPrimaryFromDomainEvent extends ActionDomainEvent { }
 

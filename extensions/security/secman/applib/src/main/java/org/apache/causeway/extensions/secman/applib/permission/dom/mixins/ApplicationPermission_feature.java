@@ -28,7 +28,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationPermission_feature {
 
     public static class PropertyDomainEvent
-            extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
+            extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
 
     final ApplicationPermission target;
 

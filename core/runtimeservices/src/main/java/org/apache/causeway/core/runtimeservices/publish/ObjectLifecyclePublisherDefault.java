@@ -34,7 +34,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

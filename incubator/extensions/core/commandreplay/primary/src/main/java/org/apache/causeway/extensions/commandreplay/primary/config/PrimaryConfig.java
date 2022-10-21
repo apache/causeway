@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
+import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
 import lombok.val;
@@ -34,7 +34,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".PrimaryConfig")
+@Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".PrimaryConfig")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 //@Log4j2
 public class PrimaryConfig {

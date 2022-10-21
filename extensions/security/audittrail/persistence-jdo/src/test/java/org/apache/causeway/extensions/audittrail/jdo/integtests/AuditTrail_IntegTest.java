@@ -19,13 +19,13 @@
 package org.apache.causeway.extensions.audittrail.jdo.integtests;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
-import org.apache.causeway.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
 import org.apache.causeway.extensions.audittrail.jdo.integtests.model.Counter;
 import org.apache.causeway.extensions.audittrail.jdo.integtests.model.CounterRepository;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,9 +45,9 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtAuditTrailPersistenceJdo.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtAuditTrailPersistenceJdo.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test),

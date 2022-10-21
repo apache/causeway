@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.swagger;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 
 /**
@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.Value;
  *
  * @since 1.x {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".services.swagger.Format")
+@Named(CausewayModuleApplib.NAMESPACE + ".services.swagger.Format")
 @Value
 public enum Format {
     /**

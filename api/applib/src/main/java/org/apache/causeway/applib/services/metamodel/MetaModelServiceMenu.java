@@ -30,7 +30,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -67,9 +67,9 @@ import lombok.val;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class MetaModelServiceMenu {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
 
 
     @Action(

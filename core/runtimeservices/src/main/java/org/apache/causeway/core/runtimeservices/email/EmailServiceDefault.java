@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.email.EmailService;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * A service that sends email notifications when specific events occur
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EmailServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

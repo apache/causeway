@@ -29,11 +29,11 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
-import org.apache.causeway.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
-@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".AsciiDocValueSemantics")
+@Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDocValueSemantics")
 public class AsciiDocValueSemantics
 extends ValueSemanticsAbstract<AsciiDoc>
 implements

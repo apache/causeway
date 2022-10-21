@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".AcceptHeaderServiceForRest")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".AcceptHeaderServiceForRest")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForRest")
 @InteractionScope

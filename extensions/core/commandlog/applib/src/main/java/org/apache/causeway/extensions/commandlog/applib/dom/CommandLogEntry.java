@@ -37,7 +37,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -98,18 +98,18 @@ import lombok.experimental.UtilityClass;
 public abstract class CommandLogEntry
 implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntry";
-    public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
+    public final static String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntry";
+    public static final String SCHEMA = CausewayModuleExtCommandLogApplib.SCHEMA;
     public static final String TABLE = "CommandLogEntry";
 
-    public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandLogEntry> { }
-    public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<CommandLogEntry> { }
-    public static class CssClassUiEvent extends IsisModuleExtCommandLogApplib.CssClassUiEvent<CommandLogEntry> { }
-    public static class LayoutUiEvent extends IsisModuleExtCommandLogApplib.LayoutUiEvent<CommandLogEntry> { }
+    public static class TitleUiEvent extends CausewayModuleExtCommandLogApplib.TitleUiEvent<CommandLogEntry> { }
+    public static class IconUiEvent extends CausewayModuleExtCommandLogApplib.IconUiEvent<CommandLogEntry> { }
+    public static class CssClassUiEvent extends CausewayModuleExtCommandLogApplib.CssClassUiEvent<CommandLogEntry> { }
+    public static class LayoutUiEvent extends CausewayModuleExtCommandLogApplib.LayoutUiEvent<CommandLogEntry> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<CommandLogEntry, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLogEntry, T> { }
-    public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry> { }
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtCommandLogApplib.PropertyDomainEvent<CommandLogEntry, T> { }
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtCommandLogApplib.CollectionDomainEvent<CommandLogEntry, T> { }
+    public static abstract class ActionDomainEvent extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry> { }
 
     @UtilityClass
     public static class Nq {

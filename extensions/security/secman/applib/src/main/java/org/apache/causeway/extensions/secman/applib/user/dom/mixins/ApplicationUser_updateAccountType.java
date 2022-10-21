@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_updateAccountType {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updateAccountType> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updateAccountType> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
 

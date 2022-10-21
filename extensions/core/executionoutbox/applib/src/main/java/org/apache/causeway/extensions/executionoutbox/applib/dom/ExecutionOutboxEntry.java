@@ -33,7 +33,7 @@ import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
 import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
+import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -91,18 +91,18 @@ import lombok.experimental.UtilityClass;
 public abstract class ExecutionOutboxEntry
 implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxEntry";
-    public static final String SCHEMA = IsisModuleExtExecutionOutboxApplib.SCHEMA;
+    public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxEntry";
+    public static final String SCHEMA = CausewayModuleExtExecutionOutboxApplib.SCHEMA;
     public static final String TABLE = "ExecutionOutboxEntry";
 
-    public static class TitleUiEvent extends IsisModuleExtExecutionOutboxApplib.TitleUiEvent<ExecutionOutboxEntry> { }
-    public static class IconUiEvent extends IsisModuleExtExecutionOutboxApplib.IconUiEvent<ExecutionOutboxEntry> { }
-    public static class CssClassUiEvent extends IsisModuleExtExecutionOutboxApplib.CssClassUiEvent<ExecutionOutboxEntry> { }
-    public static class LayoutUiEvent extends IsisModuleExtExecutionOutboxApplib.LayoutUiEvent<ExecutionOutboxEntry> { }
+    public static class TitleUiEvent extends CausewayModuleExtExecutionOutboxApplib.TitleUiEvent<ExecutionOutboxEntry> { }
+    public static class IconUiEvent extends CausewayModuleExtExecutionOutboxApplib.IconUiEvent<ExecutionOutboxEntry> { }
+    public static class CssClassUiEvent extends CausewayModuleExtExecutionOutboxApplib.CssClassUiEvent<ExecutionOutboxEntry> { }
+    public static class LayoutUiEvent extends CausewayModuleExtExecutionOutboxApplib.LayoutUiEvent<ExecutionOutboxEntry> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtExecutionOutboxApplib.PropertyDomainEvent<ExecutionOutboxEntry, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtExecutionOutboxApplib.CollectionDomainEvent<ExecutionOutboxEntry, T> { }
-    public static abstract class ActionDomainEvent extends IsisModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxEntry> { }
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtExecutionOutboxApplib.PropertyDomainEvent<ExecutionOutboxEntry, T> { }
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtExecutionOutboxApplib.CollectionDomainEvent<ExecutionOutboxEntry, T> { }
+    public static abstract class ActionDomainEvent extends CausewayModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxEntry> { }
 
     @UtilityClass
     public static class Nq {

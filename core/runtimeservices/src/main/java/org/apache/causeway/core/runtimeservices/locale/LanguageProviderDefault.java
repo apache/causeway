@@ -33,7 +33,7 @@ import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 public class LanguageProviderDefault
 implements LanguageProvider {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntimeServices.NAMESPACE + ".LanguageProviderDefault";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleCoreRuntimeServices.NAMESPACE + ".LanguageProviderDefault";
 
     private final InteractionProvider interactionProvider;
 

@@ -29,7 +29,7 @@ import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
  * Framework-provided implementation of {@link ExceptionRecognizer},
@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
  * {@link org.apache.causeway.applib.exceptions.RecoverableException}s.
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ExceptionRecognizerForRecoverableException")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ExceptionRecognizerForRecoverableException")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {

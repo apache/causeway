@@ -26,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.extensions.cors.impl.IsisModuleExtCors;
+import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
 
 import lombok.val;
 
-class IsisModuleExtCorsImplTest {
+class CausewayModuleExtCorsImplTest {
 
     private IsisConfiguration isisDefaultConfiguration;
     private RestEasyConfiguration restEasyConfiguration;
@@ -46,7 +46,7 @@ class IsisModuleExtCorsImplTest {
     @Test
     void defaultIsisConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
         // given
-        val isisModuleExtCors = new IsisModuleExtCors();
+        val isisModuleExtCors = new CausewayModuleExtCors();
 
         // when
         val filterRegistration = isisModuleExtCors.createCorsFilterRegistration(isisDefaultConfiguration, restEasyConfiguration);

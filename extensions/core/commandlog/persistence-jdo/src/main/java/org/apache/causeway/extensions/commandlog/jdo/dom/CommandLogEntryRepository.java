@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -37,7 +37,7 @@ import org.apache.causeway.extensions.commandlog.jdo.IsisModuleExtCommandLogPers
 public class CommandLogEntryRepository
 extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogPersistenceJdo.NAMESPACE + ".CommandLogEntryRepository";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogPersistenceJdo.NAMESPACE + ".CommandLogEntryRepository";
 
     public CommandLogEntryRepository() {
         super(CommandLogEntry.class);

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
+import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;
 import org.apache.causeway.extensions.commandreplay.secondary.analyser.CommandReplayAnalyser;
 
 import lombok.val;
@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalysisService")
+@Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalysisService")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class CommandReplayAnalysisService {

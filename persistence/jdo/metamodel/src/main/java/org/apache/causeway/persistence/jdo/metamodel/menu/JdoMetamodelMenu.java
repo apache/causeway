@@ -23,7 +23,7 @@ import javax.inject.Named;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -38,12 +38,12 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
-import org.apache.causeway.persistence.jdo.metamodel.IsisModulePersistenceJdoMetamodel;
+import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJdoMetamodel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named(IsisModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu")
+@Named(CausewayModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu")
 @DomainService()
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
@@ -57,7 +57,7 @@ public class JdoMetamodelMenu {
     final JdoFacetContext jdoFacetContext;
 
     public static abstract class ActionDomainEvent<T>
-    extends IsisModuleApplib.ActionDomainEvent<T> {}
+    extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
 
     @Action(

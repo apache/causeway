@@ -39,7 +39,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 
 import lombok.val;
@@ -53,7 +53,7 @@ import lombok.val;
  * @since 2.0
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".IdStringifierLookupService")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".IdStringifierLookupService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class IdStringifierLookupService {

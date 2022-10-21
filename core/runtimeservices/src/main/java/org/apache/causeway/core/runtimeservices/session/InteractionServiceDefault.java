@@ -69,7 +69,7 @@ import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
 import lombok.NonNull;
@@ -83,7 +83,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote holds a reference to the current session using a thread-local
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".InteractionServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

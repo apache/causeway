@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.bookmark;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
 
@@ -38,7 +38,7 @@ public class BookmarkHolder_object {
     private final BookmarkHolder bookmarkHolder;
 
     public static class PropertyDomainEvent
-    extends IsisModuleApplib.PropertyDomainEvent<BookmarkHolder_object, Object> { }
+    extends CausewayModuleApplib.PropertyDomainEvent<BookmarkHolder_object, Object> { }
 
     @MemberSupport public Object prop() {
         return bookmarkService.lookup(bookmarkHolder).orElse(null);

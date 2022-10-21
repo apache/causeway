@@ -25,9 +25,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.causeway.testdomain.model.stereotypes.MyService;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
@@ -40,10 +40,10 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
     MyService.class, // testing injection into entities
 
-    IsisModuleCoreRuntimeServices.class
-    ,IsisModuleSecurityBypass.class
-    ,IsisModulePersistenceJpaEclipselink.class
-    //,IsisModuleTestingFixturesApplib.class
+    CausewayModuleCoreRuntimeServices.class
+    ,CausewayModuleSecurityBypass.class
+    ,CausewayModulePersistenceJpaEclipselink.class
+    //,CausewayModuleTestingFixturesApplib.class
     ,KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @PropertySources({

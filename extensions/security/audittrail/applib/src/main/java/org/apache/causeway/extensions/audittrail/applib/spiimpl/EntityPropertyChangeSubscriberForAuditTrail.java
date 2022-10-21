@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class EntityPropertyChangeSubscriberForAuditTrail implements EntityPropertyChangeSubscriber {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
 
     final TransactionService transactionService;
     final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;

@@ -39,13 +39,13 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ExecutionPublisherDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ExecutionPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @InteractionScope

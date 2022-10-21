@@ -62,7 +62,7 @@ import lombok.val;
 public class Object_downloadLayoutXml {
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadLayoutXml> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadLayoutXml> {}
 
     private final Object holder;
 

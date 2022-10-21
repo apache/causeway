@@ -38,17 +38,17 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm;
-import org.apache.causeway.extensions.secman.encryption.spring.IsisModuleExtSecmanEncryptionSpring;
-import org.apache.causeway.extensions.secman.integration.IsisModuleExtSecmanIntegration;
-import org.apache.causeway.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
+import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
+import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
+import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
 import org.apache.causeway.security.shiro.webmodule.WebModuleShiro;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.causeway.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.causeway.testdomain.ldap.LdapServerService;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.causeway.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
+import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 import lombok.val;
 
@@ -65,17 +65,17 @@ import lombok.val;
 @Import({
 
     // Restful server
-    IsisModuleViewerRestfulObjectsViewer.class,
+    CausewayModuleViewerRestfulObjectsViewer.class,
     RestEndpointService.class,
 
     // Embedded LDAP server for testing
     LdapServerService.class,
 
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanIntegration.class,
-    IsisModuleExtSecmanShiroRealm.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSecmanEncryptionSpring.class,
+    CausewayModuleExtSecmanIntegration.class,
+    CausewayModuleExtSecmanShiroRealm.class,
+    CausewayModuleExtSecmanPersistenceJdo.class,
+    CausewayModuleExtSecmanEncryptionSpring.class,
 })
 @PropertySources({
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)

@@ -30,7 +30,7 @@ import javax.inject.Named;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreConfig.NAMESPACE + "..IsisBeanTypeRegistryImpl")
+@Named(CausewayModuleCoreConfig.NAMESPACE + "..IsisBeanTypeRegistryImpl")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 public class IsisBeanTypeRegistryDefault

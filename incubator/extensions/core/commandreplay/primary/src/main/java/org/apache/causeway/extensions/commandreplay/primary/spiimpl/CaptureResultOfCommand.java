@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.causeway.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
+import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -43,7 +43,7 @@ import lombok.val;
  * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
  */
 @Service
-@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CaptureResultOfCommand")
+@Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CaptureResultOfCommand")
 // specify quite a high priority since custom processors will probably want to run after this one
 // (but can choose to run before if they wish)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)

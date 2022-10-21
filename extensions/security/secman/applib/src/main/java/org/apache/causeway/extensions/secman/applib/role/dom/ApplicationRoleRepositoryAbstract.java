@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_delete;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
@@ -44,7 +44,7 @@ import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 import lombok.val;
 
 @Repository
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleRepository")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleRepository")
 public abstract class ApplicationRoleRepositoryAbstract<R extends ApplicationRole>
 implements ApplicationRoleRepository {
 

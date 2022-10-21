@@ -41,7 +41,7 @@ import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.util.ZipWriter;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
@@ -50,7 +50,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".LayoutServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".LayoutServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

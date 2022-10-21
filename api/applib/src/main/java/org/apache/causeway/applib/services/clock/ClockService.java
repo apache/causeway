@@ -25,7 +25,7 @@ import javax.inject.Provider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockService {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ClockService";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ClockService";
 
     private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
 

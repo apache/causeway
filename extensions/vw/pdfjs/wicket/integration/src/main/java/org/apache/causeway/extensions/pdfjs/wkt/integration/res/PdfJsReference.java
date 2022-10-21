@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
-import org.apache.causeway.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
+import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
@@ -38,7 +38,7 @@ extends WebjarsJavaScriptResourceReference {
 
     private PdfJsReference() {
         super(String.format("%s/build/pdf.min.js",
-                IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
     }
 
     /**

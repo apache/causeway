@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -46,7 +46,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeMember";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeMember";
 
     public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
 

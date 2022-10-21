@@ -32,14 +32,14 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
-import org.apache.causeway.valuetypes.vega.applib.IsisModuleValVegaApplib;
+import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 
 import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named(IsisModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
+@Named(CausewayModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
 public class VegaValueSemantics
 extends ValueSemanticsAbstract<Vega>
 implements

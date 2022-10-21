@@ -24,7 +24,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ExecutionLogger implements ExecutionSubscriber {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ExecutionLogger";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ExecutionLogger";
 
     @Override
     public boolean isEnabled() {

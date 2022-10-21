@@ -47,7 +47,7 @@ import org.springframework.transaction.TransactionStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.causeway.applib.IsisModuleApplibMixins;
+import org.apache.causeway.applib.CausewayModuleApplibMixins;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.LayoutConstants;
@@ -65,16 +65,16 @@ import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrde
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.regressiontests.layouts.integtest.model.Counter;
 import org.apache.causeway.regressiontests.layouts.integtest.model.LayoutTestDomainModel;
 import org.apache.causeway.schema.metamodel.v2.Action;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.schema.metamodel.v2.FacetAttr;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
-import org.apache.causeway.viewer.wicket.applib.IsisModuleViewerWicketApplibMixins;
+import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 
 import lombok.val;
 
@@ -87,10 +87,10 @@ public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleApplibMixins.class,
-            IsisModuleViewerWicketApplibMixins.class,
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
+            CausewayModuleApplibMixins.class,
+            CausewayModuleViewerWicketApplibMixins.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)

@@ -63,7 +63,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFac
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketAjaxRequestListenerUtil;
 
 import lombok.AccessLevel;
@@ -79,7 +79,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 
 @Configuration
 @Import({
-    IsisModuleViewerWicketViewer.class,
+    CausewayModuleViewerWicketViewer.class,
     Configuration_usingWicket.WicketViewerOutputMarkupContainerClassNameEnable.class
 })
 public class Configuration_usingWicket {

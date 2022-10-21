@@ -29,7 +29,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -84,9 +84,9 @@ extends JpaProduct
 implements IBook {
 
     // -- DOMAIN EVENTS
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<JpaBook> {};
-    public static class PropertyDomainEvent extends IsisModuleApplib.PropertyDomainEvent<JpaBook, Object> {};
-    public static class CollectionDomainEvent extends IsisModuleApplib.CollectionDomainEvent<JpaBook, Object> {};
+    public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<JpaBook> {};
+    public static class PropertyDomainEvent extends CausewayModuleApplib.PropertyDomainEvent<JpaBook, Object> {};
+    public static class CollectionDomainEvent extends CausewayModuleApplib.CollectionDomainEvent<JpaBook, Object> {};
 
     // -- LIFE CYCLE EVENTS
     public static class CreatedLifecycleEvent extends ObjectCreatedEvent<JpaBook> {};

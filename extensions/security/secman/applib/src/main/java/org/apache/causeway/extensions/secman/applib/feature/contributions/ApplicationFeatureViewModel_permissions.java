@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.applib.feature.contributions;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -41,7 +41,7 @@ public class ApplicationFeatureViewModel_permissions {
 
     private final ApplicationFeatureViewModel viewModel;
 
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<ApplicationFeatureViewModel_permissions> {}
+    public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<ApplicationFeatureViewModel_permissions> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 

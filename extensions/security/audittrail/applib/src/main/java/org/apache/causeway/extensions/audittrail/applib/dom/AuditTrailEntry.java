@@ -29,7 +29,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -64,8 +64,8 @@ import lombok.experimental.UtilityClass;
 )
 public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<AuditTrailEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailEntry";
-    public static final String SCHEMA = IsisModuleExtAuditTrailApplib.SCHEMA;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailEntry";
+    public static final String SCHEMA = CausewayModuleExtAuditTrailApplib.SCHEMA;
     public static final String TABLE = "AuditTrailEntry";
 
     @UtilityClass
@@ -87,14 +87,14 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
 
     // -- UI & DOMAIN EVENTS
 
-    public static class TitleUiEvent extends IsisModuleExtAuditTrailApplib.TitleUiEvent<AuditTrailEntry> { }
-    public static class IconUiEvent extends IsisModuleExtAuditTrailApplib.IconUiEvent<AuditTrailEntry> { }
-    public static class CssClassUiEvent extends IsisModuleExtAuditTrailApplib.CssClassUiEvent<AuditTrailEntry> { }
-    public static class LayoutUiEvent extends IsisModuleExtAuditTrailApplib.LayoutUiEvent<AuditTrailEntry> { }
+    public static class TitleUiEvent extends CausewayModuleExtAuditTrailApplib.TitleUiEvent<AuditTrailEntry> { }
+    public static class IconUiEvent extends CausewayModuleExtAuditTrailApplib.IconUiEvent<AuditTrailEntry> { }
+    public static class CssClassUiEvent extends CausewayModuleExtAuditTrailApplib.CssClassUiEvent<AuditTrailEntry> { }
+    public static class LayoutUiEvent extends CausewayModuleExtAuditTrailApplib.LayoutUiEvent<AuditTrailEntry> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtAuditTrailApplib.PropertyDomainEvent<AuditTrailEntry, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtAuditTrailApplib.CollectionDomainEvent<AuditTrailEntry, T> { }
-    public static abstract class ActionDomainEvent extends IsisModuleExtAuditTrailApplib.ActionDomainEvent<AuditTrailEntry> { }
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtAuditTrailApplib.PropertyDomainEvent<AuditTrailEntry, T> { }
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtAuditTrailApplib.CollectionDomainEvent<AuditTrailEntry, T> { }
+    public static abstract class ActionDomainEvent extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<AuditTrailEntry> { }
 
 
     @Programmatic

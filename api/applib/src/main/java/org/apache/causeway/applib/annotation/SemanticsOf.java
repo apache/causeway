@@ -20,14 +20,14 @@ package org.apache.causeway.applib.annotation;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.util.Enums;
 
 /**
  * @since 1.x {@index}
  * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
-@Named(IsisModuleApplib.NAMESPACE + ".annotation.SemanticsOf")
+@Named(CausewayModuleApplib.NAMESPACE + ".annotation.SemanticsOf")
 @Value
 public enum SemanticsOf {
 

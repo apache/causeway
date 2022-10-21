@@ -40,12 +40,12 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ServiceRegistryDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public final class ServiceRegistryDefault implements ServiceRegistry {

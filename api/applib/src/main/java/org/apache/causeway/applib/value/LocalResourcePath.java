@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 
 import lombok.Getter;
@@ -52,7 +52,7 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.LocalResourcePath")
+@Named(CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath")
 @Value
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {

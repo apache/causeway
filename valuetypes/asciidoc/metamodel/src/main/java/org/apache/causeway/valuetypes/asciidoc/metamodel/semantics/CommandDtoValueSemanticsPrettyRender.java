@@ -26,12 +26,12 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.valuesemantics.CommandDtoValueSemantics;
-import org.apache.causeway.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 
 import lombok.NonNull;
 
 @Component
-@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".CommandDtoValueSemanticsPrettyRender")
+@Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".CommandDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 @Qualifier("pretty-render")
 public class CommandDtoValueSemanticsPrettyRender

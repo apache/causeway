@@ -35,7 +35,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridReaderUsingJaxb")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridReaderUsingJaxb")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

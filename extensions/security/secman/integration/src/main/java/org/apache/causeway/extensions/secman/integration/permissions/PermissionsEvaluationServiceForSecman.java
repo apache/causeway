@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
@@ -51,7 +51,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".PermissionsEvaluationServiceForSecman")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".PermissionsEvaluationServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
 public class PermissionsEvaluationServiceForSecman

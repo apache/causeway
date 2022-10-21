@@ -29,16 +29,16 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.extensions.audittrail.jpa.IsisModuleExtAuditTrailPersistenceJpa;
-import org.apache.causeway.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
-import org.apache.causeway.extensions.executionlog.jpa.IsisModuleExtExecutionLogPersistenceJpa;
-import org.apache.causeway.extensions.executionoutbox.jpa.IsisModuleExtExecutionOutboxPersistenceJpa;
-import org.apache.causeway.extensions.sessionlog.jpa.IsisModuleExtSessionLogPersistenceJpa;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrailPersistenceJpa;
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.extensions.executionlog.jpa.CausewayModuleExtExecutionLogPersistenceJpa;
+import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
+import org.apache.causeway.extensions.sessionlog.jpa.CausewayModuleExtSessionLogPersistenceJpa;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.CmdExecAuditSessLog_IntegTestAbstract;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.CmdExecAuditSessTestDomainModel;
 import org.apache.causeway.regressiontests.cmdexecauditsess.jpa.integtests.model.Counter;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = CmdExecAuditSessLog_IntegTest.AppManifest.class
@@ -50,13 +50,13 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtCommandLogPersistenceJpa.class,
-            IsisModuleExtExecutionLogPersistenceJpa.class,
-            IsisModuleExtExecutionOutboxPersistenceJpa.class,
-            IsisModuleExtAuditTrailPersistenceJpa.class,
-            IsisModuleExtSessionLogPersistenceJpa.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtCommandLogPersistenceJpa.class,
+            CausewayModuleExtExecutionLogPersistenceJpa.class,
+            CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+            CausewayModuleExtAuditTrailPersistenceJpa.class,
+            CausewayModuleExtSessionLogPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)

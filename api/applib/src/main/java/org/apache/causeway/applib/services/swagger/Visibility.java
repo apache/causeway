@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.swagger;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.Value;
  *
  * @since 1.x {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".services.swagger.Visibility")
+@Named(CausewayModuleApplib.NAMESPACE + ".services.swagger.Visibility")
 @Value
 public enum Visibility {
 

@@ -30,10 +30,10 @@ import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.IsisConfiguration.Viewer.Wicket.Application;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
-import org.apache.causeway.viewer.commons.services.IsisModuleViewerCommonsServices;
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 @Service
-@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".BrandingUiServiceDefault")
+@Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".BrandingUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class BrandingUiServiceDefault

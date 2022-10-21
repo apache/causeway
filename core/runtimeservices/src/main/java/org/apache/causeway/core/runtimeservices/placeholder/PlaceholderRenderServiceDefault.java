@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.html._BootstrapBadge;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ import lombok.val;
  * @since 2.0
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".PlaceholderRenderServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".PlaceholderRenderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class PlaceholderRenderServiceDefault

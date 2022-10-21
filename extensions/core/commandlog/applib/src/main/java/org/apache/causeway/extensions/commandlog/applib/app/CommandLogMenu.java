@@ -29,7 +29,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.springframework.lang.Nullable;
@@ -48,10 +48,10 @@ import org.springframework.lang.Nullable;
 public class CommandLogMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogMenu";
+            CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandLogMenu";
 
     public static abstract class ActionDomainEvent<T>
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<T> { }
+            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;

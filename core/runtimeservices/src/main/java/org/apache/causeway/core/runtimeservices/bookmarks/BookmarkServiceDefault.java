@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.val;
 
@@ -49,7 +49,7 @@ import lombok.val;
  * This service enables a serializable 'bookmark' to be created for an entity.
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".BookmarkServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".BookmarkServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class BookmarkServiceDefault implements BookmarkService {

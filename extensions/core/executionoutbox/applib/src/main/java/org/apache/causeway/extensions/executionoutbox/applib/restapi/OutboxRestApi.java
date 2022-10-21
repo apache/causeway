@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
-import org.apache.causeway.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
+import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
@@ -44,7 +44,7 @@ import lombok.val;
 @RequiredArgsConstructor
 public class OutboxRestApi  {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxRestApi";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxRestApi";
 
     final @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> entryRepository;
 

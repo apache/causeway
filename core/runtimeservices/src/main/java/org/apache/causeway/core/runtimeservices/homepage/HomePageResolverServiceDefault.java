@@ -33,12 +33,12 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".HomePageResolverServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".HomePageResolverServiceDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 

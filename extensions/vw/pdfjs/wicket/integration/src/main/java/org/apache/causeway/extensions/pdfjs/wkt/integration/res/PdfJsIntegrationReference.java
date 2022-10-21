@@ -19,7 +19,7 @@
 package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
-import org.apache.causeway.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
+import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -40,7 +40,7 @@ extends JavaScriptResourceReference {
     private PdfJsIntegrationReference() {
         super(PdfJsIntegrationReference.class,
                 String.format("pdfjs-integration-%s.js",
-                        IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getIntegrationScriptSuffix()));
+                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getIntegrationScriptSuffix()));
     }
 
     /**

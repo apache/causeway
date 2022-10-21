@@ -31,11 +31,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.ExecutionOutbox_IntegTestAbstract;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.ExecutionOutboxTestDomainModel;
-import org.apache.causeway.extensions.executionoutbox.jpa.IsisModuleExtExecutionOutboxPersistenceJpa;
+import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
 import org.apache.causeway.extensions.executionoutbox.jpa.integtests.model.Counter;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = ExecutionOutbox_IntegTest.AppManifest.class
@@ -46,9 +46,9 @@ public class ExecutionOutbox_IntegTest extends ExecutionOutbox_IntegTestAbstract
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtExecutionOutboxPersistenceJpa.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtExecutionOutboxPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)

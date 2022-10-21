@@ -27,7 +27,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service()
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY + ".CommandFetcher")
+@Named(CausewayModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY + ".CommandFetcher")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE) // JUnit Support
 @Log4j2
@@ -59,7 +59,7 @@ public class CommandFetcher {
 
     static final String URL_SUFFIX =
             "services/"
-            + IsisModuleExtCommandLogApplib.SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL
+            + CausewayModuleExtCommandLogApplib.SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL
             + "/actions/findCommandsOnPrimaryAsDto/invoke";
 
     private final SecondaryConfig secondaryConfig;

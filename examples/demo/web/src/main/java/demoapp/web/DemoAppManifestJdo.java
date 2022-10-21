@@ -19,12 +19,12 @@
 package demoapp.web;
 
 
-import org.apache.causeway.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
-import org.apache.causeway.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
-import org.apache.causeway.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
-import org.apache.causeway.extensions.executionoutbox.jdo.IsisModuleExtExecutionOutboxPersistenceJdo;
-import org.apache.causeway.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.causeway.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
+import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
+import org.apache.causeway.extensions.executionoutbox.jdo.CausewayModuleExtExecutionOutboxPersistenceJdo;
+import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.sessionlog.jdo.CausewayModuleExtSessionLogPersistenceJdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -40,12 +40,12 @@ import demoapp.dom.DemoModuleJdo;
     DemoAppManifestCommon.class,
 
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSessionLogPersistenceJdo.class,
-    IsisModuleExtCommandLogPersistenceJdo.class,
-    IsisModuleExtExecutionLogPersistenceJdo.class,
-    IsisModuleExtExecutionOutboxPersistenceJdo.class,
-    IsisModuleExtAuditTrailPersistenceJdo.class,
+    CausewayModuleExtSecmanPersistenceJdo.class,
+    CausewayModuleExtSessionLogPersistenceJdo.class,
+    CausewayModuleExtCommandLogPersistenceJdo.class,
+    CausewayModuleExtExecutionLogPersistenceJdo.class,
+    CausewayModuleExtExecutionOutboxPersistenceJdo.class,
+    CausewayModuleExtAuditTrailPersistenceJdo.class,
 
 
 })

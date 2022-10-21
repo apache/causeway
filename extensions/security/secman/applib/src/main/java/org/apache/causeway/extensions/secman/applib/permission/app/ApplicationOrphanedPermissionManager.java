@@ -26,7 +26,7 @@ import javax.inject.Named;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 
@@ -35,10 +35,10 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
         nature = Nature.VIEW_MODEL)
 public class ApplicationOrphanedPermissionManager {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationOrphanedPermissionManager";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationOrphanedPermissionManager";
 
     public static abstract class CollectionDomainEvent<T>
-            extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationOrphanedPermissionManager, T> {}
+            extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationOrphanedPermissionManager, T> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 

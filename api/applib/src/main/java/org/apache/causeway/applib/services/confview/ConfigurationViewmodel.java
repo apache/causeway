@@ -25,7 +25,7 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
@@ -41,7 +41,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
         nature = Nature.VIEW_MODEL)
 public class ConfigurationViewmodel {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
 
     @Autowired(required = false)
     private ConfigurationViewService configurationService;

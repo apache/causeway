@@ -34,7 +34,7 @@ import org.apache.causeway.applib.events.ui.CssClassUiEvent;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.applib.events.ui.LayoutUiEvent;
 import org.apache.causeway.applib.events.ui.TitleUiEvent;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.Builder;
 
@@ -44,7 +44,7 @@ import lombok.Builder;
  *
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetamodelEventService")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetamodelEventService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Builder //for JUnit Test support

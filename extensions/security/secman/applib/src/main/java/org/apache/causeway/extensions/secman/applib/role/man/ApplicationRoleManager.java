@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
 @Named(ApplicationRoleManager.LOGICAL_TYPE_NAME)
@@ -36,7 +36,7 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
         nature = Nature.VIEW_MODEL)
 public class ApplicationRoleManager {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleManager";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleManager";
 
     @ObjectSupport public String title() {
         return "Application Role Manager";

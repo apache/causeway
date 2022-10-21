@@ -56,7 +56,7 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -85,8 +85,8 @@ import lombok.experimental.UtilityClass;
 public abstract class ApplicationUser
         implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUser";
-    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUser";
+    public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationUser";
 
     @UtilityClass
@@ -99,13 +99,13 @@ public abstract class ApplicationUser
 
     // -- UI & DOMAIN EVENTS
 
-    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationUser> { }
-    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationUser> { }
-    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationUser> { }
-    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationUser> { }
+    public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationUser> { }
+    public static class IconUiEvent extends CausewayModuleExtSecmanApplib.IconUiEvent<ApplicationUser> { }
+    public static class CssClassUiEvent extends CausewayModuleExtSecmanApplib.CssClassUiEvent<ApplicationUser> { }
+    public static class LayoutUiEvent extends CausewayModuleExtSecmanApplib.LayoutUiEvent<ApplicationUser> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;

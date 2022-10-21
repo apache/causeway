@@ -28,7 +28,7 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.util.JaxbUtil;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog")
+@Named(CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2

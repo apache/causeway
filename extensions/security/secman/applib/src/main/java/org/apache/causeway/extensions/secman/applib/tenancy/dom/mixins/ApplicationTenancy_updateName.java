@@ -23,7 +23,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_updateName.DomainEvent;
 
@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationTenancy_updateName {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_updateName> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_updateName> {}
 
     private final ApplicationTenancy target;
 

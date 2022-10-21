@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Property;
@@ -43,7 +43,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 )
 public class ApplicationTypeAction extends ApplicationTypeMember {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeAction, T> {}
 

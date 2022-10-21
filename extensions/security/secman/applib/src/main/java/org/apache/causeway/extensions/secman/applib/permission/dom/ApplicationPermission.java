@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -94,8 +94,8 @@ import lombok.experimental.UtilityClass;
 )
 public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
-    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
+    public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationPermission";
 
     @UtilityClass
@@ -111,13 +111,13 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     // -- UI & DOMAIN EVENTS
 
-    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationPermission> { }
-    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationPermission> { }
-    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationPermission> { }
-    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationPermission> { }
+    public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationPermission> { }
+    public static class IconUiEvent extends CausewayModuleExtSecmanApplib.IconUiEvent<ApplicationPermission> { }
+    public static class CssClassUiEvent extends CausewayModuleExtSecmanApplib.CssClassUiEvent<ApplicationPermission> { }
+    public static class LayoutUiEvent extends CausewayModuleExtSecmanApplib.LayoutUiEvent<ApplicationPermission> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
 
 
     @Inject transient ApplicationFeatureRepository featureRepository;

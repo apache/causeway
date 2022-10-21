@@ -29,10 +29,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.extensions.secman.applib.ApplicationPermissionRepositoryIntegTestAbstract;
 import org.apache.causeway.extensions.secman.applib.mmm.MmmModule;
-import org.apache.causeway.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = ApplicationPermissionRepository_IntegTest.AppManifest.class
@@ -43,9 +43,9 @@ class ApplicationPermissionRepository_IntegTest extends ApplicationPermissionRep
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtSecmanPersistenceJdo.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtSecmanPersistenceJdo.class,
 
             MmmModule.class,
     })

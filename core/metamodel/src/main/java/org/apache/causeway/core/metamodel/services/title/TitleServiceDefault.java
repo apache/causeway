@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtil;
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TitleServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TitleServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = @Inject)

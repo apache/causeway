@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_updateRole.DomainEvent;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationPermission_updateRole {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_updateRole> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_updateRole> {}
 
     @Inject ApplicationRoleRepository applicationRoleRepository;
 

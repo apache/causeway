@@ -26,18 +26,18 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 import demoapp.web.DemoAppManifestJpa;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModulePersistenceJpaEclipselink.class,
-    IsisModuleTestingFixturesApplib.class,
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModulePersistenceJpaEclipselink.class,
+    CausewayModuleTestingFixturesApplib.class,
 
     // demo domain
     DemoAppManifestJpa.class,

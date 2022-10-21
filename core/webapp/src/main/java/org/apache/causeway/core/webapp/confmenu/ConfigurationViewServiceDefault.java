@@ -46,7 +46,7 @@ import org.apache.causeway.applib.services.confview.ConfigurationProperty;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.IsisConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
@@ -78,7 +78,7 @@ implements
 //    @org.springframework.beans.factory.annotation.Value("${spring.profiles.active}")
 //    private String activeProfiles;
 
-    private final IsisModuleCoreConfig.ConfigProps configProps;
+    private final CausewayModuleCoreConfig.ConfigProps configProps;
 
     private LocalDateTime startupTime = LocalDateTime.MIN; // so it is not uninitialized
 

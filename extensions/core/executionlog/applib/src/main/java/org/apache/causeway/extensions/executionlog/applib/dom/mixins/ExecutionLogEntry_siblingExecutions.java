@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
@@ -41,7 +41,7 @@ public class ExecutionLogEntry_siblingExecutions {
     private final ExecutionLogEntry executionLogEntry;
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry_siblingExecutions, ExecutionLogEntry> { }
+            extends CausewayModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry_siblingExecutions, ExecutionLogEntry> { }
 
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {

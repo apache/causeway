@@ -31,11 +31,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
-import org.apache.causeway.extensions.executionlog.jpa.IsisModuleExtExecutionLogPersistenceJpa;
+import org.apache.causeway.extensions.executionlog.jpa.CausewayModuleExtExecutionLogPersistenceJpa;
 import org.apache.causeway.extensions.executionlog.jpa.integtests.model.Counter;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = ExecutionLog_IntegTest.AppManifest.class
@@ -46,9 +46,9 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtExecutionLogPersistenceJpa.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtExecutionLogPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)

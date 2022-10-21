@@ -35,7 +35,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -68,13 +68,13 @@ import lombok.val;
 public class UserMemento
 implements Serializable {
 
-    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<UserMemento> {}
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<UserMemento> {}
 
     private void readObject(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
     }
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMemento";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".UserMemento";
 
     /** Also used by the wicket-viewer and its AuthorizeInstantiation(...) annotations;
      *  the actual value is arbitrary; however, we use namespace style to clarify the origin*/

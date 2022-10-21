@@ -21,8 +21,8 @@ package demoapp.javafx.integtest;
 import javax.inject.Inject;
 
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.causeway.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,8 +35,8 @@ import demoapp.dom.DemoModuleJdo;
                 DemoFxTestConfig_usingJdo.class,
 
                 // INCUBATING
-                IsisModuleSecurityBypass.class,
-                IsisModuleIncViewerJavaFxViewer.class,
+                CausewayModuleSecurityBypass.class,
+                CausewayModuleIncViewerJavaFxViewer.class,
         }
 )
 public abstract class DemoFxTestAbstract extends IsisIntegrationTestAbstract {

@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_lock {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_lock> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_lock> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private IsisConfiguration config;

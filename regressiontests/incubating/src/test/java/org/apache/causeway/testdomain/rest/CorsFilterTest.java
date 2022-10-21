@@ -43,10 +43,10 @@ import org.apache.causeway.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.causeway.testdomain.rospec.RoSpecSampler;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 
-import org.apache.causeway.extensions.cors.impl.IsisModuleExtCors;
+import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
 
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import lombok.val;
 
@@ -64,8 +64,8 @@ import lombok.val;
 @Import({
     Configuration_headless.class,
     Configuration_usingRoSpec.class,
-    IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
-    IsisModuleExtCors.class
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,
+    CausewayModuleExtCors.class
 })
 @TestMethodOrder(OrderAnnotation.class) // run tests in sequence, to ease debugging
 class CorsFilterTest {

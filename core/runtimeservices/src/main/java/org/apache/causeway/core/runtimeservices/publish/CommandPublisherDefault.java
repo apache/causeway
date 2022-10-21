@@ -36,14 +36,14 @@ import org.apache.causeway.applib.services.command.Command.CommandPublishingPhas
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".CommandPublisherDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationRole_delete.DomainEvent;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_delete {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_delete> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_delete> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

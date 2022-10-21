@@ -24,7 +24,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addChild.DomainEvent;
@@ -49,7 +49,7 @@ import lombok.val;
 public class ApplicationTenancy_addChild {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_addChild> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_addChild> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 

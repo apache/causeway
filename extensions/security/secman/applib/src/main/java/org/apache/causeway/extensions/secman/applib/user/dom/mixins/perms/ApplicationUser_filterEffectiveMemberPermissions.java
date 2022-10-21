@@ -33,7 +33,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
@@ -53,7 +53,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_filterEffectiveMemberPermissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_filterEffectiveMemberPermissions> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_filterEffectiveMemberPermissions> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;

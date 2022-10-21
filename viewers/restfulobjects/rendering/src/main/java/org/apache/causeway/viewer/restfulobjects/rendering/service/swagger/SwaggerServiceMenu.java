@@ -25,7 +25,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -43,7 +43,7 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.config.RestEasyConfiguration;
-import org.apache.causeway.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
+import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 
 import lombok.val;
 
@@ -60,7 +60,7 @@ import lombok.val;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class SwaggerServiceMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;
@@ -78,7 +78,7 @@ public class SwaggerServiceMenu {
         this.basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
     }
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

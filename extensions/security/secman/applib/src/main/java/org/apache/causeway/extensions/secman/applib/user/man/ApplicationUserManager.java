@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 @Named(ApplicationUserManager.LOGICAL_TYPE_NAME)
@@ -36,7 +36,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
         nature = Nature.VIEW_MODEL)
 public class ApplicationUserManager {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserManager";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserManager";
 
     @ObjectSupport public String title() {
         return "Application User Manager";

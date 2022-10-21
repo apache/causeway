@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -49,7 +49,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_duplicate {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_duplicate> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_duplicate> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;

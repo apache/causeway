@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
+import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
 import lombok.Getter;
@@ -46,7 +46,7 @@ import lombok.Getter;
  */
 public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEntry> {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxEntryRepository";
+    public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxEntryRepository";
 
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;

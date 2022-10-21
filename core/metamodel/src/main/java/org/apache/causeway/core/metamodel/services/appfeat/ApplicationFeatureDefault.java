@@ -37,7 +37,7 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -53,7 +53,7 @@ import lombok.Setter;
  *     {@link ApplicationFeatureRepository}.
  * </p>
  */
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".services.appfeat.ApplicationFeature")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".services.appfeat.ApplicationFeature")
 @Value
 public class ApplicationFeatureDefault
 implements

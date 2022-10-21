@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.commons.internal.collections._Streams;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
@@ -54,7 +54,7 @@ import lombok.val;
 @ToString
 public class TypeNode extends MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".TypeNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".TypeNode";
 
     @Inject protected transient SpecificationLoader specificationLoader;
 

@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -60,7 +60,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FixtureResult {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureResult"; // secman seeding
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleTestingFixturesApplib.NAMESPACE + ".FixtureResult"; // secman seeding
 
     @PropertyLayout(named="Fixture script")
     @Property(optionality = Optionality.OPTIONAL)

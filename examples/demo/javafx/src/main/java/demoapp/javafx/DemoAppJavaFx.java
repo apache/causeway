@@ -23,9 +23,9 @@ import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
-import org.apache.causeway.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
+import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
 import org.apache.causeway.incubator.viewer.javafx.viewer.JavafxViewer;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -40,8 +40,8 @@ import demoapp.dom.DemoModuleJpa;
     DemoModuleJpa.class,
 
     // INCUBATING
-    IsisModuleSecurityBypass.class,
-    IsisModuleIncViewerJavaFxViewer.class,
+    CausewayModuleSecurityBypass.class,
+    CausewayModuleIncViewerJavaFxViewer.class,
 
 })
 public class DemoAppJavaFx {

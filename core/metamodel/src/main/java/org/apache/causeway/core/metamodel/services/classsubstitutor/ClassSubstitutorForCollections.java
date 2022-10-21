@@ -24,12 +24,12 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
 
 @Component
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 

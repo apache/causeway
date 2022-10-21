@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.commanddto.HasCommandDto;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -50,7 +50,7 @@ import lombok.val;
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandDto";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandDto";
 
     @Override @Nullable
     public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {

@@ -18,22 +18,22 @@
  */
 package org.apache.causeway.testdomain.model.valuetypes;
 
-import org.apache.causeway.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
-import org.apache.causeway.extensions.sse.metamodel.IsisModuleExtSseMetaModel;
-import org.apache.causeway.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.causeway.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
-import org.apache.causeway.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
+import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullCalendarApplib;
+import org.apache.causeway.extensions.sse.metamodel.CausewayModuleExtSseMetaModel;
+import org.apache.causeway.valuetypes.asciidoc.metamodel.CausewayModuleValAsciidocMetaModel;
+import org.apache.causeway.valuetypes.markdown.metamodel.CausewayModuleValMarkdownMetaModel;
+import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaModel;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    IsisModuleValAsciidocMetaModel.class,
-    IsisModuleValMarkdownMetaModel.class,
-    IsisModuleValVegaMetaModel.class,
-    IsisModuleExtSseMetaModel.class,
-    IsisModuleExtFullCalendarApplib.class,
+    CausewayModuleValAsciidocMetaModel.class,
+    CausewayModuleValMarkdownMetaModel.class,
+    CausewayModuleValVegaMetaModel.class,
+    CausewayModuleExtSseMetaModel.class,
+    CausewayModuleExtFullCalendarApplib.class,
 })
 @ComponentScan(
         basePackageClasses= {

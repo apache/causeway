@@ -67,7 +67,7 @@ public class Object_objectIdentifier {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
     @Action(
             domainEvent = Object_objectIdentifier.ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (ISIS-2650)

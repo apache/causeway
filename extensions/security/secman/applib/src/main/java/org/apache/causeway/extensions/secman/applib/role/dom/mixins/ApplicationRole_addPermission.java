@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -55,7 +55,7 @@ import lombok.experimental.Accessors;
 public class ApplicationRole_addPermission {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_addPermission> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_addPermission> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private ApplicationFeatureChoices applicationFeatureChoices;

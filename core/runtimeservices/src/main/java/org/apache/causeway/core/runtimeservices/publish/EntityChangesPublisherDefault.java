@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscribe
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EntityChangesPublisherDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EntityChangesPublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

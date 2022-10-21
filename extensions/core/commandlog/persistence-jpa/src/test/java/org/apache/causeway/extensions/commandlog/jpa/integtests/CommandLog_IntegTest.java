@@ -31,11 +31,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
 import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
-import org.apache.causeway.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
 import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = CommandLog_IntegTest.AppManifest.class
@@ -47,9 +47,9 @@ public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtCommandLogPersistenceJpa.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtCommandLogPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)

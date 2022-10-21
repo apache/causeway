@@ -28,17 +28,17 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
-import org.apache.causeway.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
-import org.apache.causeway.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
-import org.apache.causeway.extensions.executionoutbox.jdo.IsisModuleExtExecutionOutboxPersistenceJdo;
-import org.apache.causeway.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
+import org.apache.causeway.extensions.executionoutbox.jdo.CausewayModuleExtExecutionOutboxPersistenceJdo;
+import org.apache.causeway.extensions.sessionlog.jdo.CausewayModuleExtSessionLogPersistenceJdo;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.CmdExecAuditSessLog_IntegTestAbstract;
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.CmdExecAuditSessTestDomainModel;
 import org.apache.causeway.regressiontests.cmdexecauditsess.jdo.integtests.model.Counter;
 import org.apache.causeway.regressiontests.cmdexecauditsess.jdo.integtests.model.CounterRepository;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = CmdExecAuditSessLog_IntegTest.AppManifest.class
@@ -50,13 +50,13 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtCommandLogPersistenceJdo.class,
-            IsisModuleExtExecutionLogPersistenceJdo.class,
-            IsisModuleExtExecutionOutboxPersistenceJdo.class,
-            IsisModuleExtAuditTrailPersistenceJdo.class,
-            IsisModuleExtSessionLogPersistenceJdo.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtCommandLogPersistenceJdo.class,
+            CausewayModuleExtExecutionLogPersistenceJdo.class,
+            CausewayModuleExtExecutionOutboxPersistenceJdo.class,
+            CausewayModuleExtAuditTrailPersistenceJdo.class,
+            CausewayModuleExtSessionLogPersistenceJdo.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)

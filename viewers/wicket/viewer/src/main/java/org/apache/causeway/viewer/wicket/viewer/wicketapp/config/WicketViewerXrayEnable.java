@@ -23,13 +23,13 @@ import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 /**
  * Activates visual debugging mode for the Wicket Viewer.
  * Use for troubleshooting and bug hunting.
  * <p>
- * Not imported by {@link IsisModuleViewerWicketViewer}.
+ * Not imported by {@link CausewayModuleViewerWicketViewer}.
  */
 @Configuration
 public class WicketViewerXrayEnable

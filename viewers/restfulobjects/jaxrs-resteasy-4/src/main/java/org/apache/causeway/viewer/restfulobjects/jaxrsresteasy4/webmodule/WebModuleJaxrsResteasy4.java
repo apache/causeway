@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
@@ -57,7 +57,7 @@ import lombok.val;
  *
  */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {

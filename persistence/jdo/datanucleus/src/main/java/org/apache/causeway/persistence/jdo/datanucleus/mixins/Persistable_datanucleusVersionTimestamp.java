@@ -57,7 +57,7 @@ public class Persistable_datanucleusVersionTimestamp {
     private final Persistable persistable;
 
     public static class PropertyDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.PropertyDomainEvent
+    extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionTimestamp, java.sql.Timestamp> {}
 
     @MemberSupport public java.sql.Timestamp prop() {

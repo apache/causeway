@@ -72,7 +72,7 @@ public class Dto_downloadXsd {
     private final Dto holder;
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Dto_downloadXsd> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Dto_downloadXsd> {}
 
     /**
      * The {@link IsisSchemas} parameter can be used to optionally ignore the

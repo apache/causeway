@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -44,7 +44,7 @@ import org.apache.causeway.schema.cmd.v2.CommandsDto;
 @Qualifier("CommandsDto")
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandsDto";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandsDto";
 
     @Override
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {

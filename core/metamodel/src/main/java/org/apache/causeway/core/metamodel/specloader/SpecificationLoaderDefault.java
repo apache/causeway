@@ -62,8 +62,8 @@ import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel.PreloadableTypes;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel.PreloadableTypes;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -104,7 +104,7 @@ import lombok.extern.log4j.Log4j2;
  * </ul>
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".SpecificationLoaderDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".SpecificationLoaderDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Log4j2

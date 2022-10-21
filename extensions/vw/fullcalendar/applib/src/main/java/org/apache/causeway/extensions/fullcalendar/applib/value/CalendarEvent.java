@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
+import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullCalendarApplib;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -45,7 +45,7 @@ import lombok.With;
  * @since 2.0 {@index}
  * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
-@Named(IsisModuleExtFullCalendarApplib.NAMESPACE + ".value.CalendarEvent")
+@Named(CausewayModuleExtFullCalendarApplib.NAMESPACE + ".value.CalendarEvent")
 @org.apache.causeway.applib.annotation.Value
 @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
 @Getter @With

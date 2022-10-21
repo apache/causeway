@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV1";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV1";
     public static final String ACCEPT_PROFILE = "urn:org.apache.isis/v1";
 
     @Override

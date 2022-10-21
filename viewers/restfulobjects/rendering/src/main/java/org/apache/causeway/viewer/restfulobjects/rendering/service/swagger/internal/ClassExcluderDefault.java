@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import javax.inject.Named;
 
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ClassExcluderDefault")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ClassExcluderDefault")
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 
     public ClassExcluderDefault() {

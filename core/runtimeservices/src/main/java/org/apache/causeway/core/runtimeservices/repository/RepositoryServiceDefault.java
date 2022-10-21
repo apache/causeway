@@ -53,7 +53,7 @@ import org.apache.causeway.core.metamodel.object.MmEntityUtil;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,7 +61,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RepositoryServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RepositoryServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor

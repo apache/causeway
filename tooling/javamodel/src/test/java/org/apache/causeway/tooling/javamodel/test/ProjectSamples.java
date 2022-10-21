@@ -86,7 +86,7 @@ class ProjectSamples {
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScope.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeBeanFactoryPostProcessor.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeCloseListener.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/IsisModuleCoreRuntime.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/CausewayModuleCoreRuntime.java"));
         
     }
     

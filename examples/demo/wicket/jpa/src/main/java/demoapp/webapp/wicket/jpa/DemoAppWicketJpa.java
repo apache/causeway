@@ -26,19 +26,19 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.causeway.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
-import org.apache.causeway.extensions.sse.wicket.IsisModuleExtSseWicket;
-import org.apache.causeway.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.causeway.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
-import org.apache.causeway.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.causeway.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
-import org.apache.causeway.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
-import org.apache.causeway.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
-import org.apache.causeway.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
-import org.apache.causeway.valuetypes.vega.persistence.jpa.IsisModuleValVegaPersistenceJpa;
-import org.apache.causeway.valuetypes.vega.ui.wkt.IsisModuleValVegaUiWkt;
-import org.apache.causeway.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.pdfjs.wkt.ui.CausewayModuleExtPdfjsWicketUi;
+import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.apache.causeway.valuetypes.asciidoc.metamodel.CausewayModuleValAsciidocMetaModel;
+import org.apache.causeway.valuetypes.asciidoc.persistence.jpa.CausewayModuleValAsciidocPersistenceJpa;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.CausewayModuleValAsciidocUiWkt;
+import org.apache.causeway.valuetypes.markdown.metamodel.CausewayModuleValMarkdownMetaModel;
+import org.apache.causeway.valuetypes.markdown.persistence.jpa.CausewayModuleValMarkdownPersistenceJpa;
+import org.apache.causeway.valuetypes.markdown.ui.wkt.CausewayModuleValMarkdownUiWkt;
+import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaModel;
+import org.apache.causeway.valuetypes.vega.persistence.jpa.CausewayModuleValVegaPersistenceJpa;
+import org.apache.causeway.valuetypes.vega.ui.wkt.CausewayModuleValVegaUiWkt;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
@@ -50,28 +50,28 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 @Import({
     // App-Manifest (Configuration)
     DemoAppManifestJpa.class,
-    //IsisModuleSecurityBypass.class, // <-- bypass authentication
+    //CausewayModuleSecurityBypass.class, // <-- bypass authentication
 
     // Metamodel
-    IsisModuleValAsciidocMetaModel.class,
-    IsisModuleValMarkdownMetaModel.class,
-    IsisModuleValVegaMetaModel.class,
+    CausewayModuleValAsciidocMetaModel.class,
+    CausewayModuleValMarkdownMetaModel.class,
+    CausewayModuleValVegaMetaModel.class,
 
     // UI (Wicket Viewer)
-    IsisModuleViewerWicketViewer.class,
-    IsisModuleExtSseWicket.class,
-    IsisModuleValAsciidocUiWkt.class,
-    IsisModuleValMarkdownUiWkt.class,
-    IsisModuleValVegaUiWkt.class,
-    IsisModuleExtPdfjsWicketUi.class,
+    CausewayModuleViewerWicketViewer.class,
+    CausewayModuleExtSseWicket.class,
+    CausewayModuleValAsciidocUiWkt.class,
+    CausewayModuleValMarkdownUiWkt.class,
+    CausewayModuleValVegaUiWkt.class,
+    CausewayModuleExtPdfjsWicketUi.class,
 
     // Custom Demo UI (Wicket Viewer)
     DemoAppWicketCommon.class,
 
     // Persistence/Converters (JPA)
-    IsisModuleValAsciidocPersistenceJpa.class,
-    IsisModuleValMarkdownPersistenceJpa.class,
-    IsisModuleValVegaPersistenceJpa.class,
+    CausewayModuleValAsciidocPersistenceJpa.class,
+    CausewayModuleValMarkdownPersistenceJpa.class,
+    CausewayModuleValVegaPersistenceJpa.class,
 
     //XrayEnable.class // for debugging only
     // WicketViewerXrayEnable.class // for debugging only
@@ -100,7 +100,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
         SpringProfileUtil.removeActiveProfile("demo-jdo"); // just in case
     	SpringProfileUtil.addActiveProfile("demo-jpa");
 
-    	IsisModuleExtCommandLogApplib.honorSystemEnvironment();
+    	CausewayModuleExtCommandLogApplib.honorSystemEnvironment();
 
         SpringApplication.run(new Class[] { DemoAppWicketJpa.class }, args);
 

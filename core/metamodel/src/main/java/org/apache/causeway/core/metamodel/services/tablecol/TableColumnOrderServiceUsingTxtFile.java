@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceUsingTxtFile")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceUsingTxtFile")
 @Priority(PriorityPrecedence.LATE - 100) // before Default
 @Qualifier("UsingFiles")
 @Log4j2

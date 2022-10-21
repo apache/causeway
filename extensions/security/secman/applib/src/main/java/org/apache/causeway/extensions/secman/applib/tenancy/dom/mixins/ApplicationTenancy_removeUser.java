@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_removeUser.DomainEvent;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationTenancy_removeUser {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_removeUser> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy_removeUser> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;

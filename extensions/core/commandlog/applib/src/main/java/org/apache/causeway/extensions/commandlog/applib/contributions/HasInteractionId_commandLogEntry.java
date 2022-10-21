@@ -29,7 +29,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.causeway.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
@@ -50,7 +50,7 @@ public class HasInteractionId_commandLogEntry {
     private final HasInteractionId hasInteractionId;
 
     public static class PropertyDomainEvent
-            extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<HasInteractionId_commandLogEntry, CommandLogEntry> { }
+            extends CausewayModuleExtCommandLogApplib.PropertyDomainEvent<HasInteractionId_commandLogEntry, CommandLogEntry> { }
 
 
     @MemberSupport public CommandLogEntry prop() {

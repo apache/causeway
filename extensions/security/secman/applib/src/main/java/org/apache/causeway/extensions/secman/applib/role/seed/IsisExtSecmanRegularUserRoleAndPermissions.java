@@ -20,10 +20,10 @@ package org.apache.causeway.extensions.secman.applib.role.seed;
 
 import org.apache.causeway.commons.collections.Can;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
-import org.apache.causeway.core.security.IsisModuleCoreSecurity;
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
@@ -32,7 +32,7 @@ import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAn
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
 
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 import lombok.val;
 
@@ -42,7 +42,7 @@ import lombok.val;
  * <p>
  * These permissions are intended to be sufficient for most regular users
  * to have access to the 'safe' features provided by the core framework
- * (in particular, everything under the {@link IsisModuleApplib#NAMESPACE isis.applib}
+ * (in particular, everything under the {@link CausewayModuleApplib#NAMESPACE isis.applib}
  * namespace.
  * </p>
  *
@@ -78,13 +78,13 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
         val allowChanging = Can.of(
                 // everything under "isis.applib" is granted.
                 // this includes prototype actions for metamodel and translations
-                ApplicationFeatureId.newNamespace(IsisModuleApplib.NAMESPACE),
+                ApplicationFeatureId.newNamespace(CausewayModuleApplib.NAMESPACE),
 
                 // we also provide default access to run fixtures (prototype action only)
-                ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE),
+                ApplicationFeatureId.newNamespace(CausewayModuleTestingFixturesApplib.NAMESPACE),
 
                 // we also provide default access to logout action (!)
-                ApplicationFeatureId.newNamespace(IsisModuleCoreSecurity.NAMESPACE),
+                ApplicationFeatureId.newNamespace(CausewayModuleCoreSecurity.NAMESPACE),
 
                 // also the ability to logout (!)
                 ApplicationFeatureId.newType(LogoutMenu.LOGICAL_TYPE_NAME),

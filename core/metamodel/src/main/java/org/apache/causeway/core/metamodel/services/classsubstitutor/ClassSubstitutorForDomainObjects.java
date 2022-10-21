@@ -26,13 +26,13 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.beans.IsisBeanMetaData;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 

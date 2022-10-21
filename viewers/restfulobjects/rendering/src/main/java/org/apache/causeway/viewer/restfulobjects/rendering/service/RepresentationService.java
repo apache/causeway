@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".RepresentationService")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".RepresentationService")
 @Priority(PriorityPrecedence.EARLY)
 @Log4j2
 public class RepresentationService {

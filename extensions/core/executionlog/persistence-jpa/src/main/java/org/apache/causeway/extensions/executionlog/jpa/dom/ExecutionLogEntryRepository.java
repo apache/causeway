@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.extensions.executionlog.jpa.IsisModuleExtExecutionLogPersistenceJpa;
+import org.apache.causeway.extensions.executionlog.jpa.CausewayModuleExtExecutionLogPersistenceJpa;
 
 import lombok.Builder;
 
@@ -38,7 +38,7 @@ import lombok.Builder;
 public class ExecutionLogEntryRepository
 extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository<ExecutionLogEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtExecutionLogPersistenceJpa.NAMESPACE + ".ExecutionLogEntryRepository";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogPersistenceJpa.NAMESPACE + ".ExecutionLogEntryRepository";
 
     public ExecutionLogEntryRepository() {
         super(ExecutionLogEntry.class);

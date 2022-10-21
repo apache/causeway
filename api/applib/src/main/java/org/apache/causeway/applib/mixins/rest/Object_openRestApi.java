@@ -60,7 +60,7 @@ import lombok.val;
 public class Object_openRestApi {
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.IsisModuleApplib.ActionDomainEvent<Object_openRestApi> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_openRestApi> {}
 
     private final Object holder;
 

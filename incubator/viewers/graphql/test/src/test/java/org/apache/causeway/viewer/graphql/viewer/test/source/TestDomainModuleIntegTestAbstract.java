@@ -19,11 +19,11 @@
 package org.apache.causeway.viewer.graphql.viewer.test.source;
 
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.graphql.viewer.IsisModuleIncViewerGraphqlViewer;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
+import org.apache.causeway.viewer.graphql.viewer.CausewayModuleIncViewerGraphqlViewer;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.TestDomainModule;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -53,11 +53,11 @@ public class TestDomainModuleIntegTestAbstract {
     @EnableJpaRepositories
     @Import({
 
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModulePersistenceJpaEclipselink.class,
-            IsisModuleTestingFixturesApplib.class,
-            IsisModuleIncViewerGraphqlViewer.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModulePersistenceJpaEclipselink.class,
+            CausewayModuleTestingFixturesApplib.class,
+            CausewayModuleIncViewerGraphqlViewer.class,
 
             TestDomainModule.class
     })

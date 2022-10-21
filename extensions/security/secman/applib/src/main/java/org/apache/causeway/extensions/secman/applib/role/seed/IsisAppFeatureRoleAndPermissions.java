@@ -22,7 +22,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeatui.ApplicationFeatureMenu;
 
@@ -44,7 +44,7 @@ extends AbstractRoleAndPermissionsFixtureScript {
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.of(
-                        ApplicationFeatureId.newNamespace(IsisModuleApplib.NAMESPACE_FEAT)
+                        ApplicationFeatureId.newNamespace(CausewayModuleApplib.NAMESPACE_FEAT)
                         )
         );
     }

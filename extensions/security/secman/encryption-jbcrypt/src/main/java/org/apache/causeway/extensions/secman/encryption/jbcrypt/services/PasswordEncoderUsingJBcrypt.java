@@ -26,13 +26,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".PasswordEncoderUsingJBcrypt")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".PasswordEncoderUsingJBcrypt")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("secman")
 public class PasswordEncoderUsingJBcrypt

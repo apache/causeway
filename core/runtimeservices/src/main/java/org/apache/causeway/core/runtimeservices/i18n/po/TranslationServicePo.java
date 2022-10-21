@@ -40,13 +40,13 @@ import org.apache.causeway.applib.services.i18n.TranslationsResolver;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".TranslationServicePo")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".TranslationServicePo")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Po")
 public class TranslationServicePo implements TranslationService {

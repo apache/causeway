@@ -20,12 +20,12 @@ package org.apache.causeway.extensions.secman.jpa.tenancy.dom;
 
 import javax.inject.Named;
 
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepositoryAbstract;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyRepository")
+@Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyRepository")
 public class ApplicationTenancyRepository
 extends ApplicationTenancyRepositoryAbstract<ApplicationTenancy> {
 

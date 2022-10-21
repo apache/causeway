@@ -32,13 +32,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisModuleCoreConfig;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
-        IsisModuleCoreConfig.class,
+        CausewayModuleCoreConfig.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorLegacyTest.Producers.class,

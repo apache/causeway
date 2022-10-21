@@ -30,7 +30,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.security.HasUsername;
-import org.apache.causeway.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
+import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class HasUsername_recentSessionsForUser {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtSessionLogApplib.ActionDomainEvent<HasUsername_recentSessionsForUser> { }
+            extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<HasUsername_recentSessionsForUser> { }
 
     private final HasUsername hasUsername;
 

@@ -23,7 +23,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -47,9 +47,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TranslationServicePoMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".TranslationServicePoMenu";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".TranslationServicePoMenu";
 
-    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}
+    public static abstract class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}
 
     final TranslationServicePo translationService;
 

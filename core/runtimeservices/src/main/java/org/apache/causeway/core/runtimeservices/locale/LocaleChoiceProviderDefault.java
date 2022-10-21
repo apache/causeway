@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".LocaleChoiceProviderDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".LocaleChoiceProviderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

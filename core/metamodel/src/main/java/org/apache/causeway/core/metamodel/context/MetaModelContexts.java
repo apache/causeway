@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
  *
@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
  *
  */
 @Configuration
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetaModelContexts")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelContexts")
 public class MetaModelContexts {
 
     @Bean @Singleton @Primary

@@ -25,7 +25,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.hsqldb.util.DatabaseManagerSwing;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
-import org.apache.causeway.extensions.hsqldbmgr.dom.IsisModuleExtHsqldbMgr;
+import org.apache.causeway.extensions.hsqldbmgr.dom.CausewayModuleExtHsqldbMgr;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @DomainService(
         nature = NatureOfService.VIEW
 )
-@Named(IsisModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu")
+@Named(CausewayModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
@@ -73,7 +73,7 @@ public class HsqlDbManagerMenu {
         .orElse(null);
     }
 
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<HsqlDbManagerMenu> { }
+    public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<HsqlDbManagerMenu> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

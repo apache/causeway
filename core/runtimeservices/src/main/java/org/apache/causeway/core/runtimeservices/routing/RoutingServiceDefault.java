@@ -28,10 +28,10 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.routing.RoutingService;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 //@Log4j2

@@ -23,7 +23,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.LocalResourcePath;
-import org.apache.causeway.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
+import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
 import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
 
 /**
@@ -43,7 +43,7 @@ import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
 @DomainService(
         nature = NatureOfService.VIEW
 )
-@Named(IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu")
+@Named(CausewayModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
@@ -58,7 +58,7 @@ public class H2ManagerMenu {
         this.webModule = webModule;
     }
 
-    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<H2ManagerMenu>{}
+    public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<H2ManagerMenu>{}
 
     @Action(
             semantics = SemanticsOf.SAFE,

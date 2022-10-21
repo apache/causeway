@@ -30,7 +30,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -46,7 +46,7 @@ import lombok.val;
  * @since 2.0
  */
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ObjectManagerDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ObjectManagerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("DEFAULT")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

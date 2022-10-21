@@ -27,7 +27,7 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -44,7 +44,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 @DomainObjectLayout(paged=100)
 public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationNamespace";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationNamespace";
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 

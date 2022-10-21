@@ -38,14 +38,14 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ValueSemanticsResolverDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ValueSemanticsResolverDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ValueSemanticsResolverDefault

@@ -28,7 +28,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.extensions.excel.applib.ExcelService;
-import org.apache.causeway.extensions.excel.applib.IsisModuleExtExcelApplib;
+import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
 import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -51,7 +51,7 @@ import lombok.Setter;
 @DomainObject
 public class ExcelFixture2 extends FixtureScript {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExcelApplib.NAMESPACE + ".ExcelFixture2";
+    public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExcelApplib.NAMESPACE + ".ExcelFixture2";
 
     /**
      * Input, optional: defines the name of the resource.

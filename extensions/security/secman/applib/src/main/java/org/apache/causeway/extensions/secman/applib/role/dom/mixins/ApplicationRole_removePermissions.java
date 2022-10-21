@@ -34,7 +34,7 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.IsisConfiguration;
 import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
-import org.apache.causeway.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
@@ -58,7 +58,7 @@ import lombok.val;
 public class ApplicationRole_removePermissions {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_removePermissions> {}
+            extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_removePermissions> {}
 
     @Inject private MessageService messageService;
     @Inject private IsisConfiguration config;

@@ -25,7 +25,7 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.
  *
  * @since 1.x {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.Password")
+@Named(CausewayModuleApplib.NAMESPACE + ".value.Password")
 @Value
 @XmlAccessorType(XmlAccessType.FIELD)
 // @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.

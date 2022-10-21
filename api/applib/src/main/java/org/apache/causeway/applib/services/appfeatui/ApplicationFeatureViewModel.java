@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -70,11 +70,11 @@ import lombok.val;
 @DomainObject
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureViewModel";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureViewModel";
 
-    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleApplib.PropertyDomainEvent<S, T> {}
-    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleApplib.CollectionDomainEvent<S, T> {}
-    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends IsisModuleApplib.ActionDomainEvent<S> {}
+    public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends CausewayModuleApplib.PropertyDomainEvent<S, T> {}
+    public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends CausewayModuleApplib.CollectionDomainEvent<S, T> {}
+    public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends CausewayModuleApplib.ActionDomainEvent<S> {}
 
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;

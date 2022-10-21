@@ -31,13 +31,13 @@ import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiService;
-import org.apache.causeway.viewer.commons.services.IsisModuleViewerCommonsServices;
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".HeaderUiServiceDefault")
+@Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".HeaderUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

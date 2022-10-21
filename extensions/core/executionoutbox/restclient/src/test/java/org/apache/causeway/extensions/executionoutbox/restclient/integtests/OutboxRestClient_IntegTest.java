@@ -45,21 +45,21 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.causeway.core.webapp.IsisModuleCoreWebapp;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.CounterRepository;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter_bumpUsingMixin;
 import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter_bumpUsingMixinWithExecutionPublishingDisabled;
-import org.apache.causeway.extensions.executionoutbox.jpa.IsisModuleExtExecutionOutboxPersistenceJpa;
+import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
 import org.apache.causeway.extensions.executionoutbox.jpa.integtests.model.Counter;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
-import org.apache.causeway.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 
 @SpringBootTest(
         classes = OutboxRestClient_IntegTest.AppManifest.class,
@@ -71,13 +71,13 @@ public class OutboxRestClient_IntegTest  {
     @EnableAutoConfiguration
     @Configuration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModulePersistenceJpaEclipselink.class,
-            IsisModuleTestingFixturesApplib.class,
-            IsisModuleExtExecutionOutboxPersistenceJpa.class,
-            IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
-            IsisModuleCoreWebapp.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModulePersistenceJpaEclipselink.class,
+            CausewayModuleTestingFixturesApplib.class,
+            CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+            CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,
+            CausewayModuleCoreWebapp.class,
 
             // mixins
             Counter_bumpUsingMixin.class,

@@ -24,9 +24,9 @@ import java.util.Objects;
 import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.value.Markup;
-import org.apache.causeway.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -39,7 +39,7 @@ import lombok.experimental.Accessors;
  *
  * @since 2.0 {@index}
  */
-@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".AsciiDoc")
+@Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDoc")
 @org.apache.causeway.applib.annotation.Value
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support

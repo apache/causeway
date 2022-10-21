@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
+import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 
@@ -56,10 +56,10 @@ import lombok.RequiredArgsConstructor;
 public class ExecutionOutboxMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxMenu";
+            CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxMenu";
 
     public static abstract class ActionDomainEvent
-        extends IsisModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxMenu> { }
+        extends CausewayModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxMenu> { }
 
 
     @Action(semantics = SemanticsOf.SAFE)

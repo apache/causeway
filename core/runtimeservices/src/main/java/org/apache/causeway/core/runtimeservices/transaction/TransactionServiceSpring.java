@@ -32,7 +32,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".TransactionServiceSpring")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".TransactionServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
 @Log4j2

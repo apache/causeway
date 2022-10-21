@@ -22,13 +22,13 @@ import javax.inject.Inject;
 
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.IsisPresets;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
-import org.apache.causeway.extensions.audittrail.jpa.IsisModuleExtAuditTrailPersistenceJpa;
+import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrailPersistenceJpa;
 import org.apache.causeway.extensions.audittrail.jpa.integtests.model.Counter;
 import org.apache.causeway.extensions.audittrail.jpa.integtests.model.CounterRepository;
-import org.apache.causeway.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -52,9 +52,9 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModuleExtAuditTrailPersistenceJpa.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModuleExtAuditTrailPersistenceJpa.class,
 
             // entities, eager meta-model introspection
             Counter.class,

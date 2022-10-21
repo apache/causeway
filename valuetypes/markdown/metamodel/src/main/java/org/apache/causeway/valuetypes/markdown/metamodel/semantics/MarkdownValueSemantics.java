@@ -29,11 +29,11 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
-import org.apache.causeway.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
+import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
 @Component
-@Named(IsisModuleValMarkdownApplib.NAMESPACE + ".MarkdownValueSemantics")
+@Named(CausewayModuleValMarkdownApplib.NAMESPACE + ".MarkdownValueSemantics")
 public class MarkdownValueSemantics
 extends ValueSemanticsAbstract<Markdown>
 implements

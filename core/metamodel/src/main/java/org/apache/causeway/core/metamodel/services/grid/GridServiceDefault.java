@@ -37,13 +37,13 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridSystemService;
-import org.apache.causeway.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

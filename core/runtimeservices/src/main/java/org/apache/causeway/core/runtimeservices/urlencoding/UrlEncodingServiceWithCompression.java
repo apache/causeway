@@ -25,7 +25,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UrlEncodingServiceWithCompression")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".UrlEncodingServiceWithCompression")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Compression")
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {

@@ -31,7 +31,7 @@ import javax.inject.Named;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -53,7 +53,7 @@ import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 
 @Component
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ValuePropertyFactoryDefault")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ValuePropertyFactoryDefault")
 public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();

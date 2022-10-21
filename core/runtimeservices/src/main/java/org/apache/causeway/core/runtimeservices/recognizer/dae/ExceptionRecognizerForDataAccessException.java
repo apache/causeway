@@ -39,7 +39,7 @@ import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.runtime.IsisModuleCoreRuntime;
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 
 import lombok.Getter;
 import lombok.val;
@@ -55,7 +55,7 @@ import lombok.val;
 public class ExceptionRecognizerForDataAccessException
 implements ExceptionRecognizer {
 
-    static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntime.NAMESPACE + ".ExceptionRecognizerForDataAccessException";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleCoreRuntime.NAMESPACE + ".ExceptionRecognizerForDataAccessException";
 
     @Getter
     private final boolean disabled;

@@ -118,7 +118,7 @@ public final class LayoutConstants {
          * As contributed by {@link org.apache.causeway.applib.mixins.metamodel.Object_objectIdentifier} mixin.
          *
          * <p>
-         *     Note that {@link org.apache.causeway.applib.IsisModuleApplibMixins} module must be included within the
+         *     Note that {@link org.apache.causeway.applib.CausewayModuleApplibMixins} module must be included within the
          *     application in order to enable this mixin.
          * </p>
          */
@@ -128,7 +128,7 @@ public final class LayoutConstants {
          * As contributed by {@link org.apache.causeway.applib.mixins.metamodel.Object_logicalTypeName} mixin.
          *
          * <p>
-         *     Note that {@link org.apache.causeway.applib.IsisModuleApplibMixins} module must be included within the
+         *     Note that {@link org.apache.causeway.applib.CausewayModuleApplibMixins} module must be included within the
          *     application in order to enable this mixin.
          * </p>
          */

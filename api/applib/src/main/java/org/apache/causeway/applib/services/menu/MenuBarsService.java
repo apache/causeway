@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 
@@ -40,7 +40,7 @@ import org.apache.causeway.applib.layout.menubars.MenuBars;
  */
 public interface MenuBarsService {
 
-    @Named(IsisModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
+    @Named(CausewayModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
     @Value
     enum Type {
 

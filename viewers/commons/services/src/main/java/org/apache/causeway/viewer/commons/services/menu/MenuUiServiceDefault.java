@@ -40,13 +40,13 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
-import org.apache.causeway.viewer.commons.services.IsisModuleViewerCommonsServices;
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".MenuUiServiceDefault")
+@Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".MenuUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

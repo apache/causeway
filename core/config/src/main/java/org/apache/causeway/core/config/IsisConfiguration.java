@@ -64,7 +64,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
-import org.apache.causeway.applib.IsisModuleApplib;
+import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -3045,10 +3045,10 @@ public class IsisConfiguration {
                 public static final String ADMIN_ROLE_NAME_DEFAULT = "isis-ext-secman-admin";
                 public static final List<String> ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT =
                         Collections.unmodifiableList(listOf(
-                                IsisModuleApplib.NAMESPACE,
-                                IsisModuleApplib.NAMESPACE_SUDO,
-                                IsisModuleApplib.NAMESPACE_CONF,
-                                IsisModuleApplib.NAMESPACE_FEAT,
+                                CausewayModuleApplib.NAMESPACE,
+                                CausewayModuleApplib.NAMESPACE_SUDO,
+                                CausewayModuleApplib.NAMESPACE_CONF,
+                                CausewayModuleApplib.NAMESPACE_FEAT,
                                 "isis.security",
                                 "isis.ext.h2Console",
                                 "isis.ext.secman"
