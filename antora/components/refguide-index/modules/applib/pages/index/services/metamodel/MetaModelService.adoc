@@ -23,12 +23,12 @@ interface MetaModelService {
 <.> xref:#lookupLogicalTypeByName_String[lookupLogicalTypeByName(String)]
 +
 --
-Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 --
 <.> xref:#lookupLogicalTypeByClass_Class[lookupLogicalTypeByClass(Class)]
 +
 --
-Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
+Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ).
 --
 <.> xref:#rebuild_Class[rebuild(Class)]
 +
@@ -66,12 +66,12 @@ Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 [#lookupLogicalTypeByName_String]
 === lookupLogicalTypeByName(String)
 
-Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
+Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 
 [#lookupLogicalTypeByClass_Class]
 === lookupLogicalTypeByClass(Class)
 
-Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
+Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Causeway' `ObjectTypeFacet` ).
 
 [#rebuild_Class]
 === rebuild(Class)
@@ -102,7 +102,7 @@ Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provide
 
 Obtains the implementation of xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
 
-This is used by framework-provided implementations of _org.apache.isis.applib.services.conmap.ContentMappingService_ .
+This is used by framework-provided implementations of _org.apache.causeway.applib.services.conmap.ContentMappingService_ .
 
 [#exportMetaModel_Config]
 === exportMetaModel(Config)

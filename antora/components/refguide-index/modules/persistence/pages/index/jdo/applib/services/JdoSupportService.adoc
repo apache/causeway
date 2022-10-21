@@ -80,7 +80,7 @@ Force the deletion of all instances of the specified class.
 
 Note: this is intended primarily for testing purposes, eg clearing existing data as part of installing fixtures. It will generate a `SQL DELETE` for each instance. To perform a bulk deletion with a single `SQL DELETE` , use _#executeUpdate(String)_ .
 
-Implementation note: It can occasionally be the case that Isis' internal adapter for the domain object is still in memory. JDO/DataNucleus seems to bump up the version of the object prior to its deletion, which under normal circumstances would cause Isis to throw a concurrency exception. Therefore To prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
+Implementation note: It can occasionally be the case that Causeway' internal adapter for the domain object is still in memory. JDO/DataNucleus seems to bump up the version of the object prior to its deletion, which under normal circumstances would cause Causeway to throw a concurrency exception. Therefore To prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
 
 [#executeQuery_Class_BooleanExpression]
 === executeQuery(Class, BooleanExpression)

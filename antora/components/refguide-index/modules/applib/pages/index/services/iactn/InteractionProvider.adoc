@@ -3,7 +3,7 @@
 
 Provides the current thread's xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] .
 
-An xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] contains a top-level xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] representing the invocation of an action or the editing of a property. If that top-level action or property uses the _org.apache.isis.applib.services.wrapper.WrapperFactory_ domain service to invoke child actions/properties, then those sub-executions are captured as a call-graph. The xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] is thus a graph structure.
+An xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] contains a top-level xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] representing the invocation of an action or the editing of a property. If that top-level action or property uses the _org.apache.causeway.applib.services.wrapper.WrapperFactory_ domain service to invoke child actions/properties, then those sub-executions are captured as a call-graph. The xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] is thus a graph structure.
 
 == API
 

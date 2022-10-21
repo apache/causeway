@@ -40,7 +40,7 @@ Publishing support: for object stores to enlist an object that is about to be de
 <.> xref:#incrementLoaded_ManagedObject[incrementLoaded(ManagedObject)]
 +
 --
-Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.isis.applib.services.metrics.MetricsService_ .
+Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.causeway.applib.services.metrics.MetricsService_ .
 --
 
 == Members
@@ -76,4 +76,4 @@ The post-modification values are captured when the transaction commits. In the c
 [#incrementLoaded_ManagedObject]
 === incrementLoaded(ManagedObject)
 
-Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.isis.applib.services.metrics.MetricsService_ .
+Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.causeway.applib.services.metrics.MetricsService_ .

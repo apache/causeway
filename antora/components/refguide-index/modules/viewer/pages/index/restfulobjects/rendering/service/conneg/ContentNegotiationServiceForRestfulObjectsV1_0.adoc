@@ -9,7 +9,7 @@ Returns representations according to theRestful Objectsspec.
 .ContentNegotiationServiceForRestfulObjectsV1_0.java
 ----
 class ContentNegotiationServiceForRestfulObjectsV1_0 {
-  ContentNegotiationServiceForRestfulObjectsV1_0(IsisConfiguration configuration, SpecificationLoader specificationLoader)
+  ContentNegotiationServiceForRestfulObjectsV1_0(CausewayConfiguration configuration, SpecificationLoader specificationLoader)
   ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)
   ResponseBuilder buildResponseTo(IResourceContext resourceContext, ManagedObject objectAdapter, JsonRepresentation representationIfAnyRequired, JsonRepresentation rootRepresentation)     // <.>
   ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)

@@ -67,7 +67,7 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 <.> xref:#entityChangePublishing[entityChangePublishing]
 +
 --
-Whether entity changes (persistent property updates) should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
+Whether entity changes (persistent property updates) should be published to _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.causeway.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber_ s.
 --
 <.> xref:#introspection[introspection]
 +
@@ -99,52 +99,52 @@ The logical name of this object's type, that uniquely and fully qualifies it. Th
 <.> xref:#createdLifecycleEvent[createdLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
 --
 <.> xref:#persistingLifecycleEvent[persistingLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
 --
 <.> xref:#persistedLifecycleEvent[persistedLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
 --
 <.> xref:#loadedLifecycleEvent[loadedLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
 --
 <.> xref:#updatingLifecycleEvent[updatingLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
 --
 <.> xref:#updatedLifecycleEvent[updatedLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
 --
 <.> xref:#removingLifecycleEvent[removingLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
 --
 <.> xref:#actionDomainEvent[actionDomainEvent]
 +
 --
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 --
 <.> xref:#propertyDomainEvent[propertyDomainEvent]
 +
 --
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 --
 <.> xref:#collectionDomainEvent[collectionDomainEvent]
 +
 --
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 --
 
 == Members
@@ -192,7 +192,7 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 [#entityChangePublishing]
 === entityChangePublishing
 
-Whether entity changes (persistent property updates) should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
+Whether entity changes (persistent property updates) should be published to _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.causeway.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber_ s.
 
 [#introspection]
 === introspection
@@ -230,56 +230,56 @@ This value, if specified, is used in the serialized form of the object's xref:re
 [#createdLifecycleEvent]
 === createdLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#persistingLifecycleEvent]
 === persistingLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#persistedLifecycleEvent]
 === persistedLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#loadedLifecycleEvent]
 === loadedLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#updatingLifecycleEvent]
 === updatingLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#updatedLifecycleEvent]
 === updatedLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#removingLifecycleEvent]
 === removingLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#actionDomainEvent]
 === actionDomainEvent
 
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 For example:
 
@@ -301,7 +301,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#propertyDomainEvent]
 === propertyDomainEvent
 
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
 For example:
 
@@ -319,7 +319,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#collectionDomainEvent]
 === collectionDomainEvent
 
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 For example:
 

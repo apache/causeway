@@ -3,7 +3,7 @@
 
 Returns a UI model to represent the currently logged in user.
 
-This is backed by the _org.apache.isis.applib.services.user.UserMemento_ obtained from _UserService#currentUser()_ API, but could be presented in various ways.
+This is backed by the _org.apache.causeway.applib.services.user.UserMemento_ obtained from _UserService#currentUser()_ API, but could be presented in various ways.
 
 == API
 

@@ -3,7 +3,7 @@
 
 Used to serialize the intention to invoke an action or edit a property as a _CommandDto_ , for example such that it can be persisted and then executed at some later time or even against some external system.
 
-There are some similarities to _org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory_ , which is used to instantiate an _org.apache.isis.schema.ixn.v2.InteractionDto_ that represents the _actual_ execution of the action invocation or property edit.
+There are some similarities to _org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory_ , which is used to instantiate an _org.apache.causeway.schema.ixn.v2.InteractionDto_ that represents the _actual_ execution of the action invocation or property edit.
 
 == API
 
@@ -56,11 +56,11 @@ Returns a _CommandDto_ that represents the intention to edit (set or clear) a pr
 
 Adds the arguments of an action to an _ActionDto_ (the element within a _CommandDto_ representing an action invocation).
 
-This is used when the command is actually executed to populate the parameters of the equivalent _org.apache.isis.schema.ixn.v2.ActionInvocationDto_
+This is used when the command is actually executed to populate the parameters of the equivalent _org.apache.causeway.schema.ixn.v2.ActionInvocationDto_
 
 [#addPropertyValue_InteractionHead_OneToOneAssociation_PropertyDto_ManagedObject]
 === addPropertyValue(InteractionHead, OneToOneAssociation, PropertyDto, ManagedObject)
 
 Adds the new value argument of a property to a _PropertyDto_ (the element a _CommandDto_ representing an property edit).
 
-This is used when the command is actually executed to set the the new value of the equivalent _org.apache.isis.schema.ixn.v2.PropertyEditDto_ .
+This is used when the command is actually executed to set the the new value of the equivalent _org.apache.causeway.schema.ixn.v2.PropertyEditDto_ .

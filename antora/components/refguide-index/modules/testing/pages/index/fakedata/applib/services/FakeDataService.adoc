@@ -44,9 +44,9 @@ class FakeDataService {
   BigIntegers bigIntegers()
   Urls urls()
   Uuids uuids()
-  IsisPasswords isisPasswords()
-  IsisBlobs isisBlobs()
-  IsisClobs isisClobs()
+  CausewayPasswords causewayPasswords()
+  CausewayBlobs causewayBlobs()
+  CausewayClobs causewayClobs()
 }
 ----
 

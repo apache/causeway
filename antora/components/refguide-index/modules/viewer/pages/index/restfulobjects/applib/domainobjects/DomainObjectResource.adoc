@@ -23,7 +23,7 @@ interface DomainObjectResource {
   Response deleteActionPromptNotAllowed(String domainType, String instanceId, String actionId)
   Response putActionPromptNotAllowed(String domainType, String instanceId, String actionId)
   Response postActionPromptNotAllowed(String domainType, String instanceId, String actionId)
-  Response invokeActionQueryOnly(String domainType, String instanceId, String actionId, String xIsisQueryString)
+  Response invokeActionQueryOnly(String domainType, String instanceId, String actionId, String xCausewayQueryString)
   Response invokeActionIdempotent(String domainType, String instanceId, String actionId, InputStream arguments)
   Response invokeAction(String domainType, String instanceId, String actionId, InputStream arguments)
   Response deleteInvokeActionNotAllowed(String domainType, String instanceId, String actionId)

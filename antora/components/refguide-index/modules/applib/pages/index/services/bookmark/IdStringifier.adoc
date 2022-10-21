@@ -3,7 +3,7 @@
 
 SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and to convert back again into the key object used to actually look up the target entity instance; supported by both JDO and JPA persistence mechanisms.
 
-This is ultimately used by xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService] where we hold a persistent reference to an entity. The resultant string also appears in URLs of the Wicket viewer and Restful Objects viewers, and in mementos eg in _org.apache.isis.schema.cmd.v2.CommandDto_ and _org.apache.isis.schema.ixn.v2.InteractionDto_ .
+This is ultimately used by xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService] where we hold a persistent reference to an entity. The resultant string also appears in URLs of the Wicket viewer and Restful Objects viewers, and in mementos eg in _org.apache.causeway.schema.cmd.v2.CommandDto_ and _org.apache.causeway.schema.ixn.v2.InteractionDto_ .
 
 The framework provides default implementations of this SPI for JDO (data store and application identity) and for JPA. Because this is a SPI, other modules or application code can provide their own implementations. An example of such is the JPA implementation of the `commandlog` extension.
 

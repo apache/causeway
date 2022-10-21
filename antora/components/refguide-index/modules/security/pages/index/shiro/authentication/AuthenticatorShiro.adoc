@@ -11,7 +11,7 @@ However, although there are two objects, they are set up to share the same _Secu
 .AuthenticatorShiro.java
 ----
 class AuthenticatorShiro {
-  AuthenticatorShiro(IsisConfiguration configuration)
+  AuthenticatorShiro(CausewayConfiguration configuration)
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
   InteractionContext authenticate(AuthenticationRequest request, String code)
   void logout(InteractionContext context)

@@ -60,7 +60,7 @@ enum Rel {
 <.> xref:#getName_[getName()]
 +
 --
-full spec name with rel-def and suffix, eg. _urn:org.apache.isis.restfulobjects:rels/menuBars_
+full spec name with rel-def and suffix, eg. _urn:org.apache.causeway.restfulobjects:rels/menuBars_
 --
 <.> xref:#getSimpleName_[getSimpleName()]
 +
@@ -78,7 +78,7 @@ For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that 
 [#getName_]
 === getName()
 
-full spec name with rel-def and suffix, eg. _urn:org.apache.isis.restfulobjects:rels/menuBars_
+full spec name with rel-def and suffix, eg. _urn:org.apache.causeway.restfulobjects:rels/menuBars_
 
 [#getSimpleName_]
 === getSimpleName()

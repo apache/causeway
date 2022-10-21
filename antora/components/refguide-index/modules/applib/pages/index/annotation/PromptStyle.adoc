@@ -26,7 +26,7 @@ enum PromptStyle {
 <.> xref:#AS_CONFIGURED[AS_CONFIGURED]
 +
 --
-Prompt using the style configured by `isis.viewer.wicket.promptStyle` .
+Prompt using the style configured by `causeway.viewer.wicket.promptStyle` .
 --
 <.> xref:#DIALOG[DIALOG]
 +
@@ -64,7 +64,7 @@ Ignore the value provided by this annotation (meaning that the framework will ke
 [#AS_CONFIGURED]
 === AS_CONFIGURED
 
-Prompt using the style configured by `isis.viewer.wicket.promptStyle` .
+Prompt using the style configured by `causeway.viewer.wicket.promptStyle` .
 
 If no style is configured, then _#INLINE_ is assumed.
 
@@ -73,7 +73,7 @@ If no style is configured, then _#INLINE_ is assumed.
 
 Use a dialog for the prompt.
 
-This will be either modal dialog (same as if _#DIALOG_MODAL_ was selected) or sidebar (same as if _#DIALOG_SIDEBAR_ was selected) depending on the value of the `isis.viewer.wicket.dialogMode` configuration property.
+This will be either modal dialog (same as if _#DIALOG_MODAL_ was selected) or sidebar (same as if _#DIALOG_SIDEBAR_ was selected) depending on the value of the `causeway.viewer.wicket.dialogMode` configuration property.
 
 [#DIALOG_SIDEBAR]
 === DIALOG_SIDEBAR

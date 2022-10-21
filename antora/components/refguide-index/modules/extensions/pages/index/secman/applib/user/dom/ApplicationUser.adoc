@@ -21,7 +21,7 @@ class ApplicationUser {
   boolean isRunAsAdministrator()
   boolean isForSelfOrRunAsAdministrator()
   boolean isLocalAccount()
-  int compareTo(org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser other)
+  int compareTo(org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser other)
   boolean equals(Object obj)
   int hashCode()
   String toString()

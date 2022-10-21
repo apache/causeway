@@ -1,0 +1,31 @@
+= CausewaySchemas _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Controls whether, when generating _JaxbService#toXsd(Object, CausewaySchemas) XML schemas_ , any of the common Causeway schemas (in the namespace `http://org.apache.causeway.schema` ) should be included or just ignored (and therefore don't appear in the returned map).
+
+The practical benefit of this is that for many DTOs there will only be one other schema, that of the DTO itself. The xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd] mixin uses this to return that single XSD, rather than generating a ZIP of two schemas (the Causeway schema and the one for the DTO), as it would otherwise; far more convenient when debugging and so on. The Causeway schemas can always bedownloadedfrom the Causeway website.
+
+== API
+
+[source,java]
+.CausewaySchemas.java
+----
+enum CausewaySchemas {
+  INCLUDE
+  IGNORE
+  boolean shouldIgnore(String namespaceUri)     // <.>
+}
+----
+
+<.> xref:#shouldIgnore_String[shouldIgnore(String)]
++
+--
+Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
+--
+
+== Members
+
+[#shouldIgnore_String]
+=== shouldIgnore(String)
+
+Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.

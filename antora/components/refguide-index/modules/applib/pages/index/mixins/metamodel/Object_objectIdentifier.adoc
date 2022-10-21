@@ -3,7 +3,7 @@
 
 Contributes a property exposing the internal identifier of the domain object, typically as specified by _DomainObject#logicalTypeName()_ .
 
-The object identifier is also accessible from the _org.apache.isis.applib.services.bookmark.Bookmark_ of the object.
+The object identifier is also accessible from the _org.apache.causeway.applib.services.bookmark.Bookmark_ of the object.
 
 == API
 

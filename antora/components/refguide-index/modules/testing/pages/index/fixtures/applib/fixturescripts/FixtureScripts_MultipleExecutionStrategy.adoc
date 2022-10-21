@@ -56,7 +56,7 @@ Any given fixture script can only be run once, where the check to determine if a
 
 This strategy is a half-way house between the _#EXECUTE_ONCE_BY_VALUE_ and _#EXECUTE_ strategies, where we want to prevent a fixture from running more than once, where by "fixture" we mean the 'what' - the data to be loaded up; the 'how' is unimportant.
 
-This strategy was introduced in order to better support the `ExcelFixture` fixture script (provided by the (non-ASF) Isis Addons'Excel module. The `ExcelFixture` takes an Excel spreadsheet as the 'what' and loads up each row. So the 'how' is re-usable (therefore the _#EXECUTE_ONCE_BY_CLASS_ doesn't apply) on the other hand we don't want the 'what' to be loaded more than once (so the _#EXECUTE_ strategy doesn't apply either). The solution is for `ExcelFixture` to have value semantics (a digest of the spreadsheet argument).
+This strategy was introduced in order to better support the `ExcelFixture` fixture script (provided by the (non-ASF) Causeway Addons'Excel module. The `ExcelFixture` takes an Excel spreadsheet as the 'what' and loads up each row. So the 'how' is re-usable (therefore the _#EXECUTE_ONCE_BY_CLASS_ doesn't apply) on the other hand we don't want the 'what' to be loaded more than once (so the _#EXECUTE_ strategy doesn't apply either). The solution is for `ExcelFixture` to have value semantics (a digest of the spreadsheet argument).
 
 [#EXECUTE]
 === EXECUTE

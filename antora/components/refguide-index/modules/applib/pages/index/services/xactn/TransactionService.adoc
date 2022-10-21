@@ -3,7 +3,7 @@
 
 Provides utilities to access active transactions associated with the current thread.
 
-This is a low-level service that domain objects will typically have little need to leverage; there will normally be a transaction started already by the framework at the beginning of an _org.apache.isis.applib.services.iactn.Interaction_ and committed at the end. On occasion though it can be useful to take explicit control over transaction boundaries, which is where the methods provided by this domain service can be useful.
+This is a low-level service that domain objects will typically have little need to leverage; there will normally be a transaction started already by the framework at the beginning of an _org.apache.causeway.applib.services.iactn.Interaction_ and committed at the end. On occasion though it can be useful to take explicit control over transaction boundaries, which is where the methods provided by this domain service can be useful.
 
 NOTE: there is _no_ method to close (which is to say to commit) an existing transaction, because of a subtlety with the JPA transaction manager: if a transaction wasn't a new one, then closing the transaction would actually mean to decrement the transaction counter (only when it hits zero should the transaction be committed); but if the previous transaction was instead suspended, the commit the new transaction and then resume the previous transaction.
 

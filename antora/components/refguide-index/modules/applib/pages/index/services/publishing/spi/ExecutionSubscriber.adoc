@@ -3,7 +3,7 @@
 
 SPI that allows the execution of individual interactions (action invocations or property edits) to be subscribed to.
 
-The typical use case is to facilitate coarse-grained messaging for system-to-system interactions, that is from an Apache Isis application to some other system. This could be done using a pub/sub bus such asApache ActiveMQwithApache Camel.
+The typical use case is to facilitate coarse-grained messaging for system-to-system interactions, that is from an Apache Causeway application to some other system. This could be done using a pub/sub bus such asApache ActiveMQwithApache Camel.
 
 Only actions/properties annotated for publishing (using _Action#executionPublishing()_ or _Property#executionPublishing()_ are published.
 

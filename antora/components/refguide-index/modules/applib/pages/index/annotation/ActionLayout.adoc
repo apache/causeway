@@ -115,7 +115,7 @@ Note that it is also possible to associate an action with a collection using _Ac
 
 Whether (and how) this action can be bookmarked in the UI.
 
-For bookmarkable actions, either _org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
+For bookmarkable actions, either _org.apache.causeway.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.causeway.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
 
 [#cssClass]
 === cssClass

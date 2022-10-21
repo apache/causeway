@@ -3,7 +3,7 @@
 
 Returns a random _LocalDate_ , optionally based on the current time but constrained by a _Period_ .
 
-The current time ('now') is obtained from the _org.apache.isis.applib.services.clock.ClockService_ .
+The current time ('now') is obtained from the _org.apache.causeway.applib.services.clock.ClockService_ .
 
 == API
 

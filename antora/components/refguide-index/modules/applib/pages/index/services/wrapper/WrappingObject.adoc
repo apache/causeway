@@ -9,23 +9,23 @@ Implemented by all objects that have been viewed as per _WrapperFactory#wrap(Obj
 .WrappingObject.java
 ----
 interface WrappingObject {
-  void __isis_save()     // <.>
-  Object __isis_wrapped()     // <.>
-  ImmutableEnumSet<ExecutionMode> __isis_executionModes()     // <.>
+  void __causeway_save()     // <.>
+  Object __causeway_wrapped()     // <.>
+  ImmutableEnumSet<ExecutionMode> __causeway_executionModes()     // <.>
 }
 ----
 
-<.> xref:#__isis_save_[__isis_save()]
+<.> xref:#__causeway_save_[__causeway_save()]
 +
 --
 Programmatic equivalent of invoking save for a transient object .
 --
-<.> xref:#__isis_wrapped_[__isis_wrapped()]
+<.> xref:#__causeway_wrapped_[__causeway_wrapped()]
 +
 --
 Provide access to the underlying, wrapped object.
 --
-<.> xref:#__isis_executionModes_[__isis_executionModes()]
+<.> xref:#__causeway_executionModes_[__causeway_executionModes()]
 +
 --
 The xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode] (s) inferred from the xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
@@ -33,25 +33,25 @@ The xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[Execu
 
 == Members
 
-[#__isis_save_]
-=== __isis_save()
+[#__causeway_save_]
+=== __causeway_save()
 
 Programmatic equivalent of invoking save for a transient object .
 
-NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
+NOTE: domain classes may not have a method with this name. The `__causeway_` prefix is intended to reduce the risk of a collision.
 
-[#__isis_wrapped_]
-=== __isis_wrapped()
+[#__causeway_wrapped_]
+=== __causeway_wrapped()
 
 Provide access to the underlying, wrapped object.
 
 Used to unwrap objects used as arguments to actions (otherwise, end up creating a `ObjectSpecification` for the Javassist-enhanced class, not the original class).
 
-NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
+NOTE: domain classes may not have a method with this name. The `__causeway_` prefix is intended to reduce the risk of a collision.
 
  *NOTE: there is a string-literal reference to this name `DomainObjectInvocationHandler` , so it should not be changed.* .
 
-[#__isis_executionModes_]
-=== __isis_executionModes()
+[#__causeway_executionModes_]
+=== __causeway_executionModes()
 
 The xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode] (s) inferred from the xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .

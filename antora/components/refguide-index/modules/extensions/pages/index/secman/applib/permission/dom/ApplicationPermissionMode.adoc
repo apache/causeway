@@ -44,4 +44,4 @@ In other words, whether they can execute (if an action, modify/clear (if a prope
 
 The xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule] of the xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission] indicates whether access is being granted or denied.
 
-Note: as of ISIS-3084 the notion of mutable collections was removed
+Note: as of CAUSEWAY-3084 the notion of mutable collections was removed

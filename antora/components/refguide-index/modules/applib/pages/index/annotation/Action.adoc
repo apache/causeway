@@ -41,7 +41,7 @@ Whether action invocations, captured as xref:refguide:applib:index/services/comm
 <.> xref:#domainEvent[domainEvent]
 +
 --
-Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of the action should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 --
 <.> xref:#executionPublishing[executionPublishing]
 +
@@ -100,7 +100,7 @@ Whether action invocations, captured as xref:refguide:applib:index/services/comm
 [#domainEvent]
 === domainEvent
 
-Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of the action should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
 

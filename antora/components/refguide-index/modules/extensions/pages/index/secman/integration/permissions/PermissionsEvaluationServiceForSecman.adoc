@@ -7,7 +7,7 @@
 .PermissionsEvaluationServiceForSecman.java
 ----
 class PermissionsEvaluationServiceForSecman {
-  PermissionsEvaluationServiceForSecman(IsisConfiguration isisConfiguration)
+  PermissionsEvaluationServiceForSecman(CausewayConfiguration causewayConfiguration)
   ApplicationPermissionValueSet.Evaluation evaluate(ApplicationFeatureId targetMemberId, ApplicationPermissionMode mode, Collection<ApplicationPermissionValue> permissionValues)
 }
 ----

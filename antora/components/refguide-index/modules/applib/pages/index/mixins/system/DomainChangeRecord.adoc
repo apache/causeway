@@ -34,7 +34,7 @@ Distinguishes commands from audit entries from published events/interactions (wh
 <.> xref:#getInteractionId_[getInteractionId()]
 +
 --
-The unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
+The unique identifier of the _org.apache.causeway.applib.services.iactn.Interaction_ within which this change occurred.
 --
 <.> xref:#getUsername_[getUsername()]
 +
@@ -77,7 +77,7 @@ Distinguishes commands from audit entries from published events/interactions (wh
 [#getInteractionId_]
 === getInteractionId()
 
-The unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
+The unique identifier of the _org.apache.causeway.applib.services.iactn.Interaction_ within which this change occurred.
 
 [#getUsername_]
 === getUsername()

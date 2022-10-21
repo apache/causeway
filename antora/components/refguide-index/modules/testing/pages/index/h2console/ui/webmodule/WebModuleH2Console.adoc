@@ -7,7 +7,7 @@
 .WebModuleH2Console.java
 ----
 class WebModuleH2Console {
-  WebModuleH2Console(DataSourceIntrospectionService datasourceIntrospector, IsisSystemEnvironment isisSystemEnvironment, ServiceInjector serviceInjector)
+  WebModuleH2Console(DataSourceIntrospectionService datasourceIntrospector, CausewaySystemEnvironment causewaySystemEnvironment, ServiceInjector serviceInjector)
   Can<ServletContextListener> init(ServletContext ctx)
   boolean isApplicable(WebModuleContext ctx)
 }

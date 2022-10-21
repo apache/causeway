@@ -42,7 +42,7 @@ Whether property edits, captured as xref:refguide:applib:index/services/command/
 <.> xref:#domainEvent[domainEvent]
 +
 --
-Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to the property that should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 --
 <.> xref:#editing[editing]
 +
@@ -132,7 +132,7 @@ Whether property edits, captured as xref:refguide:applib:index/services/command/
 [#domainEvent]
 === domainEvent
 
-Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to the property that should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
 Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
 

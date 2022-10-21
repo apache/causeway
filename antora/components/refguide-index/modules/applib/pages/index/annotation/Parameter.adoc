@@ -91,7 +91,7 @@ If more than one is provided, then all must be satisfied (in effect "AND"ed toge
 
 Whether this parameter is optional or is mandatory (ie required).
 
-For parameters the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , is taken to mean that the parameter is required.
+For parameters the default value, _org.apache.causeway.applib.annotation.Optionality#DEFAULT_ , is taken to mean that the parameter is required.
 
 [#regexPattern]
 === regexPattern

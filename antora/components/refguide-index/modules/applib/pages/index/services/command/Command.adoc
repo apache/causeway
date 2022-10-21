@@ -3,7 +3,7 @@
 
 Represents the _intention to_ invoke either an action or modify a property. There can be only one such intention per (web) request, so a command is in effect interaction-scoped.
 
-Each Command holds a _CommandDto_ (see Apache Isiscmdschema) which reifies all the details in a serializable form.
+Each Command holds a _CommandDto_ (see Apache Causewaycmdschema) which reifies all the details in a serializable form.
 
 It also captures details of the corresponding action invocation (or property edit), specifically when that action/edit _Command#getStartedAt() started_ or _Command#getCompletedAt() completed_ , and its result, either a _Command#getResult() return value_ or an _Command#getException() exception_ . Also captures a stack of xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] s.
 

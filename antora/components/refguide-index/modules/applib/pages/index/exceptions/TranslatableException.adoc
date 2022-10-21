@@ -3,7 +3,7 @@
 
 Exceptions that provide translations should implement this interface.
 
-The _org.apache.isis.applib.services.exceprecog.ExceptionRecognizer_ will automatically detect and use the translation. In addition, the integration testing support provides a rule ( `ExceptionRecognizerTranslations` ) that will exercise any thrown exceptions, ensuring tha the message is captured in the `translations.po` file so that it can be translated.
+The _org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer_ will automatically detect and use the translation. In addition, the integration testing support provides a rule ( `ExceptionRecognizerTranslations` ) that will exercise any thrown exceptions, ensuring tha the message is captured in the `translations.po` file so that it can be translated.
 
 == API
 
@@ -28,4 +28,4 @@ In the spirit of _Exception#getLocalizedMessage()_ , but using xref:refguide:app
 
 In the spirit of _Exception#getLocalizedMessage()_ , but using xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] instead.
 
-If returns `null` , then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] and xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException] to provide constructors that accept a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] , but can be left as null for any existing code.
+If returns `null` , then _Exception#getMessage()_ will be used as a fallback. This design allows the Causeway-provided xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] and xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException] to provide constructors that accept a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] , but can be left as null for any existing code.

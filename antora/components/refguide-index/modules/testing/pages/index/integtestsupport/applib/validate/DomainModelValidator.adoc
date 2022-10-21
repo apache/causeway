@@ -8,7 +8,7 @@
 ----
 class DomainModelValidator {
   DomainModelValidator(ServiceRegistry registry)
-  DomainModelValidator(SpecificationLoader specificationLoader, IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment)
+  DomainModelValidator(SpecificationLoader specificationLoader, CausewayConfiguration configuration, CausewaySystemEnvironment causewaySystemEnvironment)
   void assertValid()     // <.>
   void throwIfInvalid()     // <.>
   Set<ValidationFailure> getFailures()

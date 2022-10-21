@@ -3,7 +3,7 @@
 
 Supporting service for the user-registration functionality.
 
-The framework provides a default implementation which in turn uses the _org.apache.isis.applib.services.email.EmailService_ , namely `EmailServiceDefault` .
+The framework provides a default implementation which in turn uses the _org.apache.causeway.applib.services.email.EmailService_ , namely `EmailServiceDefault` .
 
 == API
 

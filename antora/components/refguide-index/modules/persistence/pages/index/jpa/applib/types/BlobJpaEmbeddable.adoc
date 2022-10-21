@@ -7,7 +7,7 @@ Although JPA supports custom value types, these can only be for simple values; s
 
 EclipseLink _does_ provide its own extension,Transformation API, but there's a lot of boilerplate involved even so.
 
-This class provides support for an alternative approach, where the Isis xref:refguide:applib:index/value/Blob.adoc[Blob] is marshalled in and out of this class.
+This class provides support for an alternative approach, where the Causeway xref:refguide:applib:index/value/Blob.adoc[Blob] is marshalled in and out of this class.
 
 Example usage:
 

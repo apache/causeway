@@ -18,7 +18,7 @@ enum Repainting {
 <.> xref:#NO_REPAINT[NO_REPAINT]
 +
 --
-Equivalent to `@PropertyLayout(unchanging=true)` prior to Isis 2.x
+Equivalent to `@PropertyLayout(unchanging=true)` prior to Causeway 2.x
 --
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
@@ -31,7 +31,7 @@ Ignore the value provided by this annotation (meaning that the framework will ke
 [#NO_REPAINT]
 === NO_REPAINT
 
-Equivalent to `@PropertyLayout(unchanging=true)` prior to Isis 2.x
+Equivalent to `@PropertyLayout(unchanging=true)` prior to Causeway 2.x
 
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED
