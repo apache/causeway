@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.email.EmailService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.extern.log4j.Log4j2;
@@ -61,7 +61,7 @@ public class EmailServiceDefault implements EmailService {
         }
     }
 
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewayConfiguration configuration;
 
     // -- INIT
 

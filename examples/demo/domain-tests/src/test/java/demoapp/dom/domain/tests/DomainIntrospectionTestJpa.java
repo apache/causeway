@@ -63,7 +63,7 @@ class DomainIntrospectionTestJpa {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
     //@Inject private TitleService titleService;
-    //@Inject private IsisConfiguration isisConfig;
+    //@Inject private CausewayConfiguration isisConfig;
     //@Inject private DomainObjectTesterFactory testerFactory;
 
     @Test

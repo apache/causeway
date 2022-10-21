@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
@@ -41,7 +41,7 @@ public class SessionLogServiceInitializer implements MetamodelListener {
     final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
     final InteractionService interactionService;
     final ClockService clockService;
-    final IsisConfiguration isisConfiguration;
+    final CausewayConfiguration isisConfiguration;
 
     @Override
     public void onMetamodelLoaded() {

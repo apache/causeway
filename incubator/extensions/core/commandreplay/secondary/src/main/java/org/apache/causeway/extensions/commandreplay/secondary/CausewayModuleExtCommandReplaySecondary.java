@@ -37,7 +37,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException;
 import org.apache.causeway.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult;
@@ -90,7 +90,7 @@ public class CausewayModuleExtCommandReplaySecondary {
             extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> { }
 
     @Inject ApplicationContext applicationContext;
-    @Inject IsisConfiguration isisConfiguration;
+    @Inject CausewayConfiguration isisConfiguration;
 
     @Bean(name = "ReplicateAndReplayJob")
     public JobDetailFactoryBean replicateAndReplayJobDetailFactory() {

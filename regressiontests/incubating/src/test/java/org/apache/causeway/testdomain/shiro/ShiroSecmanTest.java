@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 
@@ -61,7 +61,7 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class ShiroSecmanTest extends AbstractShiroTest {
 
-    @Inject IsisConfiguration isisConfig;
+    @Inject CausewayConfiguration isisConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach

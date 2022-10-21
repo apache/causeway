@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -53,7 +53,7 @@ public class InitialFixtureScriptsInstaller {
 
     @Inject
     public InitialFixtureScriptsInstaller(
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final FixtureScripts fixtureScripts) {
 
         this.fixtureScripts = fixtureScripts;

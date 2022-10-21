@@ -28,8 +28,8 @@ import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
@@ -54,8 +54,8 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
     private final ServiceRegistry serviceRegistry;
     private final SpecificationLoader specificationLoader;
-    private final IsisConfiguration isisConfiguration;
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final CausewayConfiguration isisConfiguration;
+    private final CausewaySystemEnvironment isisSystemEnvironment;
     private final ExecutionStrategyResolvingWithinInteraction executionStrategy;
     private final ObjectTypeFactory objectTypeFactory;
     private final QueryFieldFactory queryFieldFactory;

@@ -62,12 +62,12 @@ import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
@@ -128,10 +128,10 @@ implements MetaModelContext {
         .build();
 
     @Builder.Default
-    private IsisSystemEnvironment systemEnvironment = newIsisSystemEnvironment();
+    private CausewaySystemEnvironment systemEnvironment = newIsisSystemEnvironment();
 
     @Builder.Default
-    private IsisConfiguration configuration = newIsisConfiguration();
+    private CausewayConfiguration configuration = newCausewayConfiguration();
 
     @Builder.Default
     private ClassSubstitutorRegistry classSubstitutorRegistry =
@@ -260,15 +260,15 @@ implements MetaModelContext {
                 );
     }
 
-    private static IsisSystemEnvironment newIsisSystemEnvironment() {
-        val env = new IsisSystemEnvironment();
+    private static CausewaySystemEnvironment newIsisSystemEnvironment() {
+        val env = new CausewaySystemEnvironment();
         env.setUnitTesting(true);
         return env;
     }
 
-    private static IsisConfiguration newIsisConfiguration() {
+    private static CausewayConfiguration newCausewayConfiguration() {
         val properties = _Maps.<String, String>newHashMap();
-        val config = new IsisConfiguration(new AbstractEnvironment() {
+        val config = new CausewayConfiguration(new AbstractEnvironment() {
             @Override
             public String getProperty(final String key) {
                 return properties.get(key);
@@ -410,7 +410,7 @@ implements MetaModelContext {
         val currentConfigBackup = this.configuration;
         try {
 
-            this.configuration = new IsisConfiguration(new AbstractEnvironment() {
+            this.configuration = new CausewayConfiguration(new AbstractEnvironment() {
                 @Override
                 public String getProperty(final String key) {
                     return properties.get(key);

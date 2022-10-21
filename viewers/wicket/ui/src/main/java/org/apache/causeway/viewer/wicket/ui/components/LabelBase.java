@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -45,7 +45,7 @@ implements HasMetaModelContext {
         super(id, model);
     }
 
-    private transient IsisConfiguration isisConfiguration;
+    private transient CausewayConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient MetaModelContext commonContext;
 
@@ -54,8 +54,8 @@ implements HasMetaModelContext {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
-    public IsisConfiguration getIsisConfiguration() {
-        return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
+    public CausewayConfiguration getCausewayConfiguration() {
+        return isisConfiguration = computeIfAbsent(CausewayConfiguration.class, isisConfiguration);
     }
 
     public WebAppContextPath getWebAppContextPath() {

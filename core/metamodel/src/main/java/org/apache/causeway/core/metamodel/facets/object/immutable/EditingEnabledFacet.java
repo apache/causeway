@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
  * modified either through the viewer or indeed programmatically.
  * <p>
  * Overrides at type level the object editing configuration
- * {@link org.apache.causeway.core.config.IsisConfiguration.Applib.Annotation.DomainObject#getEditing()}
+ * {@link org.apache.causeway.core.config.CausewayConfiguration.Applib.Annotation.DomainObject#getEditing()}
  *
  * @see ValueFacet
  *

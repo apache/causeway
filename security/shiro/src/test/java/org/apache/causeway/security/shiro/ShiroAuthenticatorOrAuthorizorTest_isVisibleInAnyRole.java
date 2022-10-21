@@ -32,7 +32,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.security.shiro.authentication.AuthenticatorShiro;
@@ -50,7 +50,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
         // PRODUCTION
 
-        val configuration = new IsisConfiguration(null);
+        val configuration = new CausewayConfiguration(null);
         configuration.getSecurity().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
 
         authenticator = new AuthenticatorShiro(configuration);

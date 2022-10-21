@@ -46,8 +46,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.DelegatedUsers.AutoCreatePolicy;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.DelegatedUsers.AutoCreatePolicy;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -66,7 +66,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionService interactionService;
     @Inject protected PlatformTransactionManager txMan;
-	@Inject protected IsisConfiguration config;
+	@Inject protected CausewayConfiguration config;
 
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
     @Getter @Setter private boolean autoCreateUser = true;

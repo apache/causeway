@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @Singleton
 @Log4j2
-public class IsisSystemEnvironment {
+public class CausewaySystemEnvironment {
 
     @Inject private ApplicationContext springContext;
 
@@ -74,13 +74,13 @@ public class IsisSystemEnvironment {
         // when bootstrapped with Spring, postConstruct() must happen before any call to get() above,
         // otherwise we copy over settings from the primed instance already created with get() above,
         // then on the _Context replace the primed with this one
-        val primed = _Context.getIfAny(IsisSystemEnvironment.class);
+        val primed = _Context.getIfAny(CausewaySystemEnvironment.class);
         if(primed!=null) {
-            _Context.remove(IsisSystemEnvironment.class);
+            _Context.remove(CausewaySystemEnvironment.class);
             this.setPrototyping(primed.isPrototyping());
             this.setUnitTesting(primed.isUnitTesting());
         }
-        _Context.putSingleton(IsisSystemEnvironment.class, this);
+        _Context.putSingleton(CausewaySystemEnvironment.class, this);
     }
 
     @PreDestroy

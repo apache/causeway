@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 
@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
  * Model providing welcome text.
  */
 public class WelcomeModel
-extends ModelAbstract<IsisConfiguration.Viewer.Wicket.Welcome> {
+extends ModelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ extends ModelAbstract<IsisConfiguration.Viewer.Wicket.Welcome> {
     }
 
     @Override
-    protected IsisConfiguration.Viewer.Wicket.Welcome load() {
+    protected CausewayConfiguration.Viewer.Wicket.Welcome load() {
         return getWicketViewerSettings().getWelcome();
     }
 

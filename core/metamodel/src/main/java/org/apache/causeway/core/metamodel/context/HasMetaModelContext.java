@@ -38,8 +38,8 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
@@ -60,11 +60,11 @@ public interface HasMetaModelContext {
 
     // -- SHORTCUTS
 
-    default IsisSystemEnvironment getSystemEnvironment() {
+    default CausewaySystemEnvironment getSystemEnvironment() {
         return getMetaModelContext().getSystemEnvironment();
     }
 
-    default IsisConfiguration getConfiguration() {
+    default CausewayConfiguration getConfiguration() {
         return getMetaModelContext().getConfiguration();
     }
 

@@ -49,7 +49,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.Authenticator;
@@ -77,12 +77,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AuthenticatorShiro implements Authenticator {
 
-    private final IsisConfiguration configuration;
+    private final CausewayConfiguration configuration;
     private final boolean autoLogout;
 
     @Inject
     public AuthenticatorShiro(
-            final IsisConfiguration configuration) {
+            final CausewayConfiguration configuration) {
         super();
         this.configuration = configuration;
         this.autoLogout = this.configuration.getSecurity().getShiro().isAutoLogoutIfAlreadyAuthenticated();

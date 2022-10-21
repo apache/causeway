@@ -22,7 +22,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * SPI to provide an implementation of
- * {@link org.apache.causeway.core.config.IsisConfiguration.Testing.Fixtures.FixtureScriptsSpecification}.
+ * {@link org.apache.causeway.core.config.CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification}.
  *
  * <p>
  *     Generally it is easy to just use the <code>isis.testing.fixture.fixture-scripts-specification</code>

@@ -42,7 +42,7 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
@@ -65,7 +65,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment isisSystemEnvironment;
 
     private final Class<C> commandLogEntryClass;
 

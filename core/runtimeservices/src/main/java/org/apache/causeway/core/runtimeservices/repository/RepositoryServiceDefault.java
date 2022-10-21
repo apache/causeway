@@ -45,7 +45,7 @@ import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -72,7 +72,7 @@ implements RepositoryService, HasMetaModelContext {
     final FactoryService factoryService;
     final WrapperFactory wrapperFactory;
     final TransactionService transactionService;
-    final IsisConfiguration isisConfiguration;
+    final CausewayConfiguration isisConfiguration;
 
     @Getter(onMethod_ = {@Override})
     final MetaModelContext metaModelContext;

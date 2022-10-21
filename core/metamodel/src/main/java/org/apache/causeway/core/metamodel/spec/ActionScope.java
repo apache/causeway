@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.spec;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 public enum ActionScope {
     PRODUCTION,
@@ -41,7 +41,7 @@ public enum ActionScope {
     public static final ImmutableEnumSet<ActionScope> PRODUCTION_ONLY = ImmutableEnumSet.of(ActionScope.PRODUCTION);
     public static final ImmutableEnumSet<ActionScope> ANY = ImmutableEnumSet.allOf(ActionScope.class);
 
-    public static ImmutableEnumSet<ActionScope> forEnvironment(final IsisSystemEnvironment systemEnvironment) {
+    public static ImmutableEnumSet<ActionScope> forEnvironment(final CausewaySystemEnvironment systemEnvironment) {
         return systemEnvironment.isPrototyping()
             ? ActionScope.ANY
             : ActionScope.PRODUCTION_ONLY;

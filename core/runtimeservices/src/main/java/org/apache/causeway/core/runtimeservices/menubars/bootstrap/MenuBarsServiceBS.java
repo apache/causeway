@@ -51,7 +51,7 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -101,7 +101,7 @@ implements MenuBarsService {
     private final MenuBarsLoaderService menuBarsLoaderService;
     private final MessageService messageService;
     private final JaxbService jaxbService;
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final CausewaySystemEnvironment isisSystemEnvironment;
     private final MetaModelContext metaModelContext;
 
     private final _Lazy<BSMenuBars> menuBarsFromAnnotationsOnly = _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.config.metamodel.facets;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.lang.Nullable;
 
 import lombok.Getter;
@@ -52,7 +52,7 @@ public final class CollectionLayoutConfigOptions {
     // -- FACTORIES
 
     public static TableDecoration tableDecoration(
-            final @NonNull IsisConfiguration configuration) {
+            final @NonNull CausewayConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getCollectionLayout().getTableDecoration();
     }
 
@@ -65,7 +65,7 @@ public final class CollectionLayoutConfigOptions {
             return name().toLowerCase();
         }
 
-        public static DefaultView from(final IsisConfiguration configuration) {
+        public static DefaultView from(final CausewayConfiguration configuration) {
             return configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView();
         }
 

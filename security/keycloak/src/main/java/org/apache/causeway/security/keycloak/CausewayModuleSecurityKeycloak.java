@@ -45,7 +45,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.security.authentication.login.LoginSuccessHandlerUNUSED;
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
@@ -79,7 +79,7 @@ public class CausewayModuleSecurityKeycloak {
 
     @Bean
     public WebSecurityConfigurerAdapter webSecurityConfigurer(
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final KeycloakOauth2UserService keycloakOidcUserService,
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers
@@ -91,7 +91,7 @@ public class CausewayModuleSecurityKeycloak {
 
 
     @Bean
-    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final IsisConfiguration isisConfiguration) {
+    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration isisConfiguration) {
 
         val jwtDecoder = createNimbusJwtDecoder(
                 oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri(),
@@ -108,7 +108,7 @@ public class CausewayModuleSecurityKeycloak {
 
         private final KeycloakOauth2UserService keycloakOidcUserService;
         private final List<LogoutHandler> logoutHandlers;
-        private final IsisConfiguration isisConfiguration;
+        private final CausewayConfiguration isisConfiguration;
 
         @Override
         public void configure(final HttpSecurity http) throws Exception {

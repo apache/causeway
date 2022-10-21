@@ -29,12 +29,12 @@ import org.apache.causeway.applib.services.confview.ConfigurationMenu;
 /**
  * @since 2.0 {@index}
  */
-public class IsisConfigurationRoleAndPermissions
+public class CausewayConfigurationRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
     public static final String ROLE_NAME = ConfigurationMenu.LOGICAL_TYPE_NAME.replace(".","-");
 
-    public IsisConfigurationRoleAndPermissions() {
+    public CausewayConfigurationRoleAndPermissions() {
         super(ROLE_NAME, "Access configuration properties");
     }
 

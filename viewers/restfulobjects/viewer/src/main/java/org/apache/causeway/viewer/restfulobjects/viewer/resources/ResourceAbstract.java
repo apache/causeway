@@ -39,7 +39,7 @@ import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -59,7 +59,7 @@ import lombok.val;
 public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
-    protected final IsisConfiguration isisConfiguration;
+    protected final CausewayConfiguration isisConfiguration;
     protected final InteractionLayerTracker iInteractionLayerTracker;
 
     @Context HttpHeaders httpHeaders;
@@ -75,7 +75,7 @@ public abstract class ResourceAbstract {
     @Inject
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
 
         this.metaModelContext = metaModelContext;

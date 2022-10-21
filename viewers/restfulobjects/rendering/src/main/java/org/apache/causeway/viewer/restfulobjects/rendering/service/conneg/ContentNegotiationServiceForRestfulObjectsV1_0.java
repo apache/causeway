@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.domain.DomainObjectList;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
@@ -77,14 +77,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0
 implements ContentNegotiationService {
 
 
-    protected final IsisConfiguration configuration;
+    protected final CausewayConfiguration configuration;
     protected final SpecificationLoader specificationLoader;
 
     private final AcceptChecking acceptChecking;
 
     @Inject
     public ContentNegotiationServiceForRestfulObjectsV1_0(
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final SpecificationLoader specificationLoader) {
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
@@ -373,7 +373,7 @@ implements ContentNegotiationService {
          * Any unrecognized Accept headers will result in an HTTP Not Acceptable Response code (406).
          */
         STRICT;
-        static AcceptChecking fromConfig(final IsisConfiguration configuration) {
+        static AcceptChecking fromConfig(final CausewayConfiguration configuration) {
             return configuration.getViewer().getRestfulobjects().isStrictAcceptChecking()
                     ? AcceptChecking.STRICT
                     : AcceptChecking.RELAXED;

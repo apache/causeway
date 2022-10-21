@@ -37,7 +37,7 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetC
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;
@@ -50,7 +50,7 @@ class TemporalValueSemanticsProviderTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        editingPattern = (new IsisConfiguration.ValueTypes.Temporal()).getEditing();
+        editingPattern = (new CausewayConfiguration.ValueTypes.Temporal()).getEditing();
     }
 
     @ParameterizedTest

@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
@@ -64,7 +64,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     private static final String INTERACTION_FILTER_NAME = "IsisRestfulObjectsInteractionFilter";
 
-    private final IsisConfiguration isisConfiguration;
+    private final CausewayConfiguration isisConfiguration;
     private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
@@ -72,7 +72,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     @Inject
     public WebModuleJaxrsResteasy4(
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);

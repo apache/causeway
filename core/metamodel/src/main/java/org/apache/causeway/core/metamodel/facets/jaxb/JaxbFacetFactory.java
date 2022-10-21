@@ -40,7 +40,7 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.isPublic;
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
@@ -185,7 +185,7 @@ implements MetaModelRefiner {
 
     }
 
-    private List<TypeValidator> getTypeValidators(final IsisConfiguration configuration) {
+    private List<TypeValidator> getTypeValidators(final CausewayConfiguration configuration) {
 
         final List<TypeValidator> typeValidators = _Lists.newArrayList();
         if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNotAbstract()) {
@@ -200,7 +200,7 @@ implements MetaModelRefiner {
         return typeValidators;
     }
 
-    private List<AssociationValidator> getAssociationValidators(final IsisConfiguration configuration) {
+    private List<AssociationValidator> getAssociationValidators(final CausewayConfiguration configuration) {
         final List<AssociationValidator> associationValidators = _Lists.newArrayList();
         if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isReferenceTypeAdapter()) {
             associationValidators.add(new PropertyValidatorForReferenceTypes());

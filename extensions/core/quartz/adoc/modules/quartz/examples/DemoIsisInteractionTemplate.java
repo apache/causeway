@@ -27,7 +27,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
 import org.apache.causeway.applib.services.user.UserService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
 
 import lombok.extern.log4j.Log4j2;

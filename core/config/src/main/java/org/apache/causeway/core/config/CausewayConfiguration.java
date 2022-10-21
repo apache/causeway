@@ -49,21 +49,6 @@ import javax.validation.Payload;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
-import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
-import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.causeway.core.config.viewer.web.DialogMode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.validation.annotation.Validated;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -79,6 +64,20 @@ import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
+import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
+import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.causeway.core.config.viewer.web.DialogMode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 import lombok.Getter;
@@ -94,15 +93,15 @@ import lombok.val;
  *
  * @since 2.0
  */
-@ConfigurationProperties(IsisConfiguration.ROOT_PREFIX)
+@ConfigurationProperties(CausewayConfiguration.ROOT_PREFIX)
 @Data
 @Validated
-public class IsisConfiguration {
+public class CausewayConfiguration {
 
     public static final String ROOT_PREFIX = "isis";
 
     private final ConfigurableEnvironment environment;
-    public IsisConfiguration(final ConfigurableEnvironment environment) {
+    public CausewayConfiguration(final ConfigurableEnvironment environment) {
         this.environment = environment;
     }
 
@@ -3311,7 +3310,7 @@ public class IsisConfiguration {
         String value();
 
         String message()
-                default "{org.apache.causeway.core.config.IsisConfiguration.AssignableFrom.message}";
+                default "{org.apache.causeway.core.config.CausewayConfiguration.AssignableFrom.message}";
 
         Class<?>[] groups() default { };
 
@@ -3353,7 +3352,7 @@ public class IsisConfiguration {
         String[] value();
 
         String message()
-                default "{org.apache.causeway.core.config.IsisConfiguration.OneOf.message}";
+                default "{org.apache.causeway.core.config.CausewayConfiguration.OneOf.message}";
 
         Class<?>[] groups() default { };
 

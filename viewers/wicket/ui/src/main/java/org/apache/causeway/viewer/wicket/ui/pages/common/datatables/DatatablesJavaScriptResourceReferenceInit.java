@@ -29,7 +29,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 /**
  * Javascript (client-side) extensions and fixes.
@@ -43,7 +43,7 @@ public class DatatablesJavaScriptResourceReferenceInit extends JavaScriptContent
     private static DatatablesJavaScriptResourceReferenceInit instance = null;
 
     public static final DatatablesJavaScriptResourceReferenceInit instance(
-            final IsisConfiguration configuration) {
+            final CausewayConfiguration configuration) {
         if (instance == null) {
             String javascript = readResource(configuration);
             instance = new DatatablesJavaScriptResourceReferenceInit(javascript, ID);
@@ -55,7 +55,7 @@ public class DatatablesJavaScriptResourceReferenceInit extends JavaScriptContent
         super(javaScript, id);
     }
 
-    private static String readResource(final IsisConfiguration configuration) {
+    private static String readResource(final CausewayConfiguration configuration) {
         String options = configuration.getViewer().getWicket().getTable().getDecoration()
                 .getDataTablesNet().getOptions().orElse("");
         return readScript().replace("$PLACEHOLDER$", options);

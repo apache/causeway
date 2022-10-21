@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**
@@ -37,7 +37,7 @@ public interface IntrospectionPolicyFacet extends Facet {
 
     Introspection getIntrospection();
 
-    default IntrospectionPolicy getIntrospectionPolicy(final IsisConfiguration isisConfig) {
+    default IntrospectionPolicy getIntrospectionPolicy(final CausewayConfiguration isisConfig) {
         switch(getIntrospection()) {
         case ENCAPSULATION_ENABLED:
             return IntrospectionPolicy.ENCAPSULATION_ENABLED;

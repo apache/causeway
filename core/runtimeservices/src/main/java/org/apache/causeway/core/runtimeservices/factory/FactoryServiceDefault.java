@@ -35,7 +35,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -55,7 +55,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Inject InteractionService interactionService; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
     @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
     private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
 

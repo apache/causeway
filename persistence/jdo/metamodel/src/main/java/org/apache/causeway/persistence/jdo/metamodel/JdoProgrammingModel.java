@@ -50,7 +50,7 @@ import lombok.val;
 @Component
 public class JdoProgrammingModel implements MetaModelRefiner {
 
-    //@Inject private IsisConfiguration config;
+    //@Inject private CausewayConfiguration config;
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {

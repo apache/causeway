@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 
 import lombok.val;
@@ -39,7 +39,7 @@ public final class JsonWriterUtil {
         }
     }
 
-    public static String jsonFor(Object object, @Nullable IsisSystemEnvironment systemEnvironment) {
+    public static String jsonFor(Object object, @Nullable CausewaySystemEnvironment systemEnvironment) {
         val prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
                 ? JsonMapper.PrettyPrinting.ENABLE
                         : JsonMapper.PrettyPrinting.DISABLE;

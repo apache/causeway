@@ -46,7 +46,7 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -84,7 +84,7 @@ implements DomainObjectResource {
     @Inject
     public DomainObjectResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
         log.debug("<init>");

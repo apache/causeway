@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
@@ -32,7 +32,7 @@ import lombok.val;
 
 class CausewayModuleExtCorsImplTest {
 
-    private IsisConfiguration isisDefaultConfiguration;
+    private CausewayConfiguration isisDefaultConfiguration;
     private RestEasyConfiguration restEasyConfiguration;
 
     @BeforeEach
@@ -44,7 +44,7 @@ class CausewayModuleExtCorsImplTest {
     }
 
     @Test
-    void defaultIsisConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
+    void defaultCausewayConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
         // given
         val isisModuleExtCors = new CausewayModuleExtCors();
 

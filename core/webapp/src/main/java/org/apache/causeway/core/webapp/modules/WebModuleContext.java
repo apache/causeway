@@ -30,7 +30,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -50,7 +50,7 @@ public class WebModuleContext {
     private final StringBuilder protectedPath = new StringBuilder();
 
     @NonNull @Getter private final ServletContext servletContext;
-    @NonNull @Getter private final IsisConfiguration configuration;
+    @NonNull @Getter private final CausewayConfiguration configuration;
     @NonNull @Getter private final ServiceRegistry serviceRegistry;
 
     private Can<WebModule> webModules;

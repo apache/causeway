@@ -41,7 +41,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
@@ -66,7 +66,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     public GridLoaderServiceDefault(
            final GridReaderUsingJaxb gridReader,
            final MessageService messageService,
-           final IsisSystemEnvironment isisSystemEnvironment) {
+           final CausewaySystemEnvironment isisSystemEnvironment) {
         this.gridReader = gridReader;
         this.messageService = messageService;
         this.supportsReloading = isisSystemEnvironment.isPrototyping();

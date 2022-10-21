@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class PrimaryConfig {
 
     @Getter final String secondaryBaseUrlWicket;
 
-    public PrimaryConfig(@NotNull final IsisConfiguration isisConfiguration) {
+    public PrimaryConfig(@NotNull final CausewayConfiguration isisConfiguration) {
         val config = isisConfiguration.getExtensions().getCommandReplay();
 
         val secondaryAccess = config.getSecondaryAccess();

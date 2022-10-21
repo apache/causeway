@@ -40,7 +40,7 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_lock;
@@ -56,7 +56,7 @@ implements ApplicationUserRepository {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-	@Inject protected IsisConfiguration config;
+	@Inject protected CausewayConfiguration config;
     @Inject private EventBusService eventBusService;
     @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;

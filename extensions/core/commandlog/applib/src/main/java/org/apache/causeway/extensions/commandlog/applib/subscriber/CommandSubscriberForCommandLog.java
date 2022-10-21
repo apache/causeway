@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.util.JaxbUtil;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
-    final IsisConfiguration isisConfiguration;
+    final CausewayConfiguration isisConfiguration;
 
     @Override
     public void onCompleted(final Command command) {

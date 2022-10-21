@@ -45,7 +45,7 @@ import org.springframework.core.MethodParameter;
 import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ToString;
 
 import lombok.NonNull;
@@ -56,7 +56,7 @@ import lombok.extern.log4j.Log4j2;
 final class _ServiceInjectorLegacy implements ServiceInjector {
 
     @SuppressWarnings("unused")
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewayConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private _InjectorMethodEvaluator injectorMethodEvaluator;
 
@@ -298,7 +298,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
      * JUnit Test support.
      */
     public static _ServiceInjectorLegacy getInstanceAndInit(
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final ServiceRegistry serviceRegistry,
             final _InjectorMethodEvaluator injectorMethodEvaluator) {
         val instance = new _ServiceInjectorLegacy();

@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.welcome;
 
 import org.apache.wicket.model.LambdaModel;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.models.WelcomeModel;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * {@link HomePage}).
  */
 public class WelcomePanel
-extends PanelAbstract<IsisConfiguration.Viewer.Wicket.Welcome, WelcomeModel> {
+extends PanelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome, WelcomeModel> {
 
     private static final long serialVersionUID = 1L;
 

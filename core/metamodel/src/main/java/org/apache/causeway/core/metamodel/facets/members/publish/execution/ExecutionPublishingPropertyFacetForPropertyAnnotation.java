@@ -24,7 +24,7 @@ import org.apache.causeway.commons.internal.base._Optionals;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
@@ -35,7 +35,7 @@ extends ExecutionPublishingFacetAbstract {
 
     public static Optional<ExecutionPublishingFacet> create(
             final Optional<Property> propertyIfAny,
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
         val publishingPolicy = PropertyConfigOptions.propertyExecutionPublishingPolicy(configuration);

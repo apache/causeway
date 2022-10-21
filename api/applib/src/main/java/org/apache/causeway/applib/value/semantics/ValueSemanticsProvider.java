@@ -43,7 +43,7 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
  * Whatever the class that implements this interface, it must also expose either
  * a <tt>public</tt> no-arg constructor, or (for implementations that also are
  * <tt>Facet</tt>s) a <tt>public</tt> constructor that accepts a
- * <tt>FacetHolder</tt>, and <tt>IsisConfiguration</tt> and a
+ * <tt>FacetHolder</tt>, and <tt>CausewayConfiguration</tt> and a
  * <tt>ValueSemanticsProviderContext</tt>. This constructor is then used by the
  * framework to instantiate the object reflectively.
  *

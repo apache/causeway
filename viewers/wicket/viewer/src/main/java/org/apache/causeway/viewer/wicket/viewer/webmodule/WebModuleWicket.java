@@ -33,8 +33,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
@@ -52,8 +52,8 @@ public final class WebModuleWicket extends WebModuleAbstract {
 
     private static final String WICKET_FILTER_NAME = "WicketFilter";
 
-    private final IsisSystemEnvironment isisSystemEnvironment;
-    private final IsisConfiguration isisConfiguration;
+    private final CausewaySystemEnvironment isisSystemEnvironment;
+    private final CausewayConfiguration isisConfiguration;
 
     private final String wicketBasePath;
     private final String deploymentMode;
@@ -62,8 +62,8 @@ public final class WebModuleWicket extends WebModuleAbstract {
 
     @Inject
     public WebModuleWicket(
-            final IsisSystemEnvironment isisSystemEnvironment,
-            final IsisConfiguration isisConfiguration,
+            final CausewaySystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration isisConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
 

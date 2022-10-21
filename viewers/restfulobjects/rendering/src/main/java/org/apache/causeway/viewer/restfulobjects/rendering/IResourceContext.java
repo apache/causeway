@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.config.IsisConfiguration.Viewer.Restfulobjects;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Restfulobjects;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

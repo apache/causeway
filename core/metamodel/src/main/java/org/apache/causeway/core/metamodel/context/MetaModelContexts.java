@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 public class MetaModelContexts {
 
     @Bean @Singleton @Primary
-    public MetaModelContext metaModelContext(final IsisSystemEnvironment systemEnvironment) {
+    public MetaModelContext metaModelContext(final CausewaySystemEnvironment systemEnvironment) {
         return new MetaModelContext_usingSpring(systemEnvironment.getIocContainer());
     }
 

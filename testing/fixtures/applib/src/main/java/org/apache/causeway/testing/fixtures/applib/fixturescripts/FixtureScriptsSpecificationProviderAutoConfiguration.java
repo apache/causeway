@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
 
@@ -47,7 +47,7 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
     @Bean("isis.testing.fixtures.FixtureScriptsSpecificationProviderDefault")
     @ConditionalOnMissingBean(FixtureScriptsSpecificationProvider.class)
     @Qualifier("Default")
-    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final IsisConfiguration isisConfiguration) {
+    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final CausewayConfiguration isisConfiguration) {
 
         val fixturesConfig = isisConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
         val builder = builderFrom(fixturesConfig);
@@ -60,7 +60,7 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
         return builder::build;
     }
 
-    private static FixtureScriptsSpecification.Builder builderFrom(IsisConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
+    private static FixtureScriptsSpecification.Builder builderFrom(CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
         val contextClass = fixturesConfig.getContextClass();
         if(contextClass != null) {
             return FixtureScriptsSpecification.builder(contextClass);

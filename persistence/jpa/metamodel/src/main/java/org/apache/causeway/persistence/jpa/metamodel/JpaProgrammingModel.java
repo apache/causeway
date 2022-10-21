@@ -33,7 +33,7 @@ import lombok.val;
 @Component
 public class JpaProgrammingModel implements MetaModelRefiner {
 
-    //@Inject private IsisConfiguration config;
+    //@Inject private CausewayConfiguration config;
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {

@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
@@ -47,7 +47,7 @@ import lombok.val;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelInitFilterDefault")
 public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFilter {
 
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewayConfiguration configuration;
 
     private Predicate<ProgrammingModel.Marker[]> filterOnMarker = excludingNone();
 

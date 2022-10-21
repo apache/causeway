@@ -32,7 +32,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
@@ -62,7 +62,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     private static final _Oneshot oneshot = new _Oneshot();
 
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
-    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private CausewayConfiguration isisConfiguration;
     @Inject private WebAppContextPath webAppContextPath;
 
     // -- INTERFACE IMPLEMENTATION

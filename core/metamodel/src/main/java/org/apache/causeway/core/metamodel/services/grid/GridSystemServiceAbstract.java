@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionLayoutXml;
@@ -98,7 +98,7 @@ implements GridSystemService<G> {
     protected final TranslationService translationService;
     protected final JaxbService jaxbService;
     protected final MessageService messageService;
-    protected final IsisSystemEnvironment isisSystemEnvironment;
+    protected final CausewaySystemEnvironment isisSystemEnvironment;
 
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {

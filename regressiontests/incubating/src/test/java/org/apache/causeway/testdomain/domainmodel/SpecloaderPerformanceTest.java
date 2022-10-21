@@ -36,7 +36,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -63,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class SpecloaderPerformanceTest {
 
-    @Inject private IsisConfiguration config;
+    @Inject private CausewayConfiguration config;
     @Inject private SpecificationLoader specificationLoader;
     //@Inject private MetaModelServiceMenu metaModelServiceMenu; //XXX could use ascii diff utilizing metaModelServiceMenu
 

@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -47,7 +47,7 @@ class ViewModelSemanticCheckingFacetFactoryTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        val configuration = new IsisConfiguration(null);
+        val configuration = new CausewayConfiguration(null);
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
 
         metaModelContext = MetaModelContext_forTesting.builder()

@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
@@ -37,7 +37,7 @@ extends EntityChangePublishingFacetAbstract {
 
     public static Optional<EntityChangePublishingFacet> create(
             final Optional<Publishing> entityChangePublishingIfAny,
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
         val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);

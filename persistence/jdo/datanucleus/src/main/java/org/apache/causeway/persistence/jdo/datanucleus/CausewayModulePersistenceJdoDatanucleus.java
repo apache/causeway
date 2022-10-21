@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -127,7 +127,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     @Qualifier("local-pmf-proxy")
     @Bean
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final DataSource dataSource,
             final MetaModelContext metaModelContext,
             final ObjectLifecyclePublisher objectLifecyclePublisher,
@@ -259,7 +259,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     @SneakyThrows
     private static DataSource autoCreateSchemas(
             final DataSource dataSource,
-            final IsisConfiguration isisConfiguration) {
+            final CausewayConfiguration isisConfiguration) {
 
         val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
 

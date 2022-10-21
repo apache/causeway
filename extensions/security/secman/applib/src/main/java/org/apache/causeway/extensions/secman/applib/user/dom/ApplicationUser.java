@@ -54,8 +54,8 @@ import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.ObjectContracts;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -111,7 +111,7 @@ public abstract class ApplicationUser
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private transient UserService userService;
     @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private transient IsisConfiguration config;
+    @Inject private transient CausewayConfiguration config;
 
     @Programmatic protected ApplicationUserRepository getApplicationUserRepository() {
         return applicationUserRepository;

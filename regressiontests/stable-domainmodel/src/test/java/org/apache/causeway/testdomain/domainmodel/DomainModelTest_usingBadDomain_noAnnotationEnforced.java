@@ -27,8 +27,8 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -56,8 +56,8 @@ import lombok.val;
 })
 class DomainModelTest_usingBadDomain_noAnnotationEnforced {
 
-    @Inject private IsisConfiguration configuration;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private CausewayConfiguration configuration;
+    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
     @Inject private DomainObjectTesterFactory testerFactory;
 
     @Test

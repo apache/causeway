@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import lombok.NonNull;
 
 /**
- * @apiNote implementing classes must not rely on IsisConfiguration or other provisioned
+ * @apiNote implementing classes must not rely on CausewayConfiguration or other provisioned
  * services to be available; type classification happens before the post-construct phase
  *
  * @since 2.0

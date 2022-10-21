@@ -80,7 +80,7 @@ public class EclipselinkConfiguration {
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CCHIEAIA">eclipselink.descriptor.customizer</a> docs
          */
-        @IsisConfiguration.AssignableFrom("org.eclipse.persistence.descriptors.ClassDescriptor")
+        @CausewayConfiguration.AssignableFrom("org.eclipse.persistence.descriptors.ClassDescriptor")
         Class<?> customizer = null;
     }
 
@@ -91,7 +91,7 @@ public class EclipselinkConfiguration {
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#session.customizer">eclipselink.session.customizer</a> docs
          */
-        @IsisConfiguration.AssignableFrom("org.eclipse.persistence.config.SessionCustomizer")
+        @CausewayConfiguration.AssignableFrom("org.eclipse.persistence.config.SessionCustomizer")
         Class<?> customizer = null;
 
         private final Include include = new Include();
@@ -112,7 +112,7 @@ public class EclipselinkConfiguration {
     /**
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#session-event-listener">eclipselink.session-event-listener</a> docs
      */
-    @IsisConfiguration.AssignableFrom("org.eclipse.persistence.sessions.SessionEventListener")
+    @CausewayConfiguration.AssignableFrom("org.eclipse.persistence.sessions.SessionEventListener")
     Class<?> sessionEventListener = null;
 
 
@@ -174,7 +174,7 @@ public class EclipselinkConfiguration {
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CCHEEFGA">eclipselink.cache.database-event-listener</a> docs
          */
-        @IsisConfiguration.AssignableFrom("org.eclipse.persistence.platform.database.events.DatabaseEventListener")
+        @CausewayConfiguration.AssignableFrom("org.eclipse.persistence.platform.database.events.DatabaseEventListener")
         Class<?> databaseEventListener;
 
         /**
@@ -329,7 +329,7 @@ public class EclipselinkConfiguration {
     /**
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABHEJJI">eclipselink.ddl-generation</a> docs
      */
-    @IsisConfiguration.OneOf(value={"create-tables", "create-or-extend-tables", "drop-and-create-tables", "none"})
+    @CausewayConfiguration.OneOf(value={"create-tables", "create-or-extend-tables", "drop-and-create-tables", "none"})
     String ddlGeneration = "none";
 
     @ConfigurationProperties("eclipselink.ddl-generation")
@@ -340,7 +340,7 @@ public class EclipselinkConfiguration {
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABCDHBB">eclipselink.ddl-generation.output-mode</a> docs
          */
-        @IsisConfiguration.OneOf(value={"both", "database", "sql-script"})
+        @CausewayConfiguration.OneOf(value={"both", "database", "sql-script"})
         String outputMode = "database";
 
     }
@@ -349,7 +349,7 @@ public class EclipselinkConfiguration {
     /**
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CCHCJCDJ">eclipselink.exception-handler</a> docs
      */
-    @IsisConfiguration.AssignableFrom("org.eclipse.persistence.exceptions.ExceptionHandler")
+    @CausewayConfiguration.AssignableFrom("org.eclipse.persistence.exceptions.ExceptionHandler")
     Class<?> exceptionHandler = null;
 
     /**
@@ -382,7 +382,7 @@ public class EclipselinkConfiguration {
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CIHIAGAF">eclipselink.jdbc.batch-writing</a> docs
          */
-        @IsisConfiguration.OneOf(value={"jdbc", "buffered", "oracle-jdbc", "none"})
+        @CausewayConfiguration.OneOf(value={"jdbc", "buffered", "oracle-jdbc", "none"})
         String batchWriting = "none";
 
         @ConfigurationProperties("eclipselink.jdbc.batch-writing")
@@ -508,7 +508,7 @@ public class EclipselinkConfiguration {
     @Data
     public static class Jpql {
 
-        @IsisConfiguration.OneOf(value={"EclipseLink", "JPA 1.0", "JPA 2.0", "JPA 2.1", "None"})
+        @CausewayConfiguration.OneOf(value={"EclipseLink", "JPA 1.0", "JPA 2.0", "JPA 2.1", "None"})
         private String validation = "EclipseLink";
     }
 

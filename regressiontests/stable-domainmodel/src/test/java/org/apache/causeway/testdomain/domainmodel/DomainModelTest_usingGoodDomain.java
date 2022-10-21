@@ -49,7 +49,7 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.title.TitleService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -122,7 +122,7 @@ class DomainModelTest_usingGoodDomain {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
-    @Inject private IsisConfiguration isisConfig;
+    @Inject private CausewayConfiguration isisConfig;
     @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {

@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -49,7 +49,7 @@ public class ApplicationUser_lock {
             extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_lock> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private IsisConfiguration config;
+    @Inject private CausewayConfiguration config;
 
     private final ApplicationUser target;
 

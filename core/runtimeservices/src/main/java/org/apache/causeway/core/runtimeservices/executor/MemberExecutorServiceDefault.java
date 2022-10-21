@@ -44,7 +44,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
@@ -86,7 +86,7 @@ public class MemberExecutorServiceDefault
 implements MemberExecutorService {
 
     private final @Getter InteractionLayerTracker interactionLayerTracker;
-    private final @Getter IsisConfiguration configuration;
+    private final @Getter CausewayConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
     private final @Getter ServiceInjector serviceInjector;

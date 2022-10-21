@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.config.metamodel.specloader;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.DeploymentType;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.val;
 
@@ -59,7 +59,7 @@ public enum IntrospectionMode {
 
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
 
-    public static boolean isFullIntrospect(IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment) {
+    public static boolean isFullIntrospect(CausewayConfiguration configuration, CausewaySystemEnvironment isisSystemEnvironment) {
         val introspectionMode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         return introspectionMode.isFullIntrospect(isisSystemEnvironment.getDeploymentType());
     }

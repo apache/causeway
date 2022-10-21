@@ -37,8 +37,8 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
@@ -59,9 +59,9 @@ implements MenuBarsLoaderService {
 
     @Inject
     public MenuBarsLoaderServiceDefault(
-            final IsisSystemEnvironment isisSystemEnvironment,
+            final CausewaySystemEnvironment isisSystemEnvironment,
             final JaxbService jaxbService,
-            final IsisConfiguration isisConfiguration) {
+            final CausewayConfiguration isisConfiguration) {
         this.jaxbService = jaxbService;
         this.supportsReloading = isisSystemEnvironment.isPrototyping();
 

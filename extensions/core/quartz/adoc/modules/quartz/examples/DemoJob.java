@@ -28,7 +28,7 @@ import org.quartz.JobExecutionContext;
 
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtime.iactn.template.AbstractIsisInteractionTemplate;
 import org.apache.causeway.core.security.authentication.Authentication;
 import org.apache.causeway.core.security.authentication.standard.SimpleAuthentication;
@@ -56,7 +56,7 @@ public class DemoJob implements Job {
         return SimpleAuthentication.ofValid(user);
     }
 
-    @Inject IsisConfiguration isisConfiguration;
+    @Inject CausewayConfiguration isisConfiguration;
 
 }
 //end::class[]

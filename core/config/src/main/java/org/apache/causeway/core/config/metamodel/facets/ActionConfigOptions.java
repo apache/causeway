@@ -18,19 +18,19 @@
  */
 package org.apache.causeway.core.config.metamodel.facets;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.NonNull;
 
 public final class ActionConfigOptions {
 
     public static PublishingPolicy actionCommandPublishingPolicy(
-            final @NonNull IsisConfiguration configuration) {
+            final @NonNull CausewayConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getAction().getCommandPublishing();
     }
 
     public static PublishingPolicy actionExecutionPublishingPolicy(
-            final @NonNull IsisConfiguration configuration) {
+            final @NonNull CausewayConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getAction().getExecutionPublishing();
     }
 

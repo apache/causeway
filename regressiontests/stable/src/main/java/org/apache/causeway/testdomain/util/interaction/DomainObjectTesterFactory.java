@@ -50,8 +50,8 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -1112,8 +1112,8 @@ public class DomainObjectTesterFactory {
 
     private static abstract class Tester<T> {
 
-        @Inject protected IsisConfiguration configuration;
-        @Inject protected IsisSystemEnvironment isisSystemEnvironment;
+        @Inject protected CausewayConfiguration configuration;
+        @Inject protected CausewaySystemEnvironment isisSystemEnvironment;
         @Inject protected SpecificationLoader specificationLoader;
         @Inject protected InteractionService interactionService;
         @Inject protected FactoryService factoryService;

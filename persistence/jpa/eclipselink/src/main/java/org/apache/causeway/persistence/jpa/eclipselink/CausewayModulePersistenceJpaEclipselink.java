@@ -41,7 +41,7 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
 import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 
@@ -70,7 +70,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     @Inject private ElSettings elSettings;
 
     protected CausewayModulePersistenceJpaEclipselink(
-            IsisConfiguration isisConfiguration,
+            CausewayConfiguration isisConfiguration,
             DataSource dataSource,
             JpaProperties properties,
             ObjectProvider<JtaTransactionManager> jtaTransactionManager) {
@@ -105,7 +105,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     @SneakyThrows
     protected static DataSource autoCreateSchemas(
             final DataSource dataSource,
-            final IsisConfiguration isisConfiguration) {
+            final CausewayConfiguration isisConfiguration) {
 
         val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
 
@@ -132,7 +132,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
      */
     protected static JpaProperties addAdditionalOrmFiles(
             JpaProperties properties,
-            IsisConfiguration isisConfiguration) {
+            CausewayConfiguration isisConfiguration) {
 
         val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
 

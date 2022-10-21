@@ -46,7 +46,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -86,12 +86,12 @@ implements ApplicationFeatureRepository, MetamodelListener {
     // apparently not used
     //private final ListMultimap<String, ApplicationFeature> memberFeaturesByLogicalTypeName = _Multimaps.newListTreeMultimap();
 
-    private final IsisConfiguration configuration;
+    private final CausewayConfiguration configuration;
     private final SpecificationLoader specificationLoader;
 
     @Inject
     public ApplicationFeatureRepositoryDefault(
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final SpecificationLoader specificationLoader) {
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;

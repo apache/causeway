@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.Getter;
 import lombok.val;
@@ -62,7 +62,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment isisSystemEnvironment;
 
     protected ExecutionLogEntryRepository(final Class<E> executionLogEntryClass) {
         this.executionLogEntryClass = executionLogEntryClass;

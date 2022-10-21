@@ -62,7 +62,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.Size;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
@@ -105,7 +105,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final TranslationService translationService,
             final JaxbService jaxbService,
             final MessageService messageService,
-            final IsisSystemEnvironment isisSystemEnvironment) {
+            final CausewaySystemEnvironment isisSystemEnvironment) {
         super(specificationLoader, translationService, jaxbService, messageService, isisSystemEnvironment);
     }
 

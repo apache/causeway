@@ -27,7 +27,7 @@ import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
@@ -54,7 +54,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     @Inject
     private UiComponentFactoryFx(
-            final IsisSystemEnvironment isisSystemEnvironment,
+            final CausewaySystemEnvironment isisSystemEnvironment,
             final UiContextFx uiContext,
             final List<UiComponentHandlerFx> handlers) {
 

@@ -54,7 +54,7 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
 
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForIsis;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E1;
@@ -72,7 +72,7 @@ import lombok.val;
 public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
     @Inject TransactionService transactionService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment isisSystemEnvironment;
     @Inject SpecificationLoader specificationLoader;
     @Inject GraphQlSourceForIsis graphQlSourceForIsis;
 

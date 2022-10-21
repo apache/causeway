@@ -19,7 +19,7 @@
  */
 package org.apache.causeway.core.config.metamodel.facets;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.NonNull;
 
@@ -45,7 +45,7 @@ public final class DomainObjectLayoutConfigOptions {
 
 
     public static DomainObjectLayoutConfigOptions.TableDecoration tableDecoration(
-            final @NonNull IsisConfiguration configuration) {
+            final @NonNull CausewayConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getDomainObjectLayout().getTableDecoration();
     }
 

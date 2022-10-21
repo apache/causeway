@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;
 import org.apache.causeway.schema.common.v2.InteractionType;
@@ -45,7 +45,7 @@ import lombok.val;
 @RequiredArgsConstructor
 public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
 
-    private final IsisConfiguration isisConfiguration;
+    private final CausewayConfiguration isisConfiguration;
     private boolean enabled;
 
     @PostConstruct

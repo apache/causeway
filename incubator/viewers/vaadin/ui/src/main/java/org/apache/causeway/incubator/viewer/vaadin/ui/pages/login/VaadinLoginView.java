@@ -32,7 +32,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
@@ -53,7 +53,7 @@ public class VaadinLoginView extends VerticalLayout {
 
     @Inject
     public VaadinLoginView(
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final WebAppContextPath webAppContextPath,
             final VaadinAuthenticationHandler vaadinAuthenticationHandler) {
 
@@ -102,7 +102,7 @@ public class VaadinLoginView extends VerticalLayout {
         doLogin("sven", "pass");
     }
 
-    private void addTitleAndLogo(IsisConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {
+    private void addTitleAndLogo(CausewayConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {
         //TODO application name/logo borrowed from Wicket's configuration
         val applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
         val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin();

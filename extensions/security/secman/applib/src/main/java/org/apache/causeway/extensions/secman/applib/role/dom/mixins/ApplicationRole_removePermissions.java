@@ -32,8 +32,8 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
@@ -61,7 +61,7 @@ public class ApplicationRole_removePermissions {
             extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationRole_removePermissions> {}
 
     @Inject private MessageService messageService;
-    @Inject private IsisConfiguration config;
+    @Inject private CausewayConfiguration config;
     @Inject private RepositoryService repository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 

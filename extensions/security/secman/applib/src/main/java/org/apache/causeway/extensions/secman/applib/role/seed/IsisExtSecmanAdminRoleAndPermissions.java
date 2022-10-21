@@ -27,9 +27,9 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.Seed.Admin;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;

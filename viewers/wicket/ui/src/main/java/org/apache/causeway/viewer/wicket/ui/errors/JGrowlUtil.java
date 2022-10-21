@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.errors;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 
 import lombok.val;
@@ -32,17 +32,17 @@ public class JGrowlUtil {
 
     static enum MessageSeverity {
         INFO {
-            @Override long delayMillis(final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+            @Override long delayMillis(final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getInfoDelay().toMillis();
             }
         },
         WARNING {
-            @Override long delayMillis(final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+            @Override long delayMillis(final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getWarningDelay().toMillis();
             }
         }, // sticky
         DANGER{
-            @Override long delayMillis(final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+            @Override long delayMillis(final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getErrorDelay().toMillis();
             }
         } // sticky
@@ -52,10 +52,10 @@ public class JGrowlUtil {
             return name().toLowerCase();
         }
 
-        abstract long delayMillis(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups);
+        abstract long delayMillis(CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups);
     }
 
-    public String asJGrowlCalls(final MessageBroker messageBroker, final IsisConfiguration configuration) {
+    public String asJGrowlCalls(final MessageBroker messageBroker, final CausewayConfiguration configuration) {
         val buf = new StringBuilder();
 
         val messagePopupConfig = configuration.getViewer().getWicket().getMessagePopups();
@@ -79,7 +79,7 @@ public class JGrowlUtil {
     private void addJGrowlCall(
             final String origMsg,
             final MessageSeverity severity,
-            final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups,
+            final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups,
             final StringBuilder buf) {
 
         final CharSequence escapedMsg = escape(origMsg);

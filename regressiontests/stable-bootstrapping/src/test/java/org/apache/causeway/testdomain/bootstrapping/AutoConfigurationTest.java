@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContexts;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
@@ -51,7 +51,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                IsisSystemEnvironment.class,
+                CausewaySystemEnvironment.class,
                 MetaModelContexts.class,
                 IsisBeanFactoryPostProcessorForSpring.class,
                 IsisBeanTypeRegistryDefault.class,
@@ -70,7 +70,7 @@ import lombok.val;
 class AutoConfigurationTest {
 
     @Inject private ApplicationContext applicationContext;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
     @Inject private ServiceRegistry serviceRegistry;
 

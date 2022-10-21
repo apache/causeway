@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
@@ -99,7 +99,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     void allowingObjectsEditingToReturn(final DomainObjectConfigOptions.EditingObjectsConfiguration value) {
         if(value!=null) {
-            final IsisConfiguration config = super.metaModelContext.getConfiguration();
+            final CausewayConfiguration config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEditing(value);
         }
     }

@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
@@ -66,7 +66,7 @@ import lombok.val;
 class SpringServiceProvisioningTest {
     
     @Inject private ServiceRegistry serviceRegistry; 
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
 
     @BeforeEach
     void beforeEach() {

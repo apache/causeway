@@ -85,7 +85,7 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.IsisEnvelopeEvent;

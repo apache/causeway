@@ -31,7 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 
 import lombok.val;
@@ -47,7 +47,7 @@ public class CausewayModuleExtCors {
 
     @Bean
     public FilterRegistrationBean<Filter> createCorsFilterRegistration(
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final RestEasyConfiguration restEasyConfiguration) {
 
         String resteasyBase = restEasyConfiguration.getJaxrs().getDefaultPath();
@@ -66,7 +66,7 @@ public class CausewayModuleExtCors {
         return filterRegistrationBean;
     }
 
-    private CorsFilter createCorsFilter(IsisConfiguration configuration) {
+    private CorsFilter createCorsFilter(CausewayConfiguration configuration) {
 
         val isisCorsConfig = configuration.getExtensions().getCors();
 

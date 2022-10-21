@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
@@ -42,7 +42,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 })
 class IsisConfigBeanTest_usingHeadless {
 
-    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private CausewayConfiguration isisConfiguration;
 
     @Test
     void configurationBean_shouldBePickedUpBySpring() {

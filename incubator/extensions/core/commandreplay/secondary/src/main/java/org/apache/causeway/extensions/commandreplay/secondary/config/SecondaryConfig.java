@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.Getter;
 import lombok.val;
@@ -49,7 +49,7 @@ public class SecondaryConfig {
     @Getter final String quartzUser;
     @Getter final List<String> quartzRoles;
 
-    public SecondaryConfig(@NotNull final IsisConfiguration isisConfiguration) {
+    public SecondaryConfig(@NotNull final CausewayConfiguration isisConfiguration) {
         val config = isisConfiguration.getExtensions().getCommandReplay();
 
         val primaryAccess = config.getPrimaryAccess();

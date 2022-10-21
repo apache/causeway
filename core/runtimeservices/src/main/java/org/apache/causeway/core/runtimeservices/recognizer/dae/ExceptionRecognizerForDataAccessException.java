@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 
 import lombok.Getter;
@@ -46,7 +46,7 @@ import lombok.val;
 
 /**
  * Translates {@link DataAccessException}(s) to {@link Recognition}(s),
- * unless disabled via {@link IsisConfiguration}.
+ * unless disabled via {@link CausewayConfiguration}.
  */
 @Service
 @Named(ExceptionRecognizerForDataAccessException.LOGICAL_TYPE_NAME)
@@ -61,7 +61,7 @@ implements ExceptionRecognizer {
     private final boolean disabled;
 
     @Inject
-    public ExceptionRecognizerForDataAccessException(IsisConfiguration conf) {
+    public ExceptionRecognizerForDataAccessException(CausewayConfiguration conf) {
         this.disabled = conf.getCore().getRuntimeServices()
               .getExceptionRecognizer().getDae().isDisable();
     }

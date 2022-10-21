@@ -33,7 +33,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
 
     @Inject RepositoryService repositoryService;
     @Inject FactoryService factoryService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment isisSystemEnvironment;
 
     public Class<E> getEntityClass() {
         return auditTrailEntryClass;

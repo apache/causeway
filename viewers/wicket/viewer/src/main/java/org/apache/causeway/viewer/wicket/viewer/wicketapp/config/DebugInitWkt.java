@@ -24,15 +24,15 @@ import org.apache.wicket.devutils.debugbar.DebugBarInitializer;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
 
 @Configuration
 public class DebugInitWkt implements WicketApplicationInitializer {
 
-    @Inject private IsisSystemEnvironment systemEnvironment;
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewaySystemEnvironment systemEnvironment;
+    @Inject private CausewayConfiguration configuration;
 
     @Override
     public void init(final WebApplication webApplication) {

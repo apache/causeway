@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.facets.properties.propertylayout.Promp
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 
-    IsisConfiguration stubConfiguration = new IsisConfiguration(null);
+    CausewayConfiguration stubConfiguration = new CausewayConfiguration(null);
 
     FacetHolder mockFacetHolder;
     PropertyLayout mockPropertyLayout;

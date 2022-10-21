@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.jdo;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -110,7 +110,7 @@ implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 
                 @Inject private ApplicationUserRepository applicationUserRepository;
                 @Inject private ApplicationRoleRepository applicationRoleRepository;
-                @Inject private IsisConfiguration isisConfig;
+                @Inject private CausewayConfiguration isisConfig;
 
             };
         }

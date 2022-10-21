@@ -34,7 +34,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
@@ -62,7 +62,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment isisSystemEnvironment;
 
     protected ExecutionOutboxEntryRepository(Class<E> executionOutboxEntryClass) {
         this.executionOutboxEntryClass = executionOutboxEntryClass;

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -52,7 +52,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Inject
     public UserResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
     }

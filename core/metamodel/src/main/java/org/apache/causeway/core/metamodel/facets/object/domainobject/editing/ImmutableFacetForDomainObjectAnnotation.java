@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -38,7 +38,7 @@ extends ImmutableFacetAbstract {
 
     public static Optional<ImmutableFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
         final boolean editingDisabledByDefault =

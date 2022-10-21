@@ -31,7 +31,7 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfFilter;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverterOfAuthenticatedPrincipal;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverterOfStringPrincipal;
@@ -66,7 +66,7 @@ public class CausewayModuleSecuritySpring {
 
     @Qualifier("springSecurityFilterChain")
     @Inject private Filter springSecurityFilterChain;
-    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private CausewayConfiguration isisConfiguration;
 
     @PostConstruct
     public void disableCsrf() {

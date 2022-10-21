@@ -47,7 +47,7 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
@@ -403,11 +403,11 @@ implements TemporalValueSemantics<T> {
 
     }
 
-    private org.apache.causeway.core.config.IsisConfiguration.ValueTypes.Temporal temporalConfig() {
+    private org.apache.causeway.core.config.CausewayConfiguration.ValueTypes.Temporal temporalConfig() {
         return Optional.ofNullable(mmc) // nullable .. JUnit support
                 .map(MetaModelContext::getConfiguration)
                 .map(conf->conf.getValueTypes().getTemporal())
-                .orElseGet(IsisConfiguration.ValueTypes.Temporal::new);
+                .orElseGet(CausewayConfiguration.ValueTypes.Temporal::new);
     }
 
     protected TemporalEditingPattern temporalEditingPattern() {

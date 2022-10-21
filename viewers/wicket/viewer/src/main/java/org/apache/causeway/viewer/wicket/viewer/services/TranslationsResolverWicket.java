@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -60,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     private final ServletContext servletContext;
-    private final IsisConfiguration isisConfiguration;
+    private final CausewayConfiguration isisConfiguration;
 
     @Override
     public List<String> readLines(final String fileName) {

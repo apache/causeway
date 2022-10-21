@@ -55,11 +55,11 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.IsisBeanMetaData;
 import org.apache.causeway.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -110,8 +110,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
-    private final IsisConfiguration isisConfiguration;
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final CausewayConfiguration isisConfiguration;
+    private final CausewaySystemEnvironment isisSystemEnvironment;
     private final ServiceRegistry serviceRegistry;
     private final IsisBeanTypeClassifier isisBeanTypeClassifier;
     private final IsisBeanTypeRegistry isisBeanTypeRegistry;
@@ -140,8 +140,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Inject
     public SpecificationLoaderDefault(
             final ProgrammingModelService programmingModelService,
-            final IsisConfiguration isisConfiguration,
-            final IsisSystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration isisConfiguration,
+            final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final IsisBeanTypeClassifier isisBeanTypeClassifier,
             final IsisBeanTypeRegistry isisBeanTypeRegistry,
@@ -160,8 +160,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     SpecificationLoaderDefault(
             final ProgrammingModel programmingModel,
-            final IsisConfiguration isisConfiguration,
-            final IsisSystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration isisConfiguration,
+            final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final IsisBeanTypeClassifier isisBeanTypeClassifier,
             final IsisBeanTypeRegistry isisBeanTypeRegistry,
@@ -180,8 +180,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance(
-            final IsisConfiguration isisConfiguration,
-            final IsisSystemEnvironment isisSystemEnvironment,
+            final CausewayConfiguration isisConfiguration,
+            final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
             final IsisBeanTypeClassifier isisBeanTypeClassifier,

@@ -25,7 +25,7 @@ import org.apache.causeway.commons.internal.base._Optionals;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
@@ -43,7 +43,7 @@ extends PromptStyleFacetAbstract {
 
     public static Optional<PromptStyleFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
         return _Optionals.<PromptStyleFacet>orNullable(

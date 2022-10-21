@@ -30,7 +30,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import static org.apache.causeway.commons.internal.base._Casts.castTo;
 
-import org.apache.causeway.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;

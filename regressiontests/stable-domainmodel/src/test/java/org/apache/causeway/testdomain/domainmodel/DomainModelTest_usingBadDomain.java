@@ -43,8 +43,8 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.presets.IsisPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -89,9 +89,9 @@ import lombok.val;
 })
 class DomainModelTest_usingBadDomain {
 
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewayConfiguration configuration;
     @Inject private InteractionService interactionService;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private DomainObjectTesterFactory testerFactory;
 

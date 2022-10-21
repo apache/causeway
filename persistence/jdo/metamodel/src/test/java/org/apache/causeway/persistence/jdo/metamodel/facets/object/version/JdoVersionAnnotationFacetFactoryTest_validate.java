@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
@@ -44,7 +44,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
     @Before
     public void setUp() throws Exception {
 
-        val configuration = new IsisConfiguration(null);
+        val configuration = new CausewayConfiguration(null);
 
         metaModelContext = MetaModelContext_forTesting
         .builder()

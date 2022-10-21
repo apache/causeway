@@ -31,7 +31,7 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertEqua
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
 
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForIsis;
@@ -59,7 +59,7 @@ import graphql.schema.GraphQLTypeReference;
 public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
 
     @Inject
-    private IsisSystemEnvironment isisSystemEnvironment;
+    private CausewaySystemEnvironment isisSystemEnvironment;
 
     @Inject
     private SpecificationLoader specificationLoader;

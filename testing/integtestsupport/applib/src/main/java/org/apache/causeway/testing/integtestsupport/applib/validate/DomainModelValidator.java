@@ -36,8 +36,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -58,14 +58,14 @@ public class DomainModelValidator {
     @Inject
     public DomainModelValidator(final ServiceRegistry registry) {
         this(   registry.lookupServiceElseFail(SpecificationLoader.class),
-                registry.lookupServiceElseFail(IsisConfiguration.class),
-                registry.lookupServiceElseFail(IsisSystemEnvironment.class));
+                registry.lookupServiceElseFail(CausewayConfiguration.class),
+                registry.lookupServiceElseFail(CausewaySystemEnvironment.class));
     }
 
     public DomainModelValidator(
             final SpecificationLoader specificationLoader,
-            final IsisConfiguration configuration,
-            final IsisSystemEnvironment isisSystemEnvironment) {
+            final CausewayConfiguration configuration,
+            final CausewaySystemEnvironment isisSystemEnvironment) {
 
         val recreateRequired = isRecreateRequired(configuration, isisSystemEnvironment);
         if(recreateRequired) {
@@ -81,7 +81,7 @@ public class DomainModelValidator {
     }
 
 
-    private static boolean isRecreateRequired(final IsisConfiguration configuration, final IsisSystemEnvironment isisSystemEnvironment) {
+    private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment isisSystemEnvironment) {
         final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         switch (mode) {
             case FULL:

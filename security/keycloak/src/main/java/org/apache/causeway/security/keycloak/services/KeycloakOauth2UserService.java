@@ -44,7 +44,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.util.CollectionUtils;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -56,7 +56,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
     final JwtDecoder jwtDecoder;
     final GrantedAuthoritiesMapper authoritiesMapper;
-    final IsisConfiguration isisConfiguration;
+    final CausewayConfiguration isisConfiguration;
 
     /**
      * Augments {@link OidcUserService#loadUser(OidcUserRequest)} to add authorities

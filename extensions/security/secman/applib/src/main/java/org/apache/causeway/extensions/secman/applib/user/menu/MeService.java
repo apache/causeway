@@ -40,7 +40,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.userui.UserMenu;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -112,7 +112,7 @@ public class MeService {
     @RequiredArgsConstructor
     public static class UserMenuMeActionAdvisor {
 
-        final IsisConfiguration isisConfiguration;
+        final CausewayConfiguration isisConfiguration;
 
         @EventListener(UserMenu.me.ActionDomainEvent.class)
         public void on(final UserMenu.me.ActionDomainEvent event) {

@@ -34,9 +34,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
@@ -62,7 +62,7 @@ implements PermissionsEvaluationService {
     private final @NonNull PermissionsEvaluationPolicy policy; // serializable
 
     @Inject
-    public PermissionsEvaluationServiceForSecman(final IsisConfiguration isisConfiguration) {
+    public PermissionsEvaluationServiceForSecman(final CausewayConfiguration isisConfiguration) {
         this.policy = Optional.ofNullable(
                 isisConfiguration.getExtensions().getSecman().getPermissionsEvaluationPolicy())
                 .orElseGet(()->new Secman().getPermissionsEvaluationPolicy()); // use config defaults as fallback

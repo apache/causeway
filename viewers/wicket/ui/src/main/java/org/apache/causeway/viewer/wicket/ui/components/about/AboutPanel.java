@@ -29,7 +29,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.models.AboutModel;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
  * {@link HomePage}).
  */
 public class AboutPanel
-extends PanelAbstract<IsisConfiguration.Viewer.Wicket.Application, AboutModel> {
+extends PanelAbstract<CausewayConfiguration.Viewer.Wicket.Application, AboutModel> {
 
     private static final long serialVersionUID = 1L;
 

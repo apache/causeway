@@ -24,11 +24,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
-
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -43,8 +38,12 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.ioc._IocContainer;
+import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
@@ -67,12 +66,12 @@ class MetaModelContext_usingSpring implements MetaModelContext {
     }
 
     @Getter(lazy=true)
-    private final IsisSystemEnvironment systemEnvironment =
-    getSingletonElseFail(IsisSystemEnvironment.class);
+    private final CausewaySystemEnvironment systemEnvironment =
+    getSingletonElseFail(CausewaySystemEnvironment.class);
 
     @Getter(lazy=true)
-    private final IsisConfiguration configuration =
-    getSingletonElseFail(IsisConfiguration.class);
+    private final CausewayConfiguration configuration =
+    getSingletonElseFail(CausewayConfiguration.class);
 
     @Getter(lazy=true)
     private final ServiceInjector serviceInjector =

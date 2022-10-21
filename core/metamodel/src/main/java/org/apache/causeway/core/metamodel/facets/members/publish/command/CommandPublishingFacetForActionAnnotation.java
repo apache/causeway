@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -37,7 +37,7 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
 
     public static Optional<CommandPublishingFacet> create(
             final Optional<Action> actionsIfAny,
-            final IsisConfiguration configuration,
+            final CausewayConfiguration configuration,
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 

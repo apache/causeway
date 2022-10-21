@@ -18,18 +18,18 @@
  */
 package org.apache.causeway.core.config;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class IsisConfiguration_getMaxTitleLengthInParentedTables_Test {
+class CausewayConfiguration_getMaxTitleLengthInParentedTables_Test {
 
-    private IsisConfiguration configuration;
+    private CausewayConfiguration configuration;
 
     @BeforeEach
     void setUp() throws Exception {
-        configuration = new IsisConfiguration(null);
+        configuration = new CausewayConfiguration(null);
     }
 
     @Test

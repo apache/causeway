@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
 public interface HasCommonContext extends HasMetaModelContext {

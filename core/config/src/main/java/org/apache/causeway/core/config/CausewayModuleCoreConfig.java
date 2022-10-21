@@ -27,7 +27,7 @@ import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.converters.PatternsConverter;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.IsisLocaleInitializer;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.IsisTimeZoneInitializer;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -52,12 +52,12 @@ import lombok.Data;
     // @Service's
     DataSourceIntrospectionService.class,
     IsisBeanTypeRegistryDefault.class,
-    IsisSystemEnvironment.class,
+    CausewaySystemEnvironment.class,
     WebAppContextPath.class,
 
 })
 @EnableConfigurationProperties({
-        IsisConfiguration.class,
+        CausewayConfiguration.class,
         DatanucleusConfiguration.class,
         EclipselinkConfiguration.class,
         EclipselinkConfiguration.Weaving.class,

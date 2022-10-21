@@ -33,7 +33,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.NonNull;
 import lombok.val;
@@ -46,7 +46,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     @Inject RepositoryService repositoryService;
     @Inject TransactionService transactionService;
     @Inject FactoryService factoryService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject CausewaySystemEnvironment isisSystemEnvironment;
 
     private final Class<E> sessionLogEntryClass;
 

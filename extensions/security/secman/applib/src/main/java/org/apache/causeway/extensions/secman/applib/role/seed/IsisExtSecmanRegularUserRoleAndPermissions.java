@@ -22,7 +22,7 @@ import org.apache.causeway.commons.collections.Can;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.core.config.IsisConfiguration.Extensions.Secman;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -62,7 +62,7 @@ import lombok.val;
  * </p>
  *
  * @see IsisSudoImpersonateRoleAndPermissions
- * @see IsisConfigurationRoleAndPermissions
+ * @see CausewayConfigurationRoleAndPermissions
  *
  * @since 2.0 {@index}
  */

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.isis.WicketApplicationInitializer;
 
 import lombok.val;
@@ -33,7 +33,7 @@ import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceR
 @Configuration
 public class JQueryInitWkt implements WicketApplicationInitializer {
 
-    @Inject IsisConfiguration configuration;
+    @Inject CausewayConfiguration configuration;
 
     /**
      * Upgrading jquery 3.6.0 -> 3.6.1 because of:

@@ -35,10 +35,10 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.LocalResourcePath;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
@@ -63,14 +63,14 @@ public class WebModuleH2Console extends WebModuleAbstract {
     @Getter
     private final LocalResourcePath localResourcePathIfEnabled;
 
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final CausewaySystemEnvironment isisSystemEnvironment;
 
     private final boolean applicable;
 
     @Inject
     public WebModuleH2Console(
             final DataSourceIntrospectionService datasourceIntrospector,
-            final IsisSystemEnvironment isisSystemEnvironment,
+            final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceInjector serviceInjector) {
 
         super(serviceInjector);
@@ -115,7 +115,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
         private static String jdbcUrl;
 
-        @Inject private IsisConfiguration isisConfiguration;
+        @Inject private CausewayConfiguration isisConfiguration;
         @Inject private RandomCodeGenerator randomCodeGenerator;
 
         @Override

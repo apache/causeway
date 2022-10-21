@@ -38,8 +38,8 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
@@ -171,9 +171,9 @@ public class TranslationServicePo implements TranslationService {
 
     // -- DEPENDENCIES
 
-    @Inject private IsisSystemEnvironment systemEnvironment;
+    @Inject private CausewaySystemEnvironment systemEnvironment;
     @Inject private ServiceRegistry serviceRegistry;
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewayConfiguration configuration;
 
     @Getter
     @Inject private LanguageProvider languageProvider;

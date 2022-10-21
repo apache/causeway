@@ -35,7 +35,7 @@ import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_delete;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
@@ -50,7 +50,7 @@ implements ApplicationRoleRepository {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private IsisConfiguration config;
+    @Inject private CausewayConfiguration config;
     @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 

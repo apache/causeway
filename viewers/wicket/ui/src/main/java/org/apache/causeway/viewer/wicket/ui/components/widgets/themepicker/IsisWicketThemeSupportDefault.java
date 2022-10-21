@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -55,7 +55,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private final _Lazy<ThemeProviderComposite> themeProvider = _Lazy.of(this::createThemeProvider);
 
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewayConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
 
     @Override
@@ -106,7 +106,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     /**
      * Filters which themes to show in the drop up by using the provided values
-     * in {@link IsisConfiguration.Viewer.Wicket.Themes#getEnabled()}
+     * in {@link CausewayConfiguration.Viewer.Wicket.Themes#getEnabled()}
      *
      * @param allThemes All available themes
      * @return A list of all enabled themes

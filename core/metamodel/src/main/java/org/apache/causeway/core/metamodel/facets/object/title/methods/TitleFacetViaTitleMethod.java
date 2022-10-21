@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
@@ -92,7 +92,7 @@ implements HasImperativeAspect {
         } catch (final RuntimeException ex) {
             val isUnitTesting = Optional.ofNullable(getMetaModelContext())
                     .map(MetaModelContext::getSystemEnvironment)
-                    .map(IsisSystemEnvironment::isUnitTesting)
+                    .map(CausewaySystemEnvironment::isUnitTesting)
                     .orElse(false);
             if(!isUnitTesting) {
                 log.warn("Failed Title {}", owningAdapter.getSpecification(), ex);

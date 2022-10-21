@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
 
@@ -39,7 +39,7 @@ public class MarkupVariableResolverService {
     private final Map<String, String> constants;
 
     @Inject
-    public MarkupVariableResolverService(IsisConfiguration configuration) {
+    public MarkupVariableResolverService(CausewayConfiguration configuration) {
         constants = _Maps.unmodifiable(
                 "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
                 "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",

@@ -44,11 +44,11 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.confview.ConfigurationProperty;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.IsisConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
 import org.apache.causeway.core.webapp.modules.WebModule;
 
@@ -70,8 +70,8 @@ implements
     ConfigurationViewService {
 
     private final Environment springEnvironment;
-    private final IsisSystemEnvironment systemEnvironment;
-    private final IsisConfiguration configuration;
+    private final CausewaySystemEnvironment systemEnvironment;
+    private final CausewayConfiguration configuration;
     private final DataSourceIntrospectionService datasourceInfoService;
     private final List<WebModule> webModules;
 
@@ -223,7 +223,7 @@ implements
         return Optional.ofNullable(
                 configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
                 // fallback to configuration default policy
-                .orElseGet(()->new IsisConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
+                .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
     }
 
 

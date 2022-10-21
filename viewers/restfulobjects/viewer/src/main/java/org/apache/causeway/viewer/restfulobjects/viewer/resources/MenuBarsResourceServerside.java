@@ -34,7 +34,7 @@ import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -55,7 +55,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     @Inject
     public MenuBarsResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration,
+            final CausewayConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
     }

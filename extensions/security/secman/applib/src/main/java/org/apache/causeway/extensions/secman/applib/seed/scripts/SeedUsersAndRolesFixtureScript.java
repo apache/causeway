@@ -20,9 +20,9 @@ package org.apache.causeway.extensions.secman.applib.seed.scripts;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.role.seed.IsisAppFeatureRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.IsisConfigurationRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtAuditTrailRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtCommandLogRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.IsisExtExecutionLogRoleAndPermissions;
@@ -56,7 +56,7 @@ import lombok.val;
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
-    @Inject private IsisConfiguration config;
+    @Inject private CausewayConfiguration config;
 
     @Override
     protected void execute(final ExecutionContext executionContext) {
@@ -78,7 +78,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 new IsisExtH2ConsoleRoleAndPermissions(),
                 new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
                 new IsisSudoImpersonateRoleAndPermissions(),
-                new IsisConfigurationRoleAndPermissions()
+                new CausewayConfigurationRoleAndPermissions()
                 );
 
         // secman module (admin and regular users role, and secman-admin superuser)
@@ -96,7 +96,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                         IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME,
                         IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME,
                         IsisSudoImpersonateRoleAndPermissions.ROLE_NAME,
-                        IsisConfigurationRoleAndPermissions.ROLE_NAME)
+                        CausewayConfigurationRoleAndPermissions.ROLE_NAME)
                 );
 
     }

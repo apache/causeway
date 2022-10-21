@@ -52,8 +52,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
-import org.apache.causeway.core.config.IsisConfiguration;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -115,8 +115,8 @@ implements
     @Getter(onMethod = @__(@Override))
     @Inject private MetaModelContext metaModelContext;
     @Inject private List<WicketApplicationInitializer> applicationInitializers;
-    @Inject private IsisSystemEnvironment systemEnvironment;
-    @Inject private IsisConfiguration configuration;
+    @Inject private CausewaySystemEnvironment systemEnvironment;
+    @Inject private CausewayConfiguration configuration;
 
     @Getter(onMethod = @__(@Override))
     @Inject private ComponentFactoryRegistry componentFactoryRegistry;
@@ -244,7 +244,7 @@ implements
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    protected void configureSecurity(final IsisConfiguration configuration) {
+    protected void configureSecurity(final CausewayConfiguration configuration) {
         // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
         getCspSettings().blocking().disabled();
         getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
@@ -257,7 +257,7 @@ implements
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    protected IAuthenticationStrategy newAuthenticationStrategy(final IsisConfiguration configuration) {
+    protected IAuthenticationStrategy newAuthenticationStrategy(final CausewayConfiguration configuration) {
         val rememberMe = configuration.getViewer().getWicket().getRememberMe();
         val cookieKey = rememberMe.getCookieKey();
         val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
@@ -265,7 +265,7 @@ implements
     }
 
     /**
-     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}.
+     * As called by {@link #newAuthenticationStrategy(CausewayConfiguration)}.
      * If an encryption key for the 'rememberMe' cookie hasn't been configured,
      * then use a different encryption key for the 'rememberMe'
      * cookie each time the app is restarted.

@@ -39,7 +39,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.config.environment.IsisSystemEnvironment;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;
@@ -51,7 +51,7 @@ import lombok.val;
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
     // enforces provisioning order (this is a depends-on relationship)
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private CausewaySystemEnvironment isisSystemEnvironment;
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @Override

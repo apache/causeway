@@ -24,7 +24,7 @@ import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.StringReference;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ import lombok.val;
 public class AsciiDocReaderService {
 
     final ResourceReaderService resourceReaderService;
-    final IsisConfiguration configuration;
+    final CausewayConfiguration configuration;
 
     public AsciiDoc readFor(final Object anObject) {
         return readFor(anObject.getClass());
