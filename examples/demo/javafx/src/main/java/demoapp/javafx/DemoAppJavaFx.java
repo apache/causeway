@@ -19,7 +19,7 @@
 package demoapp.javafx;
 
 import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
@@ -58,10 +58,10 @@ public class DemoAppJavaFx {
 
     public static void main(final String[] args) {
 
-        IsisPresets.logging(InteractionServiceDefault.class, "debug");
-        IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
+        CausewayPresets.logging(InteractionServiceDefault.class, "debug");
+        CausewayPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
-        IsisPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
+        CausewayPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
         System.setProperty("spring.profiles.active", "demo-jpa");
 
         JavafxViewer.launch(DemoAppJavaFx.class, args);

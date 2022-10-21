@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +47,7 @@ import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntit
       schema = "demo",
       name = "NumberConstantJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.NumberConstantEntity")
 @DomainObject
 @NoArgsConstructor

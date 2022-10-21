@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.HasPersistenceStandardJdo;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
@@ -45,7 +45,7 @@ import org.apache.causeway.testdomain.publishing.stubs.ExecutionPublishingTestAb
                 "logging.level.org.apache.causeway.persistence.jdo.datanucleus.datanucleus.service.JdoPersistenceLifecycleService=DEBUG"
         })
 @TestPropertySource({
-    IsisPresets.UseLog4j2Test
+    CausewayPresets.UseLog4j2Test
 })
 class JdoExecutionPublishingTest
 extends ExecutionPublishingTestAbstract

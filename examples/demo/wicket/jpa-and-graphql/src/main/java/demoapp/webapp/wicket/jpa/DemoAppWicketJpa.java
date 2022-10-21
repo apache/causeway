@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.pdfjs.wkt.ui.CausewayModuleExtPdfjsWicketUi;
@@ -93,7 +93,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
         // activates when sys-env THERE_CAN_BE_ONLY_ONE=true
         _OsUtil.thereCanBeOnlyOne();
 
-    	IsisPresets.prototyping();
+    	CausewayPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
         //IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
         //IsisPresets.logging(EntityModel.class, "debug");

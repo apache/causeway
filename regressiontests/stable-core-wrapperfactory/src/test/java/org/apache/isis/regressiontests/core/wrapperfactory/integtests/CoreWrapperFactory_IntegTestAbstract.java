@@ -31,7 +31,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 import org.apache.causeway.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
@@ -59,17 +59,17 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends IsisIntegrati
             WrapperTestFixtures.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
-            @PropertySource(IsisPresets.DatanucleusEagerlyCreateTables),
-            @PropertySource(IsisPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
+            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
+            @PropertySource(CausewayPresets.DatanucleusEagerlyCreateTables),
+            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     public static class AppManifest {
     }
 
     @BeforeAll
     static void beforeAll() {
-        IsisPresets.forcePrototyping();
+        CausewayPresets.forcePrototyping();
     }
 
     protected Counter newCounter(final String name) {

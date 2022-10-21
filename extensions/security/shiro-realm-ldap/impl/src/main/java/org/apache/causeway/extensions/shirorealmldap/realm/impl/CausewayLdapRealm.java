@@ -123,7 +123,7 @@ import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapperF
  *
  * @since 1.x {@index}
  */
-public class IsisLdapRealm extends DefaultLdapRealm {
+public class CausewayLdapRealm extends DefaultLdapRealm {
 
     private static final String UNIQUEMEMBER_SUBSTITUTION_TOKEN = "{0}";
     private static final SearchControls SUBTREE_SCOPE = new SearchControls();
@@ -179,7 +179,7 @@ public class IsisLdapRealm extends DefaultLdapRealm {
      */
     private String cnAttribute = "cn";
 
-    public IsisLdapRealm() {
+    public CausewayLdapRealm() {
         setGroupObjectClass("groupOfUniqueNames");
         setUniqueMemberAttribute("uniqueMember");
         setUniqueMemberAttributeValueTemplate("uid={0}");

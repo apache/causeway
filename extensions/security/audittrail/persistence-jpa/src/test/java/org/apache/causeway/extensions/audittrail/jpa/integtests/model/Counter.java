@@ -31,7 +31,7 @@ import javax.persistence.Table;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ import lombok.Setter;
         name = "Counter"
 )
 @Named("audittrail.test.Counter")
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @DomainObject(nature = Nature.ENTITY, entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor
 @Builder

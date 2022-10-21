@@ -31,7 +31,7 @@ import lombok.val;
 /**
  * @since 1.x {@index}
  */
-public class IsisPermission extends WildcardPermission {
+public class CausewayPermission extends WildcardPermission {
 
     private static final long serialVersionUID = 1L;
     private static final Pattern PATTERN = Pattern.compile("([!]?)([^/]+)[/](.+)");
@@ -39,14 +39,14 @@ public class IsisPermission extends WildcardPermission {
     private boolean isVetoed;
     private String permissionGroup;
 
-    public IsisPermission() {
+    public CausewayPermission() {
     }
 
-    public IsisPermission(String wildcardString, boolean caseSensitive) {
+    public CausewayPermission(String wildcardString, boolean caseSensitive) {
         super(wildcardString, caseSensitive);
     }
 
-    public IsisPermission(String wildcardString) {
+    public CausewayPermission(String wildcardString) {
         super(wildcardString);
     }
 
@@ -74,8 +74,8 @@ public class IsisPermission extends WildcardPermission {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof IsisPermission) {
-            IsisPermission ip = (IsisPermission) other;
+        if (other instanceof CausewayPermission) {
+            CausewayPermission ip = (CausewayPermission) other;
             return permissionGroup.equals(ip.getPermissionGroup()) && super.equals(other);
         }
         return false;
@@ -94,26 +94,26 @@ public class IsisPermission extends WildcardPermission {
 
     // -- HELPER
 
-    private static final ThreadLocal<ListMultimap<String, IsisPermission>> VETOING_PERMISSIONS =
+    private static final ThreadLocal<ListMultimap<String, CausewayPermission>> VETOING_PERMISSIONS =
             ThreadLocal.withInitial(_Multimaps::newListMultimap);
 
     public static void resetVetoedPermissions() {
-        IsisPermission.VETOING_PERMISSIONS.remove();
+        CausewayPermission.VETOING_PERMISSIONS.remove();
     }
 
     private boolean isVetoed(String permissionGroup, Permission permission) {
         if(permissionGroup == null) {
             return false;
         }
-        val vetoMultimap = IsisPermission.VETOING_PERMISSIONS.get();
+        val vetoMultimap = CausewayPermission.VETOING_PERMISSIONS.get();
         return vetoMultimap.getOrElseEmpty(permissionGroup)
             .stream()
             .anyMatch(vetoingPermission->vetoingPermission.impliesWithoutVeto(permission));
     }
 
-    private void addVeto(IsisPermission vetoingPermission) {
+    private void addVeto(CausewayPermission vetoingPermission) {
         val permissionGroup = vetoingPermission.getPermissionGroup();
-        val vetoMultimap = IsisPermission.VETOING_PERMISSIONS.get();
+        val vetoMultimap = CausewayPermission.VETOING_PERMISSIONS.get();
         vetoMultimap.putElement(permissionGroup, vetoingPermission);
     }
 

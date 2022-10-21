@@ -35,7 +35,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.user.UserService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
@@ -66,7 +66,7 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(final String[] args) {
-        IsisPresets.prototyping();
+        CausewayPresets.prototyping();
         SpringApplication.run(new Class[] { TestAppJdoWkt.class }, args);
     }
 

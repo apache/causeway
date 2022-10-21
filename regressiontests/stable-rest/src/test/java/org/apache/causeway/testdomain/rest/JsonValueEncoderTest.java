@@ -33,7 +33,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -53,7 +53,7 @@ import lombok.val;
         CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
 //@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true") //TODO WIP
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 class JsonValueEncoderTest {
 
     @Inject MetaModelContext mmc;

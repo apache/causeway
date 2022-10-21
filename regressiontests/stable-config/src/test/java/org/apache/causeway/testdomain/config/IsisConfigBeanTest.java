@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 
 @SpringBootTest(
         classes = {
@@ -37,7 +37,7 @@ import org.apache.causeway.core.config.presets.IsisPresets;
         })
 @TestPropertySource({
     "classpath:/application-config-test.properties",
-    IsisPresets.UseLog4j2Test
+    CausewayPresets.UseLog4j2Test
 })
 
 class IsisConfigBeanTest {

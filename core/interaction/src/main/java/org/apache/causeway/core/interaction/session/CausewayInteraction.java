@@ -45,10 +45,10 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class IsisInteraction
+public class CausewayInteraction
 implements InteractionInternal {
 
-    public IsisInteraction(final @NonNull UUID interactionId) {
+    public CausewayInteraction(final @NonNull UUID interactionId) {
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.command = new Command(interactionId);
         log.debug("new IsisInteraction id={}", interactionId);

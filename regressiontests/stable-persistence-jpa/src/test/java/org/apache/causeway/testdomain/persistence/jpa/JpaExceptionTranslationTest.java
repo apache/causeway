@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
@@ -46,7 +46,7 @@ import lombok.val;
                 Configuration_usingJpa.class,
         })
 @TestPropertySources({
-    @TestPropertySource(IsisPresets.UseLog4j2Test)
+    @TestPropertySource(CausewayPresets.UseLog4j2Test)
 })
 //@Transactional ... we manage transaction ourselves
 //@DirtiesContext

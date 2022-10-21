@@ -20,7 +20,7 @@ package org.apache.causeway.testing.fakedata.integtests;
 
 import javax.transaction.Transactional;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
@@ -38,15 +38,15 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest(
         classes = FakeDataModuleIntegTestAbstract.TestManifest.class
 )
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ContextConfiguration
 @Transactional
 public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
         @Configuration
         @PropertySources({
-                @PropertySource(IsisPresets.NoTranslations),
-                @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+                @PropertySource(CausewayPresets.NoTranslations),
+                @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
         })
         @Import({
                 CausewayModuleCoreRuntimeServices.class,

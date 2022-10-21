@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.badnoactenforce.Configuration_usingInvalidDomain_noActionEnforced;
@@ -51,8 +51,8 @@ import lombok.val;
 @TestPropertySource({
     //IsisPresets.DebugMetaModel,
     //IsisPresets.DebugProgrammingModel,
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 class DomainModelTest_usingBadDomain_noAnnotationEnforced {
 

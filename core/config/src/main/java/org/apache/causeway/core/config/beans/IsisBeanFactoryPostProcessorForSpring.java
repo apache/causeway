@@ -64,12 +64,12 @@ implements
     BeanFactoryPostProcessor,
     ApplicationContextAware {
 
-    private IsisBeanTypeClassifier isisBeanTypeClassifier;
+    private CausewayBeanTypeClassifier isisBeanTypeClassifier;
     private IsisComponentScanInterceptor isisComponentScanInterceptor;
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance(applicationContext);
+        isisBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance(applicationContext);
         isisComponentScanInterceptor = IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
     }
 
@@ -117,14 +117,14 @@ implements
     }
 
     @Bean
-    public IsisBeanTypeClassifier getIsisBeanTypeClassifier() {
+    public CausewayBeanTypeClassifier getIsisBeanTypeClassifier() {
         return isisBeanTypeClassifier!=null
                 ? isisBeanTypeClassifier
-                : (isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance()); // JUnit support
+                : (isisBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance()); // JUnit support
     }
 
     @Bean("isis.bean-meta-data")
-    public Can<IsisBeanMetaData> getComponentScanResult() {
+    public Can<CausewayBeanMetaData> getComponentScanResult() {
         return isisComponentScanInterceptor.getAndDrainIntrospectableTypes();
     }
 

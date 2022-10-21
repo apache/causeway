@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.audittrail.jpa.integtests;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
@@ -60,7 +60,7 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
             Counter.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, AuditTrailTestDomainModel.class, CounterRepository.class})
     @EntityScan(basePackageClasses = {Counter.class})
@@ -72,5 +72,5 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
         return Counter.builder().name(name).build();
     }
 
-    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
 }

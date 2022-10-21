@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.DateTimeFormat;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -49,8 +49,8 @@ import lombok.val;
         properties = {
         })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 class CustomContextTest extends IsisIntegrationTestAbstract {
 

@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -55,7 +55,7 @@ public class ResourceContext_getArg_Test {
 
     @Mock private HttpServletRequest mockHttpServletRequest;
     @Mock private ServletContext mockServletContext;
-    @Mock private IsisInteraction mockIsisInteraction;
+    @Mock private CausewayInteraction mockIsisInteraction;
     @Mock private InteractionService mockInteractionService;
     @Mock private InteractionLayerTracker mockInteractionLayerTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;

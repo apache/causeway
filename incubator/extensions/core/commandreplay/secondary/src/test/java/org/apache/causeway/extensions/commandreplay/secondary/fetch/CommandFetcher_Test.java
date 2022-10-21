@@ -26,7 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.fetch.CommandFetcher;
@@ -46,7 +46,7 @@ import lombok.val;
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    IsisPresets.UseLog4j2Test,
+    CausewayPresets.UseLog4j2Test,
 })
 //intended only for manual verification.
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")

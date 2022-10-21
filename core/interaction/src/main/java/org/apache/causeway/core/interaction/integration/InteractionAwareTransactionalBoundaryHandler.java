@@ -30,7 +30,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -62,7 +62,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
 
     // -- OPEN
 
-    public void onOpen(final @NonNull IsisInteraction interaction) {
+    public void onOpen(final @NonNull CausewayInteraction interaction) {
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
@@ -81,7 +81,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
 
     // -- CLOSE
 
-    public void onClose(final @NonNull IsisInteraction interaction) {
+    public void onClose(final @NonNull CausewayInteraction interaction) {
 
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
@@ -96,7 +96,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
 
     }
 
-    public void requestRollback(final @NonNull IsisInteraction interaction) {
+    public void requestRollback(final @NonNull CausewayInteraction interaction) {
         Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                 .ifPresent(OnCloseHandle::requestRollback);
     }

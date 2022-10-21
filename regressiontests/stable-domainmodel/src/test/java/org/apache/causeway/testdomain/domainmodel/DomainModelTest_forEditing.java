@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -53,10 +53,10 @@ import lombok.val;
                 "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
-    IsisPresets.IntrospectFully,
-    IsisPresets.UseLog4j2Test,
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.IntrospectFully,
+    CausewayPresets.UseLog4j2Test,
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 

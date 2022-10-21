@@ -33,7 +33,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 
 import lombok.val;
@@ -41,7 +41,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {LdapServerService.class}
 )
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 class LdapEmbeddedServerTest {
 
     @Inject LdapServerService ldapServerService;

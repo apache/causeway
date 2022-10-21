@@ -30,7 +30,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -43,7 +43,7 @@ import lombok.val;
                 Configuration_headless.class,
         }
 )
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 class ViewModelFactoryTest extends IsisIntegrationTestAbstract {
 
     // -- VIEW MODEL SAMPLES

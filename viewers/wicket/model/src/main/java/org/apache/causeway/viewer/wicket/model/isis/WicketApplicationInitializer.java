@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.model.isis;
 import org.apache.wicket.protocol.http.WebApplication;
 
 /**
- * {@code IsisWicketApplication} refiner, supposed to be managed by <i>Spring</i>.
+ * {@code CausewayWicketApplication} refiner, supposed to be managed by <i>Spring</i>.
  *
  * @since 2.0 {index}
  */

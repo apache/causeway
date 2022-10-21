@@ -36,7 +36,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.core.config.beans.IsisBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -87,7 +87,7 @@ implements FacetHolder {
     private final IntrospectionPolicy introspectionPolicy;
 
     public ObjectSpecificationDefault(
-            final IsisBeanMetaData typeMeta,
+            final CausewayBeanMetaData typeMeta,
             final MetaModelContext mmc,
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor,

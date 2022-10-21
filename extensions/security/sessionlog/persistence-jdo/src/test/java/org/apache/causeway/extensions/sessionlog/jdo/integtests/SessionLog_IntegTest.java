@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.sessionlog.applib.integtests.SessionLogIntegTestAbstract;
 import org.apache.causeway.extensions.sessionlog.jdo.CausewayModuleExtSessionLogPersistenceJdo;
 
@@ -48,7 +48,7 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
             CausewayModuleExtSessionLogPersistenceJdo.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     public static class AppManifest {
     }

@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.testdomain.viewers.jpa.wkt.TestAppJpaWkt;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
@@ -62,8 +62,8 @@ import lombok.val;
                 "logging.level.org.springframework.orm.jpa=DEBUG"
         })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 class InteractionTestJpaWkt extends RegressionTestAbstract {
 

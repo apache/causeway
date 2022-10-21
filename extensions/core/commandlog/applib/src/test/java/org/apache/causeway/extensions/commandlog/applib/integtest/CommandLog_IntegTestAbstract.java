@@ -35,8 +35,8 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.extensions.commandlog.applib.dom.ReplayState;
@@ -62,7 +62,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
     @BeforeAll
     static void beforeAll() {
-        IsisPresets.forcePrototyping();
+        CausewayPresets.forcePrototyping();
     }
 
     Counter counter1;
@@ -481,6 +481,6 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
 }

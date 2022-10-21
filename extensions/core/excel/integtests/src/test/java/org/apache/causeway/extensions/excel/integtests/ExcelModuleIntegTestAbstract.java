@@ -27,7 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.excel.fixtures.CausewayModuleExtExcelFixtures;
 
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -40,15 +40,15 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 @SpringBootTest(
         classes = ExcelModuleIntegTestAbstract.AppManifest.class
 )
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ContextConfiguration
 @Transactional
 public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
     @Configuration
     @PropertySources({
-            @PropertySource(IsisPresets.NoTranslations),
-            @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+            @PropertySource(CausewayPresets.NoTranslations),
+            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
     })
     @Import({
             CausewayModuleCoreRuntimeServices.class,

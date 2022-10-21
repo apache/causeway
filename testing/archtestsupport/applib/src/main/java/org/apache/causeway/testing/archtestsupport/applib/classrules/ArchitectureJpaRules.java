@@ -46,7 +46,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.CommonPredicates.annotationOf;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
@@ -119,8 +119,8 @@ public class ArchitectureJpaRules {
             private boolean containsIsisEntityListener(final JavaClass[] classes) {
                 //noinspection deprecation
                 return Arrays.stream(classes)
-                        .anyMatch(x -> Objects.equals(x.getFullName(), IsisEntityListener.class.getName())
-                                || x.isAssignableTo(IsisEntityListener.class));
+                        .anyMatch(x -> Objects.equals(x.getFullName(), CausewayEntityListener.class.getName())
+                                || x.isAssignableTo(CausewayEntityListener.class));
             }
         };
     }

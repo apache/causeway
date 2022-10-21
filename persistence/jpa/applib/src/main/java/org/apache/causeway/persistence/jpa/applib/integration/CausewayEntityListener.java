@@ -60,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Log4j2
-public class IsisEntityListener {
+public class CausewayEntityListener {
 
     // not managed by Spring (directly)
     //@Inject private ServiceInjector serviceInjector;

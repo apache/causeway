@@ -26,11 +26,10 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.springframework.context.annotation.Configuration;
-
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 @Configuration
 public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
@@ -47,7 +46,7 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
         // create the bundle
         webApplication.getResourceBundles()
         .addCssBundle(
-                IsisWicketApplication.class,
+                CausewayWicketApplication.class,
                 "isis-wicket-viewer-bundle.css",
                 cssReferences.toArray(new CssResourceReference[]{}));
 
@@ -84,7 +83,7 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
 
         // ... though it turns out we cannot add this particular one to the bundle, because
         // it has CSS image links intended to be resolved relative to LinksSelectorPanelAbstract.class.
-        // Adding them into the bundle would mean these CSS links are resolved relative to IsisWicketApplication.class
+        // Adding them into the bundle would mean these CSS links are resolved relative to CausewayWicketApplication.class
         // instead.
         // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
 

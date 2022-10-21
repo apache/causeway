@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.
     schema = "demo",
     name = "DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @DomainObjectEntityChangePublishingEnabledMetaAnnotation                    // <.>
 @Named("demo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity")
 @DomainObject(

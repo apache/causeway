@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.Locale;
 
 import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
@@ -59,7 +59,7 @@ implements HasCommonContext {
         final StringBuilder tookTimingMessage = new StringBuilder();
 
         getInteractionService().currentInteraction()
-        .map(IsisInteraction.class::cast)
+        .map(CausewayInteraction.class::cast)
         .ifPresent(interaction->{
             val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));

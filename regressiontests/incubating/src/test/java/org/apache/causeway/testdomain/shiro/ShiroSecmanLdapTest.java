@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.causeway.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
@@ -76,7 +76,7 @@ import lombok.val;
     CausewayModuleExtSecmanEncryptionSpring.class,
 })
 @PropertySources({
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)
+    @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate)
 })
 class ShiroSecmanLdapTest extends AbstractShiroTest {
 

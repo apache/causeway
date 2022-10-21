@@ -28,7 +28,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.approvaltests.Approvals;
@@ -57,8 +57,8 @@ import lombok.val;
                 "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
           })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 //uncomment if intended only for manual verification.
 //@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")

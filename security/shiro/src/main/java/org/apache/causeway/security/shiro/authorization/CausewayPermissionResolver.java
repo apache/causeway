@@ -24,14 +24,14 @@ import org.apache.shiro.authz.permission.PermissionResolver;
 /**
  * @since 1.x {@index}
  */
-public class IsisPermissionResolver implements PermissionResolver {
+public class CausewayPermissionResolver implements PermissionResolver {
 
-    public IsisPermissionResolver(){
+    public CausewayPermissionResolver(){
     }
 
     @Override
     public Permission resolvePermission(String permissionString) {
-        return new IsisPermission(permissionString);
+        return new CausewayPermission(permissionString);
     }
 
 }

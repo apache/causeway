@@ -18,8 +18,23 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
+import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -30,23 +45,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
 import lombok.val;
 
@@ -67,7 +65,7 @@ public class EntityPage extends PageAbstract {
 
     /**
      * Called reflectively, in support of {@link BookmarkablePageLink} links.
-     * Specifically handled by <code>IsisWicketApplication#newPageFactory()</code>
+     * Specifically handled by <code>CausewayWicketApplication#newPageFactory()</code>
      *
      * Creates an EntityModel from the given page parameters.
      * Redirects to the application home page if there is no OID in the parameters.

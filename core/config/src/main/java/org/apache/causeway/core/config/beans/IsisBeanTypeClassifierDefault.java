@@ -45,15 +45,15 @@ import lombok.val;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 //@Log4j2
 final class IsisBeanTypeClassifierDefault
-implements IsisBeanTypeClassifier {
+implements CausewayBeanTypeClassifier {
 
     private final Can<String> activeProfiles;
-    private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
+    private final Can<CausewayBeanTypeClassifier> classifierPlugins = CausewayBeanTypeClassifier.get();
 
     // handle arbitrary types ...
     @SuppressWarnings("deprecation")
     @Override
-    public IsisBeanMetaData classify(
+    public CausewayBeanMetaData classify(
             final @NonNull Class<?> type) {
 
         //debug
@@ -63,11 +63,11 @@ implements IsisBeanTypeClassifier {
 
         if(ClassUtils.isPrimitiveOrWrapper(type)
                 || type.isEnum()) {
-            return IsisBeanMetaData.notManaged(BeanSort.VALUE, type);
+            return CausewayBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
         if(ProgrammingModelConstants.CollectionSemantics.valueOf(type).isPresent()) {
-            return IsisBeanMetaData.isisManaged(BeanSort.COLLECTION, type);
+            return CausewayBeanMetaData.isisManaged(BeanSort.COLLECTION, type);
         }
 
         if(type.isInterface()
@@ -79,12 +79,12 @@ implements IsisBeanTypeClassifier {
             // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
             // however, concrete types that inherit abstract ones with vetoes,
             // will effectively be vetoed through means of annotation synthesis
-            return IsisBeanMetaData.indifferent(BeanSort.ABSTRACT, type);
+            return CausewayBeanMetaData.indifferent(BeanSort.ABSTRACT, type);
         }
 
         // handle vetoing ...
         if(TypeExcludeMarker.anyMatchOn(type)) {
-            return IsisBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
+            return CausewayBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
         }
 
         val profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
@@ -92,7 +92,7 @@ implements IsisBeanTypeClassifier {
                 .orElse(null));
         if(profiles.isNotEmpty()
                 && !profiles.stream().anyMatch(this::isProfileActive)) {
-            return IsisBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
+            return CausewayBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
         }
 
         // handle value types ...
@@ -100,7 +100,7 @@ implements IsisBeanTypeClassifier {
         val aValue = _Annotations.synthesize(type, org.apache.causeway.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
-            return IsisBeanMetaData.notManaged(BeanSort.VALUE, type);
+            return CausewayBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
         // handle actual bean types ...
@@ -118,9 +118,9 @@ implements IsisBeanTypeClassifier {
                     .orElse(false);
 
             return namedByIsis
-                    ? IsisBeanMetaData
+                    ? CausewayBeanMetaData
                         .injectableNamedByIsis(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType)
-                    : IsisBeanMetaData
+                    : CausewayBeanMetaData
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
@@ -133,12 +133,12 @@ implements IsisBeanTypeClassifier {
         }
 
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
-            return IsisBeanMetaData.isisManaged(BeanSort.VIEW_MODEL, type);
+            return CausewayBeanMetaData.isisManaged(BeanSort.VIEW_MODEL, type);
         }
 
         val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
-            return IsisBeanMetaData.isisManaged(BeanSort.ENTITY, LogicalType.infer(type));
+            return CausewayBeanMetaData.isisManaged(BeanSort.ENTITY, LogicalType.infer(type));
         }
 
         val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
@@ -146,28 +146,28 @@ implements IsisBeanTypeClassifier {
             switch (aDomainObject.nature()) {
             case BEAN:
                 val logicalType = LogicalType.infer(type);
-                return IsisBeanMetaData
+                return CausewayBeanMetaData
                         .injectableNamedByIsis(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
             case MIXIN:
-                return IsisBeanMetaData.isisManaged(BeanSort.MIXIN, type);
+                return CausewayBeanMetaData.isisManaged(BeanSort.MIXIN, type);
             case ENTITY:
-                return IsisBeanMetaData.isisManaged(BeanSort.ENTITY, type);
+                return CausewayBeanMetaData.isisManaged(BeanSort.ENTITY, type);
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above
-                return IsisBeanMetaData.isisManaged(BeanSort.VIEW_MODEL, type);
+                return CausewayBeanMetaData.isisManaged(BeanSort.VIEW_MODEL, type);
             }
         }
 
         if(_Annotations.isPresent(type, Component.class)) {
-            return IsisBeanMetaData.indifferent(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, type);
+            return CausewayBeanMetaData.indifferent(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, type);
         }
 
         if(Serializable.class.isAssignableFrom(type)) {
-            return IsisBeanMetaData.indifferent(BeanSort.VALUE, type);
+            return CausewayBeanMetaData.indifferent(BeanSort.VALUE, type);
         }
 
-        return IsisBeanMetaData.indifferent(BeanSort.UNKNOWN, type);
+        return CausewayBeanMetaData.indifferent(BeanSort.UNKNOWN, type);
     }
 
     // -- HELPER

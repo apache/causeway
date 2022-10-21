@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.ldap.LdapServerService;
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 @Import({
     LdapServerService.class,
 })
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 //XXX inconsistent state when run in a test batch
 @Log4j2
 class ShiroLdapTest extends AbstractShiroTest {

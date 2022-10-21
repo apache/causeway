@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
@@ -46,8 +46,8 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
     JpaTestDomainModule.class
 })
 @PropertySources({
-    @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
+    @PropertySource(CausewayPresets.NoTranslations),
+    @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJpa {
 

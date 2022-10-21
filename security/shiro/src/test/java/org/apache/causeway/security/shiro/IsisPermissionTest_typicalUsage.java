@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.security.shiro;
 
-import org.apache.causeway.security.shiro.authorization.IsisPermission;
+import org.apache.causeway.security.shiro.authorization.CausewayPermission;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.hamcrest.Description;
@@ -36,12 +36,12 @@ public class IsisPermissionTest_typicalUsage {
 
     @Before
     public void setUp() throws Exception {
-        IsisPermission.resetVetoedPermissions();
+        CausewayPermission.resetVetoedPermissions();
     }
 
     @After
     public void tearDown() throws Exception {
-        IsisPermission.resetVetoedPermissions();
+        CausewayPermission.resetVetoedPermissions();
     }
 
 
@@ -132,10 +132,10 @@ public class IsisPermissionTest_typicalUsage {
 
 
     private static Matcher<? super Permission> permittedBy(final String permissionString) {
-        return permittedBy(new IsisPermission(permissionString));
+        return permittedBy(new CausewayPermission(permissionString));
     }
 
-    private static Matcher<? super Permission> permittedBy(final IsisPermission wp) {
+    private static Matcher<? super Permission> permittedBy(final CausewayPermission wp) {
         return new TypeSafeMatcher<Permission>() {
 
             @Override

@@ -36,8 +36,8 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -63,7 +63,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends IsisIntegrat
 
     @BeforeAll
     static void beforeAll() {
-        IsisPresets.forcePrototyping();
+        CausewayPresets.forcePrototyping();
     }
 
     Bookmark target1;
@@ -333,6 +333,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends IsisIntegrat
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
 
-    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
 }

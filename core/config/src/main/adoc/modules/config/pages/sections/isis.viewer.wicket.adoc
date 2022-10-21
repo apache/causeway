@@ -24,7 +24,7 @@ isis.viewer.wicket.ajax-debug-mode
 isis.viewer.wicket.app
 
 | 
-| Specifies the subclass of ``IsisWicketApplication`` that is used to bootstrap Wicket.
+| Specifies the subclass of ``CausewayWicketApplication`` that is used to bootstrap Wicket.
 
 There is usually very little reason to change this from its default.
 

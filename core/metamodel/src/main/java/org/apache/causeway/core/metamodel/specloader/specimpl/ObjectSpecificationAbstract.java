@@ -27,6 +27,11 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -36,20 +41,11 @@ import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
-import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.springframework.util.ClassUtils;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Domain;
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -89,6 +85,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
+import org.springframework.util.ClassUtils;
+
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -893,8 +892,8 @@ implements ObjectSpecification {
     }
 
     @Getter(lazy = true)
-    private final IsisBeanTypeRegistry isisBeanTypeRegistry =
+    private final CausewayBeanTypeRegistry isisBeanTypeRegistry =
         getServiceRegistry()
-                .lookupServiceElseFail(IsisBeanTypeRegistry.class);
+                .lookupServiceElseFail(CausewayBeanTypeRegistry.class);
 
 }

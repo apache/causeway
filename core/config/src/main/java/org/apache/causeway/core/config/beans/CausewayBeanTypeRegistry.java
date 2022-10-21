@@ -28,17 +28,17 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
  * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
  * @since 2.0
  */
-public interface IsisBeanTypeRegistry {
+public interface CausewayBeanTypeRegistry {
 
-    Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type);
-    Stream<IsisBeanMetaData> streamIntrospectableTypes();
+    Optional<CausewayBeanMetaData> lookupIntrospectableType(Class<?> type);
+    Stream<CausewayBeanMetaData> streamIntrospectableTypes();
 
-    Map<Class<?>, IsisBeanMetaData> getManagedBeansContributing();
-    Map<Class<?>, IsisBeanMetaData> getEntityTypes();
-    Map<Class<?>, IsisBeanMetaData> getMixinTypes();
-    Map<Class<?>, IsisBeanMetaData> getViewModelTypes();
+    Map<Class<?>, CausewayBeanMetaData> getManagedBeansContributing();
+    Map<Class<?>, CausewayBeanMetaData> getEntityTypes();
+    Map<Class<?>, CausewayBeanMetaData> getMixinTypes();
+    Map<Class<?>, CausewayBeanMetaData> getViewModelTypes();
     /** discovered per {@code @Value} annotation (vs. registered using a {@link ValueSemanticsProvider})*/
-    Map<Class<?>, IsisBeanMetaData> getDiscoveredValueTypes();
+    Map<Class<?>, CausewayBeanMetaData> getDiscoveredValueTypes();
 
     // -- LOOKUPS
 
@@ -51,17 +51,17 @@ public interface IsisBeanTypeRegistry {
      */
     default Optional<String> lookupManagedBeanNameForType(final Class<?> type) {
         return Optional.ofNullable(getManagedBeansContributing().get(type))
-                .map(IsisBeanMetaData::getBeanName);
+                .map(CausewayBeanMetaData::getBeanName);
     }
 
     /**
-     * Returns either 'JDO' or 'JPA' based on what {@link IsisBeanTypeClassifier} we find
+     * Returns either 'JDO' or 'JPA' based on what {@link CausewayBeanTypeClassifier} we find
      * registered with <i>Spring</i>.
      * Alternative implementations could be considered, however this works for now.
      */
     default PersistenceStack determineCurrentPersistenceStack() {
-        return IsisBeanTypeClassifier.get().stream()
-                .map(IsisBeanTypeClassifier::getClass)
+        return CausewayBeanTypeClassifier.get().stream()
+                .map(CausewayBeanTypeClassifier::getClass)
                 .map(Class::getSimpleName)
                 .anyMatch(classifierName->classifierName.startsWith("Jdo"))
                 ? PersistenceStack.JDO

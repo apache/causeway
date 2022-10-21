@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryDao;
@@ -57,7 +57,7 @@ import lombok.val;
                 JdoInventoryDao.class,
         })
 @TestPropertySources({
-    @TestPropertySource(IsisPresets.UseLog4j2Test)
+    @TestPropertySource(CausewayPresets.UseLog4j2Test)
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoExceptionTranslationTest_usingTransactional

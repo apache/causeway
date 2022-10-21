@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 
 import lombok.val;
 
@@ -37,7 +37,7 @@ import lombok.val;
         },
         properties = {
         })
-@TestPropertySource(IsisPresets.SilenceWicket)
+@TestPropertySource(CausewayPresets.SilenceWicket)
 public class LoggerSetupTestWkt {
 
     @Configuration

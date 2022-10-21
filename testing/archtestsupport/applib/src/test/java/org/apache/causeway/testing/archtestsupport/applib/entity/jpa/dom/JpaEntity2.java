@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 @Entity
 @Table(
@@ -41,7 +41,7 @@ import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener
 )
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-@EntityListeners({ IsisEntityListener.class})
+@EntityListeners({ CausewayEntityListener.class})
 public abstract class JpaEntity2 implements Comparable<JpaEntity2> {
 
     @Id @Column(name = "id", nullable = false)

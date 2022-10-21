@@ -96,7 +96,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class IsisWicketApplication
+public class CausewayWicketApplication
 extends AuthenticatedWebApplication
 implements
     HasComponentFactoryRegistry,
@@ -108,8 +108,8 @@ implements
     /**
      * Convenience locator, down-casts inherited functionality.
      */
-    public static IsisWicketApplication get() {
-        return (IsisWicketApplication) AuthenticatedWebApplication.get();
+    public static CausewayWicketApplication get() {
+        return (CausewayWicketApplication) AuthenticatedWebApplication.get();
     }
 
     @Getter(onMethod = @__(@Override))
@@ -126,7 +126,7 @@ implements
 
     // -- CONSTRUCTION
 
-    public IsisWicketApplication() {
+    public CausewayWicketApplication() {
         // equivalent of -Dwicket.ioc.useByteBuddy=true (as opposed to using CGLIB)
         System.setProperty("wicket.ioc.useByteBuddy", "true");
     }
@@ -146,7 +146,7 @@ implements
         super.internalInit();
 
         // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-        IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
+        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {

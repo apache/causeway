@@ -37,7 +37,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry.Nq;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -137,7 +137,7 @@ import lombok.Setter;
                       + " WHERE e.username = :username "
                       + " ORDER BY e.loginTimestamp DESC ")  // range 0,10 programmatically
 })
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named(SessionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED

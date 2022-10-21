@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 //                "logging.level.org.apache.isis.testdomain.injecting.jdo.JdoEntityInjectingTest=DEBUG"
         }
 )
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2

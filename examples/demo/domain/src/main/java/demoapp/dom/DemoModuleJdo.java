@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
 import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 
@@ -36,7 +36,7 @@ import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistence
     CausewayModuleExtCommandLogPersistenceJdo.class,
 })
 @PropertySources({
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
 })
 public class DemoModuleJdo {
 

@@ -26,7 +26,7 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter;
@@ -45,7 +45,7 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
 
     @BeforeAll
     static void beforeAll() {
-        IsisPresets.forcePrototyping();
+        CausewayPresets.forcePrototyping();
     }
 
     @BeforeEach

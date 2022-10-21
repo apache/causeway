@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -54,7 +54,7 @@ public class LineBreaker {
 
         // allow for current interaction to complete gracefully
         iInteractionLayerTracker.currentInteraction()
-        .map(IsisInteraction.class::cast)
+        .map(CausewayInteraction.class::cast)
         .ifPresent(interaction->{
             interaction.setOnClose(()->System.exit(0));
         });

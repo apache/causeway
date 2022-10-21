@@ -45,50 +45,50 @@ import lombok.val;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 public class IsisBeanTypeRegistryDefault
-implements IsisBeanTypeRegistry {
+implements CausewayBeanTypeRegistry {
 
     /**
      * (immutable) scan result, as used by the SpecificationLoader for introspection
      */
-    private final Can<IsisBeanMetaData> introspectableTypes;
+    private final Can<CausewayBeanMetaData> introspectableTypes;
 
-    private final Map<Class<?>, IsisBeanMetaData> introspectableTypesByClass = _Maps.newHashMap();
+    private final Map<Class<?>, CausewayBeanMetaData> introspectableTypesByClass = _Maps.newHashMap();
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
 
     @Getter(onMethod_ = {@Override})
-    private final Map<Class<?>, IsisBeanMetaData> managedBeansContributing = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> managedBeansContributing = new HashMap<>();
 
     @Getter(onMethod_ = {@Override})
-    private final Map<Class<?>, IsisBeanMetaData> entityTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> entityTypes = new HashMap<>();
 
     @Getter(onMethod_ = {@Override})
-    private final Map<Class<?>, IsisBeanMetaData> mixinTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> mixinTypes = new HashMap<>();
 
     @Getter(onMethod_ = {@Override})
-    private final Map<Class<?>, IsisBeanMetaData> viewModelTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> viewModelTypes = new HashMap<>();
 
     @Getter(onMethod_ = {@Override})
-    private final Map<Class<?>, IsisBeanMetaData> discoveredValueTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> discoveredValueTypes = new HashMap<>();
 
     // -- LOOKUPS
 
     @Override
-    public Optional<IsisBeanMetaData> lookupIntrospectableType(final Class<?> type) {
+    public Optional<CausewayBeanMetaData> lookupIntrospectableType(final Class<?> type) {
         return Optional.ofNullable(introspectableTypesByClass.get(type));
     }
 
     // -- ITERATORS
 
     @Override
-    public Stream<IsisBeanMetaData> streamIntrospectableTypes() {
+    public Stream<CausewayBeanMetaData> streamIntrospectableTypes() {
         return _NullSafe.stream(introspectableTypes);
     }
 
     // -- CONSTRUCTOR
 
     @Inject @Named("isis.bean-meta-data")
-    public IsisBeanTypeRegistryDefault(final @NonNull Can<IsisBeanMetaData> introspectableTypes) {
+    public IsisBeanTypeRegistryDefault(final @NonNull Can<CausewayBeanMetaData> introspectableTypes) {
         this.introspectableTypes = introspectableTypes;
 
         introspectableTypes.forEach(typeMeta->{

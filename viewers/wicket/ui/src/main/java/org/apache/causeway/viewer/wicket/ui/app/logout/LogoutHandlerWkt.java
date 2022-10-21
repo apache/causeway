@@ -23,7 +23,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
@@ -46,7 +46,7 @@ public class LogoutHandlerWkt implements LogoutHandler {
 
         if(interactionLayerTracker.isInInteraction()) {
             interactionLayerTracker.currentInteraction()
-            .map(IsisInteraction.class::cast)
+            .map(CausewayInteraction.class::cast)
             .ifPresent(interaction->
                 interaction.setOnClose(currentWktSession::invalidateNow));
 

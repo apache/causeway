@@ -66,6 +66,8 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -1980,14 +1982,14 @@ public class CausewayConfiguration {
 
             /**
              * Specifies the subclass of
-             * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication</code> that is used to
+             * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication</code> that is used to
              * bootstrap Wicket.
              *
              * <p>
              *     There is usually very little reason to change this from its default.
              * </p>
              */
-            private String app = "org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication";
+            private String app = "org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication";
 
             /**
              * Whether the Ajax debug should be shown, by default this is disabled.

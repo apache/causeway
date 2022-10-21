@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryManager;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
@@ -63,7 +63,7 @@ import lombok.val;
                 WrapperAsyncTest.ActionDomainEventListener.class
         }
 )
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @DirtiesContext // because of the temporary installed ActionDomainEventListener
 class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 

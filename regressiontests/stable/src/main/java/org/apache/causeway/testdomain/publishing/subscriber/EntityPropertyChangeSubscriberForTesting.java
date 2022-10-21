@@ -31,7 +31,7 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
@@ -45,7 +45,7 @@ implements EntityPropertyChangeSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
     @PostConstruct
     public void init() {

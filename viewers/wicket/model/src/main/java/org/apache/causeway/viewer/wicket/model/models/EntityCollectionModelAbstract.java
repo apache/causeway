@@ -20,17 +20,16 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.List;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.wicket.model.ChainingModel;
-
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
+import org.apache.wicket.model.ChainingModel;
 
 import lombok.NonNull;
 
@@ -71,7 +70,7 @@ implements EntityCollectionModel {
         return getObject();
     }
 
-//XXX experiments from IsisWicketApplication_experimental
+//XXX experiments from CausewayWicketApplication_experimental
 //    public final void setDataTableModel(final DataTableModel dataTableModel) {
 //        delegate().setObject(dataTableModel);
 //    }

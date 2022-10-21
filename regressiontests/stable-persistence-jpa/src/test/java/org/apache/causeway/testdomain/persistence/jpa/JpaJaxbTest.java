@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
@@ -39,7 +39,7 @@ import lombok.val;
         classes = {
                 Configuration_usingJpa.class,
         })
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 //@Transactional
 class JpaJaxbTest extends RegressionTestAbstract {
 

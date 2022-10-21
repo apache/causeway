@@ -20,7 +20,7 @@ package demoapp.javafx.integtest;
 
 import javax.sql.DataSource;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -36,8 +36,8 @@ import javafx.application.HostServices;
 
 @Configuration
 @PropertySources({
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema)
+    @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema)
 })
 public class DemoFxTestConfig_usingJdo {
 

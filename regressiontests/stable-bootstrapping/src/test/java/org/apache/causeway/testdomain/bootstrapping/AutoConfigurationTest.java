@@ -35,10 +35,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContexts;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.causeway.testdomain.conf.Configuration_usingStereotypes;
@@ -63,15 +63,15 @@ import lombok.val;
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel,
-    IsisPresets.UseLog4j2Test,
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel,
+    CausewayPresets.UseLog4j2Test,
 })
 class AutoConfigurationTest {
 
     @Inject private ApplicationContext applicationContext;
     @Inject private CausewaySystemEnvironment isisSystemEnvironment;
-    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private CausewayBeanTypeRegistry isisBeanTypeRegistry;
     @Inject private ServiceRegistry serviceRegistry;
 
     //XXX for debugging and experimenting

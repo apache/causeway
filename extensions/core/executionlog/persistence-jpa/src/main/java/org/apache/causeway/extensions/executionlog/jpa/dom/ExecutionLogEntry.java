@@ -45,7 +45,7 @@ import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.IsisInteractionDtoConverter;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
@@ -152,7 +152,7 @@ import lombok.Setter;
         entityChangePublishing = Publishing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 public class ExecutionLogEntry extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry {
 
 

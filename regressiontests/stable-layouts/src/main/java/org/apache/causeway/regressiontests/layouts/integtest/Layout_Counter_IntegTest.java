@@ -56,8 +56,8 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -93,7 +93,7 @@ public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
             CausewayModuleSecurityBypass.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test)
+            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, LayoutTestDomainModel.class})
     public static class AppManifest {
@@ -122,7 +122,7 @@ public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
 
     @BeforeAll
     static void beforeAll() {
-        IsisPresets.forcePrototyping();
+        CausewayPresets.forcePrototyping();
     }
 
     Bookmark target1;
@@ -774,6 +774,6 @@ public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
     @Inject SpecificationLoader specificationLoader;
     @Inject BookmarkService bookmarkService;
 
-    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
 }

@@ -44,7 +44,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
@@ -84,7 +84,7 @@ public class OutboxRestClient_IntegTest  {
             Counter_bumpUsingMixinWithExecutionPublishingDisabled.class
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test)
+            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, Counter.class})
@@ -96,7 +96,7 @@ public class OutboxRestClient_IntegTest  {
 
     @BeforeAll
     static void beforeAll() {
-        IsisPresets.forcePrototyping();
+        CausewayPresets.forcePrototyping();
     }
 
     org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter counter1;

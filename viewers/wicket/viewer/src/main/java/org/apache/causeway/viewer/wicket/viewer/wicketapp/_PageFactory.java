@@ -42,7 +42,7 @@ import lombok.val;
 @RequiredArgsConstructor
 class _PageFactory implements IPageFactory {
 
-    private final IsisWicketApplication holder;
+    private final CausewayWicketApplication holder;
     private final IPageFactory delegate;
 
     @Override

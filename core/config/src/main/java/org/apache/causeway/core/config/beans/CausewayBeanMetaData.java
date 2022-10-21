@@ -25,7 +25,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class IsisBeanMetaData {
+public class CausewayBeanMetaData {
 
     public enum ManagedBy {
         NONE,
@@ -72,19 +72,19 @@ public class IsisBeanMetaData {
 
     // -- FACTORIES
 
-    public static IsisBeanMetaData notManaged(
+    public static CausewayBeanMetaData notManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return of(beanSort, logicalType, ManagedBy.NONE);
     }
 
-    public static IsisBeanMetaData notManaged(
+    public static CausewayBeanMetaData notManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
         return notManaged(beanSort, LogicalType.infer(type));
     }
 
-    public static IsisBeanMetaData injectable(
+    public static CausewayBeanMetaData injectable(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return of(beanSort, logicalType, ManagedBy.SPRING);
@@ -92,7 +92,7 @@ public class IsisBeanMetaData {
 
     /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
     @Deprecated
-    public static IsisBeanMetaData injectableNamedByIsis(
+    public static CausewayBeanMetaData injectableNamedByIsis(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_ISIS);
@@ -101,20 +101,20 @@ public class IsisBeanMetaData {
     /**
      * Let <i>Spring</i> decide.
      */
-    public static IsisBeanMetaData indifferent(
+    public static CausewayBeanMetaData indifferent(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
         return of(beanSort, LogicalType.infer(type),
                 ManagedBy.INDIFFERENT);
     }
 
-    public static IsisBeanMetaData isisManaged(
+    public static CausewayBeanMetaData isisManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return of(beanSort, logicalType, ManagedBy.ISIS);
     }
 
-    public static IsisBeanMetaData isisManaged(
+    public static CausewayBeanMetaData isisManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
         return isisManaged(beanSort, LogicalType.infer(type));

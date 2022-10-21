@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
@@ -54,7 +54,7 @@ import lombok.RequiredArgsConstructor;
     DomainObjectTesterFactory.class // Helper for JUnit Tests
 })
 @PropertySources({
-    @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(CausewayPresets.NoTranslations),
 })
 public class Configuration_headless {
 

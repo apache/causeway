@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
@@ -52,7 +52,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     // enforces provisioning order (this is a depends-on relationship)
     @Inject private CausewaySystemEnvironment isisSystemEnvironment;
-    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
     @Override
     public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final LogicalType id) {

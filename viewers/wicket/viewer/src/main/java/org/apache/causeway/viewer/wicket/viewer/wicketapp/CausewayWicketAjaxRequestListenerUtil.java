@@ -35,7 +35,7 @@ import lombok.experimental.UtilityClass;
 
 
 @UtilityClass
-public final class IsisWicketAjaxRequestListenerUtil {
+public final class CausewayWicketAjaxRequestListenerUtil {
 
     public void setRootRequestMapper(
             final WebApplication app,

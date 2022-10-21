@@ -27,7 +27,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
 import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
@@ -50,7 +50,7 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
             CausewayModuleExtExecutionLogPersistenceJdo.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test)
+            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, ExecutionLogTestDomainModel.class})
     public static class AppManifest {

@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 @SpringBootTest(
@@ -38,7 +38,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 )
 @TestPropertySource({
     "classpath:/application-config-test.properties",
-    IsisPresets.UseLog4j2Test
+    CausewayPresets.UseLog4j2Test
 })
 class IsisConfigBeanTest_usingHeadless {
 

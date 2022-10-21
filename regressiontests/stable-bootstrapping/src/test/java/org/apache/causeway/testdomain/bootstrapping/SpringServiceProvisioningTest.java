@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 import lombok.val;
@@ -58,9 +58,9 @@ import lombok.val;
         })
 @TestPropertySource({
     //IsisPresets.DebugDiscovery
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel,
-    IsisPresets.UseLog4j2Test,
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel,
+    CausewayPresets.UseLog4j2Test,
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {

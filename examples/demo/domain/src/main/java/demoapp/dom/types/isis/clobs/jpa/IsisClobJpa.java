@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.applib.types.ClobJpaEmbeddable;
 
 import lombok.NoArgsConstructor;
@@ -52,7 +52,7 @@ import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
       schema = "demo",
       name = "IsisClobJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.IsisClobEntity")
 @DomainObject
 @NoArgsConstructor

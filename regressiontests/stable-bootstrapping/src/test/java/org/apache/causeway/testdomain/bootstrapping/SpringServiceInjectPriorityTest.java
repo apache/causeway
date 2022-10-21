@@ -44,7 +44,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.message.MessageServiceDefault;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
@@ -66,9 +66,9 @@ import lombok.val;
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-        IsisPresets.SilenceMetaModel,
-        IsisPresets.SilenceProgrammingModel,
-        IsisPresets.UseLog4j2Test
+        CausewayPresets.SilenceMetaModel,
+        CausewayPresets.SilenceProgrammingModel,
+        CausewayPresets.UseLog4j2Test
 })
 class SpringServiceInjectPriorityTest {
 

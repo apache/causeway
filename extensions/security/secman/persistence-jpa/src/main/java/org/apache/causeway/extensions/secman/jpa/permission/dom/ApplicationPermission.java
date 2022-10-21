@@ -45,7 +45,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -99,7 +99,7 @@ import lombok.Setter;
                   + "   AND p.featureSort = :featureSort "),
 })
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject
 @DomainObjectLayout(

@@ -32,15 +32,15 @@ import static org.hamcrest.Matchers.nullValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
-class IsisWicketApplication_Defaults {
+class CausewayWicketApplication_Defaults {
 
-    private IsisWicketApplication application;
+    private CausewayWicketApplication application;
 
     @BeforeEach
     public void setUp() throws Exception {
-        application = new IsisWicketApplication();
+        application = new CausewayWicketApplication();
     }
 
     @AfterEach

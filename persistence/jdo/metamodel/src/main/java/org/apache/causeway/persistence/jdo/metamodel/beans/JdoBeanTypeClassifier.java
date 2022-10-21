@@ -27,8 +27,8 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.core.config.beans.IsisBeanMetaData;
-import org.apache.causeway.core.config.beans.IsisBeanTypeClassifier;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 
 import lombok.val;
 
@@ -36,10 +36,10 @@ import lombok.val;
  * ServiceLoader plugin, classifies PersistenceCapable types into BeanSort.ENTITY.
  * @since 2.0
  */
-public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
+public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
 
     @Override
-    public IsisBeanMetaData classify(final Class<?> type) {
+    public CausewayBeanMetaData classify(final Class<?> type) {
 
         val persistenceCapableAnnot = _Annotations
                 .synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
@@ -74,7 +74,7 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 }
             }
 
-            return IsisBeanMetaData.isisManaged(BeanSort.ENTITY, logicalType);
+            return CausewayBeanMetaData.isisManaged(BeanSort.ENTITY, logicalType);
         }
 
         return null; // we don't see fit to classify given type

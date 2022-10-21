@@ -39,15 +39,15 @@ import lombok.extern.log4j.Log4j2;
 final class IsisComponentScanInterceptorImpl
 implements IsisComponentScanInterceptor {
 
-    private final @NonNull IsisBeanTypeClassifier isisBeanTypeClassifier;
+    private final @NonNull CausewayBeanTypeClassifier isisBeanTypeClassifier;
 
     /**
      * Inbox for introspection, as used by the SpecificationLoader
      */
-    private Map<Class<?>, IsisBeanMetaData> introspectableTypes = _Maps.newConcurrentHashMap();
+    private Map<Class<?>, CausewayBeanMetaData> introspectableTypes = _Maps.newConcurrentHashMap();
 
     @Override
-    public Can<IsisBeanMetaData> getAndDrainIntrospectableTypes() {
+    public Can<CausewayBeanMetaData> getAndDrainIntrospectableTypes() {
 
         if(introspectableTypes==null) {
             throw _Exceptions.illegalState("introspectable types had already been drained (one shot)");

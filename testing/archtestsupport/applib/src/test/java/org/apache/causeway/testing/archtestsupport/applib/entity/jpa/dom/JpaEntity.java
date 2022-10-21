@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners({ IsisEntityListener.class})
+@EntityListeners({ CausewayEntityListener.class})
 public class JpaEntity implements Comparable<JpaEntity> {
 
     @Id @Column(name = "id", nullable = false)

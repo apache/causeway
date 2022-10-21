@@ -43,7 +43,7 @@ import org.apache.causeway.core.interaction.integration.InteractionAwareTransact
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
@@ -223,11 +223,11 @@ implements
         return interactionLayer;
     }
 
-    private IsisInteraction getOrCreateIsisInteraction() {
+    private CausewayInteraction getOrCreateIsisInteraction() {
 
         final Stack<InteractionLayer> interactionLayers = interactionLayerStack.get();
         return interactionLayers.isEmpty()
-    			? new IsisInteraction(interactionIdGenerator.interactionId())
+    			? new CausewayInteraction(interactionIdGenerator.interactionId())
 				: _Casts.uncheckedCast(interactionLayers.firstElement().getInteraction());
     }
 
@@ -357,7 +357,7 @@ implements
                     cause.getMessage());
             return;
         }
-        val interaction = _Casts.<IsisInteraction>uncheckedCast(stack.get(0).getInteraction());
+        val interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).getInteraction());
         txBoundaryHandler.requestRollback(interaction);
     }
 
@@ -365,7 +365,7 @@ implements
     	return interactionLayerStack.get().size()==1;
     }
 
-    private void postInteractionOpened(final IsisInteraction interaction) {
+    private void postInteractionOpened(final CausewayInteraction interaction) {
         interactionId.set(interaction.getInteractionId());
         transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
         txBoundaryHandler.onOpen(interaction);
@@ -374,7 +374,7 @@ implements
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
-    private void preInteractionClosed(final IsisInteraction interaction) {
+    private void preInteractionClosed(final CausewayInteraction interaction) {
         completeAndPublishCurrentCommand();
         transactionServiceProvider.get().flushTransaction();
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
@@ -410,10 +410,10 @@ implements
         }
     }
 
-    private IsisInteraction getInternalInteractionElseFail() {
+    private CausewayInteraction getInternalInteractionElseFail() {
         val interaction = currentInteractionElseFail();
-        if(interaction instanceof IsisInteraction) {
-            return (IsisInteraction) interaction;
+        if(interaction instanceof CausewayInteraction) {
+            return (CausewayInteraction) interaction;
         }
         throw _Exceptions.unrecoverable("the framework does not recognize "
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());

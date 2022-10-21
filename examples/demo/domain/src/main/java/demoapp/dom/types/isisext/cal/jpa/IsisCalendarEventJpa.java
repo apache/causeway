@@ -35,7 +35,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,7 +50,7 @@ import demoapp.dom.types.isisext.cal.persistence.IsisCalendarEventEntity;
       schema = "demo",
       name = "IsisCalendarEventJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.IsisCalendarEventEntity")
 @DomainObject
 @NoArgsConstructor

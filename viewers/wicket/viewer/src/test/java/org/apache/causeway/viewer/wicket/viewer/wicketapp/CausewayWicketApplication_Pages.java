@@ -22,7 +22,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.junit.jupiter.api.Test;
@@ -35,18 +35,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
-class IsisWicketApplication_Pages {
+class CausewayWicketApplication_Pages {
 
     @Mock PageClassRegistry mockPageClassRegistry;
 
-    private IsisWicketApplication application;
+    private CausewayWicketApplication application;
 
     @Test
     public void delegatesToPageClassRegistryToObtainPageTypes() {
         final PageType pageType = PageType.HOME;
         final Class<HomePage> expectedPageClass = HomePage.class;
 
-        application = new IsisWicketApplication() {
+        application = new CausewayWicketApplication() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -70,7 +70,7 @@ class IsisWicketApplication_Pages {
         final Class<WebPage> expectedPageClass = WebPage.class;
 
         final PageClassRegistry mockPageClassRegistry = Mockito.mock(PageClassRegistry.class);
-        application = new IsisWicketApplication() {
+        application = new CausewayWicketApplication() {
             private static final long serialVersionUID = 1L;
 
             @Override

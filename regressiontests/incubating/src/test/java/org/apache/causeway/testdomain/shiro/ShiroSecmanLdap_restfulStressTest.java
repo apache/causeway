@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
 import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
@@ -78,7 +78,7 @@ import lombok.val;
     CausewayModuleExtSecmanEncryptionSpring.class,
 })
 @PropertySources({
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)
+    @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate)
 })
 //XXX "does not work, when executed in sequence with other regressiontests
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {

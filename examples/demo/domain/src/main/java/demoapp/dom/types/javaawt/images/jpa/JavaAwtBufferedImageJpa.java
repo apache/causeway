@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
 
 import lombok.Getter;
@@ -52,7 +52,7 @@ import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
       schema = "demo",
       name = "JavaAwtBufferedImageJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.JavaAwtBufferedImageEntity")
 @DomainObject
 @NoArgsConstructor

@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._Strings;
  * @since 2.0
  *
  */
-public final class IsisPresets  {
+public final class CausewayPresets  {
 
     public static final String NoTranslations = "classpath:/org/apache/causeway/core/config/presets/NoTranslations.properties";
     public static final String IntrospectLazily = "classpath:/org/apache/causeway/core/config/presets/IntrospectLazily.properties";

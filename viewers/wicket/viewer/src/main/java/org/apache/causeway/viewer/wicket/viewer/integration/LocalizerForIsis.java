@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
 import lombok.val;
 
@@ -74,7 +74,7 @@ public class LocalizerForIsis extends Localizer {
     }
 
     protected String translate(final String key, final Component component) {
-        final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
+        final Class<?> contextClass = determineContextClassElse(component, CausewayWicketApplication.class);
         final TranslationContext context = TranslationContext.forClassName(contextClass);
         if(interactionLayerTracker.isInInteraction()) {
             return translate(key, context);

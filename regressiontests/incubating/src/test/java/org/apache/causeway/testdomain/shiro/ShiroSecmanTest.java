@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
 
 import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
@@ -58,7 +58,7 @@ import lombok.val;
     CausewayModuleExtSecmanPersistenceJdo.class,
     CausewayModuleExtSecmanEncryptionSpring.class,
 })
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 class ShiroSecmanTest extends AbstractShiroTest {
 
     @Inject CausewayConfiguration isisConfig;

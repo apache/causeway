@@ -18,7 +18,7 @@ This defines:
 * the resources it needs (the CSS and optional JS and/or fonts), and
 * optional urls to load them from a Content Delivery Network (CDN).
 
-To make use of the custom `ITheme` the application should register it by subclassing `IsisWicketApplication` (also register this in `web.xml`) and add the following snippet:
+To make use of the custom `ITheme` the application should register it by subclassing `CausewayWicketApplication` (also register this in `web.xml`) and add the following snippet:
 
 [source,java]
 ----

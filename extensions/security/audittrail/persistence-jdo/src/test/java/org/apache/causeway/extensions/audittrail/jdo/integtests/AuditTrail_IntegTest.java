@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.audittrail.jdo.integtests;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
@@ -50,7 +50,7 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
             CausewayModuleExtAuditTrailPersistenceJdo.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, AuditTrailTestDomainModel.class, CounterRepository.class})
     public static class AppManifest {

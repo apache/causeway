@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.security.shiro.authorization;
 
-import org.apache.causeway.security.shiro.authorization.IsisPermission;
+import org.apache.causeway.security.shiro.authorization.CausewayPermission;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,8 +28,8 @@ public class IsisPermissionTest_equals {
 
     @Test
     public void differentByPermGroup() throws Exception {
-        final IsisPermission perm1 = new IsisPermission("adm/*");
-        final IsisPermission perm2 = new IsisPermission("aba/*");
+        final CausewayPermission perm1 = new CausewayPermission("adm/*");
+        final CausewayPermission perm2 = new CausewayPermission("aba/*");
 
         Assert.assertThat(perm1.equals(perm2), is(false));
     }

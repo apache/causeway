@@ -56,9 +56,9 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.beans.IsisBeanMetaData;
-import org.apache.causeway.core.config.beans.IsisBeanTypeClassifier;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -113,8 +113,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final CausewayConfiguration isisConfiguration;
     private final CausewaySystemEnvironment isisSystemEnvironment;
     private final ServiceRegistry serviceRegistry;
-    private final IsisBeanTypeClassifier isisBeanTypeClassifier;
-    private final IsisBeanTypeRegistry isisBeanTypeRegistry;
+    private final CausewayBeanTypeClassifier isisBeanTypeClassifier;
+    private final CausewayBeanTypeRegistry isisBeanTypeRegistry;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
     private final ProgrammingModel programmingModel;
@@ -143,8 +143,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final CausewayConfiguration isisConfiguration,
             final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final IsisBeanTypeClassifier isisBeanTypeClassifier,
-            final IsisBeanTypeRegistry isisBeanTypeRegistry,
+            final CausewayBeanTypeClassifier isisBeanTypeClassifier,
+            final CausewayBeanTypeRegistry isisBeanTypeRegistry,
             final Provider<ValueSemanticsResolver> valueTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this(
@@ -163,8 +163,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final CausewayConfiguration isisConfiguration,
             final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
-            final IsisBeanTypeClassifier isisBeanTypeClassifier,
-            final IsisBeanTypeRegistry isisBeanTypeRegistry,
+            final CausewayBeanTypeClassifier isisBeanTypeClassifier,
+            final CausewayBeanTypeRegistry isisBeanTypeRegistry,
             final Provider<ValueSemanticsResolver> valueSemanticsRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this.programmingModel = programmingModel;
@@ -184,8 +184,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final CausewaySystemEnvironment isisSystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
-            final IsisBeanTypeClassifier isisBeanTypeClassifier,
-            final IsisBeanTypeRegistry isisBeanTypeRegistry,
+            final CausewayBeanTypeClassifier isisBeanTypeClassifier,
+            final CausewayBeanTypeRegistry isisBeanTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         val instance = new SpecificationLoaderDefault(
@@ -214,7 +214,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     /**
      * Initializes and wires up, and primes the cache based on any service
-     * classes (provided by the {@link IsisBeanTypeRegistry}).
+     * classes (provided by the {@link CausewayBeanTypeRegistry}).
      */
     @Override
     public void createMetaModel() {
@@ -541,19 +541,19 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * however as a fallback we might need to classify types that escaped eager introspection
      * here.
      */
-    private IsisBeanMetaData classify(final @Nullable Class<?> type) {
+    private CausewayBeanMetaData classify(final @Nullable Class<?> type) {
         return isisBeanTypeRegistry
                 .lookupIntrospectableType(type)
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
-                    ? IsisBeanMetaData.isisManaged(BeanSort.VALUE, LogicalType.infer(type))
+                    ? CausewayBeanMetaData.isisManaged(BeanSort.VALUE, LogicalType.infer(type))
                     : isisBeanTypeClassifier.classify(type)
                 );
     }
 
     @Nullable
     private ObjectSpecification primeSpecification(
-            final @NonNull IsisBeanMetaData typeMeta) {
+            final @NonNull CausewayBeanMetaData typeMeta) {
         return _loadSpecification(
                 typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionState.NOT_INTROSPECTED);
 
@@ -562,7 +562,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Nullable
     private ObjectSpecification _loadSpecification(
             final @Nullable Class<?> type,
-            final @NonNull Function<Class<?>, IsisBeanMetaData> beanClassifier,
+            final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
             final @NonNull IntrospectionState upTo) {
 
         if(type==null) {
@@ -621,7 +621,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecification createSpecification(final IsisBeanMetaData typeMeta) {
+    private ObjectSpecification createSpecification(final CausewayBeanMetaData typeMeta) {
 
         guardAgainstMetamodelLockedAfterFullIntrospection(typeMeta.getCorrespondingClass());
 

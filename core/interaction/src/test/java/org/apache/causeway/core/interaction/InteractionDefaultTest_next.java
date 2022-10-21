@@ -20,7 +20,7 @@ package org.apache.causeway.core.interaction;
 
 import java.util.UUID;
 
-import org.apache.causeway.core.interaction.session.IsisInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -32,7 +32,7 @@ class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        val interaction = new IsisInteraction(UUID.randomUUID());
+        val interaction = new CausewayInteraction(UUID.randomUUID());
 
         assertThat(interaction.getThenIncrementExecutionSequence(), is(0));
         assertThat(interaction.getThenIncrementExecutionSequence(), is(1));

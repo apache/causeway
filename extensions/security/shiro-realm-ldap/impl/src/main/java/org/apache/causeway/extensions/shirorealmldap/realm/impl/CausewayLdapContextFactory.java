@@ -32,11 +32,11 @@ import org.apache.shiro.realm.ldap.JndiLdapContextFactory;
  * compared to regular authentication.
  *
  * <p>
- * See {@link IsisLdapRealm} for typical configuration within <tt>shiro.ini</tt>.
+ * See {@link CausewayLdapRealm} for typical configuration within <tt>shiro.ini</tt>.
  *
  * @since 1.x {@index}
  */
-public class IsisLdapContextFactory extends JndiLdapContextFactory {
+public class CausewayLdapContextFactory extends JndiLdapContextFactory {
 
     private String systemAuthenticationMechanism;
 

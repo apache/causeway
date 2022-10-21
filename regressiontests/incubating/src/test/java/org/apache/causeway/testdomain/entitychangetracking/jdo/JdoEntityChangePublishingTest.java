@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryManager;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -52,8 +52,8 @@ import lombok.val;
                 "logging.level.org.apache.causeway.persistence.jdo.datanucleus.persistence.IsisTransactionJdo=DEBUG"
         })
 @TestPropertySource({
-    IsisPresets.SilenceWicket
-    ,IsisPresets.UseLog4j2Test
+    CausewayPresets.SilenceWicket
+    ,CausewayPresets.UseLog4j2Test
 })
 class JdoEntityChangePublishingTest extends InteractionTestAbstract {
 

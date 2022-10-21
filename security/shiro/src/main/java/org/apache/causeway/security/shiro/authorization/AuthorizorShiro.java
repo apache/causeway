@@ -80,7 +80,7 @@ public class AuthorizorShiro implements Authorizor {
             //_Assert.assertEquals(userName, subject.getPrincipal().toString()); ... does not work
             return subject.isPermitted(permission);
         } finally {
-            IsisPermission.resetVetoedPermissions();
+            CausewayPermission.resetVetoedPermissions();
         }
     }
 

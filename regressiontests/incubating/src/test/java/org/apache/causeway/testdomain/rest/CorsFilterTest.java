@@ -37,7 +37,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.causeway.testdomain.rospec.RoSpecSampler;
@@ -60,7 +60,7 @@ import lombok.val;
                 "isis.extensions.cors.allowedOrigins=http://www.google.com",
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
     Configuration_headless.class,
     Configuration_usingRoSpec.class,

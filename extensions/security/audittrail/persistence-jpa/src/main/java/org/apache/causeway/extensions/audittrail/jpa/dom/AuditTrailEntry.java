@@ -43,7 +43,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry.Nq;
-import org.apache.causeway.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
@@ -143,7 +143,7 @@ import lombok.Setter;
                   + "   AND e.propertyId = :propertyId "
                   + " ORDER BY e.timestamp DESC ") // programmatic limit 0,30
 })
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
 @DomainObject(

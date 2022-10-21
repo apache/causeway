@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.source;
 
 import graphql.Scalars;
 import graphql.schema.*;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -24,8 +24,8 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.beans.IsisBeanMetaData;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
@@ -36,10 +36,10 @@ import lombok.val;
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
-    private IsisBeanTypeRegistry isisBeanTypeRegistry;
+    private CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
     @Inject
-    public ClassSubstitutorForDomainObjects(final IsisBeanTypeRegistry isisBeanTypeRegistry) {
+    public ClassSubstitutorForDomainObjects(final CausewayBeanTypeRegistry isisBeanTypeRegistry) {
         this.isisBeanTypeRegistry = isisBeanTypeRegistry;
     }
 
@@ -47,7 +47,7 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
         val beanSort = isisBeanTypeRegistry.lookupIntrospectableType(cls)
-        .map(IsisBeanMetaData::getBeanSort)
+        .map(CausewayBeanMetaData::getBeanSort)
         .orElse(null);
 
         if(beanSort!=null) {

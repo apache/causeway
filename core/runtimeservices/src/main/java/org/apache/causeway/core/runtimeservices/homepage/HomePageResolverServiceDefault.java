@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
@@ -43,14 +43,14 @@ import lombok.val;
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;
-    private final IsisBeanTypeRegistry isisBeanTypeRegistry;
+    private final CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
     private Optional<Class<?>> viewModelTypeForHomepage;
 
     @Inject
     public HomePageResolverServiceDefault(
             final FactoryService factoryService,
-            final IsisBeanTypeRegistry isisBeanTypeRegistry) {
+            final CausewayBeanTypeRegistry isisBeanTypeRegistry) {
 
         this.factoryService = factoryService;
         this.isisBeanTypeRegistry = isisBeanTypeRegistry;

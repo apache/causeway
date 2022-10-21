@@ -45,12 +45,12 @@ public interface IsisComponentScanInterceptor {
      */
     void intercept(ScannedTypeMetaData type);
 
-    Can<IsisBeanMetaData> getAndDrainIntrospectableTypes();
+    Can<CausewayBeanMetaData> getAndDrainIntrospectableTypes();
 
     // -- FACTORIES
 
     static IsisComponentScanInterceptor createInstance(
-            final @NonNull IsisBeanTypeClassifier isisBeanTypeClassifier) {
+            final @NonNull CausewayBeanTypeClassifier isisBeanTypeClassifier) {
         return new IsisComponentScanInterceptorImpl(isisBeanTypeClassifier);
     }
 

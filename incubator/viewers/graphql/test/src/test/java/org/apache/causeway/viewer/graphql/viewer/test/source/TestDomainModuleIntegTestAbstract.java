@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.source;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
@@ -62,10 +62,10 @@ public class TestDomainModuleIntegTestAbstract {
             TestDomainModule.class
     })
     @PropertySources({
-            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(IsisPresets.UseLog4j2Test),
-            @PropertySource(IsisPresets.SilenceMetaModel),
-            @PropertySource(IsisPresets.SilenceProgrammingModel),
+            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
+            @PropertySource(CausewayPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.SilenceMetaModel),
+            @PropertySource(CausewayPresets.SilenceProgrammingModel),
     })
     public static class TestApp {
 

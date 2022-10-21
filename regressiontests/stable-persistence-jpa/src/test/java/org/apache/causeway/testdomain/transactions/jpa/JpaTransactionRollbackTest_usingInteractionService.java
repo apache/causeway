@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
@@ -63,7 +63,7 @@ import lombok.val;
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
 //                "logging.level.org.springframework.orm.jpa.*=DEBUG",
         })
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ExtendWith({IsisInteractionHandler.class})
 @DirtiesContext
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")

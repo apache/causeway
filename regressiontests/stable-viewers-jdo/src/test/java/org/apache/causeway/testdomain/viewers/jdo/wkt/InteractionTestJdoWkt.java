@@ -34,7 +34,7 @@ import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.Enti
 
 import org.apache.causeway.testdomain.viewers.jdo.wkt.TestAppJdoWkt;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
@@ -58,8 +58,8 @@ import lombok.val;
         properties = {
         })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel
+    CausewayPresets.SilenceMetaModel,
+    CausewayPresets.SilenceProgrammingModel
 })
 class InteractionTestJdoWkt extends RegressionTestAbstract {
 

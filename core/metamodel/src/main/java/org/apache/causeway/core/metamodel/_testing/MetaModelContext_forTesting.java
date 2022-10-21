@@ -64,8 +64,8 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
-import org.apache.causeway.core.config.beans.IsisBeanTypeClassifier;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -175,9 +175,9 @@ implements MetaModelContext {
 
     private TransactionState transactionState;
 
-    private IsisBeanTypeClassifier isisBeanTypeClassifier;
+    private CausewayBeanTypeClassifier isisBeanTypeClassifier;
 
-    private IsisBeanTypeRegistry isisBeanTypeRegistry;
+    private CausewayBeanTypeRegistry isisBeanTypeRegistry;
 
     @Builder.Default
     private PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
@@ -321,14 +321,14 @@ implements MetaModelContext {
     private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring =
             new IsisBeanFactoryPostProcessorForSpring();
 
-    public IsisBeanTypeClassifier getIsisBeanTypeClassifier() {
+    public CausewayBeanTypeClassifier getIsisBeanTypeClassifier() {
         if(isisBeanTypeClassifier==null) {
             isisBeanTypeClassifier = isisBeanFactoryPostProcessorForSpring.getIsisBeanTypeClassifier();
         }
         return isisBeanTypeClassifier;
     }
 
-    public IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
+    public CausewayBeanTypeRegistry getIsisBeanTypeRegistry() {
         if(isisBeanTypeRegistry==null) {
             isisBeanTypeRegistry = new IsisBeanTypeRegistryDefault(Can.empty());
         }

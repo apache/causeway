@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.rospec.BigComplex;
 import org.apache.causeway.testdomain.rospec.Configuration_usingRoSpec;
@@ -84,7 +84,7 @@ import lombok.val;
                 //"logging.level.org.apache.causeway.extensions.restclient.ResponseDigest=DEBUG"
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
     Configuration_headless.class,
     Configuration_usingRoSpec.class,

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.security.shiro;
 
-import org.apache.causeway.security.shiro.authorization.IsisPermission;
+import org.apache.causeway.security.shiro.authorization.CausewayPermission;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -28,27 +28,27 @@ public class IsisPermissionTest_setParts {
 
     @Test
     public void noVeto() throws Exception {
-        IsisPermission ip = new IsisPermission("com.mycompany.myapp:Customer:changeAddress:r");
+        CausewayPermission ip = new CausewayPermission("com.mycompany.myapp:Customer:changeAddress:r");
         assertThat(ip.toString(), is("com.mycompany.myapp:customer:changeaddress:r"));
     }
 
     @Test
     public void withVetoableDomain() throws Exception {
-        IsisPermission ip = new IsisPermission("foo/com.mycompany.myapp:Customer:changeAddress:r");
+        CausewayPermission ip = new CausewayPermission("foo/com.mycompany.myapp:Customer:changeAddress:r");
         assertThat(ip.toString(), is("foo/com.mycompany.myapp:customer:changeaddress:r"));
     }
 
     @Test
     public void withVetoAndVetoableDomain() throws Exception {
-        IsisPermission ip = new IsisPermission("!foo/com.mycompany.myapp:Customer:changeAddress:r");
+        CausewayPermission ip = new CausewayPermission("!foo/com.mycompany.myapp:Customer:changeAddress:r");
         assertThat(ip.toString(), is("!foo/com.mycompany.myapp:customer:changeaddress:r"));
     }
 
 
     @Test
     public void xxx() throws Exception {
-        IsisPermission ip = new IsisPermission("schwartz/com.mycompany.myapp:Order:submit:*");
-        IsisPermission ip2 = new IsisPermission("com.mycompany.myapp:Customer:remove:r");
+        CausewayPermission ip = new CausewayPermission("schwartz/com.mycompany.myapp:Order:submit:*");
+        CausewayPermission ip2 = new CausewayPermission("com.mycompany.myapp:Customer:remove:r");
 
         assertThat(ip2.implies(ip), is(false));
         assertThat(ip.implies(ip2), is(false));

@@ -31,7 +31,7 @@ import lombok.NonNull;
  * ServiceLoader SPI that allows for implementing instances to have a say during bean type scanning.
  * @since 2.0
  */
-public interface IsisBeanTypeClassifier {
+public interface CausewayBeanTypeClassifier {
 
     // -- INTERFACE
 
@@ -43,27 +43,27 @@ public interface IsisBeanTypeClassifier {
      * but later used by the {@code SpecificationLoader} to also
      * classify non-concrete types (interfaces and abstract classes).
      */
-    IsisBeanMetaData classify(Class<?> type);
+    CausewayBeanMetaData classify(Class<?> type);
 
     // -- FACTORY
 
     /**
      * in support of JUnit testing
      */
-    static IsisBeanTypeClassifier createInstance() {
+    static CausewayBeanTypeClassifier createInstance() {
         return new IsisBeanTypeClassifierDefault(Can.empty());
     }
 
-    static IsisBeanTypeClassifier createInstance(final @NonNull ApplicationContext applicationContext) {
+    static CausewayBeanTypeClassifier createInstance(final @NonNull ApplicationContext applicationContext) {
         return new IsisBeanTypeClassifierDefault(
                 Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()));
     }
 
     // -- LOOKUP
 
-    public static Can<IsisBeanTypeClassifier> get() {
+    public static Can<CausewayBeanTypeClassifier> get() {
         return Can.ofStream(ServiceLoader
-                .load(IsisBeanTypeClassifier.class, _Context.getDefaultClassLoader())
+                .load(CausewayBeanTypeClassifier.class, _Context.getDefaultClassLoader())
                 .stream()
                 .map(Provider::get));
     }

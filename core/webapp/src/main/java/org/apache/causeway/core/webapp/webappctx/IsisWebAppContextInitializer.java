@@ -26,16 +26,15 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.context._Context;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.stereotype.Component;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -68,7 +67,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     // -- INTERFACE IMPLEMENTATION
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(final ServletContext servletContext) throws ServletException {
 
         // onStartup(...) must be a one shot, otherwise ignore with warning
         if(!oneshot.trigger()) {
@@ -83,7 +82,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
         }
 
         // set the ServletContext initializing thread as preliminary default until overridden by
-        // IsisWicketApplication#init() or others, that better know what ClassLoader to use as application default.
+        // CausewayWicketApplication#init() or others, that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
 
         val contextPath = servletContext.getContextPath();
@@ -104,7 +103,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
 
     }
 
-    public void contextDestroyed(WebModuleContext webModuleContext, ServletContextEvent event) {
+    public void contextDestroyed(final WebModuleContext webModuleContext, final ServletContextEvent event) {
         if(webModuleContext!=null) {
             log.info("about to destroy the context");
             webModuleContext.shutdown(event);
@@ -120,7 +119,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
         @NonNull WebModuleContext webModuleContext;
 
         @Override
-        public void contextDestroyed(ServletContextEvent sce) {
+        public void contextDestroyed(final ServletContextEvent sce) {
             IsisWebAppContextInitializer.this.contextDestroyed(webModuleContext, sce);
         }
     }

@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.config.presets.IsisPresets;
+import org.apache.causeway.core.config.presets.CausewayPresets;
 
 @SpringBootTest(
         classes = { 
@@ -49,7 +49,7 @@ import org.apache.causeway.core.config.presets.IsisPresets;
                 "foo.random-schema=test_${random.uuid}",
                 "foo.ConnectionURL=jdbc:h2:mem:test"
         })
-@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @EnableConfigurationProperties(FooProperties.class)
 class FooTest {
     

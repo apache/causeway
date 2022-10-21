@@ -54,7 +54,7 @@ module org.apache.causeway.core.config {
     requires spring.core;
     requires spring.tx;
 
-    uses org.apache.causeway.core.config.beans.IsisBeanTypeClassifier;
+    uses org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
     opens org.apache.causeway.core.config.environment to spring.core;

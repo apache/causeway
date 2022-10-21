@@ -39,7 +39,7 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
@@ -131,7 +131,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
             final DataSource dataSource,
             final MetaModelContext metaModelContext,
             final ObjectLifecyclePublisher objectLifecyclePublisher,
-            final IsisBeanTypeRegistry beanTypeRegistry,
+            final CausewayBeanTypeRegistry beanTypeRegistry,
             final DatanucleusSettings dnSettings) {
 
         _Assert.assertNotNull(dataSource, "a datasource is required");
@@ -164,7 +164,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
             final MetaModelContext metaModelContext,
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean,
-            final IsisBeanTypeRegistry beanTypeRegistry,
+            final CausewayBeanTypeRegistry beanTypeRegistry,
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
             final DatanucleusSettings dnSettings) {
 
@@ -234,7 +234,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
     private static void notifyJdoEntityDiscoveryListeners(
             final PersistenceManagerFactory pmf,
-            final IsisBeanTypeRegistry beanTypeRegistry,
+            final CausewayBeanTypeRegistry beanTypeRegistry,
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
             final DatanucleusSettings dnSettings) {
 
@@ -289,7 +289,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
     }
 
     private static PersistenceUnitMetaData createDefaultPersistenceUnit (
-            final IsisBeanTypeRegistry beanTypeRegistry) {
+            final CausewayBeanTypeRegistry beanTypeRegistry) {
         val pumd = new PersistenceUnitMetaData(
                 "dynamic-unit", "RESOURCE_LOCAL", null);
         pumd.setExcludeUnlistedClasses(false);
