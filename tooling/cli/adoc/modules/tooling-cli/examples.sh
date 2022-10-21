@@ -19,4 +19,4 @@
 SCRIPT_DIR=$( dirname "$0" )
 cd $SCRIPT_DIR || exit 1
 
-cp ../../../../../isis-tooling.yml examples/.
+cp ../../../../../causeway-tooling.yml examples/.

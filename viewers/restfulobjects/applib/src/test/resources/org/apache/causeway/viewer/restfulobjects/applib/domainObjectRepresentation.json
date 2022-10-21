@@ -16,7 +16,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/ABigDecimal",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ABigDecimal",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -34,7 +34,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/ABigInteger",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ABigInteger",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -53,7 +53,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/ADouble",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ADouble",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -72,7 +72,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/ALong",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ALong",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -91,7 +91,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/anInt",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anInt",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -109,7 +109,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/anotherDouble",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anotherDouble",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -127,7 +127,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/anotherInt",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anotherInt",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -145,7 +145,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/anotherLong",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anotherLong",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -164,7 +164,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/flag",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/flag",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -183,7 +183,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/properties/name",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/name",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
                 }
@@ -202,7 +202,7 @@
              "links": [
                  {
                      "rel": "describedby",
-                     "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/collections/someCollection",
+                     "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/collections/someCollection",
                      "method": "GET",
                      "type": "application/json;profile=\"urn:org.restfulobjects/type-collection\""
                  }
@@ -223,7 +223,7 @@
             "links": [
                 {
                     "rel": "describedby",
-                    "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity/actions/toggle",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/actions/toggle",
                     "method": "GET",
                     "type": "application/json;profile=\"urn:org.restfulobjects/type-action\""
                 },
@@ -239,7 +239,7 @@
     "links": [
         {
             "rel": "describedby",
-            "href": "http://localhost:8080/domainTypes/org.apache.isis.tck.dom.simples.SimpleEntity",
+            "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects/domain-type\""
         }

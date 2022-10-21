@@ -17,9 +17,9 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/common"
+<xs:schema targetNamespace="http://causeway.apache.org/schema/common"
            elementFormDefault="qualified"
-           xmlns="http://isis.apache.org/schema/common"
+           xmlns="http://causeway.apache.org/schema/common"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            
            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"

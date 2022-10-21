@@ -26,7 +26,7 @@
 	<!-- rename file to .xml then customize-->
 
 	<entity class="org.apache.causeway.extensions.commandlog.jpa.dom.CommandLogEntry">
-		<table schema="isisExtCommandLog" name="Command"/>
+		<table schema="causewayExtCommandLog" name="Command"/>
 	</entity>
 
 </entity-mappings>

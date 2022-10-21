@@ -16,10 +16,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #
-org.apache.isis.applib.services.iactn.InteractionProvider
-org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
-org.apache.isis.applib.services.scratchpad.Scratchpad
-org.apache.isis.core.runtimeservices.changes.ChangedObjectsServiceInternal
-org.apache.isis.core.runtimeservices.metrics.MetricsServiceForJdo
+org.apache.causeway.applib.services.iactn.InteractionProvider
+org.apache.causeway.applib.services.queryresultscache.QueryResultsCacheInternal
+org.apache.causeway.applib.services.scratchpad.Scratchpad
+org.apache.causeway.core.runtimeservices.changes.ChangedObjectsServiceInternal
+org.apache.causeway.core.runtimeservices.metrics.MetricsServiceForJdo
 PublisherDispatchServiceDefault
-org.apache.isis.objectstore.jdo.datanucleus.service.support.TimestampService
+org.apache.causeway.objectstore.jdo.datanucleus.service.support.TimestampService

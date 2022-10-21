@@ -88,7 +88,7 @@ msgid "Apply"
 msgstr ""
 
 
-#: org.apache.causeway.core.runtime.system.session.IsisSessionFactoryBuilder
+#: org.apache.causeway.core.runtime.system.session.CausewaySessionFactoryBuilder
 msgid "Are you sure?"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgid "Bulk update line item"
 msgstr ""
 
 
-#: org.apache.causeway.core.runtime.system.session.IsisSessionFactoryBuilder
+#: org.apache.causeway.core.runtime.system.session.CausewaySessionFactoryBuilder
 msgid "Cancel"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgid "Configuration"
 msgstr ""
 
 
-#: org.apache.causeway.core.runtime.system.session.IsisSessionFactoryBuilder
+#: org.apache.causeway.core.runtime.system.session.CausewaySessionFactoryBuilder
 msgid "Confirm"
 msgstr ""
 
@@ -380,7 +380,7 @@ msgstr ""
 
 
 #: org.apache.causeway.applib.services.dto.Dto_downloadXml#act(java.lang.String)
-#: org.apache.causeway.applib.services.dto.Dto_downloadXsd#act(java.lang.String,org.apache.causeway.applib.services.jaxb.JaxbService$IsisSchemas)
+#: org.apache.causeway.applib.services.dto.Dto_downloadXsd#act(java.lang.String,org.apache.causeway.applib.services.jaxb.JaxbService$CausewaySchemas)
 #: org.apache.causeway.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout(java.lang.String,org.apache.causeway.applib.services.menu.MenuBarsService$Type)
 #: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.causeway.applib.services.layout.LayoutService$Style)
 #: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act(java.lang.String)
@@ -431,7 +431,7 @@ msgid "Identifiers"
 msgstr ""
 
 
-#: org.apache.causeway.applib.services.jaxb.JaxbService$IsisSchemas#IGNORE
+#: org.apache.causeway.applib.services.jaxb.JaxbService$CausewaySchemas#IGNORE
 msgid "Ignore"
 msgstr ""
 
@@ -446,7 +446,7 @@ msgid "Import/export manager"
 msgstr ""
 
 
-#: org.apache.causeway.applib.services.jaxb.JaxbService$IsisSchemas#INCLUDE
+#: org.apache.causeway.applib.services.jaxb.JaxbService$CausewaySchemas#INCLUDE
 msgid "Include"
 msgstr ""
 
