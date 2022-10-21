@@ -1,4 +1,4 @@
-name: Apache Isis Nightly Build
+name: Apache Causeway Nightly Build
 
 on:
   workflow_dispatch:
