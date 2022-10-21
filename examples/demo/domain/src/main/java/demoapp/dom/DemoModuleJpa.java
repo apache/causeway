@@ -39,12 +39,12 @@ import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingC
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
-import demoapp.dom.types.causeway.blobs.jpa.IsisBlobJpa;
-import demoapp.dom.types.causeway.clobs.jpa.IsisClobJpa;
-import demoapp.dom.types.causeway.localresourcepaths.jpa.IsisLocalResourcePathJpa;
+import demoapp.dom.types.causeway.blobs.jpa.CausewayBlobJpa;
+import demoapp.dom.types.causeway.clobs.jpa.CausewayClobJpa;
+import demoapp.dom.types.causeway.localresourcepaths.jpa.CausewayLocalResourcePathJpa;
 import demoapp.dom.types.causeway.markups.jpa.CausewayMarkupJpa;
-import demoapp.dom.types.causeway.passwords.jpa.IsisPasswordJpa;
-import demoapp.dom.types.causewayext.cal.jpa.IsisCalendarEventJpa;
+import demoapp.dom.types.causeway.passwords.jpa.CausewayPasswordJpa;
+import demoapp.dom.types.causewayext.cal.jpa.CausewayCalendarEventJpa;
 import demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpa;
 import demoapp.dom.types.causewayval.markdowns.jpa.CausewayMarkdownJpa;
 import demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpa;
@@ -90,15 +90,15 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 })
 @EntityScan(basePackageClasses = {
 
-        IsisBlobJpa.class,
-        IsisClobJpa.class,
-        IsisLocalResourcePathJpa.class,
+        CausewayBlobJpa.class,
+        CausewayClobJpa.class,
+        CausewayLocalResourcePathJpa.class,
         CausewayMarkupJpa.class,
-        IsisPasswordJpa.class,
+        CausewayPasswordJpa.class,
         CausewayAsciiDocJpa.class,
         CausewayMarkdownJpa.class,
         CausewayVegaJpa.class,
-        IsisCalendarEventJpa.class,
+        CausewayCalendarEventJpa.class,
         EventLogEntryJpa.class,
 
         JavaAwtBufferedImageJpa.class,
