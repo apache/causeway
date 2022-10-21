@@ -74,6 +74,9 @@ public class _Files {
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter,
             final Consumer<File> onFileFound) throws IOException {
+        if(!dir.exists()) {
+            return;
+        }
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir.toPath())) {
             for (Path path : stream) {
                 val file = path.toFile();

@@ -32,8 +32,6 @@ import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueShowCase;
-import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -93,7 +91,7 @@ class ValueTypeGenTemplateTest {
     static void setup() {
         outputRootDir = PERSIST
                 ? _Files.makeDir(new File("D:/tmp/valueTypes"))
-                : _Files.tempDir("isis-tooling-showcases");
+                : _Files.tempDir("casueway-tooling-showcases");
 
         log.info("tmp dir created in {}", outputRootDir);
     }
