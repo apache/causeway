@@ -176,7 +176,7 @@
 
 	<profiles>
 		<profile>
-			<id>isis-app-starter-datanucleusenhance</id>
+			<id>causeway-app-starter-datanucleusenhance</id>
 			<activation>
 				<file>
 					<exists>${basedir}/logging-dn-enhance.properties</exists>

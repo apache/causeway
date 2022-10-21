@@ -26,7 +26,7 @@
 	<name>Apache Causeway - Regression Tests (incubating)</name>
 
 	<dependencies>
-		<!-- isis-regressiontests-stable has the domain to test against -->
+		<!-- causeway-regressiontests-stable has the domain to test against -->
 		<dependency>
 			<groupId>org.apache.causeway.regressiontests</groupId>
 			<artifactId>causeway-regressiontests-stable</artifactId>

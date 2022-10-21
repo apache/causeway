@@ -19,8 +19,8 @@
 -->
 <plugin
    id="org.apache.causeway.valuetypes.vega.persistence.jdo"
-   name="Apache Isis Value Types Vega Persistence JDO DataNucleus Implementation"
-   provider-name="Apache Isis">
+   name="Apache Causeway Value Types Vega Persistence JDO DataNucleus Implementation"
+   provider-name="Apache Causeway">
 
 
     <!--
@@ -31,7 +31,7 @@
         <java-type
                 name="org.apache.causeway.valuetypes.vega.applib.value.Vega"
                 dfg="false"
-                converter-name="isis.ext.vega-string" />
+                converter-name="causeway.ext.vega-string" />
     </extension>
 
     <!--
@@ -39,10 +39,10 @@
     -->
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.ext.vega-string"
+                name="causeway.ext.vega-string"
                 member-type="org.apache.causeway.valuetypes.vega.applib.value.Vega"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.valuetypes.vega.persistence.jdo.dn.converters.IsisVegaConverter"/>
+                converter-class="org.apache.causeway.valuetypes.vega.persistence.jdo.dn.converters.CausewayVegaConverter"/>
     </extension>
 
 

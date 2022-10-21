@@ -61,7 +61,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- ISIS API -->
+		<!-- CAUSEWAY API -->
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-applib</artifactId>
@@ -92,7 +92,7 @@
 		</dependency>
 
 		<!--
-		we no longer include isis-security-keycloak in order to reduce the
+		we no longer include causeway-security-keycloak in order to reduce the
 		3rd party dependencies.
 		<dependency>
 			<groupId>org.apache.causeway.security</groupId>
@@ -101,7 +101,7 @@
 		-->
 
 		<!--
-		we no longer include isis-security-shiro in order to reduce the
+		we no longer include causeway-security-shiro in order to reduce the
 		3rd party dependencies.  If only simple user/password authentication
 		is required, Secman can now be used independently of Shiro.
 
@@ -112,7 +112,7 @@
 		-->
 
 		<!--
-		we deliberately do NOT include isis-security-spring, because it
+		we deliberately do NOT include causeway-security-spring, because it
 		has a transitive dependency on
 
 			org.springframework.boot:spring-boot-starter-security

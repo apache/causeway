@@ -22,7 +22,7 @@
 		However, this then means that it's difficult to setup a mvn profile that will just build the graphql
 		viewer without the other incubating viewers.
 
-		As the isis-incubator module doesn't do much for us, we'll just skip and use the isis-core as our module
+		As the causeway-incubator module doesn't do much for us, we'll just skip and use the causeway-core as our module
 		(that'll be the ultimate parent one day anyway).
 
 		<groupId>org.apache.causeway.incubator</groupId>

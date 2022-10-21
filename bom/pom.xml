@@ -57,7 +57,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         Apache Causeway Bill of Material (BOM).
         Also the parent POM for the core framework and extensions.
     </description>
-    <url>https://isis.apache.org</url>
+    <url>https://causeway.apache.org</url>
     <!-- APACHE CAUSEWAY customisation 2/21: end -->
 
     <organization>
@@ -93,23 +93,23 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <mailingLists>
         <mailingList>
             <name>developers</name>
-            <archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
-            <post>dev@isis.apache.org</post>
-            <subscribe>dev-subscribe@isis.apache.org</subscribe>
-            <unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
+            <archive>http://mail-archives.apache.org/mod_mbox/causeway-dev/</archive>
+            <post>dev@causeway.apache.org</post>
+            <subscribe>dev-subscribe@causeway.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@causeway.apache.org</unsubscribe>
         </mailingList>
         <mailingList>
             <name>users</name>
-            <archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
-            <post>users@isis.apache.org</post>
-            <subscribe>users-subscribe@isis.apache.org</subscribe>
-            <unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
+            <archive>http://mail-archives.apache.org/mod_mbox/causeway-users/</archive>
+            <post>users@causeway.apache.org</post>
+            <subscribe>users-subscribe@causeway.apache.org</subscribe>
+            <unsubscribe>users-unsubscribe@causeway.apache.org</unsubscribe>
         </mailingList>
     </mailingLists>
     <scm>
-        <connection>scm:git:http://github.com/apache/isis.git</connection>
-        <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-        <url>http://github.com/apache/isis</url>
+        <connection>scm:git:http://github.com/apache/causeway.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
+        <url>http://github.com/apache/causeway</url>
         <tag>HEAD</tag>
     </scm>
     <!-- APACHE CAUSEWAY customisation 3/21: end -->
@@ -129,11 +129,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <inceptionYear>2010</inceptionYear>
     <issueManagement>
         <system>Jira</system>
-        <url>https://issues.apache.org/jira/browse/ISIS</url>
+        <url>https://issues.apache.org/jira/browse/CAUSEWAY</url>
     </issueManagement>
     <ciManagement>
         <system>CI</system>
-        <url>https://github.com/apache-isis-committers/isis-nightly</url>
+        <url>https://github.com/apache-causeway-committers/causeway-nightly</url>
     </ciManagement>
     <developers>
         <developer>
@@ -689,7 +689,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
 
-                            <exclude>**/isis/tooling/model4adoc/src/test/resources/org/apache/isis/tooling/adocmodel/test/**</exclude>
+                            <exclude>**/causeway/tooling/model4adoc/src/test/resources/org/apache/causeway/tooling/adocmodel/test/**</exclude>
 
                             <exclude>**/*.iml</exclude>
                             <exclude>**/webpack.config.js</exclude>
@@ -728,7 +728,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/simple-sidebar.css</exclude>
-                            <exclude>**/isis-bootstrap-growl.js</exclude>
+                            <exclude>**/causeway-bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
                             <exclude>**/prism*.js</exclude>
                             <exclude>**/prism*.css</exclude>
@@ -1311,7 +1311,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <repository>
                     <id>github</id>
                     <name>Github Releases</name>
-                    <url>https://maven.pkg.github.com/apache/isis</url>
+                    <url>https://maven.pkg.github.com/apache/causeway</url>
                 </repository>
             </distributionManagement>
         </profile>

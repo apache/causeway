@@ -30,7 +30,7 @@
 
     <name>Apache Causeway Core - Configuration</name>
     <description>
-        Isis configuration library for framework internal use.
+        Causeway configuration library for framework internal use.
     </description>
 
     <properties>

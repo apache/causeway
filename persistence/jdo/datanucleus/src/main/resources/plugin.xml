@@ -19,8 +19,8 @@
 -->
 <plugin
    id="org.apache.causeway.persistence.jdo.datanucleus"
-   name="Apache Isis Persistence JDO DataNucleus Implementation"
-   provider-name="Apache Isis">
+   name="Apache Causeway Persistence JDO DataNucleus Implementation"
+   provider-name="Apache Causeway">
 
     <!--
     http://www.datanucleus.org/extensions/rdbms_java_types.html
@@ -28,10 +28,10 @@
     <extension point="org.datanucleus.store.rdbms.java_mapping">
         <mapping
             java-type="org.apache.causeway.applib.value.Blob"
-            mapping-class="org.apache.causeway.persistence.jdo.datanucleus.valuemappings.IsisBlobMapping"/>
+            mapping-class="org.apache.causeway.persistence.jdo.datanucleus.valuemappings.CausewayBlobMapping"/>
         <mapping
             java-type="org.apache.causeway.applib.value.Clob"
-            mapping-class="org.apache.causeway.persistence.jdo.datanucleus.valuemappings.IsisClobMapping"/>
+            mapping-class="org.apache.causeway.persistence.jdo.datanucleus.valuemappings.CausewayClobMapping"/>
 
     </extension>
 
@@ -85,63 +85,63 @@
         <java-type
                 name="java.awt.image.BufferedImage"
                 dfg="true" priority="10"
-                converter-name="isis.bufferedimage-bytearray" />
+                converter-name="causeway.bufferedimage-bytearray" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.applib.value.Password"
                 dfg="true"
-                converter-name="isis.password-string" />
+                converter-name="causeway.password-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.applib.value.Markup"
                 dfg="true"
-                converter-name="isis.markup-string" />
+                converter-name="causeway.markup-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.applib.value.LocalResourcePath"
                 dfg="true"
-                converter-name="isis.localresourcepath-string" />
+                converter-name="causeway.localresourcepath-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.applib.services.bookmark.Bookmark"
                 dfg="true"
-                converter-name="isis.bookmark-string" />
+                converter-name="causeway.bookmark-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.schema.chg.v2.ChangesDto"
                 dfg="true"
-                converter-name="isis.changesdtov2-string" />
+                converter-name="causeway.changesdtov2-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.schema.common.v2.OidDto"
                 dfg="true"
-                converter-name="isis.oiddtov2-string" />
+                converter-name="causeway.oiddtov2-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.schema.cmd.v2.CommandDto"
                 dfg="true"
-                converter-name="isis.commanddtov2-string" />
+                converter-name="causeway.commanddtov2-string" />
     </extension>
 
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="org.apache.causeway.schema.ixn.v2.InteractionDto"
                 dfg="true"
-                converter-name="isis.interactiondtov2-string" />
+                converter-name="causeway.interactiondtov2-string" />
     </extension>
 
     <!--
@@ -174,7 +174,7 @@
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.bufferedimage-bytearray"
+                name="causeway.bufferedimage-bytearray"
                 member-type="java.awt.image.BufferedImage"
                 datastore-type="[B"
                 converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.image.JavaAwtBufferedImageByteArrayConverter"/>
@@ -182,66 +182,66 @@
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.password-string"
+                name="causeway.password-string"
                 member-type="org.apache.causeway.applib.value.Password"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.IsisPasswordConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.CausewayPasswordConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.markup-string"
+                name="causeway.markup-string"
                 member-type="org.apache.causeway.applib.value.Markup"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.IsisMarkupConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.CausewayMarkupConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.localresourcepath-string"
+                name="causeway.localresourcepath-string"
                 member-type="org.apache.causeway.applib.value.LocalResourcePath"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.IsisLocalResourcePathConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.CausewayLocalResourcePathConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.bookmark-string"
+                name="causeway.bookmark-string"
                 member-type="org.apache.causeway.applib.services.bookmark.Bookmark"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.IsisBookmarkConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib.CausewayBookmarkConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.changesdtov2-string"
+                name="causeway.changesdtov2-string"
                 member-type="org.apache.causeway.schema.chg.v2.ChangesDto"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.IsisChangesDtoConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.CausewayChangesDtoConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.oiddtov2-string"
+                name="causeway.oiddtov2-string"
                 member-type="org.apache.causeway.schema.common.v2.OidDto"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.IsisOidDtoConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.CausewayOidDtoConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.commanddtov2-string"
+                name="causeway.commanddtov2-string"
                 member-type="org.apache.causeway.schema.cmd.v2.CommandDto"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.IsisCommandDtoConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.CausewayCommandDtoConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.interactiondtov2-string"
+                name="causeway.interactiondtov2-string"
                 member-type="org.apache.causeway.schema.ixn.v2.InteractionDto"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.IsisInteractionDtoConverter"/>
+                converter-class="org.apache.causeway.persistence.jdo.datanucleus.typeconverters.schema.v2.CausewayInteractionDtoConverter"/>
     </extension>
 
 </plugin>

@@ -78,7 +78,7 @@
 				<artifactId>apache-rat-plugin</artifactId>
 				<version>0.15</version>
 
-				<!-- APACHE ISIS customisation 4/7: start -->
+				<!-- APACHE CAUSEWAY customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 					<excludeSubProjects>true</excludeSubProjects>

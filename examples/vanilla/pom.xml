@@ -25,7 +25,7 @@
 
 	<!--
 	created to allow comparisons of effective-pom between
-	isis-parent or isis vs vanilla Spring Boot.
+	causeway-parent or causeway vs vanilla Spring Boot.
 	-->
 	<groupId>org.apache.causeway.examples.app</groupId>
 	<artifactId>vanilla</artifactId>

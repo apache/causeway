@@ -18,9 +18,9 @@
     under the License.
 -->
 <plugin
-   id="org.apache.isis.valuetypes.markdown.persistence.jdo.dn"
-   name="Apache Isis Value Types Markdown Persistence JDO DataNucleus Implementation"
-   provider-name="Apache Isis">
+   id="org.apache.causeway.valuetypes.markdown.persistence.jdo.dn"
+   name="Apache Causeway Value Types Markdown Persistence JDO DataNucleus Implementation"
+   provider-name="Apache Causeway">
 
 
     <!--
@@ -29,9 +29,9 @@
 
     <extension point="org.datanucleus.java_type">
         <java-type
-                name="org.apache.isis.valuetypes.markdown.applib.value.Markdown"
+                name="org.apache.causeway.valuetypes.markdown.applib.value.Markdown"
                 dfg="false"
-                converter-name="isis.ext.markdown-string" />
+                converter-name="causeway.ext.markdown-string" />
     </extension>
 
     <!--
@@ -39,10 +39,10 @@
     -->
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.ext.markdown-string"
-                member-type="org.apache.isis.valuetypes.markdown.applib.value.Markdown"
+                name="causeway.ext.markdown-string"
+                member-type="org.apache.causeway.valuetypes.markdown.applib.value.Markdown"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.valuetypes.markdown.persistence.jdo.dn.converters.IsisMarkdownConverter"/>
+                converter-class="org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.converters.CausewayMarkdownConverter"/>
     </extension>
 
 </plugin>

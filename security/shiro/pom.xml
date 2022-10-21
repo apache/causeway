@@ -69,7 +69,7 @@
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-webapp</artifactId>
             <!-- don't make these transitive, so that we can make headless use 
-                 of the isis-security-shiro module (without bringing in spring-boot-web) -->
+                 of the causeway-security-shiro module (without bringing in spring-boot-web) -->
             <exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>

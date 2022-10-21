@@ -493,7 +493,7 @@
 
 	<profiles>
 		<profile>
-			<id>isis-extensions-datanucleusenhance</id>
+			<id>causeway-extensions-datanucleusenhance</id>
 			<activation>
 				<file>
 					<exists>${basedir}/logging-dn-enhance.properties</exists>

@@ -31,7 +31,7 @@
 
     <name>Apache Causeway Api - AppLib</name>
     <description>
-        Isis application library, defining annotations and utilities for the
+        Causeway application library, defining annotations and utilities for the
         default (Java) programming model.
     </description>
 

@@ -26,7 +26,7 @@ under the License.
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.isisaddons.wicket.pdfjs</groupId>
+    <groupId>org.causewayaddons.wicket.pdfjs</groupId>
     <artifactId>causeway-extensions-pdfjs-fixtures</artifactId>
     <name>Apache Causeway Ext - Wicket Viewer - pdf.js (fixtures)</name>
 

@@ -62,7 +62,7 @@
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
 
-				<!-- APACHE ISIS customisation 4/7: start -->
+				<!-- APACHE CAUSEWAY customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 					<excludeSubProjects>true</excludeSubProjects>
@@ -107,7 +107,7 @@
 
 						<exclude>**/package.json.d/project.info</exclude>
 						<exclude>**/src/main/resources/hbs/**</exclude>
-						<exclude>**/src/test/kotlin/org/apache/isis/client/kroviz/snapshots/**</exclude>
+						<exclude>**/src/test/kotlin/org/apache/causeway/client/kroviz/snapshots/**</exclude>
 						<exclude>**/webpack.config.d/*.js</exclude>
 
 						<exclude>**/ui/pnpm-lock.yaml</exclude>

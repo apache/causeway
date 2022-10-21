@@ -19,8 +19,8 @@
 -->
 <plugin
    id="org.apache.causeway.valuetypes.asciidoc.persistence.jdo"
-   name="Apache Isis Value Types AsciiDoc Persistence JDO DataNucleus Implementation"
-   provider-name="Apache Isis">
+   name="Apache Causeway Value Types AsciiDoc Persistence JDO DataNucleus Implementation"
+   provider-name="Apache Causeway">
 
 
     <!--
@@ -31,7 +31,7 @@
         <java-type
                 name="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc"
                 dfg="false"
-                converter-name="isis.ext.asciidoc-string" />
+                converter-name="causeway.ext.asciidoc-string" />
     </extension>
 
     <!--
@@ -39,10 +39,10 @@
     -->
     <extension point="org.datanucleus.type_converter">
         <type-converter
-                name="isis.ext.asciidoc-string"
+                name="causeway.ext.asciidoc-string"
                 member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters.IsisAsciiDocConverter"/>
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters.CausewayAsciiDocConverter"/>
     </extension>
 
 

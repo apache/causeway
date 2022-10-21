@@ -28,7 +28,7 @@
 
 	<name>Apache Causeway Core</name>
 
-	<url>https://isis.apache.org</url>
+	<url>https://causeway.apache.org</url>
 
 	<description>
         Core framework, providing metamodel, runtime and core APIs.
@@ -36,8 +36,8 @@
 
 	<properties>
 
-		<isis.skipTests>false</isis.skipTests>
-		<maven.test.skip>${isis.skipTests}</maven.test.skip>
+		<causeway.skipTests>false</causeway.skipTests>
+		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
 		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
 
@@ -340,7 +340,7 @@
 						<suffix>.min</suffix>
 						<excludes>
 							<!-- -->
-							<exclude>**/jquery.isis.wicket.viewer.js</exclude>
+							<exclude>**/jquery.causeway.wicket.viewer.js</exclude>
 							<!-- select 2 -->
 							<exclude>**/i18n/*.js</exclude>
 							<exclude>**/select2*.js</exclude>
@@ -1590,7 +1590,7 @@
 			<id>datanucleusenhance</id>
 			<activation>
 				<property>
-					<name>isis-app-starter-datanucleusenhance</name>
+					<name>causeway-app-starter-datanucleusenhance</name>
 					<value>true</value>
 				</property>
 				<!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists>

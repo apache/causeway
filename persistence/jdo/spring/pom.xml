@@ -42,7 +42,7 @@
 
 	<dependencies>
 
-		<!-- ISIS -->
+		<!-- CAUSEWAY -->
 
 		<dependency>
 			<groupId>org.apache.causeway.commons</groupId>
