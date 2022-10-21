@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-function isis_sse_observe(targetId, observing) { 
+function causeway_sse_observe(targetId, observing) { 
 
 	function updateField(newValue) {
 		document.getElementById(targetId).innerHTML = newValue;  

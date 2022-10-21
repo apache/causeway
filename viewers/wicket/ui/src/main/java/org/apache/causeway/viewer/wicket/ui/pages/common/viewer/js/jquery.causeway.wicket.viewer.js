@@ -20,11 +20,11 @@ $(function() {
 
     'use strict';
 
-    if (typeof(Isis) === 'object' && typeof(Isis.openInNewTab) === 'function') {
+    if (typeof(Causeway) === 'object' && typeof(Causeway.openInNewTab) === 'function') {
         return;
     }
 
-    window.Isis = {
+    window.Causeway = {
         Topic: {
             OPEN_IN_NEW_TAB: 'openInNewTab',
             OPEN_SELECT2: 'openSelect2',
@@ -50,66 +50,66 @@ $(function() {
     $(document, '.modal').on('show.bs.modal', centerModals);
     $(window).on('resize', centerModals);
 
-    var isisVeilTimeoutId;
+    var causewayVeilTimeoutId;
 
-    var isisShowVeil = function() {
-        if(isisVeilTimeoutId) {
-            clearTimeout(isisVeilTimeoutId);
-            isisVeilTimeoutId = null;
+    var causewayShowVeil = function() {
+        if(causewayVeilTimeoutId) {
+            clearTimeout(causewayVeilTimeoutId);
+            causewayVeilTimeoutId = null;
         }
         $("#veil").show();
     };
 
-    var isisFadeInVeil = function(attributes, jqxhr, settings) {
+    var causewayFadeInVeil = function(attributes, jqxhr, settings) {
         // use timeouts because JQuery's delay(...) cannot be stopped.
-        if(isisVeilTimeoutId) {
+        if(causewayVeilTimeoutId) {
             // already queued a fade-in
             return;
         }
-        isisVeilTimeoutId = setTimeout(function() {
+        causewayVeilTimeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
         }, 250);
 
     };
 
-    var isisHideVeil = function() {
-        if(isisVeilTimeoutId) {
-            clearTimeout(isisVeilTimeoutId);
-            isisVeilTimeoutId = null;
+    var causewayHideVeil = function() {
+        if(causewayVeilTimeoutId) {
+            clearTimeout(causewayVeilTimeoutId);
+            causewayVeilTimeoutId = null;
         }
         $("#veil").stop().hide();
     };
 
-    Wicket.Event.subscribe(Isis.Topic.OPEN_IN_NEW_TAB, function(jqEvent, url) {
+    Wicket.Event.subscribe(Causeway.Topic.OPEN_IN_NEW_TAB, function(jqEvent, url) {
         var win=window.open(url, '_blank');
         if(win) { win.focus(); }
     });
 
-    Wicket.Event.subscribe(Isis.Topic.OPEN_SELECT2, function(jqEvent, panelId) {
+    Wicket.Event.subscribe(Causeway.Topic.OPEN_SELECT2, function(jqEvent, panelId) {
         setTimeout(function() {
             var $panel = $('#'+panelId);
-            //console.log('Isis.Topic.OPEN_SELECT2: panelId=' + panelId);
+            //console.log('Causeway.Topic.OPEN_SELECT2: panelId=' + panelId);
             $($panel).find('select').select2('open');
 			//$($panel).find('select').filter(':visible:first').focus();
         }, 0);
     });
 
-//    Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
+//    Wicket.Event.subscribe(Causeway.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
 //        setTimeout(function() {
 //            var $panel = $('#'+panelId);
-//            //console.log('Isis.Topic.CLOSE_SELECT2: panelId=' + panelId);
+//            //console.log('Causeway.Topic.CLOSE_SELECT2: panelId=' + panelId);
 //            //$($panel).find('select').select2('close');
 //            //$($panel).find('select').filter(':visible:first').focus();
 //        }, 0);
 //    });
 
-    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
+    Wicket.Event.subscribe(Causeway.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
         setTimeout(function() {
             let el = $('#'+elementId).find('.inputFormTable.parameters')
             	.find('input,textarea,div.cbx,select').filter(':visible:first');
             if(el) {
 
-				//console.log('Isis.Topic.FOCUS_FIRST_PARAMETER: elementId=' + elementId);
+				//console.log('Causeway.Topic.FOCUS_FIRST_PARAMETER: elementId=' + elementId);
 
                 let elNodeName = $(el).prop('nodeName')
                 if (elNodeName) {
@@ -129,7 +129,7 @@ $(function() {
         }, 0);
     });
 
-    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent, elementId) {
+    Wicket.Event.subscribe(Causeway.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent, elementId) {
         setTimeout(function() {
             if(elementId) {
                 $("#" + elementId).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
@@ -142,20 +142,20 @@ $(function() {
     /* for modal dialogs */
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(jqEvent, attributes, jqXHR, settings) {
         if (attributes.c !== window && !$('#'+attributes.c).hasClass('noVeil')) {
-            isisFadeInVeil(attributes, jqXHR, settings);
+            causewayFadeInVeil(attributes, jqXHR, settings);
         }
     });
 
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(jqEvent, attributes, jqXHR, status) {
-        isisHideVeil(/*attributes, jqXHR, status*/);
+        causewayHideVeil(/*attributes, jqXHR, status*/);
     });
 
 
 
     /* only seem to work in non-modal situation */
-    $('.buttons .okButton:not(.noVeil)').click(isisFadeInVeil);
-    $('.buttons .ok:not(.noVeil)').click(isisFadeInVeil);
-    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(isisFadeInVeil);
+    $('.buttons .okButton:not(.noVeil)').click(causewayFadeInVeil);
+    $('.buttons .ok:not(.noVeil)').click(causewayFadeInVeil);
+    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(causewayFadeInVeil);
 
     $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception')
         .livequery(function(){
@@ -170,13 +170,13 @@ $(function() {
      */
     $('body').keydown(function(e) {
         if (e.which === 221 && e.altKey) {
-            if (Isis.copyModalShown) {
+            if (Causeway.copyModalShown) {
                 $('.copyModal').modal('hide');
                 $('.modal-backdrop').remove();
-                Isis.copyModalShown = false;
+                Causeway.copyModalShown = false;
             }
             else {
-                Isis.copyModalShown = true;
+                Causeway.copyModalShown = true;
                 $('.copyLink').click();
             }
         }

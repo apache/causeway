@@ -1,5 +1,5 @@
 /*
-*  Project: Bootstrap Growl - v2.0.0 (modified for Apache Isis / Bootstrap 5.1)
+*  Project: Bootstrap Growl - v2.0.0 (modified for Apache Causeway / Bootstrap 5.1)
 *  Description: Turns standard Bootstrap alerts into "Growl-like" notifications.
 *  Author: Mouse0270 aka Robert McIntosh
 *  License: MIT License
@@ -19,7 +19,7 @@
 			},
 			offset: 20,
 			spacing: 10,
-			z_index: 999, // modified for Apache Isis (origin: 1031), 
+			z_index: 999, // modified for Apache Causeway (origin: 1031), 
 			delay: 5000,
 			timer: 1000,
 			url_target: '_blank',
@@ -33,7 +33,7 @@
 			onHide: null,
 			onHidden: null,
 			icon_type: 'class',
-			// modified for Apache Isis (as of Bootstrap 5.1) ...
+			// modified for Apache Causeway (as of Bootstrap 5.1) ...
 			template: '<div data-growl="container" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">'
 			+ '<div class="d-flex">'
 			+ '<div class="toast-body">'

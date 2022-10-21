@@ -20,7 +20,7 @@
 window.addEventListener('DOMContentLoaded', function() {
         (function($) {
             
-        	isis_sse_observe("${targetId}", "${observing}");
+        	causeway_sse_observe("${targetId}", "${observing}");
         	
         })(jQuery);
 });
