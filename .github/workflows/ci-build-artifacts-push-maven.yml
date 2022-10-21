@@ -57,13 +57,13 @@ jobs:
       uses: actions/cache@v3
       env:
         # change the cache-name if we want to rebuild the cache
-        # currently there is no concept of cache clearing
-        cache-name: maven-2021-08
+        # can be reset via github action page
+        cache-name: maven-shared
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-${{ env.cache-name }}
         restore-keys: |
-          ${{ runner.os }}-${{ env.cache-name }}-
+          ${{ runner.os }}-${{ env.cache-name }}
           ${{ runner.os }}-
 
 #    - name: Create GitHub Release
