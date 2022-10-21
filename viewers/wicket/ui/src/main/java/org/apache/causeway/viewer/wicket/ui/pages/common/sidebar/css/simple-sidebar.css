@@ -169,7 +169,7 @@ body {
 }
 
 #sidebar-wrapper:not(.toggled) {
-	display: table; /* [ISIS-3166] allows child components to escape right boundary */
+	display: table; /* [CAUSEWAY-3166] allows child components to escape right boundary */
 }
 
 #page-content-wrapper {

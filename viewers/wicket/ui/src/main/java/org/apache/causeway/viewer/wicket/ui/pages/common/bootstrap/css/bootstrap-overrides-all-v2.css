@@ -971,8 +971,8 @@ footer .footer-image {
 }
 
 .referencePanel .scalarValueInput .editing .edit,
-.isisBlobPanel .scalarValueInput .editing .edit,
-.isisClobPanel .scalarValueInput .editing .edit,
+.causewayBlobPanel .scalarValueInput .editing .edit,
+.causewayClobPanel .scalarValueInput .editing .edit,
 .booleanPanel .scalarValueInput .editing .edit {
     margin-top: 0px;
 }
@@ -1005,7 +1005,7 @@ footer .footer-image {
 .valueChoicesSelect2Panel .actions-right .additionalLinkListInline,
 .stringPanel .actions-right .additionalLinkListInline,
 .referencePanel .actions-right .additionalLinkListInline,
-.isisBlobPanel .actions-right .additionalLinkListInline {
+.causewayBlobPanel .actions-right .additionalLinkListInline {
     margin-top: 5px;
 }
 
@@ -1139,7 +1139,7 @@ div.scalarValueInlinePromptLink {
     margin-top: 2px;
 }
 
-/* ISIS-1626, confirmation dialog for no-parameter menu actions
+/* CAUSEWAY-1626, confirmation dialog for no-parameter menu actions
    allow confirmation dialog popup to escape boundaries of parent html li element*/
 .popover .open > .dropdown-menu {
   overflow: visible;

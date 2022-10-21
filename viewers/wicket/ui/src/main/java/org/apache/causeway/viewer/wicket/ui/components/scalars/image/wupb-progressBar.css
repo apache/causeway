@@ -28,7 +28,7 @@
     }
 
     div.wupb-progressBar .wupb-border {
-	    background: url("../org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanel/progress-remainder.gif") repeat-x;
+	    background: url("../org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanel/progress-remainder.gif") repeat-x;
 		background-color: #eee;
         border-left: 1px solid grey;
         border-right: 1px solid grey;
@@ -36,7 +36,7 @@
     }
 
     div.wupb-progressBar .wupb-background {
-	    background: url("../org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanel/progress-bar.gif") repeat-x; 
+	    background: url("../org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanel/progress-bar.gif") repeat-x; 
 		background-color: #507090;
         height: 18px;
         width: 0%;

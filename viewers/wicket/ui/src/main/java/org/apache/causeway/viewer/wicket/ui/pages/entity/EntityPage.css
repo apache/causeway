@@ -28,7 +28,7 @@
     height: 16px !important;
 }
 
-/* alignment of the icons in certain cases ISIS-2588 */
+/* alignment of the icons in certain cases CAUSEWAY-2588 */
 .whereAmI .fa-2x {
     font-size: unset;
 }
