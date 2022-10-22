@@ -60,7 +60,7 @@ class RenameProject {
             "STATUS",
             "MF",
             "TXT",
-            "adoc",
+            // "adoc", // ignore adoc file content
             "bat",
             "cfg",
             "css",
@@ -107,7 +107,7 @@ class RenameProject {
     static final List<String> PATH_EXLUSIONS = List.of(
             "/build/",
             "/target/",
-            "/antora/", "/adoc/", // not published in its legacy form
+            "/adoc/", // not published in its legacy form
             "/scripts/ci/", // don't touch
             "/."
             );
