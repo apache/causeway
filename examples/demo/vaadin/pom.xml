@@ -193,7 +193,7 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apachecauseway/demo-vaadin</image>
+								<image>docker.io/apacheisis/demo-vaadin</image>
 								<tags>
 									<tag>nightly</tag>
 								</tags>
