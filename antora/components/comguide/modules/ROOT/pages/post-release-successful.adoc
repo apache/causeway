@@ -58,12 +58,12 @@ As we did for the cutting of the release, we set environment variables to parame
 
 [source,bash,subs="attributes+"]
 ----
-export ISISJIRA=CAUSEWAY-9999                           # <.>
-export ISISTMP=/c/tmp                               # <.>
-export ISISREL={page-isisrel}                           # <.>
-export ISISRC=RC1                                   # <.>
-export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISART=causeway
+export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
+export CAUSEWAYTMP=/c/tmp                               # <.>
+export CAUSEWAYREL={page-isisrel}                           # <.>
+export CAUSEWAYRC=RC1                                   # <.>
+export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
+export CAUSEWAYART=causeway
 
 env | grep CAUSEWAY | sort
 ----
@@ -77,7 +77,7 @@ Open up a terminal, and switch to the correct release branch:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout $ISISBRANCH
+git checkout $CAUSEWAYBRANCH
 ----
 
 == Update tags
@@ -88,7 +88,7 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash,subs="attributes+"]
 ----
-sh scripts/promoterctag.sh $ISISART-$ISISREL $ISISRC
+sh scripts/promoterctag.sh $CAUSEWAYART-$CAUSEWAYREL $CAUSEWAYRC
 ----
 
 This script pushes the tag under `refs/tags/rel`.
@@ -135,7 +135,7 @@ From the root directory, generate the release notes for the current release, in 
 +
 [source,bash,subs="attributes+"]
 ----
-sh scripts/jira-release-notes.sh CAUSEWAY $ISISREL > /tmp/$ISISREL.adoc
+sh scripts/jira-release-notes.sh CAUSEWAY $CAUSEWAYREL > /tmp/$CAUSEWAYREL.adoc
 ----
 +
 [NOTE]
@@ -152,7 +152,7 @@ in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/relnotes.adoc`
 ** `vvv` is the version number
 
 +
-Copy the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`, recategorising if necessary
+Copy the release notes (`/tmp/$CAUSEWAYREL.adoc`) into the `relnotes.adoc`, recategorising if necessary
 
 * Update the table in `antora/components/relnotes/ROOT/pages/about.adoc`
 +
@@ -174,7 +174,7 @@ TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: updates release notes, STATUS and doap_isis.rdf"
+git commit -m "$CAUSEWAYJIRA: updates release notes, STATUS and doap_isis.rdf"
 ----
 
 == Release Source Zip
@@ -284,7 +284,7 @@ to its versioned:
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: merging in final changes to docs"
+git commit -m "$CAUSEWAYJIRA: merging in final changes to docs"
 ----
 
 We are now ready to xref:#generate-website[generate the website].
@@ -317,7 +317,7 @@ find . -name antora.yml -exec sed -i 's/latest/{page-isisrel}/g' {} \;
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps antora.yml versions to $ISISREL"
+git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 ----
 
 We now create a branch to reference in the `site.yml`, later on.
@@ -363,7 +363,7 @@ Every content source needs to be updated:
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: updates references to version in index.html and site.yml"
+git commit -m "$CAUSEWAYJIRA: updates references to version in index.html and site.yml"
 ----
 
 We are now in a position to actually generate the Antora website.
@@ -373,7 +373,7 @@ We are now in a position to actually generate the Antora website.
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $ISISBRANCH
+git checkout $CAUSEWAYBRANCH
 pushd bom
 mvn clean install -DskipTests -Dreleased
 popd
@@ -438,7 +438,7 @@ These reference the most current snapshot nightly build.
 
 The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`.
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jdo` and `$CAUSEWAYBRANCH-jpa`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 

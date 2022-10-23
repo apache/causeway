@@ -196,12 +196,12 @@ For example:
 
 [source,bash,subs="attributes+"]
 ----
-export ISISJIRA=CAUSEWAY-9999                           # <.>
-export ISISTMP=/c/tmp                               # <.>
-export ISISREL={page-isisrel}                             # <.>
-export ISISRC=RC1                                   # <.>
-export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISART=causeway
+export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
+export CAUSEWAYTMP=/c/tmp                               # <.>
+export CAUSEWAYREL={page-isisrel}                             # <.>
+export CAUSEWAYRC=RC1                                   # <.>
+export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
+export CAUSEWAYART=causeway
 env | grep CAUSEWAY | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
@@ -224,7 +224,7 @@ Commit any changes from the preceding steps:
 [source,bash,subs="attributes+"]
 ----
 git add ..
-git commit -m "$ISISJIRA: updates to pom.xml etc for release"
+git commit -m "$CAUSEWAYJIRA: updates to pom.xml etc for release"
 ----
 
 
@@ -240,14 +240,14 @@ The original worktree can stay with the `master` branch and be used for document
 +
 [source,bash,subs="attributes+"]
 ----
-git branch $ISISBRANCH
+git branch $CAUSEWAYBRANCH
 ----
 
 * Create a worktree for this branch:
 +
 [source,bash,subs="attributes+"]
 ----
-git worktree add ../causeway-release $ISISBRANCH
+git worktree add ../causeway-release $CAUSEWAYBRANCH
 ----
 
 * Switch to the new worktree and push the branch:
@@ -255,7 +255,7 @@ git worktree add ../causeway-release $ISISBRANCH
 [source,bash,subs="attributes+"]
 ----
 cd ../causeway-release
-git push origin $ISISBRANCH -u
+git push origin $CAUSEWAYBRANCH -u
 ----
 
 
@@ -269,7 +269,7 @@ The remainder of the release process is performed from the context of the `bom` 
 cd bom
 ----
 
-=== Bump projects to `$ISISREL`
+=== Bump projects to `$CAUSEWAYREL`
 
 We use `mvn versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
@@ -280,7 +280,7 @@ We use `mvn versions:set` to manually bump the release version.
 +
 [source,bash,subs="attributes+"]
 ----
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 ----
 
 * next we build the framework so that these versioned `pom.xml` files are available for the next step:
@@ -297,7 +297,7 @@ The `-Dgithub` property activates the "github" profile that references all modul
 [source,bash,subs="attributes+"]
 ----
 pushd ../starters
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 mvn install -DskipTests -o
 popd
 ----
@@ -307,7 +307,7 @@ popd
 [source,bash,subs="attributes+"]
 ----
 git add ..
-git commit -m "$ISISJIRA: bumps version to $ISISREL"
+git commit -m "$CAUSEWAYJIRA: bumps version to $CAUSEWAYREL"
 ----
 
 
@@ -450,8 +450,8 @@ Finally, tag the release:
 
 [source,bash,subs="attributes+"]
 ----
-git tag $ISISART-$ISISREL --force
-git tag $ISISART-$ISISREL-$ISISRC --force
+git tag $CAUSEWAYART-$CAUSEWAYREL --force
+git tag $CAUSEWAYART-$CAUSEWAYREL-$CAUSEWAYRC --force
 ----
 
 
@@ -504,7 +504,7 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 [#reset-revision-property]
 === Reset `revision` property
 
-At the <<bump-code-to-isisrel,beginning>> of the release process we bumped the version to the release version, ie `$ISISREL`.
+At the <<bump-code-to-isisrel,beginning>> of the release process we bumped the version to the release version, ie `$CAUSEWAYREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
 
 Therefore, still in the `bom` directory:
@@ -520,7 +520,7 @@ mvn install -DskipTests -o
 popd
 
 git add ..
-git commit -m "$ISISJIRA: resetting version"
+git commit -m "$CAUSEWAYJIRA: resetting version"
 ----
 
 === Push branch & tag
@@ -529,14 +529,14 @@ Push the release branch to origin:
 
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH
+git push -u origin $CAUSEWAYBRANCH
 ----
 
 and also push tag:
 
 [source,bash,subs="attributes+"]
 ----
-git push origin refs/tags/causeway-$ISISREL:refs/tags/causeway-$ISISREL-$ISISRC
+git push origin refs/tags/causeway-$CAUSEWAYREL:refs/tags/causeway-$CAUSEWAYREL-$CAUSEWAYRC
 git fetch
 ----
 
@@ -561,7 +561,7 @@ These reference the most current snapshot nightly build.
 
 The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`:
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jdo` and `$CAUSEWAYBRANCH-jpa`:
 
 === HelloWorld
 
@@ -576,13 +576,13 @@ For _helloworld_, we create a release branch for both variants:
 git checkout jpa-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jpa
+git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$ISISREL # <.>
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL # <.>
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
 +
 <.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
@@ -601,7 +601,7 @@ mvn spring-boot:run
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jpa
+git push -u origin $CAUSEWAYBRANCH-jpa
 ----
 
 * for `jdo`:
@@ -613,13 +613,13 @@ git push -u origin $ISISBRANCH-jpa
 git checkout jdo-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jdo
+git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$ISISREL
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
 ----
 
 ** Test the app
@@ -638,7 +638,7 @@ This might be easiest to just cherry-pick commits made on the `jpa` branch.
 +
 [source,bash,subs="attributes+"]
 ----
-git merge $ISISBRANCH-jpa --no-commit
+git merge $CAUSEWAYBRANCH-jpa --no-commit
 ----
 +
 The idea here is to show equivalence between the two branches.
@@ -646,14 +646,14 @@ The merge commit should end up with no changes:
 +
 [source,bash,subs="attributes+"]
 ----
-git commit -m "$ISISJIRA - merge in jpa"
+git commit -m "$CAUSEWAYJIRA - merge in jpa"
 ----
 
 ** Push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jdo
+git push -u origin $CAUSEWAYBRANCH-jdo
 ----
 
 === SimpleApp
@@ -669,13 +669,13 @@ For _simple app_, the steps are almost the same:
 git checkout jpa-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jpa
+git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$ISISREL  # <.>
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL  # <.>
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
 <.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 
@@ -693,7 +693,7 @@ mvn -pl webapp spring-boot:run
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jpa
+git push -u origin $CAUSEWAYBRANCH-jpa
 ----
 
 
@@ -706,13 +706,13 @@ git push -u origin $ISISBRANCH-jpa
 git checkout jdo-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jdo
+git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$ISISREL
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
 ----
 
 ** Test the app
@@ -731,7 +731,7 @@ This might be easiest to just cherry-pick commits made on the `jpa` branch.
 +
 [source,bash,subs="attributes+"]
 ----
-git merge $ISISBRANCH-jpa --no-commit
+git merge $CAUSEWAYBRANCH-jpa --no-commit
 ----
 +
 The idea here is to show equivalence between the two branches.
@@ -739,14 +739,14 @@ The merge commit should end up with no changes:
 +
 [source,bash,subs="attributes+"]
 ----
-git commit -m "$ISISJIRA - merge in jpa"
+git commit -m "$CAUSEWAYJIRA - merge in jpa"
 ----
 
 ** Push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jdo
+git push -u origin $CAUSEWAYBRANCH-jdo
 ----
 
 
@@ -803,7 +803,7 @@ You'll also need to rebuild all and then regenerate config files and tooling:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout $ISISBRANCH
+git checkout $CAUSEWAYBRANCH
 pushd bom
 mvn clean install -DskipTests -T1C -Dgithub
 popd
@@ -828,7 +828,7 @@ cp -Rf antora/target/site/* ../causeway-site/content/.
 cd ../causeway-site
 
 git add .
-git commit -m "$ISISJIRA : staging changes to website"
+git commit -m "$CAUSEWAYJIRA : staging changes to website"
 
 sh preview.sh
 ----
