@@ -29,7 +29,7 @@ In addition, add a section for the BOM of all the testing support libraries:
 	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -514,12 +514,12 @@ Customer wrappedCustomer = ...;
 Customer customer = wrapperFactory.unwrap(wrappedCustomer);
 ----
 
-If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__isis_wrapped()` method:
+If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__causeway_wrapped()` method:
 
 [source,java]
 ----
 Customer wrappedCustomer = ...;
-Customer customer = (Customer)((WrappingObject)wrappedCustomer).__isis_wrapped());
+Customer customer = (Customer)((WrappingObject)wrappedCustomer).__causeway_wrapped());
 ----
 
 We're not sure that's any easier (in fact we're certain it looks rather obscure).  Stick with calling `unwrap(...)`!

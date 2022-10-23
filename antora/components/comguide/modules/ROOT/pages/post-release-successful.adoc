@@ -22,7 +22,7 @@ Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Causeway Core release {page-isisrel}
+[RESULT] [VOTE] Apache Causeway Core release {page-causewayrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -60,7 +60,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-isisrel}                           # <.>
+export CAUSEWAYREL={page-causewayrel}                           # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -162,7 +162,7 @@ Date of release, number of new features, improvements and bugs fixed.
 +
 To reference these release notes.
 
-* update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
+* update the `doap_causeway.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
 Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html[Apache policy docs].
@@ -174,7 +174,7 @@ TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$CAUSEWAYJIRA: updates release notes, STATUS and doap_isis.rdf"
+git commit -m "$CAUSEWAYJIRA: updates release notes, STATUS and doap_causeway.rdf"
 ----
 
 == Release Source Zip
@@ -233,7 +233,7 @@ done
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh{page-isisrel}
+sh upd.sh{page-causewayrel}
 ----
 
 The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.
@@ -309,7 +309,7 @@ First, we update all versions in `antora.yml`:
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-isisrel}/g' {} \;
+find . -name antora.yml -exec sed -i 's/latest/{page-causewayrel}/g' {} \;
 ----
 
 * Commit all these changes:
@@ -322,14 +322,14 @@ git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 
 We now create a branch to reference in the `site.yml`, later on.
 
-* We create the `{page-isisrel}` branch.
+* We create the `{page-causewayrel}` branch.
 +
-This mirrors the "rel/causeway-{page-isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/causeway-{page-causewayrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
-git branch {page-isisrel}
-git push origin {page-isisrel}
+git branch {page-causewayrel}
+git push origin {page-causewayrel}
 ----
 
 Finally, revert the last commit (backing out changes to `antora.yml` files):
@@ -344,7 +344,7 @@ git revert HEAD
 
 Lastly, we update `index.html` and then `site.yml`
 
-* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-isisrel}`
+* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-causewayrel}`
 +
 This should be in hyperlinks, `<a href="docs/...">`
 +
@@ -355,7 +355,7 @@ NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[prev
 This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-isisrel}]`
+** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
 
 
 * commit this change, too (there's no need to push):
@@ -413,15 +413,15 @@ In the `causeway` repo ():
 RC=RC1                                                <.>
 git checkout master
 git pull
-git merge release-{page-isisrel}-$RC
-git push origin --delete release-{page-isisrel}-$RC
-git branch -d release-{page-isisrel}-$RC
+git merge release-{page-causewayrel}-$RC
+git push origin --delete release-{page-causewayrel}-$RC
+git branch -d release-{page-causewayrel}-$RC
 ----
 <.> adjust RC number as required
 
-== Bump \{page-isisrel} in `site.yml`
+== Bump \{page-causewayrel} in `site.yml`
 
-In `site.yml` file, bump the version of `\{page-isisrel}` and also `\{page-isisprev}`, and commit.
+In `site.yml` file, bump the version of `\{page-causewayrel}` and also `\{page-causewayprev}`, and commit.
 
 == Update starter projects
 
@@ -457,14 +457,14 @@ For example, for a release of Apache Causeway Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Causeway version {page-isisrel} Released
+[ANN] Apache Causeway version {page-causewayrel} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Causeway team is pleased to announce the release of Apache Causeway {page-isisrel}.
+The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrel}.
 
 New features in this release include:
 
@@ -479,9 +479,9 @@ Enjoy!
 
 --The Apache Causeway team
 
-[1] https://causeway.apache.org/relnotes/{page-isisrel}/about.html
+[1] https://causeway.apache.org/relnotes/{page-causewayrel}/about.html
 [2] https://search.maven.org
-[3] https://causeway.apache.org/docs/{page-isisrel}/downloads/how-to.html
+[3] https://causeway.apache.org/docs/{page-causewayrel}/downloads/how-to.html
 ----
 
 == Blog post

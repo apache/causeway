@@ -192,7 +192,7 @@ CAUTION: TODO
 //----
 //@Programmatic
 //public java.util.List<Visit> findNotPaid() {
-//    TypesafeQuery<Visit> q = isisJdoSupport.newTypesafeQuery(Visit.class);
+//    TypesafeQuery<Visit> q = causewayJdoSupport.newTypesafeQuery(Visit.class);
 //    final QVisit cand = QVisit.candidate();
 //    q = q.filter(
 //            cand.paidOn.eq(q.parameter("paidOn", LocalDateTime.class)
@@ -583,7 +583,7 @@ CAUTION: TODO
 //----
 //@Programmatic
 //public java.util.List<Visit> findNotPaidBy(Owner owner) {
-//    TypesafeQuery<Visit> q = isisJdoSupport.newTypesafeQuery(Visit.class);
+//    TypesafeQuery<Visit> q = causewayJdoSupport.newTypesafeQuery(Visit.class);
 //    final QVisit cand = QVisit.candidate();
 //    q = q.filter(
 //            cand.paidOn.eq(q.parameter("paidOn", LocalDateTime.class)

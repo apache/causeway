@@ -65,7 +65,7 @@ export PROTOTYPING=true
 +
 [source,bash]
 ----
--Disis.deploymentType=PROTOTYPING
+-Dcauseway.deploymentType=PROTOTYPING
 ----
 
 It is also possible to explicitly specify production mode:
@@ -81,7 +81,7 @@ It is also possible to explicitly specify production mode:
 +
 [source,bash]
 ----
--Disis.deploymentType=PRODUCTION
+-Dcauseway.deploymentType=PRODUCTION
 ----
 
 If (by a combination of mechanisms) both prototyping and production modes are specified, then production mode wins.
@@ -169,7 +169,7 @@ So do some of the xref:extensions::about.adoc[extensions] and xref:valuetypes:RO
 
 The remainder of this guide lists the various configuration properties available, broken out into logical sections.
 
-[#isisconfiguration-domain-service]
+[#causewayconfiguration-domain-service]
 === IsisConfiguration domain service
 
 Applications can discover the current configuration properties for the framework (under the `causeway` top-level key) by injecting the `IsisConfiguration` domain service.

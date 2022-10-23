@@ -18,7 +18,7 @@ Its `ApplicationUser` entity is defined as:
 import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable(
-        schema = "isisExtSecman",
+        schema = "causewayExtSecman",
         table = "ApplicationUser",
         ...
 )
@@ -29,7 +29,7 @@ which results in a `CREATE TABLE` statement of:
 
 [source,sql]
 ----
-CREATE TABLE isisExtSecman."ApplicationUser" (
+CREATE TABLE causewayExtSecman."ApplicationUser" (
     ...
 )
 ----

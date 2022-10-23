@@ -116,10 +116,10 @@ The following sets up Shiro _without_ delegation:
 [main]
 
 authenticationStrategy=org.apache.causeway.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
-isisModuleSecurityRealm=org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
+causewayModuleSecurityRealm=org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
 
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy
-securityManager.realms = $isisModuleSecurityRealm
+securityManager.realms = $causewayModuleSecurityRealm
 
 [users]
 [roles]
@@ -144,7 +144,7 @@ ldapRealm=org.apache.causeway.extensions.shirorealmldap.realm.impl.IsisLdapRealm
 ldapRealm.xxx=...                                                            #<.>
 ldapRealm.yyy=...
 
-isisModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
+causewayModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
 
 ...
 ----

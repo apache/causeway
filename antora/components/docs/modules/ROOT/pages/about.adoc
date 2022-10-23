@@ -134,7 +134,7 @@ _Process_
 
 _Automated Analysis_
 
-* link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
+* link:https://sonarcloud.io/dashboard?id=apache_causeway[SonarCloud.io]
 * link:https://fisheye.apache.org/browse/~br=master/causeway-git/[ASF Fisheye]
 
 _Development_
@@ -180,13 +180,13 @@ _Academia_
 //_Example Apps_
 
 //* https://github.com/apache/causeway-app-todoapp[TodoApp]
-//* https://github.com/isisaddons/causeway-app-kitchensink[Kitchensink]
-//* https://github.com/isisaddons/causeway-app-quickstart[Quickstart]
+//* https://github.com/causewayaddons/causeway-app-kitchensink[Kitchensink]
+//* https://github.com/causewayaddons/causeway-app-quickstart[Quickstart]
 
 //_Experiments_
 //
-//* https://github.com/isisaddons/causeway-app-neoapp[Neo4J Example]
-//* https://github.com/isisaddons/causeway-app-simpledsl[Causeway DSL Example]
+//* https://github.com/causewayaddons/causeway-app-neoapp[Neo4J Example]
+//* https://github.com/causewayaddons/causeway-app-simpledsl[Causeway DSL Example]
 
 
 //|

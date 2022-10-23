@@ -101,7 +101,7 @@ Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s
 
 _A run-through of the command (profiling) service, auditing service, publishing service.  Also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation._ +
 
-Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/isisaddons-legacy/causeway-module-publishing[publishing] modules).
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/causewayaddons-legacy/causeway-module-publishing[publishing] modules).
 
 |video::tqXUZkPB3EI[youtube,width="420px",height="210px"]
 

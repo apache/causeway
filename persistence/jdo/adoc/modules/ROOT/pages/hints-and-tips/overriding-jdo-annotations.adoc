@@ -58,9 +58,9 @@ For example:
      xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/orm
         http://xmlns.jcp.org/xml/ns/jdo/orm_3_0.xsd">
 
-    <package name="org.isisaddons.module.audit.dom">
+    <package name="org.causewayaddons.module.audit.dom">
         <class name="AuditEntry"
-               schema="isisaudit"
+               schema="causewayaudit"
                table="AuditEntry">
         </class>
     </package>

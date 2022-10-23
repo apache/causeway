@@ -25,7 +25,7 @@ In addition, add a section for secman's own BOM:
             <artifactId>causeway-extensions-secman</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -100,7 +100,7 @@ Add the database schema used by the SecMan entities to the configuration file:
 causeway:
   persistence:
     schema:
-      auto-create-schemas: isisExtSecman
+      auto-create-schemas: causewayExtSecman
 ----
 
 Optionally, modify the configuration properties for Secman itself:
@@ -308,11 +308,11 @@ public class SeedSecurityService {
 
     private final FixtureScripts fixtureScripts;
     private final TransactionService transactionService;
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final IsisSystemEnvironment causewaySystemEnvironment;
 
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(final MetamodelEvent event) {
-        if (event.isPostMetamodel() && isisSystemEnvironment.isPrototyping()) {
+        if (event.isPostMetamodel() && causewaySystemEnvironment.isPrototyping()) {
             runScripts();
             transactionService.flushTransaction();
         }

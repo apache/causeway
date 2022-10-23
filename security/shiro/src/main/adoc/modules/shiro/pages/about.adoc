@@ -339,7 +339,7 @@ To configure Apache Causeway' extended permission support requires that a custom
 permissionResolver = org.apache.causeway.security.shiro.authorization.IsisPermissionResolver
 myRealm.permissionResolver = $permissionResolver  # <.>
 ----
-<.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$isisLdapRealm` etc.
+<.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$causewayLdapRealm` etc.
 
 
 
