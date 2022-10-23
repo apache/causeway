@@ -47,22 +47,22 @@ mvn clean package jetty:run
 )
 @ActiveProfiles("test")
 public abstract class VisitsModuleIntegTestAbstract
-        extends IsisIntegrationTestAbstractWithFixtures {
+        extends CausewayIntegrationTestAbstractWithFixtures {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
 
-            IsisModuleCoreRuntimeServices.class,
-            IsisModuleSecurityBypass.class,
-            IsisModulePersistenceJpaEclipselink.class,
-            IsisModuleTestingFixturesApplib.class,
+            CausewayModuleCoreRuntimeServices.class,
+            CausewayModuleSecurityBypass.class,
+            CausewayModulePersistenceJpaEclipselink.class,
+            CausewayModuleTestingFixturesApplib.class,
 
             VisitsModule.class
     })
     @PropertySources({
-            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(IsisPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
+            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     public static class TestApp {
     }

@@ -516,7 +516,7 @@ Examples: link:https://lists.apache.org/list.html?announce\@apache.org[https://l
 
 == Social Media
 
-Announce the release using the `@ApacheIsis` Twitter account.
+Announce the release using the `@ApacheCauseway` Twitter account.
 
 
 

@@ -103,7 +103,7 @@ From https://github.com/sebadiaz/causeway
 Auto-merging core/pom.xml
 Merge made by the 'recursive' strategy.
  core/pom.xml                                       |   3 +-
- .../apache/causeway/security/shiro/IsisLdapRealm.java  | 198 +++++++++++++++++++--
+ .../apache/causeway/security/shiro/CausewayLdapRealm.java  | 198 +++++++++++++++++++--
  2 files changed, 186 insertions(+), 15 deletions(-)
 
 Merged the PR; hit enter to build

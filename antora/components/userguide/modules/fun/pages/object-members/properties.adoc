@@ -337,7 +337,7 @@ import lombok.Setter;
 private Blob attachment;
 ----
 
-The three `@Column` annotations are required because the mapping classes that Apache Causeway provides (https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns.
+The three `@Column` annotations are required because the mapping classes that Apache Causeway provides (https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/CausewayBlobMapping.java#L59[CausewayBlobMapping] and https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/CausewayClobMapping.java#L59[CausewayClobMapping]) map to 3 columns.
 (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
 
 If the `Blob` is mandatory, then use:

@@ -24,13 +24,13 @@ This:
 
 * in the applib, has a top-level package of `org.apache.causeway.extensions.excel.applib`
 
-* defines a Spring configuration module called `IsisModuleExtExcelApplib`, that is simply:
+* defines a Spring configuration module called `CausewayModuleExtExcelApplib`, that is simply:
 +
 [source,java]
 ----
 @Configuration
 @ComponentScan                                  // <.>
-public class IsisModuleExtExcelApplib {
+public class CausewayModuleExtExcelApplib {
 }
 ----
 <.> the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan] indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
@@ -66,16 +66,16 @@ Therefore:
 </dependency>
 ----
 
-* and in the testing module's `IsisModuleExtExcelTesting` we see:
+* and in the testing module's `CausewayModuleExtExcelTesting` we see:
 +
 [source,java]
 ----
 @Configuration
 @Import({                                           // <.>
-    IsisModuleExtExcelApplib.class
+    CausewayModuleExtExcelApplib.class
 })
 @ComponentScan
-public class IsisModuleExtExcelTesting {
+public class CausewayModuleExtExcelTesting {
 }
 ----
 <.> The link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation declares the dependency.
@@ -92,7 +92,7 @@ package com.mycompany.modules.customer;
 
 @Configuration                                  // <.>
 @Import({
-    IsisModuleExtExcelApplib.class       // <.>
+    CausewayModuleExtExcelApplib.class       // <.>
 })
 @ComponentScan                                  // <.>
 public class CustomerModule {}
@@ -112,7 +112,7 @@ import org.apache.causeway.applib.annotation.Module;
 
 @Module
 @Import({
-    IsisModuleExtExcelApplib.class
+    CausewayModuleExtExcelApplib.class
 })
 public class CustomerModule {}
 ----

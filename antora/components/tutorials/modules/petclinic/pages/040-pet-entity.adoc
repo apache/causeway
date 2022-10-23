@@ -57,7 +57,7 @@ public @interface PetName {
         @UniqueConstraint(name = "Pet__owner_name__UNQ", columnNames = {"owner_id, name"})
     }
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("pets.Pet")
 @DomainObject(entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()

@@ -4,12 +4,12 @@
 
 == Related Services
 
-* The configuration properties for Apache Causeway can also be obtained from the xref:refguide:config:about.adoc#isisconfiguration-domain-service[IsisConfiguration] domain service.
+* The configuration properties for Apache Causeway can also be obtained from the xref:refguide:config:about.adoc#isisconfiguration-domain-service[CausewayConfiguration] domain service.
 These provide link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-typesafe-configuration-properties[type-safe] access to all `causeway.*` configuration properties.
 +
 [NOTE]
 ====
-`IsisConfiguration` is part of xref:refguide:config:about.adoc[causeway-core-config] rather than the applib.
+`CausewayConfiguration` is part of xref:refguide:config:about.adoc[causeway-core-config] rather than the applib.
 
 To use it therefore requires this dependency:
 [source,xml]

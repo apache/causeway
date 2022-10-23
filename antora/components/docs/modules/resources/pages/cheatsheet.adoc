@@ -8,10 +8,10 @@ This cheat sheet summarises the main programming conventions to follow when writ
 pass:[<br/>]
 
 
-image::IsisCheatSheet.png[width="800px",link="{attachmentsdir}/IsisCheatSheet.pdf"]
+image::CausewayCheatSheet.png[width="800px",link="{attachmentsdir}/CausewayCheatSheet.pdf"]
 
 pass:[<br/>]
 
 You can download the cheat sheet as either an
-link:{attachmentsdir}/IsisCheatSheet.pdf[Acrobat PDF] file or as an link:{attachmentsdir}/IsisCheatSheet.odt[Open Document .odt] file.
+link:{attachmentsdir}/CausewayCheatSheet.pdf[Acrobat PDF] file or as an link:{attachmentsdir}/CausewayCheatSheet.odt[Open Document .odt] file.
 

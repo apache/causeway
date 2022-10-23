@@ -28,7 +28,7 @@ An example of its use can be found in the demo app:
 .SwaggerExport_IntegTest.java
 ----
 @Import({
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
 class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {
 

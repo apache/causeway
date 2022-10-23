@@ -173,11 +173,11 @@ The framework provides a simple logging implementation, which will always be cal
 All other implementations available will also be called.
 
 
-== Injecting `IsisSessionScope`d services
+== Injecting `CausewaySessionScope`d services
 
 Most domain services are application-scoped, in other words they are stateless global singletons that are shared by all concurrent requests.
 
-A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@IsisSessionScope].
+A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@CausewaySessionScope].
 This means that they are stateful and scoped with each causeway session, in other words HTTP request.
 One such service is xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], used for performance caching.
 
