@@ -16,7 +16,7 @@ Note that a release manager may also decide to cancel a vote before 72 hours has
 
 == Inform dev ML
 
-Post the results to the `dev@isis.a.o` mailing list.
+Post the results to the `dev@causeway.a.o` mailing list.
 
 For example, use the following subject for a vote on Apache Isis Core:
 
@@ -50,9 +50,9 @@ Branches and tags need to be removed for three repos:
 [source,bash,subs="attributes+"]
 ----
 git push --delete origin release-{page-isisrel}-RC1     # <.>
-git push --delete origin isis-{page-isisrel}-RC1        # <.>
-git tag -d isis-{page-isisrel}                          # <.>
-git tag -d isis-{page-isisrel}-RC1
+git push --delete origin causeway-{page-isisrel}-RC1        # <.>
+git tag -d causeway-{page-isisrel}                          # <.>
+git tag -d causeway-{page-isisrel}-RC1
 ----
 <.> deletes the remote branch (update `RCn` as necessary)
 <.> deletes the remote origin server's tag (update `RCn` as necessary)

@@ -7,7 +7,7 @@
 This chapter describes the commands often used while working with git.
 In addition to these basic commands, please make sure you have read:
 
-* xref:conguide:ROOT:building-apache-isis.adoc[building Apache Isis]
+* xref:conguide:ROOT:building-apache-causeway.adoc[building Apache Isis]
 * xref:conguide:ROOT:contributing.adoc[Contributing]
 * xref:comguide:ROOT:policies/git-policy.adoc[Git policy]
 

@@ -92,7 +92,7 @@ for (RoleMemento role : roles) {
 
 Each role's `name` property encodes both the realm that provided the role, and the role identity itself.
 
-If using the xref:vw::about.adoc[Wicket viewer], then note there will also be another role which is used internally (namely `org.apache.isis.viewer.wicket.roles.USER`).
+If using the xref:vw::about.adoc[Wicket viewer], then note there will also be another role which is used internally (namely `org.apache.causeway.viewer.wicket.roles.USER`).
 
 
 

@@ -110,9 +110,9 @@ For example, here's a fragment of that provided by the xref:docs:starters:simple
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mb3:menuBars
     xsi:schemaLocation="..."
-    xmlns:cpt="http://isis.apache.org/applib/layout/component"
-    xmlns:lnk="http://isis.apache.org/applib/layout/links"
-    xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
+    xmlns:cpt="http://causeway.apache.org/applib/layout/component"
+    xmlns:lnk="http://causeway.apache.org/applib/layout/links"
+    xmlns:mb3="http://causeway.apache.org/applib/layout/menubars/bootstrap3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>                                               <!--.-->
         <mb3:menu>                                              <!--.-->
@@ -187,41 +187,41 @@ You can use `menubars.layout.xml` to arrange these as you see fit, though our re
         <mb3:named>Prototyping</mb3:named>
         <mb3:section>
             <mb3:named>Fixtures</mb3:named>
-            <mb3:serviceAction objectType="isis.testing.fixtures.FixtureScripts" id="runFixtureScript"/>
-            <mb3:serviceAction objectType="isis.testing.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst"/>
+            <mb3:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="runFixtureScript"/>
+            <mb3:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Layouts</mb3:named>
-            <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadLayouts"/>
-            <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
+            <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadLayouts"/>
+            <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Meta Model and Features</mb3:named>
-            <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelXml"/>
-            <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
-            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allNamespaces"/>
-            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allTypes"/>
-            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allActions"/>
-            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allProperties"/>
-            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allCollections"/>
+            <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelXml"/>
+            <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
+            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allNamespaces"/>
+            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allTypes"/>
+            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allActions"/>
+            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allProperties"/>
+            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allCollections"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Persistence</mb3:named>
-            <mb3:serviceAction objectType="isis.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels"/>
-            <mb3:serviceAction objectType="isis.ext.h2Console.H2ManagerMenu" id="openH2Console"/>
+            <mb3:serviceAction objectType="causeway.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels"/>
+            <mb3:serviceAction objectType="causeway.ext.h2Console.H2ManagerMenu" id="openH2Console"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>REST API</mb3:named>
-            <mb3:serviceAction objectType="isis.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
-            <mb3:serviceAction objectType="isis.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
-            <mb3:serviceAction objectType="isis.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
+            <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
+            <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
+            <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>i18n</mb3:named>
-            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="downloadTranslations"/>
-            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
-            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
-            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
+            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="downloadTranslations"/>
+            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
+            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
+            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
         </mb3:section>
     </mb3:menu>
 </mb3:secondary>
@@ -241,16 +241,16 @@ You can use `menubars.layout.xml` to arrange these as you see fit, though our re
         <mb3:named/>
         <mb3:section>
             <mb3:named>Configuration</mb3:named>
-            <mb3:serviceAction objectType="isis.conf.ConfigurationMenu" id="configuration"/>
+            <mb3:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Impersonate</mb3:named>
-            <mb3:serviceAction objectType="isis.sudo.ImpersonateMenu" id="impersonate"/>
-            <mb3:serviceAction objectType="isis.sudo.ImpersonateMenu" id="impersonateWithRoles"/>
-            <mb3:serviceAction objectType="isis.applib.ImpersonateStopMenu" id="stopImpersonating"/>
+            <mb3:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonate"/>
+            <mb3:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonateWithRoles"/>
+            <mb3:serviceAction objectType="causeway.applib.ImpersonateStopMenu" id="stopImpersonating"/>
         </mb3:section>
         <mb3:section>
-            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout"/>
+            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
         </mb3:section>
     </mb3:menu>
 </mb3:tertiary>

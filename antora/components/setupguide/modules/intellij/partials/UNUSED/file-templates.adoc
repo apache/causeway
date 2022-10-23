@@ -10,7 +10,7 @@ These are used to create new classes or supporting files:
 .File templates
 image::030-import-settings/040-file-templates.png[width="400px"]
 
-The file templates are provided as a settings JAR file, namely *link:{attachmentsdir}/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.
+The file templates are provided as a settings JAR file, namely *link:{attachmentsdir}/causeway-settings-file-templates.jar[causeway-settings-file-templates.jar]*.
 Download this file.
 
 Next, import using `File > Import Settings`, specifying the directory that you have downloaded the file to:

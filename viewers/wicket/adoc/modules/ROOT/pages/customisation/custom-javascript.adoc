@@ -11,7 +11,7 @@ Similar to the xref:customisation.adoc#custom-css[application.css] file, the Wic
 This is relative to the `static` package, under `src/main/resources`.
 Currently only one such `.js` file can be registered.
 
-If you wish to change the location of the file, use the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.js[isis.viewer.wicket.application.js] configuration property.
+If you wish to change the location of the file, use the xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.js[causeway.viewer.wicket.application.js] configuration property.
 
 
 [WARNING]

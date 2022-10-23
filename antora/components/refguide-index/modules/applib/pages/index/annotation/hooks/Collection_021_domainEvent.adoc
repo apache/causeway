@@ -144,7 +144,7 @@ public class SomeSubscriber {
 
 If the xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[`domainEvent()] element is not explicitly specified (is left as its default value, `CollectionDomainEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault` configuration collection can be set to "false"; this will disable posting.
+If this is not required, then the `causeway.reflector.facet.collectionAnnotation.domainEvent.postForDefault` configuration collection can be set to "false"; this will disable posting.
 
 On the other hand, if the `domainEvent` has been explicitly specified to some subclass, then an event will be posted.
 The framework provides `CollectionDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration collection setting.

@@ -24,8 +24,8 @@ To configure the extension:
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-fullcalendar-wicket-ui</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
 </dependency>
 ----
 

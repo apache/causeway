@@ -2,12 +2,12 @@ VERSION={page-isisrel}
 RC=RC1
 NEXUSREPONUM=11xx
 
-curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
+curl https://downloads.apache.org/causeway/KEYS > /tmp/KEYS
 gpg --import /tmp/KEYS
 
-rm -rf isis-$VERSION
+rm -rf causeway-$VERSION
 
-curl -O -L https://raw.githubusercontent.com/apache/isis/release-$VERSION-$RC/scripts/verify-isis-release.sh
+curl -O -L https://raw.githubusercontent.com/apache/causeway/release-$VERSION-$RC/scripts/verify-causeway-release.sh
 
-chmod +x ./verify-isis-release.sh
-./verify-isis-release.sh $NEXUSREPONUM $VERSION $RC
+chmod +x ./verify-causeway-release.sh
+./verify-causeway-release.sh $NEXUSREPONUM $VERSION $RC

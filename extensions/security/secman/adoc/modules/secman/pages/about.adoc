@@ -231,15 +231,15 @@ For more details, see xref:security:secman:setting-up-with-shiro.adoc[], xref:se
 
 SecMan consists of a number of Maven submodules:
 
-* the API module (`isis-extensions-secman-api`) defines a set of interfaces for the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole],
+* the API module (`causeway-extensions-secman-api`) defines a set of interfaces for the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole],
 xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission] and xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] entities.
 
-* the two persistence modules (`isis-extensions-secman-persistence-jpa` and `isis-extensions-secman-persistence-jdo`) provide concrete implementations of the APIs for JPA and JDO respectively.
+* the two persistence modules (`causeway-extensions-secman-persistence-jpa` and `causeway-extensions-secman-persistence-jdo`) provide concrete implementations of the APIs for JPA and JDO respectively.
 As you might expect, they are intended for use with xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] and xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] persistence mechanisms respectively; use one or the other.
 
-* the Model module (`isis-extensions-secman-model`) defines view models to represent the feature application features, and also contains business logic as mixins to the API (and therefore contributed to the appropriate concrete entity).
+* the Model module (`causeway-extensions-secman-model`) defines view models to represent the feature application features, and also contains business logic as mixins to the API (and therefore contributed to the appropriate concrete entity).
 
-* the Shiro realm module (`isis-extensions-secman-shiro-realm`) provides the Shiro realm interface that delegates to the Secman database (see discussion <<shiro-integration,above>>)
+* the Shiro realm module (`causeway-extensions-secman-shiro-realm`) provides the Shiro realm interface that delegates to the Secman database (see discussion <<shiro-integration,above>>)
 
-* the jbcrypt encryption module (`isis-extensions-secman-encryption-jbcrypt`) provides an implementation of Spring's `org.springframework.security.crypto.password.PasswordEncoder` SPI so that passwords are persisted securely using link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt].
+* the jbcrypt encryption module (`causeway-extensions-secman-encryption-jbcrypt`) provides an implementation of Spring's `org.springframework.security.crypto.password.PasswordEncoder` SPI so that passwords are persisted securely using link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt].
 

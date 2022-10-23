@@ -22,7 +22,7 @@ You can find further discussion on when and why you should write actions xref:ov
 
 == Defining actions
 
-If the xref:refguide:config:sections/isis.core.meta-model.introspector.adoc#isis.core.meta-model.introspector.policy[isis.core.meta-model.introspector.policy] configuration property is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_OPTIONAL[ANNOTATION_OPTIONAL] or is left unset (the default), then any "left-over" `public` methods will be considered to be actions.
+If the xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[causeway.core.meta-model.introspector.policy] configuration property is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_OPTIONAL[ANNOTATION_OPTIONAL] or is left unset (the default), then any "left-over" `public` methods will be considered to be actions.
 These are methods that do not represent properties or collections, and that are not recognised as xref:business-rules.adoc[supporting methods] (such as `hideXxx()` or `disableXxx()`).
 
 If the policy is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_REQUIRED[ANNOTATION_REQUIRED], then the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation must be applied for the method to be treated as an action.

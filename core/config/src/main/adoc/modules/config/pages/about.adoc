@@ -61,7 +61,7 @@ export PROTOTYPING=true
 -DPROTOTYPING=true
 ----
 
-* `isis.deploymentType` system property
+* `causeway.deploymentType` system property
 +
 [source,bash]
 ----
@@ -77,7 +77,7 @@ It is also possible to explicitly specify production mode:
 -DPROTOTYPING=false
 ----
 
-* `isis.deploymentType` system property
+* `causeway.deploymentType` system property
 +
 [source,bash]
 ----
@@ -172,7 +172,7 @@ The remainder of this guide lists the various configuration properties available
 [#isisconfiguration-domain-service]
 === IsisConfiguration domain service
 
-Applications can discover the current configuration properties for the framework (under the `isis` top-level key) by injecting the `IsisConfiguration` domain service.
+Applications can discover the current configuration properties for the framework (under the `causeway` top-level key) by injecting the `IsisConfiguration` domain service.
 There are similar domain services for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`), xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] (`DatanucleusConfiguration`) and RestEasy (`RestEasyConfiguration`), as used by xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 
 Applications can also create their own configuration properties file; the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides an example.

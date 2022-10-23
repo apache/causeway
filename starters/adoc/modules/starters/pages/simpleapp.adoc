@@ -7,7 +7,7 @@ The quickest way to get started building an application "for real" is to use the
 There are two variations of the application (and so two branches in the git repo).
 One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
 
-The application is also deployed online for you to try out, link:https://simpleapp.jdo.isis.incode.work[here (jdo)] and link:https://simpleapp.jpa.isis.incode.work[here (jpa)].
+The application is also deployed online for you to try out, link:https://simpleapp.jdo.causeway.incode.work[here (jdo)] and link:https://simpleapp.jpa.causeway.incode.work[here (jpa)].
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Isis app consisting of a single entity (`SimpleObject`) with supporting domain services.
 
@@ -165,7 +165,7 @@ As well as running in fixtures from the UI, you can also specify a configuration
 [source,ini]
 .config/application.properties
 ----
-# isis.testing.fixtures.initial-script = \
+# causeway.testing.fixtures.initial-script = \
 #    domainapp.webapp.application.fixture.scenarios.DomainAppDemo
 ----
 
@@ -910,14 +910,14 @@ The suffixes are: `Test` (unit tests, if any) and `IntegTest` (integ tests, if a
 === Root module's pom.xml
 
 In the parent module we of course have the `pom.xml`.
-This inherits from `isis-app-starter-parent`:
+This inherits from `causeway-app-starter-parent`:
 
 [source,xml]
 .pom.xml
 ----
 <parent>
-    <groupId>org.apache.isis.app</groupId>
-    <artifactId>isis-app-starter-parent</artifactId>
+    <groupId>org.apache.causeway.app</groupId>
+    <artifactId>causeway-app-starter-parent</artifactId>
     <version>XXX</version>
 </parent>
 ----
@@ -1061,8 +1061,8 @@ spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
 spring.datasource.username=simpleapp
 spring.datasource.password=simpleapp
 
-#isis.persistence.schema.create-schema-sql-template=   (use flyway instead)
-isis.persistence.schema.auto-create-schemas=
+#causeway.persistence.schema.create-schema-sql-template=   (use flyway instead)
+causeway.persistence.schema.auto-create-schemas=
 
 # DataNucleus, and must use camelCase rather than kebab-case
 datanucleus.schema.autoCreateAll=false

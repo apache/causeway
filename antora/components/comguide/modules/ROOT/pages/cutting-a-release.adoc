@@ -10,7 +10,7 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Isis itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
+Apache Isis itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -141,7 +141,7 @@ licenses to remove from supplemental-models.xml (are spurious):
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
 
-=== Reconcile isis-bom pom
+=== Reconcile causeway-bom pom
 
 The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
 
@@ -201,7 +201,7 @@ export ISISTMP=/c/tmp                               # <.>
 export ISISREL={page-isisrel}                             # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISART=isis
+export ISISART=causeway
 env | grep ISIS | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
@@ -213,7 +213,7 @@ env | grep ISIS | sort
 
 [IMPORTANT]
 ====
-The branch name is intentionally *not* the same as the eventual tag names (eg `isis-{page-isisrel}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-isisrel}`).
 ====
 
 
@@ -247,14 +247,14 @@ git branch $ISISBRANCH
 +
 [source,bash,subs="attributes+"]
 ----
-git worktree add ../isis-release $ISISBRANCH
+git worktree add ../causeway-release $ISISBRANCH
 ----
 
 * Switch to the new worktree and push the branch:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-release
+cd ../causeway-release
 git push origin $ISISBRANCH -u
 ----
 
@@ -321,7 +321,7 @@ Still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
-rm -rf ~/.m2/repository/org/apache/isis
+rm -rf ~/.m2/repository/org/apache/causeway
 mvn clean install -o -T1C -Dgithub
 git clean -dfx ..
 ----
@@ -470,7 +470,7 @@ image::release-process/nexus-staging-1.png[width="600px"]
 If nothing appears in a staging repo you should stop here and work out why.
 
 Assuming that the repo has been populated, make a note of its repo id; this is needed for the voting thread.
-In the screenshot above the id is `org.apache.isis-008`.
+In the screenshot above the id is `org.apache.causeway-008`.
 
 After checking that the staging repository contains the artifacts that you expect you should close the staging repository.
 This will make it available so that people can check the release.
@@ -536,13 +536,13 @@ and also push tag:
 
 [source,bash,subs="attributes+"]
 ----
-git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
+git push origin refs/tags/causeway-$ISISREL:refs/tags/causeway-$ISISREL-$ISISRC
 git fetch
 ----
 
 [NOTE]
 ====
-The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
+The remote tags aren't visible locally but can be seen link:https://github.com/apache/causeway/tags[online].
 ====
 
 [#update-starter-apps]
@@ -752,28 +752,28 @@ git push -u origin $ISISBRANCH-jdo
 
 == Preview website
 
-We also prepare a preview of the next version of the website, then made accessible from link:https://isis.staged.apache.org[].
+We also prepare a preview of the next version of the website, then made accessible from link:https://causeway.staged.apache.org[].
 
 * Prerequisites:
 
-** clone the link:https://github.com/apache/isis-site[] repo, alongside the `isis` repo:
+** clone the link:https://github.com/apache/causeway-site[] repo, alongside the `causeway` repo:
 +
 [source,bash,subs="attributes+"]
 ----
-git clone https://github.com/apache/isis-site ../isis-site
+git clone https://github.com/apache/causeway-site ../causeway-site
 ----
 
-** in the `isis-site` repo, check out the `asf-staging` branch:
+** in the `causeway-site` repo, check out the `asf-staging` branch:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-site
+cd ../causeway-site
 
 git checkout asf-staging
 git pull --ff-only
 ----
 
-* still in the `isis-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
+* still in the `causeway-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -785,11 +785,11 @@ done
 popd
 ----
 
-* Back in the `isis` repo's `release` worktree, generate the Antora site (from the top-level directory).
+* Back in the `causeway` repo's `release` worktree, generate the Antora site (from the top-level directory).
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-release
+cd ../causeway-release
 
 sh preview.sh -A
 ----
@@ -798,7 +798,7 @@ sh preview.sh -A
 ====
 This procedure doesn't yet work; Antora does not yet support worktrees.
 
-So instead it's currently necessary to perform the preview in the main `../isis` directory, switching branches.
+So instead it's currently necessary to perform the preview in the main `../causeway` directory, switching branches.
 You'll also need to rebuild all and then regenerate config files and tooling:
 
 [source,bash,subs="attributes+"]
@@ -814,18 +814,18 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 ====
 
 
-* Copy the generated Antora site to `isis-site` repo's `contents` directory:
+* Copy the generated Antora site to `causeway-site` repo's `contents` directory:
 +
 [source,bash,subs="attributes+"]
 ----
-cp -Rf antora/target/site/* ../isis-site/content/.
+cp -Rf antora/target/site/* ../causeway-site/content/.
 ----
 
-* Back in the `isis-site` repo, commit the changes and preview:
+* Back in the `causeway-site` repo, commit the changes and preview:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-site
+cd ../causeway-site
 
 git add .
 git commit -m "$ISISJIRA : staging changes to website"
@@ -840,7 +840,7 @@ sh preview.sh
 git push origin asf-staging -u
 ----
 
-Wait a minute or two; the site should be available at link:https://isis.staged.apache.org[]  (nb: 'staged', not 'staging').
+Wait a minute or two; the site should be available at link:https://causeway.staged.apache.org[]  (nb: 'staged', not 'staging').
 
 
 
@@ -854,7 +854,7 @@ In all cases, votes last for 72 hours and require a +3 (binding) vote from membe
 [#start-voting-thread-on-dev-mailing-list]
 === Start voting thread on dev mailing list
 
-That is, link:mailto:dev@apache.isis.org[]
+That is, link:mailto:dev@apache.causeway.org[]
 
 The following boilerplate is for a release of the Apache Isis Core.
 Adapt as required:
@@ -875,8 +875,8 @@ I've just cut a new release of the Apache Isis Framework.
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as isis-{page-isisrel}-RC1;
-see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as causeway-{page-isisrel}-RC1;
+see https://github.com/apache/causeway/tags
 
 To verify the source code itself, you can use the following commands
 (in an empty directory):
@@ -886,10 +886,10 @@ include::partial$verify-process.adoc[]
 ----------------------------------------------------------------
 
 You can then test the helloworld or simpleapp starter apps, see:
-https://isis.staged.apache.org/comguide/latest/verifying-releases.html.
+https://causeway.staged.apache.org/comguide/latest/verifying-releases.html.
 
 You can also inspect the website in general, available at:
-https://isis.staged.apache.org.
+https://causeway.staged.apache.org.
 
 Please verify the release and cast your vote.
 The vote will be open for a minimum of 72 hours.

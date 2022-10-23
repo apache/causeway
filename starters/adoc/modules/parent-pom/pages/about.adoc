@@ -14,8 +14,8 @@ To use it, just add:
 .pom.xml
 ----
 <parent>
-    <groupId>org.apache.isis.app</groupId>
-    <artifactId>isis-app-starter-parent</artifactId>
+    <groupId>org.apache.causeway.app</groupId>
+    <artifactId>causeway-app-starter-parent</artifactId>
     <version>{page-isisrel}</version>                    <!--.-->
 </parent>
 ----
@@ -37,23 +37,23 @@ As the diagram shows, the parent POM inherits two Spring Boot parent POMs: direc
 
 The parent POM also import (using `scope=import, type=pom`) each of the "bill of material" POMs provided by Apache Isis framework:
 
-* `org.apache.isis.core:isis` -
+* `org.apache.causeway.core:causeway` -
 +
-The two core modules most commonly referenced by domain applications are `o.a.i.core:isis-applib` and `o.a.i.core:isis-schema`.
+The two core modules most commonly referenced by domain applications are `o.a.i.core:causeway-applib` and `o.a.i.core:causeway-schema`.
 
-* `o.a.i.testing:isis-testing`
+* `o.a.i.testing:causeway-testing`
 +
-For the `isis-testing-xxx` modules (fixture scripts, unit test support, integ test support etc)
+For the `causeway-testing-xxx` modules (fixture scripts, unit test support, integ test support etc)
 
-* `o.a.i.extensions:isis-extensions`
+* `o.a.i.extensions:causeway-extensions`
 
-* `o.a.i.subdomains:isis-subdomains`
+* `o.a.i.subdomains:causeway-subdomains`
 
-* `o.a.i.valuetypes:isis-valuetypes`
+* `o.a.i.valuetypes:causeway-valuetypes`
 
-* `o.a.i.incubator:isis-incubator`
+* `o.a.i.incubator:causeway-incubator`
 
-* `o.a.i.legacy:isis-legacy`
+* `o.a.i.legacy:causeway-legacy`
 
 These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Isis (the reference to the parent POM).
 

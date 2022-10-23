@@ -54,8 +54,8 @@ public class MyEntity ... {
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.valuetypes</groupId>
-    <artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
 </dependency>
 ----
 
@@ -101,8 +101,8 @@ public class MyEntity ... {
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.valuetypes</groupId>
-    <artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
 </dependency>
 ----
 

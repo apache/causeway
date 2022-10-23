@@ -601,7 +601,7 @@ CAUTION: TODO
 //+
 //[source,java]
 //----
-//import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+//import org.apache.causeway.applib.services.eventbus.ActionDomainEvent;
 //...
 //public static class Delete extends ActionDomainEvent<Owner> {}  // <1>
 //@Action(
@@ -671,7 +671,7 @@ CAUTION: TODO
 //----
 //@DomainService(nature = NatureOfService.DOMAIN)
 //public class VetoDeleteOfOwnerWithUnpaidVisits
-//        extends org.apache.isis.applib.AbstractSubscriber {
+//        extends org.apache.causeway.applib.AbstractSubscriber {
 //
 //    @org.axonframework.eventhandling.annotation.EventHandler
 //    public void on(Owner.Delete ev) {
@@ -697,7 +697,7 @@ CAUTION: TODO
 //----
 //super(new PetClinicModule()
 //    .withAdditionalServices(DeploymentCategoryProviderForTesting.class)
-//    .withConfigurationProperty("isis.services.eventbus.implementation","axon")      // <1>
+//    .withConfigurationProperty("causeway.services.eventbus.implementation","axon")      // <1>
 //    .withConfigurationProperty(TranslationServicePo.KEY_PO_MODE, "write")
 //);
 //----

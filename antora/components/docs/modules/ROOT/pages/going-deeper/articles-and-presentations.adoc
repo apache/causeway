@@ -14,7 +14,7 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 == 2018
 
-* NCrafts 2018: link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
+* NCrafts 2018: link:https://danhaywood.gitlab.io/causeway-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
 
 == 2017
 
@@ -25,10 +25,10 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 == 2016
 
-* presentation, JAX London: link:https://jaxlondon.com/software-architecture-design/apache-isis-closing-the-architecturecode-gap/[Apache Isis: closing the architecture/code gap].
+* presentation, JAX London: link:https://jaxlondon.com/software-architecture-design/apache-causeway-closing-the-architecturecode-gap/[Apache Isis: closing the architecture/code gap].
 Not videotaped, but slides/demos available *link:http://www.danhaywood.com/jaxlondon2016/[here]*.
 
-* presentation/live coding, Skillsmatter: link:https://skillsmatter.com/skillscasts/7892-closing-the-feedback-loop-with-apache-isis[Closing the Feedback loop with Apache Isis]
+* presentation/live coding, Skillsmatter: link:https://skillsmatter.com/skillscasts/7892-closing-the-feedback-loop-with-apache-causeway[Closing the Feedback loop with Apache Isis]
 
 * tutorial, SPA 2016: "Naked Objects, 14 years on".
 Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
@@ -42,11 +42,11 @@ Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
 
 == 2013
 
-* Presentation, Oredev: link:http://oredev.org/oredev2013/2013/wed-fri-conference/rrraddd-ridiculously-rapid-domain-driven-and-restful-apps-with-apache-isis.html[RRRADDD! Ridiculously Rapid Domain-driven (and Restful) Apps With Apache Isis] (50 min. video)
+* Presentation, Oredev: link:http://oredev.org/oredev2013/2013/wed-fri-conference/rrraddd-ridiculously-rapid-domain-driven-and-restful-apps-with-apache-causeway.html[RRRADDD! Ridiculously Rapid Domain-driven (and Restful) Apps With Apache Isis] (50 min. video)
 * *Article, Methods and Tools : link:http://www.methodsandtools.com/PDF/mt201302.pdf[Introducing Apache Isis]*
 * Article, SDJournal : link:http://sdjournal.org[Introducing Apache Isis]
 * Article, SDJournal: link:http://sdjournal.org[Restful Objects on Apache Isis]
-* A Prezi link:http://prezi.com/cunfhjsf8dqg/braiv-apache-isis/[presentation on Naked Objects and Apache Isis], mixed by Thomas Eck
+* A Prezi link:http://prezi.com/cunfhjsf8dqg/braiv-apache-causeway/[presentation on Naked Objects and Apache Isis], mixed by Thomas Eck
 * Article, Linux Magzin (german): link:http://www.linux-magazin.de/Ausgaben/2013/07/Apache-Isis[Domain-Driven Design mit Apache Isis] by Frank Pientka
 
 

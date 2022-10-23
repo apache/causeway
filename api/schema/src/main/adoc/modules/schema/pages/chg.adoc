@@ -17,13 +17,13 @@ The `changesDto` root element is defined as:
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/chg"                                  <!--.-->
+<xs:schema targetNamespace="http://causeway.apache.org/schema/chg"                                  <!--.-->
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://isis.apache.org/schema/chg"
-           xmlns:com="http://isis.apache.org/schema/common">
+           xmlns="http://causeway.apache.org/schema/chg"
+           xmlns:com="http://causeway.apache.org/schema/common">
 
-    <xs:import namespace="http://isis.apache.org/schema/common"                                 <!--.-->
+    <xs:import namespace="http://causeway.apache.org/schema/common"                                 <!--.-->
                schemaLocation="../common/common-2.0.xsd"/>
 
     <xs:element name="changesDto">                                                              <!--.-->
@@ -45,7 +45,7 @@ The `changesDto` root element is defined as:
     ...
 </xs:schema>
 ----
-<.> the changes schema has a namespace URI of "http://isis.apache.org/schema/chg".
+<.> the changes schema has a namespace URI of "http://causeway.apache.org/schema/chg".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
 <.> uses complex types defined in the xref:refguide:schema:common.adoc["common" schema].
 <.> definition of the `changesDto` root element.
@@ -70,7 +70,7 @@ It also captures additional metrics counters:
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/chg" ... >
+<xs:schema targetNamespace="http://causeway.apache.org/schema/chg" ... >
     ...
     <xs:complexType name="objectsDto">
         <xs:sequence>

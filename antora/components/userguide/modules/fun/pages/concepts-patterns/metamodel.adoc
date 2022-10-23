@@ -14,7 +14,7 @@ The detail of the metamodel is generally explicit, usually represented by Java a
 Notably the metamodel is xref:userguide:btb:programming-model.adoc[extensible]; it is possible to teach Apache Isis new programming conventions/rules (and conversely to remove those that are built in).
 
 Most of the annotations recognized by the framework are defined by the Apache Isis framework itself.
-For example the `@Title` annotation -- which identifies how the framework should derive a human-readable label for each rendered domain object -- is part of the `org.apache.isis.applib.annotations` package.
+For example the `@Title` annotation -- which identifies how the framework should derive a human-readable label for each rendered domain object -- is part of the `org.apache.causeway.applib.annotations` package.
 However the framework also recognizes certain other JEE annotations such as `@javax.inject.Inject` (used for dependency injection).
 
 The framework integrates an ORM for persistence, specifically DataNucleus and the JDO API and since version 2.0.0, JPA (Eclipselink) is supported as well.

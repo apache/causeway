@@ -21,7 +21,7 @@ It can be configured using:
   <Loggers>
     ...
     <logger
-      name="org.apache.isis.applib.services.publishing.log.ExecutionLogger"
+      name="org.apache.causeway.applib.services.publishing.log.ExecutionLogger"
       level="debug"/>
     ...
   </Loggers>

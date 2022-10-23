@@ -51,7 +51,7 @@ Run these commands, with the environment variables set correctly.
 include::partial$verify-process.adoc[]
 ----
 
-The `verify-isis-release.sh` script performs these steps:
+The `verify-causeway-release.sh` script performs these steps:
 
 * downloads artifacts (`.zip` file and `.asc` file) from the staging repository hosted on link:https://repository.apache.org[].
 
@@ -71,7 +71,7 @@ Assuming this completes successfully, you can then test the starter applications
 +
 [source,bash]
 ----
-pushd isis-app-helloworld-jdo
+pushd causeway-app-helloworld-jdo
 mvn spring-boot:run
 popd
 ----
@@ -80,7 +80,7 @@ popd
 +
 [source,bash]
 ----
-pushd isis-app-helloworld-jpa
+pushd causeway-app-helloworld-jpa
 mvn spring-boot:run
 popd
 ----
@@ -89,7 +89,7 @@ popd
 +
 [source,bash]
 ----
-pushd isis-app-simpleapp-jdo
+pushd causeway-app-simpleapp-jdo
 mvn -pl webapp spring-boot:run
 popd
 ----
@@ -98,7 +98,7 @@ popd
 +
 [source,bash]
 ----
-pushd isis-app-simpleapp-jpa
+pushd causeway-app-simpleapp-jpa
 mvn -pl webapp spring-boot:run
 popd
 ----
@@ -110,7 +110,7 @@ And/or, you can go ahead and xref:comguide:ROOT:verifying-releases.adoc#casting-
 
 == (Optional) Verify Website
 
-The next version of the website can be found at link:https://isis.staged.apache.org[].
+The next version of the website can be found at link:https://causeway.staged.apache.org[].
 
 [#optional-creadur-tools]
 == (Optional) Creadur Tools

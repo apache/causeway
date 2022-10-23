@@ -113,8 +113,8 @@ If either are used:
 [source,xml]
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-quartz-impl</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-quartz-impl</artifactId>
 </dependency>
 ----
 
@@ -153,7 +153,7 @@ These instantiate xref:refguide:extensions:index/quartz/spring/AutowiringSpringB
 [source,java]
 .QuartzModule.java
 ----
-import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
+import org.apache.causeway.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
 
 @Configuration
 @ComponentScan

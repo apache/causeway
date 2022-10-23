@@ -8,16 +8,16 @@
 
 
 This page explains how you can contribute to Apache Isis.
-You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and learn xref:conguide:ROOT:building-apache-isis.adoc[how to build Apache Isis].
+You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and learn xref:conguide:ROOT:building-apache-causeway.adoc[how to build Apache Isis].
 
 Thanks for considering to help out, your contributions are appreciated!
 
 == Recommended Workflow (GitHub)
 
-Apache Isis' source code is hosted in at GitHub (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`).
+Apache Isis' source code is hosted in at GitHub (https://github.com/apache/causeway.git[https], or ssh: `git@github.com:apache/causeway.git`).
 
 As you might imagine, only committers are permitted to push changes to the GitHub repo.
-As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
+As a contributor, we recommend that you fork the https://github.com/apache/causeway.git[apache/causeway] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
 
 The diagram below illustrates the process:
 
@@ -26,9 +26,9 @@ image::contributing/git-workflow.png[width="600px"]
 
 That is:
 
-. as a one-time activity, you fork the https://github.com/apache/isis.git[github.com/apache/isis] repo into your own fork on github.com
+. as a one-time activity, you fork the https://github.com/apache/causeway.git[github.com/apache/causeway] repo into your own fork on github.com
 . as a one-time activity, you clone your fork to your local computer
-. you set the https://github.com/apache/isis.git[github.com/apache/isis] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
+. you set the https://github.com/apache/causeway.git[github.com/apache/causeway] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
 * note the asymmetry here: the `upstream` repo (the Apache GitHub repo) is *not* the same as the `origin` repo (your fork).
 . you work on your changes locally; when done, you push them to your GitHub fork
 . to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket (you will need to log in or create a new account first), and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below).
@@ -46,7 +46,7 @@ image::contributing/github-forking.png[width="600px"]
 
 
 
-An account isn't needed if you just clone straight from the http://github.com/apache/isis[github.com/apache/isis].
+An account isn't needed if you just clone straight from the http://github.com/apache/causeway[github.com/apache/causeway].
 
 Whether you've forked or not, you then need to clone the repo onto your computer.
 GitHub makes this very easy to do:
@@ -60,7 +60,7 @@ Again, the info is easily found in the GitHub page:
 
 image::contributing/github-cloning.png[width="600px"]
 
-If you've created your own fork, then you need to add the `upstream` remote to the https://github.com/apache/isis[github.com/apache/isis].
+If you've created your own fork, then you need to add the `upstream` remote to the https://github.com/apache/causeway[github.com/apache/causeway].
 This remote is traditionally called `upstream`.
 You should then arrange for your `master` branch to track the `upstream/master` remote branch:
 
@@ -192,7 +192,7 @@ You'll probably want to sign up to the dev mailing list first before issuing you
 
 The process to raise the pull request, broadly speaking:
 
-* Open a web browser to your GitHub fork of isis
+* Open a web browser to your GitHub fork of causeway
 * Select your topic branch (pushed in the previous step) so that the pull request references the topic branch.
 * Click the `Pull Request` button.
 * Check that the Apache Isis mailing list email came through.

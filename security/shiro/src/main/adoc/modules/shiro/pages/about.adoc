@@ -32,7 +32,7 @@ Permissions are ultimately represented as strings, and their interpretation of t
 An enhanced "wildcard" syntax, described  <<enhanced-wildcard-permission,below>> in more detail, incorporates the notion of read and write permissions, and also of vetoing permissions (as well as the usual allow permissions).
 
 
-[[configuring-isis-to-use-shiro]]
+[[configuring-causeway-to-use-shiro]]
 == Configuring to use Shiro
 
 Apache Isis' security mechanism is configurable, specifying an `Authenticator` and an `Authorizor` (non-public) APIs.
@@ -69,7 +69,7 @@ Make sure that no other `IsisModuleSecurityXxx` module is imported.
 
 The Shiro integration supports the following config properties:
 
-* xref:refguide:config:sections/isis.security.shiro.adoc#isis.security.shiro.auto-logout-if-already-authenticated[isis.security.shiro.auto-logout-if-already-authenticated]
+* xref:refguide:config:sections/causeway.security.shiro.adoc#causeway.security.shiro.auto-logout-if-already-authenticated[causeway.security.shiro.auto-logout-if-already-authenticated]
 
 === Shiro Realms and shiro.ini
 
@@ -163,8 +163,8 @@ For example:
 [source,ini]
 ----
 user_role = myapp.*,\
-            isis.security:*,\
-            isis.applib:*
+            causeway.security:*,\
+            causeway.applib:*
 admin_role = *
 ----
 
@@ -220,7 +220,7 @@ The format of the permissions string is configurable in Shiro, and Apache Isis u
 == Providing permissions to Framework-provided Features
 
 Some features of the framework are exposed as actions that must be provided as permissions.
-In particular, permission to the features in `isis.security` must be granted in order that end-users can logout.
+In particular, permission to the features in `causeway.security` must be granted in order that end-users can logout.
 
 The snippet below defines a role for each framework feature:
 
@@ -228,16 +228,16 @@ The snippet below defines a role for each framework feature:
 .shiro.ini
 ----
 [roles]
-default_role   = isis.applib,\
-                 isis.security
-fixtures_role  = isis.testing.fixtures
-features_role  = isis.feat
-metamodel_role = isis.metamodel
-h2_role        = isis.ext.h2Console
-jdo_role       = isis.persistence.jdo
-swagger_role   = isis.viewer.restfulobjects
-conf_role      = isis.conf
-sudo_role      = isis.sudo
+default_role   = causeway.applib,\
+                 causeway.security
+fixtures_role  = causeway.testing.fixtures
+features_role  = causeway.feat
+metamodel_role = causeway.metamodel
+h2_role        = causeway.ext.h2Console
+jdo_role       = causeway.persistence.jdo
+swagger_role   = causeway.viewer.restfulobjects
+conf_role      = causeway.conf
+sudo_role      = causeway.sudo
 ----
 
 Notes:
@@ -336,7 +336,7 @@ To configure Apache Isis' extended permission support requires that a custom per
 
 [source,ini]
 ----
-permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
+permissionResolver = org.apache.causeway.security.shiro.authorization.IsisPermissionResolver
 myRealm.permissionResolver = $permissionResolver  # <.>
 ----
 <.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$isisLdapRealm` etc.

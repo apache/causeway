@@ -16,8 +16,8 @@ Add the following dependency:
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-cors-impl</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-cors-impl</artifactId>
 </dependency>
 ----
 
@@ -40,7 +40,7 @@ Update the configuration properties:
 [source,yml]
 .application.yml
 ----
-isis:
+causeway:
     extensions:
         cors:
             allow-credentials: ...  # <.>
@@ -49,8 +49,8 @@ isis:
             allow-origins: ...      # <.>
             exposed-headers: ...    # <.>
 ----
-<.> xref:refguide:config:sections/isis.extensions.adoc#isis.extensions.cors.allow-credentials[isis.extensions.cors.allow-credentials]
-<.> xref:refguide:config:sections/isis.extensions.adoc#isis.extensions.cors.allowed-headers[isis.extensions.cors.allow-headers]
-<.> xref:refguide:config:sections/isis.extensions.adoc#isis.extensions.cors.allowed-methods[isis.extensions.cors.allow-methods]
-<.> xref:refguide:config:sections/isis.extensions.adoc#isis.extensions.cors.allowed-origins[isis.extensions.cors.allow-origins]
-<.> xref:refguide:config:sections/isis.extensions.adoc#isis.extensions.cors.exposed-headers[isis.extensions.cors.exposed-headers]
+<.> xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.cors.allow-credentials[causeway.extensions.cors.allow-credentials]
+<.> xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.cors.allowed-headers[causeway.extensions.cors.allow-headers]
+<.> xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.cors.allowed-methods[causeway.extensions.cors.allow-methods]
+<.> xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.cors.allowed-origins[causeway.extensions.cors.allow-origins]
+<.> xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.cors.exposed-headers[causeway.extensions.cors.exposed-headers]

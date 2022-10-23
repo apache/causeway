@@ -60,7 +60,7 @@ The table below summarises all the UI event hooks:
 | Reserved method
 
 | CSS class
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.css-class-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.css-class-ui-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object-layout.css-class-ui-event.post-for-default[causeway.applib.annotation.domain-object-layout.css-class-ui-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[cssClassUiEvent()]
 m| CssClassUiEvent.Default +
 CssClassUiEvent.Doop +
@@ -68,7 +68,7 @@ CssClassUiEvent.Noop
 |xref:refguide:applib-methods:ui-hints.adoc#cssClass[cssClass()]
 
 | Icon Name
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object-layout.icon-ui-event.post-for-default[causeway.applib.annotation.domain-object-layout.icon-ui-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[iconUiEvent()]
 m| IconUiEvent.Default +
 IconUiEvent.Doop +
@@ -76,7 +76,7 @@ IconUiEvent.Noop
 |xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()]
 
 | Layout
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object-layout.layout-ui-event.post-for-default[causeway.applib.annotation.domain-object-layout.layout-ui-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[layoutUiEvent()]
 m| LayoutUiEvent.Default +
 LayoutUiEvent.Doop +
@@ -84,7 +84,7 @@ LayoutUiEvent.Noop
 |xref:refguide:applib-methods:ui-hints.adoc#layout[layout()]
 
 | Title
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object-layout.title-ui-event.post-for-default[causeway.applib.annotation.domain-object-layout.title-ui-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[titleUiEvent()]
 m| TitleUiEvent.Default +
 TitleUiEvent.Doop +
@@ -104,9 +104,9 @@ For example:
 )
 public class ToDoItemDto {
     public static class CssClassUiEvent
-        extends org.apache.isis.applib.events.ui.CssClassUiEvent<ToDoItemDto> { }
+        extends org.apache.causeway.applib.events.ui.CssClassUiEvent<ToDoItemDto> { }
     public static class TitleUiEvent
-    extends org.apache.isis.applib.events.ui.TitleUiEvent<ToDoItemDto> { }
+    extends org.apache.causeway.applib.events.ui.TitleUiEvent<ToDoItemDto> { }
     ...
 }
 ----

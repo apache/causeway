@@ -178,7 +178,7 @@ All other implementations available will also be called.
 Most domain services are application-scoped, in other words they are stateless global singletons that are shared by all concurrent requests.
 
 A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@IsisSessionScope].
-This means that they are stateful and scoped with each isis session, in other words HTTP request.
+This means that they are stateful and scoped with each causeway session, in other words HTTP request.
 One such service is xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], used for performance caching.
 
 These domain services must be requested using a slightly different idiom, using the `Provider` interface.

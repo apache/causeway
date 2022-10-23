@@ -10,9 +10,9 @@ This is done by specifying the appropriate configuration properties:
 
 [source,properties]
 ----
-isis.viewer.wicket.application.name=My Wonderful App
-isis.viewer.wicket.welcome.file=welcome.html                # <1>
-isis.viewer.wicket.application.about=My Wonderful App v1.0
+causeway.viewer.wicket.application.name=My Wonderful App
+causeway.viewer.wicket.welcome.file=welcome.html                # <1>
+causeway.viewer.wicket.application.about=My Wonderful App v1.0
 ----
 <1> the `welcome.html` file is resolved relative to `src/main/webapp`.
 
@@ -28,8 +28,8 @@ It's also possible to replace this text with images:
 
 [source,properties]
 ----
-isis.viewer.wicket.application.brandLogoSignin=/images/logo-512.png
-isis.viewer.wicket.application.brandLogoHeader=/images/logo-80x32.png
+causeway.viewer.wicket.application.brandLogoSignin=/images/logo-512.png
+causeway.viewer.wicket.application.brandLogoHeader=/images/logo-80x32.png
 ----
 
 These images are resolved relative to `src/main/webapp`.

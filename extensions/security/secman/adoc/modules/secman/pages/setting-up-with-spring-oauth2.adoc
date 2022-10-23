@@ -19,8 +19,8 @@ Update your pom.xml:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-delegated-spring-oauth2</artifactId>    <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-delegated-spring-oauth2</artifactId>    <!--.-->
     </dependency>
 </dependencies>
 ----

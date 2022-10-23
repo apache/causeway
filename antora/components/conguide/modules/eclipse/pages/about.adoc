@@ -16,11 +16,11 @@ Also:
 
 == Prepare for Build
 
-The project/artifact `isis-core-privileged` is required to be an _automatic module_ 
-in the _Java Platform Module System_ (JPMS) sense. (It has unrestricted access to the class-path 
+The project/artifact `causeway-core-privileged` is required to be an _automatic module_
+in the _Java Platform Module System_ (JPMS) sense. (It has unrestricted access to the class-path
 but not the module-path.)
 
-WARNING: As of time of writing, _Eclipse_ does *not* support automatic module name resolution 
-for projects that are also *opened* in the IDE. Instead it will resolve such module names 
+WARNING: As of time of writing, _Eclipse_ does *not* support automatic module name resolution
+for projects that are also *opened* in the IDE. Instead it will resolve such module names
 only from *closed* projects, that previously had been built and installed via _Maven_ to the
 local repository. (Typically `~/.m2/repository`).

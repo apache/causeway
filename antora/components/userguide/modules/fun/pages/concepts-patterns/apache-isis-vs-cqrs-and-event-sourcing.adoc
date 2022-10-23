@@ -44,7 +44,7 @@ In the UI (surfaced by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]) or i
 However, this wouldn't be true CQRS because those mixins would modify those entities which would then be flushed back to the single database.
 
 Apache Isis' cross-cutting design does allow for denormalized data stores to be implemented.
-For example, there are community implementations of link:https://github.com/erikdehair/isis-module-elasticsearch[Elastic Search database] to enable a free-text search (this is likely to be incorporated into the Apache Isis framework in the future, if it hasn't already).
+For example, there are community implementations of link:https://github.com/erikdehair/causeway-module-elasticsearch[Elastic Search database] to enable a free-text search (this is likely to be incorporated into the Apache Isis framework in the future, if it hasn't already).
 
 There are other reasons why a separate read model might make sense, such as to precompute particular queries, or against denormalized data.
 In these cases Apache Isis can often provide a reasonable alternative, namely to map domain entities against RDBMS views, either materialized views or dynamic.

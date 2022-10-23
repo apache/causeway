@@ -28,8 +28,8 @@ endlegend
 together {
     rectangle "<$database_cube><$at>\n<<Annotation>>\nORM (JPA/JDO)" as PERS
     rectangle "<$envira><$at>\n<<Annotation>>\nSpring" as SPRING
-    rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png><$at>\n<<Annotation>>\nApache Isis" as FW
-    rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png><$java>\n<<Supporting Methods>>\nApache Isis" as SM
+    rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-56x64.png><$at>\n<<Annotation>>\nApache Isis" as FW
+    rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-56x64.png><$java>\n<<Supporting Methods>>\nApache Isis" as SM
     rectangle "<$java><$ma_xml><$at>\n<<Annotation>>\nJAXB" as JAXB
 
     SPRING -[hidden]- PERS
@@ -88,7 +88,7 @@ together {
     end note
 }
 
-rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png>\nMetaModel" as MM
+rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-56x64.png>\nMetaModel" as MM
 
 SPRING -> MM
 PERS -> MM

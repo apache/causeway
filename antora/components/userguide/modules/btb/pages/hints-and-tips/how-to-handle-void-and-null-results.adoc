@@ -6,7 +6,7 @@
 
 
 
-From this link:http://isis.markmail.org/thread/yf7qdeiu3vrvk2ei[thread] on the Apache Isis users mailing list:
+From this link:http://causeway.markmail.org/thread/yf7qdeiu3vrvk2ei[thread] on the Apache Isis users mailing list:
 
 * _When using a `void` action, let's say a remove action, the user is redirected to a
 page "no results".

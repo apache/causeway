@@ -22,8 +22,8 @@ In the webapp module of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.security</groupId>
-        <artifactId>isis-security-spring</artifactId>
+        <groupId>org.apache.causeway.security</groupId>
+        <artifactId>causeway-security-spring</artifactId>
     </dependency>
 </dependencies>
 ----
@@ -87,7 +87,7 @@ if(springAuthentication==null
 }
 ----
 
-For an authenticated user the `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to the list of roles.
+For an authenticated user the `org.apache.causeway.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to the list of roles.
 
 
 

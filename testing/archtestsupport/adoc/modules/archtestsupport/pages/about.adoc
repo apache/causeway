@@ -18,8 +18,8 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
             <version>{page-isisrel}</version>
@@ -38,8 +38,8 @@ In the webapp module(s) of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-archtestsupport-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-archtestsupport-applib</artifactId>
         <scope>test</scope>     <!--.-->
     </dependency>
 </dependencies>
@@ -60,7 +60,7 @@ This should look something like:
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
-import static org.apache.isis.testing.archtestsupport.applib.domainrules.ArchitectureDomainRules.*;
+import static org.apache.causeway.testing.archtestsupport.applib.domainrules.ArchitectureDomainRules.*;
 
 @AnalyzeClasses(
     packagesOf = {

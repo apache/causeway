@@ -39,5 +39,5 @@ To fix this, you can add the following dependencies:
 
 However, *please note* that these dependencies have high CVE values, and so may constitute a security risk.
 
-Further discussion on link:https://lists.apache.org/thread.html/68f16dd0306a8101c1cde06e5e6309b8d1b81b388a1f59e123cfc2f3@%3Cusers.isis.apache.org%3E[this mailing list thread].
+Further discussion on link:https://lists.apache.org/thread.html/68f16dd0306a8101c1cde06e5e6309b8d1b81b388a1f59e123cfc2f3@%3Cusers.causeway.apache.org%3E[this mailing list thread].
 

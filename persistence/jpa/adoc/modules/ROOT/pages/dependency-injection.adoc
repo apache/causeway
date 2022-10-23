@@ -10,7 +10,7 @@ For JPA, this requires that the following boilerplate:
 [source,java]
 ----
 import javax.persistence.EntityListeners;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.causeway.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 public class SomeEntity ... { /* ... */ }

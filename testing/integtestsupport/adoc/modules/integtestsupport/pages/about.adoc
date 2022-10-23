@@ -25,8 +25,8 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
             <version>{page-isisrel}</version>
@@ -45,8 +45,8 @@ In the domain module(s) of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-integtestsupport-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-integtestsupport-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -62,8 +62,8 @@ We also highly recommend using xref:fixtures:about.adoc[Fixture Scripts] to mana
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-fixtures-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-fixtures-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -163,7 +163,7 @@ They both also force an in-memory database, with JDO/DataNucleus ORM configured 
 === Faster bootstrapping
 
 By default integration tests are run in "production" deployment mode.
-With the `isis.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Isis metamodel.
+With the `causeway.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Isis metamodel.
 
 While this _does_ have the benefit that the metamodel will be validated, the downside is that the test takes longer to bootstrap.
 
@@ -229,7 +229,7 @@ Properties are visible but unmodifiable by default
 We therefore have two tests for each of these facts.
 
 NOTE: Non-editable properties is change from Isis v1.x.
-Use the `isis.applib.annotation.domain-object.editing` configuration property to pverride.
+Use the `causeway.applib.annotation.domain-object.editing` configuration property to pverride.
 
 By convention, we group tests into nested static classes, so the corresponding integration test is:
 
@@ -536,7 +536,7 @@ That means:
 
 * for *_object collections_* the test can call the getter to access the contents.
 +
-WARNING: For this to work properly, the collection should be marked as read-only, generally globally using the `isis.applib.annotation.domain-object.editing` configuration property.
+WARNING: For this to work properly, the collection should be marked as read-only, generally globally using the `causeway.applib.annotation.domain-object.editing` configuration property.
 
 * for *_object actions_* the test can call the action method itself.
 

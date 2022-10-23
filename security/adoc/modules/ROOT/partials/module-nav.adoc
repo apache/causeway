@@ -1,4 +1,4 @@
 
-// usage by isis viewers is in module-nav-end.adoc
+// usage by causeway viewers is in module-nav-end.adoc
 
 

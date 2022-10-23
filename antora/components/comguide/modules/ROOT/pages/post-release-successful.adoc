@@ -18,7 +18,7 @@ This section describes the steps to perform if the vote has been successful.
 
 == Inform dev ML
 
-Post the results to the `dev@isis.a.o` mailing list:
+Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
@@ -63,7 +63,7 @@ export ISISTMP=/c/tmp                               # <.>
 export ISISREL={page-isisrel}                           # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISART=isis
+export ISISART=causeway
 
 env | grep ISIS | sort
 ----
@@ -127,7 +127,7 @@ Create a new JIRA ticket as a catch-all for the _next_ release.
 
 == Update Release Notes
 
-In the main `isis` repo (ie containing the asciidoc source):
+In the main `causeway` repo (ie containing the asciidoc source):
 
 * Generate release notes
 +
@@ -167,7 +167,7 @@ Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the link:https://github.com/apache/isis/blob/master/STATUS[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
+* Update the link:https://github.com/apache/causeway/blob/master/STATUS[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
 
 * commit the changes
 +
@@ -189,7 +189,7 @@ The directory structure of Apache Isis reflects the directory structure in our g
 
 [source]
 ----
-isis/
+causeway/
   core/
 ----
 
@@ -197,7 +197,7 @@ If necessary, checkout this directory structure:
 
 [source,bash]
 ----
-svn co https://dist.apache.org/repos/dist/release/isis isis-dist
+svn co https://dist.apache.org/repos/dist/release/causeway causeway-dist
 ----
 
 Next, add the new release into the appropriate directory.
@@ -213,8 +213,8 @@ if [ $# -lt 1 ]; then
 fi
 
 # constants
-fullname="isis-bom"
-repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
+fullname="causeway-bom"
+repo_root=https://repository.apache.org/content/repositories/releases/org/apache/causeway
 
 # file suffices
 zip="source-release.zip"
@@ -254,7 +254,7 @@ Assuming all is good, commit the changes:
 
 [source,subs="attributes+"]
 ----
-svn commit -m "publishing isis source releases to dist.apache.org"
+svn commit -m "publishing causeway source releases to dist.apache.org"
 ----
 
 If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
@@ -324,7 +324,7 @@ We now create a branch to reference in the `site.yml`, later on.
 
 * We create the `{page-isisrel}` branch.
 +
-This mirrors the "rel/isis-{page-isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/causeway-{page-isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
@@ -367,7 +367,7 @@ git commit -m "$ISISJIRA: updates references to version in index.html and site.y
 ----
 
 We are now in a position to actually generate the Antora website.
-(NOTE, this needs to be performed in the `../isis` directory because Antora currently doesn't support git worktrees)
+(NOTE, this needs to be performed in the `../causeway` directory because Antora currently doesn't support git worktrees)
 
 * build prereqs
 +
@@ -406,7 +406,7 @@ include::partial$publish-and-index-website.adoc[]
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
 
-In the `isis` repo ():
+In the `causeway` repo ():
 
 [source,bash,subs="attributes+"]
 ----
@@ -447,11 +447,11 @@ IMPORTANT: The `jdo` and `jpa` branches should always work against the most rece
 
 == Update the ASF Reporter website
 
-Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
+Log the new release in the link:https://reporter.apache.org/addrelease.html?causeway[ASF Reporter website].
 
 == Announce the release
 
-Announce the release to link:mailto:users@isis.apache.org[users mailing list].
+Announce the release to link:mailto:users@causeway.apache.org[users mailing list].
 
 For example, for a release of Apache Isis Core, use the following subject:
 
@@ -479,14 +479,14 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] https://isis.apache.org/relnotes/{page-isisrel}/about.html
+[1] https://causeway.apache.org/relnotes/{page-isisrel}/about.html
 [2] https://search.maven.org
-[3] https://isis.apache.org/docs/{page-isisrel}/downloads/how-to.html
+[3] https://causeway.apache.org/docs/{page-isisrel}/downloads/how-to.html
 ----
 
 == Blog post
 
-link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
+link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/causeway/[Apache blog] and create a new post.
 Copy-n-paste the above mailing list announcement should suffice.
 
 
@@ -524,10 +524,10 @@ Announce the release using the `@ApacheIsis` Twitter account.
 
 Nightly builds of the framework's packages are available in two different locations:
 
-* First, they can be found as packages of the main link:https://github.com/apache/isis[github.com/apache/isis] repo; these can be accessed using your github credentials.
+* First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
 +
-Bump the `BASELINE` variable in link:https://github.com/apache/isis/blob/master/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
+Bump the `BASELINE` variable in link:https://github.com/apache/causeway/blob/master/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
 
-* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-isis-committers/isis-nightly[github.com/apache-isis-committers/isis-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
+* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
 +
-Bump the `BASELINE` variable in link:https://github.com/apache-isis-committers/isis-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-isis-ci-nightly.yml#L15[apache-isis-ci-nightly.yml] (workflow file).
+Bump the `BASELINE` variable in link:https://github.com/apache-causeway-committers/causeway-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-causeway-ci-nightly.yml#L15[apache-causeway-ci-nightly.yml] (workflow file).

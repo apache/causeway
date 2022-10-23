@@ -57,20 +57,20 @@ In addition to the xref:setting-up.adoc#dependencies[regular dependencies] requi
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-persistence-XXX</artifactId> <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-persistence-XXX</artifactId> <!--.-->
     </dependency>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
     </dependency>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
     </dependency>
 </dependencies>
 ----
-<.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
+<.> specify either `causeway-extensions-secman-persistence-jpa` or `causeway-extensions-secman-persistence-jdo`, as required
 <.> provides an implementation of `PasswordEncryptionService`
 
 
@@ -115,8 +115,8 @@ The following sets up Shiro _without_ delegation:
 ----
 [main]
 
-authenticationStrategy=org.apache.isis.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
-isisModuleSecurityRealm=org.apache.isis.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
+authenticationStrategy=org.apache.causeway.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
+isisModuleSecurityRealm=org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
 
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy
 securityManager.realms = $isisModuleSecurityRealm
@@ -140,7 +140,7 @@ For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a 
 [main]
 
 ...
-ldapRealm=org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
+ldapRealm=org.apache.causeway.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
 ldapRealm.xxx=...                                                            #<.>
 ldapRealm.yyy=...
 
@@ -165,7 +165,7 @@ We can configure whether such automatically created accounts should be unlocked 
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   extensions:
     secman:
       delegated-users:

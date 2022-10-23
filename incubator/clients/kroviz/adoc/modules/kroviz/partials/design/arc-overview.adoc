@@ -27,7 +27,7 @@ component V8 <<"<JS Runtime>">> {
 
 node server{
     interface RestfulObjects as RO
-    component ApacheIsis<<NakedObjects>> [[https://isis.apache.org/]] #F79646
+    component ApacheIsis<<NakedObjects>> [[https://causeway.apache.org/]] #F79646
 }
 
 ApacheIsis -- RO

@@ -14,7 +14,7 @@ The subclasses of `PageAbstract` are annotated with the Wicket annotation:
 
 [source,java]
 ----
-@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
+@AuthorizeInstantiation("org.apache.causeway.viewer.wicket.roles.USER")
 ----
 
 which means that they can only be accessed by a user with an authenticated session that has this special, reserved role.

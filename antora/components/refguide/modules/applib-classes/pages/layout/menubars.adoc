@@ -5,7 +5,7 @@
 :page-partial:
 
 
-The `org.apache.isis.applib.layout.menubars` package and subpackages define a number of interfaces classes that allow the layout of domain service actions to be organised across menu bars, menus and menu sections.
+The `org.apache.causeway.applib.layout.menubars` package and subpackages define a number of interfaces classes that allow the layout of domain service actions to be organised across menu bars, menus and menu sections.
 
 The classes define a hierarchical structure of menu bars, menus and menu sections.
 Similar to the xref:applib-classes:layout.adoc[object layout] classes, the concrete menu classes support bootstrap3; support for other layout systems is possible.
@@ -14,7 +14,7 @@ The component class `ServiceActionLayoutData` defines action metadata, being bro
 This is similar to the `ActionLayoutData` component class used for object layouts, but also captures the identity of the "owning" domain service.
 Service actions are grouped into menu sections.
 
-All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://causeway.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 It also allows the menu bars to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], as either XML or JSON.
 
@@ -25,7 +25,7 @@ This design greatly assists in the implementation of generic REST clients.
 
 == Menus
 
-The menu classes reside in the `org.apache.isis.applib.layout.menubars.bootstrap3` package, consisting of:
+The menu classes reside in the `org.apache.causeway.applib.layout.menubars.bootstrap3` package, consisting of:
 
 * `BS3MenuBars`
 
@@ -51,7 +51,7 @@ consisting of one or many actions (``ServiceActionLayoutData``s)
 
 == Components
 
-The service action class reside in the `org.apache.isis.applib.layout.component` package, consisting of just:
+The service action class reside in the `org.apache.causeway.applib.layout.component` package, consisting of just:
 
 * `ServiceActionLayoutData` class
 
@@ -63,6 +63,6 @@ This is similar to `ActionLayoutData` (of the xref:applib-classes:layout.adoc[ob
 
 == Link
 
-The link classes reside in the `org.apache.isis.applib.layout.links` package, and consist of just the `Link` class.
+The link classes reside in the `org.apache.causeway.applib.layout.links` package, and consist of just the `Link` class.
 
-The XSD for these classes is available at link:http://isis.apache.org/applib/layout/links/links.xsd[].
+The XSD for these classes is available at link:http://causeway.apache.org/applib/layout/links/links.xsd[].

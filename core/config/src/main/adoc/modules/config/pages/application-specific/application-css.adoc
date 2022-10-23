@@ -23,7 +23,7 @@ For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses `
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   viewer:
     wicket:
       application:

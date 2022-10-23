@@ -21,8 +21,8 @@ In addition, add a section for secman's own BOM:
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-secman</artifactId>
             <scope>import</scope>
             <type>pom</type>
             <version>{page-isisrel}</version>
@@ -41,16 +41,16 @@ In the webapp module of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-persistence-XXX</artifactId>    <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-persistence-XXX</artifactId>    <!--.-->
     </dependency>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
     </dependency>
 </dependencies>
 ----
-<.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
+<.> specify either `causeway-extensions-secman-persistence-jpa` or `causeway-extensions-secman-persistence-jdo`, as required
 <.> provides an implementation of `PasswordEncoder`, so that passwords are only persisted in encrypted form.
 
 
@@ -97,7 +97,7 @@ Add the database schema used by the SecMan entities to the configuration file:
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   persistence:
     schema:
       auto-create-schemas: isisExtSecman
@@ -108,19 +108,19 @@ Optionally, modify the configuration properties for Secman itself:
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   extensions:
     secman:
       seed:
         admin:
           user-name: "secman-admin"                     #<.>
           password: "pass"                              #<1>
-          role-name: "isis-ext-secman-admin"            #<.>
+          role-name: "causeway-ext-secman-admin"            #<.>
           namespace-permissions:
             sticky: ...                                 #<.>
             additional: ...                             #<.>
         regular-user:
-          role-name: "isis-ext-secman-user"             #<.>
+          role-name: "causeway-ext-secman-user"             #<.>
       permissions-evaluation-policy: allow_beats_veto   #<.>
       user-menu-me-action-policy: hide                  #<.>
       user-registration:
@@ -159,25 +159,25 @@ To get you started, the following fragment adds all of the actions to a "Securit
         <mb3:named>Security</mb3:named>
         <mb3:section>
             <mb3:named>Users</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="userManager"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="findUsers"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="userManager"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="findUsers"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Roles</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="findRoles"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="findRoles"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="newRole"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="allRoles"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Permissions</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Tenancies</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
         </mb3:section>
     </mb3:menu>
 </mb3:secondary>
@@ -192,8 +192,8 @@ We also recommend adding the non-production "me" action to the tertiary menu, eg
     <mb3:menu>
         ...
         <mb3:section>
-            <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
-            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
+            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
         </mb3:section>
     </mb3:menu>
 </mb3:tertiary>
@@ -292,7 +292,7 @@ You then will need a way to automatically ensure these users/roles are set up on
 When developing the app you will probably be using the H2 in-memory database, and so you'll want to ensure that the roles and (perhaps) users are automatically seeded into the database.
 Even when running in production with a persistent database, running a default set of fixture scripts may be worthwihle.
 
-One option to setup these users/roles would be to use the xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.initial-script[isis.testing.fixtures.initial-script] configuration property.
+One option to setup these users/roles would be to use the xref:refguide:config:sections/causeway.testing.adoc#causeway.testing.fixtures.initial-script[causeway.testing.fixtures.initial-script] configuration property.
 However the purpose of that config property is meant to be to setup an application-specific scenario for demoing/prototyping, so that's probably not the smartest approach.
 
 A better approach is to write a little domain service to do the seeding of security data for you.
@@ -487,7 +487,7 @@ The exact roles to setup are specified using configuration property:
 [source,yaml]
 .application.yaml
 ----
-isis:
+causeway:
   extensions:
     secman:
       user-registration:

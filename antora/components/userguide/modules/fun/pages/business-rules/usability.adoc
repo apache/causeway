@@ -8,7 +8,7 @@
 == Property
 
 By default properties cannot be edited, as specified by the
-xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[isis.applib.annotation.domain-object.editing] configuration property.
+xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.editing[causeway.applib.annotation.domain-object.editing] configuration property.
 
 This policy can be overridden for an individual property using the xref:refguide:applib:index/annotation/Property.adoc#editing[@Property#editing] annotation; this makes sense for properties where there are no business rules governing their content, for example "notes" or "comments" fields.
 

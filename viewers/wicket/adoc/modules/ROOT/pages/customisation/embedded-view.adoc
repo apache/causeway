@@ -29,20 +29,20 @@ To suppress the header, add the following as a request parameter:
 
 [source,ini]
 ----
-isis.no.header
+causeway.no.header
 ----
 
 and to suppress the header, add the following as a request parameter:
 
 [source,ini]
 ----
-isis.no.footer
+causeway.no.footer
 ----
 
 For example,
 
 [source,ini]
 ----
-http://localhost:8080/wicket/entity/TODO:0?isis.no.header&isis.no.footer
+http://localhost:8080/wicket/entity/TODO:0?causeway.no.header&causeway.no.footer
 ----
 

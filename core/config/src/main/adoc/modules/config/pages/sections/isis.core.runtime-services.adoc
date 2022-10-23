@@ -4,7 +4,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-include::../section-hooks/isis.core.runtime-services~pre.adoc[]
+include::../section-hooks/causeway.core.runtime-services~pre.adoc[]
 
 [cols="3a,2a,5a", options="header"]
 |===
@@ -12,56 +12,56 @@ include::../section-hooks/isis.core.runtime-services~pre.adoc[]
 |Default
 |Description
 |
-[[isis.core.runtime-services.application-features.init]]
-isis.core.runtime-services. +
+[[causeway.core.runtime-services.application-features.init]]
+causeway.core.runtime-services. +
 application-features.init
 
-| 
+|
 | Whether the ``ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of ``ApplicationFeature`` that describe the metamodel eagerly, or lazily.
 
 
 |
-[[isis.core.runtime-services.email.override.bcc]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.override.bcc]]
+causeway.core.runtime-services.email. +
 override.bcc
 
-| 
+|
 | Intended for testing purposes only, if set then the requested ``bcc:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
-[[isis.core.runtime-services.email.override.cc]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.override.cc]]
+causeway.core.runtime-services.email. +
 override.cc
 
-| 
+|
 | Intended for testing purposes only, if set then the requested ``cc:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
-[[isis.core.runtime-services.email.override.to]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.override.to]]
+causeway.core.runtime-services.email. +
 override.to
 
-| 
+|
 | Intended for testing purposes only, if set then the requested ``to:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
-[[isis.core.runtime-services.email.port]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.port]]
+causeway.core.runtime-services.email. +
 port
 
-| 
+|
 | The port to use for sending email.
 
 
 |
-[[isis.core.runtime-services.email.sender.address]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.sender.address]]
+causeway.core.runtime-services.email. +
 sender.address
 
-| 
+|
 | Specifies the email address of the user sending the email.
 
 If the username is not specified, is also used as the username to connect to the SMTP service.
@@ -70,90 +70,90 @@ This configuration property is mandatory (for the default implementation of the 
 
 
 |
-[[isis.core.runtime-services.email.sender.hostname]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.sender.hostname]]
+causeway.core.runtime-services.email. +
 sender.hostname
 
-| 
+|
 | Specifies the host running the SMTP service.
 
 If not specified, then the value used depends upon the email implementation. The default implementation will use the ``host`` system property.
 
 
 |
-[[isis.core.runtime-services.email.sender.password]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.sender.password]]
+causeway.core.runtime-services.email. +
 sender.password
 
-| 
+|
 | Specifies the password (corresponding to the username to connect to the SMTP service.
 
 This configuration property is mandatory (for the default implementation of the ``EmailService``, at least).
 
 
 |
-[[isis.core.runtime-services.email.sender.username]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.sender.username]]
+causeway.core.runtime-services.email. +
 sender.username
 
-| 
+|
 | Specifies the username to use to connect to the SMTP service.
 
 If not specified, then the sender's email address will be used instead.
 
 
 |
-[[isis.core.runtime-services.email.socket-connection-timeout]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.socket-connection-timeout]]
+causeway.core.runtime-services.email. +
 socket-connection-timeout
 
-| 
+|
 | The maximum number of millseconds to wait to obtain a socket connection before timing out.
 
 
 |
-[[isis.core.runtime-services.email.socket-timeout]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.socket-timeout]]
+causeway.core.runtime-services.email. +
 socket-timeout
 
-| 
+|
 | The maximum number of millseconds to wait to obtain a socket before timing out.
 
 
 |
-[[isis.core.runtime-services.email.throw-exception-on-fail]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.throw-exception-on-fail]]
+causeway.core.runtime-services.email. +
 throw-exception-on-fail
 
-| 
+|
 | If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (List, List, String, String, DataSource...) that's being called.
 
 
 |
-[[isis.core.runtime-services.email.tls.enabled]]
-isis.core.runtime-services.email. +
+[[causeway.core.runtime-services.email.tls.enabled]]
+causeway.core.runtime-services.email. +
 tls.enabled
 
-| 
+|
 | Whether TLS encryption should be started (that is, ``STARTTLS``).
 
 
 |
-[[isis.core.runtime-services.exception-recognizer.dae.disable]]
-isis.core.runtime-services. +
+[[causeway.core.runtime-services.exception-recognizer.dae.disable]]
+causeway.core.runtime-services. +
 exception-recognizer.dae.disable
 
-| 
+|
 | Whether the ``ExceptionRecognizer`` implementation for Spring's DataAccessException - which attempts to sanitize any exceptions arising from object stores - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
 
 
 |
-[[isis.core.runtime-services.repository-service.disable-auto-flush]]
-isis.core.runtime-services. +
+[[causeway.core.runtime-services.repository-service.disable-auto-flush]]
+causeway.core.runtime-services. +
 repository-service. +
 disable-auto-flush
 
-| 
+|
 | Normally any queries are automatically preceded by flushing pending executions.
 
 This key allows this behaviour to be disabled.
@@ -162,11 +162,11 @@ NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flu
 
 
 |
-[[isis.core.runtime-services.translation.po.mode]]
-isis.core.runtime-services. +
+[[causeway.core.runtime-services.translation.po.mode]]
+causeway.core.runtime-services. +
 translation.po.mode
 
-| 
+|
 | Specifies the initial mode for obtaining/discovering translations.
 
 There are three modes:
@@ -177,19 +177,19 @@ There are three modes:
 
 
 |
-[[isis.core.runtime-services.translation.resource-location]]
-isis.core.runtime-services. +
+[[causeway.core.runtime-services.translation.resource-location]]
+causeway.core.runtime-services. +
 translation.resource-location
 
-| 
+|
 | Specifies the relative resource path to look for translation files.
 
 If \{@code null} uses \{@code servletContext.getResource("/WEB-INF/")}.
 
-Replaces the former Servlet context parameter 'isis.config.dir';
+Replaces the former Servlet context parameter 'causeway.config.dir';
 
 
 
 |===
 
-include::../section-hooks/isis.core.runtime-services~post.adoc[]
+include::../section-hooks/causeway.core.runtime-services~post.adoc[]

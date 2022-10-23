@@ -145,7 +145,7 @@ If this is omitted then whether editing is enabled or disabled is inherited from
 
 If that isn't specified (or is set to "AS_CONFIGURED"), then the configuration is taken from the `application.properties` configuration file:
 
-* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[isis.applib.annotation.domain-object.editing]
+* xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.editing[causeway.applib.annotation.domain-object.editing]
 +
 for all properties in the domain object.
 
@@ -312,7 +312,7 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 === ``Blob``s
 
-Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
+Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.causeway.applib.value.Blob` and `org.apache.causeway.applib.value.Clob` can also be persisted.
 
 As for Joda dates, this requires the `@javax.jdo.annotations.Persistent` annotation.
 However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
@@ -337,7 +337,7 @@ import lombok.Setter;
 private Blob attachment;
 ----
 
-The three `@Column` annotations are required because the mapping classes that Apache Isis provides (https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns.
+The three `@Column` annotations are required because the mapping classes that Apache Isis provides (https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns.
 (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
 
 If the `Blob` is mandatory, then use:

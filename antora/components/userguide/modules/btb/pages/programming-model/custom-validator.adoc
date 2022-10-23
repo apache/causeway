@@ -23,7 +23,7 @@ Any custom validator must implement Apache Isis' internal `MetaModelValidator` i
 
 [source,java]
 ----
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.causeway.core.metamodel.specloader.validator;
 
 public interface MetaModelValidator {
 
@@ -58,7 +58,7 @@ More often than not, you'll want to visit every element in the metamodel, and so
 
 [source,java]
 ----
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.causeway.core.metamodel.specloader.validator;
 
 public final class MetaModelValidatorVisiting
                         extends MetaModelValidatorAbstract {
@@ -84,7 +84,7 @@ As a slight refinement, you can also subclass from `MetaModelValidatorVisiting.S
 
 [source,java]
 ----
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.causeway.core.metamodel.specloader.validator;
 
 public final class MetaModelValidatorVisiting
                         extends MetaModelValidatorAbstract {

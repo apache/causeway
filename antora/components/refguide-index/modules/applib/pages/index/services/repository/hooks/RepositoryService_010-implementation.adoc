@@ -18,7 +18,7 @@ The default implementation of this domain service supports the following configu
 (default value)
 |Description
 
-|`isis.core.runtime-services.` +
+|`causeway.core.runtime-services.` +
 `repository-service.` +
 `disable-auto-flush`
 |`true`,`false` +

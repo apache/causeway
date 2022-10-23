@@ -19,8 +19,8 @@ In the webapp module of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-spring-security-oauth2</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
     </dependency>
 </dependencies>
 ----
@@ -134,10 +134,10 @@ Next configure authenticationStrategy and permissenResolver for realms, and add 
 .shiro.ini
 ----
 [main]
-authenticationStrategy=org.apache.isis.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
+authenticationStrategy=org.apache.causeway.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy
 securityManager.realms = $iniRealm
-permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
+permissionResolver = org.apache.causeway.security.shiro.authorization.IsisPermissionResolver
 iniRealm.permissionResolver = $permissionResolver
 ...
 [users]

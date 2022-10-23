@@ -5,7 +5,7 @@
 
 
 
-From link:http://isis.markmail.org/thread/ctppmtcbsf4iskzi[this thread] on the Apache Isis users mailing list:
+From link:http://causeway.markmail.org/thread/ctppmtcbsf4iskzi[this thread] on the Apache Isis users mailing list:
 
 * _I am trying to internationalize the label descriptions of form actions, eg those in `ActionParametersFormPanel`.
 Referencing those via their message id inside a .po file didn't work either.

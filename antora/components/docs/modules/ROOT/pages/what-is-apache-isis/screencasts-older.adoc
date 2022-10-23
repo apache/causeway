@@ -26,7 +26,7 @@ _This screencast is for Apache Isis v1.1.0 (ie very out of date)_
 
 |Todo app walkthrough (v.1.4.0) +
 
-_A run-through of the main features of the http://github.com/apache/isis-app-todoapp[TodoApp]_
+_A run-through of the main features of the http://github.com/apache/causeway-app-todoapp[TodoApp]_
 
 
 |video::2leQwavWxeg[youtube,width="420px",height="210px"]
@@ -101,7 +101,7 @@ Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s
 
 _A run-through of the command (profiling) service, auditing service, publishing service.  Also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation._ +
 
-Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/isisaddons-legacy/isis-module-publishing[publishing] modules).
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/isisaddons-legacy/causeway-module-publishing[publishing] modules).
 
 |video::tqXUZkPB3EI[youtube,width="420px",height="210px"]
 
@@ -168,7 +168,7 @@ _Posting to the "Objects of Type" resource"_
 
 == JRebel Integration
 
-_Develop your app without having to redeploy using link:http://zeroturnaround.com/software/jrebel/[JRebel] and an link:https://github.com/danhaywood/isis-jrebel-plugin[Isis plugin] for JRebel._
+_Develop your app without having to redeploy using link:http://zeroturnaround.com/software/jrebel/[JRebel] and an link:https://github.com/danhaywood/causeway-jrebel-plugin[Isis plugin] for JRebel._
 
 [cols="2a,2a"]
 |===

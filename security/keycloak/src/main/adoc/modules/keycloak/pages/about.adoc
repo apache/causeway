@@ -19,8 +19,8 @@ In the webapp module of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.security</groupId>
-        <artifactId>isis-security-keycloak</artifactId>
+        <groupId>org.apache.causeway.security</groupId>
+        <artifactId>causeway-security-keycloak</artifactId>
     </dependency>
 </dependencies>
 ----
@@ -135,10 +135,10 @@ image::client-secret.png[width=600px]
 [source,properties]
 .config/application.properties
 ----
-isis.security.keycloak.realm=simpleapp                                  #<.>
-isis.security.keycloak.base-url=http://localhost:9090/auth              #<.>
+causeway.security.keycloak.realm=simpleapp                                  #<.>
+causeway.security.keycloak.base-url=http://localhost:9090/auth              #<.>
 
-kc.realm-url=${isis.security.keycloak.base-url}/realms/${isis.security.keycloak.realm} #<.>
+kc.realm-url=${causeway.security.keycloak.base-url}/realms/${causeway.security.keycloak.realm} #<.>
 
 spring.security.oauth2.client.registration.simpleapp.client-id=simpleapp-client #<.>
 spring.security.oauth2.client.registration.simpleapp.client-name=Simple App

@@ -1,4 +1,4 @@
-include::docs:ROOT:partial$module-nav/what-is-apache-isis.adoc[]
+include::docs:ROOT:partial$module-nav/what-is-apache-causeway.adoc[]
 include::docs:ROOT:partial$module-nav/quick-start.adoc[]
 include::docs:ROOT:partial$module-nav/demos-and-tutorials.adoc[]
 include::docs:ROOT:partial$module-nav/resources.adoc[]

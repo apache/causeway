@@ -36,7 +36,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: version
+    compile group: 'org.apache.causeway.core', name: 'causeway-core-applib', version: version
 }
 task copyClasses << {
     copy {
@@ -135,12 +135,12 @@ from the command line (in the `dom` module):
 image::070-advanced/005-gradle-output.png[width="600px"]
 
 
-Live reload also requires that the `isis.viewer.wicket.liveReloadUrl` configuration property is set appropriately:
+Live reload also requires that the `causeway.viewer.wicket.liveReloadUrl` configuration property is set appropriately:
 
 [source,ini]
 .`viewer_wicket.properties`
 ----
-isis.viewer.wicket.liveReloadUrl=http://localhost:35729/livereload.js?snipver=1
+causeway.viewer.wicket.liveReloadUrl=http://localhost:35729/livereload.js?snipver=1
 ----
 
 You can confirm the script is loaded correctly using the web browser's development tools, eg:
@@ -190,7 +190,7 @@ image::070-advanced/040-dcevm-run-configuration.png[width="600px"]
 
 == Setting up JRebel
 
-See the repo for the (non-ASF) link:https://github.com/isisaddons/isis-jrebel-plugin[Isis JRebel] plugin.
+See the repo for the (non-ASF) link:https://github.com/isisaddons/causeway-jrebel-plugin[Isis JRebel] plugin.
 
 Note that JRebel is a commercial product, requiring a license.
 At the time of writing there is also currently a non-commercial free license (though note this comes with some usage conditions).

@@ -13,7 +13,7 @@ If you are an http://www.eclipse.org[Eclipse] user, then we recommend you downlo
 //These are used to add new methods to existing classes.
 //(These are equivalent to the xref:setupguide:intellij:about.adoc#live-templates[IntelliJ live templates]):
 //
-//* `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
+//* `is` (Apache Isis domain objects).  link:./resources/eclipse/causeway-templates.xml[Download]
 //* `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
 //* `jm` (for JMock mocks or libraries) link:./resources/eclipse/jmock2-templates.xml[Download]
 //

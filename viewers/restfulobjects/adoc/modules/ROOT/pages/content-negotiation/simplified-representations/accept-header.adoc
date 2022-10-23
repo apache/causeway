@@ -20,7 +20,7 @@ This is done by specifying an `Accept` header of:
 
 [source]
 ----
-Accept: application/json;profile="urn:org.apache.isis/v2"
+Accept: application/json;profile="urn:org.apache.causeway/v2"
 ----
 
 Not every resource supports this header, but the most commonly accessed ones do.

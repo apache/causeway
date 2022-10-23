@@ -16,5 +16,5 @@ include::hints-and-tips/restful-image-property.adoc[leveloffset=+1]
 include::hints-and-tips/view-model-as-parameter.adoc[leveloffset=+1]
 include::hints-and-tips/troubleshooting.adoc[leveloffset=+1]
 
-//https://lists.apache.org/thread.html/cbd18320bbf6e5c5e767283f9e675cf56e7f4692c109e1e79dbaa90a@%3Cusers.isis.apache.org%3E // FIXME: to add
+//https://lists.apache.org/thread.html/cbd18320bbf6e5c5e767283f9e675cf56e7f4692c109e1e79dbaa90a@%3Cusers.causeway.apache.org%3E // FIXME: to add
 

@@ -36,12 +36,12 @@ public class ToDoItem {
 
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.property-layout.label-position[isis.applib.annotation.property-layout.label-position] configuration property:
+Instead, a default can be specified using the xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.property-layout.label-position[causeway.applib.annotation.property-layout.label-position] configuration property:
 
 [source,ini]
 .application.properties
 ----
-isis.applib.annotation.property-layout.label-position=TOP
+causeway.applib.annotation.property-layout.label-position=TOP
 ----
 
 or
@@ -49,7 +49,7 @@ or
 [source,ini]
 .application.properties
 ----
-isis.applib.annotation.property-layout.label-position=LEFT
+causeway.applib.annotation.property-layout.label-position=LEFT
 ----
 
 If these are not present then the framework will render according to internal defaults.

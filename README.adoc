@@ -3,24 +3,24 @@
 :toc-title: pass:[<h3>Contents</h3>]
 :toc-placement!:
 
-image:https://maven-badges.herokuapp.com/maven-central/org.apache.isis.core/isis-applib/badge.svg[]
-image:https://github.com/apache/isis/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
+image:https://maven-badges.herokuapp.com/maven-central/org.apache.causeway.core/causeway-applib/badge.svg[]
+image:https://github.com/apache/causeway/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
 image:https://sonarcloud.io/api/project_badges/measure?project=apache_isis&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_isis"]
-image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/badge.svg[link="https://github.com/apache-isis-committers/isis-nightly/actions?query=workflow%3A%22Nightly%22"]
+image:https://github.com/apache-causeway-committers/causeway-nightly/workflows/Nightly/badge.svg[link="https://github.com/apache-causeway-committers/causeway-nightly/actions?query=workflow%3A%22Nightly%22"]
 
-_http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
+_http://causeway.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
-Start learning about Apache Isis using the https://github.com/apache/isis-app-helloworld["Hello World"] starter app.
-Explore features with our daily built demo docker image https://github.com/apache/isis/blob/master/examples/demo/domain/src/main/adoc/modules/demo/pages/about.adoc["DemoApp"].
-Build your own apps using our https://github.com/apache/isis-app-simpleapp["SimpleApp"] starter app.
+Start learning about Apache Isis using the https://github.com/apache/causeway-app-helloworld["Hello World"] starter app.
+Explore features with our daily built demo docker image https://github.com/apache/causeway/blob/master/examples/demo/domain/src/main/adoc/modules/demo/pages/about.adoc["DemoApp"].
+Build your own apps using our https://github.com/apache/causeway-app-simpleapp["SimpleApp"] starter app.
 
-For help and support, join our https://isis.apache.org/docs/2.0.0-M9/support/slack-channel.html[Slack channel] or https://isis.apache.org/docs/2.0.0-M7/support/mailing-list.html[mailing list].
+For help and support, join our https://causeway.apache.org/docs/2.0.0-M9/support/slack-channel.html[Slack channel] or https://causeway.apache.org/docs/2.0.0-M7/support/mailing-list.html[mailing list].
 
 toc::[]
 
 == Nightly Builds
 
-Nightly builds are available as link:https://github.com/orgs/apache/packages?repo_name=isis[packages] of this repo.
+Nightly builds are available as link:https://github.com/orgs/apache/packages?repo_name=causeway[packages] of this repo.
 
 One way to make them available is to add the following to your `~/.m2/settings.xml` file.
 You will need to add a github token in the location indicated:
@@ -31,23 +31,23 @@ You will need to add a github token in the location indicated:
 <settings>
   <servers>
     <server>
-      <id>github-apache-isis</id>
+      <id>github-apache-causeway</id>
       <username>myusername</username>                               <!--.-->
       <password>ghp_TOKEN_WITH_PACKAGE_REPO_READ_ACCESS</password>  <!--.-->
     </server>
   </servers>
   <profiles>
     <profile>
-      <id>github-apache-isis</id>
+      <id>github-apache-causeway</id>
       <activation>
         <property>
-          <name>!skip.github-apache-isis</name>
+          <name>!skip.github-apache-causeway</name>
         </property>
       </activation>
       <repositories>
         <repository>
-          <id>github-apache-isis</id>
-          <url>https://maven.pkg.github.com/apache/isis</url>
+          <id>github-apache-causeway</id>
+          <url>https://maven.pkg.github.com/apache/causeway</url>
           <snapshots>
             <enabled>true</enabled>
           </snapshots>
@@ -56,14 +56,14 @@ You will need to add a github token in the location indicated:
     </profile>
   </profiles>
   <activeProfiles>
-    <activeProfile>github-apache-isis</activeProfile>
+    <activeProfile>github-apache-causeway</activeProfile>
   </activeProfiles>
 </settings>
 ----
 <.> your github username.
 <.> a corresponding personal token to provide access, as per link:https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages[these docs].
 
-You can find the latest version by browsing the link:https://github.com/apache/isis/packages/1304938[org.apache.isis.core.isis-applib] package.
+You can find the latest version by browsing the link:https://github.com/apache/causeway/packages/1304938[org.apache.causeway.core.causeway-applib] package.
 
 == Core Features
 
@@ -74,7 +74,7 @@ Apache Isis automatically generates the UI from the domain classes.
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro] as well as link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
 When using Shiro, the core framework supports file-based realms, while the __SecMan__ extension provides a well-featured subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/010-login.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/010-login.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/010-login.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/010-login.png"]
 
 
 === Install Fixtures
@@ -84,14 +84,14 @@ One such are fixture scripts, which allow pre-canned data to be installed in the
 This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests.
 (More on tests later).
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/020-install-fixtures.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/020-install-fixtures.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/020-install-fixtures.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/020-install-fixtures.png"]
 
 === Dashboard and View Models
 
 Most of the time the end-user interacts with representations of persistent domain entities, but Isis also supports view models which can aggregate data from multiple sources.
 The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/030-dashboard-view-model.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/030-dashboard-view-model.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/030-dashboard-view-model.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/030-dashboard-view-model.png"]
 
 In general we recommend to initially focus only on domain entities; this will help drive out a good domain model.
 Later on view models can be introduced in support of specific use cases.
@@ -102,7 +102,7 @@ The screenshot below is of the todoapp's `ToDoItem` domain entity.
 Like all web pages, this UI is generated at runtime, directly from the domain object itself.
 There are no controllers or HTML to write.
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/040-domain-entity.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/040-domain-entity.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/"]
 
 In addition to the domain entity, Apache Isis allows layout metadata hints to be provided, for example to specify the grouping of properties, the positioning of those groups into columns, the association of actions (the buttons) with properties or collections, the icons on the buttons, and so on.
 This metadata can be specified either as annotations or in JSON form; the benefit of the latter is that it can be updated (and the UI redrawn) without restarting the app.
@@ -114,7 +114,7 @@ Any production-ready app will require this metadata but (like the view models di
 By default properties on domain entities are editable, meaning they can be changed directly.
 In the todoapp example, the `ToDoItem`'s description is one such editable property:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/050-edit-property.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/050-edit-property.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/050-edit-property.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/050-edit-property.png"]
 
 Note that some of the properties are read-only even in edit mode; individual properties can be made non-editable.
 It is also possible to make all properties disabled and thus enforce changes only through actions (below).
@@ -124,7 +124,7 @@ It is also possible to make all properties disabled and thus enforce changes onl
 The other way to modify an entity is to an invoke an action.
 In the screenshot below the `ToDoItem`'s category and subcategory can be updated together using an action:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/060-invoke-action.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/060-invoke-action.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/060-invoke-action.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/060-invoke-action.png"]
 
 There are no limitations on what an action can do; it might just update a single object, it could update multiple objects.
 Or, it might not update any objects at all, but could instead perform some other activity, such as sending out email or printing a document.
@@ -139,11 +139,11 @@ When an object is rendered by Apache Isis, the mixin "contributes" its behaviour
 
 In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) the "similar to" collection and the two "as DTO" actions are all contributed by mixins:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/065-contributions.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/065-contributions.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/065-contributions.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/065-contributions.png"]
 
 The code snippet below shows how this works for the "as DTO v1.0" action:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/067-contributed-action.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/067-contributed-action.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/067-contributed-action.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/067-contributed-action.png"]
 
 
 
@@ -153,26 +153,26 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/do
 The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been architected to be extensible.
 For example, when a collection of objects is rendered, this is just one several views, as shown in the selector drop-down:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/070-pluggable-views.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/070-pluggable-views.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/070-pluggable-views.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/070-pluggable-views.png"]
 
 The __gmap3__ extension will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/080-gmap3-view.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/080-gmap3-view.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png"]
 
 Similarly the __fullcalendar2__ extension will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/090-fullcalendar2-view.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/090-fullcalendar2-view.png"]
 
 
 Yet another "view" (though this one is rather simpler) is the __exceldownload__ extension.
 This provides a download button to the table as a spreadsheet:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/100-excel-view-and-docx.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/100-excel-view-and-docx.png"]
 
 The screenshot above also shows an "export to Word" action.
 This is _not_ a view but instead is a (contributed) action that uses the (non-ASF) link:https://platform.incode.org/modules/lib/docx/lib-docx.html[docx library] module to perform a "mail-merge":
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/110-docx.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/110-docx.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/110-docx.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/110-docx.png"]
 
 
 
@@ -183,21 +183,21 @@ As well as providing extensions to the UI, the framework has a rich set of exten
 
 Under the activity menu are four sets of services which provide support for _user session logging/auditing_, _command profiling_, _(object change) auditing_ (shown) and (inter-system) _event publishing_:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/120-auditing.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/120-auditing.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/120-auditing.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/120-auditing.png"]
 
 In the security menu is access to the rich set of functionality provided by the SecMan extension:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/130-security.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/130-security.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/130-security.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/130-security.png"]
 
 In the prototyping menu is the ability to download a GNU gettext `.po` file for translation.
 This file can then be translated into multiple languages so that your app can support different locales. Note that this feature is part of Apache Isis core:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/140-i18n.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/140-i18n.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/140-i18n.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/140-i18n.png"]
 
 The framework also provides an extension module for managing _application and user settings_.
 Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/150-appsettings.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/150-appsettings.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/150-appsettings.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/150-appsettings.png"]
 
 === Multi-tenancy support
 
@@ -207,7 +207,7 @@ An SPI is provided as the mechanism to interpret this token, so this is highly c
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
 A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/160-switch-tenancy.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/160-switch-tenancy.png"]
 
 
 === Me
@@ -215,11 +215,11 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/do
 Most of the security module's domain services are on the "security" menu, which would normally be accessible only to administrators.
 Kept separate is the "me" action:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/170-me.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/170-me.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/170-me.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/170-me.png"]
 
 Assuming they have been granted permissions, this allows a user to access an entity representing their own user account:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/180-app-user-entity.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/180-app-user-entity.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/180-app-user-entity.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/180-app-user-entity.png"]
 
 If not all of these properties are required, then they can be hidden either using security or though Isis' internal event bus (described below).
 Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
@@ -229,7 +229,7 @@ Conversely, additional properties can be "grafted onto" the user using the contr
 Apache Isis' Wicket viewer uses link:http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed.
 If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/190-switch-theme.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/190-switch-theme.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/190-switch-theme.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/190-switch-theme.png"]
 
 
 
@@ -238,7 +238,7 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/do
 In addition to Isis' Wicket viewer, it also provides a fully fledged REST API, as an implementation of the http://restfulobjects.org[Restful Objects] specification.
 The screenshot below shows accessing this REST API using a Chrome plugin:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/200-rest-api.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/200-rest-api.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/200-rest-api.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/200-rest-api.png"]
 
 Like the Wicket viewer, the REST API is generated automatically from the domain objects (entities and view models).
 
@@ -250,19 +250,19 @@ Earlier on we noted that Apache Isis allows fixtures to be installed through the
 These same fixture scripts can be reused within integration tests.
 For example, the code snippet below shows how the `FixtureScripts` service injected into an integration test can then be used to set up data:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/210-fixture-scripts.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/210-fixture-scripts.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/210-fixture-scripts.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/210-fixture-scripts.png"]
 
 The tests themselves are run in junit.
 While these are integration tests (so talking to a real database), they are no more complex than a regular unit test:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/220-testing-happy-case.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/220-testing-happy-case.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/220-testing-happy-case.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/220-testing-happy-case.png"]
 
 
 To simulate the business rules enforced by Apache Isis, the domain object can be "wrapped" in a proxy.
 For example, if using the Wicket viewer then Apache Isis will enforce the rule (implemented in the `ToDoItem` class itself) that a completed item cannot have the "completed" action invoked upon it.
 The wrapper simulates this by throwing an appropriate exception:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/230-testing-wrapper-factory.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/230-testing-wrapper-factory.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/230-testing-wrapper-factory.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/230-testing-wrapper-factory.png"]
 
 
 
@@ -274,15 +274,15 @@ Contributions, discussed earlier, are an important tool in ensuring that the pac
 Another important tool to ensure your codebase remains maintainable is Isis' internal event bus.
 It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/240-domain-events.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/240-domain-events.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/240-domain-events.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/240-domain-events.png"]
 
 Domain service (application-scoped, stateless) can then subscribe to this event:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/250-domain-event-subscriber.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/250-domain-event-subscriber.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/250-domain-event-subscriber.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/250-domain-event-subscriber.png"]
 
 And this test verifies that completing an action causes the subscriber to be called:
 
-image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/260-domain-event-test.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/260-domain-event-test.png"]
+image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/260-domain-event-test.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/260-domain-event-test.png"]
 
 In fact, the domain event is fired not once, but (up to) 5 times.
 It is called 3 times prior to execution, to check that the action is visible, enabled and that arguments are valid.
@@ -298,10 +298,10 @@ Indeed, the example todoapp demonstrates this.
 
 == Learning More
 
-The Apache Isis http://isis.apache.org[website] has lots of useful information and is being continually updated.
+The Apache Isis http://causeway.apache.org[website] has lots of useful information and is being continually updated.
 
-Or, you can just start coding using the https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app.
+Or, you can just start coding using the https://github.com/apache/causeway-app-simpleapp[SimpleApp] starter app.
 
-And if you need help or support, join our https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack[ASF Slack channel] or our http://isis.apache.org/support.html[mailing list].
+And if you need help or support, join our https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack[ASF Slack channel] or our http://causeway.apache.org/support.html[mailing list].
 
 

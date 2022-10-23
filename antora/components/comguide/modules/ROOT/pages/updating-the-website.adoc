@@ -9,7 +9,7 @@ This branch can then be used for documentation updates.
 
 == Update docs
 
-In the regular `isis` repo:
+In the regular `causeway` repo:
 
 * Check out the branch:
 +

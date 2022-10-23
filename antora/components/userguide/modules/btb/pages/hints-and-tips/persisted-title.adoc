@@ -29,8 +29,8 @@ We can then define a subscribing domain service that leverage this.
 ----
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
-import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 import lombok.val;
 
 @Service

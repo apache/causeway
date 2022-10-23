@@ -36,8 +36,8 @@ Make the following changes:
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-pdfjs-applib</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-pdfjs-applib</artifactId>
 </dependency>
 ----
 +
@@ -49,8 +49,8 @@ This will provide access to the xref:refguide:extensions:index/pdfjs/applib/anno
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
 </dependency>
 ----
 

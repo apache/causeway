@@ -37,12 +37,12 @@ public class Order {
 
 If you want a consistent look-n-feel throughout the app, eg all parameter labels to the top, then it'd be rather frustrating to have to annotate every parameter.
 
-Instead, a default can be specified using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.parameter-layout.label-position[isis.applib.annotation.parameter-layout.label-position] configuration property:
+Instead, a default can be specified using the xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.parameter-layout.label-position[causeway.applib.annotation.parameter-layout.label-position] configuration property:
 
 [source,ini]
 .application.properties
 ----
-isis.applib.annotation.parameter-layout.label-position=TOP
+causeway.applib.annotation.parameter-layout.label-position=TOP
 ----
 
 or
@@ -50,7 +50,7 @@ or
 [source,ini]
 .application.properties
 ----
-isis.applib.annotation.parameter-layout.label-position=LEFT
+causeway.applib.annotation.parameter-layout.label-position=LEFT
 ----
 
 If these are not present then the framework will render according to internal defaults.

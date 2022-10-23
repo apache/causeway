@@ -20,12 +20,12 @@ image::brand-logo/brand-logo-signin.png[width="750px"]
 
 
 
-To configure, set the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-signin[isis.viewer.wicket.application.brand-logo-signin] and xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-header[isis.viewer.wicket.application.brand-logo-header] config properties:
+To configure, set the xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.brand-logo-signin[causeway.viewer.wicket.application.brand-logo-signin] and xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.brand-logo-header[causeway.viewer.wicket.application.brand-logo-header] config properties:
 
 [source,properties]
 ----
-isis.wicket.viewer.application.brand-logo-signin=images/todoapp-logo-signin.png
-isis.wicket.viewer.application.brand-logo-header=images/todoapp-logo-header.png
+causeway.wicket.viewer.application.brand-logo-signin=images/todoapp-logo-signin.png
+causeway.wicket.viewer.application.brand-logo-header=images/todoapp-logo-header.png
 ----
 
 These files are resolved relative to the `static` package in `src/main/resources`.

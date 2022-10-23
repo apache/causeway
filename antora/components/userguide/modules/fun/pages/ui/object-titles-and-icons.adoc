@@ -133,7 +133,7 @@ In the target object, we define an appropriate event type and use the xref:refgu
 )
 public class Author extends Customer {
     public static class TitleUiEvent
-            extends org.apache.isis.applib.events.ui.TitleUiEvent<Author> {}
+            extends org.apache.causeway.applib.events.ui.TitleUiEvent<Author> {}
 
     //...
 }
@@ -231,7 +231,7 @@ For example:
 )
 public class Order {
     public static class IconUiEvent
-            extends org.apache.isis.applib.events.ui.IconUiEvent<Order> {}
+            extends org.apache.causeway.applib.events.ui.IconUiEvent<Order> {}
     // ..
 }
 ----
@@ -307,7 +307,7 @@ For example
 @DomainObjectLayout( cssClassUiEvent = Order.CssClassUiEvent.class )
 public class Order {
     public static class CssClassUiEvent
-            extends org.apache.isis.applib.events.ui.CssClassUiEvent<Order> {}
+            extends org.apache.causeway.applib.events.ui.CssClassUiEvent<Order> {}
     // ..
 }
 ----
@@ -379,7 +379,7 @@ For example
 @DomainObjectLayout( layoutUiEvent = Order.LayoutUiEvent.class )
 public class IncomingInvoice {
     public static class LayoutUiEvent
-            extends org.apache.isis.applib.events.ui.LayoutUiEvent<Order> {}
+            extends org.apache.causeway.applib.events.ui.LayoutUiEvent<Order> {}
     // ..
 }
 ----

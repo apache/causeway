@@ -8,7 +8,7 @@ image::WheatFieldWithCrows.png[]
 . Build Isis with kroviz
 +
 ----
-cd ~/isis
+cd ~/causeway
 mvn -T 1C clean install \
  -Dmodule-kroviz \
  -Dmaven.source.skip=true
@@ -18,7 +18,7 @@ mvn -T 1C clean install \
 +
 [source]
 ----
-cd ~/isis/incubator/clients/kroviz/
+cd ~/causeway/incubator/clients/kroviz/
 #gradle build
 ./gradlew.sh -t run
 ----
@@ -58,7 +58,7 @@ gradle can be run under Windows with git-bash:
 
 Internally gradle uses npm for the JS part.
 
-In IntelliJ import the gradle project residing in ~/isis/incubator/clients/kroviz/.
+In IntelliJ import the gradle project residing in ~/causeway/incubator/clients/kroviz/.
 TIP: In case the project isn't working as expected, you may try File -> Invalidate Caches ...
 Alternatively you can e.g. in IntelliJ a Run/Debug Configuration:
 
@@ -302,7 +302,7 @@ Create from the Apache Isis SimpleApp archetype:
 [source,bash]
 ----
 mvn archetype:generate \
-    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeGroupId=org.apache.causeway.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
     -D archetypeVersion=2.0.0-M3 \
     -D groupId=org.my \

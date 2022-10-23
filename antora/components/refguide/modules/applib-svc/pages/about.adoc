@@ -50,7 +50,7 @@ include::applib-svc:partial$_security-spi.adoc[leveloffset=+2]
 
 == Public API vs Internal Services
 
-The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-applib` module) as stable, public classes.
+The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:causeway-applib` module) as stable, public classes.
 Importantly, this also minimizes the coupling between your code and Apache Isis, allowing you to easily mock out these services in your unit tests.
 
 The framework also defines a number of "internal" services.
@@ -117,7 +117,7 @@ The default implementation has these annotations:
 [source,java]
 ----
 @Service
-@Named("isis.runtimeservices.LanguageProviderDefault")
+@Named("causeway.runtimeservices.LanguageProviderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

@@ -4,7 +4,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-include::../section-hooks/isis.value-types~pre.adoc[]
+include::../section-hooks/causeway.value-types~pre.adoc[]
 
 [cols="3a,2a,5a", options="header"]
 |===
@@ -12,71 +12,71 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 |Default
 |Description
 |
-[[isis.value-types.java-lang.byte.format]]
-isis.value-types.java-lang.byte. +
+[[causeway.value-types.java-lang.byte.format]]
+causeway.value-types.java-lang.byte. +
 format
 
-| 
+|
 | Configures the number format understood by ``ByteValueSemanticsProviderAbstract``. @deprecated
 
 
 |
-[[isis.value-types.java-lang.double.format]]
-isis.value-types.java-lang.double. +
+[[causeway.value-types.java-lang.double.format]]
+causeway.value-types.java-lang.double. +
 format
 
-| 
+|
 | Configures the number format understood by ``DoubleValueSemanticsProviderAbstract``. @deprecated
 
 
 |
-[[isis.value-types.java-lang.float.format]]
-isis.value-types.java-lang.float. +
+[[causeway.value-types.java-lang.float.format]]
+causeway.value-types.java-lang.float. +
 format
 
-| 
+|
 | Configures the number format understood by ``FloatValueSemanticsProviderAbstract``. @deprecated
 
 
 |
-[[isis.value-types.java-lang.long.format]]
-isis.value-types.java-lang.long. +
+[[causeway.value-types.java-lang.long.format]]
+causeway.value-types.java-lang.long. +
 format
 
-| 
+|
 | Configures the number format understood by ``LongValueSemanticsProviderAbstract``. @deprecated
 
 
 |
-[[isis.value-types.java-lang.short.format]]
-isis.value-types.java-lang.short. +
+[[causeway.value-types.java-lang.short.format]]
+causeway.value-types.java-lang.short. +
 format
 
-| 
+|
 | Configures the number format understood by ``ShortValueSemanticsProviderAbstract``. @deprecated
 
 
 |
-[[isis.value-types.java-math.big-decimal.format]]
-isis.value-types.java-math. +
+[[causeway.value-types.java-math.big-decimal.format]]
+causeway.value-types.java-math. +
 big-decimal.format
 
-| 
+|
 | Configures the number format understood by ``BigDecimalValueSemanticsProvider``. @deprecated
 
 
 |
-[[isis.value-types.java-math.big-integer.format]]
-isis.value-types.java-math. +
+[[causeway.value-types.java-math.big-integer.format]]
+causeway.value-types.java-math. +
 big-integer.format
 
-| 
+|
 | Configures the number format understood by ``BigIntegerValueSemanticsProvider``. @deprecated
 
 
 |
-[[isis.value-types.java-sql.date.format]]
-isis.value-types.java-sql.date. +
+[[causeway.value-types.java-sql.date.format]]
+causeway.value-types.java-sql.date. +
 format
 
 |  medium
@@ -84,8 +84,8 @@ format
 
 
 |
-[[isis.value-types.java-sql.time.format]]
-isis.value-types.java-sql.time. +
+[[causeway.value-types.java-sql.time.format]]
+causeway.value-types.java-sql.time. +
 format
 
 |  short
@@ -93,8 +93,8 @@ format
 
 
 |
-[[isis.value-types.java-sql.timestamp.format]]
-isis.value-types.java-sql. +
+[[causeway.value-types.java-sql.timestamp.format]]
+causeway.value-types.java-sql. +
 timestamp.format
 
 |  short
@@ -102,8 +102,8 @@ timestamp.format
 
 
 |
-[[isis.value-types.java-time.local-date-time.format]]
-isis.value-types.java-time. +
+[[causeway.value-types.java-time.local-date-time.format]]
+causeway.value-types.java-time. +
 local-date-time.format
 
 |  medium
@@ -111,8 +111,8 @@ local-date-time.format
 
 
 |
-[[isis.value-types.java-time.local-date.format]]
-isis.value-types.java-time. +
+[[causeway.value-types.java-time.local-date.format]]
+causeway.value-types.java-time. +
 local-date.format
 
 |  medium
@@ -120,8 +120,8 @@ local-date.format
 
 
 |
-[[isis.value-types.java-time.local-time.format]]
-isis.value-types.java-time. +
+[[causeway.value-types.java-time.local-time.format]]
+causeway.value-types.java-time. +
 local-time.format
 
 |  medium
@@ -129,8 +129,8 @@ local-time.format
 
 
 |
-[[isis.value-types.java-time.offset-date-time.format]]
-isis.value-types.java-time. +
+[[causeway.value-types.java-time.offset-date-time.format]]
+causeway.value-types.java-time. +
 offset-date-time.format
 
 |  medium
@@ -138,8 +138,8 @@ offset-date-time.format
 
 
 |
-[[isis.value-types.java-time.offset-time.format]]
-isis.value-types.java-time. +
+[[causeway.value-types.java-time.offset-time.format]]
+causeway.value-types.java-time. +
 offset-time.format
 
 |  medium
@@ -147,8 +147,8 @@ offset-time.format
 
 
 |
-[[isis.value-types.java-time.zoned-date-time.format]]
-isis.value-types.java-time. +
+[[causeway.value-types.java-time.zoned-date-time.format]]
+causeway.value-types.java-time. +
 zoned-date-time.format
 
 |  medium
@@ -156,8 +156,8 @@ zoned-date-time.format
 
 
 |
-[[isis.value-types.java-util.date.format]]
-isis.value-types.java-util.date. +
+[[causeway.value-types.java-util.date.format]]
+causeway.value-types.java-util.date. +
 format
 
 |  medium
@@ -165,8 +165,8 @@ format
 
 
 |
-[[isis.value-types.joda.date-time.format]]
-isis.value-types.joda.date-time. +
+[[causeway.value-types.joda.date-time.format]]
+causeway.value-types.joda.date-time. +
 format
 
 |  medium
@@ -174,8 +174,8 @@ format
 
 
 |
-[[isis.value-types.joda.local-date-time.format]]
-isis.value-types.joda. +
+[[causeway.value-types.joda.local-date-time.format]]
+causeway.value-types.joda. +
 local-date-time.format
 
 |  medium
@@ -183,8 +183,8 @@ local-date-time.format
 
 
 |
-[[isis.value-types.joda.local-date.format]]
-isis.value-types.joda.local-date. +
+[[causeway.value-types.joda.local-date.format]]
+causeway.value-types.joda.local-date. +
 format
 
 |  medium
@@ -192,15 +192,15 @@ format
 
 
 |
-[[isis.value-types.primitives.int.format]]
-isis.value-types.primitives.int. +
+[[causeway.value-types.primitives.int.format]]
+causeway.value-types.primitives.int. +
 format
 
-| 
+|
 | Configures the number format understood by ``IntValueSemanticsProviderAbstract``. @deprecated
 
 
 
 |===
 
-include::../section-hooks/isis.value-types~post.adoc[]
+include::../section-hooks/causeway.value-types~post.adoc[]
