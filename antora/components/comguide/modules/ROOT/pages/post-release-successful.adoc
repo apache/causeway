@@ -58,14 +58,14 @@ As we did for the cutting of the release, we set environment variables to parame
 
 [source,bash,subs="attributes+"]
 ----
-export ISISJIRA=ISIS-9999                           # <.>
+export ISISJIRA=CAUSEWAY-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
 export ISISREL={page-isisrel}                           # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=causeway
 
-env | grep ISIS | sort
+env | grep CAUSEWAY | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
 (One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
@@ -103,14 +103,14 @@ Any tickets that were partially implemented should be closed, and new tickets cr
 
 === Mark the version as released
 
-In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Causeway project and update the version as being released.
+In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/CAUSEWAY/versions[administration section] for the Apache Causeway project and update the version as being released.
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
 [#close-all-released-tickets]
 === Close all released tickets
 
-From the link:https://issues.apache.org/jira/projects/ISIS?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased[Releases page], review the status of all work items in the release to check that they are closed.
+From the link:https://issues.apache.org/jira/projects/CAUSEWAY?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased[Releases page], review the status of all work items in the release to check that they are closed.
 
 If any are not, open the tickets in the issue navigator (from the release page):
 
@@ -135,7 +135,7 @@ From the root directory, generate the release notes for the current release, in 
 +
 [source,bash,subs="attributes+"]
 ----
-sh scripts/jira-release-notes.sh ISIS $ISISREL > /tmp/$ISISREL.adoc
+sh scripts/jira-release-notes.sh CAUSEWAY $ISISREL > /tmp/$ISISREL.adoc
 ----
 +
 [NOTE]

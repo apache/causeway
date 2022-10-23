@@ -114,7 +114,7 @@ Then run:
 
 [source,bash]
 ----
-sh publish.sh "ISIS-nnnn: a custom commit message"
+sh publish.sh "CAUSEWAY-nnnn: a custom commit message"
 ----
 
 This does the following:
@@ -162,7 +162,7 @@ When ready, then stage, commit and push the changes (in the `causeway-site.git` 
 
 [source,bash]
 ----
-git commit -am "ISIS-nnnn: updating docs"
+git commit -am "CAUSEWAY-nnnn: updating docs"
 git push
 ----
 

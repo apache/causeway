@@ -31,7 +31,7 @@ That is:
 . you set the https://github.com/apache/causeway.git[github.com/apache/causeway] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
 * note the asymmetry here: the `upstream` repo (the Apache GitHub repo) is *not* the same as the `origin` repo (your fork).
 . you work on your changes locally; when done, you push them to your GitHub fork
-. to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket (you will need to log in or create a new account first), and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below).
+. to contribute back a change, raise a https://issues.apache.org/jira/browse/CAUSEWAY[JIRA] ticket (you will need to log in or create a new account first), and ensure your commit message is in the form: `CAUSEWAY-nnnn: ...` so that changes can be tracked (more discussion on this point below).
 In any case, before you decide to start hacking with Apache Causeway, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:support:mailing-list.adoc[mailing lists].
 . Use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
 . An Apache Causeway committer will review your change, and apply it if suitable.
@@ -84,7 +84,7 @@ We therefore recommend that your commit messages are as follows:footnote:[Inspir
 
 [source,other]
 ----
-ISIS-999: Makes the example in CONTRIBUTING imperative and concrete
+CAUSEWAY-999: Makes the example in CONTRIBUTING imperative and concrete
 
 Without this patch applied, the example commit message in the CONTRIBUTING
 document is not a concrete example.  This is a problem because the
@@ -125,15 +125,15 @@ If this fails, see our xref:conguide:git:about.adoc#git-cookbook[git cookbook] p
 
 === Create a topic branch
 
-We recommend you name topic branches by the JIRA ticket, ie <tt>ISIS-nnn-description</tt>.
-So let's create a new branch based off `master` and call it "ISIS-123-blobs"
+We recommend you name topic branches by the JIRA ticket, ie <tt>CAUSEWAY-nnn-description</tt>.
+So let's create a new branch based off `master` and call it "CAUSEWAY-123-blobs"
 
 You can confirm the branch is there and is your new `HEAD` using either `gitk --all`.
 Alternatively, use the command line:
 
 [source,bash]
 ----
-$ git checkout -b ISIS-123-blobs
+$ git checkout -b CAUSEWAY-123-blobs
 ----
 
 The command line prompt should also indicate you are on a branch, isolated from any changes that might happen on the `master` branch.
@@ -166,7 +166,7 @@ Next, we reintegrate our topic branch by rebasing onto `master`:
 
 [source,bash]
 ----
-git checkout ISIS-123-blobs
+git checkout CAUSEWAY-123-blobs
 git rebase master
 ----
 
@@ -184,7 +184,7 @@ Once the rebase has completed, re-run your tests to confirm that everything is s
 If you have your own fork, you can now simply push the changes you've made locally to your fork:
 
 This will create a corresponding branch in the remote GitHub repo.
-If you use `gitk --all`, you'll also see a `remotes/origin/ISIS-123-blobs` branch.
+If you use `gitk --all`, you'll also see a `remotes/origin/CAUSEWAY-123-blobs` branch.
 
 Then, use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request].
 Pull requests sent to the Apache GitHub repositories will forward a pull request e-mail to the xref:docs:support:mailing-list.adoc[dev mailing list].
@@ -216,7 +216,7 @@ You'll probably also want to remove the remote branch on github:
 
 [source,bash]
 ----
-git push origin --delete ISIS-123-blobs
+git push origin --delete CAUSEWAY-123-blobs
 ----
 
 \... and continue as before until you are ready to resubmit your change.

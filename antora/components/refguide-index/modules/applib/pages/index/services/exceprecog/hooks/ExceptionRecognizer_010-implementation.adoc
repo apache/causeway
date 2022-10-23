@@ -14,7 +14,7 @@ The framework provides a number of default implementations for JPA and JDO, to r
 * other data access problem.
 
 
-// TODO: v2 - flesh this out once ISIS-2502 is complete.
+// TODO: v2 - flesh this out once CAUSEWAY-2502 is complete.
 
 //=== Configuration Properties
 //

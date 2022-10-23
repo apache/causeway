@@ -42,7 +42,7 @@ For domain objects (not mixins), the wrapper can be interacted with as follows:
 * a `set...()` method for properties
 * any action
 
-NOTE: with ISIS-3084, `addTo...()` and `removeFrom...()` methods for collections were removed;
+NOTE: with CAUSEWAY-3084, `addTo...()` and `removeFrom...()` methods for collections were removed;
  the notion (direct) collection modification was deprecated as any specific business logic
  should by handled via actions instead;
 

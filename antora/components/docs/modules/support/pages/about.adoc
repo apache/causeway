@@ -20,6 +20,6 @@ If you think you've found a bug or want to raise an enhancement request, go to:
 
 Some other places that might be useful are:
 
-* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+* link:https://cwiki.apache.org/confluence/display/CAUSEWAY/Index[ASF Wiki]
 * link:https://twitter.com/ApacheIsis[Twitter]
 

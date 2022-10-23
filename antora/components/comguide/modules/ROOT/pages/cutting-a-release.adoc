@@ -196,13 +196,13 @@ For example:
 
 [source,bash,subs="attributes+"]
 ----
-export ISISJIRA=ISIS-9999                           # <.>
+export ISISJIRA=CAUSEWAY-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
 export ISISREL={page-isisrel}                             # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=causeway
-env | grep ISIS | sort
+env | grep CAUSEWAY | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
 (One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).

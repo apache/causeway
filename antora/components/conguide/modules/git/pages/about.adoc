@@ -18,7 +18,7 @@ To modify existing files:
 [source,bash]
 ----
 git add filename
-git commit -m "ISIS-nnn: yada yada"
+git commit -m "CAUSEWAY-nnn: yada yada"
 ----
 
 The `git add` command adds the changes to the file(s) to the git index (aka staging area).
@@ -31,7 +31,7 @@ You can combine these two commands using `-am` flag to git commit:
 
 [source,bash]
 ----
-git commit -am "ISIS-nnn: yada yada"
+git commit -am "CAUSEWAY-nnn: yada yada"
 ----
 
 == Adding new files
@@ -41,7 +41,7 @@ To add a new file:
 [source,bash]
 ----
 git add .
-git commit -m "ISIS-nnn: yada yada"
+git commit -m "CAUSEWAY-nnn: yada yada"
 ----
 
 Note that this sequence of commands is identical to modifying an existing file.
@@ -54,7 +54,7 @@ To delete a file:
 [source,bash]
 ----
 git rm filename
-git commit -m "ISIS-nnn: yada yada"
+git commit -m "CAUSEWAY-nnn: yada yada"
 ----
 
 == Renaming or moving files
@@ -64,7 +64,7 @@ To rename or move a file:
 [source,bash,subs=+quotes]
 ----
 git mv _filename_ _newfilename_
-git commit -m "ISIS-nnn: yada yada"
+git commit -m "CAUSEWAY-nnn: yada yada"
 ----
 
 == Common Workflows

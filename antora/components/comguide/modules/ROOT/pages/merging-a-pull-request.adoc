@@ -17,7 +17,7 @@ Once you are happy, you can commit.
 
 The overall process is as follows:
 
-* locate/raise corresponding JIRA ticket, eg ISIS-1162
+* locate/raise corresponding JIRA ticket, eg CAUSEWAY-1162
 * checkout branch from which PR was forked (usually just 'master')
 * merge PR into temporary branch using the `github-pr.sh` script
 * test the change locally (run the app, rebuild, manual regression tests etc)
@@ -54,7 +54,7 @@ The syntax is:
 
 [source,bash]
 ----
-github-pr.sh -j 1162 -g 31 [-s] [-p ISIS]
+github-pr.sh -j 1162 -g 31 [-s] [-p CAUSEWAY]
 ----
 
 where:
@@ -71,9 +71,9 @@ is the github PR issue number
 +
 will optionally skip the build and auto-merge
 
-* `-p ISIS`
+* `-p CAUSEWAY`
 +
-optionally overrids the JIRA project (defaults to 'ISIS')
+optionally overrids the JIRA project (defaults to 'CAUSEWAY')
 
 == Example transcript
 
@@ -91,12 +91,12 @@ repo_full_name   : sebadiaz/causeway
 repo_clone_url   : https://github.com/sebadiaz/causeway.git
 branch_name_fork : master
 
-merging into: ISIS-1162_pr-31
+merging into: CAUSEWAY-1162_pr-31
 
-Deleting branch 'ISIS-1162_pr-31'
-Deleted branch ISIS-1162_pr-31 (was bd2e3c2).
-Creating the branch ISIS-1162_pr-31
-Switched to a new branch 'ISIS-1162_pr-31'
+Deleting branch 'CAUSEWAY-1162_pr-31'
+Deleted branch CAUSEWAY-1162_pr-31 (was bd2e3c2).
+Creating the branch CAUSEWAY-1162_pr-31
+Switched to a new branch 'CAUSEWAY-1162_pr-31'
 Pulling the changes from https://github.com/sebadiaz/causeway.git master
 From https://github.com/sebadiaz/causeway
  * branch            master     -> FETCH_HEAD
@@ -116,14 +116,14 @@ Once done, the script continues:
 ----
 If build successful and happy to merge, execute:
 
-git checkout master && git merge --no-ff ISIS-1162_pr-31 && git branch -d ISIS-1162_pr-31
+git checkout master && git merge --no-ff CAUSEWAY-1162_pr-31 && git branch -d CAUSEWAY-1162_pr-31
 ----
 
 The screenshot belows shows the history we end up with:
 
 image::committers/github-pr-history.png[]
 
-This shows the fork being merged into the temporary branch ("ISIS-1162_pr-31"), then some further tidy-up, and finally the merging of the temporary branch into mainline.
+This shows the fork being merged into the temporary branch ("CAUSEWAY-1162_pr-31"), then some further tidy-up, and finally the merging of the temporary branch into mainline.
 
 Note that there is no rebasing in this model.
 This is intentional: when the merged branch is pushed, github will automatically close the original pull request.

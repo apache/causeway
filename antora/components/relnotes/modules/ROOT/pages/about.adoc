@@ -90,7 +90,7 @@ Fixes CVE-2022-42467.
 |
 * xref:relnotes:ROOT:2020/2.0.0-M4/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2020/2.0.0-M4/mignotes.adoc[Migration Notes]
-* link:https://issues.apache.org/jira/projects/ISIS/versions/12347808[JIRA Rel Notes]
+* link:https://issues.apache.org/jira/projects/CAUSEWAY/versions/12347808[JIRA Rel Notes]
 
 | 2.0.0-M3
 | 27-Mar-2020

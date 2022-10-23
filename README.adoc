@@ -302,6 +302,6 @@ The Apache Causeway http://causeway.apache.org[website] has lots of useful infor
 
 Or, you can just start coding using the https://github.com/apache/causeway-app-simpleapp[SimpleApp] starter app.
 
-And if you need help or support, join our https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack[ASF Slack channel] or our http://causeway.apache.org/support.html[mailing list].
+And if you need help or support, join our https://cwiki.apache.org/confluence/display/CAUSEWAY/Signing+up+to+Slack[ASF Slack channel] or our http://causeway.apache.org/support.html[mailing list].
 
 
