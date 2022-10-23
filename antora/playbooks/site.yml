@@ -16,7 +16,7 @@
 #  under the License.
 
 site:
-  title: Apache Isis
+  title: Apache Causeway
   url: https://isis.apache.org/
   start_page: docs:ROOT:about.adoc
 
