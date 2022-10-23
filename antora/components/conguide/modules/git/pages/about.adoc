@@ -7,7 +7,7 @@
 This chapter describes the commands often used while working with git.
 In addition to these basic commands, please make sure you have read:
 
-* xref:conguide:ROOT:building-apache-causeway.adoc[building Apache Isis]
+* xref:conguide:ROOT:building-apache-causeway.adoc[building Apache Causeway]
 * xref:conguide:ROOT:contributing.adoc[Contributing]
 * xref:comguide:ROOT:policies/git-policy.adoc[Git policy]
 
@@ -25,7 +25,7 @@ The `git add` command adds the changes to the file(s) to the git index (aka stag
 If you were to make subsequent changes to the file these would not be committed.
 
 The `git commit` takes all the staged changes and commits them locally.
-Note that these changes are not shared public with Apache Isis' central git repo.
+Note that these changes are not shared public with Apache Causeway' central git repo.
 
 You can combine these two commands using `-am` flag to git commit:
 
@@ -70,7 +70,7 @@ git commit -m "ISIS-nnn: yada yada"
 == Common Workflows
 
 The xref:conguide:ROOT:contributing.adoc[contributing] page describes the workflow for non-committers.
-The xref:comguide:ROOT:policies/git-policy.adoc[Git policy] page describes a workflow for Apache Isis **committers**.
+The xref:comguide:ROOT:policies/git-policy.adoc[Git policy] page describes a workflow for Apache Causeway **committers**.
 
 == Backing up a local branch
 

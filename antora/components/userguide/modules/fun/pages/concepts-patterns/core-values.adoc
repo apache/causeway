@@ -3,11 +3,11 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-This section describes the core values that the the Apache Isis framework tries to uphold.
+This section describes the core values that the the Apache Causeway framework tries to uphold.
 
 == Aligned with the Business
 
-Apache Isis is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] is intended to be usable by domain experts, typically end-users within the organization.
+Apache Causeway is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] is intended to be usable by domain experts, typically end-users within the organization.
 
 But why should an organisation build software, when it could just buy it?
 
@@ -61,7 +61,7 @@ What this means in turn is that the application needs to be maintainable, so tha
 That's a tall order for any application to meet, and realistically it _can_ only be met if the application is modular.
 Any application that lacks a coherent internal structure will ultimately degrade into an unmaintable "big ball of mud", and the development team's velocity/capacity to make changes will reduce accordingly.
 
-Apache Isis' architecture allows the internal structure to be maintained in two distinct ways.
+Apache Causeway' architecture allows the internal structure to be maintained in two distinct ways.
 
 * first, the naked objects pattern acts as a "firewall", ensuring that any business logic in the domain layer doesn't leak out into the presentation layer (it can't, because the developer doesn't write any controllers/views).
 
@@ -95,7 +95,7 @@ For further discussion on modular monoliths, check out Dan Haywood's article on 
 == Easing the road to DDD
 
 The case for xref:concepts-patterns.adoc#domain-driven-design[domain driven design]  might be compelling, but that doesn't necessarily make it easy to do.
-Let's take a look at some of the challenges that _DDD_ throws up and see how Apache Isis (and its implementation of the naked objects pattern) helps address them.
+Let's take a look at some of the challenges that _DDD_ throws up and see how Apache Causeway (and its implementation of the naked objects pattern) helps address them.
 
 === DDD takes a conscious effort
 
@@ -110,8 +110,8 @@ It takes a _conscious_ effort by the entire team to develop the ubiquitous langu
 Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking.
 This takes willingness on the part of all involved, not to mention some practice.
 
-With Apache Isis, though, the ubiquitous language evolves with scarcely any effort at all.
-For the business experts, the Apache Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion.
+With Apache Causeway, though, the ubiquitous language evolves with scarcely any effort at all.
+For the business experts, the Apache Causeway viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion.
 Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes.
 There's no technology to get distracted by; there is literally nothing else for the developers to be working on.
 
@@ -125,7 +125,7 @@ If we fail to do this, then we open up the communication divide, and our ubiquit
 There is literally no point having a domain model that cannot be represented in code.
 We cannot invent our ubiquitous language in a vacuum, and the developers must ensure that the model remains grounded in the doable.
 
-In Apache Isis, we have a very pure one-to-one correspondence between the domain concepts and its implementation.
+In Apache Causeway, we have a very pure one-to-one correspondence between the domain concepts and its implementation.
 Domain concepts are represented as classes and interfaces, easily demonstrated back to the business.
 If the model is clumsy, then the application will be clumsy too, and so the team can work together to find a better implementable model.
 
@@ -139,10 +139,10 @@ Or we could generate a PDF document from Javadoc comments, but comments aren't c
 Anyway, even if we do create such a document, not everyone will read it.
 
 A better way to represent the model is to show it in action as a working prototype.
-As we show with the xref:docs:starters:helloworld.adoc[starter apps], Apache Isis enables this with ease.
+As we show with the xref:docs:starters:helloworld.adoc[starter apps], Apache Causeway enables this with ease.
 Such prototypes bring the domain model to life, engaging the audience in a way that a piece of paper never can.
 
-Moreover, with Apache Isis prototypes, the domain model will come shining through.
+Moreover, with Apache Causeway prototypes, the domain model will come shining through.
 If there are mistakes or misunderstandings in the domain model (inevitable when building any complex system), they will be obvious to all.
 
 === Architecture must be robust
@@ -159,13 +159,13 @@ It takes real skill to ensure the correct separation of concerns between these l
 Even with the best intentions, it's all too easy for custom-written layers to blur the boundaries and put (for example) validation in the user interface layer when it should belong to the domain layer.
 At the other extreme, it's quite possible for custom layers to distort or completely subvert the underlying domain model.
 
-Because of Apache Isis' generic __OOUI__s, there's no need to write the other layers of the architecture.
+Because of Apache Causeway' generic __OOUI__s, there's no need to write the other layers of the architecture.
 Of course, this reduces the development cost.
 But more than that, there will be no leakage of concerns outside the domain model.
 All the validation logic *must* be in the domain model because there is nowhere else to put it.
 
-Moreover, although Apache Isis does provide a complete runtime framework, there is no direct coupling of your domain model to the framework.
-That means it is very possible to take your domain model prototyped in Apache Isis and then deploy it on some other _J(2)EE_ architecture, with a custom _UI_ if you want.
+Moreover, although Apache Causeway does provide a complete runtime framework, there is no direct coupling of your domain model to the framework.
+That means it is very possible to take your domain model prototyped in Apache Causeway and then deploy it on some other _J(2)EE_ architecture, with a custom _UI_ if you want.
 This is discussed later on, in xref:concepts-patterns.adoc#deployment-options[deployment options].
 
 === Extending the reach of DDD
@@ -177,10 +177,10 @@ The trouble is that we immediately have to make a choice: is the domain complex 
 This goes back to the previous point, building and maintaining a layered architecture.
 It doesn't seem cost effective to go to all the effort of a DDD approach if the underlying domain model is simple.
 
-However, with Apache Isis, we don't write these other layers, so we don't have to make a call on how complex our domain is.
+However, with Apache Causeway, we don't write these other layers, so we don't have to make a call on how complex our domain is.
 We can start working solely on our domain, even if we suspect it will be simple.
 If it is indeed a simple domain, then there's no hardship, but if unexpected subtleties arise, then we're in a good position to handle them.
 
-If you're just starting out writing domain-driven applications, then Apache Isis should significantly ease your journey into applying _DDD_.
+If you're just starting out writing domain-driven applications, then Apache Causeway should significantly ease your journey into applying _DDD_.
 And if you _have_ used _DDD_ for a while, then you should find the framework a very useful new tool in your arsenal.
 

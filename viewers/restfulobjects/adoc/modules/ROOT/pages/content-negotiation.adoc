@@ -18,7 +18,7 @@ If the entities were exposed directly then those REST clients will break.
 Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.
 There are three ways in which you can do this:
 
-* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:userguide:fun:overview.adoc#view-models[view model].
+* first is to solve the problem at the domain layer by defining a regular Apache Causeway xref:userguide:fun:overview.adoc#view-models[view model].
 This is then surfaced by the RO viewer.
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
@@ -32,7 +32,7 @@ If the underlying tables change (as the result of a change in their correspondin
 +
 The `ContentNegotiationService` is responsible for inspecting the HTTP `Accept` header, and use this to select the correct representation to render.
 +
-The Apache Isis framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.
+The Apache Causeway framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.
 One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header.
 +
 A typical implementation of `ContentMappingService` will convert the domain object into some sort of DTO (data transfer object) as specified by the "x-ro-domaintype".
@@ -54,7 +54,7 @@ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegoti
 If the implementation does not recognize the value of the header, if can simply return `null`.
 +
 The framework provides a number of implementations; an implementation that handles the
-xref:vro:ROOT:content-negotiation/apache-causeway-v2-profile.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
+xref:vro:ROOT:content-negotiation/apache-causeway-v2-profile.adoc[simplified representation] of the Apache Causeway profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
 
 * xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService]
 +

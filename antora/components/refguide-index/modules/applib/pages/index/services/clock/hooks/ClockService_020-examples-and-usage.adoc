@@ -14,7 +14,7 @@ While instantiating a `java.util.Date` to current the current time is painless e
 
 Therefore it's common to provide a domain service whose responsibility is to provide the current time.
 This service can be injected into any domain object (and can be mocked out for unit testing).
-Apache Isis provides such a facade through the `ClockService`.
+Apache Causeway provides such a facade through the `ClockService`.
 
 
 == See also

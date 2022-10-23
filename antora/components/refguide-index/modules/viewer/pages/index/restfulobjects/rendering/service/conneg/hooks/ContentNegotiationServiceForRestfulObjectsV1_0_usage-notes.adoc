@@ -4,7 +4,7 @@
 
 == Extensions
 
-One extension (specific to Apache Isis, not part of the RO spec) is that actions can also be invoked with an HTTP `Accept` header of the form:
+One extension (specific to Apache Causeway, not part of the RO spec) is that actions can also be invoked with an HTTP `Accept` header of the form:
 
     application/json;profile=urn:org.restfulobjects:repr-types/object
 

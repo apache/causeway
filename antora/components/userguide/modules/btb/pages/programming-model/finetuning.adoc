@@ -5,7 +5,7 @@
 :page-partial:
 
 
-The core metamodel defines APIs and implementations for building the Apache Isis metamodel: a description of the set of entities, domain services and values that make up the domain model.
+The core metamodel defines APIs and implementations for building the Apache Causeway metamodel: a description of the set of entities, domain services and values that make up the domain model.
 
 The description of each domain class consists of a number of elements:
 
@@ -23,7 +23,7 @@ The property's type is either a reference to another entity, or is a value type.
 link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/spec/feature/OneToManyAssociation.java[OneToManyAssociation]::
 
 Represents a class member that is a collection of references to other entities.
-Note that Apache Isis does not currently support collections of values.
+Note that Apache Causeway does not currently support collections of values.
 
 
 link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/spec/feature/ObjectAction.java[ObjectAction]::
@@ -36,7 +36,7 @@ Two special `FacetFactory` implementations - link:https://github.com/apache/caus
 Pretty much all the other ``FacetFactory``s are responsible for installing https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/facetapi/Facet.java[Facet]s onto the metamodel elements.
 
 There are many many such ``Facet``s, and are used to do such things get values from properties or collections, modify properties or collections, invoke action, hide or disable class members, provide UI hints for class members, and so on.
-In short, the ``FacetFactory``s registered defines the Apache Isis programming conventions.
+In short, the ``FacetFactory``s registered defines the Apache Causeway programming conventions.
 
 == Modifying the Prog. Model
 

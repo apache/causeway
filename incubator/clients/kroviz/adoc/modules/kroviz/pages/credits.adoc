@@ -23,7 +23,7 @@ convert.exe WheatFieldWithCrows.jpg -channel all isis_clut.png -clut WheatFieldW
 convert.exe WheatFieldWithCrows.jpg -separate -normalize -combine isis_clut.png -clut WheatFieldWithCrows.png
 ----
 
-== Apache Isis colors
+== Apache Causeway colors
 
 In the icon: green, orange, red, blue
 

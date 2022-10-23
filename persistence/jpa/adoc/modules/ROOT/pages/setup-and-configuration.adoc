@@ -75,7 +75,7 @@ is set to `create-or-extend-tables`
 
 * `javax.persistence.bean.manager`
 +
-is set to an Apache Isis implementation, to assist with dependency injection into entities.
+is set to an Apache Causeway implementation, to assist with dependency injection into entities.
 
 Generally these should not be changed, though if there is a requirement, then provide a subclasse alternate implementation of `org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings` with an earlier `@Priority` precedence.
 

@@ -2,10 +2,10 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-If you are using Apache Isis to develop complex business-critical applications, then being able to write automated tests for those applications is massively important.
-As such Apache Isis treats the topic of testing very seriously.
+If you are using Apache Causeway to develop complex business-critical applications, then being able to write automated tests for those applications is massively important.
+As such Apache Causeway treats the topic of testing very seriously.
 
-This guide describes those features available to you for testing your Apache Isis application.
+This guide describes those features available to you for testing your Apache Causeway application.
 
 
 == Unit tests vs Integ tests
@@ -34,7 +34,7 @@ Unit tests ensure that you are *_building the system right_*.
 ====
 
 Integration tests leverage Spring Boot's integration testing infrastructure,in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
-This configures and bootstraps the Apache Isis runtime, usually running against an in-memory database.
+This configures and bootstraps the Apache Causeway runtime, usually running against an in-memory database.
 
 == Integ tests vs BDD Specs
 
@@ -59,8 +59,8 @@ But if you don't then you certainly should write integration tests: acceptance c
 When we talk about integration tests/specs here, we mean tests that exercise the domain object logic, through to the actual database.
 But we also want the tests to exercise the app from the users's perspective, which means including the user interface.
 
-For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate . In this regard though, Apache Isis has a significant trick up its sleeve.
-Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services.
+For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate . In this regard though, Apache Causeway has a significant trick up its sleeve.
+Because Apache Causeway implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services.
 This therefore allows for other implementations of the UI.
 
 The xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
@@ -72,12 +72,12 @@ If the test invokes an action that is disabled, then the wrapper will throw an a
 If the action is ok to invoke, it delegates through.
 There's more discussion on the wrapper factory in the xref:testing:integtestsupport:about.adoc#wrapper-factory[integ test support] chapter.
 
-What this means is that an Apache Isis application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.
+What this means is that an Apache Causeway application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.
 Although integration tests re (necessarily) slower than unit tests, they are not any harder to write (in fact, in some respects they are easier).
 
 == Dependency Injection
 
-Spring Boot will automatically inject dependencies into integration tests and services, and Apache Isis extends this to also inject services into every domain object (entity or view model).
+Spring Boot will automatically inject dependencies into integration tests and services, and Apache Causeway extends this to also inject services into every domain object (entity or view model).
 This is most useful when writing unit tests; simply mock out the service and inject into the domain object.
 
 There are a number of syntaxes supported, but the simplest is to use `@javax.inject.Inject` annotation; for example:
@@ -89,7 +89,7 @@ CustomerRepository customers;
 ----
 
 Domain services are discovered by Spring Boot, either explicitly referenced in the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation, or picked up from class path scanning of link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
-Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
+Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Causeway' xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
 
 == Given/When/Then
 
@@ -116,14 +116,14 @@ In the previous section we discussed using given/when/then as a form of organizi
 For integration tests though it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.
 Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
 
-The solution that Apache Isis provides is xref:testing:fixtures:about.adoc[fixture scripts], supported by a domain service (also) called xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts].
+The solution that Apache Causeway provides is xref:testing:fixtures:about.adoc[fixture scripts], supported by a domain service (also) called xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts].
 This defines a pattern (command pattern and composite pattern) with supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
 
 == Fake data
 
 include::testing:fakedata:partial$intro.adoc[]
 
-Apache Isis provides the xref:testing:fakedata:about.adoc[Fake Data] library to assist with this.
+Apache Causeway provides the xref:testing:fakedata:about.adoc[Fake Data] library to assist with this.
 
 [TIP]
 ====

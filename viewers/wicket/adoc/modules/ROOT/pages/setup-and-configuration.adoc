@@ -143,7 +143,7 @@ causeway:
       credit:
         - url:  http://causeway.apache.org
           image: images/apache-causeway/logo-48x48.png
-          name: Apache Isis
+          name: Apache Causeway
 ----
 
 Up to three credits can be provided.

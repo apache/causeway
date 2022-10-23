@@ -6,7 +6,7 @@
 SecMan provides an implementation of both the xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] and xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPIs, storing user, roles and permissions information as domain entities (persisted to relational database).
 It can be used with both the JDO or JPA persistence mechanisms.
 
-Because these features are implemented using domain entities, it means that this security information can be administered from within your Apache Isis application.
+Because these features are implemented using domain entities, it means that this security information can be administered from within your Apache Causeway application.
 The domain model is explained in more detail <<domain-model,below>>.
 
 If SecMan is used for authentication, user/passwords are stored in encrypted form using a configured `PasswordEncoder`.
@@ -65,7 +65,7 @@ The diagram below shows the domain model for SecMan, and how it relates to the f
 .SecMan domain model
 image:secman-domain-model.drawio.svg[]
 
-SecMan's users, roles and permissions are entities, but application features are serializable value types that are derived from the Apache Isis metamodel.
+SecMan's users, roles and permissions are entities, but application features are serializable value types that are derived from the Apache Causeway metamodel.
 
 Thus:
 
@@ -191,9 +191,9 @@ For this reason, the xref:refguide:extensions:index/secman/applib/user/dom/Appli
 TIP: Another implementation of xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] can be found in the xref:docs:demo:about.adoc[Demo App]..
 
 
-.Apache Isis' multi-tenancy is only skin deep
+.Apache Causeway' multi-tenancy is only skin deep
 ****
-It's important to realize that Apache Isis' multi-tenancy support is only skin deep.
+It's important to realize that Apache Causeway' multi-tenancy support is only skin deep.
 What we mean by that is that the restricting of access to data is only performed at the presentation layer.
 If a user is not permitted to view/edit an object, then it is only the viewer component prevents them from doing so; the restricted object could still have been retrieved into memory from the database.
 

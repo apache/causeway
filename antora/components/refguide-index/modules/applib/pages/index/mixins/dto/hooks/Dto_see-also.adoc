@@ -62,7 +62,7 @@ public class ToDoItemV1_1 implements Dto {                          // <.>
 [#versioning]
 === Versioning
 
-The whole point of using DTOs (in Apache Isis, at least) is to define a formal contact between two inter-operating but independent applications.
+The whole point of using DTOs (in Apache Causeway, at least) is to define a formal contact between two inter-operating but independent applications.
 Since the only thing we can predict about the future with any certainty is that one or both of these applications will change, we should version DTOs from the get-go.
 This allows us to make changes going forward without unnecessarily breaking existing consumers of the data.
 

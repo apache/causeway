@@ -5,7 +5,7 @@ image::WheatFieldWithCrows.png[]
 
 == Quickstart
 
-. Build Isis with kroviz
+. Build Causeway with kroviz
 +
 ----
 cd ~/causeway
@@ -34,7 +34,7 @@ http://localhost:3000
 . Select 'Connect' in the Burger Menu
 
 
-TIP: Originally Apache Isis SimpleApp 1.16.0 was used as the reference RO backend.
+TIP: Originally Apache Causeway SimpleApp 1.16.0 was used as the reference RO backend.
 This required some extra steps in order to deal with CORS setup, see sections on pre 2.0.0-M3 and CORS.
 Currently (2.0.0-M6) Demo is used as reference - at the moment  it's the only CORS enabled application.
 === Frontend
@@ -297,7 +297,7 @@ include::partial$design/dev-overview.adoc[]
 
 ==== Create from Archetype
 
-Create from the Apache Isis SimpleApp archetype:
+Create from the Apache Causeway SimpleApp archetype:
 
 [source,bash]
 ----
@@ -405,7 +405,7 @@ Put into webapp/src/main/webapp/WEB-INF/lib:
 
 ==== Solution 3:
 
- Incorporate kroviz.js e.g. in the WAR containing your Apache Isis backend.
+ Incorporate kroviz.js e.g. in the WAR containing your Apache Causeway backend.
 
 == Extensions
 

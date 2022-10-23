@@ -7,7 +7,7 @@
 
 == Built-in
 
-Apache Isis can render and persist all of the JDK primitives and wrapper classes, and a number of other JDK (7.x) classes that represent value types.
+Apache Causeway can render and persist all of the JDK primitives and wrapper classes, and a number of other JDK (7.x) classes that represent value types.
 
 It also supports some of the link:http://www.joda.org/joda-time/[Joda-Time] datatypes, and a number of value types that are shipped by the framework itself.
 

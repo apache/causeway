@@ -4,7 +4,7 @@
 :page-partial:
 
 
-This guide describes the design and configuration of the Apache Shiro integration with Apache Isis.
+This guide describes the design and configuration of the Apache Shiro integration with Apache Causeway.
 
 
 == Design
@@ -35,7 +35,7 @@ An enhanced "wildcard" syntax, described  <<enhanced-wildcard-permission,below>>
 [[configuring-causeway-to-use-shiro]]
 == Configuring to use Shiro
 
-Apache Isis' security mechanism is configurable, specifying an `Authenticator` and an `Authorizor` (non-public) APIs.
+Apache Causeway' security mechanism is configurable, specifying an `Authenticator` and an `Authorizor` (non-public) APIs.
 The Shiro security mechanism is an integration with Apache Shiro that implements both interfaces.
 
 [TIP]
@@ -102,7 +102,7 @@ Another option alternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP
 As noted above, as well as realms many other aspects of configuration can be specified in this file:
 
 * enable caching for performance; discussed <<caching,below>>
-* leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, by specifying the Apache Isis permission resolver; discussed <<permission-resolver-configuration,below>>.
+* leverage Apache Causeway' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, by specifying the Apache Causeway permission resolver; discussed <<permission-resolver-configuration,below>>.
 
 
 [#shiro-ini-realm]
@@ -213,7 +213,7 @@ myapp                                   # ditto
 
 [TIP]
 ====
-The format of the permissions string is configurable in Shiro, and Apache Isis uses this to provide an extended wildcard format, described xref:security:shiro:about.adoc#enhanced-wildcard-permission[here].
+The format of the permissions string is configurable in Shiro, and Apache Causeway uses this to provide an extended wildcard format, described xref:security:shiro:about.adoc#enhanced-wildcard-permission[here].
 ====
 
 
@@ -280,8 +280,8 @@ Instead, the corresponding sections from for `realm1.ini` are used instead.
 [#enhanced-wildcard-permission]
 == Enhanced Wildcard Permission
 
-If using the text-based xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm] or xref:security:shiro-realm-ldap:about.adoc[Apache Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
-Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
+If using the text-based xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm] or xref:security:shiro-realm-ldap:about.adoc[Apache Causeway' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
+Apache Causeway provides its own `IsisPermission` which introduces the concept of a "veto".
 
 A vetoing permission is one that prevents access to a feature, rather than grants it.
 This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.
@@ -332,7 +332,7 @@ The net effect is therefore what we would want: that a user with both `admin_rol
 [[permission-resolver-configuration]]
 === Configuration
 
-To configure Apache Isis' extended permission support requires that a custom permission resolver is specified in `shiro.ini` file:
+To configure Apache Causeway' extended permission support requires that a custom permission resolver is specified in `shiro.ini` file:
 
 [source,ini]
 ----

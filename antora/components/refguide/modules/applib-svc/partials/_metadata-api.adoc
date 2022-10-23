@@ -26,7 +26,7 @@ xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceM
 
 
 |xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService] & xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu]
-|Access to certain information from the Apache Isis metamodel.
+|Access to certain information from the Apache Causeway metamodel.
 
 
 |xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService] & xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu]

@@ -9,7 +9,7 @@ One variation uses JDO as the ORM, the other uses JPA, so you can focus on which
 
 The application is also deployed online for you to try out, link:https://simpleapp.jdo.causeway.incode.work[here (jdo)] and link:https://simpleapp.jpa.causeway.incode.work[here (jpa)].
 
-As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Isis app consisting of a single entity (`SimpleObject`) with supporting domain services.
+As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
 
 However, unlike HelloWorld, this app also provides more structure to assist you as your application grows, with business logic placed in a separate Maven module (`simpleapp-...-module-simple`) to the module that bootstraps the webapp (`simpleapp-...-webapp`).
 Replace "..." with either "jdo" or "jpa", as appropriate.
@@ -29,11 +29,11 @@ You can use them as a reference once your ideas have solidifid and you need to s
 
 == Prerequisites
 
-Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
+Apache Causeway is a Java based framework, so in terms of prerequisites, you'll need to install:
 
 * Java 11 JDK (or later)
 +
-Apache Isis itself is compatible with Java 11, and the simpleapp itself is configured for Java 11.
+Apache Causeway itself is compatible with Java 11, and the simpleapp itself is configured for Java 11.
 
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
@@ -289,7 +289,7 @@ image::simpleapp/using/250-retrieve-object-using-rest-api-response.png[width="60
 
 
 The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).
-The REST API implemented by Apache Isis is specified in the link:http://www.restfulobjects.org[Restful Object spec].
+The REST API implemented by Apache Causeway is specified in the link:http://www.restfulobjects.org[Restful Object spec].
 
 
 
@@ -352,7 +352,7 @@ For integration tests, this uses the link:https://docs.spring.io/spring-boot/doc
 
 These two different annotations reference a (class annotated with) link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration], which in turn can link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] other annotations.
 
-By convention, the top-level `@Configuration` in an Apache Isis application is called the "app manifest".
+By convention, the top-level `@Configuration` in an Apache Causeway application is called the "app manifest".
 
 The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below shows how classes fit together:
 
@@ -417,7 +417,7 @@ This is discussed in more detail below.
 
 ==== SimpleModule
 
-Every module within an Apache Isis application should have a module class.
+Every module within an Apache Causeway application should have a module class.
 Its purpose is to define a package to scan from, and optionally to declare any transitive dependencies.
 In the case of `SimpleModule`, it consists of:
 
@@ -484,7 +484,7 @@ Since the module dependency graph is known, this allows all data to be removed, 
 This Spring Boot feature is used by the framework, but can equally easily be used by application code.
 The `@Name.Specification` class uses this configuration property.
 
-The scanning mechanism is also leveraged by Apache Isis to pick up three types of classes:
+The scanning mechanism is also leveraged by Apache Causeway to pick up three types of classes:
 
 * all domain services
 +
@@ -589,7 +589,7 @@ public abstract class SimpleModuleIntegTestAbstract
 <.> Tests typically inherit from `IsisIntegrationTestAbstract`, which provides some convenience methods to inherit from.
 In this case, the test inherits from the `IsisIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
-<.> Specifies the modules that make up Apache Isis framework itself.
+<.> Specifies the modules that make up Apache Causeway framework itself.
 These include core, security set to the bypass implementation (effectively is ignored) and JDO/DataNucleus for persistence.
 Note that no viewers are bootstrapped because the tests are run through Spring's integration testing framework, rather than (say) as Selenium tests.
 
@@ -662,11 +662,11 @@ This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/
 +
 Discussed in more detail below.
 
-<.> Demonstrates how to implement a custom REST controller, accessing the domain object model managed by Apache Isis.
+<.> Demonstrates how to implement a custom REST controller, accessing the domain object model managed by Apache Causeway.
 
-<.> Demonstrates how to run quartz as a background service, accessing the domain object model managed by Apache Isis.
+<.> Demonstrates how to run quartz as a background service, accessing the domain object model managed by Apache Causeway.
 
-<.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`, and `CustomModule`).
+<.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Causeway to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`, and `CustomModule`).
 +
 This is discussed in more detail below
 
@@ -732,7 +732,7 @@ public class AppManifest {
 }
 ----
 
-<.> Mandatory - specifies the core of the Apache Isis framework
+<.> Mandatory - specifies the core of the Apache Causeway framework
 
 <.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
@@ -829,7 +829,7 @@ This leverages a feature in Spring Boot's Flyway integration which allows differ
 
 <.> The `banner.txt` is shown when bootstrapping.
 
-<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
+<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Causeway)
 
 <.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
 
@@ -854,7 +854,7 @@ JQuery is available by default.
 
 === No src/main/webapp
 
-Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Isis automatically.
+Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Causeway automatically.
 
 
 [#integration-tests]
@@ -927,7 +927,7 @@ This means:
 
 * the set of third party dependencies declared have been validated as compatible by Spring Boot team
 * build plugins are declared and configured appropriately
-* imports to the Apache Isis dependencies are declared via `<dependencyManagement>`
+* imports to the Apache Causeway dependencies are declared via `<dependencyManagement>`
 
 
 

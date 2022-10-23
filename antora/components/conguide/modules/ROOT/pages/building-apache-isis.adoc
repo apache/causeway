@@ -1,5 +1,5 @@
 [[building-apache-causeway]]
-= Building Apache Isis
+= Building Apache Causeway
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -15,7 +15,7 @@ mvn clean install
 
 == Git
 
-The Apache Isis source code lives in a git repo.
+The Apache Causeway source code lives in a git repo.
 
 
 === Installation
@@ -39,9 +39,9 @@ If using Mac, you might also want to check out Atlassian's http://www.atlassian.
 
 
 
-==== Cloning the Apache Isis repo
+==== Cloning the Apache Causeway repo
 
-First, clone the Apache Isis repo:
+First, clone the Apache Causeway repo:
 
 [source,bash]
 ----
@@ -130,21 +130,21 @@ For further reading, see:
 
 == Installing Java
 
-Apache Isis v2 is compatible with Java 11 and above, and releases are xref:comguide:ROOT:cutting-a-release.adoc[cut] using Java 11, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
+Apache Causeway v2 is compatible with Java 11 and above, and releases are xref:comguide:ROOT:cutting-a-release.adoc[cut] using Java 11, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
 
 Therefore install Java 11 JDK or newer.
 Note that the JRE is _not_ sufficient.
 
 [TIP]
 ====
-If you intend to contribute back patches to Apache Isis, note that while you can develop using Java 11 or above within your IDE, be sure not to use any APIs more recent than Java 11.
+If you intend to contribute back patches to Apache Causeway, note that while you can develop using Java 11 or above within your IDE, be sure not to use any APIs more recent than Java 11.
 ====
 
 // no longer required, I believe.
 //
 //=== Configure Maven toolchains plugin
 //
-//If you are a committer that will be performing releases of Apache Isis, then you _must_ configure the
+//If you are a committer that will be performing releases of Apache Causeway, then you _must_ configure the
 //link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin so that releases can be built using Java 11.
 //
 //This is done by placing the `toolchains.xml` file in `~/.m2` directory.
@@ -166,10 +166,10 @@ If you intend to contribute back patches to Apache Isis, note that while you can
 //    </toolchain>
 //</toolchains>
 //----
-//<.> The Apache Isis build is configured to search for the (`1.8, openjdk`) JDK toolchain.
+//<.> The Apache Causeway build is configured to search for the (`1.8, openjdk`) JDK toolchain.
 //<.> adjust as necessary
 //
-//The Apache Isis parent `pom.xml` activates this plugin whenever the `apache-release` profile is enabled.
+//The Apache Causeway parent `pom.xml` activates this plugin whenever the `apache-release` profile is enabled.
 
 == Installing Maven
 
@@ -182,7 +182,7 @@ Set `MAVEN_OPTS` environment variable:
 export MAVEN_OPTS="-Xms512m -Xmx1024m"
 ----
 
-== Building Apache Isis
+== Building Apache Causeway
 
 To build the source code from the command line, simply go to the root directory and type:
 
@@ -191,7 +191,7 @@ To build the source code from the command line, simply go to the root directory 
 mvn clean install
 ----
 
-The first time you do this, you'll find it takes a while since Maven needs to download all of the Apache Isis prerequisites.
+The first time you do this, you'll find it takes a while since Maven needs to download all of the Apache Causeway prerequisites.
 
 Thereafter you can speed up the build by adding the `-o` (offline flag).
 To save more time still, we also recommend that you build in parallel.
@@ -229,7 +229,7 @@ where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 | Description
 
 | module-all
-| All Apache Isis Modules
+| All Apache Causeway Modules
 
 | module-antora
 | Official Project Documentation
@@ -280,7 +280,7 @@ mvn clean install -Dmodule-tooling -Dskip.essential
 
 == Checking for Vulnerabilities
 
-Apache Isis configures the link:https://www.owasp.org/index.php/Main_Page[OWASP] link:https://www.owasp.org/index.php/OWASP_Dependency_Check[dependency check] link:http://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html[Maven plugin] to determine whether the framework uses libraries that are known to have security vulnerabilities.
+Apache Causeway configures the link:https://www.owasp.org/index.php/Main_Page[OWASP] link:https://www.owasp.org/index.php/OWASP_Dependency_Check[dependency check] link:http://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html[Maven plugin] to determine whether the framework uses libraries that are known to have security vulnerabilities.
 
 To check, run:
 

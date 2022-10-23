@@ -15,7 +15,7 @@ Formally speaking, a collection is simply a regular JavaBean getter, returning a
 Most collections (those that are modifiable) will also have a setter and, if persisted, a backing instance field.
 And collections properties will also have a number of annotations:
 
-* Apache Isis defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
+* Apache Causeway defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
 It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file)
 
 * the collections of domain entities are often annotated with ORM annotation(s).
@@ -24,7 +24,7 @@ Other annotations can be used to specify if the association is bidirectional, an
 
 * for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[@javax.xml.bind.annotation.XmlElementWrapper] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[@javax.xml.bind.annotation.XmlElement] will be present
 
-Apache Isis may recognise some of these annotations from the persistence layer infers some domain semantics from them.
+Apache Causeway may recognise some of these annotations from the persistence layer infers some domain semantics from them.
 
 Unlike xref:userguide:fun:object-members.adoc#properties[properties], the framework does not allow collections to be "edited".
 Instead, xref:userguide:fun:object-members.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
@@ -72,7 +72,7 @@ public class ParentObject
 ----
 <.> indicates a bidirectional association; the foreign key pointing back to the `Parent` will be in the table for `ChildObject`
 <.> disables cascade delete
-<.> (not actually required in this case, because no attributes are set, but acts as a useful reminder that this collection will be rendered in the UI by Apache Isis)
+<.> (not actually required in this case, because no attributes are set, but acts as a useful reminder that this collection will be rendered in the UI by Apache Causeway)
 <.> uses a `SortedSet` (as opposed to some other collection type; discussion below)
 
 while in the child object you will have:
@@ -101,18 +101,18 @@ JDO/Datanucleus does support the mapping of these other types, but RDBMS are set
 
 == Maps
 
-While ORMs support `java.util.Map` as a collection type, maps are not supported by Apache Isis.
+While ORMs support `java.util.Map` as a collection type, maps are not supported by Apache Causeway.
 
-If you do wish to use this collection type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
+If you do wish to use this collection type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Causeway framework.
 
 == Value vs Reference Types
 
-While ORMs support collections/arrays of value types, such collections are not supported by Apache Isis.
-Apache Isis can (currently) only provide a UI for collections of references.
+While ORMs support collections/arrays of value types, such collections are not supported by Apache Causeway.
+Apache Causeway can (currently) only provide a UI for collections of references.
 
-If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
+If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Causeway framework.
 
-As a workaround, if you want to visualize an array of value types in Apache Isis, then one option is to wrap the value in a view model, as explained xref:userguide:btb:hints-and-tips/simulating-collections-of-values.adoc[here].
+As a workaround, if you want to visualize an array of value types in Apache Causeway, then one option is to wrap the value in a view model, as explained xref:userguide:btb:hints-and-tips/simulating-collections-of-values.adoc[here].
 
 == Derived Collections
 

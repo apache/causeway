@@ -12,7 +12,7 @@ For parameters, it disables the entry into the parameter; this is for actions wi
 Typically modification/invocation is vetoed based on the state of the domain object being interacted with, though it could be any reason at all (eg the current date/time of the interaction, or the state of some other related data such as stock levels, or the identity of the calling user).
 
 The reason for vetoing a modification/invocation is normally returned as a string.
-However, Apache Isis' xref:userguide:btb:i18n.adoc[i18n support] extends this so that reasons can be internationalized.
+However, Apache Causeway' xref:userguide:btb:i18n.adoc[i18n support] extends this so that reasons can be internationalized.
 
 The signature of the supporting method is generally:
 

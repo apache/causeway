@@ -6,13 +6,13 @@
 
 Additional configuration of Eclipse for contributors (and committers):
 
-* Set up the link:{attachmentsdir}/Apache-Isis.importorder[import order]
+* Set up the link:{attachmentsdir}/Apache-Causeway.importorder[import order]
 
 Also:
 
 * set up link:{attachmentsdir}/Apache-code-style-formatting.xml[code formatting]
 * set up the link:{attachmentsdir}/Apache-code-style-template.xml[code style templates]
-* set up link:{attachmentsdir}/Apache-Isis-code-style-cleanup.xml[code style cleanup]
+* set up link:{attachmentsdir}/Apache-Causeway-code-style-cleanup.xml[code style cleanup]
 
 == Prepare for Build
 

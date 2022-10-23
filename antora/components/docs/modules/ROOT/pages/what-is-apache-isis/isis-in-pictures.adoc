@@ -1,10 +1,10 @@
-= Apache Isis in Pictures
+= Apache Causeway in Pictures
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 // TODO: v2: NICE-TO-HAVE: these screenshots should be updated, but first need to port the todoapp over first (which also means the various modules from incode-platform)
 
-On this page we want to show you what an Apache Isis application looks like, running on the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
+On this page we want to show you what an Apache Causeway application looks like, running on the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 The screenshots below are taken from a "Todo" application.
 
 NOTE: these screenshots are based on an app running against v1.13  and v1.10 of the framework.
@@ -16,9 +16,9 @@ Let's start with the basics...
 
 === Sign-in
 
-Apache Isis integrates with a variety of authentication mechanisms, including link:http://shiro.apache.org[Apache Shiro], link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
+Apache Causeway integrates with a variety of authentication mechanisms, including link:http://shiro.apache.org[Apache Shiro], link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
 
-The xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
+The xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Causeway metamodel.
 
 
 
@@ -26,7 +26,7 @@ image::what-is-apache-causeway/causeway-in-pictures/010-login.png[width="800px"]
 
 === Install Fixtures
 
-Apache Isis has lots of features to help you prototype and then fully test your application.
+Apache Causeway has lots of features to help you prototype and then fully test your application.
 One such are fixture scripts, which allow pre-canned data to be installed in the running application.
 This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests.
 (More on tests later).
@@ -36,7 +36,7 @@ image::what-is-apache-causeway/causeway-in-pictures/020-install-fixtures.png[wid
 
 === Dashboard and View Models
 
-Most of the time the end-user interacts with representations of persistent domain entities, but Apache Isis also supports view models which can aggregate data from multiple sources.
+Most of the time the end-user interacts with representations of persistent domain entities, but Apache Causeway also supports view models which can aggregate data from multiple sources.
 The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
 
 image::what-is-apache-causeway/causeway-in-pictures/030-dashboard-view-model.png[width="800px"]
@@ -54,7 +54,7 @@ There are no controllers or HTML to write.
 image::what-is-apache-causeway/causeway-in-pictures/040-domain-entity.png[width="800px"]
 
 
-In addition to the domain entity, Apache Isis allows layout metadata hints to be provided, for example to specify the grouping of properties, the positioning of those groups into columns, the association of actions (the buttons) with properties or collections, the icons on the buttons, and so on.
+In addition to the domain entity, Apache Causeway allows layout metadata hints to be provided, for example to specify the grouping of properties, the positioning of those groups into columns, the association of actions (the buttons) with properties or collections, the icons on the buttons, and so on.
 This metadata can be specified either as annotations or in XML form.
 The benefit of the latter is that it can be updated (and the UI redrawn) without restarting the app.
 
@@ -88,7 +88,7 @@ We sometimes use the term "behaviourally complete" for such domain objects.
 === Mixins
 
 As an alternative to placing actions (business logic) on a domain object, it can instead be placed inside a mixin object.
-When an object is rendered by Apache Isis, the mixin "contributes" its behaviour to the domain object (similar to aspect-oriented traits).
+When an object is rendered by Apache Causeway, the mixin "contributes" its behaviour to the domain object (similar to aspect-oriented traits).
 
 In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) the "similar to" collection and the two "as DTO" actions are all contributed by mixins:
 
@@ -97,7 +97,7 @@ image::what-is-apache-causeway/causeway-in-pictures/065-contributions.png[width=
 == Extensible Views
 
 
-The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible.
+The Apache Causeway viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible.
 For example, when a collection of objects is rendered, this is just one of several views, as shown in the selector drop-down:
 
 image::what-is-apache-causeway/causeway-in-pictures/070-pluggable-views.png[width="800px"]
@@ -174,19 +174,19 @@ image::what-is-apache-causeway/causeway-in-pictures/180-app-user-entity.png[widt
 
 
 
-If not all of these properties are required, then they can be hidden either using security or though Apache Isis' internal event bus (described below).
+If not all of these properties are required, then they can be hidden either using security or though Apache Causeway' internal event bus (described below).
 Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
 
 === Themes
 
-Apache Isis' Wicket viewer uses http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed.
+Apache Causeway' Wicket viewer uses http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed.
 If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
 
 image::what-is-apache-causeway/causeway-in-pictures/190-switch-theme.png[width="800px"]
 
 == REST API
 
-In addition to Apache Isis' Wicket viewer, it also provides a rich REST API with a full set of hypermedia controls, generated automatically from the domain objects (entities and view models).
+In addition to Apache Causeway' Wicket viewer, it also provides a rich REST API with a full set of hypermedia controls, generated automatically from the domain objects (entities and view models).
 The framework provides two default representations, one an implementation of the http://restfulobjects.org[Restful Objects] spec, the other a simplified representation suitable for custom JavaScript apps.
 Other representations can be plugged in.
 
@@ -203,7 +203,7 @@ image::what-is-apache-causeway/causeway-in-pictures/205-swagger-ui.png[width="80
 
 == Integration Testing Support
 
-Earlier on we noted that Apache Isis allows fixtures to be installed through the UI.
+Earlier on we noted that Apache Causeway allows fixtures to be installed through the UI.
 These same fixture scripts can be reused within integration tests.
 For example, the code snippet below shows how the `FixtureScripts` service injected into an integration test can then be used to set up data:
 
@@ -218,17 +218,17 @@ image::what-is-apache-causeway/causeway-in-pictures/220-testing-happy-case.png[w
 
 
 
-To simulate the business rules enforced by Apache Isis, the domain object can be "wrapped" in a proxy.
-For example, if using the Wicket viewer then Apache Isis will enforce the rule (implemented in the `ToDoItem` class itself) that a completed item cannot have the "completed" action invoked upon it.
+To simulate the business rules enforced by Apache Causeway, the domain object can be "wrapped" in a proxy.
+For example, if using the Wicket viewer then Apache Causeway will enforce the rule (implemented in the `ToDoItem` class itself) that a completed item cannot have the "completed" action invoked upon it.
 The wrapper simulates this by throwing an appropriate exception:
 
 image::what-is-apache-causeway/causeway-in-pictures/230-testing-wrapper-factory.png[width="550px"]
 
 == Internal Event Bus
 
-Contributions, discussed earlier, are an important tool in ensuring that the packages within your Apache Isis application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
+Contributions, discussed earlier, are an important tool in ensuring that the packages within your Apache Causeway application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
 
-Another important tool to ensure your codebase remains maintainable is Apache Isis' internal event bus.
+Another important tool to ensure your codebase remains maintainable is Apache Causeway' internal event bus.
 It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
 
 image::what-is-apache-causeway/causeway-in-pictures/240-domain-events.png[width="400px"]

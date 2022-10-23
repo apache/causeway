@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The starter app parent POM is provided as a convenience to act as the `<parent>` for Apache Isis applications.
+The starter app parent POM is provided as a convenience to act as the `<parent>` for Apache Causeway applications.
 It builds upon a similar POM provided by the Spring Boot framework, which ensures a consistent set of dependencies, as well as configuring various build plugins.
 
 == Usage
@@ -35,7 +35,7 @@ As the diagram shows, the parent POM inherits two Spring Boot parent POMs: direc
 * `spring-boot-starter-parent` configures various `<build>/<plugins>` and `<resources>`, while
 * `spring-boot-dependencies` the second defines numerous `xxx.version` properties for various third party applications (validated as being compatible with each other by the Spring Boot team), and sets up corresponding `<dependencyManagement>/<dependencies>`.
 
-The parent POM also import (using `scope=import, type=pom`) each of the "bill of material" POMs provided by Apache Isis framework:
+The parent POM also import (using `scope=import, type=pom`) each of the "bill of material" POMs provided by Apache Causeway framework:
 
 * `org.apache.causeway.core:causeway` -
 +
@@ -55,7 +55,7 @@ For the `causeway-testing-xxx` modules (fixture scripts, unit test support, inte
 
 * `o.a.i.legacy:causeway-legacy`
 
-These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Isis (the reference to the parent POM).
+These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Causeway (the reference to the parent POM).
 
 
 [#surefire-configuration]

@@ -2,21 +2,21 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Apache Isis' is a Spring Boot application, and so is typically configured using an `application.properties` or `application.yml` file.
+Apache Causeway' is a Spring Boot application, and so is typically configured using an `application.properties` or `application.yml` file.
 
 
 The configuration can be obtained from a variety of external locations; see the link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config[Spring Boot] documentation for more details.
 
 TIP: The xref:docs:starters:about.adoc[starter apps] use `application.yml` for configuration that doesn't change between environments, and `config/application.properties` for settings (such as JDBC URL) that does vary.
 
-This chapter describes the configuration properties available to configure an Apache Isis application.
+This chapter describes the configuration properties available to configure an Apache Causeway application.
 
 
 
 [#deployment-types]
 == Deployment Types
 
-Apache Isis distinguishes between the application being run in prototyping mode vs running in production mode.
+Apache Causeway distinguishes between the application being run in prototyping mode vs running in production mode.
 The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
 
 A similar concept appears in the link:https://wicket.apache.org[Apache Wicket] framework (which is the library with which the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] is implemented, of course).
@@ -26,7 +26,7 @@ Wicket's term is the "configuration".
 [cols="1a,1a", options="header"]
 |===
 
-| Apache Isis +
+| Apache Causeway +
 deployment type
 | Apache Wicket library +
 configuration
@@ -40,7 +40,7 @@ configuration
 
 |===
 
-By default Apache Isis runs in production mode.
+By default Apache Causeway runs in production mode.
 But if configured to run instead in prototyping mode, then any actions xref:refguide:applib:index/annotation/Action.adoc#restrictTo[restricted to] to prototype mode are visible.
 In particular, the "Prototyping" menu will appear, containing a number of framework-provided menu services - all restricted to prototyping mode.
 For example, menu items to run in xref:testing:fixtures:about.adoc[fixture scripts] are on this menu.
@@ -96,7 +96,7 @@ Applications can discover the prototyping mode by injecting the `IsisSystemEnvir
 [#specifying-components]
 == Specifying components
 
-Components are pluggable parts of the Apache Isis framework that are responsible for the presentation layer, for security, or for persistence.
+Components are pluggable parts of the Apache Causeway framework that are responsible for the presentation layer, for security, or for persistence.
 Each component corresponds to one or more Maven module(s), and are specified using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] statements from a top-level class annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] annotation.
 These are then bootstrapped from a link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] or link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
 
@@ -122,7 +122,7 @@ public class SimpleApp
 <.> specifies prototyping mode.
 This enables actions marked for prototyping to become available, useful during the early stages of development.
 
-In turn, the "app manifest" (the name has been retained from Apache Isis v1.x) is the top-level Spring `@Configuration`.
+In turn, the "app manifest" (the name has been retained from Apache Causeway v1.x) is the top-level Spring `@Configuration`.
 It looks like this:
 
 [source,java]
@@ -143,7 +143,7 @@ public class AppManifest {
 }
 ----
 
-<.> Mandatory - specifies the core of the Apache Isis framework
+<.> Mandatory - specifies the core of the Apache Causeway framework
 <.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
 <.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.

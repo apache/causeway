@@ -65,7 +65,7 @@ Conversely, if a `Product` is viewed then its collection of ``Order``s would sup
 [TIP]
 ====
 This feature is a close cousin of the `@PropertyLayout(hidden=Where.REFERENCES_PARENT)` annotation, which will cause the property itself to be hidden as a column in the table.
-An Apache Isis idiom is therefore:
+An Apache Causeway idiom is therefore:
 
 [source,java]
 ----

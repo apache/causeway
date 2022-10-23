@@ -5,14 +5,14 @@
 :page-partial:
 
 
-Apache Isis' support for internationlization (i18n) allows every element of the domain model (the class names, property names, action names, parameter names and so forth) to be translated.
+Apache Causeway' support for internationlization (i18n) allows every element of the domain model (the class names, property names, action names, parameter names and so forth) to be translated.
 
 It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:refguide:applib-methods:prefixes.adoc#disable[disable...()] or xref:refguide:applib-methods:prefixes.adoc#validate[validate...()], and so on.
 
 The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] (that is, its labels and messages) is also internationalized using the same mechanism.
 If no translations are available, then the Wicket viewer falls back to using Wicket resource bundles.
 
-Isis does not translate the values of your domain objects, though.
+Causeway does not translate the values of your domain objects, though.
 So, if you have a domain concept such as `Country` whose name is intended to be localized according to the current user, you will need to model this yourself.
 
 == Implementation Approach
@@ -24,7 +24,7 @@ However, there are some serious drawbacks in this approach, including:
 * there is no support for plural forms (see this link:http://stackoverflow.com/questions/14326653/java-internationalization-i18n-with-proper-plurals/14327683#14327683[SO answer])
 * there is no tooling support for translators
 
-Apache Isis therefore takes a different approach, drawing inspiration from GNU's https://www.gnu.org/software/gettext/manual/index.html[gettext] API and specifically its `.pot` and `.po` files.
+Apache Causeway therefore takes a different approach, drawing inspiration from GNU's https://www.gnu.org/software/gettext/manual/index.html[gettext] API and specifically its `.pot` and `.po` files.
 These are intended to be used as follows:
 
 * the `.pot` (portable object template) file holds the message text to be translated
@@ -37,7 +37,7 @@ These message strings can also have singular and plural forms.
 
 [IMPORTANT]
 ====
-Although Apache Isis' implementation is modelled after GNU's API, it does _not_ use any GNU software.
+Although Apache Causeway' implementation is modelled after GNU's API, it does _not_ use any GNU software.
 This is for two reasons: (a) to simplify the toolchain/developer experience, and (b) because GNU software is usually GPL, which would be incompatible with the Apache license.
 ====
 
@@ -50,7 +50,7 @@ This design tackles all the issues of ``ResourceBundle``s:
 In fact, there are also online communities/platforms of translators to assist with translating files.
 One such is https://crowdin.com/[crowdin] (nb: this link does not imply endorsement).
 
-In Apache Isis' implementation, if the translation is missing from the `.po` file then the original message text from the `.pot` file will be returned.
+In Apache Causeway' implementation, if the translation is missing from the `.po` file then the original message text from the `.pot` file will be returned.
 In fact, it isn't even necessary for there to be any `.po` files; `.po` translations can be added piecemeal as the need arises.
 
 == API

@@ -4,7 +4,7 @@
 
 
 
-Apache Isis&trade; software is a framework for rapidly developing domain-driven apps in Java.
+Apache Causeway&trade; software is a framework for rapidly developing domain-driven apps in Java.
 Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or RESTful API.
 Use for prototyping or production.
 
@@ -19,7 +19,7 @@ If you just want to get going quickly, we suggest using our xref:docs:starters:h
 
 == Formal Releases
 
-If you want to build Apache Isis from formally released source tarballs, you can download from here:
+If you want to build Apache Causeway from formally released source tarballs, you can download from here:
 
 * https://www.apache.org/dyn/closer.cgi/causeway/causeway-core/causeway-{page-isisrel}-source-release.zip[causeway-{page-isisrel}] (https://www.apache.org/dist/causeway/causeway-core/causeway-{page-isisrel}-source-release.zip.asc[asc], https://www.apache.org/dist/causeway/causeway-core/causeway-{page-isisrel}-source-release.zip.md5[md5])
 
@@ -73,8 +73,8 @@ Windows users can get binary md5 programs from these (and likely other) places:
 
 == Source Code
 
-The Apache Isis source is hosted on github.
-You can download the Apache Isis source code using:
+The Apache Causeway source is hosted on github.
+You can download the Apache Causeway source code using:
 
 [source,bash]
 ----
@@ -90,7 +90,7 @@ See link:https://gitbox.apache.org/setup/[gitbox setup] for more details on how 
 
 == DOAP RDF File
 
-The http://projects.apache.org/doap.html[description of a project] RDF file for Apache Isis can be downloaded link:https://causeway.apache.org/doap_isis.rdf[here].
+The http://projects.apache.org/doap.html[description of a project] RDF file for Apache Causeway can be downloaded link:https://causeway.apache.org/doap_isis.rdf[here].
 
 
 

@@ -33,7 +33,7 @@ Dan::
 OK, good enough for me.
 
 Andi::
-ConcurrentTaskList and its co-operator classes reside in the internal API section of the 'commons' module, however they don't follow the _ prefixed scheme. I was in conflict with whether to move them up in the package hierarchy to make them also official usable by Isis coders. I decided 'not-yet' so we might want to add the prefixes.
+ConcurrentTaskList and its co-operator classes reside in the internal API section of the 'commons' module, however they don't follow the _ prefixed scheme. I was in conflict with whether to move them up in the package hierarchy to make them also official usable by Causeway coders. I decided 'not-yet' so we might want to add the prefixes.
 
 Dan::
 Yes, I'd prefer that : "_" to mean internal.  If we do decide to make them formal API, we can refactor our internal code that uses it
@@ -43,7 +43,7 @@ most simple usecase scenario ...
 +
 [source,java]
 ----
-val taskList = ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
+val taskList = ConcurrentTaskList.named("Causeway Application Background Initialization Tasks")
 .addRunnable("Configure WebJars",            this::configureWebJars)
 .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
 .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);

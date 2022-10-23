@@ -2,8 +2,8 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Apache Isis builds on top of Spring Boot's integration testing support, in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
-This configures and bootstraps the Apache Isis runtime, usually running against an in-memory database.
+Apache Causeway builds on top of Spring Boot's integration testing support, in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
+This configures and bootstraps the Apache Causeway runtime, usually running against an in-memory database.
 
 On top of that, we usually:
 
@@ -94,7 +94,7 @@ public class AppManifest {
 [#bootstrapping]
 == Bootstrapping
 
-We typically put the bootstrapping of Apache Isis into a superclass, one for each Maven module.
+We typically put the bootstrapping of Apache Causeway into a superclass, one for each Maven module.
 This allows an individual "slice" of the application to be tested, rather than as a monolith.
 
 So, for the `module-simple` module, we have:
@@ -163,7 +163,7 @@ They both also force an in-memory database, with JDO/DataNucleus ORM configured 
 === Faster bootstrapping
 
 By default integration tests are run in "production" deployment mode.
-With the `causeway.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Isis metamodel.
+With the `causeway.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Causeway metamodel.
 
 While this _does_ have the benefit that the metamodel will be validated, the downside is that the test takes longer to bootstrap.
 
@@ -228,7 +228,7 @@ public class SimpleObject
 Properties are visible but unmodifiable by default
 We therefore have two tests for each of these facts.
 
-NOTE: Non-editable properties is change from Isis v1.x.
+NOTE: Non-editable properties is change from Causeway v1.x.
 Use the `causeway.applib.annotation.domain-object.editing` configuration property to pverride.
 
 By convention, we group tests into nested static classes, so the corresponding integration test is:
@@ -477,7 +477,7 @@ This is usually done in the test's `setUp()` method.
 
 . the test calls the methods on the wrapper rather than the domain object itself
 
-. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Isis metamodel
+. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Causeway metamodel
 
 . (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
 

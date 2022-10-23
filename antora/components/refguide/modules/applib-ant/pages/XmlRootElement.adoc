@@ -9,7 +9,7 @@ The `@XmlRootElement` annotation provides an alternative way to define a xref:us
 A view model is a non-persisted domain object whose state is converted to/from a string memento.
 In the case of a JAXB-annotated object this memento is its XML representation.
 JAXB generally requires that the root element of the XML representation is annotated with `@XmlRootElement`.
-Apache Isis makes this a mandatory requirement.
+Apache Causeway makes this a mandatory requirement.
 
 In comparison to using either the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface or the
 xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject(nature=VIEW_MODEL)] annotation,
@@ -26,7 +26,7 @@ In contrast, if the `@DomainObject(nature=VIEW_MODEL)` annotation is used then o
 If using `ViewModel` interface then arbitrary state (including that of collections), however the programmer must write all the code by hand
 
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated with the xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[@XmlJavaTypeAdapter], using the framework-provided `PersistentEntityAdapter`.
-This adapter converts any references to such domain entities using the `oidDto` complex type (as defined by the Apache Isis xref:refguide:schema:common.adoc[common schema]): the object's type and its identifier.
+This adapter converts any references to such domain entities using the `oidDto` complex type (as defined by the Apache Causeway xref:refguide:schema:common.adoc[common schema]): the object's type and its identifier.
 
 [TIP]
 ====

@@ -6,10 +6,10 @@
 
 
 
-Apache Isis is a mature platform suitable for production deployment, with its "sweet spot" being line-of-business enterprise applications.
+Apache Causeway is a mature platform suitable for production deployment, with its "sweet spot" being line-of-business enterprise applications.
 So if you're looking to develop that sort of application, we certainly hope you'll seriously evaluate it.
 
-But there are other ways that you can make Apache Isis work for you; in this section we explore a few of them.
+But there are other ways that you can make Apache Causeway work for you; in this section we explore a few of them.
 
 include::partial$_deployment-options.adoc[]
 

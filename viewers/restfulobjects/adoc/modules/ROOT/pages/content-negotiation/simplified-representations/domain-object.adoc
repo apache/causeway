@@ -6,7 +6,7 @@
 
 :dollar: $
 
-If a domain object resource (link:https://www.restfulobjects.org/spec/1.0/section-c/chapter-14.html[section 14]) is accessed with the Apache Isis profile, the resultant representation is a JSON object with simple key/value pairs for each property.
+If a domain object resource (link:https://www.restfulobjects.org/spec/1.0/section-c/chapter-14.html[section 14]) is accessed with the Apache Causeway profile, the resultant representation is a JSON object with simple key/value pairs for each property.
 
 The contents of any collections are also eagerly returned, consisting of an array of elements of each referenced object.
 Each such element contains key/value pairs of each property (in other words, a grid of data is returned).

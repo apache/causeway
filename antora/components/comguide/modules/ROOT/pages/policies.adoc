@@ -8,7 +8,7 @@
 
 
 
-This chapter pulls together various policy documents relating to the development of Apache Isis'.
+This chapter pulls together various policy documents relating to the development of Apache Causeway'.
 
 
 include::policies/versioning-policy.adoc[leveloffset=+1]

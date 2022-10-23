@@ -4,7 +4,7 @@
 
 
 
-The Apache Isis metamodel is built up from declaratively (ie, xref:refguide:applib-ant:about.adoc[annotations]) and imperatively, from "supporting" methods and other reserved methods.
+The Apache Causeway metamodel is built up from declaratively (ie, xref:refguide:applib-ant:about.adoc[annotations]) and imperatively, from "supporting" methods and other reserved methods.
 
 This chapter documents the supporting methods and the reserved methods.
 It also documents the reserved methods that act as callback hooks into the persistence lifecycle of domain entities.

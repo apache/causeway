@@ -5,7 +5,7 @@
 
 
 
-This guide documents Apache Isis' domain services, both those that act as an API (implemented by the framework for your domain objects to call), and those domain services that act as an SPI (implemented by your domain application and which are called by the framework).
+This guide documents Apache Causeway' domain services, both those that act as an API (implemented by the framework for your domain objects to call), and those domain services that act as an SPI (implemented by your domain application and which are called by the framework).
 
 == Types of Domain Service
 
@@ -50,8 +50,8 @@ include::applib-svc:partial$_security-spi.adoc[leveloffset=+2]
 
 == Public API vs Internal Services
 
-The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:causeway-applib` module) as stable, public classes.
-Importantly, this also minimizes the coupling between your code and Apache Isis, allowing you to easily mock out these services in your unit tests.
+The vast majority of Apache Causeway' domain services are defined in Apache Causeway' applib (`o.a.i.core:causeway-applib` module) as stable, public classes.
+Importantly, this also minimizes the coupling between your code and Apache Causeway, allowing you to easily mock out these services in your unit tests.
 
 The framework also defines a number of "internal" services.
 These are not part of the framework's formal API, in that they use classes that are outside of the applib.
@@ -60,7 +60,7 @@ These internal framework services should be thought of as part of the internal d
 
 == Using the services
 
-Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
+Apache Causeway includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Causeway will inject the service into your object.
 
 For example:
 

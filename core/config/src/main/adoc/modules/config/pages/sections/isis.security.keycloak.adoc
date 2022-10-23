@@ -41,7 +41,7 @@ login-success-url
 causeway.security.keycloak.realm
 
 |
-| The name of the realm for the Apache Isis application, as configured in Keycloak.
+| The name of the realm for the Apache Causeway application, as configured in Keycloak.
 
 
 

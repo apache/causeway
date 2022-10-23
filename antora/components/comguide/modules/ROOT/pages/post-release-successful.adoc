@@ -7,7 +7,7 @@ The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
 
-* members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 
 * the release manager performing post-release tasks, for either a successful or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote (former documented below)
 
@@ -22,7 +22,7 @@ Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {page-isisrel}
+[RESULT] [VOTE] Apache Causeway Core release {page-isisrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -103,7 +103,7 @@ Any tickets that were partially implemented should be closed, and new tickets cr
 
 === Mark the version as released
 
-In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the version as being released.
+In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Causeway project and update the version as being released.
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
@@ -167,7 +167,7 @@ Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the link:https://github.com/apache/causeway/blob/master/STATUS[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
+* Update the link:https://github.com/apache/causeway/blob/master/STATUS[STATUS] file (in root of Apache Causeway' source) should be updated with details of the new release.
 
 * commit the changes
 +
@@ -185,7 +185,7 @@ The release is then automatically pushed to http://www.apache.org/dist/[http://w
 Only the most recent release of each supported release line should be contained here, old versions should be deleted.
 
 Each project is responsible for the structure of its directory.
-The directory structure of Apache Isis reflects the directory structure in our git source code repo:
+The directory structure of Apache Causeway reflects the directory structure in our git source code repo:
 
 [source]
 ----
@@ -453,31 +453,31 @@ Log the new release in the link:https://reporter.apache.org/addrelease.html?caus
 
 Announce the release to link:mailto:users@causeway.apache.org[users mailing list].
 
-For example, for a release of Apache Isis Core, use the following subject:
+For example, for a release of Apache Causeway Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Isis version {page-isisrel} Released
+[ANN] Apache Causeway version {page-isisrel} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis {page-isisrel}.
+The Apache Causeway team is pleased to announce the release of Apache Causeway {page-isisrel}.
 
 New features in this release include:
 
 * ...
 
-Full release notes are available on the Apache Isis website at [1].
+Full release notes are available on the Apache Causeway website at [1].
 
 You can access this release directly from the Maven central repo [2].
 Alternatively, download the release and build it from source [3].
 
 Enjoy!
 
---The Apache Isis team
+--The Apache Causeway team
 
 [1] https://causeway.apache.org/relnotes/{page-isisrel}/about.html
 [2] https://search.maven.org

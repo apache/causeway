@@ -11,7 +11,7 @@ image::030-import-settings/050-live-templates.png[width="600px"]
 
 The live templates have a prefix of either:
 
-* `is` : for Apache Isis domain objects
+* `is` : for Apache Causeway domain objects
 * `ju` : for JUnit tests
 * `jm` : for JMock mocks or libraries
 

@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Apache Isis runs on top of Spring Boot, and uses Spring Boot for dependency injection, both the application's own domain services and also the many additional services defined by the framework (such as xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]).
+Apache Causeway runs on top of Spring Boot, and uses Spring Boot for dependency injection, both the application's own domain services and also the many additional services defined by the framework (such as xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]).
 
 Since this is a core capability of Spring, it's worth checking out Spring's link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-factory-collaborators[documentation] on the topic.
 
@@ -18,7 +18,7 @@ It is also possible to use Spring's own link:https://docs.spring.io/spring-frame
 Since the two annotations are effectively equivalent, we recommend using the JEE standard.
 ====
 
-However, not only does Apache Isis use Spring to autowire domain services into other services, the framework _also_ ensures that services are injected into any domain object (eg xref:overview.adoc#domain-entities[entity], xref:overview.adoc#view-models[view model], xref:overview.adoc#mixins[mixins], xref:testing:fixtures:about.adoc#fixture-scripts[fixture script], xref:refguide:applib:index/spec/Specification.adoc[specification] etc).
+However, not only does Apache Causeway use Spring to autowire domain services into other services, the framework _also_ ensures that services are injected into any domain object (eg xref:overview.adoc#domain-entities[entity], xref:overview.adoc#view-models[view model], xref:overview.adoc#mixins[mixins], xref:testing:fixtures:about.adoc#fixture-scripts[fixture script], xref:refguide:applib:index/spec/Specification.adoc[specification] etc).
 This is key enabler to place functionality in the "right place", eg in a domain entity/view model itself, or in a mixin.
 
 
@@ -145,7 +145,7 @@ Using default visibility here still allows the field to be mocked out within uni
 
 If there is more than one implementation of the service, then a specific implementation can be requested using either Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Primary.html[@Primary] annotation (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-primary[here]) or Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Qualifier.html[Qualifier] annotation (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers[here]).
 
-All of the domain services provided by Apache Isis' are annotated with `@Qualifier` to enable this.
+All of the domain services provided by Apache Causeway' are annotated with `@Qualifier` to enable this.
 
 
 == Injecting Lists of Services

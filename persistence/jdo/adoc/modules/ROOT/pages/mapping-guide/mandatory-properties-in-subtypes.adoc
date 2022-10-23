@@ -21,7 +21,7 @@ whereby a single table holds the properties of the subtype, and also holds the p
 
 In the first "rollup" case, we can have a situation where - logically speaking - the property is mandatory in the subtype - but it must be mapped as nullable in the database because it is n/a for any other subtypes that are rolled up.
 
-In this situation we must tell JDO that the column is optional, but to Apache Isis we want to enforce it being mandatory. This can be done using the `@Property(optionality=Optionality.MANDATORY)` annotation.
+In this situation we must tell JDO that the column is optional, but to Apache Causeway we want to enforce it being mandatory. This can be done using the `@Property(optionality=Optionality.MANDATORY)` annotation.
 
 For example:
 

@@ -17,7 +17,7 @@ In addition they will also require ORM metadata.
 
 TIP: It is also possible to specify ORM metadata using `.xml` files.
 
-In this section we discuss the mechanics of writing domain objects that comply with Apache Isis' programming model.
+In this section we discuss the mechanics of writing domain objects that comply with Apache Causeway' programming model.
 
 
 == Entities (JPA)
@@ -80,7 +80,7 @@ A common strategy is to allow the database to assign the id, for example using a
 
 <.> The `@Version` annotation is useful for optimistic locking; the strategy indicates what to store in the `version` column.
 
-<.> The `@DomainObject` annotation identifies the domain object to Apache Isis (not DataNucleus).
+<.> The `@DomainObject` annotation identifies the domain object to Apache Causeway (not DataNucleus).
 It isn't necessary to include this annotation -- at least, not for entities -- but it is nevertheless recommended.
 In particular, its strongly recommended that the `logicalTypeName` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
 

@@ -7,17 +7,17 @@
 
 
 
-This page explains how you can contribute to Apache Isis.
-You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and learn xref:conguide:ROOT:building-apache-causeway.adoc[how to build Apache Isis].
+This page explains how you can contribute to Apache Causeway.
+You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and learn xref:conguide:ROOT:building-apache-causeway.adoc[how to build Apache Causeway].
 
 Thanks for considering to help out, your contributions are appreciated!
 
 == Recommended Workflow (GitHub)
 
-Apache Isis' source code is hosted in at GitHub (https://github.com/apache/causeway.git[https], or ssh: `git@github.com:apache/causeway.git`).
+Apache Causeway' source code is hosted in at GitHub (https://github.com/apache/causeway.git[https], or ssh: `git@github.com:apache/causeway.git`).
 
 As you might imagine, only committers are permitted to push changes to the GitHub repo.
-As a contributor, we recommend that you fork the https://github.com/apache/causeway.git[apache/causeway] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
+As a contributor, we recommend that you fork the https://github.com/apache/causeway.git[apache/causeway] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Causeway committers to apply.
 
 The diagram below illustrates the process:
 
@@ -32,9 +32,9 @@ That is:
 * note the asymmetry here: the `upstream` repo (the Apache GitHub repo) is *not* the same as the `origin` repo (your fork).
 . you work on your changes locally; when done, you push them to your GitHub fork
 . to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket (you will need to log in or create a new account first), and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below).
-In any case, before you decide to start hacking with Apache Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:support:mailing-list.adoc[mailing lists].
+In any case, before you decide to start hacking with Apache Causeway, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:support:mailing-list.adoc[mailing lists].
 . Use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
-. An Apache Isis committer will review your change, and apply it if suitable.
+. An Apache Causeway committer will review your change, and apply it if suitable.
 
 == Setting up your fork/clone
 
@@ -76,7 +76,7 @@ For more info on tracking branches http://git-scm.com/book/en/Git-Branching-Remo
 
 == Commit messages
 
-Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Apache Isis committer.
+Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Apache Causeway committer.
 You should take time to write a meaningful commit message that helps explain what the patch refers to; if you don't then there's a chance that your patch may be rejected and not applied.
 No-one likes hard work to go to waste!
 
@@ -195,7 +195,7 @@ The process to raise the pull request, broadly speaking:
 * Open a web browser to your GitHub fork of causeway
 * Select your topic branch (pushed in the previous step) so that the pull request references the topic branch.
 * Click the `Pull Request` button.
-* Check that the Apache Isis mailing list email came through.
+* Check that the Apache Causeway mailing list email came through.
 
 == If your pull request is accepted
 

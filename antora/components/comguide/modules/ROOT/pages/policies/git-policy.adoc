@@ -25,7 +25,7 @@ And, of course, there is loads of good advice on http://stackoverflow.com/questi
 
 == Workflow
 
-There are many ways of using Git, but the Apache Isis committers have adopted the following workflow:
+There are many ways of using Git, but the Apache Causeway committers have adopted the following workflow:
 
 * create a topic branch for a feature +
 +

@@ -15,7 +15,7 @@ Accept: application/json;profile="urn:org.restfulobjects:repr-types/xxx"
 where "xxx" varies by resource.
 The detail can be found in link:https://www.restfulobjects.org/spec/1.0/section-a/chapter-02.html#_2-4-1-representationtype-profile-parameter[section 2.4.1] of the RO spec.
 
-The "Isis" profile allows the client to request simplified representations for the most frequently accessed resources.
+The "Causeway" profile allows the client to request simplified representations for the most frequently accessed resources.
 This is done by specifying an `Accept` header of:
 
 [source]

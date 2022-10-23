@@ -15,7 +15,7 @@ Formally speaking, a property is simply a regular JavaBean getter, returning a s
 Most properties (those that are editable/modifiable) will also have a setter and, if persisted, a backing instance field.
 And most properties will also have a number of annotations:
 
-* Apache Isis defines its own xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation for capturing domain semantics.
+* Apache Causeway defines its own xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation for capturing domain semantics.
 It also provides a xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file)
 
 * the properties of domain entities are usually also annotated with an ORM annotation.
@@ -26,7 +26,7 @@ It's also possible (using annotations) to define a link table to hold foreign ke
 
 * for the properties of view models, then JAXB annotations such as  link:https://docs.oracle.com/javase/8/docs/api/javax/xml/bind/annotation/XmlElement.html[@XmlElement] may be present
 
-Apache Isis recognises some of these annotations from the persistence layer and infers some domain semantics from them (for example, the maximum allowable length of a string property).
+Apache Causeway recognises some of these annotations from the persistence layer and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
 The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses this approach.
@@ -87,11 +87,11 @@ For further details on mapping associations using xref:pjdo:ROOT:about.adoc[JDO/
 (For domain entities) JDO/DataNucleus' default is that a property is assumed to be mandatory if it is a primitive type (eg `int`, `boolean`), but optional if a reference type (eg `String`, `BigDecimal` etc).
 To override optionality in JDO/DataNucleus the `@Column(allowsNull="...")` annotations is used.
 
-Apache Isis on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.
-These defaults can also be overridden using Apache Isis' own annotations, specifically `@Property(optionality=...)`, or (because it's much less verbose) using `@javax.annotation.Nullable`.
+Apache Causeway on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.
+These defaults can also be overridden using Apache Causeway' own annotations, specifically `@Property(optionality=...)`, or (because it's much less verbose) using `@javax.annotation.Nullable`.
 
 These different defaults can lead to incompatibilities between the two frameworks.
-To counteract that, Apache Isis also recognizes and honours JDO's `@Column(allowsNull=...)`.
+To counteract that, Apache Causeway also recognizes and honours JDO's `@Column(allowsNull=...)`.
 
 For example, you can write:
 
@@ -121,12 +121,12 @@ import lombok.Setter;
 private LocalDate date;
 ----
 
-The framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Apache Isis' defaults and DataNucleus, and will refuse to boot if any are found.
+The framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Apache Causeway' defaults and DataNucleus, and will refuse to boot if any are found.
 
 [#editable-properties]
 == Editable Properties
 
-Apache Isis provides the capability to allow individual properties to be modified.
+Apache Causeway provides the capability to allow individual properties to be modified.
 This is specified using the `@Property(editing=...)` attribute.
 
 For example:
@@ -186,19 +186,19 @@ AddressService addressService;                                      // <.>
 ----
 <.> the representation of the address, in human readable form, eg "10 Downing Street, London, UK"
 <.> the lat/long representation of the address, eg "51.503363;-0.127625".
-Excluded from the Apache Isis metamodel.
+Excluded from the Apache Causeway metamodel.
 <.> an injected service that can convert to/from address and latLong.
 
 == Ignoring Properties
 
-By default Apache Isis will automatically render all properties in the xref:vw:ROOT:about.adoc[Wicket UI] or in the xref:vro:ROOT:about.adoc[REST API].
-To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic].
+By default Apache Causeway will automatically render all properties in the xref:vw:ROOT:about.adoc[Wicket UI] or in the xref:vro:ROOT:about.adoc[REST API].
+To get Apache Causeway to ignore a property (exclude it from its metamodel), annotate the getter using xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic].
 
 Similarly, for the JDO/DataNucleus ORM, ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.
-This is independent of Apache Isis; in other words that property will still be rendered in the UI (unless also annotated with `@Programmatic`).
+This is independent of Apache Causeway; in other words that property will still be rendered in the UI (unless also annotated with `@Programmatic`).
 
 For view models, you can tell JAXB to ignore a property using the `@javax.xml.bind.annotation.XmlTransient` annotation.
-Again, this is independent of Apache Isis.
+Again, this is independent of Apache Causeway.
 
 You can also suppress a property from the UI using xref:refguide:applib:index/annotation/Property.adoc#hidden[@Property#hidden()] or indeed xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[@PropertyLayout#hidden()].
 However, this doesn't exclude the property from the metamodel.
@@ -236,11 +236,11 @@ import lombok.Setter;
 private String firstName
 ----
 
-This is a good example of a case where Apache Isis infers domain semantics from the JDO annotation.
+This is a good example of a case where Apache Causeway infers domain semantics from the JDO annotation.
 
 === JODA Dates
 
-Apache Isis' bundles DataNucleus' http://www.datanucleus.org/documentation/products/plugins.html[built-in support] for Joda `LocalDate` and `LocalDateTime` datatypes, meaning that entity properties of these types will be persisted as appropriate data types in the database tables.
+Apache Causeway' bundles DataNucleus' http://www.datanucleus.org/documentation/products/plugins.html[built-in support] for Joda `LocalDate` and `LocalDateTime` datatypes, meaning that entity properties of these types will be persisted as appropriate data types in the database tables.
 
 It is, however, necessary to annotate your properties with `@javax.jdo.annotations.Persistent`, otherwise the data won't actually be persisted.
 See the link:http://db.apache.org/jdo/field_types.html[JDO docs] for more details on this.
@@ -312,7 +312,7 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 === ``Blob``s
 
-Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.causeway.applib.value.Blob` and `org.apache.causeway.applib.value.Clob` can also be persisted.
+Apache Causeway configures JDO/DataNucleus so that the properties of type `org.apache.causeway.applib.value.Blob` and `org.apache.causeway.applib.value.Clob` can also be persisted.
 
 As for Joda dates, this requires the `@javax.jdo.annotations.Persistent` annotation.
 However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
@@ -337,7 +337,7 @@ import lombok.Setter;
 private Blob attachment;
 ----
 
-The three `@Column` annotations are required because the mapping classes that Apache Isis provides (https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns.
+The three `@Column` annotations are required because the mapping classes that Apache Causeway provides (https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/causeway/blob/causeway-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/causeway/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns.
 (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
 
 If the `Blob` is mandatory, then use:

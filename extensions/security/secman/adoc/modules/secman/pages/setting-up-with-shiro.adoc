@@ -17,12 +17,12 @@ image:secman-shiro-architecture.drawio.svg[]
 
 Thus:
 
-* Apache Isis' xref:security:shiro:about.adoc[Shiro security] integration sets up Shiro web filters to intercept every http request, as well as the xref:refguide:security:index/shiro/authentication/AuthenticatorShiro.adoc[AuthenticatorShiro] implementation.
+* Apache Causeway' xref:security:shiro:about.adoc[Shiro security] integration sets up Shiro web filters to intercept every http request, as well as the xref:refguide:security:index/shiro/authentication/AuthenticatorShiro.adoc[AuthenticatorShiro] implementation.
 * The `AuthenticatorShiro` calls to the Shiro Security Manager to obtain the authenticated principal.
 * The Shiro Security Manager uses the `shiro.ini` configuration file to look up the realm to perform the authentication; in this case we configure it to use Secman's realm (xref:refguide:extensions:index/secman/delegated/shiro/realm/IsisModuleExtSecmanShiroRealm.adoc[IsisModuleExtSecmanShiroRealm]).
 * Secman's realm implementation queries the database and uses this to create an instance of `PrincipalForApplicationUser`, where the `Principal` interface is Shiro's representation of an authenticated user.
 The `PrincipalForApplicationUser` is backed by xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], which all of the permissions to object members for this particular user.
-* to render a page, the Apache Isis viewer uses configured `Authorizor`, in this case
+* to render a page, the Apache Causeway viewer uses configured `Authorizor`, in this case
 Secman's own xref:refguide:extensions:index/secman/integration/authorizor/AuthorizorSecman.adoc[AuthorizorSecman].
 This looks up the current xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] (which will already reside in-memory) and renders the page according to which object members are visible or not.
 

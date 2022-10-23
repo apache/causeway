@@ -14,7 +14,7 @@ This material does not constitute an endorsement; AgileJ Structure Views is not 
 ====
 
 The key to using the tool is in developing a suitable filter script, a DSL.
-You can use the following script as a starting point for visualizing Apache Isis domain models:
+You can use the following script as a starting point for visualizing Apache Causeway domain models:
 
 [source,AgileJ]
 ----

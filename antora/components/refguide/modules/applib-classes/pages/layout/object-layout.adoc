@@ -62,10 +62,10 @@ Thus, a column with a span of 12 is the full width, one with a span of 6 is half
 
 When specifying the span of a column, Bootstrap also allows a size to be specified (`XS`, `SM`, `MD`, `LG`).
 The size determines the rules for responsive design.
-Apache Isis defaults to `MD` but this can be overridden.
+Apache Causeway defaults to `MD` but this can be overridden.
 It is also possible to specify multiple size/spans for a given column.
 
-The grid classes provided by Apache Isis reside in the `org.apache.causeway.applib.layout.grid.bootstrap3` package, and consist of:
+The grid classes provided by Apache Causeway reside in the `org.apache.causeway.applib.layout.grid.bootstrap3` package, and consist of:
 
 * `BS3Grid` +
 +

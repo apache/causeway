@@ -4,7 +4,7 @@
 :page-partial:
 
 
-This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator` API.
+This guide describes the configuration of the Keycloak implementation of Apache Causeway' `Authenticator` API.
 
 It does _not_ however provide any implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI.
 You will therefore need to configure an alternative implementation, eg the xref:bypass:about.adoc[Bypass] implementation (to disable authorisation checks completely), or use the xref:secman:about.adoc[SecMan] implementation (see xref:security:secman:setting-up-with-keycloak.adoc[here for details]).
@@ -112,7 +112,7 @@ image::define-simpleapp-realm.png[width=400px]
 
 === Create a Keycloak client for the application
 
-From the perspective of Keycloak, the Apache Isis domain application is a client: the domain app redirects its login page to Keycloak (and be redirected back on success).
+From the perspective of Keycloak, the Apache Causeway domain application is a client: the domain app redirects its login page to Keycloak (and be redirected back on success).
 We therefore need to create the Keycloak client for our app:
 
 * create the client:
@@ -206,7 +206,7 @@ image::logged-in-as-sven.png[width=800px]
 
 === Test
 
-Finally, start the Apache Isis application:
+Finally, start the Apache Causeway application:
 
 * and confirm that navigating to http://localhost:8080 redirects to the keycloak login:
 +

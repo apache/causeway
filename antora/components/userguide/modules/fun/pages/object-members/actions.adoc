@@ -15,7 +15,7 @@ There are three operations here: set the end date of the original lease term, cr
 Instead, all of these operations can be combined into a single action, "renew".
 Through such means the xref:concepts-patterns.adoc#ubiquitous-language[ubiquitous language] grows.
 
-TIP: This is the reason why Apache Isis' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
+TIP: This is the reason why Apache Causeway' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
 
 You can find further discussion on when and why you should write actions xref:overview.adoc#actions[earlier].
 

@@ -10,9 +10,9 @@
 
 |
 [discrete]
-== What is Apache Isis?
+== What is Apache Causeway?
 
-* *xref:what-is-apache-causeway/causeway-in-pictures.adoc[Apache Isis in pictures]*
+* *xref:what-is-apache-causeway/causeway-in-pictures.adoc[Apache Causeway in pictures]*
 * xref:what-is-apache-causeway/common-use-cases.adoc[Common Use Cases]
 
 * xref:what-is-apache-causeway/screencasts.adoc[Screencasts]
@@ -186,7 +186,7 @@ _Academia_
 //_Experiments_
 //
 //* https://github.com/isisaddons/causeway-app-neoapp[Neo4J Example]
-//* https://github.com/isisaddons/causeway-app-simpledsl[Isis DSL Example]
+//* https://github.com/isisaddons/causeway-app-simpledsl[Causeway DSL Example]
 
 
 //|

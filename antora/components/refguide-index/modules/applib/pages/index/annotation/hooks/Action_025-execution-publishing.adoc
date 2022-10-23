@@ -6,7 +6,7 @@
 
 The xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[executionPublishing()] element determines whether and how an action invocation is published via the registered implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 
-A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
+A common use case is to notify external "downstream" systems of changes in the state of the Apache Causeway application.
 
 The xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.property.execution-publishing[causeway.applib.annotation.property.execution-publishing] configuration property is used to determine the whether the action invocation is published:
 

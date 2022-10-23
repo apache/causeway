@@ -5,7 +5,7 @@
 :page-partial:
 
 
-In Apache Isis every object is identified to the user by a title (label) and an icon.
+In Apache Causeway every object is identified to the user by a title (label) and an icon.
 This is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.

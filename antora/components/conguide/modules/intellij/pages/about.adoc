@@ -6,7 +6,7 @@
 
 Additional configuration of IntelliJ for contributors (and committers).
 
-* Set up the link:{attachmentsdir}/Apache-Isis-importorder.xml[import order].
+* Set up the link:{attachmentsdir}/Apache-Causeway-importorder.xml[import order].
 
 == Prepare for Build
 

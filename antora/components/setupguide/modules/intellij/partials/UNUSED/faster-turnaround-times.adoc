@@ -8,7 +8,7 @@ In this section are several options that will reduce the time it takes between m
 
 == Using Grade to compile/enhance
 
-Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.
+Running an Apache Causeway application requires that the DataNucleus enhancer runs on the compiled bytecode.
 As described xref:setupguide:intellij:about.adoc#running-the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
 
 Alternative, you can use the following `build.gradle` script in your `dom` module:
@@ -152,7 +152,7 @@ image::070-advanced/006-livereload-js.png[width="800px"]
 
 link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more reliable hot swapping of the implementation of existing methods.
 
-In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
+In the context of Apache Causeway, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
 
 Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.
 You may find that adding actions will work, but adding new properties or collections is much less likely to.
@@ -190,7 +190,7 @@ image::070-advanced/040-dcevm-run-configuration.png[width="600px"]
 
 == Setting up JRebel
 
-See the repo for the (non-ASF) link:https://github.com/isisaddons/causeway-jrebel-plugin[Isis JRebel] plugin.
+See the repo for the (non-ASF) link:https://github.com/isisaddons/causeway-jrebel-plugin[Causeway JRebel] plugin.
 
 Note that JRebel is a commercial product, requiring a license.
 At the time of writing there is also currently a non-commercial free license (though note this comes with some usage conditions).

@@ -11,7 +11,7 @@ Every ASF project has a Project Management Committee, or PMC.
 This committee is ultimately responsible for the long-term management of the framework.
 More information about PMCs can be found link:http://www.apache.org/dev/pmc.html[here]
 
-In Apache Isis, every committer is a member of the PMC.
+In Apache Causeway, every committer is a member of the PMC.
 
 This page contains some general notes on maintenance activities required by PMC members.
 
@@ -54,13 +54,13 @@ with body:
 
 [source]
 ----
-I'd like to nominate Joe Bloggs as a committer and also a PMC member for Apache Isis.   <1>
+I'd like to nominate Joe Bloggs as a committer and also a PMC member for Apache Causeway.   <1>
 
 Joe this ...                                                                            <1>
 
 Joe that ...                                                                            <1>
 
-Overall, I think Joe would be a great addition to Isis' committers and PMC; ...
+Overall, I think Joe would be a great addition to Causeway' committers and PMC; ...
 
 Voting ends in one week's time, i.e. midnight UTC on YYYY-MM-DD                         <1>
 http://www.timeanddate.com/countdown/to?year=YYYY&month=MM&day=DD
@@ -118,7 +118,7 @@ More info can be found in the https://www.apache.org/dev/new-committers-guide.ht
 === Update the `causeway` unix group
 
 All committers must be added to the `causeway` UNIX group.
-This will give them commit access to the Apache Isis git repo.
+This will give them commit access to the Apache Causeway git repo.
 
 To do this, log onto `minotaur.apache.org`, then eg:
 
@@ -169,7 +169,7 @@ For example:
 
 [source]
 ----
-[NOTICE] Joe Bloggs to join Apache Isis as committer and member of the PMC              <1>
+[NOTICE] Joe Bloggs to join Apache Causeway as committer and member of the PMC              <1>
 ----
 <1> update as required
 
@@ -177,7 +177,7 @@ with body:
 
 [source]
 ----
-The Apache Isis PMC has voted Joe Bloggs as a committer and also member of the PMC.     <1>
+The Apache Causeway PMC has voted Joe Bloggs as a committer and also member of the PMC.     <1>
 
 Voting thread:
 https://mail-search.apache.org/members/private-arch/causeway-private/xxx                    <1>
@@ -196,7 +196,7 @@ update the private threads above
 
 === Update project metadata
 
-Update the `STATUS` file (in the root directory of the Apache Isis git repo) with the new committer details.
+Update the `STATUS` file (in the root directory of the Apache Causeway git repo) with the new committer details.
 
 === Announce to the world
 
@@ -214,16 +214,16 @@ with body:
 
 [source]
 ----
-I'm delighted to announce that Joe Bloggs has been voted in as a committer on Isis, and also as a member of the Isis PMC.  The first gives Joe the right to commit changes directly to Isis' codebase, the second gives him the right to be involved in future votes.
+I'm delighted to announce that Joe Bloggs has been voted in as a committer on Causeway, and also as a member of the Causeway PMC.  The first gives Joe the right to commit changes directly to Causeway' codebase, the second gives him the right to be involved in future votes.
 
 Joe this ...                                                                            <1>
 
 Joe that ...
 
-I'm looking forward to working with Joe in the future; another great addition to Isis' committers.  So please join me in welcoming him to our happy band!
+I'm looking forward to working with Joe in the future; another great addition to Causeway' committers.  So please join me in welcoming him to our happy band!
 
 Dan Haywood
-Apache Isis PMC Chair
+Apache Causeway PMC Chair
 ----
 <1> update as required
 

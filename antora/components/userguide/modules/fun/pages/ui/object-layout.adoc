@@ -24,7 +24,7 @@ There are some downsides, though:
 
 * there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type).
 
-The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-classes:layout/object-layout.adoc[Grid] layout class defined within Apache Isis' applib.
+The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-classes:layout/object-layout.adoc[Grid] layout class defined within Apache Causeway' applib.
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 == Grids vs Components

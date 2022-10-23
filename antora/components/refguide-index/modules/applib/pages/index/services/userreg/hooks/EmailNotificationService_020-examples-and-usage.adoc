@@ -5,11 +5,11 @@
 == Alternatives
 
 The text of these email templates are hard-coded as resources, in other words baked into the core jar files.
-If you need to use different text then you can of course always write and register your own implementation to be used instead of Apache Isis' default.
+If you need to use different text then you can of course always write and register your own implementation to be used instead of Apache Causeway' default.
 
 If you have configured an alternative email service implementation, it should process the message body as HTML.
 
-Be aware also that there may not be any Apache Isis session running when this service is called.
+Be aware also that there may not be any Apache Causeway session running when this service is called.
 If necessary, one can be created on the fly using the `InteractionService#runAuthenticated(...)` (not API).
 .
 
@@ -32,7 +32,7 @@ The default implementation of this service uses the xref:refguide:applib:index/s
 
 The default implementation of this service uses xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], which must have been configured/initialized correctly.
 
-This service is used by (Apache Isis' default implementation of) xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService].
+This service is used by (Apache Causeway' default implementation of) xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService].
 
 
 == Related Event Classes

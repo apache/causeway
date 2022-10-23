@@ -12,7 +12,7 @@ The BDD tooling parses this text and uses it to actually interact with the syste
 As a byproduct the BDD frameworks generate readable output of some form; this is often an annotated version of the original specification, marked up to indicate which specifications passed, which have failed.
 This readable output is a form of "living documentation"; it captures the actual behaviour of the system, and so is guaranteed to be accurate.
 
-There are many BDD tools out there; Apache Isis provides an integration with link:https://cucumber.io/docs/installation/java/[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
+There are many BDD tools out there; Apache Causeway provides an integration with link:https://cucumber.io/docs/installation/java/[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
 
 
 == How it works

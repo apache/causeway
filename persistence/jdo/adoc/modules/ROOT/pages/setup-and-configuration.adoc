@@ -157,7 +157,7 @@ For example, use `datanucleus.schema.autoCreateAll` not `datanucleus.schema.auto
 
 DataNucleus will for itself also read the `META-INF/persistence.xml`.
 In theory this can hold mappings and even connection strings.
-However, with Apache Isis we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
+However, with Apache Causeway we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
 
 Here's the one provided by the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
 

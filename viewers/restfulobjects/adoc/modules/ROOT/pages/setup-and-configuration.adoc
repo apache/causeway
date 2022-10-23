@@ -53,7 +53,7 @@ Security is discussed in more detail xref:security.adoc[here].
 
 These configuration properties that can be used to suppress or simplify the default RO-spec representations.
 
-These configuration properties pre-date the support for the link:content-negotiation/simplified-representations/[Apache Isis profile], and are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request basis (as is the case with the `Accept` header used for the Apache Isis profile).
+These configuration properties pre-date the support for the link:content-negotiation/simplified-representations/[Apache Causeway profile], and are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request basis (as is the case with the `Accept` header used for the Apache Causeway profile).
 They have therefore been deprecated, and may be removed in the future.
 
 Nevertheless, those configuration properties are:
@@ -75,7 +75,7 @@ Nevertheless, those configuration properties are:
 
 [NOTE]
 ====
-If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-causeway-v2-profile.adoc#apache-causeway-v2-profile-simplified-representation[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
+If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-causeway-v2-profile.adoc#apache-causeway-v2-profile-simplified-representation[Apache Causeway profile], then the special `$$ro` property in the representations with reflect these settings.
 ====
 
 

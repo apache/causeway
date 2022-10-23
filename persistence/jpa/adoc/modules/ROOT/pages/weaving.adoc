@@ -73,7 +73,7 @@ As well as setting the above configuration options, it's also neceesary to run t
 mvn dependency:get -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
 ----
 =
-changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Isis parent `pom.xml`.
+changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Causeway parent `pom.xml`.
 
 * Move and rename this file, eg to `lib/spring-instrument.jar`.
 

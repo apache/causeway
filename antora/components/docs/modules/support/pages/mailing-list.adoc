@@ -7,7 +7,7 @@
 
 
 
-Apache Isis has two public mailing lists.
+Apache Causeway has two public mailing lists.
 
 .Table caption
 [cols="2,3,2,3", options="header"]

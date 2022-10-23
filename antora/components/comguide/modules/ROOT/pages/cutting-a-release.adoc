@@ -7,10 +7,10 @@
 The release process consists of:
 
 * the release manager cutting the release (documented below)
-* Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* Members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Isis itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
+Apache Causeway itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -97,7 +97,7 @@ Once you've fixed all issues, run the script again to confirm that all license v
 
 === Missing License Check
 
-Although Apache Isis has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
+Although Apache Causeway has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
 Without appropriate additional configuration, this would result in the generated `DEPENDENCIES` file and generated Maven site indicating dependencies as having "unknown" licenses.
 
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
@@ -315,7 +315,7 @@ git commit -m "$ISISJIRA: bumps version to $ISISREL"
 === Sanity check
 
 Perform one last sanity check on the codebase.
-Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag.
+Delete all Causeway artifacts from your local Maven repo, then build using the `-o` offline flag.
 
 Still in the `bom` directory:
 
@@ -856,21 +856,21 @@ In all cases, votes last for 72 hours and require a +3 (binding) vote from membe
 
 That is, link:mailto:dev@apache.causeway.org[]
 
-The following boilerplate is for a release of the Apache Isis Core.
+The following boilerplate is for a release of the Apache Causeway Core.
 Adapt as required:
 
 Use the following subject, eg:
 
 [source,subs="attributes+"]
 ----
-[VOTE] Apache Isis Core release {page-isisrel} RC1
+[VOTE] Apache Causeway Core release {page-isisrel} RC1
 ----
 
 And use the following body:
 
 [source,subs="attributes+"]
 ----
-I've just cut a new release of the Apache Isis Framework.
+I've just cut a new release of the Apache Causeway Framework.
 
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.

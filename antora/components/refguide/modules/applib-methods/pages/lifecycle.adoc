@@ -7,7 +7,7 @@
 The lifecycle callback methods notify a domain entity about its interaction within the persistence lifecycle.
 For example, the entity is notified immediately prior to being persisted, or when it is about to be updated.
 
-The lifecycle callback methods supported by Apache Isis are:
+The lifecycle callback methods supported by Apache Causeway are:
 
 .Lifecycle methods (partial support)
 [cols="1m,3a,2m", options="header"]

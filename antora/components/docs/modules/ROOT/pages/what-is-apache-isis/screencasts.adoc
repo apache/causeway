@@ -6,7 +6,7 @@
 
 // TODO: v2: NICE-TO-HAVE: update these screenshots for v2
 
-We've prepared a number of screencasts to help you see what Apache Isis has to offer.
+We've prepared a number of screencasts to help you see what Apache Causeway has to offer.
 
 While these each follow on from each other, you should be able to watch them in any order; the typical duration is
 3 minutes.
@@ -45,7 +45,7 @@ include::screencasts/playlists.adoc[]
 
 
 //|https://www.youtube.com/watch?v=RQ_FFYd7npU[000^] +
-//Searching and using the Apache Isis docs
+//Searching and using the Apache Causeway docs
 //|X||||||||||
 
 
@@ -120,7 +120,7 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 
 // FIXME: currently removed in v2, may reinstate
 //|link:https://www.youtube.com/watch?v=yOh3WphhR1E[010^].
-//Using the xref:refguide:mvn:about.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
+//Using the xref:refguide:mvn:about.adoc[Apache Causeway maven plugin] to validate domain object models during the build process (rather than at runtime).
 //||||||||X|||
 
 
@@ -207,20 +207,20 @@ Using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts] to specify
 include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
-Demonstrates how Apache Isis' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] remembers the state of rendered domain objects, and how the end-user of the
+Demonstrates how Apache Causeway' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] remembers the state of rendered domain objects, and how the end-user of the
  application can clear these UI hints using the (framework-provided) xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc["clear hints"] mixin action.
 |||X||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=Kqch-XNlBMA[020^] +
-Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
+Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Causeway' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 |||X||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], and how the developer can ensure that xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:refguide:applib:index/annotation/Action.adoc#semantics[query-only]) xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Causeway' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], and how the developer can ensure that xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:refguide:applib:index/annotation/Action.adoc#semantics[query-only]) xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[actions] can be bookmarked.
 |||X||||||||
 
 
@@ -466,12 +466,12 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=SoREp-8MQz0[047^] +
-Configuring an Apache Isis app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel wicket component.
+Configuring an Apache Causeway app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel wicket component.
 |||||X||||||
 
 
 |link:https://www.youtube.com/watch?v=bqjLx8gMOEw[048^] +
-Configuring an Apache Isis app to allow tables of domain objects with date information to be rendered on a full-page
+Configuring an Apache Causeway app to allow tables of domain objects with date information to be rendered on a full-page
 calendar, using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket
 component.
 |||||X||||||
@@ -480,12 +480,12 @@ component.
 |link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
 Using the xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] annotation to exclude methods from a domain object
 (eg implementing methods of an interface as defined by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket component) that would
-otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
+otherwise be part of the Apache Causeway metamodel (and thus show up in the UI).
 ||||||||||X|
 
 
 |link:https://www.youtube.com/watch?v=mIwptdeZ67Q[050^] +
-Configuring an Apache Isis app to allow tables of domain objects with location information to be rendered on map,
+Configuring an Apache Causeway app to allow tables of domain objects with location information to be rendered on map,
  using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component.
 |||||X||||||
 

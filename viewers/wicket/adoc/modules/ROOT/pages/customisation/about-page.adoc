@@ -4,7 +4,7 @@
 
 
 
-Isis' Wicket viewer has an About page that, accessed by clicking on the application version in the footer.
+Causeway' Wicket viewer has an About page that, accessed by clicking on the application version in the footer.
 
 image::about-page/about-page.png[width="800px"]
 

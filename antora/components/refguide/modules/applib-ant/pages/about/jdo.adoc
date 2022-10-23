@@ -4,7 +4,7 @@
 :page-partial:
 
 
-The table below lists the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] annotations currently recognized by Apache Isis.
+The table below lists the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] annotations currently recognized by Apache Causeway.
 
 
 .JDO Annotations
@@ -35,7 +35,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 
 |xref:refguide:applib-ant:NotPersistent.adoc[@javax.jdo.annotations. +
 NotPersistent]
-|Used to determine whether to enforce or skip some metamodel validation for `@Column` versus equivalent Isis annotations.
+|Used to determine whether to enforce or skip some metamodel validation for `@Column` versus equivalent Causeway annotations.
 
 |Domain / persistence
 |Property
@@ -44,7 +44,7 @@ NotPersistent]
 
 |xref:refguide:applib-ant:PersistenceCapable.adoc[@javax.jdo.annotations. +
 PersistenceCapable]
-|Used to build Apache Isis' own internal identifier for objects. +
+|Used to build Apache Causeway' own internal identifier for objects. +
 
 If the `schema` attribute is specified (and if xref:refguide:applib-ant:Discriminator.adoc[@Discriminator] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
 
@@ -54,7 +54,7 @@ If the `schema` attribute is specified (and if xref:refguide:applib-ant:Discrimi
 
 |xref:refguide:applib-ant:PrimaryKey.adoc[@javax.jdo.annotations. +
 PrimaryKey]
-|Used to ensure Apache Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
+|Used to ensure Apache Causeway does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
 
 |Domain / persistence
 |Property
@@ -65,9 +65,9 @@ PrimaryKey]
 
 
 
-Isis also parses the following JDO annotations, but the metadata is currently unused.
+Causeway also parses the following JDO annotations, but the metadata is currently unused.
 
-.JDO Annotations (unused within Apache Isis)
+.JDO Annotations (unused within Apache Causeway)
 [cols="2,4a,1,1", options="header"]
 |===
 |Annotation

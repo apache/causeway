@@ -4,9 +4,9 @@
 :page-partial:
 
 
-While Apache Isis does define many of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
+While Apache Causeway does define many of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
 
-The table below lists the JEE annotations currently recognized.  Expect to see more added in future releases of Apache Isis.
+The table below lists the JEE annotations currently recognized.  Expect to see more added in future releases of Apache Causeway.
 
 
 .Java EE Annotations

@@ -23,7 +23,7 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 
 |xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]
 |Programmatically post events to the internal event bus.
-Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
+Also used by Apache Causeway itself to broadcast domain, UI and lifecycle events.
 
 
 |xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]

@@ -4,7 +4,7 @@
 
 == Usage Notes
 
-For the "big picture" and further details on Apache Isis' i18n support, see xref:userguide:btb:i18n.adoc[here].
+For the "big picture" and further details on Apache Causeway' i18n support, see xref:userguide:btb:i18n.adoc[here].
 
 
 == See Also
