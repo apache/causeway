@@ -32,7 +32,7 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 | 2.0.0-M9
 | 18-Oct-2022
 |
-Ninth milestone release for Apache Causeway 2.0.0 +
+Ninth milestone release +
 Fixes CVE-2022-42466.
 | 2
 | 3
@@ -42,7 +42,7 @@ Fixes CVE-2022-42466.
 
 | 2.0.0-M8
 | 06-Oct-2022
-| Eighth milestone release for Apache Causeway 2.0.0 +
+| Eighth milestone release +
 Fixes CVE-2022-42467.
 | 26
 | 79
@@ -63,7 +63,7 @@ Fixes CVE-2022-42467.
 
 | 2.0.0-M6
 | 26-Aug-2021
-| Sixth milestone release for Apache Causeway 2.0.0; now JDK11+
+| Sixth milestone release; now JDK11+
 | 23
 | 92
 | 92
@@ -73,7 +73,7 @@ Fixes CVE-2022-42467.
 
 | 2.0.0-M5
 | 28-Mar-2021
-| Fifth milestone release for Apache Causeway 2.0.0
+| Fifth milestone release
 | 4
 | 68
 | 44
@@ -83,7 +83,7 @@ Fixes CVE-2022-42467.
 
 | 2.0.0-M4
 | 17-Oct-2020
-| Fourth milestone release for Apache Causeway 2.0.0
+| Fourth milestone release
 | 14
 | 28
 | 56
@@ -94,7 +94,7 @@ Fixes CVE-2022-42467.
 
 | 2.0.0-M3
 | 27-Mar-2020
-| Third milestone release for Apache Causeway 2.0.0: now re-platformed on top of Spring Boot.
+| Third milestone release; now re-platformed on top of Spring Boot.
 | 24
 | 149
 | 46
@@ -105,7 +105,7 @@ Fixes CVE-2022-42467.
 
 | 2.0.0-M2
 | 22-Jan-2019
-| Second milestone release for Apache Causeway 2.0.0: tree support, initial work on simplifying bootstrapping and configuration, removing dependencies
+| Second milestone release; tree support, initial work on simplifying bootstrapping and configuration, removing dependencies
 | 2
 | 36
 | 13
@@ -115,7 +115,7 @@ Fixes CVE-2022-42467.
 
 |2.0.0-M1
 | 31-Jul-2018
-| First milestone release for Apache Causeway 2.0.0: Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
+| First milestone release; Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
 | 6
 | 55
 + 4 tasks
