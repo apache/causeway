@@ -4,8 +4,8 @@
 :toc-placement!:
 
 image:https://maven-badges.herokuapp.com/maven-central/org.apache.causeway.core/causeway-applib/badge.svg[]
-image:https://github.com/apache/causeway/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
-image:https://sonarcloud.io/api/project_badges/measure?project=apache_causeway&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_causeway"]
+image:https://github.com/apache/isis/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
+image:https://sonarcloud.io/api/project_badges/measure?project=apache_isis&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_isis"]
 image:https://github.com/apache-causeway-committers/causeway-nightly/actions/workflows/apache-causeway-ci-nightly.yml/badge.svg[link="https://github.com/apache-causeway-committers/causeway-nightly/actions/workflows/apache-causeway-ci-nightly.yml"]
 
 _http://causeway.apache.org[Apache Causeway] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
