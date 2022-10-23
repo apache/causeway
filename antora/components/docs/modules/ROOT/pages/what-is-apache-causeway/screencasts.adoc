@@ -208,7 +208,7 @@ include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
 Demonstrates how Apache Causeway' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] remembers the state of rendered domain objects, and how the end-user of the
- application can clear these UI hints using the (framework-provided) xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc["clear hints"] mixin action.
+ application can clear these UI hints using the (framework-provided) xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc["clear hints"] mixin action.
 |||X||||||||
 
 
@@ -253,7 +253,7 @@ Using a xref:refguide:applib-classes:events/domainevent.adoc[domain event] subsc
 
 
 |link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
-Using a domain event subscriber to hide functionality, in this case the xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc["clear hints"] action automatically provided by the framework.
+Using a domain event subscriber to hide functionality, in this case the xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc["clear hints"] action automatically provided by the framework.
 ||||||||||X|
 
 

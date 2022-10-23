@@ -102,4 +102,5 @@ For further details, see:
 * xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService]
 * xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0]
 * xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceXRoDomainType.adoc[ContentNegotiationServiceXRoDomainType]
-* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV1.adoc[ContentNegotiationServiceOrgApacheIsisV1] and  xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV2.adoc[ContentNegotiationServiceOrgApacheIsisV2]
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV1.adoc[ContentNegotiationServiceOrgApacheIsisV1]
+* xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheCausewayV2.adoc[ContentNegotiationServiceOrgApacheCausewayV2]

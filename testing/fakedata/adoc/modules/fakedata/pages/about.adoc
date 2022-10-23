@@ -65,7 +65,7 @@ In the domain module(s) of your application, add the following dependency:
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingFakeDataApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingFakeDataApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -73,7 +73,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingFakeDataApplib.class,
+        CausewayModuleTestingFakeDataApplib.class,
         ...
 })
 public class AppManifest {

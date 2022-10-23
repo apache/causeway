@@ -32,6 +32,9 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".UrlEncodingServiceWithCompression")
 @Priority(PriorityPrecedence.MIDPOINT)

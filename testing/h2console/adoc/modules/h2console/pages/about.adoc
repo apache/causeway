@@ -49,7 +49,7 @@ In the domain module(s) of your application, add the following dependency:
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingH2ConsoleUi` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingH2ConsoleUi` module:
 
 [source,java]
 .AppManifest.java
@@ -57,7 +57,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingH2ConsoleUi.class,
+        CausewayModuleTestingH2ConsoleUi.class,
         ...
 })
 public class AppManifest {

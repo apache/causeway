@@ -273,7 +273,7 @@ regular-user.role-name
 |
 | The role name for regular users of the application, granting them access to basic security features.
 
-The exact set of permissions is hard-wired in the ``IsisExtSecmanRegularUserRoleAndPermissions`` fixture.
+The exact set of permissions is hard-wired in the ``CausewayExtSecmanRegularUserRoleAndPermissions`` fixture.
 
 
 |

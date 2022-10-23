@@ -2,7 +2,9 @@
 
 WARNING: TODO: was renamed/moved from auditing+publishing to entityChangePublishing
 
-The `entityChangePublishing` element for a domain object means that all registered implementation(s) of the link:https://causeway.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
+The `entityChangePublishing` element for a domain object means that all registered implementation(s) of the (internal) xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher]
+
+link:https://causeway.apache.org/refguide/2.0.0-M3/applib-svc/PublisherService.html#spi[`PublisherService` SPI] will be notified of the identity and nature of the change (created/updated/deleted) to the domain object.
 
 :examples/demo/domain/src/main/java/demoapp/dom/annotDomain/DomainObject/publishing/DomainObjectPublishingVm-description.adoc
 This is done _after_ the interaction in which the object(s) was changed has completed.

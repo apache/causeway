@@ -71,7 +71,7 @@ The grid regions will be empty in this version, and the framework will use the `
 == See also
 
 The functionality of `LayoutService` is surfaced in the user interface through a related xref:refguide:applib:index/services/layout/LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
-See also xref:refguide:applib:index/services/layout/Style.adoc[Style], which determines how much data is included in the downloaded XML.
+See also xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle], which determines how much data is included in the downloaded XML.
 
 The xref:refguide:applib:index/services/grid/GridService.adoc[GridService] is responsible for loading and normalizing layout XML for a domain class.
 It in turn uses the xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService] and  xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService]

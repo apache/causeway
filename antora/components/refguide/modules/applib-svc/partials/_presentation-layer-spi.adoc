@@ -75,7 +75,7 @@ xref:security:secman:about.adoc[SecMan] provides an implementation of this servi
 Used to convert view models mementos into usable URL form.
 
 
-|xref:refguide:viewer:index/common/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
+|xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.
 
 |===

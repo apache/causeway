@@ -87,9 +87,9 @@ It is also possible to explicitly specify production mode:
 If (by a combination of mechanisms) both prototyping and production modes are specified, then production mode wins.
 
 
-=== `IsisSystemEnvironment` domain service
+=== `CausewaySystemEnvironment` domain service
 
-Applications can discover the prototyping mode by injecting the `IsisSystemEnvironment` service.
+Applications can discover the prototyping mode by injecting the `CausewaySystemEnvironment` service.
 
 
 
@@ -112,7 +112,7 @@ public class SimpleApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <.>
+        CausewayPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { SimpleApp.class }, args);
     }
@@ -130,11 +130,11 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    // <.>
-        IsisModuleSecurityShiro.class,                          // <.>
-        IsisModuleJpaEclipselink.class,                         // <.>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
-        IsisModuleViewerWicketViewer.class,                     // <.>
+        CausewayModuleCoreRuntimeServices.class,                    // <.>
+        CausewayModuleSecurityShiro.class,                          // <.>
+        CausewayModuleJpaEclipselink.class,                         // <.>
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
+        CausewayModuleViewerWicketViewer.class,                     // <.>
         ...
         ApplicationModule.class,                                // <.>
         ...
@@ -148,7 +148,7 @@ public class AppManifest {
 There are several security implementations, precisely one must be selected
 <.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.
 +
-Alternatively, `IsisModuleJdoDataNucleus5.class` would be specified in order to use xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] instead.
+Alternatively, `CausewayModuleJdoDataNucleus5.class` would be specified in order to use xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] instead.
 +
 Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
 
@@ -156,10 +156,10 @@ Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-mode
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
 <.> References the application's module(s), in this case just the one, `ApplicationModule`. +
 
-All of the components available are named in the form`IsisModuleXxx`, so they are easy to discover.
+All of the components available are named in the form `CausewayModuleXxx`, so they are easy to discover.
 
 NOTE: Components currently do _not_ use Spring Boot's auto-configuration capabilities.
-That means that it's not enough to just add the appropriate Maven module to the classpath; its corresponding `IsisModuleXxx` must be referenced using an `@Import`.
+That means that it's not enough to just add the appropriate Maven module to the classpath; its corresponding `CausewayModuleXxx` must be referenced using an `@Import`.
 
 
 == Configuration Properties
@@ -170,9 +170,9 @@ So do some of the xref:extensions::about.adoc[extensions] and xref:valuetypes:RO
 The remainder of this guide lists the various configuration properties available, broken out into logical sections.
 
 [#causewayconfiguration-domain-service]
-=== IsisConfiguration domain service
+=== CausewayConfiguration domain service
 
-Applications can discover the current configuration properties for the framework (under the `causeway` top-level key) by injecting the `IsisConfiguration` domain service.
+Applications can discover the current configuration properties for the framework (under the `causeway` top-level key) by injecting the `CausewayConfiguration` domain service.
 There are similar domain services for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`), xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] (`DatanucleusConfiguration`) and RestEasy (`RestEasyConfiguration`), as used by xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 
 Applications can also create their own configuration properties file; the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides an example.

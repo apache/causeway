@@ -173,7 +173,7 @@ Thus:
 
 * *_Viewmodels_* and *_Entities_* are specializations of *_Domain Objects_*.
 
-** _View Models_ are (lifecycle-) managed by _Apache Isis_
+** _View Models_ are (lifecycle-) managed by _Apache Causeway_
 ** _Entities_ are managed by the configured persistence layer
 (either JDO or JPA).
 

@@ -25,6 +25,11 @@ import java.util.EventObject;
  * <tt>iconName()</tt> supporting method).
  *
  * <p>
+ * If the domain object defines its own xref:refguide:applib-methods:ui-hints.adoc[iconName()] supporting method, or if it has the
+ * xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
+ * </p>
+ * 
+ * <p>
  * The class has a number of responsibilities:
  * </p>
  *
@@ -41,13 +46,6 @@ import java.util.EventObject;
  * The class itself is instantiated automatically by the framework.
  * </p>
  *
- *
- * *
- *
- *
- * If the domain object defines its own xref:refguide:applib-methods:reserved.adoc#iconName[iconName()] supporting method, or if it has the
- * xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
- * </p>
  *
  * @since 1.x {@index}
  */
