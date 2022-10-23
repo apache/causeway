@@ -44,14 +44,14 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named(ContentNegotiationServiceOrgApacheCausewayV1.LOGICAL_TYPE_NAME)
+@Named(ContentNegotiationServiceOrgApacheIsisV1.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
-@Qualifier("OrgApacheCausewayV1")
+@Qualifier("OrgApacheIsisV1")
 @Log4j2
-public class ContentNegotiationServiceOrgApacheCausewayV1 extends ContentNegotiationServiceAbstract {
+public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
-    static final String LOGICAL_TYPE_NAME = CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheCausewayV1";
-    public static final String ACCEPT_PROFILE = "urn:org.apache.causeway/v1";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV1";
+    public static final String ACCEPT_PROFILE = "urn:org.apache.isis/v1";
 
     @Override
     public Response.ResponseBuilder buildResponse(

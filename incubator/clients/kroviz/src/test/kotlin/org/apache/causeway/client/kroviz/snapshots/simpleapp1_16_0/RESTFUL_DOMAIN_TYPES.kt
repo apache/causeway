@@ -1012,7 +1012,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
     "rel" : "urn:org.restfulobjects:rels/domain-type",
-    "href" : "http://localhost:8080/restful/domain-types/org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV1",
+    "href" : "http://localhost:8080/restful/domain-types/org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
