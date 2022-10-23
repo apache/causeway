@@ -125,7 +125,7 @@ If either are used:
 @Configuration
 @Import({
         // ...
-        IsisModuleExtQuartzImpl.class,
+        CausewayModuleExtQuartzImpl.class,
 })
 // ...
 public class AppManifest {

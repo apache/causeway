@@ -184,7 +184,7 @@ Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::
 +
 Required in almost all cases:
 
-*** `every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()`
+*** `every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener()`
 
 ** ensure entities can be referenced in JAXB view models:
 +

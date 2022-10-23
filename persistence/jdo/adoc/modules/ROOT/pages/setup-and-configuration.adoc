@@ -17,7 +17,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModulePersistenceJdoDatanucleus.class,
+        CausewayModulePersistenceJdoDatanucleus.class,
         ...
 })
 public class AppManifest {
@@ -109,10 +109,10 @@ If running in an integration test, you can use a preset:
 ----
 @SpringBootTest
 @TestPropertySource({
-    IsisPresets.UseLog4j2Test,
-    IsisPresets.DatanucleusEagerlyCreateTables      // <.>
+    CausewayPresets.UseLog4j2Test,
+    CausewayPresets.DatanucleusEagerlyCreateTables      // <.>
 })
-class MyIntegrationTest extends IsisIntegrationTestAbstract {
+class MyIntegrationTest extends CausewayIntegrationTestAbstract {
     //...
 }
 ----

@@ -67,7 +67,7 @@ public class MyEntity ... {
 @Configuration
 @Import({
         ...
-        IsisModuleValAsciidocPersistenceJpa.java
+        CausewayModuleValAsciidocPersistenceJpa.java
         ...
 })
 public class AppManifest {
@@ -114,7 +114,7 @@ public class MyEntity ... {
 @Configuration
 @Import({
         ...
-        IsisModuleValMarkdownPersistenceJpa.java
+        CausewayModuleValMarkdownPersistenceJpa.java
         ...
 })
 public class AppManifest {

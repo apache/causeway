@@ -61,7 +61,7 @@ This will provide access to the xref:refguide:extensions:index/pdfjs/applib/anno
 ----
 @Configuration
 @Import({
-        IsisModuleExtPdfjsWicketUi.class,  // <.>
+        CausewayModuleExtPdfjsWicketUi.class,  // <.>
         ...
 })
 public class AppManifest {

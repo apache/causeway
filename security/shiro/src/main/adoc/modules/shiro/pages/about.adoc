@@ -56,14 +56,14 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleSecurityShiro.class,
+        CausewayModuleSecurityShiro.class,
         ...
 })
 public class AppManifest {
 }
 ----
 
-Make sure that no other `IsisModuleSecurityXxx` module is imported.
+Make sure that no other `CausewayModuleSecurityXxx` module is imported.
 
 === Configuration Properties
 
@@ -281,13 +281,13 @@ Instead, the corresponding sections from for `realm1.ini` are used instead.
 == Enhanced Wildcard Permission
 
 If using the text-based xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm] or xref:security:shiro-realm-ldap:about.adoc[Apache Causeway' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
-Apache Causeway provides its own `IsisPermission` which introduces the concept of a "veto".
+Apache Causeway provides its own `CausewayPermission` which introduces the concept of a "veto".
 
 A vetoing permission is one that prevents access to a feature, rather than grants it.
 This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.
 The configuration can therefore be set up to grant fairly broad-brush permissions and then veto permission for the sensitive features for those users that do not have access.
 
-The string representation of the `IsisPermission` uses the following format:
+The string representation of the `CausewayPermission` uses the following format:
 
 [source,ini]
 ----
@@ -336,7 +336,7 @@ To configure Apache Causeway' extended permission support requires that a custom
 
 [source,ini]
 ----
-permissionResolver = org.apache.causeway.security.shiro.authorization.IsisPermissionResolver
+permissionResolver = org.apache.causeway.security.shiro.authorization.CausewayPermissionResolver
 myRealm.permissionResolver = $permissionResolver  # <.>
 ----
 <.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$causewayLdapRealm` etc.

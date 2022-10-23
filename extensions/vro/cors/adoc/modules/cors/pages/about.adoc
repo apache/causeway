@@ -28,7 +28,7 @@ Also add the following module to your `AppManifest`:
 ----
 @Configuration
 @Import({
-        IsisModuleExtCors.class,
+        CausewayModuleExtCors.class,
         ...
 })
 public class AppManifest {

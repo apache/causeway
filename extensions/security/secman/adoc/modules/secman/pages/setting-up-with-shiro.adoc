@@ -19,7 +19,7 @@ Thus:
 
 * Apache Causeway' xref:security:shiro:about.adoc[Shiro security] integration sets up Shiro web filters to intercept every http request, as well as the xref:refguide:security:index/shiro/authentication/AuthenticatorShiro.adoc[AuthenticatorShiro] implementation.
 * The `AuthenticatorShiro` calls to the Shiro Security Manager to obtain the authenticated principal.
-* The Shiro Security Manager uses the `shiro.ini` configuration file to look up the realm to perform the authentication; in this case we configure it to use Secman's realm (xref:refguide:extensions:index/secman/delegated/shiro/realm/IsisModuleExtSecmanShiroRealm.adoc[IsisModuleExtSecmanShiroRealm]).
+* The Shiro Security Manager uses the `shiro.ini` configuration file to look up the realm to perform the authentication; in this case we configure it to use Secman's realm (xref:refguide:extensions:index/secman/delegated/shiro/realm/CausewayModuleExtSecmanShiroRealm.adoc[CausewayModuleExtSecmanShiroRealm]).
 * Secman's realm implementation queries the database and uses this to create an instance of `PrincipalForApplicationUser`, where the `Principal` interface is Shiro's representation of an authenticated user.
 The `PrincipalForApplicationUser` is backed by xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], which all of the permissions to object members for this particular user.
 * to render a page, the Apache Causeway viewer uses configured `Authorizor`, in this case
@@ -35,7 +35,7 @@ These are called "local" users, as per the xref:refguide:extensions:index/secman
 
 Local authentication - as described in the previous section - does not actually accomplish much; although Shiro's `Authenticator` implementation is in use, since the Shiro Realm just queries the SecMan database, there is no real difference from simply using SecMan's own `Authenticator` implementation.
 
-Where things become more interesting and useful is that Secman's xref:refguide:extensions:index/secman/delegated/shiro/realm/IsisModuleExtSecmanShiroRealm.adoc[Realm implementation] also allows an alternative "delegate" realm (eg LDAP) to be queried.
+Where things become more interesting and useful is that Secman's xref:refguide:extensions:index/secman/delegated/shiro/realm/CausewayModuleExtSecmanShiroRealm.adoc[Realm implementation] also allows an alternative "delegate" realm (eg LDAP) to be queried.
 In such cases Shiro can obtain authentication of "delegated" users is performed by the delegate realm rather than locally.
 
 The diagram below shows where this delegation occurs:
@@ -88,7 +88,7 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 @Configuration
 @Import({
         ...
-        IsisModuleExtSecmanRealmShiro.class,    // <.>
+        CausewayModuleExtSecmanRealmShiro.class,    // <.>
         ...
 })
 public class AppManifest {
@@ -97,9 +97,9 @@ public class AppManifest {
 
 <.> enables Shiro integration (so that Shiro delegates to Secman for authentication).
 +
-This brings in a transitive dependency on the `IsisModuleSecurityShiro` module.
+This brings in a transitive dependency on the `CausewayModuleSecurityShiro` module.
 
-Ensure that no other `IsisModuleSecurityXxx` module is imported into the AppManifest.
+Ensure that no other `CausewayModuleSecurityXxx` module is imported into the AppManifest.
 
 
 
@@ -116,7 +116,7 @@ The following sets up Shiro _without_ delegation:
 [main]
 
 authenticationStrategy=org.apache.causeway.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
-causewayModuleSecurityRealm=org.apache.causeway.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
+causewayModuleSecurityRealm=org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm
 
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy
 securityManager.realms = $causewayModuleSecurityRealm
@@ -140,7 +140,7 @@ For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a 
 [main]
 
 ...
-ldapRealm=org.apache.causeway.extensions.shirorealmldap.realm.impl.IsisLdapRealm #<.>
+ldapRealm=org.apache.causeway.extensions.shirorealmldap.realm.impl.CausewayLdapRealm #<.>
 ldapRealm.xxx=...                                                            #<.>
 ldapRealm.yyy=...
 

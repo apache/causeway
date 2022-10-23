@@ -81,7 +81,7 @@ include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingSpecSupportApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingSpecSupportApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -89,7 +89,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingSpecSupportApplib.class,
+        CausewayModuleTestingSpecSupportApplib.class,
         ...
 })
 public class AppManifest {

@@ -74,9 +74,9 @@ ResponseHandler .> TransferObject : converts \n JSON \n into TO
 
 circle RestfulObjects<<RemoteFacade>>
 package remote <<Node>> {
-    class ApacheIsis<<(F, #FF7700)FrameWork>>
+    class ApacheCauseway<<(F, #FF7700)FrameWork>>
     class NakedObjects<<(F, #FF7700)FrameWork>>
-    RestfulObjects <|- ApacheIsis
+    RestfulObjects <|- ApacheCauseway
     RestfulObjects <|-- NakedObjects
 }
 XHR -( RestfulObjects : invoke() \njson string / blob <

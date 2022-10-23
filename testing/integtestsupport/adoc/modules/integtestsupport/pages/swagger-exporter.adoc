@@ -16,7 +16,7 @@ The example below is taken from the xref:docs:starters:simpleapp.adoc[simpleapp]
 @SpringBootTest(
     classes = {
         ApplicationIntegTestAbstract.AppManifest.class,             // <1>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class          // <2>
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class          // <2>
     }
 )
 class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {

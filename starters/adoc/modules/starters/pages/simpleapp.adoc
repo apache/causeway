@@ -561,21 +561,21 @@ The `SimpleModuleIntegTestAbstract` is the superclass of all integration tests i
 )
 @ActiveProfiles("test") // <.>
 public abstract class SimpleModuleIntegTestAbstract
-        extends IsisIntegrationTestAbstractWithFixtures {       // <.>
+        extends CausewayIntegrationTestAbstractWithFixtures {       // <.>
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,                    // <.>
-        IsisModuleSecurityBypass.class,                         // <.>
-        IsisModuleJdoDataNucleus5.class,                        // <.>
-        IsisModuleTestingFixturesApplib.class,                  // <.>
+        CausewayModuleCoreRuntimeServices.class,                    // <.>
+        CausewayModuleSecurityBypass.class,                         // <.>
+        CausewayModuleJdoDataNucleus5.class,                        // <.>
+        CausewayModuleTestingFixturesApplib.class,                  // <.>
 
         SimpleModule.class                                      // <.>
     })
     @PropertySources({
-            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),     // <.>
-            @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate), // <.>
-            @PropertySource(IsisPresets.UseLog4j2Test),                   // <.>
+            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),     // <.>
+            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate), // <.>
+            @PropertySource(CausewayPresets.UseLog4j2Test),                   // <.>
     })
     public static class TestApp {
     }
@@ -586,8 +586,8 @@ public abstract class SimpleModuleIntegTestAbstract
 
 <.> Activates the "test" profile, which reads in additional configuration in `application-test.yml"
 
-<.> Tests typically inherit from `IsisIntegrationTestAbstract`, which provides some convenience methods to inherit from.
-In this case, the test inherits from the `IsisIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
+<.> Tests typically inherit from `CausewayIntegrationTestAbstract`, which provides some convenience methods to inherit from.
+In this case, the test inherits from the `CausewayIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
 <.> Specifies the modules that make up Apache Causeway framework itself.
 These include core, security set to the bypass implementation (effectively is ignored) and JDO/DataNucleus for persistence.
@@ -597,7 +597,7 @@ Note that no viewers are bootstrapped because the tests are run through Spring's
 
 <.> Configures JDO as the ORM.
 +
-If using JPA, this would be `IsisModuleJpaEclipseLink.class` instead.
+If using JPA, this would be `CausewayModuleJpaEclipseLink.class` instead.
 
 <.> Brings in support for running fixtures.
 +
@@ -708,16 +708,16 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    // <.>
-        IsisModuleSecurityShiro.class,                          // <.>
-        IsisModuleJpaEclipseLink.class,                         // <.>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
-        IsisModuleViewerWicketViewer.class,                     // <.>
+        CausewayModuleCoreRuntimeServices.class,                    // <.>
+        CausewayModuleSecurityShiro.class,                          // <.>
+        CausewayModuleJpaEclipseLink.class,                         // <.>
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
+        CausewayModuleViewerWicketViewer.class,                     // <.>
 
-        IsisModuleTestingH2ConsoleUi.class,                     // <.>
-        IsisModuleTestingFixturesApplib.class,                  // <.>
+        CausewayModuleTestingH2ConsoleUi.class,                     // <.>
+        CausewayModuleTestingFixturesApplib.class,                  // <.>
 
-        IsisModuleExtFlywayImpl.class,                          // <.>
+        CausewayModuleExtFlywayImpl.class,                          // <.>
 
         ApplicationModule.class,                                // <.>
         CustomModule.class,                                     // <9>
@@ -726,7 +726,7 @@ It looks like this:
         DomainAppDemo.class                                     // <.>
 })
 @PropertySources({
-        @PropertySource(IsisPresets.DebugDiscovery),            // <.>
+        @PropertySource(CausewayPresets.DebugDiscovery),            // <.>
 })
 public class AppManifest {
 }
@@ -739,7 +739,7 @@ There are several security implementations, precisely one must be selected
 
 <.> Enables JPA/Eclipselink for persistence.
 +
-If using JDO as the ORM, replace with `IsisModuleJdoDataNucleus5`.
+If using JDO as the ORM, replace with `CausewayModuleJdoDataNucleus5`.
 
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
 
@@ -758,7 +758,7 @@ If using JDO as the ORM, replace with `IsisModuleJdoDataNucleus5`.
 <.> Makes the fixture scenario classes available for discovery.
 
 <.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
-These two both use the `IsisPresets` convenience class, to disable i18n support and for additional debugging log statements.
+These two both use the `CausewayPresets` convenience class, to disable i18n support and for additional debugging log statements.
 
 
 ==== SimpleApp
@@ -776,7 +776,7 @@ public class SimpleApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <.>
+        CausewayPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { SimpleApp.class }, args);
     }
@@ -833,7 +833,7 @@ This leverages a feature in Spring Boot's Flyway integration which allows differ
 
 <.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
 
-<.> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
+<.> The `shiro.ini` file configures Shiro security integration (see the `CausewayModuleSecurityShiro` module imported in the `AppManifest`, above).
 +
 [TIP]
 ====

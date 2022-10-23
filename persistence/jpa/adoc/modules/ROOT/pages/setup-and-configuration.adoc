@@ -20,7 +20,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleJpaEclipselink.class,
+        CausewayModuleJpaEclipselink.class,
         ...
 })
 public class AppManifest {
@@ -79,7 +79,7 @@ is set to an Apache Causeway implementation, to assist with dependency injection
 
 Generally these should not be changed, though if there is a requirement, then provide a subclasse alternate implementation of `org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings` with an earlier `@Priority` precedence.
 
-To set other EclipseLink configuration properties, use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModulePersistenceJpaEclipselink.adoc[] and override `getVendorProperties()`.
+To set other EclipseLink configuration properties, use a subclass of xref:refguide:persistence:index/jpa/eclipselink/CausewayModulePersistenceJpaEclipselink.adoc[] and override `getVendorProperties()`.
 
 
 == Other Configuration Properties

@@ -31,7 +31,7 @@ In the webapp module of your application, add the following dependency:
 [[_update-appmanifest]]
 == Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleSecuritySpring` module and remove any other `IsisModuleSecurityXxx` modules.
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleSecuritySpring` module and remove any other `CausewayModuleSecurityXxx` modules.
 
 Also, as this module provides no implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, instead you will need some an alternative implementation, such as the xref:bypass:about.adoc[Bypass] implementation.
 (Note: this will in effect disable authorisation checks).
@@ -42,14 +42,14 @@ Also, as this module provides no implementation of the xref:refguide:core:index/
 @Configuration
 @Import({
         ...
-        IsisModuleSecuritySpring.class,     // <.>
+        CausewayModuleSecuritySpring.class,     // <.>
         AuthorizorBypass.class,             // <.>
         ...
 })
 public class AppManifest {
 }
 ----
-<.> make sure that no other `IsisModuleSecurityXxx` module is imported.
+<.> make sure that no other `CausewayModuleSecurityXxx` module is imported.
 <.> or some other implementation of `Authorizor`.
 
 
@@ -134,7 +134,7 @@ As discussed <<_update-appmanifest,above>>, we need to reference Apache Causeway
 @Configuration
 @Import({
         ...
-        IsisModuleSecuritySpring.class,
+        CausewayModuleSecuritySpring.class,
         AuthorizorBypass.class,
         SecurityConfig.class,
         ...

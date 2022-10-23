@@ -36,7 +36,7 @@ To configure the extension:
 ----
 @Configuration
 @Import({
-        IsisModuleExtFullCalendarWicketUi.class,  // <.>
+        CausewayModuleExtFullCalendarWicketUi.class,  // <.>
         ...
 })
 public class AppManifest {

@@ -113,9 +113,9 @@ This provides numerous methods, each for a specific data type, providing an obje
 
 *More specialized value types*
 
-* xref:refguide:testing:index/fakedata/applib/services/IsisBlobs.adoc[IsisBlobs]
-* xref:refguide:testing:index/fakedata/applib/services/IsisClobs.adoc[IsisClobs]
-* xref:refguide:testing:index/fakedata/applib/services/IsisPasswords.adoc[IsisPasswords]
+* xref:refguide:testing:index/fakedata/applib/services/CausewayBlobs.adoc[CausewayBlobs]
+* xref:refguide:testing:index/fakedata/applib/services/CausewayClobs.adoc[CausewayClobs]
+* xref:refguide:testing:index/fakedata/applib/services/CausewayPasswords.adoc[CausewayPasswords]
 
 |
 *Dates and times*

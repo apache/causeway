@@ -35,7 +35,7 @@ Also add the following module to your `AppManifest`:
 ----
 @Configuration
 @Import({
-        IsisModuleExtSseWicket.class,  // <.>
+        CausewayModuleExtSseWicket.class,  // <.>
         ...
 })
 public class AppManifest {

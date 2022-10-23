@@ -23,7 +23,7 @@ Also add the following module to your `AppManifest`:
 @Configuration
 @Import({
     ...
-    IsisModuleExtFlywayImpl.class,
+    CausewayModuleExtFlywayImpl.class,
     ...
 })
 public static class AppManifest {

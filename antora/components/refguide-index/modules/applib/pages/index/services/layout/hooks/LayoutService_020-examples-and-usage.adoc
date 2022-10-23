@@ -15,7 +15,7 @@ The XML can then be copied into the codebase of the application, and annotations
 
 === Styles
 
-Each of these actions take as a parameter an instance of xref:refguide:applib:index/services/layout/Style.adoc[Style].
+Each of these actions take as a parameter an instance of xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle].
 
 The `CURRENT` style corresponds to the layout already loaded for the domain class, typically from an already persisted `layout.xml` file.
 The other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, typically from annotations in the metamodel.

@@ -19,7 +19,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleViewerWicketViewer.class,
+        CausewayModuleViewerWicketViewer.class,
         ...
 })
 public class AppManifest {
@@ -99,7 +99,7 @@ One way to do this is using the Spring link:https://docs.spring.io/spring/docs/c
 @Configuration
 @Import({
         // ...
-        IsisModuleViewerWicketViewer.class,
+        CausewayModuleViewerWicketViewer.class,
 
         // ...
 })

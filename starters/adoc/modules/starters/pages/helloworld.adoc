@@ -336,17 +336,17 @@ In the case of the helloworld starter app *for the `jdo` branch* the `AppManifes
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                // <.>
-        IsisModuleSecurityShiro.class,                      // <.>
-        IsisModuleJdoDataNucleus5.class,                    // <.>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class, // <.>
-        IsisModuleViewerWicketViewer.class,                 // <.>
+        CausewayModuleCoreRuntimeServices.class,                // <.>
+        CausewayModuleSecurityShiro.class,                      // <.>
+        CausewayModuleJdoDataNucleus5.class,                    // <.>
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class, // <.>
+        CausewayModuleViewerWicketViewer.class,                 // <.>
 
-        IsisModuleTestingH2ConsoleUi.class,                 // <.>
+        CausewayModuleTestingH2ConsoleUi.class,                 // <.>
 
         HelloWorldModule.class                              // <.>
 })
-@PropertySource(IsisPresets.NoTranslations)                 // <.>
+@PropertySource(CausewayPresets.NoTranslations)                 // <.>
 public class AppManifest {
 }
 ----
@@ -368,15 +368,15 @@ Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-mode
 <.> References the application's module(s), in this case just the one, `HelloWorldModule`.
 
 <.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
-This particular one disables the framework's i18n support using the `IsisPresets` convenience class.
+This particular one disables the framework's i18n support using the `CausewayPresets` convenience class.
 
 For the `jpa` branch the `AppManifest` is almost identical, just replacing:
 
-* `IsisModuleJdoDataNucleus5.class,`
+* `CausewayModuleJdoDataNucleus5.class,`
 
 with:
 
-* `IsisModuleJpaEclipseLink.class,`
+* `CausewayModuleJpaEclipseLink.class,`
 
 This bootstraps the JPA as the ORM instead of JDO.
 
@@ -396,7 +396,7 @@ public class HelloWorldApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <.>
+        CausewayPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { HelloWorldApp.class }, args);
     }
@@ -447,7 +447,7 @@ Typically this just holds JDBC connection strings, etc.
 
 <.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
 
-<.> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
+<.> The `shiro.ini` file configures Shiro security integration (see the `CausewayModuleSecurityShiro` module imported in the `AppManifest`, above).
 +
 [TIP]
 ====

@@ -33,7 +33,7 @@ And update your `AppManifest`:
 @Configuration
 @Import({
         ...
-        IsisModuleExtSecmanDelegatedSpringOauth2.class,
+        CausewayModuleExtSecmanDelegatedSpringOauth2.class,
         ...
 })
 public class AppManifest {

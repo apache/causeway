@@ -67,21 +67,21 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 @Configuration
 @Import({
         ...
-        IsisModuleExtSecmanPersistenceXxx.class,        // <.>
-        IsisModuleExtSecmanEncryptionJbcrypt.class,     // <.>
+        CausewayModuleExtSecmanPersistenceXxx.class,        // <.>
+        CausewayModuleExtSecmanEncryptionJbcrypt.class,     // <.>
 
-        IsisModuleTestingFixturesApplib.class,          // <.>
+        CausewayModuleTestingFixturesApplib.class,          // <.>
         ...
 })
 public class AppManifest {
 }
 ----
 
-<.> specify either `IsisModuleExtSecmanPersistenceJdo` or `IsisModuleExtSecmanPersistenceJpa`, as required
+<.> specify either `CausewayModuleExtSecmanPersistenceJdo` or `CausewayModuleExtSecmanPersistenceJpa`, as required
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 
-In addition, you will probably want to *remove* the `IsisModuleSecurityShiro.class` dependency so that SecMan can take care of both authentication _and_ authorisation.
+In addition, you will probably want to *remove* the `CausewayModuleSecurityShiro.class` dependency so that SecMan can take care of both authentication _and_ authorisation.
 
 [NOTE]
 ====
@@ -223,43 +223,43 @@ This role should therefore be extremely tightly locked down.
 Regular user permissions for Secman.
 This should be granted to all users (in particular, it includes the ability to logout!)
 
-** `IsisConfigurationRoleAndPermissions.ROLE_NAME`
+** `CausewayConfigurationRoleAndPermissions.ROLE_NAME`
 +
 Access the configuration properties (from the tertiary menu))
 
 * Available only in prototype mode:
 
-** `IsisAppFeatureRoleAndPermissions.ROLE_NAME`
+** `CausewayAppFeatureRoleAndPermissions.ROLE_NAME`
 +
 Browse the application features + permissions (from the "Prototyping" menu).
 
-** `IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
+** `CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
 +
 Download the JDO metamodel (from the "Prototyping" menu).
 
 // moved to the incubator for the time being
-//** `IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
+//** `CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
 //+
 //Access to the command replay primary menu
 //
-//** `IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
+//** `CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
 //+
 //Access to the command replay secondary menu
 //
 
-** `IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME`
+** `CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME`
 +
 Access the h2 console (from the "Prototyping" menu)
 
-** `IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME`
+** `CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME`
 +
 Access the swagger UI (from the "Prototyping" menu)
 
-** `IsisSudoImpersonateRoleAndPermissions.ROLE_NAME`
+** `CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME`
 +
 Impersonate other users (from the "Prototyping" menu, and mixins)
 
-The full list can be found by searching for subclasses of xref:refguide:extensions:index/secman/applib/role/fixtures/ AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript].
+The full list can be found by searching for subclasses of xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript].
 
 [NOTE]
 ====
@@ -308,7 +308,7 @@ public class SeedSecurityService {
 
     private final FixtureScripts fixtureScripts;
     private final TransactionService transactionService;
-    private final IsisSystemEnvironment causewaySystemEnvironment;
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
 
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(final MetamodelEvent event) {
@@ -367,16 +367,16 @@ public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript 
       "/",                    // <.>
       AccountType.LOCAL,      // <.>
       Can.of(
-        RoleAndPerms__UserRw.ROLE_NAME                                            // <.>
-        , IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
-        , IsisAppFeatureRoleAndPermissions.ROLE_NAME                   // <.>
-        , IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME      // <7>
-        , IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME      // <7>
-        , IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME    // <7>
-        , IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME                 // <7>
-        , IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME  // <7>
-        , IsisSudoImpersonateRoleAndPermissions.ROLE_NAME              // <7>
-        , IsisConfigurationRoleAndPermissions.ROLE_NAME                // <7>
+        RoleAndPerms__UserRw.ROLE_NAME                                                // <.>
+        , CausewayConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
+        , CausewayAppFeatureRoleAndPermissions.ROLE_NAME                              // <.>
+        , CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME                 // <7>
+        , CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME                 // <7>
+        , CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME               // <7>
+        , CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME                            // <7>
+        , CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME             // <7>
+        , CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME                         // <7>
+        , CausewayConfigurationRoleAndPermissions.ROLE_NAME                           // <7>
       ));
   }
 }
@@ -434,9 +434,9 @@ public class UserToRole__joe_UserRw_but_NoDelete
       "/ITA",
       AccountType.LOCAL,
       Can.of(
-        RoleAndPerms__UserRw.ROLE_NAME                                           // <.>
-        ,RoleAndPerms__NoDelete.ROLE_NAME                                        // <1>
-        ,IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
+        RoleAndPerms__UserRw.ROLE_NAME                                               // <.>
+        ,RoleAndPerms__NoDelete.ROLE_NAME                                            // <1>
+        ,CausewayConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
     ));
   }
 }

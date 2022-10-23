@@ -19,7 +19,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleViewerRestfulObjectsViewer.class,
+        CausewayModuleViewerRestfulObjectsViewer.class,
         ...
 })
 public class AppManifest {

@@ -75,7 +75,7 @@ include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingIntegTestSupportApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingIntegTestSupportApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -83,7 +83,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingIntegTestApplib.class,
+        CausewayModuleTestingIntegTestApplib.class,
         ...
 })
 public class AppManifest {
@@ -106,18 +106,18 @@ So, for the `module-simple` module, we have:
         classes = SimpleModuleIntegTestAbstract.AppManifest.class
 )
 @TestPropertySource({
-        IsisPresets.H2InMemory_withUniqueSchema,
-        IsisPresets.DataNucleusAutoCreate,
-        IsisPresets.UseLog4j2Test,
+        CausewayPresets.H2InMemory_withUniqueSchema,
+        CausewayPresets.DataNucleusAutoCreate,
+        CausewayPresets.UseLog4j2Test,
 })
-public abstract class SimpleModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
+public abstract class SimpleModuleIntegTestAbstract extends CausewayIntegrationTestAbstractWithFixtures {
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,
-        IsisModuleSecurityBypass.class,
-        IsisModuleJdoDataNucleus5.class,
-        IsisModuleTestingFixturesApplib.class,
+        CausewayModuleCoreRuntimeServices.class,
+        CausewayModuleSecurityBypass.class,
+        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleTestingFixturesApplib.class,
         SimpleModule.class                      //<1>
     })
     public static class AppManifest {
@@ -135,19 +135,19 @@ while in the `webapp` module we have:
         classes = ApplicationIntegTestAbstract.AppManifest.class
 )
 @TestPropertySource({
-        IsisPresets.H2InMemory_withUniqueSchema,
-        IsisPresets.DataNucleusAutoCreate,
-        IsisPresets.UseLog4j2Test,
+        CausewayPresets.H2InMemory_withUniqueSchema,
+        CausewayPresets.DataNucleusAutoCreate,
+        CausewayPresets.UseLog4j2Test,
 })
 @ContextConfiguration
-public abstract class ApplicationIntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,
-        IsisModuleJdoDataNucleus5.class,
-        IsisModuleSecurityBypass.class,
-        IsisModuleTestingFixturesApplib.class,
+        CausewayModuleCoreRuntimeServices.class,
+        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleSecurityBypass.class,
+        CausewayModuleTestingFixturesApplib.class,
         ApplicationModule.class                 //<1>
     })
     public static class AppManifest {
@@ -172,7 +172,7 @@ This can be done by adding:
 
 [source,java]
 ----
-@TestPropertySource(IsisPresets.IntrospectLazily)
+@TestPropertySource(CausewayPresets.IntrospectLazily)
 ----
 
 
@@ -406,9 +406,9 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 Some of the methods being called here are inherited from the superclass, so let's look at that next.
 
 
-== IsisIntegrationTestAbstract
+== CausewayIntegrationTestAbstract
 
-For convenience the framework provides the `IsisIntegrationTestAbstract` as a base class for integration tests.
+For convenience the framework provides the `CausewayIntegrationTestAbstract` as a base class for integration tests.
 
 
 This is the class that provides the `wrap(...)` method (as see in the xref:about.adoc#typical-usage[previous section]).

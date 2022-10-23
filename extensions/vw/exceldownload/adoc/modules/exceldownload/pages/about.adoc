@@ -25,7 +25,7 @@ Also add the following module to your `AppManifest`:
 ----
 @Configuration
 @Import({
-        IsisModuleExtExcelDownloadWicketUi.class,
+        CausewayModuleExtExcelDownloadWicketUi.class,
         ...
 })
 public class AppManifest {
