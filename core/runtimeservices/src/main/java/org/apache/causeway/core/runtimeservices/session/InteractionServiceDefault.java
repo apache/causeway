@@ -32,26 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
-import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
-import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
-import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactn.Interaction;
@@ -65,12 +45,30 @@ import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
-
+import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
+import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
+import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
+import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -376,7 +374,13 @@ implements
 
     private void preInteractionClosed(final CausewayInteraction interaction) {
         completeAndPublishCurrentCommand();
-        transactionServiceProvider.get().flushTransaction();
+
+        try {
+            transactionServiceProvider.get().flushTransaction();
+        } catch (Exception e) {
+            //[ISIS-3262] if flush fails just ignore, proceed with closing ...
+        }
+
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
         transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
         txBoundaryHandler.onClose(interaction);
