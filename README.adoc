@@ -155,11 +155,11 @@ For example, when a collection of objects is rendered, this is just one several 
 
 image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/070-pluggable-views.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/070-pluggable-views.png"]
 
-The __gmap3__ extension will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
+// The __gmap3__ extension will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
+//
+// image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png"]
 
-image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png"]
-
-Similarly the __fullcalendar2__ extension will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
+Thus, the __fullcalendar2__ extension will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
 
 image::https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/090-fullcalendar2-view.png[link="https://raw.githubusercontent.com/apache/causeway/master/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/090-fullcalendar2-view.png"]
 

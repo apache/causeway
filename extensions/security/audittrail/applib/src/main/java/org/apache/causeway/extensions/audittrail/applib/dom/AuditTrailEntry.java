@@ -52,6 +52,9 @@ import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTr
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,

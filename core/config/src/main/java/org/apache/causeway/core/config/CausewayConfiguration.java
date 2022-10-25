@@ -260,7 +260,6 @@ public class CausewayConfiguration {
             public static class DomainObject {
 
                 /**
-                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
                  * sent through to {@link EntityChangesSubscriber}s and
                  * sent through to {@link EntityPropertyChangeSubscriber}.
@@ -743,13 +742,11 @@ public class CausewayConfiguration {
             public static class Action {
 
                 /**
-                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.causeway.applib.services.command.Command},
                  * to be sent to any registered
                  * {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber}s,
-                 * either for auditing or for replayed against a secondary
-                 * system, eg for regression testing.
+                 * typically for auditing purposes.
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
@@ -1400,9 +1397,11 @@ public class CausewayConfiguration {
                 }
 
                 /**
-                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.
+                 * Whether to perform metamodel introspection in parallel, intended to speed up bootstrapping.
+                 *
                  * <p>
-                 *     For now this is <i>experimental</i>. Leave this disabled (the default).
+                 *     For now this is <i>experimental</i>.
+                 *     We recommend this is left as disabled (the default).
                  * </p>
                  */
                 private boolean parallelize = false; //TODO[CAUSEWAY-2382] concurrent spec-loading is experimental
@@ -2250,7 +2249,6 @@ public class CausewayConfiguration {
              */
             private boolean wicketSourcePlugin = false;
 
-            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
             private final Application application = new Application();
             @Data
             public static class Application {
@@ -2873,7 +2871,21 @@ public class CausewayConfiguration {
         public static class Cors {
 
             /**
-             * TODO missing java-doc
+             * Whether the resource supports user credentials.
+             *
+             * <p>
+             *     This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response.
+             *     It helps browser determine whether or not an actual request can be made using credentials.
+             * </p>
+             *
+             * <p>
+             *     By default this is not set (i.e. user credentials are not supported).
+             * </p>
+             *
+             * <p>
+             *     For more information, check the usage of the <code>cors.support.credentials</code> init parameter
+             *     for <a href="https://github.com/eBay/cors-filter">EBay CORSFilter</a>.
+             * </p>
              */
             private boolean allowCredentials = false;
 
@@ -2881,7 +2893,12 @@ public class CausewayConfiguration {
              * Which origins are allowed to make CORS requests.
              *
              * <p>
-             *     The default is the wildcard (&quot;*&quot;) but this can be made more restrictive if necessary.
+             *     The default is the wildcard (&quot;*&quot;), meaning any origin is allowed to access the resource,
+             *     but this can be made more restrictive if necessary using a whitelist of comma separated origins
+             *     eg:
+             * </p>
+             * <p>
+             *     <code>http://www.w3.org, https://www.apache.org</code>
              * </p>
              *
              * <p>
@@ -2892,7 +2909,12 @@ public class CausewayConfiguration {
             private List<String> allowedOrigins = listOf("*");
 
             /**
-             * Which HTTP headers are allowed in a CORS request.
+             * Which HTTP headers can be allowed in a CORS request.
+             *
+             * <p>
+             *     These header will also be returned as part of 'Access-Control-Allow-Headers' header in a
+             *     pre-flight response.
+             * </p>
              *
              * <p>
              *     For more information, check the usage of the <code>cors.allowed.headers</code> init parameter
@@ -2914,6 +2936,16 @@ public class CausewayConfiguration {
              * Which HTTP methods are permitted in a CORS request.
              *
              * <p>
+             *     A comma separated list of HTTP methods that can be used to access the resource, using cross-origin
+             *     requests. These are the methods which will also be included as part of 'Access-Control-Allow-Methods'
+             *     header in a pre-flight response.
+             * </p>
+             *
+             * <p>
+             *     Default is <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>OPTIONS</code>.
+             * </p>
+             *
+             * <p>
              *     For more information, check the usage of the <code>cors.allowed.methods</code> init parameter
              *     for <a href="https://github.com/eBay/cors-filter">EBay CORSFilter</a>.
              * </p>
@@ -2922,6 +2954,16 @@ public class CausewayConfiguration {
 
             /**
              * Which HTTP headers are exposed in a CORS request.
+             *
+             * <p>
+             *     A comma separated list of headers other than the simple response headers that browsers are allowed
+             *     to access. These are the headers which will also be included as part of
+             *     'Access-Control-Expose-Headers' header in the pre-flight response.
+             * </p>
+             *
+             * <p>
+             *     Default is none.
+             * </p>
              *
              * <p>
              *     For more information, check the usage of the <code>cors.exposed.headers</code> init parameter

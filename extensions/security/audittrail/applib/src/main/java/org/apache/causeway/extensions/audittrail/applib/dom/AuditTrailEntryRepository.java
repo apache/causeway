@@ -41,6 +41,8 @@ import lombok.val;
 
 /**
  * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
+ *
+ * @since 2.0 {@index}
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {

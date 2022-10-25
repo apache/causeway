@@ -33,6 +33,9 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepos
 import lombok.RequiredArgsConstructor;
 
 
+/**
+ * @since 2.0 {@index}
+ */
 @Collection(
         domainEvent = HasInteractionId_auditTrailEntries.CollectionDomainEvent.class
 )

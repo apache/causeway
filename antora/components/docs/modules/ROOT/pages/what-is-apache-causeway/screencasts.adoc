@@ -458,7 +458,7 @@ How to use the xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoCompl
 
 
 
-12+| *Excel, Calendars, Maps*
+12+| *Excel, Calendars*
 
 
 
@@ -484,15 +484,15 @@ otherwise be part of the Apache Causeway metamodel (and thus show up in the UI).
 ||||||||||X|
 
 
-|link:https://www.youtube.com/watch?v=mIwptdeZ67Q[050^] +
-Configuring an Apache Causeway app to allow tables of domain objects with location information to be rendered on map,
- using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component.
-|||||X||||||
+// |link:https://www.youtube.com/watch?v=mIwptdeZ67Q[050^] +
+// Configuring an Apache Causeway app to allow tables of domain objects with location information to be rendered on map,
+//  using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component.
+// |||||X||||||
 
 
-|link:https://www.youtube.com/watch?v=3n_70HJ23uY[051^] +
-Using derived properties to persist value types (such as gmap3's Location value type) as regular primitive datatypes.
-|||||||X||||
+// |link:https://www.youtube.com/watch?v=3n_70HJ23uY[051^] +
+// Using derived properties to persist value types (such as gmap3's Location value type) as regular primitive datatypes.
+// |||||||X||||
 
 
 

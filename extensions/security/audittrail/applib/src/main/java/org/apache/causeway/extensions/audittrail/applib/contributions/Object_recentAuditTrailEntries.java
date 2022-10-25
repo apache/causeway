@@ -41,6 +41,9 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepos
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = Object_recentAuditTrailEntries.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE

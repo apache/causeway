@@ -3,7 +3,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The xref:security:audittrail:about.adoc[] module provides an implementation of the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], as well as a number of related domain services,
+The xref:security:audittrail:about.adoc[] module provides an implementation of the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], which provides a fine-grained persistent audit trail: each and every change to a entity property is persisted as an individual `AuditTrailEntry` instance.
+The xref:refguide:extensions:index/audittrail/applib/
+
+xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interaction id] identifies all the changes made within a single xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
+
+It also provides as well as a number of related domain services,
 It creates an audit record for each changed property of each domain entity.
 
 WARNING: TODO: v2 - to write up...

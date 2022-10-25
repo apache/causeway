@@ -71,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
  *     {@link WrapperFactory#asyncWrapMixin(Class, Object, AsyncControl)}), then
  *     a separate {@link Command} object
  *     is created, and the originating {@link Command} is set to be its
- *     {@link Command#getParent() parent}.
+ *     {@link Command#getParentInteractionId() parent}.
  * </p>
  *
  * @since 1.x {@index}

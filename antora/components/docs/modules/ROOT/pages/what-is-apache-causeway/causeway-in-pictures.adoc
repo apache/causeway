@@ -102,10 +102,10 @@ For example, when a collection of objects is rendered, this is just one of sever
 
 image::what-is-apache-causeway/causeway-in-pictures/070-pluggable-views.png[width="800px"]
 
-There are a number of optional extensions provided with the framework.
-One such is the xref:vw:gmap3:about.adoc[Gmap3] extension, that will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
-
-image::what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png[width="800px"]
+// There are a number of optional extensions provided with the framework.
+// One such is the xref:vw:gmap3:about.adoc[Gmap3] extension, that will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
+//
+// image::what-is-apache-causeway/causeway-in-pictures/080-gmap3-view.png[width="800px"]
 
 
 

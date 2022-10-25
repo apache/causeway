@@ -127,11 +127,11 @@ _Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel 
 
 
 
-|Customizing the Wicket viewer +
-
-_How to customize the Wicket viewer, integrating the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component._
-
-|video::9o5zAME8LrM[youtube,width="420px",height="315px"]
+// |Customizing the Wicket viewer +
+//
+// _How to customize the Wicket viewer, integrating the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component._
+//
+// |video::9o5zAME8LrM[youtube,width="420px",height="315px"]
 
 
 
