@@ -18,13 +18,7 @@
 #
 
 #Organize Import Order
-#Sat Jan 04 15:55:51 CET 2020
-11=\#org.isisaddons
-12=org.incode
-13=\#org.incode
-14=lombok
-15=
-16=\#
+#Tue Oct 25 09:39:01 CEST 2022
 0=java
 1=\#java
 2=javax
@@ -35,4 +29,3 @@
 7=\#org
 8=org.apache.causeway
 9=\#org.apache.causeway
-10=org.isisaddons
