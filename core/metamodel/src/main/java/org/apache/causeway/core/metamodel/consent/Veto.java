@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
-import static org.apache.causeway.commons.internal.base._With.requiresNotEmpty;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+
+import static org.apache.causeway.commons.internal.base._With.requiresNotEmpty;
 
 public class Veto extends ConsentAbstract {
 

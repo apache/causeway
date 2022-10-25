@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXml;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
@@ -53,8 +56,6 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.schema.CausewayModuleSchema;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

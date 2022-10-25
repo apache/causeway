@@ -20,7 +20,7 @@ package org.apache.causeway.commons.internal.base;
 
 import java.util.Optional;
 
-import static org.apache.causeway.commons.internal.exceptions._Exceptions.notImplemented;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Value;
 
@@ -38,7 +38,7 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
 
     @Override
     public String setValue(final String value) {
-        throw notImplemented();
+        throw _Exceptions.notImplemented();
     }
 
     @Override

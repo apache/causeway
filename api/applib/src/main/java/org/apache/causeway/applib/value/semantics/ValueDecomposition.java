@@ -20,10 +20,9 @@ package org.apache.causeway.applib.value.semantics;
 
 import java.io.Serializable;
 
+import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Either.HasEither;
-
-import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;

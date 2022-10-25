@@ -22,10 +22,10 @@ import java.util.Comparator;
 
 import javax.annotation.Priority;
 
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.val;
 

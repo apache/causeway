@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.services.schema;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;

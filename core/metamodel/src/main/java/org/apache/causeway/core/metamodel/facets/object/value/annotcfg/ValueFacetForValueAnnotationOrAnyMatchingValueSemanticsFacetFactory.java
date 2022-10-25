@@ -20,15 +20,14 @@ package org.apache.causeway.core.metamodel.facets.object.value.annotcfg;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;

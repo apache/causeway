@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.webapp;
 
-import org.apache.causeway.core.interaction.session.MessageBrokerImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,6 +26,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 
+import org.apache.causeway.core.interaction.session.MessageBrokerImpl;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.webapp.confmenu.ConfigurationViewServiceDefault;

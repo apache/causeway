@@ -24,20 +24,17 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.CanVector;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.CanVector;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -57,6 +54,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
 import lombok.val;

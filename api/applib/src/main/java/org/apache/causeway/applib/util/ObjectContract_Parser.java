@@ -28,11 +28,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.util.ObjectContracts.ObjectContract;
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Package private parser for ObjectContract.<br/><br/>

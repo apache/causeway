@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.logicaltype;
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

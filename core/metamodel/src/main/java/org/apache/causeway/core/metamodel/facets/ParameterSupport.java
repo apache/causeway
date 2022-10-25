@@ -29,7 +29,6 @@ import java.util.function.IntFunction;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;

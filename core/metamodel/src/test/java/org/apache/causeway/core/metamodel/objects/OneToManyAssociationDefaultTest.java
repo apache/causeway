@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import com.sun.xml.bind.v2.schemagen.xmlschema.List;
 
-import org.apache.causeway.commons.functional.Either;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,6 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;

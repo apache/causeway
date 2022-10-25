@@ -20,11 +20,11 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.function.UnaryOperator;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

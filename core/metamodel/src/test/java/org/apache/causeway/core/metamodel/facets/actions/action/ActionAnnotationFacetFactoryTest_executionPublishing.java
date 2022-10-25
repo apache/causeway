@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.internal.base._Blackhole;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;

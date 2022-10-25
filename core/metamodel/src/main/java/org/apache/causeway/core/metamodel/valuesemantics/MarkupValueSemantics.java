@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -32,6 +30,8 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component

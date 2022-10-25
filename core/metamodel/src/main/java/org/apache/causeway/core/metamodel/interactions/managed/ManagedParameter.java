@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

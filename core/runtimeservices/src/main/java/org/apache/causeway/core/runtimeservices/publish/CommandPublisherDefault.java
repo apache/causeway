@@ -24,8 +24,6 @@ import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.having.HasEnabling;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -35,12 +33,14 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.Command.CommandPublishingPhase;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.having.HasEnabling;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandPublisherDefault")

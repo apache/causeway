@@ -24,10 +24,9 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;

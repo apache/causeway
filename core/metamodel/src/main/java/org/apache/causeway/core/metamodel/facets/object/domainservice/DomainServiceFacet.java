@@ -20,10 +20,10 @@ package org.apache.causeway.core.metamodel.facets.object.domainservice;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 

@@ -23,9 +23,9 @@ import java.time.LocalDateTime;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

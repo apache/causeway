@@ -20,7 +20,6 @@ package org.apache.causeway.commons.internal.collections.snapshot;
 
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.collections.snapshot._VersionedList;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

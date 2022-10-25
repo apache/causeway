@@ -29,9 +29,6 @@ import java.util.stream.StreamSupport;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -40,6 +37,9 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.graph.Edge;
 import org.apache.causeway.applib.graph.SimpleEdge;
 import org.apache.causeway.applib.graph.Vertex;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.SneakyThrows;
 

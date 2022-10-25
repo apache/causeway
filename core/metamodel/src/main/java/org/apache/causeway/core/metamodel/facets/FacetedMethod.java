@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
-
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

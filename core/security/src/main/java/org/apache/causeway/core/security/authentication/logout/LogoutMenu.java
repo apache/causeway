@@ -23,8 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -39,6 +37,7 @@ import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
 import lombok.RequiredArgsConstructor;

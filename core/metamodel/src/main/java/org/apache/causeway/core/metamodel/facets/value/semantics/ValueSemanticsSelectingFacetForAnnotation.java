@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacetAbstract;

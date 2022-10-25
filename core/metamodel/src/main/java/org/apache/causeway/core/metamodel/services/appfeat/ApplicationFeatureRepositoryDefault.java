@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +44,8 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;

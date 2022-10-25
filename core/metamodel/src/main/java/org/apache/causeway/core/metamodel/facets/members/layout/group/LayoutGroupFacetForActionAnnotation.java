@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class LayoutGroupFacetForActionAnnotation

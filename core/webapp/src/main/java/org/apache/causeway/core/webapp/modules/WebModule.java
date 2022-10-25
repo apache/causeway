@@ -26,11 +26,11 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
 import lombok.val;
 

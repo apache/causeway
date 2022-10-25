@@ -20,7 +20,6 @@ package org.apache.causeway.commons.internal.image;
 
 import java.awt.image.BufferedImage;
 
-import org.apache.causeway.commons.internal.image._Images;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

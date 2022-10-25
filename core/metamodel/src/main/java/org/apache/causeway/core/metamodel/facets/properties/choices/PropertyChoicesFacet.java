@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.properties.choices;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

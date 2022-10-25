@@ -29,8 +29,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.resources._Xml;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +38,8 @@ import org.apache.causeway.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;

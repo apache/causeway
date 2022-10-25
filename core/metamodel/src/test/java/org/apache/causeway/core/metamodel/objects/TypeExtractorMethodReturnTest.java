@@ -22,12 +22,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.val;
 

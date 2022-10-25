@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel._testing;
 
+import static java.util.Objects.requireNonNull;
+
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

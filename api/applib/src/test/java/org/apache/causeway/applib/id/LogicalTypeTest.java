@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.applib.id;
 
-import org.apache.causeway.commons.internal.testing._SerializationTester;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.SomeDomainClass;
+import org.apache.causeway.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 

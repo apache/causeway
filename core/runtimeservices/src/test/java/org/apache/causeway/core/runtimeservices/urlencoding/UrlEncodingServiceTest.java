@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
-import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 
 class UrlEncodingServiceTest {
 

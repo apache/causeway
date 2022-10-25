@@ -21,10 +21,9 @@ package org.apache.causeway.applib.services.iactn;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
 /**
  * Provides the current thread's {@link Interaction}.

@@ -27,8 +27,9 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
 import lombok.val;

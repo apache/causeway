@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.security.spring.authconverters;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.AccessLevel;
 import lombok.NonNull;

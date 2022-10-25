@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.core.security;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

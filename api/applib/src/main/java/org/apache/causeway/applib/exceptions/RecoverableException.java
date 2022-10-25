@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.applib.exceptions;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 

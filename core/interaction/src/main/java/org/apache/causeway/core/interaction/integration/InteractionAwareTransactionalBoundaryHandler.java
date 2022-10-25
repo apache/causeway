@@ -26,11 +26,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -39,6 +34,11 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

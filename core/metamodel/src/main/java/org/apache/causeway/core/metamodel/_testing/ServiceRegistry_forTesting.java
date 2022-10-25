@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -36,9 +38,6 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc._IocContainer;
 import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
-
-import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;

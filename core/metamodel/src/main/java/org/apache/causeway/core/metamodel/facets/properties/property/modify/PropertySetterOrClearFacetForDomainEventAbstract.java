@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
-
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
@@ -42,6 +40,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
+import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -25,10 +25,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within {@link org.apache.causeway.applib.annotation.DomainServiceLayout}.

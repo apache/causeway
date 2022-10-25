@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.members.hidden;
 
 import java.util.Properties;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 

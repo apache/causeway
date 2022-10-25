@@ -24,17 +24,17 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.annotation.Domain;
-import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;

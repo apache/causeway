@@ -20,11 +20,11 @@ package org.apache.causeway.core.metamodel.commons;
 
 import java.lang.reflect.Executable;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.NonNull;

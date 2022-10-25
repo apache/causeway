@@ -22,12 +22,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.debug.xray.graphics.SequenceDiagram;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 
 import lombok.Builder;
 import lombok.NonNull;

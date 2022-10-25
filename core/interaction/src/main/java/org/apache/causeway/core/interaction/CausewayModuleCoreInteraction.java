@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.core.interaction;
 
-import org.apache.causeway.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
-import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
+import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 
 @Configuration
 @Import({

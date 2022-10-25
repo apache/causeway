@@ -20,15 +20,15 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug._XrayEvent;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.commons.internal.debug._Debug;
+import org.apache.causeway.commons.internal.debug._XrayEvent;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 

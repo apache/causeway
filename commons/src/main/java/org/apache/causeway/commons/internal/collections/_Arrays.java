@@ -26,10 +26,11 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.val;

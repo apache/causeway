@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.context._Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -29,12 +28,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {

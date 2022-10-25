@@ -25,11 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.OptionalLong;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.springframework.lang.Nullable;
 
 import lombok.SneakyThrows;
 import lombok.val;

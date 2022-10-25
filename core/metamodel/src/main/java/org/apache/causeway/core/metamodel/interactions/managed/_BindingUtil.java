@@ -18,15 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
+import org.apache.causeway.applib.value.semantics.Parser;
+import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;

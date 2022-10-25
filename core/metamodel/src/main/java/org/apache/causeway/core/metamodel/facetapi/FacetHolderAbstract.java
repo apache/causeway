@@ -22,13 +22,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
-
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

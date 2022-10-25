@@ -22,10 +22,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Various hardening utilities.

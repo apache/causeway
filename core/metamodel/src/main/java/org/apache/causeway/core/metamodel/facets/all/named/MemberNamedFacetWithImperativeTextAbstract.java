@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.all.named;
 import java.lang.reflect.Method;
 
 import org.apache.causeway.commons.functional.Either;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.imperative.HasImperativeText;

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.config.util;
 
-import org.apache.causeway.core.config.util.ValueMaskingUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

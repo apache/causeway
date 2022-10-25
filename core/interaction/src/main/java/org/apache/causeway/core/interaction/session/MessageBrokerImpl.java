@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 
 import lombok.NoArgsConstructor;

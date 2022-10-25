@@ -22,10 +22,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.collections._Sets;
-
 import org.apache.causeway.applib.graph.tree.TreeState;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.collections._Sets;
 
 import lombok.experimental.UtilityClass;
 

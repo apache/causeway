@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.AccessorPrefix;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;

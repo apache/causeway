@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.security.bypass;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.authentication.AuthenticatorBypass;
 import org.apache.causeway.security.bypass.authorization.AuthorizorBypass;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * Auth/bypass for eg. Integration Testing

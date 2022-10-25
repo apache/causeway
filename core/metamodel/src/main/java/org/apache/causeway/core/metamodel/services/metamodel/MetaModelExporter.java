@@ -25,12 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-
-import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;

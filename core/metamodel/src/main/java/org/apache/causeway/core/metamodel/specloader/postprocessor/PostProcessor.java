@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.specloader.postprocessor;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

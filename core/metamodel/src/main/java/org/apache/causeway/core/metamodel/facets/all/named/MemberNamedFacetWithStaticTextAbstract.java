@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.all.named;
 
 import org.apache.causeway.commons.functional.Either;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;

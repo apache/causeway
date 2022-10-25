@@ -22,11 +22,12 @@ import java.io.Serializable;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
+import org.springframework.transaction.annotation.Propagation;
+
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.springframework.transaction.annotation.Propagation;
 
 /**
  * Provides access to the details of the asynchronous callable (representing a child command to be executed

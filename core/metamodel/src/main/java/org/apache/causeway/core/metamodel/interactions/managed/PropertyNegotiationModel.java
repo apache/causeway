@@ -28,7 +28,6 @@ import org.apache.causeway.commons.internal.binding._Observables.BooleanObservab
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

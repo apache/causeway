@@ -21,9 +21,8 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;

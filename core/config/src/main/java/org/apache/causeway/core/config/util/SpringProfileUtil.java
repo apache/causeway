@@ -20,9 +20,10 @@ package org.apache.causeway.core.config.util;
 
 import java.util.stream.Collectors;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.springframework.lang.Nullable;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

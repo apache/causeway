@@ -25,8 +25,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides a subset of the functionality that the Java {@link Collection}

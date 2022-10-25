@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;

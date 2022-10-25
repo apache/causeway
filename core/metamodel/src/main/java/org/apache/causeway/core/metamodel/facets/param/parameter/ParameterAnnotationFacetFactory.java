@@ -18,16 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.core.MethodParameter;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;

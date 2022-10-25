@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.ActionArgumentVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

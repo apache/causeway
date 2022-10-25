@@ -26,13 +26,12 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
-
-import org.apache.causeway.applib.exceptions.UnrecoverableException;
 
 public final class ClassExtensions {
 

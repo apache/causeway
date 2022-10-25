@@ -30,9 +30,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 
+import org.apache.logging.log4j.Level;
+
 import org.apache.causeway.commons.concurrent.AwaitableLatch;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.logging.log4j.Level;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

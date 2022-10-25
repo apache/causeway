@@ -20,9 +20,10 @@ package org.apache.causeway.commons.internal.compare;
 
 import java.util.StringTokenizer;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Ints;
-import org.springframework.lang.Nullable;
 
 import lombok.val;
 

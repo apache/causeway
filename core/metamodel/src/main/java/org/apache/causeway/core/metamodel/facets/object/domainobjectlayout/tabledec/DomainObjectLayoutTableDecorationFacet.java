@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabl
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Optionals;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;

@@ -22,13 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.core.security.authentication.login.LoginSuccessHandlerUNUSED;
-import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
-import org.apache.causeway.security.keycloak.handler.LogoutHandlerForKeycloak;
-import org.apache.causeway.security.keycloak.services.KeycloakOauth2UserService;
-import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +44,14 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.security.authentication.login.LoginSuccessHandlerUNUSED;
+import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
+import org.apache.causeway.security.keycloak.handler.LogoutHandlerForKeycloak;
+import org.apache.causeway.security.keycloak.services.KeycloakOauth2UserService;
+import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

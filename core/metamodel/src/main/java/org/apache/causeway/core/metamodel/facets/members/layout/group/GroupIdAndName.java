@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
 import lombok.Value;

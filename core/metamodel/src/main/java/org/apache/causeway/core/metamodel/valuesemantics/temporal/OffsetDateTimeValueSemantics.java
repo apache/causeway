@@ -23,10 +23,10 @@ import java.time.OffsetDateTime;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Temporals;
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component

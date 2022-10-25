@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class ChoicesFromFacetForActionAnnotation

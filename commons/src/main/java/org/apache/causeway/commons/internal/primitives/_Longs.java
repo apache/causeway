@@ -21,8 +21,9 @@ package org.apache.causeway.commons.internal.primitives;
 import java.util.OptionalLong;
 import java.util.function.Consumer;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.Value;

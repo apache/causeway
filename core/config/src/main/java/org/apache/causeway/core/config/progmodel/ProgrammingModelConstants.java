@@ -42,6 +42,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
+
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.ObjectLifecycle;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableCollection;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -56,18 +65,9 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
-
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Domain;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ObjectLifecycle;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.services.i18n.TranslatableString;
 
 import lombok.Getter;
 import lombok.NonNull;

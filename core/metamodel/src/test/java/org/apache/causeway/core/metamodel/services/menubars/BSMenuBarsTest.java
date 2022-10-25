@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.services.menubars;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 class BSMenuBarsTest {
 

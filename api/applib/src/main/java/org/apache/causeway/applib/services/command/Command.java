@@ -21,8 +21,6 @@ package org.apache.causeway.applib.services.command;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import org.apache.causeway.commons.functional.Try;
-
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.mixins.security.HasUsername;
@@ -34,6 +32,7 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;

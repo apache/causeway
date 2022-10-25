@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 import org.springframework.core.ResolvableType;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 

@@ -19,7 +19,6 @@ package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.functional.Either;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

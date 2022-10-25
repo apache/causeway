@@ -25,16 +25,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.services.i18n.LanguageProvider;
+import org.apache.causeway.applib.services.i18n.Mode;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.i18n.TranslationsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
-
-import org.apache.causeway.applib.services.i18n.LanguageProvider;
-import org.apache.causeway.applib.services.i18n.Mode;
-import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.i18n.TranslationsResolver;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

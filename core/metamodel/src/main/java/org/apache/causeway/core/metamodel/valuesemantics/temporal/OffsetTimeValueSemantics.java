@@ -23,10 +23,12 @@ import java.time.OffsetTime;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Temporals;
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component

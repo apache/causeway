@@ -22,11 +22,10 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -39,10 +38,11 @@ import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.applib.util.ToString;
-
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsFirst;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;

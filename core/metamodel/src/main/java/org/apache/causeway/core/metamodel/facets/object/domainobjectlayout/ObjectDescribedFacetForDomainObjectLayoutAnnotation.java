@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 

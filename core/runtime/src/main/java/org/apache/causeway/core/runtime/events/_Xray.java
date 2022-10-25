@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.runtime.events;
 
-import org.apache.causeway.commons.internal.debug._XrayEvent;
-import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
-
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.commons.internal.debug._XrayEvent;
+import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
+import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 
 import lombok.val;

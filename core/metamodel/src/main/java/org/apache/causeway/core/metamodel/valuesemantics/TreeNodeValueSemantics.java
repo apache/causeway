@@ -25,11 +25,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.Memento;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -40,6 +35,11 @@ import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.memento._Mementos;
+import org.apache.causeway.commons.internal.memento._Mementos.Memento;
+import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component

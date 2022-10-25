@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;

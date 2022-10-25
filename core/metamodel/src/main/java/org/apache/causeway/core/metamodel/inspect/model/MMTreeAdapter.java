@@ -21,9 +21,8 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 public class MMTreeAdapter implements TreeAdapter<MMNode> {
 

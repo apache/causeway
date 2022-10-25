@@ -25,12 +25,9 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-
-import static org.apache.causeway.commons.internal.functions._Predicates.not;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.HomePage;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -45,6 +42,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.val;

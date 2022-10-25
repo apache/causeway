@@ -23,7 +23,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

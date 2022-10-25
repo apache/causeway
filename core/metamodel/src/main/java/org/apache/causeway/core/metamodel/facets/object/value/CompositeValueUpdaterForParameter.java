@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.commons.internal.delegate._Delegate;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

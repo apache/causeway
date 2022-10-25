@@ -20,12 +20,12 @@ package org.apache.causeway.commons.internal.base;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.base._Reduction;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.collections._Lists;
 
 class ReductionTest {
 

@@ -21,9 +21,6 @@ package org.apache.causeway.commons.internal.base;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +31,8 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.apache.causeway.commons.internal._Constants;
 
 import lombok.val;
 

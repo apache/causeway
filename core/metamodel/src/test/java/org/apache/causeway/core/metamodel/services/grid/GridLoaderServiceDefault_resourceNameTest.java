@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.services.grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.DomainClassAndLayout;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.DomainClassAndLayout;
 
 class GridLoaderServiceDefault_resourceNameTest {
 

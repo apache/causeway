@@ -23,11 +23,6 @@ import java.lang.reflect.Modifier;
 
 import javax.persistence.Entity;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.reflection._Annotations;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -36,6 +31,11 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.AccessLevel;
 import lombok.NonNull;

@@ -25,10 +25,11 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.springframework.lang.Nullable;
 
 import lombok.AccessLevel;
 import lombok.NonNull;

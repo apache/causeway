@@ -26,7 +26,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +36,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

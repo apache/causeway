@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.security.authentication.standard;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.security.EncodabilityContractTest;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.security.EncodabilityContractTest;
 
 abstract class SimpleSessionEncodabilityTestAbstract
 extends EncodabilityContractTest {

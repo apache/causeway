@@ -22,10 +22,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 

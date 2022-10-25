@@ -21,12 +21,13 @@ package org.apache.causeway.core.internaltestsupport.jmocking;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.apache.causeway.commons.internal.proxy._ProxyFactory;
-import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.jmock.api.Imposteriser;
 import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 import org.jmock.lib.JavaReflectionImposteriser;
+
+import org.apache.causeway.commons.internal.proxy._ProxyFactory;
+import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 
 class ImposteriserUsingCodegenPlugin implements Imposteriser {
 

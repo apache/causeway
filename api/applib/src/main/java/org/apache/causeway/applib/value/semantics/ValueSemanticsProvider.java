@@ -19,13 +19,13 @@
 
 package org.apache.causeway.applib.value.semantics;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;

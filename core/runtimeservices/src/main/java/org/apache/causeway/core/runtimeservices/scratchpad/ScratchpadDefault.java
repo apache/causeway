@@ -23,14 +23,14 @@ import java.util.Map;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.InteractionScope;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.scratchpad.Scratchpad;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".Scratchpad")

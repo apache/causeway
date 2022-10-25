@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;

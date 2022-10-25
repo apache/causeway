@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.collection.modify;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;

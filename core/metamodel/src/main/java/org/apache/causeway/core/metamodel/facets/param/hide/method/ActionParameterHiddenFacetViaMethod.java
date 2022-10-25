@@ -24,13 +24,12 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 
 import lombok.Getter;
 import lombok.NonNull;

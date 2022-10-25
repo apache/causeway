@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacetAbstract;

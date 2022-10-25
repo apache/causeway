@@ -18,16 +18,17 @@
  */
 package org.apache.causeway.core.runtimeservices.eventbus;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.eventbus.EventBusService;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.eventbus.EventBusService;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EventBusServiceSpring")

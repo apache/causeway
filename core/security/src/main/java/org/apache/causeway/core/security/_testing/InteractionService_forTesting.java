@@ -24,8 +24,6 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
@@ -33,6 +31,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

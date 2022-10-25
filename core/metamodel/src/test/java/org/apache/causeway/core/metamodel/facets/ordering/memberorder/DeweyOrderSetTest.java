@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.ordering.memberorder;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.context._Context;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

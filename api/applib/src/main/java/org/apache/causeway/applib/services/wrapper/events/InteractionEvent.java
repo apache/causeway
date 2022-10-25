@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.applib.services.wrapper.events;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.commons.collections.Can;
 
 /**
  * Supported only by {@link WrapperFactory},

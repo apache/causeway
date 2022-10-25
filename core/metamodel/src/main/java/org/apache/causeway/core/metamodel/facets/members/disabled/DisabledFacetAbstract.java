@@ -20,10 +20,10 @@ package org.apache.causeway.core.metamodel.facets.members.disabled;
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacetAbstract;

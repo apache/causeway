@@ -20,9 +20,9 @@ package org.apache.causeway.core.metamodel.services.metamodel;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;

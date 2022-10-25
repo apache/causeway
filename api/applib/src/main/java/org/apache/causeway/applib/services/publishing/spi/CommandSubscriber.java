@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.applib.services.publishing.spi;
 
-import org.apache.causeway.commons.having.HasEnabling;
-
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.having.HasEnabling;
 
 /**
  * Part of the <i>Publishing SPI</i>. A component to receive {@link Command}s 

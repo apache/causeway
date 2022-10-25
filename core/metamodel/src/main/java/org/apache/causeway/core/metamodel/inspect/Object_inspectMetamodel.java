@@ -23,8 +23,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -38,6 +36,7 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.inspect.model.MMNodeFactory;
 import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
 

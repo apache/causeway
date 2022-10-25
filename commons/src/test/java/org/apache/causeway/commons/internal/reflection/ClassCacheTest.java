@@ -20,15 +20,14 @@ package org.apache.causeway.commons.internal.reflection;
 
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.val;
 

@@ -23,11 +23,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.val;

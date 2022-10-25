@@ -21,7 +21,6 @@ package org.apache.causeway.security.shiro.permrolemapper;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.causeway.security.shiro.permrolemapper.Util;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

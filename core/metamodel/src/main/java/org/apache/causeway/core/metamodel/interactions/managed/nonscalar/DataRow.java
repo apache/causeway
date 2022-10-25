@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;

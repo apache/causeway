@@ -20,11 +20,11 @@ package org.apache.causeway.commons.collections;
 
 import java.util.List;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.internal.collections._Lists;
 
 class CanCompareTest {
 

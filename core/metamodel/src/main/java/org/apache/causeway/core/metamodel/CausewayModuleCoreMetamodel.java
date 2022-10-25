@@ -20,9 +20,6 @@ package org.apache.causeway.core.metamodel;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.functional.Railway;
-import org.apache.causeway.commons.functional.Try;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -31,6 +28,9 @@ import org.springframework.context.annotation.Primary;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.functional.Railway;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContexts;

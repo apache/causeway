@@ -24,11 +24,10 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 
 import lombok.Value;
 import lombok.val;

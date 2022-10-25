@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.compare._Comparators;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.internal.collections._Lists;
 
 class ComparatorsTest {
 

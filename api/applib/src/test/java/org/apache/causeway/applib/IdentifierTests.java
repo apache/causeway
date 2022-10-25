@@ -20,7 +20,6 @@ package org.apache.causeway.applib;
 
 import java.math.BigDecimal;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,6 +28,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.val;
 

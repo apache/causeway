@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.email;
 
-import org.apache.causeway.core.runtimeservices.email.EmailServiceDefault;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;

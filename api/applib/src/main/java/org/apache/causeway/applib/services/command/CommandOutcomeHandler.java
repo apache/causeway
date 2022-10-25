@@ -20,9 +20,8 @@ package org.apache.causeway.applib.services.command;
 
 import java.sql.Timestamp;
 
-import org.apache.causeway.commons.functional.Try;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.functional.Try;
 
 /**
  * Used by {@link CommandExecutorService}, to update a {@link Command} after it has been executed.

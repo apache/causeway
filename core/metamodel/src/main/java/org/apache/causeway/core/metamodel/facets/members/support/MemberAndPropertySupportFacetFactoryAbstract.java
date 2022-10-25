@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.members.support;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;

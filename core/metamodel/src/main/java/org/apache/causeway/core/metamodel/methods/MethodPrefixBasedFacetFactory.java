@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.methods;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;

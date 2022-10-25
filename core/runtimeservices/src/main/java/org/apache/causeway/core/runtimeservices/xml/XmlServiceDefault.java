@@ -32,8 +32,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.causeway.commons.internal.codec._DocumentFactories;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -45,6 +43,8 @@ import org.w3c.dom.Text;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.xml.XmlService;
+import org.apache.causeway.commons.internal.codec._DocumentFactories;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  *

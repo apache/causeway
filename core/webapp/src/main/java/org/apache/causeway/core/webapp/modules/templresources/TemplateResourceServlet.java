@@ -28,19 +28,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.apache.causeway.commons.internal.base._Strings.pair;
-import static org.apache.causeway.commons.internal.base._With.ifPresentElseGet;
-
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.commons.InputStreamExtensions;
 import org.apache.causeway.core.metamodel.commons.ResourceUtil;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
+
+import static org.apache.causeway.commons.internal.base._Strings.pair;
+import static org.apache.causeway.commons.internal.base._With.ifPresentElseGet;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

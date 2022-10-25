@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.services.command;
 
 import java.util.UUID;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;

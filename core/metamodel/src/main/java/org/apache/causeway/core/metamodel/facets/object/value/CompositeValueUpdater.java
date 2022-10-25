@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;

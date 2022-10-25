@@ -20,10 +20,9 @@ package org.apache.causeway.applib.services.iactnlayer;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides access to the current {@link InteractionLayer}.

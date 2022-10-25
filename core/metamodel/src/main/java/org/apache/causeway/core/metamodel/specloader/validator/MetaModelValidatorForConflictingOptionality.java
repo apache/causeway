@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.specloader.validator;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
-
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 
 import lombok.val;

@@ -24,12 +24,12 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;

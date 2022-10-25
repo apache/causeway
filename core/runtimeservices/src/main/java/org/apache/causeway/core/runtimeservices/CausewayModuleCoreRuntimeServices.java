@@ -20,6 +20,12 @@ package org.apache.causeway.core.runtimeservices;
 
 import javax.inject.Singleton;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.OrderComparator;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
 import org.apache.causeway.core.codegen.bytebuddy.CausewayModuleCoreCodegenByteBuddy;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -67,11 +73,6 @@ import org.apache.causeway.core.runtimeservices.userreg.EmailNotificationService
 import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.OrderComparator;
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 @Configuration
 @Import({

@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.val;

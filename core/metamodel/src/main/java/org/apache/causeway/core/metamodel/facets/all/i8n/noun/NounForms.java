@@ -21,12 +21,12 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
 import lombok.Getter;

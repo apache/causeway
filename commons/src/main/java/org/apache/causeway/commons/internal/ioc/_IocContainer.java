@@ -23,10 +23,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.context.ApplicationContext;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.Cardinality;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.springframework.context.ApplicationContext;
 
 import lombok.NonNull;
 import lombok.val;

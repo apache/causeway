@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.layout.memberorderfacet;
 import java.util.Comparator;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;

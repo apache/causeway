@@ -24,12 +24,12 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 

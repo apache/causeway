@@ -29,10 +29,6 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -55,6 +51,9 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;

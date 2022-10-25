@@ -22,10 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.runtimeservices.i18n.po.PoReader;
-import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 @ExtendWith(MockitoExtension.class)
 class PoReaderTest {

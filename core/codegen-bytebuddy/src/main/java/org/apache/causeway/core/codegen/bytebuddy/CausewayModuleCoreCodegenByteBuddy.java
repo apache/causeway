@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.core.codegen.bytebuddy;
 
-import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 
 @Configuration
 @Import({

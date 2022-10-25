@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides a mechanism for parsing and rendering string representations of

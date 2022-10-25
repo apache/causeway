@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
 import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
-import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
 
 import lombok.val;
 

@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.facets.collections.layout;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
-
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
+
+import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 public class SortedByFacetForCollectionLayoutAnnotation
 extends SortedByFacetAbstract {

@@ -32,8 +32,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +41,8 @@ import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.causeway.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.causeway.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailNotificationServiceDefault")

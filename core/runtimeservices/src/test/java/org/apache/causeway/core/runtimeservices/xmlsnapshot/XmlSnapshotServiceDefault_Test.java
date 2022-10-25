@@ -24,10 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Locale;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
-import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -35,6 +31,10 @@ import org.w3c.dom.Element;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
 
 class XmlSnapshotServiceDefault_Test {
 

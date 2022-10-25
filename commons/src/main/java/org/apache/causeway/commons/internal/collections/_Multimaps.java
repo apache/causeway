@@ -39,9 +39,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.val;

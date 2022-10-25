@@ -23,8 +23,6 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import org.apache.causeway.commons.internal.resources._Json;
-import org.apache.causeway.commons.internal.resources._Yaml;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

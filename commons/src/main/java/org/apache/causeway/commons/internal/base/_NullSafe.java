@@ -33,10 +33,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableCollection;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.springframework.lang.Nullable;
 
 /**
  * <h1>- internal use only -</h1>

@@ -20,12 +20,12 @@ package org.apache.causeway.core.runtimeservices.wrapper.proxy;
 
 import java.lang.reflect.Proxy;
 
+import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

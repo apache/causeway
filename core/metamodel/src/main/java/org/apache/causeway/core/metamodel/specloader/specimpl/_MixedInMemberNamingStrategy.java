@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 import java.util.Objects;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 import lombok.experimental.UtilityClass;

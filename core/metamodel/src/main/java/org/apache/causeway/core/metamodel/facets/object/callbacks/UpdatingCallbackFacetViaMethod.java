@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.callbacks;
 import java.lang.reflect.Method;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class UpdatingCallbackFacetViaMethod

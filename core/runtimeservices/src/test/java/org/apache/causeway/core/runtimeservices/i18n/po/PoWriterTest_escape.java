@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.i18n.po;
 
-import org.apache.causeway.core.runtimeservices.i18n.po.PoWriter;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

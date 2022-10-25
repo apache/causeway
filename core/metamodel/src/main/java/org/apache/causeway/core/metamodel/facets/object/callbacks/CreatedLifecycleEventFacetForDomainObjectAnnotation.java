@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callbacks;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
 

@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.applib.events.metamodel;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Convenience interface to listen on {@link MetamodelEvent}s.

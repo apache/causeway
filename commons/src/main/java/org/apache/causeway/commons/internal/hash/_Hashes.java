@@ -25,8 +25,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -20,8 +20,6 @@ package org.apache.causeway.commons.internal.concurrent;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
-import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -18,9 +18,8 @@ package org.apache.causeway.core.metamodel.facets.object.grid;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Lazy;
-
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;

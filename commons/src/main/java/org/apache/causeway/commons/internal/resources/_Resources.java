@@ -26,10 +26,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

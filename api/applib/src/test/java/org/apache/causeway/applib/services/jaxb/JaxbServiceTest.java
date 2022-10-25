@@ -20,7 +20,6 @@ package org.apache.causeway.applib.services.jaxb;
 
 import javax.xml.bind.JAXBContext;
 
-import org.apache.causeway.commons.internal.resources._Xml;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -29,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.SneakyThrows;

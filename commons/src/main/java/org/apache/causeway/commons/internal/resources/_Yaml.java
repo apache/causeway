@@ -26,11 +26,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
-import org.apache.causeway.commons.functional.Try;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+
+import org.apache.causeway.commons.functional.Try;
 
 import lombok.SneakyThrows;
 import lombok.val;

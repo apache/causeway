@@ -37,13 +37,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -84,6 +77,13 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

@@ -21,9 +21,6 @@ package org.apache.causeway.core.interaction.scope;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -32,6 +29,9 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
 import lombok.val;

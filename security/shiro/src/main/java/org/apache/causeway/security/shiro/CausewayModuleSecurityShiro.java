@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.security.shiro;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.causeway.security.shiro.authorization.AuthorizorShiro;
 import org.apache.causeway.security.shiro.webmodule.WebModuleShiro;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * Configuration Bean to support Causeway Security using Shiro.

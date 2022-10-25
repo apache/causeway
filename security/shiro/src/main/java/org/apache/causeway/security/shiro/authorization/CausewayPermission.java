@@ -21,10 +21,11 @@ package org.apache.causeway.security.shiro.authorization;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
+
+import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 
 import lombok.val;
 

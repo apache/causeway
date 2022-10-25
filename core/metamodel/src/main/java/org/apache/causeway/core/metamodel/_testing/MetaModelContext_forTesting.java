@@ -29,15 +29,6 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.collections._Streams;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.util.ClassUtils;
 
@@ -62,6 +53,15 @@ import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.collections._Streams;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;

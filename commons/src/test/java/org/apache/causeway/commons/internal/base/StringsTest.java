@@ -21,15 +21,14 @@ package org.apache.causeway.commons.internal.base;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
+import org.apache.causeway.commons.internal._Constants;
 
 class StringsTest {
 

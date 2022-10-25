@@ -27,10 +27,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.resources._Xml;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

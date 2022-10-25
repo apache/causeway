@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -35,8 +36,6 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
-
-import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ThrowableExtensions;
 

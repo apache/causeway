@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.Getter;

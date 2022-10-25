@@ -29,14 +29,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Navigable;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
 import org.apache.causeway.schema.metamodel.v2.FacetHolder;
 import org.apache.causeway.schema.metamodel.v2.MetamodelElement;

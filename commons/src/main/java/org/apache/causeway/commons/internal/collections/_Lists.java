@@ -32,8 +32,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
 import lombok.val;

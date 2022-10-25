@@ -28,10 +28,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
 import lombok.NonNull;

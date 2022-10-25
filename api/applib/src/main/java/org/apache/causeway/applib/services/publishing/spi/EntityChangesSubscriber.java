@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.applib.services.publishing.spi;
 
-import org.apache.causeway.commons.having.HasEnabling;
-
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.commons.having.HasEnabling;
 
 /**
  * SPI to receive a summary of the number of entities that have changed as the

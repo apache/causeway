@@ -20,9 +20,9 @@ package org.apache.causeway.core.metamodel.facets.object.title;
 
 import java.util.function.Predicate;
 
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 

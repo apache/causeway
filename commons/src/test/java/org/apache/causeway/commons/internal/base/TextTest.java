@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.commons.internal.base;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Text;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.collections.Can;
 
 class TextTest {
 

@@ -26,6 +26,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.context._Context;
@@ -33,8 +36,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.stereotype.Component;
 
 import lombok.NonNull;
 import lombok.Value;

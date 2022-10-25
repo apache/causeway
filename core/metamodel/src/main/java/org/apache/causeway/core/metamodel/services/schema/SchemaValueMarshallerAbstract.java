@@ -21,10 +21,6 @@ package org.apache.causeway.core.metamodel.services.schema;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.Cardinality;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -34,6 +30,10 @@ import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.Converter;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.Cardinality;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;

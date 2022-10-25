@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 

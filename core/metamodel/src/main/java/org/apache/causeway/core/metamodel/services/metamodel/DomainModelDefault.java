@@ -25,10 +25,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.services.metamodel.DomainModel;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 @XmlRootElement(name="domain")
 @XmlAccessorType(XmlAccessType.PROPERTY)

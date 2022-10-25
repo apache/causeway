@@ -23,11 +23,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.util.Enums;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.val;
 

@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.core.io.AbstractResource;
@@ -29,6 +28,7 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;

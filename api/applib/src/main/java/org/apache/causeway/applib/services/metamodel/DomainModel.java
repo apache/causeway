@@ -21,8 +21,9 @@ package org.apache.causeway.applib.services.metamodel;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.collections._Multimaps;
 
 import lombok.val;
 

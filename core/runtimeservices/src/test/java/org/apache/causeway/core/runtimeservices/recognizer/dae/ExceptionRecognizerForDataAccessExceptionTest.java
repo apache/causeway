@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 import lombok.val;
 

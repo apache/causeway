@@ -22,9 +22,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;

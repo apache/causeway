@@ -20,14 +20,14 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.binding.Observable;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.binding._Observables;
-import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.binding.Observable;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.binding._Observables;
+import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

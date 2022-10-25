@@ -22,10 +22,9 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 import lombok.AccessLevel;
 import lombok.Getter;

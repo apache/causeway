@@ -18,9 +18,17 @@
  */
 package org.apache.causeway.core.runtimeservices.publish;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -30,23 +38,16 @@ import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSu
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.having.HasEnabling;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.having.HasEnabling;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import org.springframework.lang.Nullable;
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-
-import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EntityPropertyChangePublisherDefault")

@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;

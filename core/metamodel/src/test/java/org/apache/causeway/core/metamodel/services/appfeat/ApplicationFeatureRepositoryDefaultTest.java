@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services.appfeat;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -33,6 +32,7 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;

@@ -20,8 +20,6 @@ package org.apache.causeway.applib.services.sitemap;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -34,6 +32,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Simply provides a UI to allow a site-map (obtained from {@link SitemapService}) to be downloaded.

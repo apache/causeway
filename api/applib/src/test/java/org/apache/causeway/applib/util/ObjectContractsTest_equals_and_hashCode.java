@@ -20,9 +20,9 @@ package org.apache.causeway.applib.util;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.junit.jupiter.api.BeforeEach;
 
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
 class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {

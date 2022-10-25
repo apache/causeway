@@ -22,10 +22,11 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.binding.ChangeListener;
 import org.apache.causeway.commons.binding.InvalidationListener;
 import org.apache.causeway.commons.binding.Observable;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 

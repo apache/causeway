@@ -25,14 +25,14 @@ import java.util.Optional;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
+import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;

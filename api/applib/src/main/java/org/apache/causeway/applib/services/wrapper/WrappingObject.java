@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.applib.services.wrapper;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
-
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
 
 /**
  * Implemented by all objects that have been viewed as per

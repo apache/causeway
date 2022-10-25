@@ -20,7 +20,6 @@ package org.apache.causeway.core.config.beans.aoppatch;
 
 import javax.inject.Named;
 
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -33,6 +32,8 @@ import org.springframework.transaction.config.TransactionManagementConfigUtils;
 import org.springframework.transaction.interceptor.BeanFactoryTransactionAttributeSourceAdvisor;
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
+
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

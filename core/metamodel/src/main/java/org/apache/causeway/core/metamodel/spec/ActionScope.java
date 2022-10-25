@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.spec;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 public enum ActionScope {

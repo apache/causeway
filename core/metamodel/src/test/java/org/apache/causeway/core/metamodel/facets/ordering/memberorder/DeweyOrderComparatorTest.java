@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.ordering.memberorder;
 
-import org.apache.causeway.commons.internal.context._Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;

@@ -21,13 +21,13 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;

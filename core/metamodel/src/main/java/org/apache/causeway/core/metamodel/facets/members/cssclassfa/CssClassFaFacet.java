@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 
 import org.apache.causeway.commons.functional.Either;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**

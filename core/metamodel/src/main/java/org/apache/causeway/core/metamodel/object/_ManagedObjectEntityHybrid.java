@@ -20,12 +20,12 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Blackhole;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 
 import lombok.NonNull;
 import lombok.Synchronized;

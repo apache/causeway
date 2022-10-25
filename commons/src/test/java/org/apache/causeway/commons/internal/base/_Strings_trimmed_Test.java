@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.commons.internal.base;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;

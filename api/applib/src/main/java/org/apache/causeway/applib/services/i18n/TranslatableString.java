@@ -24,9 +24,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * @since 1.x {@index}

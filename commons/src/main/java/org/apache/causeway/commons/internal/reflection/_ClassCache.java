@@ -27,13 +27,14 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.ReflectionUtils;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ReflectionUtils;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

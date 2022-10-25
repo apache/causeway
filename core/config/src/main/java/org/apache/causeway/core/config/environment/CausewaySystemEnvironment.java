@@ -25,10 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
@@ -36,6 +32,11 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.ioc._IocContainer;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
 import lombok.val;

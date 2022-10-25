@@ -21,9 +21,10 @@ package org.apache.causeway.core.config.beans;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
 
+import org.springframework.context.ApplicationContext;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.context._Context;
-import org.springframework.context.ApplicationContext;
 
 import lombok.NonNull;
 

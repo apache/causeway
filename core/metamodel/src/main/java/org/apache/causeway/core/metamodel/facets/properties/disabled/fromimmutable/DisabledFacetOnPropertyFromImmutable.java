@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.disabled.fromimmutable;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;

@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.core.config.beans;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Component;
+
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.NonNull;
 

@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanBeVoid;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 

@@ -21,9 +21,8 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Arrays;
-
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;

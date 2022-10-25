@@ -29,6 +29,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -36,11 +41,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;

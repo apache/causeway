@@ -28,8 +28,9 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

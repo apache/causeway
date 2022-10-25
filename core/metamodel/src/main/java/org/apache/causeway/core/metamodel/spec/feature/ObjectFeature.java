@@ -21,9 +21,8 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.apache.causeway.commons.functional.Either;
-
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.interactions.managed;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 @FunctionalInterface

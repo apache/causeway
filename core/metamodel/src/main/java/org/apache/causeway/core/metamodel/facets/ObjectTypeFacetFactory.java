@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 /**

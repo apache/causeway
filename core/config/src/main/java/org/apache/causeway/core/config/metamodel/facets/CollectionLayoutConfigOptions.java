@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.core.config.metamodel.facets;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.Getter;
 import lombok.NonNull;

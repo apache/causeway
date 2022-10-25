@@ -24,7 +24,6 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
-
 import org.apache.causeway.schema.common.v2.DifferenceDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;

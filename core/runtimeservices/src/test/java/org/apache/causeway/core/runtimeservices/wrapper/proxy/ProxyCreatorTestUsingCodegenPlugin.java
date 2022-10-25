@@ -22,9 +22,6 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
-import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
+import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 
 class ProxyCreatorTestUsingCodegenPlugin {
 

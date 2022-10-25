@@ -37,8 +37,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.NonNull;
 import lombok.val;

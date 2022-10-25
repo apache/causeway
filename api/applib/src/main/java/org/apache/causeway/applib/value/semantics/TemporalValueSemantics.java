@@ -21,12 +21,8 @@ package org.apache.causeway.applib.value.semantics;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.TimePrecision;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
 import lombok.NonNull;

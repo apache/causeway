@@ -20,9 +20,9 @@ package org.apache.causeway.core.metamodel.facets.object.immutable;
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

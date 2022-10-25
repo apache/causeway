@@ -20,11 +20,10 @@ package org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.spec.Specification;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;

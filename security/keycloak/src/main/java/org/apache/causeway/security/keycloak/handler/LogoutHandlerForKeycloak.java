@@ -27,8 +27,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Propagates logouts to Keycloak.

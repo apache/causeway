@@ -21,10 +21,10 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;

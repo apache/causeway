@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.postprocessors.param;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;

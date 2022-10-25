@@ -23,10 +23,10 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 

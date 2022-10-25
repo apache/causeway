@@ -21,11 +21,6 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Railway;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -33,6 +28,11 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.routing.RoutingService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Railway;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

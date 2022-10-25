@@ -20,9 +20,9 @@ package org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;

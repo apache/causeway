@@ -22,10 +22,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.val;
 

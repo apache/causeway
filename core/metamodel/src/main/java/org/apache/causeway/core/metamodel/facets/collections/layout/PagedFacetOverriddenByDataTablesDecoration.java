@@ -18,11 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout;
 
-import java.util.Optional;
-
-import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetOverriddenByDataTablesDecoration extends PagedFacetAbstract {

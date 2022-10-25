@@ -21,8 +21,9 @@ package org.apache.causeway.applib.util;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

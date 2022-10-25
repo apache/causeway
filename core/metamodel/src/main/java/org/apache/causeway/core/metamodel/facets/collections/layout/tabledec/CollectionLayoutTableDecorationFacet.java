@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Optionals;
-
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;

@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.services.objectlifecycle;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Either;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 

@@ -21,15 +21,15 @@ package org.apache.causeway.core.metamodel.facets.collections.javautilcollection
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
 
-import static org.apache.causeway.commons.internal.collections._Arrays.toArray;
-
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import static org.apache.causeway.commons.internal.collections._Arrays.toArray;
 
 import lombok.val;
 

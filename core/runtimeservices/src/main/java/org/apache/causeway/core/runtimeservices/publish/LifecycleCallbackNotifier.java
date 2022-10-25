@@ -24,15 +24,15 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;

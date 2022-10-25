@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.transaction.changetracking;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 

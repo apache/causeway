@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.objectvalue.typicallen;
 
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Ints.Bound;
-
 import org.apache.causeway.core.metamodel.facets.SingleIntValueFacet;
 
 import lombok.val;

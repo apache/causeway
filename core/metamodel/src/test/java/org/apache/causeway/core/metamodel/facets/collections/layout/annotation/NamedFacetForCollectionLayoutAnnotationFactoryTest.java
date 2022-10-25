@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.annotation;
 import java.lang.reflect.Method;
 import java.util.SortedSet;
 
-import org.apache.causeway.commons.internal.collections._Sets;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -30,6 +28,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;

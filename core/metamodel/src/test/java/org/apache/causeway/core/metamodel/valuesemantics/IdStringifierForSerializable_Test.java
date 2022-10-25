@@ -27,9 +27,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
 import lombok.Value;
 import lombok.val;

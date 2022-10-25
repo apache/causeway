@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject.editing;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

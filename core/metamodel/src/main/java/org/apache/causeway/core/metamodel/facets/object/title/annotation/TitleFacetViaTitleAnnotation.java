@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -33,8 +34,6 @@ import org.apache.causeway.commons.internal.compare._Comparators;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
-
-import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Validation;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;

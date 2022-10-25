@@ -20,12 +20,11 @@ package org.apache.causeway.core.metamodel.facets.members.publish.command;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Optionals;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

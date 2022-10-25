@@ -22,8 +22,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.FormatStyle;
 
-import org.apache.causeway.commons.internal._Constants;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.TimeZoneTranslation;
 import org.apache.causeway.applib.annotation.ValueSemantics;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;

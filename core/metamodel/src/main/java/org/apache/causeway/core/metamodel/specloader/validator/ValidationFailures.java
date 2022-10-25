@@ -26,10 +26,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-
-import org.apache.causeway.applib.Identifier;
 
 import lombok.val;
 

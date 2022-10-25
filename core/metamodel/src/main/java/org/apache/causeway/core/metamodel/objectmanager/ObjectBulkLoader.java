@@ -20,11 +20,10 @@ package org.apache.causeway.core.metamodel.objectmanager;
 
 import java.util.List;
 
+import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

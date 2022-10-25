@@ -31,12 +31,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
-import org.apache.causeway.core.webapp.modules.WebModuleContext;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.config.ShiroFilterConfiguration;
@@ -52,6 +46,12 @@ import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
+import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

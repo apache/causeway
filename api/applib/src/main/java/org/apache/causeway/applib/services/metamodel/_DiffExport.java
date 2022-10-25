@@ -31,7 +31,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
-
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.schema.metamodel.v2.Facet;
 import org.apache.causeway.schema.metamodel.v2.FacetAttr;

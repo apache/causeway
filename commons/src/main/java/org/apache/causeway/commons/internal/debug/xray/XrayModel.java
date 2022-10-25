@@ -25,8 +25,9 @@ import java.util.UUID;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Value;
 import lombok.val;

@@ -21,12 +21,11 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Blackhole;
-
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;

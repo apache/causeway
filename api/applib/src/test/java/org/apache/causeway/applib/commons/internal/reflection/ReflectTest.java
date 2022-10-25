@@ -24,18 +24,19 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.junit.jupiter.api.Test;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.getAnnotation;
-import static org.apache.causeway.commons.internal.reflection._Reflect.streamAllMethods;
-import static org.apache.causeway.commons.internal.reflection._Reflect.streamTypeHierarchy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
+
+import static org.apache.causeway.commons.internal.reflection._Reflect.getAnnotation;
+import static org.apache.causeway.commons.internal.reflection._Reflect.streamAllMethods;
+import static org.apache.causeway.commons.internal.reflection._Reflect.streamTypeHierarchy;
 
 import lombok.val;
 

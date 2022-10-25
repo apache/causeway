@@ -20,11 +20,12 @@ package org.apache.causeway.applib.services.xactn;
 
 import java.util.concurrent.Callable;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.functional.Try;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.functional.Try;
 
 import lombok.val;
 

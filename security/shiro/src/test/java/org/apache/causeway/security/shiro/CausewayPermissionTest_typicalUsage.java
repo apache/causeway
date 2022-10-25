@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.security.shiro;
 
-import org.apache.causeway.security.shiro.authorization.CausewayPermission;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.hamcrest.Description;
@@ -30,6 +29,8 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.security.shiro.authorization.CausewayPermission;
 
 public class CausewayPermissionTest_typicalUsage {
 

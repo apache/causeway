@@ -20,11 +20,10 @@ package org.apache.causeway.applib.services.menu;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Responsible for returning a {@link MenuBarsService} instance, a data

@@ -35,8 +35,9 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 

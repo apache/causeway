@@ -21,12 +21,12 @@ package org.apache.causeway.core.metamodel.specloader.validator;
 import java.util.Comparator;
 import java.util.Objects;
 
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsFirst;
 
 import lombok.NonNull;
 import lombok.Value;

@@ -20,15 +20,10 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabl
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.TableDecoration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
-import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
-import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
 import lombok.val;
 

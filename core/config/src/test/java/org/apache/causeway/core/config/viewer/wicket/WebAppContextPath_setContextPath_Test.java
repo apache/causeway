@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.core.config.viewer.wicket;
 
-import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
 class WebAppContextPath_setContextPath_Test {
 

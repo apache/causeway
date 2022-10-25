@@ -20,12 +20,12 @@ package org.apache.causeway.commons.internal.debug.xray;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.debug.xray._CallStackMerger;
-import org.apache.causeway.commons.internal.debug.xray._CallStackMerger.IntTreeVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.internal.debug.xray._CallStackMerger.IntTreeVisitor;
 
 import lombok.val;
 

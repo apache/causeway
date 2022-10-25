@@ -23,9 +23,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.command.Command;
@@ -37,6 +34,9 @@ import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscribe
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 

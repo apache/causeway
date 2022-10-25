@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.commons.internal.context;
 
-import org.apache.causeway.commons.internal.context._Context;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.mixin;
 
-import org.apache.causeway.commons.internal.reflection._Reflect;
-
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;

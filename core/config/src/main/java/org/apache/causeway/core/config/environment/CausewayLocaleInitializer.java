@@ -24,8 +24,9 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.stereotype.Component;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.extern.log4j.Log4j2;
 

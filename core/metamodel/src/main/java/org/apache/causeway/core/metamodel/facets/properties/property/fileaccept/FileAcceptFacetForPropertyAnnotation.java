@@ -20,9 +20,8 @@ package org.apache.causeway.core.metamodel.facets.properties.property.fileaccept
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacetAbstract;

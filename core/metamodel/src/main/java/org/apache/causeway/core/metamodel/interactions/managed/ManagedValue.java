@@ -20,12 +20,11 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.function.UnaryOperator;
 
+import org.apache.causeway.applib.value.semantics.Parser;
+import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
-
-import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

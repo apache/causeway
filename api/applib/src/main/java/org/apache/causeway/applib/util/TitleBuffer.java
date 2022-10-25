@@ -21,9 +21,8 @@ package org.apache.causeway.applib.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.internal._Constants;
-
 import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.commons.internal._Constants;
 
 /**
  * Title buffer is a utility class to help produce titles for objects without

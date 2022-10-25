@@ -22,16 +22,12 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
-import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
-import org.springframework.transaction.annotation.Propagation;
 
 /**
  *

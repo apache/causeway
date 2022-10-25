@@ -20,11 +20,10 @@ package org.apache.causeway.applib.spec;
 
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.val;
 

@@ -21,14 +21,14 @@ package org.apache.causeway.core.metamodel.progmodel;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.springframework.lang.Nullable;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
-
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
+
+import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
 
 import lombok.val;
 

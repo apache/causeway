@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.core.transaction;
 
-import org.apache.causeway.core.transaction.changetracking.events.TimestampService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.core.transaction.changetracking.events.TimestampService;
 
 @Configuration
 @Import({

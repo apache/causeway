@@ -28,8 +28,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 
 import lombok.val;
 

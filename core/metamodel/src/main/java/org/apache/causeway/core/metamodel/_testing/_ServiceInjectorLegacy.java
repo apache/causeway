@@ -32,6 +32,12 @@ import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.core.MethodParameter;
+
+import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -39,12 +45,6 @@ import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Generics;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.springframework.beans.factory.InjectionPoint;
-import org.springframework.core.MethodParameter;
-
-import org.apache.causeway.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ToString;
 

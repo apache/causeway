@@ -22,9 +22,10 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.springframework.lang.Nullable;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 

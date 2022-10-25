@@ -20,9 +20,8 @@ package org.apache.causeway.applib.value.semantics;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.NonNull;
 

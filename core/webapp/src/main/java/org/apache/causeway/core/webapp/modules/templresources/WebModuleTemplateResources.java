@@ -24,13 +24,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
 

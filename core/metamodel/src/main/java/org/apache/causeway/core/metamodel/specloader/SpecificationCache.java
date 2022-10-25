@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 interface SpecificationCache<T extends ObjectSpecification> {

@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.facetapi;
 import java.beans.Introspector;
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 

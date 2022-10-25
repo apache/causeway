@@ -25,11 +25,10 @@ import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.exceptions.TranslatableException;
 import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.Setter;

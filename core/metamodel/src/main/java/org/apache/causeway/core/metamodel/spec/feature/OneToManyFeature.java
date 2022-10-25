@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.spec.feature;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 

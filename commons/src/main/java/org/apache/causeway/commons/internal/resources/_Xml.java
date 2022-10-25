@@ -34,6 +34,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -41,7 +43,6 @@ import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
-import org.springframework.lang.Nullable;
 
 import lombok.Builder;
 import lombok.NonNull;

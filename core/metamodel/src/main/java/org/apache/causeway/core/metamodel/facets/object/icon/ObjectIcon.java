@@ -22,11 +22,10 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
 
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
-
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.applib.services.wrapper.control;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.val;
 

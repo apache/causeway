@@ -21,8 +21,9 @@ package org.apache.causeway.applib.services.i18n;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Value;

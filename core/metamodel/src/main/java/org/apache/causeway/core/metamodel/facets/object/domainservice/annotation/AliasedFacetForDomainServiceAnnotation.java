@@ -20,10 +20,9 @@ package org.apache.causeway.core.metamodel.facets.object.domainservice.annotatio
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.AliasedFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;

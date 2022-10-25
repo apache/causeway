@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.commons.collections;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.CanVector;
-import org.apache.causeway.commons.internal.testing._SerializationTester;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 

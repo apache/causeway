@@ -22,13 +22,13 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.causeway.commons.internal._Constants;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ResolvableType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.SneakyThrows;

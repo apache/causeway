@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.security.shiro.authorization;
 
-import org.apache.causeway.security.shiro.authorization.CausewayPermission;
 import org.junit.Assert;
 import org.junit.Test;
 

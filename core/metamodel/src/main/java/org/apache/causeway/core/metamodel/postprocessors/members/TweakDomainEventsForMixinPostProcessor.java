@@ -22,13 +22,12 @@ import java.lang.reflect.Method;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.reflection._Annotations;
-
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
+import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;

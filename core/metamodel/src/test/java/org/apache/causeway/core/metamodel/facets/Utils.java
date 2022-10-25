@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal._Constants;
-
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 class Utils {

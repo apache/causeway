@@ -30,10 +30,11 @@ import java.nio.charset.StandardCharsets;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.primitives._Ints;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

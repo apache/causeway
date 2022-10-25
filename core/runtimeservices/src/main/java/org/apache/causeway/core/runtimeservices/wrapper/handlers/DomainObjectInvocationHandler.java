@@ -24,14 +24,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.IndexedFunction;
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
@@ -46,6 +38,13 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
 import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedFunction;
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

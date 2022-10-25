@@ -20,9 +20,6 @@ package org.apache.causeway.core.metamodel.layout;
 
 import java.util.Comparator;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.functions._Functions;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
@@ -38,6 +35,8 @@ import org.apache.causeway.applib.layout.component.HasHidden;
 import org.apache.causeway.applib.layout.component.HasNamed;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;

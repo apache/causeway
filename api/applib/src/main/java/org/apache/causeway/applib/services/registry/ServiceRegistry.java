@@ -26,13 +26,12 @@ import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
-
-import org.apache.causeway.applib.id.LogicalType;
 
 import lombok.val;
 

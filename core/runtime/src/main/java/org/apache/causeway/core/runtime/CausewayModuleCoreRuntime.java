@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.core.runtime;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtime.events.TransactionEventEmitter;
 import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
 import org.apache.causeway.valuetypes.jodatime.integration.CausewayModuleValJodatimeIntegration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

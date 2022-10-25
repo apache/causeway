@@ -23,14 +23,14 @@ import java.nio.charset.StandardCharsets;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
  * @since 2.0 {@index}

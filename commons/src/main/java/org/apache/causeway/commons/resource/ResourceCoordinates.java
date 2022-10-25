@@ -21,11 +21,12 @@ package org.apache.causeway.commons.resource;
 import java.io.File;
 import java.util.Comparator;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.springframework.lang.Nullable;
 
 import lombok.Builder;
 import lombok.NonNull;

@@ -26,14 +26,14 @@ import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
 import lombok.val;

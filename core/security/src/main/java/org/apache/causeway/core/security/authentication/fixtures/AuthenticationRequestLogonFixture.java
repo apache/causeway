@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.core.security.authentication.AuthenticationRequestAbstract;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 

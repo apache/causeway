@@ -27,11 +27,10 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Text;
 
 import lombok.EqualsAndHashCode;
 

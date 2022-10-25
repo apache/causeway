@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.param.validate;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;

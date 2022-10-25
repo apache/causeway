@@ -20,13 +20,13 @@ package org.apache.causeway.commons.internal.reflection;
 
 import java.util.ArrayList;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.reflection._Generics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal._Constants;
 
 import lombok.val;
 

@@ -20,10 +20,9 @@ package org.apache.causeway.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.xactn.TransactionId;
+import org.apache.causeway.commons.collections.Can;
 
 public interface HasEnlistedEntityPropertyChanges {
 

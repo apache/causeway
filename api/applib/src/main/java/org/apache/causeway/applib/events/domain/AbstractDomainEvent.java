@@ -24,8 +24,6 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -33,6 +31,8 @@ import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;

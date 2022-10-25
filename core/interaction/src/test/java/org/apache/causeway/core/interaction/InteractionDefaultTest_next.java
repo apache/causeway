@@ -20,11 +20,12 @@ package org.apache.causeway.core.interaction;
 
 import java.util.UUID;
 
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 
 import lombok.val;
 

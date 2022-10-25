@@ -22,9 +22,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Strings.KeyValuePair;
-import org.springframework.lang.Nullable;
 
 import lombok.Getter;
 import lombok.NonNull;

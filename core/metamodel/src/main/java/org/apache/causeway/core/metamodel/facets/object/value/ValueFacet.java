@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -32,6 +31,7 @@ import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;

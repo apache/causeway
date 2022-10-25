@@ -20,10 +20,10 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;

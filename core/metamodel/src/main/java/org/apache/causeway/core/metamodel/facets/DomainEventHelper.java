@@ -24,17 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.springframework.lang.Nullable;
-
-import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
@@ -43,6 +33,11 @@ import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,6 +46,11 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+
+import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
+import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

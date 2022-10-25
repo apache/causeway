@@ -28,9 +28,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-import org.apache.causeway.commons.internal.factory._InstanceUtil;
-
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
 
 public abstract class WebModuleAbstract implements WebModule {
 

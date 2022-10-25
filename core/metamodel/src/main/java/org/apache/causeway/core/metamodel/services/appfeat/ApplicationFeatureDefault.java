@@ -25,8 +25,6 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.collections._Sets;
-
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
@@ -37,6 +35,7 @@ import org.apache.causeway.applib.util.Equality;
 import org.apache.causeway.applib.util.Hashing;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.AccessLevel;

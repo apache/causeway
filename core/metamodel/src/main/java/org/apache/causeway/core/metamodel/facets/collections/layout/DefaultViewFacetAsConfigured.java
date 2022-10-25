@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.collections.layout;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;

@@ -20,12 +20,11 @@ package org.apache.causeway.core.runtimeservices.session;
 
 import java.util.Stack;
 
+import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
-
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 
 import lombok.val;

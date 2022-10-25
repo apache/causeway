@@ -24,11 +24,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Date;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.Memento;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +33,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.memento._Mementos;
+import org.apache.causeway.commons.internal.memento._Mementos.Memento;
+import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 
 class MementosTest {
 

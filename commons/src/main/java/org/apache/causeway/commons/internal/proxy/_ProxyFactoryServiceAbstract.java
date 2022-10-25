@@ -24,6 +24,7 @@ import java.util.WeakHashMap;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.ProxyEnhanced;
 
 import lombok.NonNull;
 

@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.commons.internal.ioc;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.beans.factory.ObjectProvider;
+
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.Value;
 import lombok.val;

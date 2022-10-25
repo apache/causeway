@@ -23,15 +23,14 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.reflection._Reflect;
-
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.HasTranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.Getter;
 import lombok.NonNull;

@@ -24,11 +24,10 @@ import java.util.Locale;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
-
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.collections._Sets;
 
 import lombok.extern.log4j.Log4j2;
 

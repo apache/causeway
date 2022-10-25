@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.validating;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 

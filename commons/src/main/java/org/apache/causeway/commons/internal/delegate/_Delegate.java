@@ -25,8 +25,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.springframework.util.ClassUtils;
+
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

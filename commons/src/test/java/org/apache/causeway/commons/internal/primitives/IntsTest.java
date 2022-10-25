@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.commons.internal.primitives;
 
-import org.apache.causeway.commons.internal.primitives._Ints;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

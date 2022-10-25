@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 

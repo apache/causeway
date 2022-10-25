@@ -24,10 +24,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Arrays;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 

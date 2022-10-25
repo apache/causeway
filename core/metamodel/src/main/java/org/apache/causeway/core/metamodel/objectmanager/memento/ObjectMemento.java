@@ -24,15 +24,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.resources._Serializables;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**

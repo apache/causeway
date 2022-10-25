@@ -23,14 +23,14 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.testing._SerializationTester;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 

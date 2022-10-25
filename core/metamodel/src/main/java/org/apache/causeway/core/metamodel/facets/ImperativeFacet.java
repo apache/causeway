@@ -22,11 +22,10 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;

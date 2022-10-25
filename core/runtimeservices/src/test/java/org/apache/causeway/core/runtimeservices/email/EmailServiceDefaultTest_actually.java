@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.email;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.runtimeservices.email.EmailServiceDefault;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -27,6 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.collections._Lists;
 
 class EmailServiceDefaultTest_actually {
 

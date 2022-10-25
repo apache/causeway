@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.applib.services.grid;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.

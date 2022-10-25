@@ -21,12 +21,13 @@ package org.apache.causeway.commons.handlers;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-import org.apache.causeway.commons.handler.ChainOfResponsibility;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.apache.causeway.commons.handler.ChainOfResponsibility;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 

@@ -19,8 +19,8 @@
 package org.apache.causeway.core.config.metamodel.specloader;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.environment.DeploymentType;
 
 import lombok.val;
 

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.commons.internal.resources;
 
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

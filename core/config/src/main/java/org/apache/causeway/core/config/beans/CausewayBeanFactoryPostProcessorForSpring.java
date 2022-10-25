@@ -22,10 +22,6 @@ import java.util.Objects;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -38,6 +34,10 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

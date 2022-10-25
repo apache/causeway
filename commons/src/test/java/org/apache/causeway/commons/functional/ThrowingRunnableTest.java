@@ -20,12 +20,12 @@ package org.apache.causeway.commons.functional;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 

@@ -24,7 +24,6 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.TableDecoration;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 
 public class CollectionLayoutTableDecorationFacetForCollectionLayoutXml
 extends CollectionLayoutTableDecorationFacetAbstract {

@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
 @Component

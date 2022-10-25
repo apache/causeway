@@ -21,18 +21,19 @@ package org.apache.causeway.security.authentication.standard;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
-import org.apache.causeway.core.security._testing.InteractionService_forTesting;
-import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
-import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.causeway.security.AuthenticatorsForTesting;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
+import org.apache.causeway.core.security._testing.InteractionService_forTesting;
+import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
+import org.apache.causeway.security.AuthenticatorsForTesting;
 
 import lombok.val;
 

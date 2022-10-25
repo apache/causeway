@@ -22,16 +22,17 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryServiceAbstract;
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;

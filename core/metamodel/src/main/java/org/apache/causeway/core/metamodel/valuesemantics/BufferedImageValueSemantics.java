@@ -24,8 +24,6 @@ import java.util.Optional;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.image._Images;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +33,8 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.image._Images;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.schema.common.v2.BlobDto;

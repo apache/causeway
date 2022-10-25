@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;

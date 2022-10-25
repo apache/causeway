@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.paged;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**

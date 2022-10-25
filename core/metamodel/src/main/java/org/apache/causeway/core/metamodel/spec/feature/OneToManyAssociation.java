@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.compare._Comparators;
 import org.apache.causeway.commons.internal.functions._Predicates;
-
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.causeway.core.metamodel.spec.feature.memento.CollectionMemento;
 

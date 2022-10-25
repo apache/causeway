@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.internal.base._Optionals;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;

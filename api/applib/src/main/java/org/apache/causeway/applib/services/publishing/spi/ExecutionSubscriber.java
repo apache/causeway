@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.applib.services.publishing.spi;
 
-import org.apache.causeway.commons.having.HasEnabling;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
+import org.apache.causeway.commons.having.HasEnabling;
 
 /**
  * SPI that allows the execution of individual interactions (action invocations

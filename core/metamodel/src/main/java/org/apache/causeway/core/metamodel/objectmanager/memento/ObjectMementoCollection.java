@@ -20,10 +20,9 @@ package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.util.ArrayList;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;

@@ -19,13 +19,13 @@ package org.apache.causeway.security.shiro.permrolemapper;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.collections._Sets;
 
 public class PermissionToRoleMapperFromStringTest {
 

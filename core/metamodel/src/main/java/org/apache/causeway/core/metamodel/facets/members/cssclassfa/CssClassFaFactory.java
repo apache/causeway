@@ -21,10 +21,9 @@ package org.apache.causeway.core.metamodel.facets.members.cssclassfa;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-
-import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 /**
  * @since 2.0

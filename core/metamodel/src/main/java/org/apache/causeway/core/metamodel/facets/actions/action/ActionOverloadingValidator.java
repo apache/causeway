@@ -20,10 +20,9 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.collections._Sets;
-
-import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

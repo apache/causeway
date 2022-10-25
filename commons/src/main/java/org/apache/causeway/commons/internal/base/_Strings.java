@@ -42,10 +42,11 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Bytes.BytesOperator;
 import org.apache.causeway.commons.internal.functions._Predicates;
-import org.springframework.lang.Nullable;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.size;
 import static org.apache.causeway.commons.internal.base._Strings_SplitIterator.splitIterator;

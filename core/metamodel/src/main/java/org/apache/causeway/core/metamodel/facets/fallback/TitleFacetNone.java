@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.fallback;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;

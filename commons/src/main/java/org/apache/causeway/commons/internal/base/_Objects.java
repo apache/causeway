@@ -21,8 +21,9 @@ package org.apache.causeway.commons.internal.base;
 import java.util.Comparator;
 import java.util.Objects;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * <h1>- internal use only -</h1>

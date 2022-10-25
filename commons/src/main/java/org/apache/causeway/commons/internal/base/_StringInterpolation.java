@@ -22,9 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings.KeyValuePair;
-import org.springframework.lang.Nullable;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 

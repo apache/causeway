@@ -23,11 +23,12 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.springframework.lang.Nullable;
 
 import lombok.Builder;
 import lombok.NonNull;

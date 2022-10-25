@@ -20,10 +20,9 @@ package org.apache.causeway.applib.services.iactn;
 
 import java.util.UUID;
 
-import org.apache.causeway.commons.having.HasTypeSpecificAttributes;
-
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.having.HasTypeSpecificAttributes;
 
 /**
  * Represents an action invocation or property modification, resulting in some

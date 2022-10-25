@@ -28,6 +28,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -38,7 +40,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
 import org.apache.causeway.commons.internal.memento._Mementos.Memento;
 import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 

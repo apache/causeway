@@ -22,8 +22,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -37,6 +35,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Provides a UI to allow layouts (obtained from {@link LayoutService}) to be downloaded.

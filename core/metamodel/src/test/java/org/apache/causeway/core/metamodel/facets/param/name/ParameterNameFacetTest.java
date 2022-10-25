@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;

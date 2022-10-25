@@ -22,11 +22,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
