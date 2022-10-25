@@ -20,15 +20,15 @@ package org.apache.causeway.testing.integtestsupport.applib;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.reflection._Annotations;
-import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
-import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAsUtils;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
+import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAsUtils;
 
 class _Helper {
 

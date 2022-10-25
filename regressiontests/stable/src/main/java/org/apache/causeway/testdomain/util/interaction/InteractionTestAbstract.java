@@ -27,14 +27,17 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.springframework.lang.Nullable;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
@@ -44,9 +47,6 @@ import org.apache.causeway.testdomain.publishing.subscriber.EntityPropertyChange
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 

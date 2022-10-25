@@ -29,8 +29,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;

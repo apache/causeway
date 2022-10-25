@@ -20,12 +20,13 @@ package org.apache.causeway.persistence.jdo.datanucleus.dialect;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.persistence.jdo.spring.integration.DefaultJdoDialect;
-import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
 import org.datanucleus.api.jdo.JDOAdapter;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
+
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.persistence.jdo.spring.integration.DefaultJdoDialect;
+import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
 
 import lombok.val;
 

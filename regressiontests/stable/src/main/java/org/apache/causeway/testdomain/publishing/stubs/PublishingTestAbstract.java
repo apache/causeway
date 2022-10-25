@@ -23,13 +23,14 @@ package org.apache.causeway.testdomain.publishing.stubs;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
 import org.apache.causeway.testdomain.HasPersistenceStandard;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
 
 import lombok.val;
 

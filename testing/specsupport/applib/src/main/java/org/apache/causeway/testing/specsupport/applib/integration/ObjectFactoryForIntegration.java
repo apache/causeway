@@ -21,14 +21,12 @@ package org.apache.causeway.testing.specsupport.applib.integration;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.commons.internal.collections._Maps;
 
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.core.exception.CucumberException;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}

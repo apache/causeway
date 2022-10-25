@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.shiro;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.config.Ini;
@@ -31,6 +30,7 @@ import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForCauseway;
 
 import lombok.SneakyThrows;

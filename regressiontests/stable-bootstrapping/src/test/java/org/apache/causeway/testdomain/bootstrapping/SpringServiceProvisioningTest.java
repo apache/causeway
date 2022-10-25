@@ -25,24 +25,25 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.apache.causeway.commons.internal.collections._Collections.toStringJoiningNewLine;
-import static org.apache.causeway.commons.internal.collections._Sets.intersectSorted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
+
+import static org.apache.causeway.commons.internal.collections._Collections.toStringJoiningNewLine;
+import static org.apache.causeway.commons.internal.collections._Sets.intersectSorted;
 
 import lombok.val;
 

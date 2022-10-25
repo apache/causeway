@@ -21,7 +21,6 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.object.query;
 import javax.jdo.annotations.Query;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 

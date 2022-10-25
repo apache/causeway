@@ -28,19 +28,17 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import static org.hamcrest.CoreMatchers.either;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -50,6 +48,10 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;

@@ -23,7 +23,6 @@ import java.util.concurrent.CountDownLatch;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.junit.runners.model.InitializationError;
 import org.springframework.stereotype.Service;
 

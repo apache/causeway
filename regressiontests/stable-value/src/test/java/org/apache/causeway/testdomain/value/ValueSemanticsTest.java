@@ -28,9 +28,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -59,6 +56,9 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;

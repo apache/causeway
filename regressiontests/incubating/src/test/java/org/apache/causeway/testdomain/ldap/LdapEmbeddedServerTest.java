@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.ldap.LdapConstants;
 
 import lombok.val;
 

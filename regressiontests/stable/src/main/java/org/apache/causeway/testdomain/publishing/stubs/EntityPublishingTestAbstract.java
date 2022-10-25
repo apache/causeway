@@ -20,6 +20,9 @@ package org.apache.causeway.testdomain.publishing.stubs;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
@@ -30,8 +33,6 @@ import static org.apache.causeway.testdomain.publishing.subscriber.EntityChanges
 import static org.apache.causeway.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getLoaded;
 import static org.apache.causeway.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getModified;
 import static org.apache.causeway.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getUpdated;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class EntityPublishingTestAbstract
 extends PublishingTestAbstract {

@@ -23,7 +23,11 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
@@ -32,10 +36,6 @@ import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.V
 import org.apache.causeway.testdomain.publishing.subscriber.CommandSubscriberForTesting;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

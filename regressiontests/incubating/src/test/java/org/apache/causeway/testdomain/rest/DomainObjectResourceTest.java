@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;

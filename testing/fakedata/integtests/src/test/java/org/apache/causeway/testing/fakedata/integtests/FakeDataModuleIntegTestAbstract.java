@@ -20,13 +20,6 @@ package org.apache.causeway.testing.fakedata.integtests;
 
 import javax.transaction.Transactional;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fakedata.fixtures.CausewayModuleTestingFakeDataFixtures;
-import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,6 +27,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fakedata.fixtures.CausewayModuleTestingFakeDataFixtures;
+import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @SpringBootTest(
         classes = FakeDataModuleIntegTestAbstract.TestManifest.class

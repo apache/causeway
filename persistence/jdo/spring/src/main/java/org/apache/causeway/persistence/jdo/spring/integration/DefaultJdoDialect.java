@@ -20,6 +20,7 @@ package org.apache.causeway.persistence.jdo.spring.integration;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
 import javax.jdo.Constants;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManager;

@@ -25,8 +25,6 @@ import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,6 +36,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFactory;

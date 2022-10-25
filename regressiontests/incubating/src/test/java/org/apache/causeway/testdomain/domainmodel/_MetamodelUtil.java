@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Sets;
-
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 

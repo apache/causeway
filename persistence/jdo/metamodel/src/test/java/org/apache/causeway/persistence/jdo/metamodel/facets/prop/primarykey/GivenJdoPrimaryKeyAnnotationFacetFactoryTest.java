@@ -30,10 +30,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.DisabledFacetFromJdoPrimaryKeyAnnotation;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetFromJdoPrimaryKeyAnnotation;
-
 import lombok.val;
 
 public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest

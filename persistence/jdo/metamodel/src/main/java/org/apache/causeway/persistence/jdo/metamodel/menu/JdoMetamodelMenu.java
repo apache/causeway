@@ -35,10 +35,9 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
-
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJdoMetamodel;
+import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

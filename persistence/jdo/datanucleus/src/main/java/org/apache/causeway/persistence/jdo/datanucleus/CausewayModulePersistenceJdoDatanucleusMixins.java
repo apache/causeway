@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.causeway.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.causeway.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.causeway.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import lombok.extern.log4j.Log4j2;
 

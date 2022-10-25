@@ -27,12 +27,13 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
-import org.apache.causeway.persistence.jdo.spring.integration.DefaultJdoDialect;
-import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
-import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
+
+import org.apache.causeway.persistence.jdo.spring.integration.DefaultJdoDialect;
+import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
+import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * Proxy that implements the {@link javax.jdo.PersistenceManager} interface,

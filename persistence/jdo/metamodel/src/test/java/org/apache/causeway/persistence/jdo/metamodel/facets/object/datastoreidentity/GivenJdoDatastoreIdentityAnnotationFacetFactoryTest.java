@@ -28,9 +28,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
 
-import org.apache.causeway.persistence.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
-import org.apache.causeway.persistence.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacetAnnotation;
-
 import lombok.val;
 
 public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest

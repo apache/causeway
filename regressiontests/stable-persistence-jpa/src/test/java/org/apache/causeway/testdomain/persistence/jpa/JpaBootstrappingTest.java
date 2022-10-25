@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -41,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;

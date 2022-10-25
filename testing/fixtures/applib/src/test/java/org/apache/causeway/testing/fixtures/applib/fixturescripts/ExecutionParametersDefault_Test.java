@@ -21,8 +21,6 @@ package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParameters;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersDefault;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;

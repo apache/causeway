@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.testdomain.publishing.conf;
 
-import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 
 @Configuration
 @Import({

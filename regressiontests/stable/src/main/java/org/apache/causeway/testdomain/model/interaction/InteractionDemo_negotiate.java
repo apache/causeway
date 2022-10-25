@@ -20,11 +20,11 @@ package org.apache.causeway.testdomain.model.interaction;
 
 import java.util.stream.IntStream;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

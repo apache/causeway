@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.dom.pojo;
 
-import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.PojoTester;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
+
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.BooleanHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ByteHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.DoubleHolder;
@@ -26,12 +29,8 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.Float
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.IntHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.LongHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ShortHolder;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import lombok.val;
-
-import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_datatypes_primitive_Test {
 

@@ -24,12 +24,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

@@ -30,14 +30,8 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.sql.DataSource;
 
-import org.apache.causeway.persistence.jdo.spring.exceptions.JdoObjectRetrievalFailureException;
-import org.apache.causeway.persistence.jdo.spring.exceptions.JdoOptimisticLockingFailureException;
-import org.apache.causeway.persistence.jdo.spring.exceptions.JdoResourceFailureException;
-import org.apache.causeway.persistence.jdo.spring.exceptions.JdoSystemException;
-import org.apache.causeway.persistence.jdo.spring.exceptions.JdoUsageException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.core.Ordered;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -48,6 +42,12 @@ import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 import org.springframework.transaction.support.ResourceHolderSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
+
+import org.apache.causeway.persistence.jdo.spring.exceptions.JdoObjectRetrievalFailureException;
+import org.apache.causeway.persistence.jdo.spring.exceptions.JdoOptimisticLockingFailureException;
+import org.apache.causeway.persistence.jdo.spring.exceptions.JdoResourceFailureException;
+import org.apache.causeway.persistence.jdo.spring.exceptions.JdoSystemException;
+import org.apache.causeway.persistence.jdo.spring.exceptions.JdoUsageException;
 
 /**
  * Helper class featuring methods for JDO {@link PersistenceManager} handling,

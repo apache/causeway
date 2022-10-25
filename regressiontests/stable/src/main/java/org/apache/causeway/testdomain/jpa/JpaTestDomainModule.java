@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.testdomain.jpa;
 
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 
 @Configuration
 @ComponentScan(

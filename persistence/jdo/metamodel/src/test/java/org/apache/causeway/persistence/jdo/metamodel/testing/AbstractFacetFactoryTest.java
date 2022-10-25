@@ -21,7 +21,6 @@ package org.apache.causeway.persistence.jdo.metamodel.testing;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.jmock.Expectations;
 import org.junit.Rule;
 
@@ -31,6 +30,7 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;

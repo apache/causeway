@@ -20,14 +20,14 @@ package org.apache.causeway.testdomain.util.event;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
-import org.apache.causeway.testdomain.util.dto.BookDto;
-import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.testdomain.jpa.entities.JpaBook;
+import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

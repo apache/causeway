@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.testing.fakedata.fixtures;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.testing.fakedata.applib.CausewayModuleTestingFakeDataApplib;
 import org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.FakeDataDemoObjectWithAll_tearDown;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

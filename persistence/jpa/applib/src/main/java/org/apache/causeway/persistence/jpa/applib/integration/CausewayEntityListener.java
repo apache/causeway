@@ -28,11 +28,11 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Either;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;

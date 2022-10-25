@@ -20,11 +20,12 @@ package org.apache.causeway.testing.unittestsupport.applib.dom.comparable;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.hamcrest.Matchers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.collections._Lists;
 
 /**
  * @since 2.0 {@index}

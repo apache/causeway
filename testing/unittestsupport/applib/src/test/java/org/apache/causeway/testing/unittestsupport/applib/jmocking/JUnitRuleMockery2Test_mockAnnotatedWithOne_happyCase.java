@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.jmocking;
 
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.ClassUnderTest;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.One;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.ClassUnderTest;
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.One;
 
 public class JUnitRuleMockery2Test_mockAnnotatedWithOne_happyCase {
 

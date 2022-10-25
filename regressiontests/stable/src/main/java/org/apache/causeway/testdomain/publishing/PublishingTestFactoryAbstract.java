@@ -24,13 +24,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
-import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -46,6 +39,13 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
+import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;
 

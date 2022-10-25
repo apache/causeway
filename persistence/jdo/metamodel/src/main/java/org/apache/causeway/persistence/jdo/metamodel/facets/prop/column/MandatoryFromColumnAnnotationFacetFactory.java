@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -36,11 +37,10 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetFromJdoPrimaryKeyAnnotation;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
-
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetFromJdoPrimaryKeyAnnotation;
 
 
 public class MandatoryFromColumnAnnotationFacetFactory

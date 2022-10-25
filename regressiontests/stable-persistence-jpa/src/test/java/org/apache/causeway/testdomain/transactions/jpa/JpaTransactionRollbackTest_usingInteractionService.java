@@ -23,8 +23,6 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;

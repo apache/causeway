@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -41,6 +40,7 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
 import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;

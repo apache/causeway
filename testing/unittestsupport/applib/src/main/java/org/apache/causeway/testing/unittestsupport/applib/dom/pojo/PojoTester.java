@@ -46,12 +46,12 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.joda.time.DateTime;
 import org.opentest4j.AssertionFailedError;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 

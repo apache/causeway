@@ -21,8 +21,6 @@ package org.apache.causeway.extensions.hsqldbmgr.dom.services;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.context._Context;
 import org.hsqldb.util.DatabaseManagerSwing;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -34,6 +32,8 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
 import org.apache.causeway.extensions.hsqldbmgr.dom.CausewayModuleExtHsqldbMgr;

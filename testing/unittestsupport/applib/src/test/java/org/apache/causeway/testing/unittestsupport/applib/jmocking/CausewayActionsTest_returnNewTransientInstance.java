@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.jmocking;
 
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.CausewayActions;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

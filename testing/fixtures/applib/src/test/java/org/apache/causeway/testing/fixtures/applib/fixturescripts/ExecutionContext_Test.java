@@ -20,7 +20,6 @@ package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
 import java.util.Map;
 
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;

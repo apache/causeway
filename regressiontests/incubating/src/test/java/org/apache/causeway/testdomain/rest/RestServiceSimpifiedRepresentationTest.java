@@ -28,9 +28,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.debug._Probe;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Table;
@@ -45,12 +42,13 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.apache.causeway.testdomain.util.CollectionAssertions.assertComponentWiseEquals;
-import static org.apache.causeway.testdomain.util.CollectionAssertions.assertComponentWiseNumberEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.rospec.BigComplex;
@@ -59,13 +57,14 @@ import org.apache.causeway.testdomain.rospec.Customer;
 import org.apache.causeway.testdomain.rospec.RoSpecSampler;
 import org.apache.causeway.testdomain.util.UtilSurefire;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
-
 import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 import org.apache.causeway.viewer.restfulobjects.client.ActionParameterListBuilder;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 
+import static org.apache.causeway.testdomain.util.CollectionAssertions.assertComponentWiseEquals;
+import static org.apache.causeway.testdomain.util.CollectionAssertions.assertComponentWiseNumberEquals;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.cell;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.doc;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.headRow;

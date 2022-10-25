@@ -22,8 +22,6 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Try;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -37,14 +35,14 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.causeway.testdomain.rospec.RoSpecSampler;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
-
-import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
-
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 

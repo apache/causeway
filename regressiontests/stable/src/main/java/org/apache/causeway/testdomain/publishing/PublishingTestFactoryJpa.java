@@ -25,10 +25,6 @@ import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.functions._Functions.CheckedConsumer;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +37,10 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.functions._Functions.CheckedConsumer;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

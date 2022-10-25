@@ -28,7 +28,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.LayoutConstants;
 

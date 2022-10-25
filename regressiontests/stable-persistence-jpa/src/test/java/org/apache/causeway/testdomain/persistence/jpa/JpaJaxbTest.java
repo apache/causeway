@@ -24,8 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.causeway.applib.annotation.InteractionScope;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;

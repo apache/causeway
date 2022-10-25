@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.interact;
 
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -30,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;

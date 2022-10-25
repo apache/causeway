@@ -26,9 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.resources._Resources;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
@@ -36,6 +33,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;

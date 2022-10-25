@@ -20,8 +20,6 @@ package org.apache.causeway.testing.fakedata.applib.services;
 
 import java.math.BigInteger;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 /**
  * Returns random {@link BigInteger}s.
  *

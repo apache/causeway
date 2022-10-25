@@ -21,8 +21,6 @@ package org.apache.causeway.testing.fakedata.applib.services;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 /**
  * Returns random but well-formed {@link URL}s.
  *

@@ -37,6 +37,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -70,7 +72,6 @@ import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.interact;
 
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.internal.binding._Bindables;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 
 public class SimulatedUiAutoComplete extends SimulatedUiChoices {

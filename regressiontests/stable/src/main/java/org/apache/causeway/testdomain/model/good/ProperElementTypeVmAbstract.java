@@ -20,12 +20,11 @@ package org.apache.causeway.testdomain.model.good;
 
 import java.util.Set;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.ImmutableCollection;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.ImmutableCollection;
 
 /**
  * @see <a href="https://issues.apache.org/jira/browse/CAUSEWAY-3164">CAUSEWAY-3164</a>

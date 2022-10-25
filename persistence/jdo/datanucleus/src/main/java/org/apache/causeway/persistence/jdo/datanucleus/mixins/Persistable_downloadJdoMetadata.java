@@ -26,6 +26,8 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 import javax.xml.bind.JAXBException;
 
+import org.datanucleus.enhancement.Persistable;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -36,7 +38,6 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
-import org.datanucleus.enhancement.Persistable;
 
 import lombok.RequiredArgsConstructor;
 

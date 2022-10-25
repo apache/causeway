@@ -20,6 +20,9 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -27,13 +30,6 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
-
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.BigDecimalFromColumnAnnotationFacetFactory;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MaxFractionalDigitsFacetFromJdoColumn;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MaxTotalDigitsFacetFromJdoColumnAnnotation;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 

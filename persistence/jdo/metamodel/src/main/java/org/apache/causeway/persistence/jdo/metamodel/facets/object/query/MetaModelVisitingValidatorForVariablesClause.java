@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.query;
 
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.context._Context;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;

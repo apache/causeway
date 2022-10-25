@@ -26,9 +26,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

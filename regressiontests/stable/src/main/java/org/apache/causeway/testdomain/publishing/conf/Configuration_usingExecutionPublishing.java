@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.testdomain.publishing.conf;
 
-import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
-import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
+import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 @Configuration
 @Import({

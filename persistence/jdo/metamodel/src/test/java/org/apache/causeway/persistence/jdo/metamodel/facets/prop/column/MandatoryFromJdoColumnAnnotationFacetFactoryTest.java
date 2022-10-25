@@ -20,17 +20,13 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
-
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MandatoryFacetFromAbsenceOfColumnAnnotation;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MandatoryFacetFromColumnAnnotation;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MandatoryFromColumnAnnotationFacetFactory;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 

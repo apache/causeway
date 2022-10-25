@@ -30,6 +30,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 

@@ -22,13 +22,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
 import javax.jdo.JDOException;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;

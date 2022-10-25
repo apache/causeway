@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;

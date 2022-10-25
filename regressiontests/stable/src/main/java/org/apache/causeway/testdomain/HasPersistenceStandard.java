@@ -19,7 +19,6 @@
 package org.apache.causeway.testdomain;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.config.beans.PersistenceStack;
 
 public interface HasPersistenceStandard {

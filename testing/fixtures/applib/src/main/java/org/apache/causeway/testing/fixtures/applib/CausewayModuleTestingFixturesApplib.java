@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.testing.fixtures.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixturesService;
 import org.apache.causeway.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlForFixtures;
 import org.apache.causeway.testing.fixtures.applib.services.InitialFixtureScriptsInstaller;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

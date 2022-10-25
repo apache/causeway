@@ -25,8 +25,9 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.springframework.stereotype.Repository;
+
+import org.apache.causeway.applib.services.repository.RepositoryService;
 
 @Repository
 public class CounterRepository {

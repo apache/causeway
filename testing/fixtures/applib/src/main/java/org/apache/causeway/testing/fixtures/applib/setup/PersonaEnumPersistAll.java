@@ -20,13 +20,13 @@ package org.apache.causeway.testing.fixtures.applib.setup;
 
 import java.util.List;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
-import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * @since 2.x {@index}

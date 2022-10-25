@@ -22,12 +22,13 @@ package org.apache.causeway.persistence.jdo.datanucleus.oid;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics;
 import org.assertj.core.api.Assertions;
 import org.datanucleus.identity.DatastoreUniqueLongId;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics;
 
 import lombok.val;
 

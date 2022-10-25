@@ -20,7 +20,6 @@ package org.apache.causeway.regressiontests.core.wrapperfactory.integtests;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,16 +30,16 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
-import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.wrapperfactory.Counter;
 import org.apache.causeway.testdomain.wrapperfactory.CounterRepository;
 import org.apache.causeway.testdomain.wrapperfactory.WrapperTestFixtures;
+import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @SpringBootTest(
         classes = CoreWrapperFactory_IntegTestAbstract.AppManifest.class

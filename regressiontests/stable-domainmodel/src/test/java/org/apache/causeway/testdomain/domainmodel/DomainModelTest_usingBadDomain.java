@@ -33,6 +33,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -67,9 +70,6 @@ import org.apache.causeway.testdomain.model.bad.InvalidServiceWithAlias;
 import org.apache.causeway.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 

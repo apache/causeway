@@ -20,8 +20,9 @@ package org.apache.causeway.persistence.jdo.datanucleus.typeconverters.time;
 
 import java.time.OffsetDateTime;
 
-import org.apache.causeway.commons.internal.base._Temporals;
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.causeway.commons.internal.base._Temporals;
 
 /**
  * @since 2.0 {@index}

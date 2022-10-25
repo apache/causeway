@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.matchers;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * @since 2.0 {@index}

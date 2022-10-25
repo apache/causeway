@@ -24,13 +24,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;

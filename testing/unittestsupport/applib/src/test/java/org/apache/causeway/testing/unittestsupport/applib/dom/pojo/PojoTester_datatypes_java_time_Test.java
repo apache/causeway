@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.dom.pojo;
 
-import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.PojoTester;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
+
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaLocalDateHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaLocalDateTimeHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaLocalTimeHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaOffsetDateTimeHolder;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import lombok.val;
 

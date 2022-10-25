@@ -21,7 +21,6 @@ package org.apache.causeway.testdomain.viewers.jpa.wkt;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.os._OsUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -35,6 +34,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.commons.internal.os._OsUtil;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;

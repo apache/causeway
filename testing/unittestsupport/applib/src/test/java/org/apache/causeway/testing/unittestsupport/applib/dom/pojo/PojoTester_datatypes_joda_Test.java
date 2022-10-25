@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.dom.pojo;
 
-import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.PojoTester;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
+
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalDateHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalDateTimeHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalTimeHolder;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import lombok.val;
-
-import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_datatypes_joda_Test {
 

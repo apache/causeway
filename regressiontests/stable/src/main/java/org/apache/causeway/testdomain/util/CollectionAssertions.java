@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Arrays;
 import org.assertj.core.api.Assertions;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.val;

@@ -27,8 +27,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.causeway.persistence.jdo.spring.support.OpenPersistenceManagerInViewFilter;
-import org.apache.causeway.persistence.jdo.spring.support.OpenPersistenceManagerInViewInterceptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -46,6 +44,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import org.apache.causeway.persistence.jdo.spring.support.OpenPersistenceManagerInViewFilter;
+import org.apache.causeway.persistence.jdo.spring.support.OpenPersistenceManagerInViewInterceptor;
 
 class OpenPersistenceManagerInViewTests {
 

@@ -23,13 +23,14 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.SortedSet;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.testing.unittestsupport.applib.dom.AbstractApplyToAllContractTest;
 
 import static org.apache.causeway.commons.internal.collections._Collections.toHashSet;
 import static org.apache.causeway.commons.internal.reflection._Reflect.withTypeAssignableTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @since 2.0 {@index}

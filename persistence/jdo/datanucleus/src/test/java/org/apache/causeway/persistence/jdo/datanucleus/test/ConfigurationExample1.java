@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.test;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
 import lombok.val;
 

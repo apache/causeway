@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.entitychangetracking.jdo;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +26,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryManager;

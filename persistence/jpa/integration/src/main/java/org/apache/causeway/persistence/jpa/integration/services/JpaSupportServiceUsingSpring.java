@@ -21,9 +21,10 @@ package org.apache.causeway.persistence.jpa.integration.services;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.springframework.data.jpa.repository.JpaContext;
+
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
-import org.springframework.data.jpa.repository.JpaContext;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

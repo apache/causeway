@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.testdomain.cucumber;
 
-import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

@@ -23,13 +23,13 @@ import java.util.NoSuchElementException;
 import javax.jdo.JDODataStoreException;
 import javax.jdo.JDOException;
 
-import org.apache.causeway.commons.functional.Try;
 import org.datanucleus.api.jdo.JDOAdapter;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.persistence.jdo.spring.integration.JdoTransactionManager;
 
 final class _JdoExceptionTranslator {

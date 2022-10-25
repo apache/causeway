@@ -25,11 +25,11 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Value;
 import lombok.val;

@@ -24,11 +24,12 @@ import java.util.stream.Stream;
 
 import javax.jdo.identity.ShortIdentity;
 
-import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics;
 
 import lombok.val;
 

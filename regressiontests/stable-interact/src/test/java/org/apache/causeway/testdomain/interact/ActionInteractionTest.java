@@ -21,8 +21,6 @@ package org.apache.causeway.testdomain.interact;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -33,10 +31,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.DemoEnum;
@@ -47,7 +46,6 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo_multiEnu
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.NonNull;
 import lombok.val;
 
 @SpringBootTest(

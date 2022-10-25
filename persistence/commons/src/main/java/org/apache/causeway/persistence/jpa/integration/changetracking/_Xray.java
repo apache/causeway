@@ -23,10 +23,9 @@ import java.awt.Color;
 
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.security.util.XrayUtil;

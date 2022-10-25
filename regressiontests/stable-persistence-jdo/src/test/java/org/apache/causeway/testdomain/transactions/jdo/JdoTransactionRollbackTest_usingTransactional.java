@@ -20,11 +20,6 @@ package org.apache.causeway.testdomain.transactions.jdo;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures.Lock;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -37,6 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
+import org.apache.causeway.testdomain.jdo.JdoTestFixtures.Lock;
+import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.

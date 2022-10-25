@@ -22,6 +22,10 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -33,11 +37,6 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJdoForTesting;
 import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 
 import lombok.val;
 

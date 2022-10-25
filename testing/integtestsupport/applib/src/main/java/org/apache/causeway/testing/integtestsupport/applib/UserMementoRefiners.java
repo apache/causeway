@@ -23,7 +23,6 @@ package org.apache.causeway.testing.integtestsupport.applib;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.core.security.authentication.manager.UserMementoRefiner;
 

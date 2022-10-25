@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.jmocking;
 
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.ClassUnderTest;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Ignoring;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.ClassUnderTest;
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Ignoring;
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 
 public class JUnitRuleMockery2Test_mockAnnotatedWithIgnoring {
 

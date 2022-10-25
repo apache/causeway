@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.testdomain.factory;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

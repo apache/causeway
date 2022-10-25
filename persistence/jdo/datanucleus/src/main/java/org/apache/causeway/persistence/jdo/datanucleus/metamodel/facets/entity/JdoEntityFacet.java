@@ -29,11 +29,6 @@ import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
@@ -48,6 +43,11 @@ import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionalProcessor;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -59,10 +59,9 @@ import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLo
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
-
-import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 
 import lombok.AccessLevel;
 import lombok.Getter;

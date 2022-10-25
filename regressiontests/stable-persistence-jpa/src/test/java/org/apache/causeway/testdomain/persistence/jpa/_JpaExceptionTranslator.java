@@ -20,11 +20,12 @@ package org.apache.causeway.testdomain.persistence.jpa;
 
 import java.util.NoSuchElementException;
 
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
+
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 final class _JpaExceptionTranslator {
 

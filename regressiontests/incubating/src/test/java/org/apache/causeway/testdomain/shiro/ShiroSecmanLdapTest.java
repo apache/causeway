@@ -40,16 +40,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
-import org.apache.causeway.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.causeway.testdomain.ldap.LdapConstants;
-import org.apache.causeway.testdomain.ldap.LdapServerService;
 import org.apache.causeway.extensions.secman.delegated.shiro.realm.CausewayModuleExtSecmanShiroRealm;
 import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
 import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
 import org.apache.causeway.extensions.secman.jdo.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.jdo.user.dom.ApplicationUserRepository;
+import org.apache.causeway.testdomain.conf.Configuration_usingJdoAndShiro;
+import org.apache.causeway.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.causeway.testdomain.ldap.LdapConstants;
+import org.apache.causeway.testdomain.ldap.LdapServerService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;

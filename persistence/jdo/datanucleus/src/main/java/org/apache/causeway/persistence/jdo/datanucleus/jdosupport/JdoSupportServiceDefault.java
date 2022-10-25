@@ -37,6 +37,11 @@ import javax.jdo.Query;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
+import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectPersistenceException;
@@ -45,10 +50,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
-import org.datanucleus.store.rdbms.RDBMSPropertyNames;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 

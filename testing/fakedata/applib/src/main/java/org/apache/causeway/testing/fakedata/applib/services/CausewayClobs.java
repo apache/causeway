@@ -24,12 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Resources;
-
-import org.apache.causeway.applib.value.Clob;
-
-import lombok.val;
 
 /**
  * Returns random {@link Clob} values, optionally constrained to either XMLs or RTFs.
@@ -111,7 +108,7 @@ public class CausewayClobs extends AbstractRandomValueGenerator {
     }
 
     private static Clob asClob(final String fileName) {
-        try(val is = _Resources.load(CausewayBlobs.class, "clobs/" + fileName)) {
+        try(var is = _Resources.load(CausewayBlobs.class, "clobs/" + fileName)) {
             return new Clob(fileName, mimeTypeFor(fileName), _Strings.read(is, StandardCharsets.US_ASCII));
         } catch (IOException e) {
             throw new RuntimeException(e);

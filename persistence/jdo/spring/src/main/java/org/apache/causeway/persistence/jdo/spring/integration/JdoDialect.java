@@ -19,6 +19,7 @@
 package org.apache.causeway.persistence.jdo.spring.integration;
 
 import java.sql.SQLException;
+
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;

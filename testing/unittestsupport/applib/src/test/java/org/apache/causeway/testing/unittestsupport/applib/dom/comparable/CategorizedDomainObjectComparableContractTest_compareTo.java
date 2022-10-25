@@ -20,8 +20,6 @@ package org.apache.causeway.testing.unittestsupport.applib.dom.comparable;
 
 import java.util.List;
 
-import org.apache.causeway.testing.unittestsupport.applib.dom.comparable.ComparableContractTest_compareTo;
-
 public class CategorizedDomainObjectComparableContractTest_compareTo extends ComparableContractTest_compareTo<CategorizedDomainObject> {
 
     @Override

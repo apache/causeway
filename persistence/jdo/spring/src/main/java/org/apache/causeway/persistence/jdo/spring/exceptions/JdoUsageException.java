@@ -21,8 +21,9 @@ package org.apache.causeway.persistence.jdo.spring.exceptions;
 import javax.jdo.JDOFatalUserException;
 import javax.jdo.JDOUserException;
 
-import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+
+import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * JDO-specific subclass of InvalidDataAccessApiUsageException.

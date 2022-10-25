@@ -23,13 +23,12 @@ import java.util.List;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 @Named("testdomain.RoSpecSampler")
 @DomainService(

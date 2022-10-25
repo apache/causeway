@@ -24,12 +24,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
-
-import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
-import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFromAnnotation;
 
 import lombok.val;
 

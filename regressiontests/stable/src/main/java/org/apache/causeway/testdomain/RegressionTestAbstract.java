@@ -22,7 +22,6 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -31,6 +30,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 /**

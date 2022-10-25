@@ -26,7 +26,6 @@ import java.util.function.Consumer;
 import javax.jdo.annotations.Column;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 

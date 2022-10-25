@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.transactions.jdo;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;

@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel;
 
-import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
-import org.apache.causeway.persistence.jpa.applib.CausewayModulePersistenceJpaApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
+import org.apache.causeway.persistence.jpa.applib.CausewayModulePersistenceJpaApplib;
 
 @Configuration
 @Import({

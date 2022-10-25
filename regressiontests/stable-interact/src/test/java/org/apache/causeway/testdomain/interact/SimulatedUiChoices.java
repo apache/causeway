@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

@@ -23,12 +23,6 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.resources._Xml;
-import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,6 +34,11 @@ import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.resources._Xml;
+import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;

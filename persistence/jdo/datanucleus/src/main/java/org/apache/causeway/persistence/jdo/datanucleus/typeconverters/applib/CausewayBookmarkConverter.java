@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.typeconverters.applib;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.HasTarget;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * @since 2.0 {@index}

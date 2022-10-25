@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.jmocking;
 
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JMockActions;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 
 public class JMockActionsTest_returnArgument {
 

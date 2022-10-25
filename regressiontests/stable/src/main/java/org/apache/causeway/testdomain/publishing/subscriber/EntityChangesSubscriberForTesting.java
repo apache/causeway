@@ -24,13 +24,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

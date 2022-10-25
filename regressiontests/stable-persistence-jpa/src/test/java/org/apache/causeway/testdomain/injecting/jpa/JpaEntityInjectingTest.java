@@ -20,9 +20,6 @@ package org.apache.causeway.testdomain.injecting.jpa;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.primitives._Longs.Bound;
-import org.apache.causeway.commons.internal.primitives._Longs.Range;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -37,6 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.primitives._Longs.Bound;
+import org.apache.causeway.commons.internal.primitives._Longs.Range;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;

@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -34,6 +33,7 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;

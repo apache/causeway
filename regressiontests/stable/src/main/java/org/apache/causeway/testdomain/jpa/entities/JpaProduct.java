@@ -34,8 +34,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -44,6 +42,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

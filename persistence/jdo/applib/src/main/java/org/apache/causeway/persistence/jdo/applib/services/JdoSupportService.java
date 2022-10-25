@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.lang.Nullable;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -30,6 +29,7 @@ import javax.jdo.Query;
 import javax.jdo.query.BooleanExpression;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+import org.springframework.lang.Nullable;
 
 /**
  * Primarily provides access to the current thread's {@link PersistenceManagerFactory} and

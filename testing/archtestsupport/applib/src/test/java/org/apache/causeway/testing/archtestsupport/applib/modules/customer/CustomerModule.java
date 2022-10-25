@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.testing.archtestsupport.applib.modules.customer;
 
-import org.apache.causeway.testing.archtestsupport.applib.modules.base.BaseModule;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.testing.archtestsupport.applib.modules.base.BaseModule;
 
 @Import({ BaseModule.class })
 public class CustomerModule {

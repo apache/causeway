@@ -20,10 +20,11 @@ package org.apache.causeway.persistence.jdo.datanucleus.typeconverters.image;
 
 import java.awt.image.BufferedImage;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.image._Images;
 import org.datanucleus.exceptions.NucleusDataStoreException;
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.image._Images;
 
 /**
  * @since 2.0 {@index}

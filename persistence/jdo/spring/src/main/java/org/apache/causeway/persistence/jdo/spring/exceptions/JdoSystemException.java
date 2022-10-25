@@ -20,8 +20,9 @@ package org.apache.causeway.persistence.jdo.spring.exceptions;
 
 import javax.jdo.JDOException;
 
-import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 import org.springframework.dao.UncategorizedDataAccessException;
+
+import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
 
 /**
  * JDO-specific subclass of UncategorizedDataAccessException,

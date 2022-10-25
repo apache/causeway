@@ -22,10 +22,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 

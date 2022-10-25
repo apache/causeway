@@ -22,12 +22,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.testing.fakedata.applib.services.FakeDataService;
 import org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
 import org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts.data.FakeDataDemoObjectWithAll_create_withFakeData;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.causeway.applib.annotation.Programmatic;
 
 import lombok.Getter;
 import lombok.Setter;

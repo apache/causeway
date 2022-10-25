@@ -20,6 +20,9 @@ package org.apache.causeway.testdomain.publishing.stubs;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
@@ -28,9 +31,6 @@ import org.apache.causeway.testdomain.publishing.subscriber.EntityPropertyChange
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

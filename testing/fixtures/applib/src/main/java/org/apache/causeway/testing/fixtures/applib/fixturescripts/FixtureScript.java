@@ -31,13 +31,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
-import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -52,6 +45,13 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
+import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
 import lombok.Setter;

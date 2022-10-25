@@ -28,17 +28,6 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Oneshot;
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Refs.BooleanAtomicReference;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
-import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
-import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.springframework.stereotype.Service;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -50,6 +39,17 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Oneshot;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Refs.BooleanAtomicReference;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.testdomain.jpa.entities.JpaBook;
+import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
+import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
+import org.apache.causeway.testdomain.util.dto.BookDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

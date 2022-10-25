@@ -23,8 +23,6 @@ import java.util.Optional;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancement.Persistable;
@@ -34,6 +32,8 @@ import org.datanucleus.store.FieldValues;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 

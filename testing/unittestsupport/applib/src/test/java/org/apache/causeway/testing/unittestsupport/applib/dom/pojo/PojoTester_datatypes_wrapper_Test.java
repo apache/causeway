@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.dom.pojo;
 
-import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.PojoTester;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
+
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.BooleanWrapperHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ByteWrapperHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.DoubleWrapperHolder;
@@ -26,12 +29,8 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.Float
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.IntWrapperHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.LongWrapperHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ShortWrapperHolder;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import lombok.val;
-
-import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_datatypes_wrapper_Test {
 

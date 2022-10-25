@@ -22,12 +22,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.ImmutableCollection;
-
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collections.ImmutableCollection;
 
 import lombok.Getter;
 import lombok.Setter;

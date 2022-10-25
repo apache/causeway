@@ -26,11 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.JAXBException;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
-import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
-import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -41,6 +36,11 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.testdomain.jdo.entities.JdoBook;
+import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
+import org.apache.causeway.testdomain.util.dto.BookDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

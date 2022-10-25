@@ -22,9 +22,9 @@ import javax.inject.Inject;
 import javax.persistence.Entity;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
 import lombok.val;

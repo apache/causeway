@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.dom.sortedsets;
 
-import org.apache.causeway.testing.unittestsupport.applib.dom.sortedsets.SortedSetsContractTestAbstract;
-
 public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
     public SortedSetsContractTestAll() {

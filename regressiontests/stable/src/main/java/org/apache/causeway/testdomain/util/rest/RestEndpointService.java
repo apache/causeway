@@ -25,13 +25,13 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.GenericType;
 import javax.xml.bind.JAXBException;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Try;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;

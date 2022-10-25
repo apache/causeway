@@ -23,10 +23,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.debug._Probe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -36,6 +32,10 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;

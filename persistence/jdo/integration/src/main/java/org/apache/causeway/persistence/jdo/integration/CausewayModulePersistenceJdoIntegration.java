@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.persistence.jdo.integration;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
 import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJdoMetamodel;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

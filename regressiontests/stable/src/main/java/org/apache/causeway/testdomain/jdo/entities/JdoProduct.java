@@ -31,8 +31,6 @@ import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -40,6 +38,7 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

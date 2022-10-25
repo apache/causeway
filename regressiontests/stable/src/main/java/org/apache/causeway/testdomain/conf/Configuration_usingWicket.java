@@ -25,9 +25,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.wicket.Component;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
@@ -49,6 +46,9 @@ import org.springframework.context.annotation.Import;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -66,16 +66,15 @@ import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketAjaxRequestListenerUtil;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 
 @Configuration
 @Import({

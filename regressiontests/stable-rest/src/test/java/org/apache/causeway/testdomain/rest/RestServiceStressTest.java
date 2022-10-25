@@ -22,7 +22,6 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Timing;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
@@ -35,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;

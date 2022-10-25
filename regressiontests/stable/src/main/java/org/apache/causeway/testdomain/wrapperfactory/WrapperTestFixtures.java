@@ -20,12 +20,13 @@
 
 package org.apache.causeway.testdomain.wrapperfactory;
 
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
 @Configuration
 @Import({

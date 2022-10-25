@@ -33,10 +33,9 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 
 import lombok.SneakyThrows;
 

@@ -20,8 +20,6 @@ package org.apache.causeway.testdomain.rest;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.actnsemantics.Configuration_usingActionSemantics;

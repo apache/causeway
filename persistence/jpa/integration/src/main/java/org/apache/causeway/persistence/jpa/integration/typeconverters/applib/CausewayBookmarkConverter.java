@@ -21,10 +21,9 @@ package org.apache.causeway.persistence.jpa.integration.typeconverters.applib;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.HasTarget;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * @since 2.0 {@index}

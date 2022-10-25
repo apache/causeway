@@ -23,6 +23,8 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
@@ -38,8 +40,6 @@ import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.V
 import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

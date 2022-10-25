@@ -21,7 +21,6 @@ package org.apache.causeway.testdomain.interact;
 import java.util.function.Supplier;
 
 import org.apache.causeway.commons.functional.Railway;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;

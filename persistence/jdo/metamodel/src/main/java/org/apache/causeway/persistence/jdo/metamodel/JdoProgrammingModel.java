@@ -32,9 +32,6 @@ import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollect
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
-import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
-
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
@@ -44,6 +41,8 @@ import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.Mandator
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.column.MaxLengthFromJdoColumnAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
+import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
+import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.val;
 

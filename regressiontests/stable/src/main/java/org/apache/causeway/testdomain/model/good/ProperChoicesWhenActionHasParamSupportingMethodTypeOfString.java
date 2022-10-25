@@ -20,13 +20,12 @@ package org.apache.causeway.testdomain.model.good;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 

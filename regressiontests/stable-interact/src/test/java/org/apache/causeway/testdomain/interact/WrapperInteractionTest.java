@@ -24,6 +24,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
@@ -38,11 +43,6 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_biArgEnabled;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

@@ -22,7 +22,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -37,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmEntityUtil;

@@ -26,10 +26,10 @@ import javax.jdo.metadata.DiscriminatorMetadata;
 import javax.jdo.metadata.InheritanceMetadata;
 import javax.jdo.metadata.TypeMetadata;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * @since 2.x {@index}

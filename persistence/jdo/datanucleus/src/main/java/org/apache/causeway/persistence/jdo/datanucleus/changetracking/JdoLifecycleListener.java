@@ -28,10 +28,10 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.LoadLifecycleListener;
 import javax.jdo.listener.StoreLifecycleListener;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

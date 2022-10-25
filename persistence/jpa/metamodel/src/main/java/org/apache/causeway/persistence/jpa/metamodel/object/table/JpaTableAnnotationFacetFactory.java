@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import javax.persistence.Table;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;

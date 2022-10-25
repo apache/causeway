@@ -21,8 +21,6 @@ package org.apache.causeway.testing.unittestsupport.applib.util;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.testing.unittestsupport.applib.util.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -30,6 +28,8 @@ import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 
 
 public class Files_deleteFileUtils_Test {

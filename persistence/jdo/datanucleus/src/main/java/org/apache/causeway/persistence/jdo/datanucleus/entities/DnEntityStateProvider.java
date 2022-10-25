@@ -21,13 +21,13 @@ package org.apache.causeway.persistence.jdo.datanucleus.entities;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.datanucleus.enhancement.Persistable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;

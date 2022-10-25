@@ -26,9 +26,10 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.testing.unittestsupport.applib.io.IndentPrinter;
-import org.junit.jupiter.api.Test;
 
 /**
  * Provides some basic infrastructure to iterate over all entity types and

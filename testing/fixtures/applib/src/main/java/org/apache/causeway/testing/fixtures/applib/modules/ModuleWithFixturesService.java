@@ -31,12 +31,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.core.runtimeservices.spring.BeanDescriptor;
-import org.apache.causeway.core.runtimeservices.spring.ContextBeans;
-import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +38,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.core.runtimeservices.spring.BeanDescriptor;
+import org.apache.causeway.core.runtimeservices.spring.ContextBeans;
+import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

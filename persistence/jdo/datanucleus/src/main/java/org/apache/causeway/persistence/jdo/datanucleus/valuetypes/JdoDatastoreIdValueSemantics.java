@@ -22,9 +22,6 @@ import java.lang.reflect.Constructor;
 
 import javax.annotation.Priority;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.datanucleus.identity.DatastoreId;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +30,9 @@ import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;

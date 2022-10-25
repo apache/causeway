@@ -50,9 +50,8 @@ import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProducerFactory;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
 

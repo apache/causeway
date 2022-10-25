@@ -24,8 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +33,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.LocalResourcePath;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
@@ -42,6 +42,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
+import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console.H2WebServlet;
 
 import lombok.Getter;
 import lombok.val;

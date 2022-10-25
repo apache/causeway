@@ -20,13 +20,14 @@ package org.apache.causeway.testing.h2console.ui.webmodule;
 
 import java.util.function.Consumer;
 
+import org.h2.server.web.ConnectionInfo;
+import org.h2.server.web.WebServer;
+import org.h2.server.web.WebServlet;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.h2.server.web.ConnectionInfo;
-import org.h2.server.web.WebServer;
-import org.h2.server.web.WebServlet;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

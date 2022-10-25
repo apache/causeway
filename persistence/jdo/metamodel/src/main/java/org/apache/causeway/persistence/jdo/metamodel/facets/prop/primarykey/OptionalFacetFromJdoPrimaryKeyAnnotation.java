@@ -20,6 +20,7 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey;
 
 import javax.jdo.annotations.PrimaryKey;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;

@@ -27,8 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -36,6 +34,8 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
 
 import lombok.Getter;
 import lombok.Setter;

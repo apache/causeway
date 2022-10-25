@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.junit.jupiter.api.AfterEach;
@@ -29,26 +28,26 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
-import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.testdomain.viewers.jpa.wkt.TestAppJpaWkt;
-
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
-import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperties;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperty;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
+
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 
 import lombok.val;
 

@@ -32,9 +32,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
@@ -46,6 +43,8 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Setter;

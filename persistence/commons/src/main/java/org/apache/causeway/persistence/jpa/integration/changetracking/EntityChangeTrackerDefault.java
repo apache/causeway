@@ -31,6 +31,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.EntityChangeKind;
 import org.apache.causeway.applib.annotation.InteractionScope;
@@ -62,12 +69,6 @@ import org.apache.causeway.core.transaction.changetracking.EntityChangesPublishe
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.apache.causeway.core.transaction.events.TransactionBeforeCompletionEvent;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
 import lombok.Getter;

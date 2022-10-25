@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
 import org.springframework.lang.Nullable;
@@ -36,6 +35,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;

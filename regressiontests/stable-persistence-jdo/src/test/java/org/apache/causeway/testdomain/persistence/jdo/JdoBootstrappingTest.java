@@ -22,7 +22,6 @@ import java.sql.SQLException;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -36,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;

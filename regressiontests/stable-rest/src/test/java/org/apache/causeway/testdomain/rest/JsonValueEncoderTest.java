@@ -25,14 +25,19 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Temporals;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -40,11 +45,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

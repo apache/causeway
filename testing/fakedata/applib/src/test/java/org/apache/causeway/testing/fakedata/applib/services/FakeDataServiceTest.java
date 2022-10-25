@@ -31,12 +31,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.testing.fakedata.applib.services.FakeDataService;
-import org.apache.causeway.testing.fakedata.applib.services.CausewayBlobs;
-import org.apache.causeway.testing.fakedata.applib.services.CausewayClobs;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -51,6 +45,9 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.Password;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 
 public class FakeDataServiceTest {
 

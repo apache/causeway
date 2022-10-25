@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.testing.fixtures.applib.modules;
 
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * A module is a class that implements this {@link ModuleWithFixtures} interface, but in addition is expected to be annotated with

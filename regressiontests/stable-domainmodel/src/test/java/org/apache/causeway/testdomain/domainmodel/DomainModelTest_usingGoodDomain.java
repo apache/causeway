@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -49,6 +48,7 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

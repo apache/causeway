@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.matchers;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

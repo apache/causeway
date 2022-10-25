@@ -23,12 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.resources._Resources;
-
-import org.apache.causeway.applib.value.Blob;
-
-import lombok.val;
 
 /**
  * Returns random {@link Blob} values, optionally constrained to either PDFs or JPGs.
@@ -81,7 +78,7 @@ public class CausewayBlobs extends AbstractRandomValueGenerator {
     }
 
     private static Blob asBlob(final String fileName) {
-        try(val is = _Resources.load(CausewayBlobs.class, "blobs/" + fileName)){
+        try(var is = _Resources.load(CausewayBlobs.class, "blobs/" + fileName)){
             return new Blob(fileName, mimeTypeFor(fileName), _Bytes.of(is));
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -21,16 +21,16 @@ package org.apache.causeway.persistence.jdo.spring.support;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
-import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerHolder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
+
+import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerFactoryUtils;
+import org.apache.causeway.persistence.jdo.spring.integration.PersistenceManagerHolder;
 
 /**
  * Spring web request interceptor that binds a JDO PersistenceManager to the

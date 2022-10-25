@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.persistence.jpa.integration;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jpa.integration.entity.JpaEntityIntegration;
@@ -36,9 +40,6 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayOidDtoConverter;
 import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJpaMetamodel;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

@@ -24,9 +24,8 @@ import javax.inject.Named;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

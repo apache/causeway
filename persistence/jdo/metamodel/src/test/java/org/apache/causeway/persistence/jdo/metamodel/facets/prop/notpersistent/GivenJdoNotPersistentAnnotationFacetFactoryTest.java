@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodConte
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
-
 import lombok.val;
 
 public class GivenJdoNotPersistentAnnotationFacetFactoryTest

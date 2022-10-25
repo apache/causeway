@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 /**
  * Returns random strings, specifying the number of characters.
  *
