@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.extensions.sse.metamodel.facets.SseObserveFacet;
-
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;

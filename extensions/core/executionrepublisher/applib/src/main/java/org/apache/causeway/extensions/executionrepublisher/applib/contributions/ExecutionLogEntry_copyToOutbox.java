@@ -22,7 +22,6 @@ package org.apache.causeway.extensions.executionrepublisher.applib.contributions
 
 import javax.inject.Inject;
 
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;

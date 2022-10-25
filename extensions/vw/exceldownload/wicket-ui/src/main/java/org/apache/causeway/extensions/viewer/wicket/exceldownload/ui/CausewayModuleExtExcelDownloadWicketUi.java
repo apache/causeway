@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.viewer.wicket.exceldownload.ui;
 
-import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
 
 /**
  * @since 2.0 {@index}

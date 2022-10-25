@@ -46,9 +46,6 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry.Nq;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
-
-import lombok.Getter;
-import lombok.Setter;
 @Entity
 @Table(
         schema = AuditTrailEntry.SCHEMA,

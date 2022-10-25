@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.applib.permission.dom;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Whether the permission {@link #ALLOW grants} or {@link #VETO denies} access to an

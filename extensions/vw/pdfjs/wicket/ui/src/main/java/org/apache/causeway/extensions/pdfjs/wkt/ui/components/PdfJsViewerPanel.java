@@ -45,15 +45,13 @@ import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.components.PdfJsPanel;
-
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  *

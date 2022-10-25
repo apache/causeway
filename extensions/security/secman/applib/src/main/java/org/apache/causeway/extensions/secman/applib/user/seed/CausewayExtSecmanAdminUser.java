@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.seed;
 
-import java.util.Collection;
-
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
 import org.apache.causeway.extensions.secman.applib.tenancy.seed.GlobalTenancy;
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;

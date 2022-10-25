@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.jdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.jdo.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.jdo.dom.CommandLogEntryRepository;

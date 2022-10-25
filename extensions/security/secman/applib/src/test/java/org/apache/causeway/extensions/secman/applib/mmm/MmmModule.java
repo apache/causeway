@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.extensions.secman.applib.mmm;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.secman.applib.mmm.dom.ChaseCatsService;
 import org.apache.causeway.extensions.secman.applib.mmm.dom.EatCheeseService;
 import org.apache.causeway.extensions.secman.applib.mmm.dom.PressLiftButtonService;
 import org.apache.causeway.extensions.secman.applib.mmm.dom.RideLiftService;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

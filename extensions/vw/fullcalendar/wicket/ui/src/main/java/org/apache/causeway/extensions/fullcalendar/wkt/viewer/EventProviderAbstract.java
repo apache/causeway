@@ -27,9 +27,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -37,7 +36,6 @@ import org.apache.causeway.extensions.fullcalendar.applib.spi.CalendarableDerefe
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
-
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 

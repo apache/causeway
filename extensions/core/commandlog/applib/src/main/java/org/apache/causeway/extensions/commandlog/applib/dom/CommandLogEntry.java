@@ -33,11 +33,6 @@ import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -55,6 +50,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
+import org.apache.causeway.applib.mixins.system.DomainChangeRecord.ChangeType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
@@ -65,6 +61,11 @@ import org.apache.causeway.applib.services.tablecol.TableColumnOrderForCollectio
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.applib.util.ToString;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Temporals;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 

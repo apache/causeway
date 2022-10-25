@@ -22,13 +22,12 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.val;

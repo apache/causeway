@@ -29,14 +29,12 @@ import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarConf
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
-
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 final class FullCalendarWithEventHandling extends FullCalendar {
 

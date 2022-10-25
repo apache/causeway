@@ -25,12 +25,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.extensions.excel.applib.ExcelService;
-import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 import org.apache.poi.util.IOUtils;
 
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.extensions.excel.applib.ExcelService;
+import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 
 /**
  * @since 2.0 {@index}

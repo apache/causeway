@@ -21,12 +21,11 @@ package org.apache.causeway.extensions.sse.wicket.markup;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
 import static org.apache.causeway.commons.internal.base._Strings.isNullOrEmpty;
-
-import org.apache.causeway.applib.value.LocalResourcePath;
-import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
 import lombok.extern.log4j.Log4j2;
 

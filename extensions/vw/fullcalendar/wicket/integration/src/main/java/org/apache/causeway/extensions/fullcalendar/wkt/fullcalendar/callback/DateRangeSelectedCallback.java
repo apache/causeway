@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.Request;
 import org.joda.time.DateTime;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 
 public abstract class DateRangeSelectedCallback
 extends AbstractAjaxCallback

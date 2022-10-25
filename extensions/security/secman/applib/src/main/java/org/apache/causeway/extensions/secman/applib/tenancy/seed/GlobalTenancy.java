@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.secman.applib.tenancy.seed;
 
 import org.apache.causeway.extensions.secman.applib.tenancy.fixtures.AbstractTenancyFixtureScript;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**

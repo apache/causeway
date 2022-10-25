@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.ui;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.pdfjs.metamodel.CausewayModuleExtPdfjsMetaModel;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 import org.apache.causeway.extensions.pdfjs.wkt.ui.components.PdfJsViewerPanelComponentFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

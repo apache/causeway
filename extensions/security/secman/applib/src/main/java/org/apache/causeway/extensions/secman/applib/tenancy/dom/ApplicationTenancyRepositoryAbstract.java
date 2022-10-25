@@ -24,13 +24,13 @@ import java.util.Collections;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;
 import lombok.val;

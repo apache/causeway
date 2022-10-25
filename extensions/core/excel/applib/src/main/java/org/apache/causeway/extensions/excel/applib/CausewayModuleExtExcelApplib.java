@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.excel.applib;
 
-import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 
 /**
  * @since 2.0 {@index}

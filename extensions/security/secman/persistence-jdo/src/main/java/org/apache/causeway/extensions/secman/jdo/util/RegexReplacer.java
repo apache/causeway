@@ -20,9 +20,10 @@ package org.apache.causeway.extensions.secman.jdo.util;
 
 import javax.inject.Named;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
-import org.springframework.stereotype.Component;
 
 import lombok.val;
 

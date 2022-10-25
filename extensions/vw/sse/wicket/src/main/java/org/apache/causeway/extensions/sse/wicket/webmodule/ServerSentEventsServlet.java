@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.apache.causeway.applib.value.Markup;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

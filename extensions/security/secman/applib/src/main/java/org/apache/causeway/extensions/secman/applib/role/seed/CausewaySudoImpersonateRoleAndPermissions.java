@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.seed;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.services.user.ImpersonateMenu;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.applib.services.user.ImpersonateMenu;
 
 /**
  * @since 2.0 {@index}

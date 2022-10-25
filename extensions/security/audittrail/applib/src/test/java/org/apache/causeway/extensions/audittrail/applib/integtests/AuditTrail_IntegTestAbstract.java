@@ -22,6 +22,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -33,11 +39,6 @@ import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.CounterRepository;
 import org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter_bumpUsingMixin;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.val;
 

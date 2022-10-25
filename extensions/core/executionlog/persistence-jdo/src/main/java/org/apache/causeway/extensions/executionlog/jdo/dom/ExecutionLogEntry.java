@@ -37,8 +37,8 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
 import lombok.Getter;

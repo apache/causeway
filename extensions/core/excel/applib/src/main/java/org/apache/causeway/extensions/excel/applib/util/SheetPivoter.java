@@ -23,8 +23,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.causeway.extensions.excel.applib.AggregationType;
-import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -35,6 +33,9 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
+
+import org.apache.causeway.extensions.excel.applib.AggregationType;
+import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 
 import lombok.val;
 

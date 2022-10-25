@@ -20,10 +20,11 @@ package org.apache.causeway.extensions.excel.applib.util;
 
 import java.util.List;
 
-import org.apache.causeway.extensions.excel.applib.AggregationType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.causeway.extensions.excel.applib.AggregationType;
 
 /**
  * @since 2.0 {@index}

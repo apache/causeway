@@ -21,7 +21,6 @@
 package org.apache.causeway.extensions.audittrail.applib.integtests.model;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 

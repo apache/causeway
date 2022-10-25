@@ -28,8 +28,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.ViewModel;
@@ -38,9 +36,10 @@ import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

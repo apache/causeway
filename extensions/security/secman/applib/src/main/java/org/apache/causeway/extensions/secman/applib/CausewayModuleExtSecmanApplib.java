@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.extensions.secman.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.causeway.extensions.secman.applib.feature.contributions.ApplicationFeatureViewModel_permissions;
 import org.apache.causeway.extensions.secman.applib.permission.app.ApplicationOrphanedPermissionManager;
@@ -79,9 +82,6 @@ import org.apache.causeway.extensions.secman.applib.user.man.mixins.ApplicationU
 import org.apache.causeway.extensions.secman.applib.user.man.mixins.ApplicationUserManager_newLocalUser;
 import org.apache.causeway.extensions.secman.applib.user.menu.ApplicationUserMenu;
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 /**

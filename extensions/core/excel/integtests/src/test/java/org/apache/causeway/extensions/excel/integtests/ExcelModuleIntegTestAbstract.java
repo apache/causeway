@@ -28,10 +28,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.extensions.excel.fixtures.CausewayModuleExtExcelFixtures;
-
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-
+import org.apache.causeway.extensions.excel.fixtures.CausewayModuleExtExcelFixtures;
 import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;

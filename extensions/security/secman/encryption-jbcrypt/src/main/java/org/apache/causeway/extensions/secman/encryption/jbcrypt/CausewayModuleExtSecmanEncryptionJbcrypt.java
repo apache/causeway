@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.secman.encryption.jbcrypt;
 
-import org.apache.causeway.extensions.secman.encryption.jbcrypt.services.PasswordEncoderUsingJBcrypt;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.secman.encryption.jbcrypt.services.PasswordEncoderUsingJBcrypt;
 
 /**
  * @since 2.0 {@index}

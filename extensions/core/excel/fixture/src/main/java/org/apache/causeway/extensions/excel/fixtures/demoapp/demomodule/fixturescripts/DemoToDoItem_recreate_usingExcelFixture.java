@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown2;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class DemoToDoItem_recreate_usingExcelFixture extends FixtureScript {

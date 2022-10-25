@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.causeway.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
@@ -28,8 +31,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
 import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

@@ -23,12 +23,12 @@ package org.apache.causeway.extensions.sessionlog.jpa;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntryPK;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntryRepository;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;

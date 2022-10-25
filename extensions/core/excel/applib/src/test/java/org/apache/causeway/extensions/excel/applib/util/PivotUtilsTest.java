@@ -21,7 +21,6 @@ package org.apache.causeway.extensions.excel.applib.util;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.causeway.extensions.excel.applib.util.PivotUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;

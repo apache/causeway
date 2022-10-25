@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback;
 
+import org.joda.time.DateTime;
+
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventSource;
-import org.joda.time.DateTime;
 
 import lombok.Getter;
 

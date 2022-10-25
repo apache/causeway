@@ -20,9 +20,10 @@ package org.apache.causeway.extensions.secman.jdo.permission.dom;
 
 import javax.inject.Named;
 
+import org.springframework.stereotype.Repository;
+
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepositoryAbstract;
-import org.springframework.stereotype.Repository;
 
 @Repository
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermissionRepository")

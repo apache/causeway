@@ -20,8 +20,6 @@ package org.apache.causeway.extensions.secman.applib.user.dom.mixins;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Editing;
@@ -30,6 +28,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
+import org.apache.causeway.commons.internal.base._Temporals;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 

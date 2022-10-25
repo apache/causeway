@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.Request;
+
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventSource;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.Request;
 
 public abstract class EventResizedCallback
 extends AbstractAjaxCallbackWithClientsideRevert

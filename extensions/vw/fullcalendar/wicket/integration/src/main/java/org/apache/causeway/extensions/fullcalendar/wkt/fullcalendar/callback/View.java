@@ -19,8 +19,9 @@
 
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.ViewType;
 import org.joda.time.DateMidnight;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.ViewType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

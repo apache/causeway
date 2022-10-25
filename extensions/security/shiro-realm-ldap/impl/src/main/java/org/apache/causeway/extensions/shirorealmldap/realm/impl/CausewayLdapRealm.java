@@ -32,8 +32,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapContext;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.config.Ini;
@@ -43,10 +41,12 @@ import org.apache.shiro.realm.ldap.LdapUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.StringUtils;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapper;
 import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
+
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 /**
  * Implementation of {@link org.apache.shiro.realm.ldap.JndiLdapRealm} that also

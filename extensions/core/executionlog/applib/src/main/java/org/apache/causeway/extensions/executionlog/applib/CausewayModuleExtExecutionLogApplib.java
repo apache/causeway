@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.extensions.executionlog.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.executionlog.applib.app.ExecutionLogMenu;
 import org.apache.causeway.extensions.executionlog.applib.contributions.HasInteractionId_executionLogEntries;
 import org.apache.causeway.extensions.executionlog.applib.contributions.HasUsername_recentExecutionsByUser;
@@ -25,9 +28,6 @@ import org.apache.causeway.extensions.executionlog.applib.contributions.Object_r
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.mixins.ExecutionLogEntry_siblingExecutions;
 import org.apache.causeway.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration

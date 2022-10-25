@@ -30,9 +30,6 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
-import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -49,6 +46,9 @@ import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.causeway.applib.util.ObjectContracts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration.components;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.panel.Panel;
+
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsCmapsReference;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsReference;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsWorkerReference;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.markup.html.panel.Panel;
-
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;

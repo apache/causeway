@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.Event;
@@ -32,9 +35,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.Res
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.SelectedRange;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.View;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.selector.EventSourceSelector;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 

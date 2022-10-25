@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.extensions.sse.metamodel;
 
-import org.apache.causeway.extensions.sse.applib.CausewayModuleExtSseApplib;
-import org.apache.causeway.extensions.sse.metamodel.facets.SseAnnotationFacetFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.sse.applib.CausewayModuleExtSseApplib;
+import org.apache.causeway.extensions.sse.metamodel.facets.SseAnnotationFacetFactory;
 
 @Configuration
 @Import({

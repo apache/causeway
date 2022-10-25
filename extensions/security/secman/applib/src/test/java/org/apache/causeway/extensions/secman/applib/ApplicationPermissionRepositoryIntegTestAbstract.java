@@ -36,7 +36,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
-
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import static org.apache.causeway.applib.services.appfeat.ApplicationFeatureId.newType;

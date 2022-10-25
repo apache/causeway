@@ -23,6 +23,10 @@ import java.util.List;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -33,11 +37,6 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.causeway.extensions.secman.applib.user.dom.mixins.perms.UserPermissionViewModel;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 

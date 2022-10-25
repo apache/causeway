@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.sse.metamodel.facets;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;

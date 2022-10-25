@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.seed;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
 /**
  * Access to the h2 console UI.

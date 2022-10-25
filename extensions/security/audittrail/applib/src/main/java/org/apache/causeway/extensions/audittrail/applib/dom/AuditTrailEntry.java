@@ -27,9 +27,6 @@ import java.util.UUID;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -41,12 +38,16 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
+import org.apache.causeway.applib.mixins.system.DomainChangeRecord.ChangeType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.TitleBuffer;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Temporals;
+import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

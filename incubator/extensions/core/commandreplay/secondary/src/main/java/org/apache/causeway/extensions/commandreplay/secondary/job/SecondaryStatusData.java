@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary.job;
 
+import org.quartz.JobExecutionContext;
+
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 import org.apache.causeway.extensions.quartz.context.JobExecutionData;
-import org.quartz.JobExecutionContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

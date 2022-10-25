@@ -26,15 +26,14 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.extensions.excel.applib.ExcelService;
-import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
-import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.value.Blob;
-
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
+import org.apache.causeway.extensions.excel.applib.ExcelService;
+import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;

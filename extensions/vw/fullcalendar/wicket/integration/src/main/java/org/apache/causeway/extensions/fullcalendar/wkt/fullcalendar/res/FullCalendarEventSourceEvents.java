@@ -23,7 +23,6 @@ import java.util.function.Function;
 
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventSource;
-
 import org.apache.causeway.viewer.wicket.ui.util.LicensedTextTemplate;
 
 import lombok.Getter;

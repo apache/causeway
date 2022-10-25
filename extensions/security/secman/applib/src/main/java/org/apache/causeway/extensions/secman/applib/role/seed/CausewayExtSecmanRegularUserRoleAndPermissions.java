@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.seed;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu;
@@ -31,7 +30,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
-
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 import lombok.val;

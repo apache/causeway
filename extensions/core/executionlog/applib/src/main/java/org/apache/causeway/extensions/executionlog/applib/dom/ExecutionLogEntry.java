@@ -32,8 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
-import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -47,6 +45,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
+import org.apache.causeway.applib.mixins.system.DomainChangeRecord.ChangeType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -59,6 +58,8 @@ import org.apache.causeway.applib.services.tablecol.TableColumnOrderForCollectio
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.TitleBuffer;
 import org.apache.causeway.applib.util.ToString;
+import org.apache.causeway.commons.internal.base._Temporals;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 

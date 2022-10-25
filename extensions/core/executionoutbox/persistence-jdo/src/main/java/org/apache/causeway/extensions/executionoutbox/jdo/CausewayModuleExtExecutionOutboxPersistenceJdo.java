@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.executionoutbox.jdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryPK;

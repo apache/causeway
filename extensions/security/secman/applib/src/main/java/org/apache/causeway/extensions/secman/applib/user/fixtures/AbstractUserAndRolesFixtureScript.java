@@ -22,6 +22,8 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
@@ -29,9 +31,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.value.Password;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;

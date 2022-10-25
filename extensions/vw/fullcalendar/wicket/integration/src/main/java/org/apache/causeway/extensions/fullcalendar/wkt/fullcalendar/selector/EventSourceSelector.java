@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.selector;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebComponent;
 
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class EventSourceSelector extends WebComponent implements IHeaderContributor {

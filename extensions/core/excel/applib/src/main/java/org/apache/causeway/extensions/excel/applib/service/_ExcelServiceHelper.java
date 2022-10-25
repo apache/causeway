@@ -24,13 +24,13 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.excel.applib.WorksheetContent;

@@ -18,14 +18,6 @@
  */
 package org.apache.causeway.extensions.audittrail.jdo.integtests;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
-import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
-import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
-import org.apache.causeway.extensions.audittrail.jdo.integtests.model.Counter;
-import org.apache.causeway.extensions.audittrail.jdo.integtests.model.CounterRepository;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +26,15 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
+import org.apache.causeway.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
+import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.audittrail.jdo.integtests.model.Counter;
+import org.apache.causeway.extensions.audittrail.jdo.integtests.model.CounterRepository;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
         classes = AuditTrail_IntegTest.AppManifest.class

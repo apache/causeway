@@ -25,8 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.shiro.subject.PrincipalCollection;
+
+import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

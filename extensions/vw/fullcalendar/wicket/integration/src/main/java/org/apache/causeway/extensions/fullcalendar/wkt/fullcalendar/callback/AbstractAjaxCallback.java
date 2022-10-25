@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 
 import lombok.NonNull;
 

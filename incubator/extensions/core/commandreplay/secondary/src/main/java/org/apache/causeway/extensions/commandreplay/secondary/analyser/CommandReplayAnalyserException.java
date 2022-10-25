@@ -23,12 +23,12 @@ import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;

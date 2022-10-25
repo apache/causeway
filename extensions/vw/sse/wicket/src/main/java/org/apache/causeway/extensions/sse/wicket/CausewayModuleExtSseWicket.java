@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.extensions.sse.wicket;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.sse.metamodel.CausewayModuleExtSseMetaModel;
 import org.apache.causeway.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket;
 import org.apache.causeway.extensions.sse.wicket.services.SseServiceDefault;
 import org.apache.causeway.extensions.sse.wicket.webmodule.WebModuleServerSentEvents;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

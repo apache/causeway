@@ -30,17 +30,6 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.resources._Serializables;
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
-import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -60,6 +49,17 @@ import org.apache.causeway.applib.services.appfeatui.ApplicationFeatureViewModel
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.resources._Serializables;
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -18,15 +18,16 @@
  */
 package org.apache.causeway.extensions.commandreplay.primary;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandreplay.primary.config.PrimaryConfig;
 import org.apache.causeway.extensions.commandreplay.primary.mixins.Object_openOnSecondary;
 import org.apache.causeway.extensions.commandreplay.primary.restapi.CommandRetrievalOnPrimaryService;
 import org.apache.causeway.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand;
 import org.apache.causeway.extensions.commandreplay.primary.ui.CommandReplayOnPrimaryService;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
 /**
  * Activates with <i>Spring profile</i> 'commandreplay-primary'.

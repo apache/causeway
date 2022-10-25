@@ -19,10 +19,11 @@
  */
 package org.apache.causeway.extensions.secman.delegated.springoauth2;
 
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
-import org.apache.causeway.extensions.secman.delegated.springoauth2.dom.ApplicationUserAutoCreationService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
+import org.apache.causeway.extensions.secman.delegated.springoauth2.dom.ApplicationUserAutoCreationService;
 
 /**
  * @since 2.0 {@index}

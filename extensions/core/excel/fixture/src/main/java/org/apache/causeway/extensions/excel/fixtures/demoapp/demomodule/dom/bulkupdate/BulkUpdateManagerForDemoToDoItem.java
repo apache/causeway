@@ -31,9 +31,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.lang.Nullable;
 
-import static org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.thoseCategorised;
-import static org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.thoseCompleted;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
@@ -57,6 +54,9 @@ import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+
+import static org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.thoseCategorised;
+import static org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.thoseCompleted;
 
 import lombok.Getter;
 import lombok.Setter;

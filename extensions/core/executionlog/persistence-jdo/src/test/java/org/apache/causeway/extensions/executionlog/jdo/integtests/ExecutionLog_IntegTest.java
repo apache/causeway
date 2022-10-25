@@ -28,12 +28,11 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
 import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
 import org.apache.causeway.extensions.executionlog.jdo.integtests.model.Counter;
-
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(

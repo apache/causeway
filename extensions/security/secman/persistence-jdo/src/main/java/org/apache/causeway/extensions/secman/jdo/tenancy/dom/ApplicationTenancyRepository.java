@@ -20,9 +20,10 @@ package org.apache.causeway.extensions.secman.jdo.tenancy.dom;
 
 import javax.inject.Named;
 
+import org.springframework.stereotype.Repository;
+
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepositoryAbstract;
-import org.springframework.stereotype.Repository;
 
 @Repository
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyRepository")

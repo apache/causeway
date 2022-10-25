@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.executionoutbox.jpa;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK;

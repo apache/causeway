@@ -34,16 +34,16 @@ import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.Nq;
-import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.Nq;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.Getter;
 import lombok.Setter;

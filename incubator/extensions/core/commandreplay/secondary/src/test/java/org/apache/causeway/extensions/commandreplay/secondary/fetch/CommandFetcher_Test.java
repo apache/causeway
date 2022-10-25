@@ -26,13 +26,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
-import org.apache.causeway.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.causeway.extensions.commandreplay.secondary.status.StatusException;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.val;
 

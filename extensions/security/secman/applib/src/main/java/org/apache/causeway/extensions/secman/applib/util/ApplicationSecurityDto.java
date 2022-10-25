@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.applib.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.commons.internal.resources._Yaml;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -29,7 +30,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 
 import lombok.Data;
 import lombok.NonNull;

@@ -21,13 +21,11 @@ package org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendarable;
 import java.util.Set;
 
 import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.causeway.extensions.fullcalendar.applib.Calendarable;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.viewer.EventProviderAbstract;
-
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
 public class CalendarableEventProvider extends EventProviderAbstract {

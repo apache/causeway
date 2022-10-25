@@ -20,11 +20,12 @@
 
 package org.apache.causeway.extensions.sessionlog.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.sessionlog.applib.app.SessionLogMenu;
 import org.apache.causeway.extensions.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
 import org.apache.causeway.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 
 @Configuration

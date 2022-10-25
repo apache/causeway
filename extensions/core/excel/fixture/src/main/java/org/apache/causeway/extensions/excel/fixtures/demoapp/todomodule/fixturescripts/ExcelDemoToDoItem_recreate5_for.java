@@ -29,7 +29,6 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Cate
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {

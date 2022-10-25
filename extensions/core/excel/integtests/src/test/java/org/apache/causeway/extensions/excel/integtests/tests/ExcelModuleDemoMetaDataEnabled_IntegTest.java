@@ -23,15 +23,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2;
-import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoFixture_extending_ExcelFixture2;
+import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;

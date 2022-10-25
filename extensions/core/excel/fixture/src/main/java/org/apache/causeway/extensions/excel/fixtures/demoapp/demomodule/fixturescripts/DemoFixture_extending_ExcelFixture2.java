@@ -20,12 +20,12 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixture
 
 import javax.inject.Named;
 
+import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.extensions.excel.applib.Mode;
 import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
 import org.apache.causeway.extensions.excel.testing.ExcelFixture2;
-import org.apache.causeway.applib.annotation.DomainObject;
 
 import lombok.Getter;
 import lombok.Setter;

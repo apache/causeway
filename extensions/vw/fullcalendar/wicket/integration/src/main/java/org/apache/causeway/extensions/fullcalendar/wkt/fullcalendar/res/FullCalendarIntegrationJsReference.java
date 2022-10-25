@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.Strings;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

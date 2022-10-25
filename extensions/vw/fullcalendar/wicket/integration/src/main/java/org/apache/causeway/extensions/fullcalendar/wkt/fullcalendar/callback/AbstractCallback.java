@@ -20,11 +20,12 @@ package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import java.util.Map;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.wicket.Component;
 import org.apache.wicket.IRequestListener;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 
 import lombok.Getter;
 

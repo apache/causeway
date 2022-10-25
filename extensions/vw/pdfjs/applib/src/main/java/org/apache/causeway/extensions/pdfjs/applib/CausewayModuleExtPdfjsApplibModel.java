@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.pdfjs.applib;
 
-import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
 @Configuration
 @Import({

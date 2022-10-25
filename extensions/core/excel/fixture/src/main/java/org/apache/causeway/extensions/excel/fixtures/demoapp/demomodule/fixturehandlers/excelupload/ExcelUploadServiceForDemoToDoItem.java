@@ -33,7 +33,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;
 import org.apache.causeway.extensions.excel.testing.ExcelFixture;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;

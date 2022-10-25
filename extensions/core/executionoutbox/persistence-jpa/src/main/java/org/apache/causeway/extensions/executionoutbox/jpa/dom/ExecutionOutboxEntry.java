@@ -43,13 +43,12 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.Nq;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
-
-import static org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.Nq;
 
 import lombok.Getter;
 import lombok.Setter;

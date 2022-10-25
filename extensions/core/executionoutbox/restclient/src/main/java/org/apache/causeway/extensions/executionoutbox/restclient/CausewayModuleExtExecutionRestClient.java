@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.extensions.executionoutbox.restclient;
 
-import org.apache.causeway.schema.CausewayModuleSchema;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.schema.CausewayModuleSchema;
 
 @Configuration
 @Import({

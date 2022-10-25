@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.extensions.spring.security.oauth2;
 
-import org.apache.causeway.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
 import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
 /**

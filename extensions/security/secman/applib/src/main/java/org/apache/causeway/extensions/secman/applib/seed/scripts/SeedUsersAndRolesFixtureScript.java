@@ -37,7 +37,6 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayViewerRest
 import org.apache.causeway.extensions.secman.applib.seed.SeedSecurityModuleService;
 import org.apache.causeway.extensions.secman.applib.tenancy.seed.GlobalTenancy;
 import org.apache.causeway.extensions.secman.applib.user.seed.CausewayExtSecmanAdminUser;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.val;

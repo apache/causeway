@@ -31,7 +31,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventProvide
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.selector.EventSourceSelector;
-
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;

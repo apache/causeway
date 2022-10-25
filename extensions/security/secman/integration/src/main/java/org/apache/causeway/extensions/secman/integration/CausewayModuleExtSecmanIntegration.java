@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.extensions.secman.integration;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.integration.authorizor.AuthorizorSecman;
 import org.apache.causeway.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor;
@@ -26,8 +29,6 @@ import org.apache.causeway.extensions.secman.integration.spiimpl.ImpersonateMenu
 import org.apache.causeway.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman;
 import org.apache.causeway.extensions.secman.integration.usermementorefiner.UserMementoRefinerFromApplicationUser;
 import org.apache.causeway.extensions.secman.integration.userreg.UserRegistrationServiceForSecman;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

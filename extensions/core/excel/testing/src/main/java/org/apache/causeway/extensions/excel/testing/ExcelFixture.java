@@ -28,11 +28,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -40,11 +35,14 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.excel.applib.ExcelService;
 import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
-
+import org.apache.causeway.extensions.excel.applib.ExcelService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 

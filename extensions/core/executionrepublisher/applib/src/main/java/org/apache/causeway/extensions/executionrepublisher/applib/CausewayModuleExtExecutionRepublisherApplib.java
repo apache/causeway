@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.extensions.executionrepublisher.applib;
 
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
+import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox;
 
 @Configuration
 @Import({

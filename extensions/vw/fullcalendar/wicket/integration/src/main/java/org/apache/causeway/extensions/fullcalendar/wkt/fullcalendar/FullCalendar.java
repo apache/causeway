@@ -24,6 +24,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.wicket.IRequestListener;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.util.lang.Objects;
+
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.AjaxConcurrency;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.DateRangeSelectedCallback;
@@ -35,9 +39,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.Sel
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.callback.View;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarEventSourceEvents;
 import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
-import org.apache.wicket.IRequestListener;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.util.lang.Objects;
 
 import lombok.val;
 

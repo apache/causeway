@@ -23,15 +23,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.extensions.excel.applib.ExcelService;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
-import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -41,6 +32,15 @@ import org.junit.jupiter.api.Disabled;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.extensions.excel.applib.ExcelService;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts.DemoToDoItem_recreate_usingExcelFixture;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
+import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 
 public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelModuleIntegTestAbstract {
 

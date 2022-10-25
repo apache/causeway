@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.secman.jdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
 import org.apache.causeway.extensions.secman.jdo.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
@@ -34,7 +35,6 @@ import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistence
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
-import org.apache.causeway.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 /**
  * @since 2.0 {@index}

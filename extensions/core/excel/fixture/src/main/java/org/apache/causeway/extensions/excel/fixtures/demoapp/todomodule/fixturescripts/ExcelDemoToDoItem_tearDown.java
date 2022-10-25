@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts;
 
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
-
 import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
 public class ExcelDemoToDoItem_tearDown extends TeardownFixtureJdoAbstract {

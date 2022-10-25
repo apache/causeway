@@ -22,12 +22,12 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
-import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
 import lombok.val;
 

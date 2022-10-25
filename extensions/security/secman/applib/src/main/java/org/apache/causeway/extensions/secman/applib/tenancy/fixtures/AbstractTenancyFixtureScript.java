@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public abstract class AbstractTenancyFixtureScript extends FixtureScript {

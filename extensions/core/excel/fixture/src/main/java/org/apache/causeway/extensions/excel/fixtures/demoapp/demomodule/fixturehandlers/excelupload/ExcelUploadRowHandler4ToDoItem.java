@@ -42,7 +42,6 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Exce
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 import org.apache.causeway.extensions.excel.testing.ExcelFixture;
 import org.apache.causeway.extensions.excel.testing.ExcelFixtureRowHandler;
-
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;

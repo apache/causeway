@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarCssReference;
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarJsReference;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarCssReference;
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarJsReference;
 
 abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderContributor {
     private static final long serialVersionUID = 1L;

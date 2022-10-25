@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
-import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
-import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
+import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

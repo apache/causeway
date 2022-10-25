@@ -28,7 +28,6 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.pam.AllSuccessfulStrategy;
 import org.apache.shiro.realm.Realm;
 
-
 import lombok.val;
 
 public class AuthenticationStrategyForSecMan extends AllSuccessfulStrategy {

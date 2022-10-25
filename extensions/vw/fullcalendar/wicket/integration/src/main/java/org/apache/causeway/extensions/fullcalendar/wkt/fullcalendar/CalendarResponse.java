@@ -20,8 +20,9 @@ package org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar;
 
 import java.util.Date;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+
+import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
 
 public class CalendarResponse {
 	private final FullCalendar calendar;

@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendareventable;
 
-import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
-import org.apache.causeway.extensions.fullcalendar.wkt.viewer.CalendaredCollectionFactoryAbstract;
 import org.apache.wicket.Component;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
+import org.apache.causeway.extensions.fullcalendar.wkt.viewer.CalendaredCollectionFactoryAbstract;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 

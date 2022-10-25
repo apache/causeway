@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.extensions.fullcalendar.wkt.viewer;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullCalendarApplib;
 import org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory;
 import org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

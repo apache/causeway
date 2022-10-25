@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.extensions.excel.fixtures;
 
-import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
+import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;

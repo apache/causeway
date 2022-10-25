@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.jpa;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
 import org.apache.causeway.extensions.secman.jpa.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;

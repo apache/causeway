@@ -20,8 +20,9 @@ package org.apache.causeway.extensions.pdfjs.applib.config;
 
 import java.io.Serializable;
 
-import org.apache.causeway.commons.internal.resources._Json;
 import org.springframework.util.Assert;
+
+import org.apache.causeway.commons.internal.resources._Json;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

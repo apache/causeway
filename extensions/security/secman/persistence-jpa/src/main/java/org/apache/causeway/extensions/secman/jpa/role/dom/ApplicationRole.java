@@ -36,14 +36,14 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.Nq;
-import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.Nq;
+import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;

@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.executionlog.jpa;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
 import org.apache.causeway.extensions.executionlog.jpa.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.jpa.dom.ExecutionLogEntryPK;
