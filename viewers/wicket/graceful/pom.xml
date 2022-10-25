@@ -59,13 +59,13 @@
                         <configuration>
                             <target>
                                 <copy
-                                        file="${project.build.testSourceDirectory}/../resources/wicket-artifacts-no-module-info/wicket-core-9.11.0.jar.mangled"
-                                        tofile="${settings.localRepository}/org/apache/wicket/wicket-core/9.11.0/wicket-core-9.11.0.jar"
+                                        file="${project.build.testSourceDirectory}/../resources/wicket-artifacts-no-module-info/wicket-core-9.12.0.jar.mangled"
+                                        tofile="${settings.localRepository}/org/apache/wicket/wicket-core/9.12.0/wicket-core-9.12.0.jar"
                                         overwrite="true"
                                 />
                                 <copy
-                                        file="${project.build.testSourceDirectory}/../resources/wicket-artifacts-no-module-info/wicket-util-9.11.0.jar.mangled"
-                                        tofile="${settings.localRepository}/org/apache/wicket/wicket-util/9.11.0/wicket-util-9.11.0.jar"
+                                        file="${project.build.testSourceDirectory}/../resources/wicket-artifacts-no-module-info/wicket-util-9.12.0.jar.mangled"
+                                        tofile="${settings.localRepository}/org/apache/wicket/wicket-util/9.12.0/wicket-util-9.12.0.jar"
                                         overwrite="true"
                                 />
                             </target>
