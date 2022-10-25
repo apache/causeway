@@ -376,10 +376,12 @@ implements
     private void preInteractionClosed(final CausewayInteraction interaction) {
         completeAndPublishCurrentCommand();
 
+        RuntimeException flushException = null;
         try {
             transactionServiceProvider.get().flushTransaction();
-        } catch (Exception e) {
-            //[ISIS-3262] if flush fails just ignore, proceed with closing ...
+        } catch (RuntimeException e) {
+            //[ISIS-3262] if flush fails rethrow later, when interaction was closed ...
+            flushException = e;
         }
 
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
@@ -389,6 +391,10 @@ implements
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last
+
+        if(flushException!=null) {
+            throw flushException;
+        }
     }
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
