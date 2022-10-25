@@ -20,11 +20,12 @@ package org.apache.causeway.tooling.projectmodel;
 
 import java.io.File;
 
-import org.springframework.lang.Nullable;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.tooling.projectmodel.maven.MavenModelFactory;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleProject;
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.tooling.projectmodel.maven.MavenModelFactory;
 
 import lombok.NonNull;
 import lombok.val;

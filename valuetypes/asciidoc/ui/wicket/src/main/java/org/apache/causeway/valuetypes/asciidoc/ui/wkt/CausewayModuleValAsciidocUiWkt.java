@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.ui.wkt;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
-import org.apache.causeway.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt;
 
 /**
  * @since 2.0 {@index}

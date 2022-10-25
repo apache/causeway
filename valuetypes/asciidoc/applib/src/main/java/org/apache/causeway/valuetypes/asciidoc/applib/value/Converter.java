@@ -20,12 +20,13 @@ package org.apache.causeway.valuetypes.asciidoc.applib.value;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.tooling.cli.projdoc;
 
+import static guru.nidi.codeassert.config.Language.JAVA;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -36,6 +38,10 @@ import java.util.stream.Stream;
 import com.structurizr.model.Container;
 import com.structurizr.view.AutomaticLayout.RankDirection;
 
+import org.apache.commons.lang3.builder.EqualsExclude;
+import org.asciidoctor.ast.Document;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -52,9 +58,6 @@ import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.causeway.tooling.projectmodel.Dependency;
 import org.apache.causeway.tooling.projectmodel.ProjectNode;
-import org.apache.commons.lang3.builder.EqualsExclude;
-import org.asciidoctor.ast.Document;
-import org.springframework.lang.Nullable;
 
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.cell;
@@ -63,18 +66,15 @@ import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.headRow;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.row;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.table;
 
+import guru.nidi.codeassert.config.Language;
+import guru.nidi.codeassert.model.CodeClass;
+import guru.nidi.codeassert.model.Model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
-
-import guru.nidi.codeassert.config.Language;
-import guru.nidi.codeassert.model.CodeClass;
-import guru.nidi.codeassert.model.Model;
-
-import static guru.nidi.codeassert.config.Language.JAVA;
 
 /**
  * Acts both as a model and a writer (adoc).

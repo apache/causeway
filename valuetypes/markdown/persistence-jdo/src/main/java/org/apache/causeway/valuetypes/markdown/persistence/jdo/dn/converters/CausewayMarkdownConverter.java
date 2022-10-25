@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.converters;
 
-import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
 /**
  * @since 2.0 {@index}

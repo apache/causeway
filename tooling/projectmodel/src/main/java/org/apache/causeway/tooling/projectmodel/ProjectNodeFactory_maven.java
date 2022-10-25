@@ -26,12 +26,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.maven.model.Model;
 import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.tooling.projectmodel.Dependency.Location;
 import org.apache.causeway.tooling.projectmodel.maven.MavenModelFactory;
 import org.apache.causeway.tooling.projectmodel.maven.SimpleModelResolver;
-import org.apache.maven.model.Model;
 
 import lombok.NonNull;
 import lombok.val;

@@ -29,10 +29,9 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 import org.apache.causeway.commons.collections.Can;
-
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 import lombok.NonNull;
 import lombok.val;

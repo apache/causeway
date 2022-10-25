@@ -24,7 +24,6 @@ import java.util.Objects;
 import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;

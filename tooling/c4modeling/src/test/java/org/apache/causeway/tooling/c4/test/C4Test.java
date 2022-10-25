@@ -28,11 +28,12 @@ import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.SystemContextView;
 
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.tooling.c4.C4;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.tooling.c4.C4;
 
 import lombok.val;
 

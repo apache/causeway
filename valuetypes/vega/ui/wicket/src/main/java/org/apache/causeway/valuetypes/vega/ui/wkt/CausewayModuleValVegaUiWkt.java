@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.valuetypes.vega.ui.wkt;
 
-import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
-import org.apache.causeway.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
+import org.apache.causeway.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt;
 
 /**
  * @since 2.0 {@index}

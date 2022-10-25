@@ -20,12 +20,13 @@ package org.apache.causeway.tooling.j2adoc.format;
 
 import java.util.Optional;
 
+import org.asciidoctor.ast.StructuralNode;
+
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
-import org.asciidoctor.ast.StructuralNode;
 
 import lombok.NonNull;
 import lombok.val;

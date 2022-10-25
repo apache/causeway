@@ -20,8 +20,6 @@ package org.apache.causeway.tooling.j2adoc.convert;
 
 import java.util.Stack;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
@@ -30,6 +28,9 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
+
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 
 import lombok.SneakyThrows;
 import lombok.val;

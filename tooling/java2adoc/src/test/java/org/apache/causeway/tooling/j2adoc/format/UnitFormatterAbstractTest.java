@@ -20,12 +20,9 @@
 
 package org.apache.causeway.tooling.j2adoc.format;
 
-import org.apache.causeway.tooling.j2adoc.format.UnitFormatterAbstract;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UnitFormatterAbstractTest {
 

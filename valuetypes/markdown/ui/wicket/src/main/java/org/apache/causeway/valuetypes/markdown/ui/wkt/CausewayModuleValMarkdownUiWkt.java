@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.valuetypes.markdown.ui.wkt;
 
-import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
-import org.apache.causeway.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
+import org.apache.causeway.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt;
 
 /**
  * @since 2.0 {@index}

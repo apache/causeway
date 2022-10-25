@@ -23,12 +23,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.tooling.model4adoc.include.IncludeStatements;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import lombok.NonNull;
 import lombok.val;

@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.tooling.model4adoc.ast;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.asciidoctor.ast.ListItem;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Setter;

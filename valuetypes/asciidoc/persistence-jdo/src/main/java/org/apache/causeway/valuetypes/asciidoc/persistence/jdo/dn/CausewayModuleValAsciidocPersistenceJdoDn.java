@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 
 /**
  * @since 2.0 {@index}

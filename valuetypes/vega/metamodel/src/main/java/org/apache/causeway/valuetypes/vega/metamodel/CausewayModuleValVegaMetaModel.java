@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.vega.metamodel;
 
-import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
 
 /**
  * @since 2.0 {@index}

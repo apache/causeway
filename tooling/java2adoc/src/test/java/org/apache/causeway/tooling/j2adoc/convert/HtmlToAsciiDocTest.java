@@ -18,16 +18,16 @@
  */
 package org.apache.causeway.tooling.j2adoc.convert;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.tooling.j2adoc.convert.HtmlToAsciiDoc;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
+import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.val;
 

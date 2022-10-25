@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.valuetypes.markdown.persistence.jpa;
 
-import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
-import org.apache.causeway.valuetypes.markdown.persistence.jpa.converters.CausewayMarkdownConverter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
+import org.apache.causeway.valuetypes.markdown.persistence.jpa.converters.CausewayMarkdownConverter;
 
 /**
  * @since 2.0 {@index}

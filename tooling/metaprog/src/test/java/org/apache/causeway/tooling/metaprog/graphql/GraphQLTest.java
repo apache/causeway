@@ -22,14 +22,14 @@ import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.tooling.metaprog.compiler.JavaSourceCompilingClassLoader;
-import org.apache.causeway.tooling.metaprog.graphql.GraphQLToJavaSourceConverter;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

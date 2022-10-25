@@ -20,9 +20,6 @@ package org.apache.causeway.tooling.c4;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.springframework.lang.Nullable;
-
 import com.structurizr.Workspace;
 import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.io.plantuml.StructurizrPlantUMLWriter;
@@ -35,6 +32,10 @@ import com.structurizr.view.Shape;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.Getter;

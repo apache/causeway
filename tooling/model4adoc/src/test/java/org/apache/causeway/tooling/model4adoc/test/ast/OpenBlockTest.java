@@ -20,10 +20,11 @@ package org.apache.causeway.tooling.model4adoc.test.ast;
 
 import java.io.IOException;
 
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.block;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.doc;

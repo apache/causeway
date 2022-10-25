@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.tooling.cli.test;
 
-import org.apache.causeway.commons.internal.resources._Yaml;
-import org.apache.causeway.tooling.cli.CliConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +25,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.commons.internal.resources._Yaml;
+import org.apache.causeway.tooling.cli.CliConfig;
 
 import lombok.val;
 

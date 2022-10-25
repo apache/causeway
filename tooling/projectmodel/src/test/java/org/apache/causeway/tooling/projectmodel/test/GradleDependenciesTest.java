@@ -21,12 +21,13 @@ package org.apache.causeway.tooling.projectmodel.test;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import org.apache.causeway.tooling.projectmodel.gradle.GradleDependencies;
-import org.apache.causeway.tooling.projectmodel.gradle.GradleDependenciesFactory;
-import org.apache.causeway.tooling.projectmodel.gradle.GradleDependenciesWriter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.apache.causeway.tooling.projectmodel.gradle.GradleDependencies;
+import org.apache.causeway.tooling.projectmodel.gradle.GradleDependenciesFactory;
+import org.apache.causeway.tooling.projectmodel.gradle.GradleDependenciesWriter;
 
 class GradleDependenciesTest extends ProjectModelTestAbstract {
 

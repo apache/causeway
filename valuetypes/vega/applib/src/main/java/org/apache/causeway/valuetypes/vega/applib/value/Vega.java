@@ -25,11 +25,12 @@ import java.util.Objects;
 import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Json;
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.jaxb.VegaJaxbAdapter;
-import org.springframework.lang.Nullable;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

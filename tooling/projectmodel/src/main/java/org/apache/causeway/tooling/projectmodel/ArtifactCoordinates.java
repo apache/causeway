@@ -21,8 +21,9 @@ package org.apache.causeway.tooling.projectmodel;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.maven.artifact.versioning.ComparableVersion;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
 import lombok.Value;

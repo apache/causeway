@@ -22,10 +22,11 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Div;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.causeway.incubator.viewer.vaadin.ui.util.PrismResourcesVaa;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
-import org.springframework.lang.Nullable;
 
 public class VegaFieldVaa extends CustomField<Vega> {
 

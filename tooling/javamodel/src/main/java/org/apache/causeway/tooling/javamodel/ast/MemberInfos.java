@@ -21,9 +21,8 @@ package org.apache.causeway.tooling.javamodel.ast;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import lombok.NonNull;
-
 import guru.nidi.codeassert.model.MemberInfo;
+import lombok.NonNull;
 
 public final class MemberInfos {
 

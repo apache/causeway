@@ -19,13 +19,21 @@
 package org.apache.causeway.tooling.j2adoc.format;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.javadoc.Javadoc;
+
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.List;
+import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -35,10 +43,6 @@ import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.causeway.tooling.javamodel.ast.Javadocs;
 import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.List;
-import org.asciidoctor.ast.StructuralNode;
 
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.block;
 

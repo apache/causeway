@@ -21,13 +21,14 @@ package org.apache.causeway.tooling.cli.projdoc;
 import java.io.File;
 import java.util.function.BiConsumer;
 
+import org.asciidoctor.ast.Document;
+
 import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
-import org.asciidoctor.ast.Document;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

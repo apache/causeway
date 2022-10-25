@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.vega.persistence.jdo.dn;
 
-import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 
 /**
  * @since 2.0 {@index}

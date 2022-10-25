@@ -31,6 +31,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
+
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -38,11 +44,6 @@ import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Table;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

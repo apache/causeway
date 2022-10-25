@@ -18,10 +18,15 @@
  */
 package org.apache.causeway.tooling.j2adoc.test;
 
+import static guru.nidi.codeassert.config.Language.JAVA;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Text;
@@ -30,15 +35,10 @@ import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import lombok.NonNull;
-import lombok.val;
 
 import guru.nidi.codeassert.config.Language;
-
-import static guru.nidi.codeassert.config.Language.JAVA;
+import lombok.NonNull;
+import lombok.val;
 
 class J2AdocTest {
 

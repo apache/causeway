@@ -21,13 +21,14 @@ package org.apache.causeway.tooling.model4adoc.test.ast;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.val;
 

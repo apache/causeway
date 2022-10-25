@@ -20,7 +20,6 @@
 
 package org.apache.causeway.tooling.cli.projdoc;
 
-import org.apache.causeway.tooling.cli.projdoc.ProjectDocModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

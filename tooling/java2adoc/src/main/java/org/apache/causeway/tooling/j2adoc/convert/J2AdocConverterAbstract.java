@@ -21,8 +21,6 @@ package org.apache.causeway.tooling.j2adoc.convert;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -32,11 +30,13 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.javadoc.description.JavadocSnippet;
 
+import org.asciidoctor.ast.Document;
+import org.jsoup.Jsoup;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
-import org.asciidoctor.ast.Document;
-import org.jsoup.Jsoup;
 
 import lombok.NonNull;
 import lombok.val;

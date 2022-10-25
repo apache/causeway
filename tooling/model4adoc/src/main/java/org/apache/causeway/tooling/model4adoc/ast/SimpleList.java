@@ -20,8 +20,9 @@ package org.apache.causeway.tooling.model4adoc.ast;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.asciidoctor.ast.StructuralNode;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.ToString;
 

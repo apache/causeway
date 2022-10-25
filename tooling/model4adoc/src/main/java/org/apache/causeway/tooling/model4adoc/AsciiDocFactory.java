@@ -21,6 +21,16 @@ package org.apache.causeway.tooling.model4adoc;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Cell;
+import org.asciidoctor.ast.Column;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.Row;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -33,15 +43,6 @@ import org.apache.causeway.tooling.model4adoc.ast.SimpleList;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleListItem;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleRow;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleTable;
-import org.asciidoctor.ast.Block;
-import org.asciidoctor.ast.Cell;
-import org.asciidoctor.ast.Column;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.ListItem;
-import org.asciidoctor.ast.Row;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Table;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.val;

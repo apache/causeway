@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.markdown.persistence.jdo.dn;
 
-import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 
 /**
  * @since 2.0 {@index}

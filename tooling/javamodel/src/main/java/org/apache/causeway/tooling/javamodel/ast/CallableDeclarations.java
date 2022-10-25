@@ -19,7 +19,7 @@
 package org.apache.causeway.tooling.javamodel.ast;
 
 import com.github.javaparser.ast.body.CallableDeclaration;
-import com.github.javaparser.ast.body.Parameter;
+
 import lombok.NonNull;
 import lombok.val;
 

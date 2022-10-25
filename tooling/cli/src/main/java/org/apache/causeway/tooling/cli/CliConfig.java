@@ -22,12 +22,13 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
+import org.yaml.snakeyaml.constructor.ConstructorException;
+
 import org.apache.causeway.commons.internal.resources._Yaml;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatter;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatterCompact;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatterWithSourceAndCallouts;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatterWithSourceAndSections;
-import org.yaml.snakeyaml.constructor.ConstructorException;
 
 import lombok.Data;
 import lombok.Getter;

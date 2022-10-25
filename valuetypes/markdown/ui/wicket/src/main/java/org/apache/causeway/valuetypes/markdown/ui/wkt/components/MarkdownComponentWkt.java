@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.valuetypes.markdown.ui.wkt.components;
 
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.wicket.model.IModel;
+
+import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 public class MarkdownComponentWkt extends MarkupComponent {
 

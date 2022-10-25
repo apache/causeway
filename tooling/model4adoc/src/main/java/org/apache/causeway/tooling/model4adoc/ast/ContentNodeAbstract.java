@@ -23,9 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.Document;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Setter;

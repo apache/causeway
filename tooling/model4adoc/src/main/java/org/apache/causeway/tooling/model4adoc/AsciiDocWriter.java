@@ -28,10 +28,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Document;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.SneakyThrows;
 import lombok.val;

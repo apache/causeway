@@ -26,6 +26,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
+import org.apache.causeway.tooling.j2adoc.format.Snippets.Callout;
 import org.apache.causeway.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.EnumConstantDeclarations;

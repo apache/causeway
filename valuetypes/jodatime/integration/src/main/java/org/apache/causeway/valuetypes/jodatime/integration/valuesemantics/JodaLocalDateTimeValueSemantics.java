@@ -21,11 +21,11 @@ package org.apache.causeway.valuetypes.jodatime.integration.valuesemantics;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.collections.Can;
 import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;

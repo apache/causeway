@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.valuetypes.vega.persistence.jpa;
 
-import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
-import org.apache.causeway.valuetypes.vega.persistence.jpa.converters.CausewayVegaConverter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
+import org.apache.causeway.valuetypes.vega.persistence.jpa.converters.CausewayVegaConverter;
 
 /**
  * @since 2.0 {@index}

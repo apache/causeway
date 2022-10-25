@@ -21,14 +21,15 @@ package org.apache.causeway.tooling.projectmodel.test;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.causeway.tooling.projectmodel.ProjectNode;
-import org.apache.causeway.tooling.projectmodel.ProjectNodeFactory;
-import org.apache.causeway.tooling.projectmodel.ProjectVisitor;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.tooling.projectmodel.ProjectNode;
+import org.apache.causeway.tooling.projectmodel.ProjectNodeFactory;
+import org.apache.causeway.tooling.projectmodel.ProjectVisitor;
 
 import lombok.val;
 

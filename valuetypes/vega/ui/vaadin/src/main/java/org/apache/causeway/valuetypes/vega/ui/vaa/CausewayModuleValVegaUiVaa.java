@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.valuetypes.vega.ui.vaa;
 
-import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
-import org.apache.causeway.valuetypes.vega.ui.vaa.components.VegaFieldFactoryVaa;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
+import org.apache.causeway.valuetypes.vega.ui.vaa.components.VegaFieldFactoryVaa;
 
 @Configuration
 @Import({

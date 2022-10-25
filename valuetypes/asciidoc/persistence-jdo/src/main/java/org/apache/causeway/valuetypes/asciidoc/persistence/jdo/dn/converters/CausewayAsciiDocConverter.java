@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 /**
  * @since 2.0 {@index}

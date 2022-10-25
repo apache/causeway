@@ -25,16 +25,17 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.tooling.projectmodel.gradle.GradleSettings;
-import org.apache.causeway.tooling.projectmodel.gradle.GradleSettingsFactory;
-import org.apache.causeway.tooling.projectmodel.gradle.GradleSettingsWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.tooling.projectmodel.gradle.GradleSettings;
+import org.apache.causeway.tooling.projectmodel.gradle.GradleSettingsFactory;
+import org.apache.causeway.tooling.projectmodel.gradle.GradleSettingsWriter;
 
 import lombok.SneakyThrows;
 import lombok.val;

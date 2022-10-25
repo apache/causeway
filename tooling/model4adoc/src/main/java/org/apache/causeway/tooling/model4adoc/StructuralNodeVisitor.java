@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.tooling.model4adoc;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Node visitor interface. Provide an implementing class to {@link StructuralNodeTraversor} to iterate through nodes.

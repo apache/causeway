@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.ui.wkt.components;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-import org.springframework.stereotype.Component;
 
 import lombok.val;
 

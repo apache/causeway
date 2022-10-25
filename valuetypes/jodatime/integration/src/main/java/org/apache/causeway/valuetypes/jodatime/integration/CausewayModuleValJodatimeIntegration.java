@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.valuetypes.jodatime.integration;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaDateTimeValueSemantics;
 import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
 import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateValueSemantics;
 import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalTimeValueSemantics;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

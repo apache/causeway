@@ -25,9 +25,10 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 
+import org.asciidoctor.ast.Document;
+
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
-import org.asciidoctor.ast.Document;
 
 import lombok.NonNull;
 

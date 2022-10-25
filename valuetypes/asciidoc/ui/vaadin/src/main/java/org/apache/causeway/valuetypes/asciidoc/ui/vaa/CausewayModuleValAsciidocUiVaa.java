@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.ui.vaa;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
-import org.apache.causeway.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa;
 
 @Configuration
 @Import({

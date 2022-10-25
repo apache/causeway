@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.markdown.metamodel;
 
-import org.apache.causeway.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics;
 
 /**
  * @since 2.0 {@index}

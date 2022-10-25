@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.tooling.model4adoc;
 
+import org.asciidoctor.ast.StructuralNode;
+
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.BooleanReference;
-import org.asciidoctor.ast.StructuralNode;
 
 import lombok.val;
 

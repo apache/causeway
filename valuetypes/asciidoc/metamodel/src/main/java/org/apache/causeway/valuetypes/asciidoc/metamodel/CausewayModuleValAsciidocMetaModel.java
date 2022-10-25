@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.metamodel;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics;
 import org.apache.causeway.valuetypes.asciidoc.metamodel.semantics.ChangesDtoValueSemanticsPrettyRender;
 import org.apache.causeway.valuetypes.asciidoc.metamodel.semantics.CommandDtoValueSemanticsPrettyRender;
 import org.apache.causeway.valuetypes.asciidoc.metamodel.semantics.InteractionDtoValueSemanticsPrettyRender;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}

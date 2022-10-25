@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.vega.persistence.jdo.dn.converters;
 
+import org.datanucleus.store.types.converters.TypeConverter;
+
 import org.apache.causeway.valuetypes.vega.applib.stringify.VegaStringifier;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
-import org.datanucleus.store.types.converters.TypeConverter;
 
 /**
  * @since 2.0 {@index}

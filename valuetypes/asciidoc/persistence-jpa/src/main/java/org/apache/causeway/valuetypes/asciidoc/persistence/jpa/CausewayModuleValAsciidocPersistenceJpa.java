@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.persistence.jpa;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
-import org.apache.causeway.valuetypes.asciidoc.persistence.jpa.converters.CausewayAsciiDocConverter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.persistence.jpa.converters.CausewayAsciiDocConverter;
 
 /**
  * @since 2.0 {@index}

@@ -26,13 +26,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.springframework.util.ClassUtils;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.springframework.util.ClassUtils;
+import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.TemplateVariant;
 
 import lombok.Builder;
 import lombok.Getter;

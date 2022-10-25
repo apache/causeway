@@ -20,6 +20,9 @@ package org.apache.causeway.valuetypes.vega.ui.wkt.components;
 
 import java.util.Optional;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.model.IModel;
+
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -29,8 +32,6 @@ import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaEmbedJsRefer
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaLiteJsReference;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.model.IModel;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

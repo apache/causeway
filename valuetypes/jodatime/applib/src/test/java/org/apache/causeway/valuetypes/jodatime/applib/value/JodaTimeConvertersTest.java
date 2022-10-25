@@ -23,7 +23,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 
-import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.joda.time.DateTimeZone;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

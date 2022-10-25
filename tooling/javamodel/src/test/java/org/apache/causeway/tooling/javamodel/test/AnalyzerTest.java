@@ -18,24 +18,24 @@
  */
 package org.apache.causeway.tooling.javamodel.test;
 
+import static guru.nidi.codeassert.config.Language.JAVA;
+
 import java.io.File;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.causeway.tooling.javamodel.ast.CompilationUnits;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import lombok.val;
 
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.model.CodeClass;
 import guru.nidi.codeassert.model.Model;
-
-import static guru.nidi.codeassert.config.Language.JAVA;
+import lombok.val;
 
 class AnalyzerTest {
 

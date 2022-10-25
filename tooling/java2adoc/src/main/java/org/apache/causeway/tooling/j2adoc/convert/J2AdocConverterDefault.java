@@ -29,6 +29,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
@@ -42,8 +45,6 @@ import org.apache.causeway.tooling.javamodel.ast.Javadocs;
 import org.apache.causeway.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleBlock;
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.StructuralNode;
 
 import lombok.NonNull;
 import lombok.val;

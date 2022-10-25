@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.ui.wkt.components;
 
+import org.apache.wicket.model.IModel;
+
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.wicket.model.IModel;
 
 public class AsciiDocComponentWkt extends MarkupComponent {
 

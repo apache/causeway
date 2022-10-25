@@ -21,8 +21,9 @@ package org.apache.causeway.tooling.j2adoc.format;
 import java.io.File;
 import java.util.function.BiFunction;
 
-import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 import org.asciidoctor.ast.Document;
+
+import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 
 public interface UnitFormatter
 extends BiFunction<J2AdocUnit, File, Document> {

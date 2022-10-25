@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.base._Files;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
@@ -37,6 +36,8 @@ import org.apache.maven.model.building.UrlModelSource;
 import org.apache.maven.model.resolution.InvalidRepositoryException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.model.resolution.UnresolvableModelException;
+
+import org.apache.causeway.commons.internal.base._Files;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
