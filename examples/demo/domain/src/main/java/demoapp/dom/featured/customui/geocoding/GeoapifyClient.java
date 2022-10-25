@@ -30,16 +30,16 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.causeway.commons.internal.base._Bytes;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.commons.internal.base._Bytes;
+
+import demoapp.dom.AppConfiguration;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
-
-import demoapp.dom.AppConfiguration;
 
 //tag::class[]
 @Service

@@ -23,9 +23,8 @@ package demoapp.dom.featured.customui;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import lombok.val;
-
 import demoapp.dom.featured.customui.latlng.LatLngUtils;
+import lombok.val;
 
 class GeocodeResponseUtilsTest {
 

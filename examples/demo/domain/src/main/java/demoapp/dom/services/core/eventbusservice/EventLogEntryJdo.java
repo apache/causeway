@@ -35,11 +35,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
 
 @Profile("demo-jdo")
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )

@@ -20,10 +20,10 @@ package demoapp.dom._infra.resources;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Refs.StringReference;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Refs.StringReference;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 

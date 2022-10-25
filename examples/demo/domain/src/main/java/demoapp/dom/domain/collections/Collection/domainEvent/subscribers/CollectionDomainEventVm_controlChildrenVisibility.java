@@ -27,9 +27,8 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]

@@ -24,9 +24,8 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
+import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.SAFE

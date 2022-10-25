@@ -32,9 +32,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
@@ -52,6 +49,8 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
 import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.PropertyMenu")
 @DomainService(

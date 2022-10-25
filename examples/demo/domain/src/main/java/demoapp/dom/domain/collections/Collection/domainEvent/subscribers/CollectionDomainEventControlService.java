@@ -26,9 +26,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service

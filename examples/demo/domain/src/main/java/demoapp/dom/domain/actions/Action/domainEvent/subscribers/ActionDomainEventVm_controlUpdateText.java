@@ -23,9 +23,8 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]

@@ -22,11 +22,10 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 //tag::class[]
 @Action(

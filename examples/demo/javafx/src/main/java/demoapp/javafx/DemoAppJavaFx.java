@@ -18,6 +18,10 @@
  */
 package demoapp.javafx;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
@@ -26,9 +30,6 @@ import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
 import org.apache.causeway.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
 import demoapp.dom.DemoModuleJpa;
 

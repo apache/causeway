@@ -34,12 +34,11 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 
 //tag::class[]
 @XmlRootElement(name = "child")

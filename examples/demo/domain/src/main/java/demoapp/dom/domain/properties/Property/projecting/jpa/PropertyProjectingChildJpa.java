@@ -35,11 +35,10 @@ import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

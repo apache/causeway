@@ -18,12 +18,12 @@
  */
 package demoapp.webapp.wicket.jdo;
 
-import org.apache.causeway.commons.internal.os._OsUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.commons.internal.os._OsUtil;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;

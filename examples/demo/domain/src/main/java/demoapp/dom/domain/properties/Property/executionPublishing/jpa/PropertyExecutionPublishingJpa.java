@@ -36,13 +36,12 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingDisabledMetaAnnotation;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEnabledMetaAnnotation;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Profile("demo-jpa")
 //tag::class[]

@@ -20,8 +20,6 @@ package demoapp.javafx.integtest;
 
 import javax.sql.DataSource;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -29,10 +27,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import lombok.val;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 
 import demoapp.javafx.DemoAppJavaFx;
 import javafx.application.HostServices;
+import lombok.val;
 
 @Configuration
 @PropertySources({

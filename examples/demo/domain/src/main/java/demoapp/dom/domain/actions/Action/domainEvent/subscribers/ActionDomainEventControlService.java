@@ -25,10 +25,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;
+import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service

@@ -24,12 +24,10 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ValueSemantics;
-
-import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import lombok.RequiredArgsConstructor;
 
 @Collection()
 @RequiredArgsConstructor

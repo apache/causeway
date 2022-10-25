@@ -26,11 +26,10 @@ import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.NonNull;
-
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom._infra.values.ValueHolderFixtureFactory;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.NonNull;
 
 public abstract class SeedServiceAbstract
 implements

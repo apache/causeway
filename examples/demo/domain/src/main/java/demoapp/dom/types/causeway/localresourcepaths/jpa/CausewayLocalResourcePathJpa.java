@@ -37,11 +37,10 @@ import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

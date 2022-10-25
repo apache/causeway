@@ -25,8 +25,6 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ValueSemantics;
-import org.apache.causeway.schema.chg.v2.ChangesDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

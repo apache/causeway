@@ -20,12 +20,13 @@ package demoapp.javafx.integtest;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-import org.junit.jupiter.api.BeforeAll;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import demoapp.dom.DemoModuleJdo;
 

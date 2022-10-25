@@ -18,10 +18,9 @@
  */
 package demoapp.dom.featured.customui.vm;
 
+import demoapp.dom.featured.customui.latlng.LatLng;
 import lombok.Data;
 import lombok.Getter;
-
-import demoapp.dom.featured.customui.latlng.LatLng;
 
 @Data
 public class BoundingBox {

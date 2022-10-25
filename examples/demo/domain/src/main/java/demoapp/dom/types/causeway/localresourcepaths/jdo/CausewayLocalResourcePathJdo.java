@@ -36,10 +36,9 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.LocalResourcePath;
 
+import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

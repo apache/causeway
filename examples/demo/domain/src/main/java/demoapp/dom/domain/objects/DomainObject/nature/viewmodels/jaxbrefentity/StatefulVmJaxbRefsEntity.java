@@ -46,12 +46,11 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolderRepository;
 
 //tag::class[]
 @XmlRootElement(name = "root")

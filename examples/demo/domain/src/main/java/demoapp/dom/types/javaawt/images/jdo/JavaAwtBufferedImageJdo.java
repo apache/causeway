@@ -35,10 +35,9 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

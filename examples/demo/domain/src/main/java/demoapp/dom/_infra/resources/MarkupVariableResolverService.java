@@ -24,10 +24,10 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;

@@ -33,12 +33,11 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.javamath.bigdecimals.holder.JavaMathBigDecimalHolder2;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javamath.bigdecimals.holder.JavaMathBigDecimalHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")

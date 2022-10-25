@@ -26,9 +26,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]

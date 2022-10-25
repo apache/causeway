@@ -36,10 +36,9 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.Clob;
 
+import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

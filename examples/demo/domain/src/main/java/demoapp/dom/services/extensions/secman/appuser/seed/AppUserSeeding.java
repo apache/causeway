@@ -21,10 +21,10 @@ package demoapp.dom.services.extensions.secman.appuser.seed;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;

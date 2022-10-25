@@ -49,11 +49,10 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.Markup;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
+import lombok.Getter;
+import lombok.Setter;
 
 @XmlRootElement(name = "Demo")
 @XmlType

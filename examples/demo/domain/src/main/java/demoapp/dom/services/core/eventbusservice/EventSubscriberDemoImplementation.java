@@ -18,6 +18,8 @@
  */
 package demoapp.dom.services.core.eventbusservice;
 
+import static demoapp.dom._infra.utils.LogUtils.emphasize;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,13 +34,10 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
-
-import static demoapp.dom._infra.utils.LogUtils.emphasize;
 
 @Service
 @Named("demo.eventSubscriber")

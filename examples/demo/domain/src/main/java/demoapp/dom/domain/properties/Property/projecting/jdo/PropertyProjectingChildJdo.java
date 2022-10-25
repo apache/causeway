@@ -34,10 +34,9 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
+import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

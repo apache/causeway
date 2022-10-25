@@ -22,12 +22,11 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.concurrent._ThreadSleep;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.commons.internal.concurrent._ThreadSleep;
 import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 

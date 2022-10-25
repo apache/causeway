@@ -34,11 +34,10 @@ import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
 import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Makes the integral parts of the 'demo' web application.

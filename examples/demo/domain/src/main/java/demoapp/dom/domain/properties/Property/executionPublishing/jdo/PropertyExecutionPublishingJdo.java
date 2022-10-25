@@ -35,12 +35,11 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingDisabledMetaAnnotation;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEnabledMetaAnnotation;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]

@@ -20,19 +20,18 @@ package demoapp.dom.types.causeway.blobs.samples;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.resources._Resources;
 
+import demoapp.dom.types.Samples;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
-
-import demoapp.dom.types.Samples;
 
 @Service
 public class CausewayBlobsSamples implements Samples<Blob> {

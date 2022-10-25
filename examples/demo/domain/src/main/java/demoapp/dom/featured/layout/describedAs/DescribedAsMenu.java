@@ -29,10 +29,9 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
+import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 
 @Named("demo.DescribedAsMenu")
 @DomainService(

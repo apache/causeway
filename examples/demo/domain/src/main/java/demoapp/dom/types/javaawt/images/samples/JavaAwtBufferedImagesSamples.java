@@ -23,14 +23,14 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.springframework.stereotype.Service;
 
-import lombok.SneakyThrows;
-import lombok.val;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.resources._Resources;
 
 import demoapp.dom.types.Samples;
+import lombok.SneakyThrows;
+import lombok.val;
 
 @Service
 public class JavaAwtBufferedImagesSamples implements Samples<BufferedImage> {

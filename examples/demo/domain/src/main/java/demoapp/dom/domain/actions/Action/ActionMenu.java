@@ -28,9 +28,6 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
@@ -43,6 +40,8 @@ import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToVm;
 import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
 import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.ActionMenu")
 @DomainService(nature=NatureOfService.VIEW)
