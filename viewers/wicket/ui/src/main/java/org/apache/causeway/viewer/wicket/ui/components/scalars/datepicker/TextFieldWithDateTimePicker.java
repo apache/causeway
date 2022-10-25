@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 
+import static de.agilecoders.wicket.jquery.JQuery.$;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,8 +34,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
@@ -41,8 +41,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6I
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
 import de.agilecoders.wicket.jquery.Config;
-
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import lombok.val;
 
 /**
  * A text input field that is used as a date or date/time picker.

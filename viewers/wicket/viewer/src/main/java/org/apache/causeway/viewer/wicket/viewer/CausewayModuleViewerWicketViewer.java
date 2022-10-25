@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.viewer;
 
-import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
 import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassListDefault;

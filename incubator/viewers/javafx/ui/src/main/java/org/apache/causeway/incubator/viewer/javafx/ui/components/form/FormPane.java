@@ -20,22 +20,21 @@ package org.apache.causeway.incubator.viewer.javafx.ui.components.form;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
-
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 public class FormPane extends GridPane {
 

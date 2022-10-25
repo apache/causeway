@@ -21,10 +21,9 @@ package org.apache.causeway.incubator.viewer.javafx.model.events;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import javafx.scene.image.Image;
 import lombok.Builder;
 import lombok.Getter;
-
-import javafx.scene.image.Image;
 
 @Getter @Builder
 public class JavaFxViewerConfig {

@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox;
 
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn.BulkToggle;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
+
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn.BulkToggle;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 

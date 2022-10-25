@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.image;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
@@ -29,6 +28,7 @@ import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;

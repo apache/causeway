@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.errors;
 
-import org.apache.causeway.viewer.wicket.ui.errors.JGrowlUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.wicket.ui.errors.JGrowlUtil;
 
 class JGrowlUtilTest {
 

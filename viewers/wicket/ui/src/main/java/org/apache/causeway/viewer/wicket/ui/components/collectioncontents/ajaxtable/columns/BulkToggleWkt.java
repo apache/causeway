@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.wicket.model.models.binding.BooleanBinding;
 

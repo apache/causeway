@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.action.UiActionForm;

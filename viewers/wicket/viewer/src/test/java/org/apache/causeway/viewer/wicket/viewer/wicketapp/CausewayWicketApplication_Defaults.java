@@ -32,7 +32,6 @@ import static org.hamcrest.Matchers.nullValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
 class CausewayWicketApplication_Defaults {
 

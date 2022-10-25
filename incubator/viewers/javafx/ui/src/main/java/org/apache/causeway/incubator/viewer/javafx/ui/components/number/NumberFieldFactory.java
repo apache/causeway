@@ -28,12 +28,11 @@ import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

@@ -26,11 +26,10 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

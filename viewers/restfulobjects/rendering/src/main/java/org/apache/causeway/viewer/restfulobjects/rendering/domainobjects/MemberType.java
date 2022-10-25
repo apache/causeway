@@ -21,9 +21,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-
 import org.apache.causeway.applib.util.Enums;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;

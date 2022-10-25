@@ -20,10 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.errors;
 
 import java.util.List;
 
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public final class StackTraceListView
 extends ListView<StackTraceDetail> {

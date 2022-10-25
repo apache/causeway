@@ -20,14 +20,15 @@ package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.IOException;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+
+import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
 public class DomainObjectRepresentationTest_getProperties {
 

@@ -20,6 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
 import java.util.Optional;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.Model;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -33,12 +40,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGro
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.Model;
-import org.springframework.lang.Nullable;
 
 import lombok.val;
 

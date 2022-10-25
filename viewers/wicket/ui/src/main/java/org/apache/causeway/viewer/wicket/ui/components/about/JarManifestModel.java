@@ -36,11 +36,8 @@ import javax.inject.Provider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
-
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
-
-import lombok.val;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
@@ -84,7 +81,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             jarManifests.add(jarManifest);
 
 
-            try(val is = url.openStream()) {
+            try(var is = url.openStream()) {
                 if (is != null) {
                     manifest = new Manifest(is);
                     jarManifest.addAttributesFrom(manifest);

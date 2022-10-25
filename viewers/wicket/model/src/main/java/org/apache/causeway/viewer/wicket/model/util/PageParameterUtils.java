@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.wicket.model.util;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
@@ -34,6 +32,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;

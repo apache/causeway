@@ -25,12 +25,11 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;

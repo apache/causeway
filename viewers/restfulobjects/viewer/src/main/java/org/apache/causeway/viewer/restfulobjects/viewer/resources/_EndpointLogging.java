@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.Logger;
+
 import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.logging.log4j.Logger;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

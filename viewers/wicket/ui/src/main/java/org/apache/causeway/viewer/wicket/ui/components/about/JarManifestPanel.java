@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.about;
 
-import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 public class JarManifestPanel extends Panel {
 

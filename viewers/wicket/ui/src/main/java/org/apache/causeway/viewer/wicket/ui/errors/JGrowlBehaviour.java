@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.errors;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,6 +27,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;

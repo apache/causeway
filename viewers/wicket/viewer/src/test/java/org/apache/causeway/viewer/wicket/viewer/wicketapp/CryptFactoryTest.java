@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.causeway.viewer.wicket.viewer.wicketapp._CryptFactory;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.mock.MockWebResponse;

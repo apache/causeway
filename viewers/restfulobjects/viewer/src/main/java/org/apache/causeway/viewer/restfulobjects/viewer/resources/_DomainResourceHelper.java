@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.causeway.commons.functional.Railway;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.Result;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;

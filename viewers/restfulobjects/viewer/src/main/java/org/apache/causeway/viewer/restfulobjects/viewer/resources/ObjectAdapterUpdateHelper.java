@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import org.apache.causeway.commons.internal.base._Refs;
-
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

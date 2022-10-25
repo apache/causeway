@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.icontitle;
 
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
 /**
  * {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} for {@link org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel}.

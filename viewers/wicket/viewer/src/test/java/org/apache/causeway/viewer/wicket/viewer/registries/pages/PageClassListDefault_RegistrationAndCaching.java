@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
-import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
-import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassListDefault;
-import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 import org.apache.wicket.Page;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 
 public class PageClassListDefault_RegistrationAndCaching {
 

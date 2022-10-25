@@ -20,13 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.provider
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
+import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 

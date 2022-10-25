@@ -20,10 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.pages.accmngt;
 
 import java.util.function.Consumer;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.functions._Functions;
 
 import lombok.NonNull;
 import lombok.val;

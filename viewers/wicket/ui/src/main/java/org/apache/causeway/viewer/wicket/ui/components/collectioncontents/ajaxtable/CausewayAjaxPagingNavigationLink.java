@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
+
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
 import de.agilecoders.wicket.core.util.Attributes;

@@ -27,15 +27,14 @@ import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
+import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
-
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

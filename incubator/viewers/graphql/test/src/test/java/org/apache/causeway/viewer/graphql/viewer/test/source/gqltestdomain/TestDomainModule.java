@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
 
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration
 @ComponentScan

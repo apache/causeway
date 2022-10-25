@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

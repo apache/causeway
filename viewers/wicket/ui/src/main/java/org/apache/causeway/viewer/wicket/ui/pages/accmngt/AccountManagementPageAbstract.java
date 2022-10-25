@@ -18,14 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.accmngt;
 
-import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandName;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.pages.WebPageBase;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -40,11 +32,18 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
-
-import lombok.val;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandName;
+import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.causeway.viewer.wicket.ui.pages.WebPageBase;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import lombok.val;
 
 /**
  * Boilerplate, pick up our HTML and CSS.

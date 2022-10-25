@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
 
 public class DomainResourceHelper_readBodyAsMap_Test {
 

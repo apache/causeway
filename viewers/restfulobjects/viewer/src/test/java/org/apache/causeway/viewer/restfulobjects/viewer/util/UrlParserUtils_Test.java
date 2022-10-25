@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.util;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.viewer.util.UrlParserUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class UrlParserUtils_Test {
 

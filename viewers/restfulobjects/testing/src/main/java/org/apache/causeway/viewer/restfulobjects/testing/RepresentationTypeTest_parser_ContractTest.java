@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.restfulobjects.testing;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
 /**
  * contract test.

@@ -22,6 +22,7 @@ import com.vaadin.flow.spring.annotation.EnableVaadin;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.incubator.viewer.vaadin.model.CausewayModuleIncViewerVaadinModel;
 import org.apache.causeway.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;

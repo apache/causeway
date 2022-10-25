@@ -24,16 +24,16 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.incubator.viewer.javafx.model.icon.IconService;
-import org.springframework.stereotype.Service;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
+import javafx.scene.image.Image;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
-import javafx.scene.image.Image;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

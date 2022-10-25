@@ -18,16 +18,13 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.components.other;
 
-import org.springframework.core.annotation.Order;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
-import lombok.val;
-
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import lombok.val;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.LAST)

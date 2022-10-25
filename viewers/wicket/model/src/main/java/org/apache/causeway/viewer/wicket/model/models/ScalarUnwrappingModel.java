@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.wicket.model.ChainingModel;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
 

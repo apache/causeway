@@ -24,9 +24,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 /**
  * Defines an API for registering {@link ComponentFactory}s.

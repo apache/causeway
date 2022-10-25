@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.viewer.restfulobjects.testing;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
-import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
 public abstract class Parser_forJaxRsMediaType_ContractTest {
 

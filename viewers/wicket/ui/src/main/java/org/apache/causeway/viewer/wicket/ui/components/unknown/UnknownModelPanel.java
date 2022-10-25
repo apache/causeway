@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.unknown;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;

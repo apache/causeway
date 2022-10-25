@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.links;
 
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,6 +26,8 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
+
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;

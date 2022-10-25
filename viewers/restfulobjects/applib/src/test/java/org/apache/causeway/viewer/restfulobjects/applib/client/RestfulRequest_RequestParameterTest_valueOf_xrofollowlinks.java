@@ -20,14 +20,15 @@ package org.apache.causeway.viewer.restfulobjects.applib.client;
 
 import java.util.List;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest;
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 
 public class RestfulRequest_RequestParameterTest_valueOf_xrofollowlinks {
 

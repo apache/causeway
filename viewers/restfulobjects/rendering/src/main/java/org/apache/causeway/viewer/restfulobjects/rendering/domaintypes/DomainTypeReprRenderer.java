@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;

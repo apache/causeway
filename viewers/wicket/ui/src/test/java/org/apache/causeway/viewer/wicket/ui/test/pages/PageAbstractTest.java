@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.pages;
 
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public abstract class PageAbstractTest {
 

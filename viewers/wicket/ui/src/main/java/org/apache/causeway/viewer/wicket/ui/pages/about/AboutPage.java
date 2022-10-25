@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.about;
 
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 /**
  * Web page representing the about page.

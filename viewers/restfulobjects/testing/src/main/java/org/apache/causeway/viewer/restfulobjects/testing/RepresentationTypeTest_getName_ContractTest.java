@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.restfulobjects.testing;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 
 /**
  * contract test.

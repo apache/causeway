@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.viewer;
 
-import org.apache.causeway.incubator.viewer.javafx.ui.CausewayModuleIncViewerJavaFxUi;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.incubator.viewer.javafx.ui.CausewayModuleIncViewerJavaFxUi;
 
 /**
  *

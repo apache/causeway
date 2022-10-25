@@ -23,13 +23,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.causeway.viewer.commons.model.action.UiAction;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
 public class ActionUiModelFx

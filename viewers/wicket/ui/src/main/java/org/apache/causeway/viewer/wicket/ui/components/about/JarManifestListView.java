@@ -20,10 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.about;
 
 import java.util.List;
 
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public final class JarManifestListView extends ListView<JarManifestAttributes> {
 

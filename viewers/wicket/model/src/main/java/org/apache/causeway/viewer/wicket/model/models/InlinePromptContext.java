@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.functions._Functions;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

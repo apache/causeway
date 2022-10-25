@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.junit.jupiter.api.Test;
 
-import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
 import lombok.val;
 

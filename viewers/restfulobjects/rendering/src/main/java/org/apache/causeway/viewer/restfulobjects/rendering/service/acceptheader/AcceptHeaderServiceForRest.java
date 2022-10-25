@@ -18,16 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import org.apache.causeway.applib.annotation.InteractionScope;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.acceptheader.AcceptHeaderService;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -36,9 +29,18 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import org.apache.causeway.applib.annotation.InteractionScope;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.acceptheader.AcceptHeaderService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
+
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 /**
  * @since 1.x {@index}

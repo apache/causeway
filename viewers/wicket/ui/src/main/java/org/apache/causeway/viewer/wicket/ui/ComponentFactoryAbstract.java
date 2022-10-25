@@ -23,9 +23,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
-
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.Getter;
 import lombok.Setter;

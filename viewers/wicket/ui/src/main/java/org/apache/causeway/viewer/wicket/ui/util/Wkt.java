@@ -18,16 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.util;
 
+import static de.agilecoders.wicket.jquery.JQuery.$;
+
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
-import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
-import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -85,19 +81,20 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
+import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
+import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
-
-import org.apache.causeway.viewer.commons.model.components.UiString;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -108,8 +105,9 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
-
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.

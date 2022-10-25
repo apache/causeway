@@ -21,20 +21,20 @@ package org.apache.causeway.viewer.wicket.viewer.integration;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
-import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 
 public abstract class AuthenticatedWebSessionForCauseway_TestAbstract {
 

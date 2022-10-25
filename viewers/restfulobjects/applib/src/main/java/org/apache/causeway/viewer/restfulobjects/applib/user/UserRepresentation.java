@@ -21,9 +21,9 @@ package org.apache.causeway.viewer.restfulobjects.applib.user;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
 import org.apache.causeway.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 
 /**

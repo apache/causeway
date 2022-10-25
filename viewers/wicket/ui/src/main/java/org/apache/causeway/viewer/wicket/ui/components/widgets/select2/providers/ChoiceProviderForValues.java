@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;

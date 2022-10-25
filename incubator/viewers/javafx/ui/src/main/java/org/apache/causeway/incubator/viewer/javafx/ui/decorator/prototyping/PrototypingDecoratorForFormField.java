@@ -21,16 +21,17 @@ package org.apache.causeway.incubator.viewer.javafx.ui.decorator.prototyping;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
+
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

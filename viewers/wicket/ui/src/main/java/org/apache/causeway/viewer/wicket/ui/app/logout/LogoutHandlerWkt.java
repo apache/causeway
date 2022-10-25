@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
-
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
 import lombok.RequiredArgsConstructor;

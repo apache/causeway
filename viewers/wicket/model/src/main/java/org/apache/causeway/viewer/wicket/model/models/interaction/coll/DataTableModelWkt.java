@@ -18,21 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
-import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
-
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
+import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;

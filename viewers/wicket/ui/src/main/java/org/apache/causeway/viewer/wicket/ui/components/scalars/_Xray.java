@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-
 import org.apache.causeway.core.metamodel.object.MmDebugUtil;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 

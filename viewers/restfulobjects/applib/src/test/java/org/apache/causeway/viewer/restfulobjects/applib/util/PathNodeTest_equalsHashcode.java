@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.util;
 
-import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

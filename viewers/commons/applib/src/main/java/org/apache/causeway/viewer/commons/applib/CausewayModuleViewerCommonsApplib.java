@@ -18,10 +18,11 @@
  */
 package org.apache.causeway.viewer.commons.applib;
 
-import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonate;
-import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonateWithRoles;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonate;
+import org.apache.causeway.viewer.commons.applib.mixins.Object_impersonateWithRoles;
 
 @Configuration
 @Import({

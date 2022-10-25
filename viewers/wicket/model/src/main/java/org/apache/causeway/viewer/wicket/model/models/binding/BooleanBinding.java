@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.wicket.model.models.binding;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.binding._BindableAbstract;
 
 import lombok.val;
 

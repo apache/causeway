@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.viewer;
 
-import lombok.experimental.UtilityClass;
-
 import javafx.application.Application;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class JavafxViewer {

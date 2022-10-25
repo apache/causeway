@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.components.widgets.choices;
 
-import org.apache.causeway.commons.collections.Can;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.wicketstuff.select2.Response;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing._TestDummies;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;

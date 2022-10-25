@@ -25,12 +25,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
 import lombok.val;
 

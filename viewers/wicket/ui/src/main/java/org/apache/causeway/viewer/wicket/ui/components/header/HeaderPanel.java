@@ -18,15 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.header;
 
-import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.AvatarImage;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandName;
-import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
@@ -37,6 +28,15 @@ import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.AvatarImage;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.navbar.BrandName;
+import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 

@@ -25,11 +25,10 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.commons.model.scalar.UiProperty;
+import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 /**
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.

@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.zclip;
 
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.model.Model;
+
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 public class SimpleClipboardModalWindowPanel
 extends PanelAbstract<String, Model<String>> {

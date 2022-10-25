@@ -22,9 +22,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault.Factory;
-import org.springframework.stereotype.Component;
 
 /**
  * Not used by the framework yet, supposed to be reconsidered in the process of

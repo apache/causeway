@@ -21,12 +21,12 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;

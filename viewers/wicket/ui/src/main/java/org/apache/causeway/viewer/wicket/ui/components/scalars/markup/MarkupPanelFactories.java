@@ -25,12 +25,11 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
 import lombok.val;
 

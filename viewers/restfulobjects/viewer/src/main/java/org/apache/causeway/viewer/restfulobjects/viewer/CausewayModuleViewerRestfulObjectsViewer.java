@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
@@ -34,8 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.resources.MenuBarsResour
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.SwaggerSpecResource;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.UserResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.VersionResourceServerside;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 1.x {@index}

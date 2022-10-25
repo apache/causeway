@@ -35,10 +35,6 @@ import org.apache.causeway.incubator.viewer.javafx.ui.components.collections.Tab
 import org.apache.causeway.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
@@ -48,6 +44,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

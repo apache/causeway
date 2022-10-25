@@ -25,16 +25,14 @@ import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.ChangeListener;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.apache.causeway.viewer.commons.model.binding.BindingConverter;
-
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BindingsFx {

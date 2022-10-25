@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.voidreturn;
 
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.model.IModel;
+
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 public class VoidReturnPanel
 extends PanelAbstract<Void, IModel<Void>> {

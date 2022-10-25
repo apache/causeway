@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.restfulobjects.applib.client;
 
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 
 public class RestfulResponse_HttpStatusCodeTest {
 

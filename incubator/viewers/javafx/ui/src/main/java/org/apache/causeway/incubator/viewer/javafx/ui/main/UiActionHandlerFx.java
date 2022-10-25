@@ -20,10 +20,10 @@ package org.apache.causeway.incubator.viewer.javafx.ui.main;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -31,14 +31,13 @@ import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

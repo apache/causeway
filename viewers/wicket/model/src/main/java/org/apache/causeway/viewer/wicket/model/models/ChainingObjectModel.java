@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.wicket.model.ChainingModel;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

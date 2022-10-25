@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.tree.themes;
 
-import org.apache.causeway.viewer.wicket.ui.components.tree.themes.bootstrap.WktBootstrapTreeTheme;
 import org.apache.wicket.behavior.Behavior;
+
+import org.apache.causeway.viewer.wicket.ui.components.tree.themes.bootstrap.WktBootstrapTreeTheme;
 
 public class TreeThemeProviderDefault implements TreeThemeProvider {
 

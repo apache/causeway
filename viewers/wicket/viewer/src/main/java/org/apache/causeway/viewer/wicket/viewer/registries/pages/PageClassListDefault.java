@@ -18,6 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
+import javax.annotation.Priority;
+import javax.inject.Named;
+
+import org.apache.wicket.Page;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassList;
@@ -32,12 +39,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.wicket.Page;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Priority;
-import javax.inject.Named;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.util;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -27,6 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.lang.Args;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
 import de.agilecoders.wicket.jquery.util.Strings2;

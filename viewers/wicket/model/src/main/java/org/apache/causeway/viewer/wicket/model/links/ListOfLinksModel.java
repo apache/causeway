@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.wicket.model.links;
 
 import java.util.List;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.model.ChainingModel;
+
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.NonNull;
 import lombok.val;

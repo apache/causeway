@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.model;
 
-import org.apache.causeway.viewer.graphql.applib.CausewayModuleIncViewerGraphqlApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.viewer.graphql.applib.CausewayModuleIncViewerGraphqlApplib;
 
 @Configuration
 @Import({

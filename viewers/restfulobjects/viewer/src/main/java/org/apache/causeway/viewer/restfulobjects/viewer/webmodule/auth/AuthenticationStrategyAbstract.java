@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;

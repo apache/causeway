@@ -34,7 +34,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

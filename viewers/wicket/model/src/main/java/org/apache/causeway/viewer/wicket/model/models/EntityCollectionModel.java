@@ -28,9 +28,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTab
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
-
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
+import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

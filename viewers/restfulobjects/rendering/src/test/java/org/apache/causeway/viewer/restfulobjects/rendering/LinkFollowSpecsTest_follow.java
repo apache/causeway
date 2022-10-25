@@ -20,13 +20,13 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 
 import java.util.List;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
-import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
 public class LinkFollowSpecsTest_follow {
 

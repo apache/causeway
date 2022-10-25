@@ -19,15 +19,13 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.commons.collections.Can;
-
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
-
 import org.apache.causeway.viewer.commons.model.scalar.HasUiParameter;
+import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
 import lombok.Getter;
 import lombok.NonNull;

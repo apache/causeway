@@ -20,12 +20,13 @@ package org.apache.causeway.viewer.restfulobjects.testing;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertSame;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertSame;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 
 
 /**

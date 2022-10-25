@@ -20,18 +20,18 @@ package org.apache.causeway.viewer.wicket.ui.pages.error;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
-import org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail;
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.causeway.applib.services.error.ErrorDetails;
 import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
+import org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.val;
 

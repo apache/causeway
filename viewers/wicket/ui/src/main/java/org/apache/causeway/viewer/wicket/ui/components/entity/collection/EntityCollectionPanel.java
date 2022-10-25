@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.components.entity.collection;
 
 import java.util.List;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;

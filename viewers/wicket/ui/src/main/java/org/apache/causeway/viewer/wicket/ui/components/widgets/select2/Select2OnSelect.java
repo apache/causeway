@@ -23,10 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.causeway.commons.binding.Bindable;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.debug._XrayEvent;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
@@ -38,6 +34,10 @@ import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.JQuery;
 
+import org.apache.causeway.commons.binding.Bindable;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.debug._XrayEvent;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;

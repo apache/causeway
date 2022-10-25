@@ -23,12 +23,12 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

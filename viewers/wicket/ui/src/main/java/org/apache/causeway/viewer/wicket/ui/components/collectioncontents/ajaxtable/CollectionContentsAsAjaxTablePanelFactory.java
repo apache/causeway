@@ -18,16 +18,17 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsAjaxTablePanel}.

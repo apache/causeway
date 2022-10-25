@@ -20,9 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.buttons;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -30,6 +27,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 /**
  * A button contained within its own form.

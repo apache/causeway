@@ -25,9 +25,8 @@ import javax.inject.Provider;
 
 import com.vaadin.flow.component.Component;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;

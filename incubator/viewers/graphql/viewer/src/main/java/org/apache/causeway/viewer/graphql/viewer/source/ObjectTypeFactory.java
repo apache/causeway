@@ -18,6 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.source;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static graphql.schema.GraphQLNonNull.nonNull;
+import static graphql.schema.GraphQLObjectType.newObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,9 +31,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
-
-import static org.apache.causeway.viewer.graphql.viewer.source._Utils.metaTypeName;
-import static org.apache.causeway.viewer.graphql.viewer.source._Utils.mutatorsTypeName;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -40,14 +42,11 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import static org.apache.causeway.viewer.graphql.viewer.source._Utils.metaTypeName;
+import static org.apache.causeway.viewer.graphql.viewer.source._Utils.mutatorsTypeName;
 
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.FieldCoordinates;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
@@ -60,11 +59,10 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLObjectType.newObject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -142,9 +140,6 @@ public class ObjectTypeFactory {
             final BeanSort objectSpecificationBeanSort,
             final MutatorsDataForEntity mutatorsDataForEntity,
             final GraphQLObjectType graphQLObjectType) {
-
-
-
 
     }
 
@@ -466,45 +461,33 @@ public class ObjectTypeFactory {
             final GraphQLFieldDefinition gql_meta,
             final GraphQLObjectType graphQLObjectType) {
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), new DataFetcher<Object>() {
-            @Override
-            public Object get(final DataFetchingEnvironment environment) throws Exception {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), (DataFetcher<Object>) environment -> {
 
-                Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
-                if (bookmark == null) return null; //TODO: is this correct ?
-                return new GQLMeta(bookmark, bookmarkService);
-            }
+            Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
+            if (bookmark == null) return null; //TODO: is this correct ?
+            return new GQLMeta(bookmark, bookmarkService);
         });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, idField), new DataFetcher<Object>() {
-            @Override
-            public Object get(final DataFetchingEnvironment environment) throws Exception {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, idField), (DataFetcher<Object>) environment -> {
 
-                GQLMeta gqlMeta = environment.getSource();
+            GQLMeta gqlMeta = environment.getSource();
 
-                return gqlMeta.id();
-            }
+            return gqlMeta.id();
         });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, logicalTypeNameField), new DataFetcher<Object>() {
-            @Override
-            public Object get(final DataFetchingEnvironment environment) throws Exception {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, logicalTypeNameField), (DataFetcher<Object>) environment -> {
 
-                GQLMeta gqlMeta = environment.getSource();
+            GQLMeta gqlMeta = environment.getSource();
 
-                return gqlMeta.logicalTypeName();
-            }
+            return gqlMeta.logicalTypeName();
         });
 
         if (objectSpecificationBeanSort == BeanSort.ENTITY) {
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, versionField), new DataFetcher<Object>() {
-                @Override
-                public Object get(final DataFetchingEnvironment environment) throws Exception {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, versionField), (DataFetcher<Object>) environment -> {
 
-                    GQLMeta gqlMeta = environment.getSource();
+                GQLMeta gqlMeta = environment.getSource();
 
-                    return gqlMeta.version();
-                }
+                return gqlMeta.version();
             });
 
         }

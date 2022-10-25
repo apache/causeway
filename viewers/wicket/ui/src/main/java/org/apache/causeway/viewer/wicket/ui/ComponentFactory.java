@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.wicket.ui;
 
 import java.io.Serializable;
 
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 
 /**
  * Creates {@link Component}s of a specified {@link UiComponentType}, optionally

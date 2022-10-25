@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.panels;
 
-import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.wicket.model.IModel;
+
+import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action

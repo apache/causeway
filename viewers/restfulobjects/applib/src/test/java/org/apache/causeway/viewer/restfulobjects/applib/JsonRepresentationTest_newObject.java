@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

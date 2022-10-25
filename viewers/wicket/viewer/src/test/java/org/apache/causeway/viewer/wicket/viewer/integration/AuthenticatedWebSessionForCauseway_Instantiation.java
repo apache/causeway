@@ -25,9 +25,9 @@ import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 
 public class AuthenticatedWebSessionForCauseway_Instantiation {
 

@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionpromptsb;
 
-import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
+
+import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class ActionPromptSidebar
 extends GenericPanel<Void>

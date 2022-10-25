@@ -25,11 +25,11 @@ import java.util.stream.Stream;
 
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".TaggerDefault")

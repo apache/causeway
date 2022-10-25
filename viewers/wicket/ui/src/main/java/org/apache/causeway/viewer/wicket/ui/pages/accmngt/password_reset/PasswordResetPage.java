@@ -31,9 +31,8 @@ import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * A page used for resetting the password of an user.

@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.model.models.test;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -40,6 +39,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

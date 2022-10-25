@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.errors;
 
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 

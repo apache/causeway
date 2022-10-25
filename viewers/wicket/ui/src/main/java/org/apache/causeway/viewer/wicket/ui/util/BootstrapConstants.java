@@ -22,11 +22,10 @@ import java.util.EnumSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 @UtilityClass
 public class BootstrapConstants {

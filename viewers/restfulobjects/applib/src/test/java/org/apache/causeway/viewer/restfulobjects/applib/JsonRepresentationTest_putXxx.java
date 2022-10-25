@@ -21,14 +21,14 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 import java.io.IOException;
 import java.util.Random;
 
-import org.apache.causeway.commons.functional.IndexedConsumer;
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.apache.causeway.commons.functional.IndexedConsumer;
 
 class JsonRepresentationTest_putXxx {
 

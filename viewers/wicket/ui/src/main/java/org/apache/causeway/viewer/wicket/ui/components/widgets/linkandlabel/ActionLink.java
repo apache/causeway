@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
 
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -28,12 +26,13 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import static org.apache.causeway.commons.internal.base._Casts.castTo;
-
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
@@ -49,7 +48,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import static org.apache.causeway.commons.internal.base._Casts.castTo;
 
 import lombok.NonNull;
 import lombok.val;

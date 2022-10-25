@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.source;
 
+import static graphql.schema.FieldCoordinates.coordinates;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,9 +37,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import graphql.GraphQL;
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
@@ -43,10 +44,8 @@ import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
-
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLObjectType.newObject;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

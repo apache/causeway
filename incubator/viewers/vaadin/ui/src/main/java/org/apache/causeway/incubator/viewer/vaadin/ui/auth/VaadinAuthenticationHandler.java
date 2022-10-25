@@ -31,10 +31,10 @@ import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;

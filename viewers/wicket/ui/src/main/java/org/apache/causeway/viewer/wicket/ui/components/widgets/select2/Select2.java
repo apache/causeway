@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.causeway.commons.functional.Either;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
@@ -31,6 +30,7 @@ import org.wicketstuff.select2.AbstractSelect2Choice;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;

@@ -20,6 +20,7 @@ package org.apache.causeway.incubator.viewer.javafx.ui;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.incubator.viewer.javafx.model.events.CausewayModuleIncViewerJavaFxModel;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory;

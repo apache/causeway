@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions
 
 import java.util.List;
 
+import org.apache.wicket.MarkupContainer;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.links.ListOfLinksModel;
@@ -27,7 +29,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
-import org.apache.wicket.MarkupContainer;
 
 import lombok.val;
 

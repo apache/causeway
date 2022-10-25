@@ -20,8 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.causeway.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

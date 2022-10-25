@@ -27,6 +27,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
+import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
@@ -38,9 +40,6 @@ import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProv
 import org.apache.causeway.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
-
-import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
-import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 
 /**
  * Provides the <em>common context</em> for all implementing sub-classes.

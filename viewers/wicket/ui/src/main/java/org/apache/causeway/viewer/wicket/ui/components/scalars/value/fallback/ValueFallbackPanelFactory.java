@@ -19,11 +19,12 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback;
 
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import lombok.val;
 

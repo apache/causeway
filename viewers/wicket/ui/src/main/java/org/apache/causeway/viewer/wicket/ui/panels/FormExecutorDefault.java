@@ -20,9 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.panels;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.springframework.lang.Nullable;
@@ -30,6 +27,9 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.debug._Debug;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.MmEntityUtil;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;

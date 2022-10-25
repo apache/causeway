@@ -20,9 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
 
 import java.util.EnumSet;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.wicket.Component;
+
+import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.causeway.applib.value.Markup}.

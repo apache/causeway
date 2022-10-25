@@ -28,6 +28,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.exceprecog.RootCauseFinder;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -37,12 +41,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.ExceptionWithHttpStat
 import org.apache.causeway.viewer.restfulobjects.viewer.mappers.entity.ExceptionDetail;
 import org.apache.causeway.viewer.restfulobjects.viewer.mappers.entity.ExceptionPojo;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.applib.services.exceprecog.RootCauseFinder;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 

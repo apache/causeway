@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.viewer;
 
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
 import javafx.application.Application;
 import javafx.application.HostServices;

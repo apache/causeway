@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.viewer.services;
 
 import java.io.File;
 
-import org.apache.causeway.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.junit.Before;
 import org.junit.Test;
 

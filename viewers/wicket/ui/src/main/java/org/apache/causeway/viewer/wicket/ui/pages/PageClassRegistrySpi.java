@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages;
 
-import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.wicket.Page;
+
+import org.apache.causeway.viewer.wicket.model.models.PageType;
 
 /**
  * Used by {@link PageClassList} implementations to add pages into the registry.

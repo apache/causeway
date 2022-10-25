@@ -20,15 +20,15 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract.ChoiceTitleHandler;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;

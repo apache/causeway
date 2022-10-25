@@ -20,12 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceaction
 
 import java.util.List;
 
-import org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js.ServerSentEventsJsReference;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js.ServerSentEventsJsReference;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 

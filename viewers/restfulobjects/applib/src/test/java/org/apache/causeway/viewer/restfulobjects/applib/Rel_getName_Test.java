@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
-import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

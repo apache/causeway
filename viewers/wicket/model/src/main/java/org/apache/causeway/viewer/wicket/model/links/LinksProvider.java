@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.model.links;
 
+import org.apache.wicket.markup.html.link.Link;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.wicket.markup.html.link.Link;
 
 /**
  * For models - such as {@link EntityCollectionModel} - that can provide an

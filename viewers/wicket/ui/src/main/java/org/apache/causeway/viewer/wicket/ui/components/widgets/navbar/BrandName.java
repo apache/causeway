@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.navbar;
 
-import org.apache.causeway.viewer.wicket.ui.components.LabelBase;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
+import org.apache.causeway.viewer.wicket.ui.components.LabelBase;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar

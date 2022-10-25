@@ -23,16 +23,16 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
+
 import org.apache.causeway.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -41,11 +41,11 @@ public class IconDecoratorForMenuItem implements IconDecorator<MenuItem, MenuIte
     private final IconService iconService;
 
     @Override
-    public MenuItem decorate(MenuItem menuItem, Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
+    public MenuItem decorate(final MenuItem menuItem, final Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
         // TODO honor icon position
 
         fontAwesomeDecorationModel.ifPresent(fa->{
-            val icon = iconService.fontAwesome(fa);
+            var icon = iconService.fontAwesome(fa);
             icon
             .map(this::iconForImage)
             .ifPresent(menuItem::setGraphic);
@@ -53,7 +53,7 @@ public class IconDecoratorForMenuItem implements IconDecorator<MenuItem, MenuIte
         return menuItem;
     }
 
-    private ImageView iconForImage(Image image) {
+    private ImageView iconForImage(final Image image) {
         return _fx.iconForImage(image, 16, 16);
     }
 

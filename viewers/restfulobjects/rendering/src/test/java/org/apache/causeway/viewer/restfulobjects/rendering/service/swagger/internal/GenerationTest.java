@@ -20,15 +20,11 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import java.util.Set;
 
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.Generation;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 public class GenerationTest {
 

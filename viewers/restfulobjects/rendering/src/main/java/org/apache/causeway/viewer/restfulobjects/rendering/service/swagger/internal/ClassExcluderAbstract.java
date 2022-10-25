@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 import java.util.Set;
 
 import org.apache.causeway.commons.internal.collections._Sets;
-
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 

@@ -26,13 +26,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiService;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
 import lombok.RequiredArgsConstructor;
 

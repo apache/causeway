@@ -33,12 +33,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
-import org.apache.causeway.commons.internal.base._Text;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
+import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.RequiredArgsConstructor;

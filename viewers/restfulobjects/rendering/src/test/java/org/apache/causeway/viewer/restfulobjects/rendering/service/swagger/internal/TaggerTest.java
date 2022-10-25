@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
 import org.junit.Before;
 import org.junit.Test;
 

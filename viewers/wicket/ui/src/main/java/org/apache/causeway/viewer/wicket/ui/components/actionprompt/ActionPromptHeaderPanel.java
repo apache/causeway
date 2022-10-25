@@ -19,13 +19,11 @@
 package org.apache.causeway.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.causeway.commons.internal.base._Blackhole;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
 import lombok.val;
 

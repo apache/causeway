@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.unknown;
 
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 public class UnknownModelPanelFactory implements ComponentFactory {
 

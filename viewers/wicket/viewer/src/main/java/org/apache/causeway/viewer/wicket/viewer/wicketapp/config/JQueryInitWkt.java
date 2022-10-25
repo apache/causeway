@@ -26,9 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
-import lombok.val;
-
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
+import lombok.val;
 
 @Configuration
 public class JQueryInitWkt implements WicketApplicationInitializer {

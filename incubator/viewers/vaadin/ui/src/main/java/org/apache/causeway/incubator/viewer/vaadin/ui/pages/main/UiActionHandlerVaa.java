@@ -20,10 +20,10 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.pages.main;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.collections.Can;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;

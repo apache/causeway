@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.ui.panels;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link UiComponentType}s.

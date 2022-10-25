@@ -18,13 +18,16 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV2;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
@@ -33,8 +36,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inter
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 1.x {@index}

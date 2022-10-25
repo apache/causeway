@@ -28,14 +28,13 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.components.UiString;
+import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
-
-import org.apache.causeway.viewer.commons.model.components.UiString;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 
 import lombok.NonNull;
 import lombok.val;

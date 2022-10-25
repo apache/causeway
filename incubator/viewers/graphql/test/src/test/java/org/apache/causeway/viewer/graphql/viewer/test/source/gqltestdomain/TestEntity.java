@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-
 public interface TestEntity {
 
     public String getName();

@@ -20,14 +20,14 @@ package org.apache.causeway.viewer.wicket.ui.app.registry;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 /**
  * API for finding registered {@link ComponentFactory}s.

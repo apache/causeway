@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
-import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
+import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 /**

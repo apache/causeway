@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.icontitle;
 
+import org.apache.wicket.MarkupContainer;
+
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
-import org.apache.wicket.MarkupContainer;
 
 import lombok.val;
 

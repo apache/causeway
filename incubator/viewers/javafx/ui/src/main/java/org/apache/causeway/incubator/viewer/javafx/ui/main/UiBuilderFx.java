@@ -22,15 +22,15 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
-import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
-import org.apache.causeway.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
+import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
+import org.apache.causeway.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.panels;
 
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -26,6 +25,8 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 public final class PanelUtil {
 

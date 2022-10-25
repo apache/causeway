@@ -20,13 +20,13 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
+import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 

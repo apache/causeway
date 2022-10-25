@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent;
 
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -29,6 +25,10 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 /**
  * Convenience adapter for {@link FormComponent}s that are implemented using the

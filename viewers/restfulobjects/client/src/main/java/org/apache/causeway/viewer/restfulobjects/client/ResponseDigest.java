@@ -34,14 +34,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 
 import lombok.NonNull;
 import lombok.val;

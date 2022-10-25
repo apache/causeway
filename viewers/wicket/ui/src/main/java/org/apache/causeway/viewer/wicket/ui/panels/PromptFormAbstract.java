@@ -21,10 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.panels;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.debug._Probe;
-import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -34,6 +30,10 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayPropertyEditCompletedEvent;
@@ -47,8 +47,8 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstra
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 

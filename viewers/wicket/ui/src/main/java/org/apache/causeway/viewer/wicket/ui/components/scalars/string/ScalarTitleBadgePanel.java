@@ -20,11 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.string;
 
 import java.util.EnumSet;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Component;
+
+import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering titles for scalars of any type.

@@ -18,15 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionprompt;
 
-import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
+import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 

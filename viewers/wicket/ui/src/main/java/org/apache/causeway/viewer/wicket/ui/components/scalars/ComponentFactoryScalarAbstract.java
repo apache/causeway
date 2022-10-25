@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.Getter;
 import lombok.val;

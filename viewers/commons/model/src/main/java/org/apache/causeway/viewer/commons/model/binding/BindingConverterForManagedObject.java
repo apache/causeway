@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.commons.model.binding;
 
 import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

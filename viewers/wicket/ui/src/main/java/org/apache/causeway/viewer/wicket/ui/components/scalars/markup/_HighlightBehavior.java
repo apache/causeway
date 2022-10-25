@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.prism.Prism;
 
 interface _HighlightBehavior {

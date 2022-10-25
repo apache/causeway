@@ -29,6 +29,7 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
+import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -38,8 +39,6 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter.Cre
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import org.apache.causeway.applib.client.SuppressionType;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

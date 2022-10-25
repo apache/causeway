@@ -20,9 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;

@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.components.entity.icontitle;
 
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
 class EntityIconAndTitlePanelTest_abbreviated {
 

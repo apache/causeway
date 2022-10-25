@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.client;
 
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
-import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest;
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
 public class RestfulRequest_DomainModelTest_parser {
 

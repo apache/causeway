@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RestartResponseException;
@@ -30,9 +30,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 
 /**
  * Default implementation of {@link org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService}

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.welcome;
 
-import org.apache.causeway.viewer.wicket.model.models.WelcomeModel;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.WelcomeModel;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 /**
  * {@link ComponentFactory} for {@link WelcomePanel}.

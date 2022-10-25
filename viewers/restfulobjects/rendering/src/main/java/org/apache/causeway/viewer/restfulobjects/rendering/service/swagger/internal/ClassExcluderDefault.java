@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import javax.inject.Named;
 
-import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.springframework.stereotype.Component;
+
+import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ClassExcluderDefault")

@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.components.widgets.choices;
 
-import org.apache.causeway.commons.collections.Can;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

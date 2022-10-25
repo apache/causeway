@@ -28,10 +28,9 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.causeway.viewer.commons.prism.Prism;
 import org.apache.causeway.viewer.commons.prism.PrismLanguage;
 
-import lombok.experimental.UtilityClass;
-
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class PrismResourcesWkt{

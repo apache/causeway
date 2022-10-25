@@ -35,7 +35,6 @@ import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -57,15 +56,15 @@ public class UiContextVaaDefault implements UiContextVaa {
     private Function<ManagedObject, Component> pageFactory;
 
     @Override
-    public void route(ManagedObject object) {
+    public void route(final ManagedObject object) {
         log.info("about to render object {}", object);
         newPage(pageFor(object));
     }
 
     @Override
-    public void route(Supplier<ManagedObject> objectSupplier) {
+    public void route(final Supplier<ManagedObject> objectSupplier) {
         interactionService.runAnonymous(()->{
-            val object = objectSupplier.get();
+            var object = objectSupplier.get();
             route(object);
         });
     }
@@ -89,13 +88,13 @@ public class UiContextVaaDefault implements UiContextVaa {
 
     // -- HELPER
 
-    private void newPage(Component content) {
+    private void newPage(final Component content) {
         if(newPageHandler!=null && content!=null) {
             newPageHandler.accept(content);
         }
     }
 
-    private Component pageFor(ManagedObject object) {
+    private Component pageFor(final ManagedObject object) {
         return pageFactory!=null
                 ? pageFactory.apply(object)
                 : null;

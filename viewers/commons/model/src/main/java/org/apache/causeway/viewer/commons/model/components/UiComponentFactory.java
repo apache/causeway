@@ -21,11 +21,11 @@ package org.apache.causeway.viewer.commons.model.components;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.apache.causeway.commons.handler.ChainOfResponsibility;
-import org.apache.causeway.commons.internal.functions._Predicates;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.commons.handler.ChainOfResponsibility;
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedFeature;

@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.JsonParserHelper;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class JsonParserHelper_Test {
 

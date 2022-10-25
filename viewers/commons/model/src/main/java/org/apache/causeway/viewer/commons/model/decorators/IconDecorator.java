@@ -23,9 +23,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 
 import lombok.AccessLevel;

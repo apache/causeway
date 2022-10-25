@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ResourceContext_stripQuotes_Test {
 

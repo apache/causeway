@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.wicket.model.mementos;
 
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 public enum PageParameterNames {

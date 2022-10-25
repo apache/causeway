@@ -33,12 +33,11 @@ import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentHand
 import org.apache.causeway.viewer.commons.model.binding.BindingConverterForManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.VBox;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.wicket.util.template.PackageTextTemplate;
+
+import org.apache.causeway.commons.internal.base._Text;
 
 import lombok.val;
 

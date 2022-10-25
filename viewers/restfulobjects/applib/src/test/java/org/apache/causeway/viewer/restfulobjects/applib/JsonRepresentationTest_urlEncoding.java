@@ -22,8 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.causeway.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

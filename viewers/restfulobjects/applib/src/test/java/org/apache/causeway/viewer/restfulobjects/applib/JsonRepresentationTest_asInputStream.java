@@ -22,17 +22,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._Strings;
+
+import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
 public class JsonRepresentationTest_asInputStream {
 

@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap;
 
-import org.apache.causeway.viewer.wicket.model.models.ActionPrompt;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
+
+import org.apache.causeway.viewer.wicket.model.models.ActionPrompt;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;

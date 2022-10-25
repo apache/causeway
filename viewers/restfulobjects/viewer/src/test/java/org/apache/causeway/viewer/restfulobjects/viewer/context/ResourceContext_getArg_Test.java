@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.viewer.context;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -30,9 +28,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-
+import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
@@ -43,11 +45,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ResourceContext_getArg_Test {
 

@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.applib.util;
 
 import java.util.Map;
 
-import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.ui.app.logout.LogoutHandlerWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupportDefault;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @since 1.x {@index}

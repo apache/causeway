@@ -21,11 +21,10 @@ package org.apache.causeway.incubator.viewer.javafx.ui.components.panel;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 
-import lombok.Getter;
-
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 public class TitledPanel extends VBox {
 

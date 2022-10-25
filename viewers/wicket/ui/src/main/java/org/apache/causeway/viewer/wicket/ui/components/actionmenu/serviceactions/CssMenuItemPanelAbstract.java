@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
+
+import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * Package-level adapter for menu items and submenu-items.

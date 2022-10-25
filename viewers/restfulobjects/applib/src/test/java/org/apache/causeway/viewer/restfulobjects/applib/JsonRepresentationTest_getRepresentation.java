@@ -20,14 +20,14 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 
-import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
 public class JsonRepresentationTest_getRepresentation {
 

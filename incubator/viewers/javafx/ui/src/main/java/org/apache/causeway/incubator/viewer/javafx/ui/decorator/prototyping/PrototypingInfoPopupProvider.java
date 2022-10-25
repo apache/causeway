@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
@@ -34,16 +34,15 @@ import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentFact
 import org.apache.causeway.incubator.viewer.javafx.ui.components.dialog.Dialogs;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

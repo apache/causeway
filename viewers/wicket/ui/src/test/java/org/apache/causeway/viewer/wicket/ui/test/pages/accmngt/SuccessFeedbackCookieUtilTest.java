@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.mock.MockWebResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -38,6 +37,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 
 import lombok.val;
 

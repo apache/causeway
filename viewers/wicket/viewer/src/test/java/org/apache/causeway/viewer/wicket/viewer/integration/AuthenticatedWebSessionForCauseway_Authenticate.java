@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -38,6 +37,7 @@ import static org.hamcrest.Matchers.nullValue;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.ImpersonatedUserHolder;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -48,7 +48,6 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 
 public class AuthenticatedWebSessionForCauseway_Authenticate {
 

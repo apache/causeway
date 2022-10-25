@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.pages;
 
 import java.io.Serializable;
 
-import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.wicket.Page;
+
+import org.apache.causeway.viewer.wicket.model.models.PageType;
 
 /**
  * Registry of the {@link Page} class to use for each {@link PageType}.

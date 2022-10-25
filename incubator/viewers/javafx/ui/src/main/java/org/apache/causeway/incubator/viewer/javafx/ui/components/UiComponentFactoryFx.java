@@ -23,23 +23,25 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
+import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ButtonRequest;
+import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.LabelAndPosition;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
-
-import lombok.Getter;
-import lombok.val;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import lombok.Getter;
+import lombok.val;
 
 @Service
 public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {

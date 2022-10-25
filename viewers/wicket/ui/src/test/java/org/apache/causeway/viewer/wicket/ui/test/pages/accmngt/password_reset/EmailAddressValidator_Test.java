@@ -19,10 +19,11 @@
 package org.apache.causeway.viewer.wicket.ui.test.pages.accmngt.password_reset;
 
 
-import org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset.EmailAddressValidator;
 import org.apache.wicket.validation.Validatable;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset.EmailAddressValidator;
 
 public class EmailAddressValidator_Test {
 

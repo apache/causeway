@@ -26,6 +26,14 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.wicket.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
+
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
@@ -75,14 +83,6 @@ import org.apache.causeway.viewer.wicket.ui.components.value.StandaloneValuePane
 import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
-import org.apache.wicket.Component;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 
 import lombok.NonNull;
 import lombok.val;

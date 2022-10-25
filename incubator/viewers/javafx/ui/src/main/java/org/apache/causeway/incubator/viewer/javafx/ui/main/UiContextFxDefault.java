@@ -35,16 +35,14 @@ import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuItem;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -65,15 +63,15 @@ public class UiContextFxDefault implements UiContextFx {
     private Function<ManagedObject, Node> pageFactory;
 
     @Override
-    public void route(ManagedObject object) {
+    public void route(final ManagedObject object) {
         log.info("about to render object {}", object);
         newPage(pageFor(object));
     }
 
     @Override
-    public void route(Supplier<ManagedObject> objectSupplier) {
+    public void route(final Supplier<ManagedObject> objectSupplier) {
         interactionService.runAnonymous(()->{
-            val object = objectSupplier.get();
+            var object = objectSupplier.get();
             route(object);
         });
     }
@@ -97,13 +95,13 @@ public class UiContextFxDefault implements UiContextFx {
 
     // -- HELPER
 
-    private void newPage(Node content) {
+    private void newPage(final Node content) {
         if(newPageHandler!=null && content!=null) {
             newPageHandler.accept(content);
         }
     }
 
-    private Node pageFor(ManagedObject object) {
+    private Node pageFor(final ManagedObject object) {
         return pageFactory!=null
                 ? pageFactory.apply(object)
                 : null;

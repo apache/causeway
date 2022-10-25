@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.

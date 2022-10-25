@@ -34,7 +34,9 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiService;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
+import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator;
+import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 
 import lombok.Getter;
 import lombok.val;

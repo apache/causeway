@@ -20,10 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.pages.login;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
+
+import org.apache.causeway.viewer.wicket.model.models.PageType;
+import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
 public class WicketLogoutPage extends WebPage {
 

@@ -20,13 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
 
 import java.util.List;
 
-import org.apache.causeway.viewer.wicket.ui.util.PrismResourcesWkt;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.causeway.viewer.commons.prism.Prism;
+import org.apache.causeway.viewer.wicket.ui.util.PrismResourcesWkt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

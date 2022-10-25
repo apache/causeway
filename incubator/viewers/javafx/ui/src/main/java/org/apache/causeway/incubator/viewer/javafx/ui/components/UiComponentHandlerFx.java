@@ -18,12 +18,9 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.components;
 
-import org.apache.causeway.viewer.commons.model.binding.BindingConverterForManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
 
 import javafx.scene.Node;
-import javafx.util.StringConverter;
-import lombok.NonNull;
 
 public interface UiComponentHandlerFx
 extends UiComponentFactory.Handler<Node> {

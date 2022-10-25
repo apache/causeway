@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.pages;
 
 import java.io.Serializable;
 
-import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import org.apache.causeway.viewer.wicket.model.models.PageType;
 
 /**
  * A service helping with the navigation to pages by type

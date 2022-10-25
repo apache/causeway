@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.servlet.FilterConfig;
 
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;

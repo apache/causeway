@@ -34,7 +34,6 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
@@ -49,11 +48,8 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
-import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
-
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.graphql.viewer.source.GraphQlSourceForCauseway;
@@ -61,6 +57,10 @@ import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E1;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.E2;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.GQLTestDomainMenu;
 import org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain.TestEntityRepository;
+
+import static org.apache.causeway.commons.internal.assertions._Assert.assertEquals;
+import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
+import static org.apache.causeway.commons.internal.assertions._Assert.assertTrue;
 
 import lombok.Data;
 import lombok.SneakyThrows;

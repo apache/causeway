@@ -21,9 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.pages.mmverror;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.viewer.wicket.ui.pages.WebPageBase;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -32,6 +29,10 @@ import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.viewer.wicket.ui.pages.WebPageBase;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 

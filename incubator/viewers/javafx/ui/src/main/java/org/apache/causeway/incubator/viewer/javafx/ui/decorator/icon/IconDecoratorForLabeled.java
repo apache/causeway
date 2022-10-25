@@ -23,16 +23,15 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
+
 import org.apache.causeway.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import javafx.scene.control.Labeled;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -41,9 +40,9 @@ public class IconDecoratorForLabeled implements IconDecorator<Labeled, Labeled> 
     private final IconService iconService;
 
     @Override
-    public Labeled decorate(Labeled uiComponent, Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
+    public Labeled decorate(final Labeled uiComponent, final Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
         fontAwesomeDecorationModel.ifPresent(fa->{
-            val icon = iconService.fontAwesome(fa);
+            var icon = iconService.fontAwesome(fa);
             icon
             .map(this::iconForImage)
             .ifPresent(uiComponent::setGraphic);
@@ -51,7 +50,7 @@ public class IconDecoratorForLabeled implements IconDecorator<Labeled, Labeled> 
         return uiComponent;
     }
 
-    private ImageView iconForImage(Image image) {
+    private ImageView iconForImage(final Image image) {
         return _fx.iconForImage(image, 16, 16);
     }
 

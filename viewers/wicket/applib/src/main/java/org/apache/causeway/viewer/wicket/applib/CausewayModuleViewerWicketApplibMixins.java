@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.applib;
 
-import org.apache.causeway.viewer.wicket.applib.mixins.Object_clearHints;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.viewer.wicket.applib.mixins.Object_clearHints;
 
 /**
  * @since 1.x {@index}

@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
+
+import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;

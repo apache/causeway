@@ -21,9 +21,10 @@ package org.apache.causeway.viewer.commons.model.decorators;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.Value;

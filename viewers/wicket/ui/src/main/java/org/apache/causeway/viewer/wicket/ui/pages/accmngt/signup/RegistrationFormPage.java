@@ -20,11 +20,12 @@ package org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * A page for self-registering a new user after confirmation of her email account.

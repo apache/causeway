@@ -23,9 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.val;
