@@ -68,17 +68,6 @@ public final class ManagedObjects {
         if(adapter instanceof PackedManagedObject) {
             return ((PackedManagedObject)adapter).unpack().isEmpty();
         }
-        // calling getPojo on entities has side-effects, so do null check with special care!
-        if(adapter.getSpecialization().isEntity()
-                && adapter.isBookmarkMemoized()) {
-            // handle the 'deleted' / 'not found' case gracefully
-            try {
-                return adapter.getPojo()==null;
-            } catch (Throwable e) {
-                // if anything goes wrong retrieving the pojo, report as missing
-                return true;
-            }
-        }
         return adapter.getPojo()==null;
     }
 

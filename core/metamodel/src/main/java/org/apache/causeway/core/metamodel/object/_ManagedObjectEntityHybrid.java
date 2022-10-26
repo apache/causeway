@@ -20,12 +20,11 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Blackhole;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -42,25 +41,32 @@ extends _ManagedObjectSpecified
 implements _Refetchable {
 
     /**
-     * dynamically mutates from one to the other based on pojo's persistent state;
-     * however, the pojo reference must be kept identical
+     * One of {_ManagedObjectEntityTransient, _ManagedObjectEntityBookmarked, _ManagedObjectEntityRemoved}.
+     * <p>
+     * May dynamically mutate from 'left' to 'right' based on pojo's persistent state.
+     * However, the pojo reference must be kept identical, unless the entity becomes 'removed',
+     * in which case the pojo reference is invalidated and should no longer be accessible to callers.
      */
-    private @NonNull Either<_ManagedObjectEntityTransient, _ManagedObjectEntityBookmarked>
-        eitherDetachedOrBookmarked;
+    private @NonNull ManagedObject variant;
 
     private enum MorphState {
         /** Has no bookmark yet; can be transitioned to BOOKMARKED once
          *  for accompanied pojo, an OID becomes available. */
         TRANSIENT,
-        /** Final state, once we have an OID,
-         * regardless of the accompanied pojo's persistent state. */
-        BOOKMARKED;
+        /** We have an OID,
+         * regardless of the accompanied pojo's persistent state (unless becomes removed). */
+        BOOKMARKED,
+        /** Final state, that can be entered once after we had an OID. */
+        REMOVED;
         public boolean isTransient() { return this == TRANSIENT; }
-//        public boolean isBookmarked() { return this == BOOKMARKED; }
+        public boolean isBookmarked() { return this == BOOKMARKED; }
+        public boolean isRemoved() { return this == REMOVED; }
         static MorphState valueOf(final EntityState entityState) {
-            return entityState.hasOid()
-                    ? BOOKMARKED
-                    : TRANSIENT;
+            return entityState.isRemoved()
+                    ? REMOVED
+                    : entityState.hasOid()
+                        ? BOOKMARKED
+                        : TRANSIENT;
         }
     }
 
@@ -69,14 +75,14 @@ implements _Refetchable {
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityTransient _transient) {
         super(ManagedObject.Specialization.ENTITY, _transient.getSpecification());
-        this.eitherDetachedOrBookmarked = Either.left(_transient);
+        this.variant = _transient;
         this.morphState = MorphState.TRANSIENT;
     }
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityBookmarked bookmarked) {
         super(ManagedObject.Specialization.ENTITY, bookmarked.getSpecification());
-        this.eitherDetachedOrBookmarked = Either.right(bookmarked);
+        this.variant = bookmarked;
         this.morphState = MorphState.BOOKMARKED;
         _Assert.assertTrue(bookmarked.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
@@ -84,28 +90,34 @@ implements _Refetchable {
 
     @Override
     public Optional<Bookmark> getBookmark() {
-        return eitherDetachedOrBookmarked
-                .fold(Bookmarkable::getBookmark, Bookmarkable::getBookmark);
+        return (variant instanceof Bookmarkable)
+                ? ((Bookmarkable)variant).getBookmark()
+                : Optional.empty();
     }
 
     @Override
     public boolean isBookmarkMemoized() {
-        return eitherDetachedOrBookmarked
-                .fold(Bookmarkable::isBookmarkMemoized, Bookmarkable::isBookmarkMemoized);
+        return (variant instanceof Bookmarkable)
+                ? ((Bookmarkable)variant).isBookmarkMemoized()
+                : false;
     }
 
     @Override
     public @NonNull EntityState getEntityState() {
 
-        val entityState = eitherDetachedOrBookmarked
-                .fold(ManagedObject::getEntityState, ManagedObject::getEntityState);
-
+        val entityState = variant.getEntityState();
         val newMorphState = MorphState.valueOf(entityState);
 
+        System.err.printf("%s -> %s%n", peekAtPojo(), entityState);
+
         if(this.morphState!=newMorphState) {
-            log.debug("about to transition to bookmarked variant given {}", entityState);
+            log.debug("about to transition to {} variant given {}", newMorphState.name(), entityState);
             reassessVariant(entityState, peekAtPojo());
-            _Assert.assertTrue(isVariantAttached(), ()->"successful transition");
+            if(newMorphState.isBookmarked()) {
+                _Assert.assertTrue(isVariantBookmarked(), ()->"successful transition");
+            } else if(newMorphState.isRemoved()) {
+                _Assert.assertTrue(isVariantRemoved(), ()->"successful transition");
+            }
             this.morphState = newMorphState;
         }
         return entityState;
@@ -113,18 +125,27 @@ implements _Refetchable {
 
     @Override
     public Object getPojo() {
-        val pojo = eitherDetachedOrBookmarked
-                .fold(ManagedObject::getPojo, ManagedObject::getPojo);
+        if(isVariantRemoved()) {
+            return null; // don't reassess
+        }
 
-        triggerReassessment();
-
-        return pojo;
+        // handle the 'deleted' / 'not found' case gracefully
+        try {
+            val pojo = variant.getPojo();
+            triggerReassessment();
+            return pojo;
+        } catch (ObjectNotFoundException e) {
+            // if object not found, transition to 'removed' state
+            makeRemoved();
+            return null;
+        }
     }
 
     @Override
     public Object peekAtPojo() {
-        return eitherDetachedOrBookmarked
-            .fold(_Refetchable::peekAtPojo, _Refetchable::peekAtPojo);
+        return (variant instanceof _Refetchable)
+                ? ((_Refetchable)variant).peekAtPojo()
+                : null;
     }
 
     @Override
@@ -143,28 +164,44 @@ implements _Refetchable {
         }
     }
 
-    private boolean isVariantAttached() {
-        return eitherDetachedOrBookmarked.isRight();
+    private boolean isVariantBookmarked() {
+        return variant instanceof _ManagedObjectEntityBookmarked;
     }
 
-    private boolean isVariantDetached() {
-        return eitherDetachedOrBookmarked.isLeft();
+    private boolean isVariantTransient() {
+        return variant instanceof _ManagedObjectEntityTransient;
+    }
+
+    private boolean isVariantRemoved() {
+        return variant instanceof _ManagedObjectEntityRemoved;
     }
 
     @Synchronized
     private void reassessVariant(final EntityState entityState, final Object pojo) {
-        if(isVariantDetached()
+        if(isVariantTransient()
                 && entityState.hasOid()) {
-            attach(pojo);
+            makeBookmarked(pojo);
+            return;
+        }
+        if(isVariantBookmarked()
+                && entityState.isRemoved()) {
+            makeRemoved();
+            return;
         }
     }
 
     // morph into attached
-    private void attach(final Object pojo) {
+    private void makeBookmarked(final Object pojo) {
         val attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, Optional.empty());
-        eitherDetachedOrBookmarked = Either.right(attached);
+        this.variant = attached;
         _Assert.assertTrue(attached.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
+    }
+
+    // morph into attached
+    private void makeRemoved() {
+        val removed = new _ManagedObjectEntityRemoved(getSpecification());
+        this.variant = removed;
     }
 
 }
