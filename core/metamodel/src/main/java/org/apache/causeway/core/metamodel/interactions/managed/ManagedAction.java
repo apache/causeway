@@ -91,10 +91,16 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull MultiselectChoices multiselectChoices) {
 
         super(owner, where);
-        _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(owner), ()->
-                String.format("cannot create managed-action for action %s with an empty owner %s",
-                        action.getFeatureIdentifier(),
-                        owner));
+        /* entities might become removed, but even though removed, an entity delete mixin say,
+            may still want to provide an action result, that does not need the mixee instance to be produced;
+            eg. delete ApplicationUser mixin that returns a collection of all remaining users
+            after deleting the selected one */
+        if(!owner.getSpecialization().isEntity()) {
+            _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(owner), ()->
+                    String.format("cannot create managed-action for action %s with an empty owner %s",
+                            action.getFeatureIdentifier(),
+                            owner));
+        }
         this.action = action;
         this.multiselectChoices = multiselectChoices;
     }

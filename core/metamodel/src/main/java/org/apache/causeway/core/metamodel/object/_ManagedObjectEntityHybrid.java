@@ -108,8 +108,6 @@ implements _Refetchable {
         val entityState = variant.getEntityState();
         val newMorphState = MorphState.valueOf(entityState);
 
-        System.err.printf("%s -> %s%n", peekAtPojo(), entityState);
-
         if(this.morphState!=newMorphState) {
             log.debug("about to transition to {} variant given {}", newMorphState.name(), entityState);
             reassessVariant(entityState, peekAtPojo());
