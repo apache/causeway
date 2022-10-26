@@ -110,27 +110,26 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleCollections(obj: TObject, referrer: String) {
+        console.log("[OA.handleCollections]")
+        console.log(obj)
         obj.getCollections().forEach {
+            console.log(it)
             val key = it.id
             val aggregator = CollectionAggregator(key, this)
             collectionMap[key] = aggregator
             val link = it.links.first()
+            console.log(link)
             ResourceProxy().fetch(link, aggregator, referrer = referrer)
         }
     }
 
     private fun handleProperty(p: Property, referrer: String) {
-        console.log("[OA.handleProperty]")
         val dm = dpm as ObjectDM
         if (p.isPropertyDescription()) {
-            console.log("isPropertyDescription")
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            console.log(p)
-            val pdl = p.getDescriptionLink()
-            console.log(pdl)
-            if (pdl == null) return
+            val pdl = p.getDescriptionLink() ?: return
             invoke(pdl, this, referrer = referrer)
         }
     }

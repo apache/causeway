@@ -34,6 +34,8 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
     var icon: Icon? = null
 
     override fun canBeDisplayed(): Boolean {
+//        console.log("[DMWL.canBeDisplayed]")
+//        console.log(this)
         return when {
             isRendered -> false
             layout != null -> true
