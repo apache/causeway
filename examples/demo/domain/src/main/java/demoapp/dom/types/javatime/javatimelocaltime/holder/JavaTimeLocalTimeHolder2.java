@@ -18,10 +18,10 @@
  */
 package demoapp.dom.types.javatime.javatimelocaltime.holder;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 
 //tag::class[]
 public interface JavaTimeLocalTimeHolder2 extends JavaTimeLocalTimeHolder {

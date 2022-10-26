@@ -21,12 +21,12 @@ package demoapp.dom.homepage;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.HomePage;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.resources.AsciiDocReaderService;

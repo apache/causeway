@@ -25,26 +25,26 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 import demoapp.web.DemoAppManifestJpa;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModulePersistenceJpaEclipselink.class,
-    IsisModuleTestingFixturesApplib.class,
+    CausewayModuleCoreRuntimeServices.class,
+    CausewayModulePersistenceJpaEclipselink.class,
+    CausewayModuleTestingFixturesApplib.class,
 
     // demo domain
     DemoAppManifestJpa.class,
 })
 @PropertySources({
-    @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
+    @PropertySource(CausewayPresets.NoTranslations),
+    @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
 })
 @Profile("demo-jpa")
 public class Configuration_usingJpa {

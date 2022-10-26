@@ -27,12 +27,12 @@ interface EntityChanges {
 <.> xref:#getInteractionId_[getInteractionId()]
 +
 --
-inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] and transitively from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] and transitively from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the _org.apache.causeway.applib.services.iactn.Interaction_ in which these objects were changed.
 --
 <.> xref:#getSequence_[getSequence()]
 +
 --
-inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] , with _#getInteractionId()_ it identifies the transaction within the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] , with _#getInteractionId()_ it identifies the transaction within the _org.apache.causeway.applib.services.iactn.Interaction_ in which these objects were changed.
 --
 <.> xref:#getUsername_[getUsername()]
 +
@@ -80,12 +80,12 @@ Same details, but as an an instance of _ChangesDto_ .
 [#getInteractionId_]
 === getInteractionId()
 
-inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] and transitively from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] and transitively from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the _org.apache.causeway.applib.services.iactn.Interaction_ in which these objects were changed.
 
 [#getSequence_]
 === getSequence()
 
-inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] , with _#getInteractionId()_ it identifies the transaction within the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] , with _#getInteractionId()_ it identifies the transaction within the _org.apache.causeway.applib.services.iactn.Interaction_ in which these objects were changed.
 
 [#getUsername_]
 === getUsername()
@@ -127,4 +127,4 @@ Number of domain objects properties that were changed in this interaction
 
 Same details, but as an an instance of _ChangesDto_ .
 
-This can be converted into a serializable XML representation using the _org.apache.isis.applib.util.schema.ChangesDtoUtils_ utility class.
+This can be converted into a serializable XML representation using the _org.apache.causeway.applib.util.schema.ChangesDtoUtils_ utility class.

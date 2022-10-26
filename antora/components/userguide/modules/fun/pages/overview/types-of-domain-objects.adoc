@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Apache Isis supports recognises four main types of domain classes:
+Apache Causeway supports recognises four main types of domain classes:
 
 * *domain entities* - domain objects persisted to the database the ORM (eg  JDO/DataNucleus); for example `Customer`
 
@@ -20,8 +20,8 @@ From the end-user's perspective the UI displays a single domain object instance 
 The end-user can then inspect and modify its state, and navigate to related objects.
 
 Domain classes are generally recognized using annotations.
-Apache Isis defines its own set of annotations, and
-you can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
+Apache Causeway defines its own set of annotations, and
+you can generally recognize an Apache Causeway domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 
 The framework also recognises some annotations from the ORM layer (eg JDO/DataNucleus) and infers domain semantics from these annotations.
 Similarly, JAXB annotations are typically used for view models.
@@ -48,7 +48,7 @@ There's good logic here: requiring only root-to-root relationships reduces the n
 On the other hand, this constraint can substantially complicate matters when mapping domain layer to the persistence layer.
 DDD tends to de-emphasise such matters: it aims to be completely agnostic about the persistence layer, with the responsibilities for managing relationships moved (pretty much by definition) into the domain layer.
 
-As a framework Apache Isis is less dogmatic about such things.
+As a framework Apache Causeway is less dogmatic about such things.
 Generally the domain objects are mapped to a relational database and so we can lean on the referential integrity capabilities of the persistence layer to maintain referential invariants.
 Said another way: we don't tend to require that only roots can maintain roots: we don't see anything wrong in an `InvoiceItem` referencing an `OrderItem`, for example.
 
@@ -77,7 +77,7 @@ For example, for the `Customer` entity there may be a `CustomerRepository`, whil
 Similarly, entities might also have a corresponding factory service: a `CustomerFactory` or an `OrderFactory`; Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objecpts).
 
 On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
-For this reason, in Apache Isis it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
+For this reason, in Apache Causeway it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
 
 The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]'s UI.
 
@@ -89,11 +89,11 @@ Domain services can also be used for a number of other purposes:
 +
 This is discussed in more detail below, in the section on xref:userguide:fun:overview.adoc#events[events].
 
-* to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Isis framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
+* to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Causeway framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 
 Domain objects of any type (entities, other services, view models, mixins) can also delegate to domain services; domain services are automatically injected into every other domain object.
 This injection of domain services into entities is significant: it allows business logic to be implemented in the domain entities, rather than have it "leach away" into supporting service layers.
-Said another way: it is the means by which Apache Isis helps you avoid the anaemic domain model anti-pattern.
+Said another way: it is the means by which Apache Causeway helps you avoid the anaemic domain model anti-pattern.
 
 Domain services are instantiated once and once only by the framework, and are used to centralize any domain logic that does not logically belong in a domain entity or value.
 
@@ -145,7 +145,7 @@ Details on how to actually write a view model (the programming model for view mo
 Sometimes the entities that make up your application are persisted not in the local database but reside in some other system, for example accessible only through a SOAP web service.
 Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity if only because JDO/DataNucleus doesn't know about the entity nor how to retrieve or update it.
 
-There are a couple of ways around this: we could either replicate the data somehow from the external system into the Isis-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
+There are a couple of ways around this: we could either replicate the data somehow from the external system into the Causeway-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
 This proxy would hold the reference to the externally-managed domain entity (eg an external id), as well as the "smarts" to know how to interact with that entity (by making SOAP web service calls etc).
 
 The stub/proxy is a type of view model: a view -- if you like -- onto the domain entity managed by the external system.
@@ -158,11 +158,11 @@ A simple example is read-only configuration data that is read from a config file
 
 === Application-layer view models
 
-Domain entities (whether locally persisted or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are solid.
+Domain entities (whether locally persisted or managed externally) are the bread-and-butter of Apache Causeway applications: the focus after all, should be on the business domain concepts and ensuring that they are solid.
 Generally those domain entities will make sense to the business domain experts: they form the _ubiquitous language_ of the domain.
 These domain entities are part of the domain layer.
 
-When developing an Apache Isis application you will most likely start off with the persistent domain entities: `Customer`, `Order`, `Product`, and so on.
+When developing an Apache Causeway application you will most likely start off with the persistent domain entities: `Customer`, `Order`, `Product`, and so on.
 For some applications this may well suffice.
 
 That said, it may not always be practical to expect end-users of the application to interact solely with those domain entities.
@@ -200,7 +200,7 @@ It is not a persisted entity, instead it belongs to the application layer.
 
 DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carry data between processes".
 
-If those two processes are parts of the same overall application (the same team builds and deploys both server and client) then there's generally no need to define a DTO; just access the entities using Apache Isis' xref:vro:ROOT:about.adoc[RestfulObjects viewer].
+If those two processes are parts of the same overall application (the same team builds and deploys both server and client) then there's generally no need to define a DTO; just access the entities using Apache Causeway' xref:vro:ROOT:about.adoc[RestfulObjects viewer].
 
 On the other hand, if the client consuming the DTO is a different application -- by which we mean developed/deployed by a different (possible third-party) team -- then the DTOs act as a formal contract between the provider and the consumer.
 In such cases, exposing domain entities over xref:vro:ROOT:about.adoc[RestfulObjects] would be "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be easily changed by the producer.
@@ -271,7 +271,7 @@ In fact, we find mixins nicely balance inside-out vs outside-in ways of thinking
 
 * outside-in tends to focus on the behaviour, that is the functionality that the system provides to automate the business processes; the verbs, in other words.
 
-So, while Apache Isis allows you to put behaviour onto the underlying domain entities, it can often be better to treat the domain entities as immutable.
+So, while Apache Causeway allows you to put behaviour onto the underlying domain entities, it can often be better to treat the domain entities as immutable.
 Instead, use mixins to implement behaviour.
 When using an agile development methodology, it's common for a user story to correspond to a new mixin.
 
@@ -294,7 +294,7 @@ Mixins are an implementation of the link:http://www.artima.com/articles/dci_visi
 Reenskaug was the inventor of the MVC pattern (and also the external examiner for Richard Pawson's link:../../../../../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis]), while Coplien has a long history in object-orientation, C++ and patterns.
 
 DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where behaviour is bound to objects dynamically rather than statically in some context or other.
-The mixin pattern is Apache Isis' straightforward take on the same basic concept.
+The mixin pattern is Apache Causeway' straightforward take on the same basic concept.
 ****
 
 

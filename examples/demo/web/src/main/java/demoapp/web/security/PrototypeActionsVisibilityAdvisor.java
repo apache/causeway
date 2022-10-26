@@ -22,19 +22,19 @@ import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
-import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
-import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
-import org.apache.isis.applib.mixins.rest.Object_openRestApi;
-import org.apache.isis.core.metamodel.inspect.Object_inspectMetamodel;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.DomainServiceLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.mixins.layout.Object_downloadLayoutXml;
+import org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml;
+import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
+import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
+import org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel;
 
 @Named("demo.PrototypeActionsVisibilityAdvisor")
 @DomainService(

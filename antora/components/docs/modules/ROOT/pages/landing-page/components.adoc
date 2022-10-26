@@ -39,6 +39,6 @@ Alternatively, you can "roll your own" (by implementing the xref:refguide:applib
 
 == Security
 
-The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Isis.
+The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Causeway.
 
 

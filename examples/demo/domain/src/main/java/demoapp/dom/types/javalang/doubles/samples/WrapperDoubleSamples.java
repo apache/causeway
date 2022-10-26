@@ -30,7 +30,7 @@ public class WrapperDoubleSamples implements Samples<java.lang.Double> {
 
     @Override
     public Stream<java.lang.Double> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.DoubleValueSemantics()
                 .getExamples()
                 .stream();
     }

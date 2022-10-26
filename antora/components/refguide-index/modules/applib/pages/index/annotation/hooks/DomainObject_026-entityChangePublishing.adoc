@@ -6,7 +6,7 @@
 
 The xref:refguide:applib:index/annotation/DomainObject.adoc#entityChangePublishing[entityChangePublishing()] element indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s).
 
-The default value for the element is `AS_CONFIGURED`, meaning that the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.entity-change-publishing[isis.applib.annotation.domain-object.entity-change-publishing] configuration property is used to determine the whether the action is audited:
+The default value for the element is `AS_CONFIGURED`, meaning that the xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.entity-change-publishing[causeway.applib.annotation.domain-object.entity-change-publishing] configuration property is used to determine the whether the action is audited:
 
 * `all` +
 +

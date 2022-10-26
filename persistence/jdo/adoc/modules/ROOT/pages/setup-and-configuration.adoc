@@ -17,7 +17,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModulePersistenceJdoDatanucleus.class,
+        CausewayModulePersistenceJdoDatanucleus.class,
         ...
 })
 public class AppManifest {
@@ -83,9 +83,9 @@ The table name will be based on the entity
 
 When prototyping we rely on the ORM to automatically create the entire database tables, which includes the owning schemas.
 As EclipseLink does not do this automatically, the framework will do this if requested.
-The xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.auto-create-schemas[isis.persistence.schema.auto-create-schemas] controls if this is done or not.
+The xref:refguide:config:sections/causeway.persistence.schema.adoc#causeway.persistence.schema.auto-create-schemas[causeway.persistence.schema.auto-create-schemas] controls if this is done or not.
 
-Different database vendors have different syntaxes to do this, and so this can be configured using the xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.create-schema-sql-template[isis.persistence.schema.create-schema-sql-template].
+Different database vendors have different syntaxes to do this, and so this can be configured using the xref:refguide:config:sections/causeway.persistence.schema.adoc#causeway.persistence.schema.create-schema-sql-template[causeway.persistence.schema.create-schema-sql-template].
 The default value is to use SQL-99 syntax ("CREATE SCHEMA IF NOT EXISTS %S"), passed through to `String.format()`.
 
 
@@ -109,10 +109,10 @@ If running in an integration test, you can use a preset:
 ----
 @SpringBootTest
 @TestPropertySource({
-    IsisPresets.UseLog4j2Test,
-    IsisPresets.DatanucleusEagerlyCreateTables      // <.>
+    CausewayPresets.UseLog4j2Test,
+    CausewayPresets.DatanucleusEagerlyCreateTables      // <.>
 })
-class MyIntegrationTest extends IsisIntegrationTestAbstract {
+class MyIntegrationTest extends CausewayIntegrationTestAbstract {
     //...
 }
 ----
@@ -157,7 +157,7 @@ For example, use `datanucleus.schema.autoCreateAll` not `datanucleus.schema.auto
 
 DataNucleus will for itself also read the `META-INF/persistence.xml`.
 In theory this can hold mappings and even connection strings.
-However, with Apache Isis we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
+However, with Apache Causeway we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
 
 Here's the one provided by the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
 

@@ -23,8 +23,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
-import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
@@ -40,15 +40,15 @@ import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingC
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
-import demoapp.dom.types.isis.blobs.jpa.IsisBlobJpa;
-import demoapp.dom.types.isis.clobs.jpa.IsisClobJpa;
-import demoapp.dom.types.isis.localresourcepaths.jpa.IsisLocalResourcePathJpa;
-import demoapp.dom.types.isis.markups.jpa.IsisMarkupJpa;
-import demoapp.dom.types.isis.passwords.jpa.IsisPasswordJpa;
-import demoapp.dom.types.isisext.cal.jpa.IsisCalendarEventJpa;
-import demoapp.dom.types.isisval.asciidocs.jpa.IsisAsciiDocJpa;
-import demoapp.dom.types.isisval.markdowns.jpa.IsisMarkdownJpa;
-import demoapp.dom.types.isisval.vegas.jpa.IsisVegaJpa;
+import demoapp.dom.types.causeway.blobs.jpa.CausewayBlobJpa;
+import demoapp.dom.types.causeway.clobs.jpa.CausewayClobJpa;
+import demoapp.dom.types.causeway.localresourcepaths.jpa.CausewayLocalResourcePathJpa;
+import demoapp.dom.types.causeway.markups.jpa.CausewayMarkupJpa;
+import demoapp.dom.types.causeway.passwords.jpa.CausewayPasswordJpa;
+import demoapp.dom.types.causewayext.cal.jpa.CausewayCalendarEventJpa;
+import demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpa;
+import demoapp.dom.types.causewayval.markdowns.jpa.CausewayMarkdownJpa;
+import demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpa;
 import demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpa;
 import demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpa;
 import demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpa;
@@ -86,20 +86,20 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 @Profile("demo-jpa")
 @Import({
     DemoModuleCommon.class,
-    IsisModulePersistenceJpaEclipselink.class,
-    IsisModuleExtCommandLogPersistenceJpa.class,
+    CausewayModulePersistenceJpaEclipselink.class,
+    CausewayModuleExtCommandLogPersistenceJpa.class,
 })
 @EntityScan(basePackageClasses = {
 
-        IsisBlobJpa.class,
-        IsisClobJpa.class,
-        IsisLocalResourcePathJpa.class,
-        IsisMarkupJpa.class,
-        IsisPasswordJpa.class,
-        IsisAsciiDocJpa.class,
-        IsisMarkdownJpa.class,
-        IsisVegaJpa.class,
-        IsisCalendarEventJpa.class,
+        CausewayBlobJpa.class,
+        CausewayClobJpa.class,
+        CausewayLocalResourcePathJpa.class,
+        CausewayMarkupJpa.class,
+        CausewayPasswordJpa.class,
+        CausewayAsciiDocJpa.class,
+        CausewayMarkdownJpa.class,
+        CausewayVegaJpa.class,
+        CausewayCalendarEventJpa.class,
         EventLogEntryJpa.class,
 
         JavaAwtBufferedImageJpa.class,

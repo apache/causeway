@@ -11,7 +11,7 @@ Thus, a property called "firstName", derived from a method `getFirstName()` may 
 Supporting methods are, therefore, each characterized by their own particular prefix.
 
 
-The table below lists the method prefixes that are recognized as part of Apache Isis' default programming model.
+The table below lists the method prefixes that are recognized as part of Apache Causeway' default programming model.
 
 .Method Prefixes
 [cols="2m,1,1,1,1,1,4a",options="header"]
@@ -111,7 +111,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[set...()].
 ====
 Using name matching to associate supporting methods generally works very well, but of course if an object member's method is renamed, there's always the risk that the developer forgets to rename the supporting method; the supporting methods become "orphaned".
 
-Apache Isis checks for this automatically, and will fail-fast (fail to boot) if any orphaned methods are located.
+Apache Causeway checks for this automatically, and will fail-fast (fail to boot) if any orphaned methods are located.
 A suitable error message is logged so that the issue can be easily diagnosed.
 ====
 

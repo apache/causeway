@@ -23,30 +23,30 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
-import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
+import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import demoapp.dom.DemoModuleJdo;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 DemoModuleJdo.class,
                 DemoFxTestConfig_usingJdo.class,
-                
+
                 // INCUBATING
-                IsisModuleSecurityBypass.class,
-                IsisModuleIncViewerJavaFxViewer.class,
-        } 
+                CausewayModuleSecurityBypass.class,
+                CausewayModuleIncViewerJavaFxViewer.class,
+        }
 )
-public abstract class DemoFxTestAbstract extends IsisIntegrationTestAbstract {
-    
+public abstract class DemoFxTestAbstract extends CausewayIntegrationTestAbstract {
+
     @Inject protected UiContextFx uiContext;
-    
+
     @BeforeAll
     static void beforeAll() {
-       //JavafxViewer.launch(DemoAppJavaFx.class, _Constants.emptyStringArray);    
+       //JavafxViewer.launch(DemoAppJavaFx.class, _Constants.emptyStringArray);
     }
-    
+
 }

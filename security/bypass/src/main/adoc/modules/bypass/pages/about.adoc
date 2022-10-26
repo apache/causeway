@@ -22,14 +22,14 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleSecurityBypass.class,
+        CausewayModuleSecurityBypass.class,
         ...
 })
 public class AppManifest {
 }
 ----
 
-Make sure that no other `IsisModuleSecurityXxx` module is imported.
+Make sure that no other `CausewayModuleSecurityXxx` module is imported.
 
 
 == In Use

@@ -34,12 +34,12 @@ class JdoLifecycleListener {
 <.> xref:#preClear_InstanceLifecycleEvent[preClear(InstanceLifecycleEvent)]
 +
 --
-Does nothing, not important event for Isis to track.
+Does nothing, not important event for Causeway to track.
 --
 <.> xref:#postClear_InstanceLifecycleEvent[postClear(InstanceLifecycleEvent)]
 +
 --
-Does nothing, not important event for Isis to track.
+Does nothing, not important event for Causeway to track.
 --
 
 == Members
@@ -47,9 +47,9 @@ Does nothing, not important event for Isis to track.
 [#preClear_InstanceLifecycleEvent]
 === preClear(InstanceLifecycleEvent)
 
-Does nothing, not important event for Isis to track.
+Does nothing, not important event for Causeway to track.
 
 [#postClear_InstanceLifecycleEvent]
 === postClear(InstanceLifecycleEvent)
 
-Does nothing, not important event for Isis to track.
+Does nothing, not important event for Causeway to track.

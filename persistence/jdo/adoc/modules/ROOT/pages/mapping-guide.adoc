@@ -50,8 +50,8 @@ public class MyEntity ... {
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.valuetypes</groupId>
-    <artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-asciidoc-persistence-jdo</artifactId>
 </dependency>
 ----
 
@@ -63,7 +63,7 @@ public class MyEntity ... {
 @Configuration
 @Import({
         ...
-        IsisModuleValAsciidocPersistenceJdo.java
+        CausewayModuleValAsciidocPersistenceJdo.java
         ...
 })
 public class AppManifest {
@@ -97,8 +97,8 @@ public class MyEntity ... {
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.valuetypes</groupId>
-    <artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-markdown-persistence-jdo</artifactId>
 </dependency>
 ----
 
@@ -110,7 +110,7 @@ public class MyEntity ... {
 @Configuration
 @Import({
         ...
-        IsisModuleValMarkdownPersistenceJdo.java
+        CausewayModuleValMarkdownPersistenceJdo.java
         ...
 })
 public class AppManifest {

@@ -21,11 +21,11 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -41,15 +41,15 @@ In the domain module(s) of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-h2console-ui</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-h2console-ui</artifactId>
     </dependency>
 </dependencies>
 ----
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingH2ConsoleUi` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingH2ConsoleUi` module:
 
 [source,java]
 .AppManifest.java
@@ -57,7 +57,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingH2ConsoleUi.class,
+        CausewayModuleTestingH2ConsoleUi.class,
         ...
 })
 public class AppManifest {

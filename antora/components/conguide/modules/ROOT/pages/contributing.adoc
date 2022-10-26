@@ -7,17 +7,17 @@
 
 
 
-This page explains how you can contribute to Apache Isis.
-You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and learn xref:conguide:ROOT:building-apache-isis.adoc[how to build Apache Isis].
+This page explains how you can contribute to Apache Causeway.
+You'll probably also want xref:setupguide:ROOT:about.adoc[set up your IDE] and learn xref:conguide:ROOT:building-apache-causeway.adoc[how to build Apache Causeway].
 
 Thanks for considering to help out, your contributions are appreciated!
 
 == Recommended Workflow (GitHub)
 
-Apache Isis' source code is hosted in at GitHub (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`).
+Apache Causeway' source code is hosted in at GitHub (https://github.com/apache/causeway.git[https], or ssh: `git@github.com:apache/causeway.git`).
 
 As you might imagine, only committers are permitted to push changes to the GitHub repo.
-As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
+As a contributor, we recommend that you fork the https://github.com/apache/causeway.git[apache/causeway] GitHub repo, and then use your fork as a way of publishing your patches for the Apache Causeway committers to apply.
 
 The diagram below illustrates the process:
 
@@ -26,15 +26,15 @@ image::contributing/git-workflow.png[width="600px"]
 
 That is:
 
-. as a one-time activity, you fork the https://github.com/apache/isis.git[github.com/apache/isis] repo into your own fork on github.com
+. as a one-time activity, you fork the https://github.com/apache/causeway.git[github.com/apache/causeway] repo into your own fork on github.com
 . as a one-time activity, you clone your fork to your local computer
-. you set the https://github.com/apache/isis.git[github.com/apache/isis] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
+. you set the https://github.com/apache/causeway.git[github.com/apache/causeway] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
 * note the asymmetry here: the `upstream` repo (the Apache GitHub repo) is *not* the same as the `origin` repo (your fork).
 . you work on your changes locally; when done, you push them to your GitHub fork
-. to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket (you will need to log in or create a new account first), and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below).
-In any case, before you decide to start hacking with Apache Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:support:mailing-list.adoc[mailing lists].
+. to contribute back a change, raise a https://issues.apache.org/jira/browse/CAUSEWAY[JIRA] ticket (you will need to log in or create a new account first), and ensure your commit message is in the form: `CAUSEWAY-nnnn: ...` so that changes can be tracked (more discussion on this point below).
+In any case, before you decide to start hacking with Apache Causeway, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:support:mailing-list.adoc[mailing lists].
 . Use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
-. An Apache Isis committer will review your change, and apply it if suitable.
+. An Apache Causeway committer will review your change, and apply it if suitable.
 
 == Setting up your fork/clone
 
@@ -46,7 +46,7 @@ image::contributing/github-forking.png[width="600px"]
 
 
 
-An account isn't needed if you just clone straight from the http://github.com/apache/isis[github.com/apache/isis].
+An account isn't needed if you just clone straight from the http://github.com/apache/causeway[github.com/apache/causeway].
 
 Whether you've forked or not, you then need to clone the repo onto your computer.
 GitHub makes this very easy to do:
@@ -60,7 +60,7 @@ Again, the info is easily found in the GitHub page:
 
 image::contributing/github-cloning.png[width="600px"]
 
-If you've created your own fork, then you need to add the `upstream` remote to the https://github.com/apache/isis[github.com/apache/isis].
+If you've created your own fork, then you need to add the `upstream` remote to the https://github.com/apache/causeway[github.com/apache/causeway].
 This remote is traditionally called `upstream`.
 You should then arrange for your `master` branch to track the `upstream/master` remote branch:
 
@@ -76,7 +76,7 @@ For more info on tracking branches http://git-scm.com/book/en/Git-Branching-Remo
 
 == Commit messages
 
-Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Apache Isis committer.
+Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Apache Causeway committer.
 You should take time to write a meaningful commit message that helps explain what the patch refers to; if you don't then there's a chance that your patch may be rejected and not applied.
 No-one likes hard work to go to waste!
 
@@ -84,7 +84,7 @@ We therefore recommend that your commit messages are as follows:footnote:[Inspir
 
 [source,other]
 ----
-ISIS-999: Makes the example in CONTRIBUTING imperative and concrete
+CAUSEWAY-999: Makes the example in CONTRIBUTING imperative and concrete
 
 Without this patch applied, the example commit message in the CONTRIBUTING
 document is not a concrete example.  This is a problem because the
@@ -125,15 +125,15 @@ If this fails, see our xref:conguide:git:about.adoc#git-cookbook[git cookbook] p
 
 === Create a topic branch
 
-We recommend you name topic branches by the JIRA ticket, ie <tt>ISIS-nnn-description</tt>.
-So let's create a new branch based off `master` and call it "ISIS-123-blobs"
+We recommend you name topic branches by the JIRA ticket, ie <tt>CAUSEWAY-nnn-description</tt>.
+So let's create a new branch based off `master` and call it "CAUSEWAY-123-blobs"
 
 You can confirm the branch is there and is your new `HEAD` using either `gitk --all`.
 Alternatively, use the command line:
 
 [source,bash]
 ----
-$ git checkout -b ISIS-123-blobs
+$ git checkout -b CAUSEWAY-123-blobs
 ----
 
 The command line prompt should also indicate you are on a branch, isolated from any changes that might happen on the `master` branch.
@@ -166,7 +166,7 @@ Next, we reintegrate our topic branch by rebasing onto `master`:
 
 [source,bash]
 ----
-git checkout ISIS-123-blobs
+git checkout CAUSEWAY-123-blobs
 git rebase master
 ----
 
@@ -184,7 +184,7 @@ Once the rebase has completed, re-run your tests to confirm that everything is s
 If you have your own fork, you can now simply push the changes you've made locally to your fork:
 
 This will create a corresponding branch in the remote GitHub repo.
-If you use `gitk --all`, you'll also see a `remotes/origin/ISIS-123-blobs` branch.
+If you use `gitk --all`, you'll also see a `remotes/origin/CAUSEWAY-123-blobs` branch.
 
 Then, use GitHub to raise a https://help.github.com/articles/using-pull-requests/[pull request].
 Pull requests sent to the Apache GitHub repositories will forward a pull request e-mail to the xref:docs:support:mailing-list.adoc[dev mailing list].
@@ -192,10 +192,10 @@ You'll probably want to sign up to the dev mailing list first before issuing you
 
 The process to raise the pull request, broadly speaking:
 
-* Open a web browser to your GitHub fork of isis
+* Open a web browser to your GitHub fork of causeway
 * Select your topic branch (pushed in the previous step) so that the pull request references the topic branch.
 * Click the `Pull Request` button.
-* Check that the Apache Isis mailing list email came through.
+* Check that the Apache Causeway mailing list email came through.
 
 == If your pull request is accepted
 
@@ -216,7 +216,7 @@ You'll probably also want to remove the remote branch on github:
 
 [source,bash]
 ----
-git push origin --delete ISIS-123-blobs
+git push origin --delete CAUSEWAY-123-blobs
 ----
 
 \... and continue as before until you are ready to resubmit your change.

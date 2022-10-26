@@ -59,7 +59,7 @@ Indicates that the property is required (even if the JDO `javax.jdo.annotations.
 
 When using the JDO/DataNucleus objectstore, it is sometimes necessary to annotate a property as optional (using `javax.jdo.annotations.Column#allowsNull()` set to `true` ), even if the property is logically mandatory. For example, this can occur when the property is in a subtype class that has been "rolled up" to the superclass table using `javax.jdo.annotations.Inheritance` > with the `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE` superclass strategy.
 
-This annotation, therefore, is intended to override any objectstore-specific annotation, so that Isis can apply the constraint even though the objectstore is unable to do so.
+This annotation, therefore, is intended to override any objectstore-specific annotation, so that Causeway can apply the constraint even though the objectstore is unable to do so.
 
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED

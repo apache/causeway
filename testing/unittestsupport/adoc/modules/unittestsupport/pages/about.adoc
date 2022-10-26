@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Apache Isis provides a number of helpers to help unit test your domain objects.
+Apache Causeway provides a number of helpers to help unit test your domain objects.
 
 
 == Maven Configuration
@@ -17,11 +17,11 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -37,8 +37,8 @@ In the domain module(s) of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-unittestsupport-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-unittestsupport-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -52,8 +52,8 @@ We also highly recommend using the xref:fakedata:about.adoc[Fakedata] library fo
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-fakedata-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-fakedata-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -65,7 +65,7 @@ include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingUnitTestSupportApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingUnitTestSupportApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -73,7 +73,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingUnitTestSupportApplib.class,
+        CausewayModuleTestingUnitTestSupportApplib.class,
         ...
 })
 public class AppManifest {
@@ -231,7 +231,7 @@ As here, it is often sufficient to provide a single instance (as it is compared 
 
 === XML Marshalling Support
 
-Apache Isis' unit testing support provides the xref:refguide:testing:index/unittestsupport/applib/matchers/JaxbMatchers.adoc[JaxbMatchers] while the core applib also provides the useful xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil] class.
+Apache Causeway' unit testing support provides the xref:refguide:testing:index/unittestsupport/applib/matchers/JaxbMatchers.adoc[JaxbMatchers] while the core applib also provides the useful xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil] class.
 
 These can be useful for example if you have example XML-serialized representations of the SOAP requests and response payloads and want to use these within your tests.
 
@@ -256,7 +256,7 @@ If using JMock then the interactions (in the "then") are checked automatically b
 However, you probably will still have some state changes to assert upon.
 
 
-Apache Isis' unit test support provides `JUnitRuleMockery2` which is an extension to the link:http://www.jmock.org/[JMock]'s `JunitRuleMockery`.
+Apache Causeway' unit test support provides `JUnitRuleMockery2` which is an extension to the link:http://www.jmock.org/[JMock]'s `JunitRuleMockery`.
 It provides a simpler API and also providing support for autowiring.
 
 

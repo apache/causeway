@@ -23,17 +23,14 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
@@ -52,6 +49,8 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
 import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternVm;
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.PropertyMenu")
 @DomainService(

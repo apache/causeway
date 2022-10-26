@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `isis-mavendeps-webapp` aggregates the main runtime dependencies of a production webapp.
+The `causeway-mavendeps-webapp` aggregates the main runtime dependencies of a production webapp.
 Note that it does _not_ include the runtime dependencies for either JDO or JPA; these must be included separately.
 
 To use, add the following :
@@ -12,8 +12,8 @@ To use, add the following :
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-webapp</artifactId>
+        <groupId>org.apache.causeway.mavendeps</groupId>
+        <artifactId>causeway-mavendeps-webapp</artifactId>
         <type>pom</type>
     </dependency>
 </dependencies>
@@ -23,7 +23,7 @@ For convenience, it includes all of the current components available:
 
 * Spring Boot (link:https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-first-application-dependencies[spring-boot-starter-web])
 
-* Apache Isis Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (the _Runtime Services_ module)
+* Apache Causeway Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (the _Runtime Services_ module)
 
 * The xref:security:bypass:about.adoc[Bypass] security implementation.
 +
@@ -35,8 +35,8 @@ If you don't need any of these, then use a Maven `<exclusion>`.
 
 In addition, you will probably need to specify a persistence implementation (xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]) as well as a security implementation.
 
-Also, remember that adding the class onto the classpath does _not_ make that functionality available (Apache Isis does not currently leverage Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-auto-configuration[auto configuration] capabilities).
-You must therefore also add in the appropriate `IsisModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").
+Also, remember that adding the class onto the classpath does _not_ make that functionality available (Apache Causeway does not currently leverage Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-auto-configuration[auto configuration] capabilities).
+You must therefore also add in the appropriate `CausewayModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").
 For example, see the xref:docs:starters:simpleapp.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
 
 

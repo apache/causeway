@@ -3,7 +3,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Command Line Interface for the _Apache Isis Tooling_ ecosystem, to generate documentation from program sources (`.java` files, `pom.xml`, etc).
+Command Line Interface for the _Apache Causeway Tooling_ ecosystem, to generate documentation from program sources (`.java` files, `pom.xml`, etc).
 
 
 
@@ -26,7 +26,7 @@ Use the help command to see a list of available commands:
 [source]
 .calling for help
 ----
-java -jar tooling/cli/target/isis-tooling-cli.jar --help
+java -jar tooling/cli/target/causeway-tooling-cli.jar --help
 ----
 
 which (currently) generates the following:
@@ -34,7 +34,7 @@ which (currently) generates the following:
 [source]
 ----
 Usage: cli [-hV] [-o=<outputPath>] [-p=<projectRootPath>] [COMMAND]
-CLI for the Apache Isis Tooling Ecosystem
+CLI for the Apache Causeway Tooling Ecosystem
   -h, --help      Show this help message and exit.
   -w, --overview=<overviewPath>
                   path to write the overview file (default: NONE = write to std.out)
@@ -56,10 +56,10 @@ By default, the current directory is used as the target to perform commands in.
 
 === Configuration File
 
-The `isis-tooling.yml` configuration file (found in the root of the repo) provides default options for each command, as well as global defaults applicable to all commands:
+The `causeway-tooling.yml` configuration file (found in the root of the repo) provides default options for each command, as well as global defaults applicable to all commands:
 
 [source,yml]
-.isis-tooling.yml
+.causeway-tooling.yml
 ----
 global: # <.>
   option ...
@@ -80,7 +80,7 @@ command:
 <.> configuration for the "index" command (also used by the "projdoc" command)
 
 TIP: This configuration file is mapped onto the `CLIConfig` bean.
-Inspect its https://github.com/apache/isis/blob/master/tooling/cli/src/main/java/org/apache/isis/tooling/cli/CliConfig.java#L31[source code] for more detailed information.
+Inspect its https://github.com/apache/causeway/blob/master/tooling/cli/src/main/java/org/apache/causeway/tooling/cli/CliConfig.java#L31[source code] for more detailed information.
 
 
 == Commands
@@ -91,10 +91,10 @@ All commands accept the following common parameters:
 +
 in other words, the root of the git repo.
 
-A number of global configuration options can be specified under the `global` entry in the `isis-tooling.yml` file.
+A number of global configuration options can be specified under the `global` entry in the `causeway-tooling.yml` file.
 
 [source,yml]
-.isis-tooling.yml
+.causeway-tooling.yml
 ----
 global:
   licenseHeader: "Licensed to the Apache Software Foundation (ASF) ..."   # <.>
@@ -115,7 +115,7 @@ The `projdoc` command is usually invoked as follows:
 
 [source]
 ----
-java -jar tooling/cli/target/isis-tooling-cli.jar \
+java -jar tooling/cli/target/causeway-tooling-cli.jar \
     -p . \
     -w core/adoc \
     -x antora/components/refguide-index \
@@ -151,7 +151,7 @@ The `overview` command is usually invoked as follows:
 
 [source]
 ----
-java -jar tooling/cli/target/isis-tooling-cli.jar \
+java -jar tooling/cli/target/causeway-tooling-cli.jar \
     -p . \
     -v core/adoc \
     overview
@@ -173,7 +173,7 @@ There are no command-specific options.
 The `overview` command supports a number of command-specific configuration options:
 
 [source,yml]
-.isis-tooling.yml
+.causeway-tooling.yml
 ----
 commands:
   overview:
@@ -183,9 +183,9 @@ commands:
     description: "These tables summarize all Maven artifacts ..."   # <.>
     sections:                                                       # <.>
       ...
-      Persistence: org.apache.isis.persistence
-      JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
-      JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
+      Persistence: org.apache.causeway.persistence
+      JDO: "org.apache.causeway.persistence:causeway-persistence-jdo.*"
+      JPA: "org.apache.causeway.persistence:causeway-persistence-jpa.*"
       ...
 ----
 <.> the output target root for generated overview _adoc_; corresponds to command line option `-v` (if empty the current dir is used)
@@ -205,15 +205,15 @@ It consists of key:value pairs:
 
 This pattern in turn can be either:
 
-* an exact Maven `groupId`, such as `org.apache.isis.persistence`
+* an exact Maven `groupId`, such as `org.apache.causeway.persistence`
 +
 This matches all Maven modules with exactly that `groupId`.
 
-* a Maven `groupId` with wildcard, such as `org.apache.isis.core.*`
+* a Maven `groupId` with wildcard, such as `org.apache.causeway.core.*`
 +
 This matches all Maven modules whose `groupId` pattern matches the groupId.
 
-* a Maven group and artifact optionally with wildcard, such as `org.apache.isis.persistence:isis-persistence-jdo.*`
+* a Maven group and artifact optionally with wildcard, such as `org.apache.causeway.persistence:causeway-persistence-jdo.*`
 +
 This matches all Maven modules whose `groupId` pattern equals the specified groupId and whose `artifactId` pattern matches the specified `artifactId`.
 
@@ -244,7 +244,7 @@ The `index` command is usually invoked as follows:
 
 [source]
 ----
-java -jar tooling/cli/target/isis-tooling-cli.jar \
+java -jar tooling/cli/target/causeway-tooling-cli.jar \
     -p . \
     -x antora/components/refguide-index \
     index
@@ -264,7 +264,7 @@ where :
 The `index` command supports a number of command-specific configuration options:
 
 [source,yml]
-.isis-tooling.yml
+.causeway-tooling.yml
 ----
 commands:
   index:
@@ -278,7 +278,7 @@ commands:
 <.> the output target root for generated index _adoc_ files; corresponds to command line option `-x` (if empty the current dir is used)
 <.> sub-folder name for the _Document Global Index_
 <.> format for include statements via which other _adoc_ files may refer to the Document Global Index
-<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.causeway.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
 <.> whether to activate the `OrphanedIncludeStatementFixer`.
 
 The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.

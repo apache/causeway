@@ -15,18 +15,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.causeway.core</groupId>
+		<artifactId>causeway-core</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.testing</groupId>
-	<artifactId>isis-testing</artifactId>
+	<groupId>org.apache.causeway.testing</groupId>
+	<artifactId>causeway-testing</artifactId>
 
-	<name>Apache Isis Testing</name>
+	<name>Apache Causeway Testing</name>
 	<description>
-        A library of utilities, mini-frameworks and tools for prototyping and testing Apache Isis applications.
+        A library of utilities, mini-frameworks and tools for prototyping and testing Apache Causeway applications.
     </description>
 
 	<packaging>pom</packaging>
@@ -34,8 +34,8 @@
 	<properties>
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<jar-plugin.automaticModuleName>org.apache.isis.testing</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/testing</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.testing</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/testing</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -66,96 +66,96 @@
 			<!-- this module -->
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-archtestsupport</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-archtestsupport</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-archtestsupport-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fakedata</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fakedata-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fakedata-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fakedata-integtests</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-archtestsupport-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fakedata</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fakedata-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fakedata-fixtures</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fakedata-integtests</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fixtures</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-fixtures-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-h2console</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-h2console</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-h2console-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-integtestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-integtestsupport-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-h2console-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-hsqldbmgr-ui</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-integtestsupport</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-specsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-specsupport-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-hsqldbmgr-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-unittestsupport</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-specsupport</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-unittestsupport-applib</artifactId>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-specsupport-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-unittestsupport</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing-unittestsupport-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -176,7 +176,7 @@
 
 	<profiles>
 		<profile>
-			<id>isis-app-starter-datanucleusenhance</id>
+			<id>causeway-app-starter-datanucleusenhance</id>
 			<activation>
 				<file>
 					<exists>${basedir}/logging-dn-enhance.properties</exists>

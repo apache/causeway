@@ -4,7 +4,7 @@
 :page-partial:
 
 
-Apache Isis allows link:http://fortawesome.github.io/Font-Awesome/icons/[font awesome] icons to be associated with each action, and for link:http://getbootstrap.com/css/#buttons[Bootstrap CSS] to be applied to action rendered as buttons.
+Apache Causeway allows link:http://fortawesome.github.io/Font-Awesome/icons/[font awesome] icons to be associated with each action, and for link:http://getbootstrap.com/css/#buttons[Bootstrap CSS] to be applied to action rendered as buttons.
 These UI hints can be applied either to individual actions, or can be applied en-masse using pattern matching.
 
 It is also possible to specify additional CSS for an object's members (not just actions).
@@ -35,13 +35,13 @@ Alternatively, you can specify these hints dynamically in the xref:ui.adoc#objec
 Rather than annotating every action with xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClassFa[@ActionLayout#cssClassFa] and xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClass[@ActionLayout#cssClass] you can instead specify the UI hint globally using regular expressions.
 Not only does this save a lot of boilerplate/editing, it helps ensure consistency across all actions.
 
-To declare fa classes globally, use the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action-layout.css-class-fa.patterns[isis.applib.annotation.action-layout.css-class-fa.patterns] configuration property (a comma separated list of key:value pairs).
+To declare fa classes globally, use the xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.action-layout.css-class-fa.patterns[causeway.applib.annotation.action-layout.css-class-fa.patterns] configuration property (a comma separated list of key:value pairs).
 
 For example:
 
 [source,ini]
 ----
-isis.applib.annotation.action-layout.css-class-fa.patterns=\
+causeway.applib.annotation.action-layout.css-class-fa.patterns=\
                         new.*:fa-plus,\
                         add.*:fa-plus-square,\
                         create.*:fa-plus,\
@@ -77,13 +77,13 @@ Again, this CSS class will be attached to an appropriate containing `<div>` or `
 Possible use cases for this is to highlight the most important properties of a domain object.
 
 
-It is also possible to specify CSS classes globally, using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action-layout.css-class.patterns[isis.applib.annotation.action-layout.css-class.patterns] configuration property.
+It is also possible to specify CSS classes globally, using the xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.action-layout.css-class.patterns[causeway.applib.annotation.action-layout.css-class.patterns] configuration property.
 
 For example:
 
 [source,ini]
 ----
-isis.applib.annotation.action-layout.css-class.patterns=\
+causeway.applib.annotation.action-layout.css-class.patterns=\
                         delete.*:btn-warning
 ----
 

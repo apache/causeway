@@ -22,14 +22,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
-import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
-import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
-import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
-import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
+import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
+import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
+import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
+import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
+import org.apache.causeway.incubator.viewer.javafx.viewer.JavafxViewer;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 import demoapp.dom.DemoModuleJpa;
 
@@ -41,8 +41,8 @@ import demoapp.dom.DemoModuleJpa;
     DemoModuleJpa.class,
 
     // INCUBATING
-    IsisModuleSecurityBypass.class,
-    IsisModuleIncViewerJavaFxViewer.class,
+    CausewayModuleSecurityBypass.class,
+    CausewayModuleIncViewerJavaFxViewer.class,
 
 })
 public class DemoAppJavaFx {
@@ -50,7 +50,7 @@ public class DemoAppJavaFx {
     @Bean
     public JavaFxViewerConfig viewerConfig() {
         return JavaFxViewerConfig.builder()
-                .applicationTitle("Apache Isis Demo")
+                .applicationTitle("Apache Causeway Demo")
                 .applicationIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "icon.png"))
                 .brandingIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "gift_32.png"))
                 .objectFallbackIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "object_fallback_icon.png"))
@@ -59,10 +59,10 @@ public class DemoAppJavaFx {
 
     public static void main(final String[] args) {
 
-        IsisPresets.logging(InteractionServiceDefault.class, "debug");
-        IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
+        CausewayPresets.logging(InteractionServiceDefault.class, "debug");
+        CausewayPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
-        IsisPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
+        CausewayPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
         System.setProperty("spring.profiles.active", "demo-jpa");
 
         JavafxViewer.launch(DemoAppJavaFx.class, args);

@@ -32,26 +32,25 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.jaxb.PersistentEntitiesAdapter;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -103,7 +102,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
 //end::class[]
 
-    //XXX[ISIS-2384] potentially fails with NPE
+    //XXX[CAUSEWAY-2384] potentially fails with NPE
     @Action(choicesFrom = "children")
     public StatefulVmJaxbRefsEntity suffixSelected(final List<JaxbRefEntity> children) {
         for(JaxbRefEntity child : children) {
@@ -124,7 +123,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         return this;
     }
 
-    //XXX[ISIS-2383] in support of an editable property ...
+    //XXX[CAUSEWAY-2383] in support of an editable property ...
     @MemberSupport public List<JaxbRefEntity> choicesFavoriteChild() {
         return choices0ChangeFavoriteChild(); // reuse logic from above
     }

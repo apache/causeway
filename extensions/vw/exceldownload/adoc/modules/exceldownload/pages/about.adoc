@@ -13,8 +13,8 @@ Add the following dependency:
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
 </dependency>
 ----
 
@@ -25,7 +25,7 @@ Also add the following module to your `AppManifest`:
 ----
 @Configuration
 @Import({
-        IsisModuleExtExcelDownloadWicketUi.class,
+        CausewayModuleExtExcelDownloadWicketUi.class,
         ...
 })
 public class AppManifest {

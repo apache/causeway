@@ -36,7 +36,7 @@ class ApplicationFeatureViewModel {
 <.> xref:#title_[title()]
 +
 --
-having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Causeway 1.6.0
 --
 <.> xref:#getMemberName_[getMemberName()]
 +
@@ -54,7 +54,7 @@ The parent package feature of this class or package.
 [#title_]
 === title()
 
-having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Causeway 1.6.0
 
 [#getMemberName_]
 === getMemberName()

@@ -140,7 +140,7 @@ Use instead of _#hide()_ , _#disable(String)_ and _#invalidate(String)_ ; just d
 <.> xref:#veto_TranslatableString[veto(TranslatableString)]
 +
 --
-Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
+Use instead of _#hide()_ , _#disable(org.apache.causeway.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.causeway.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
 --
 <.> xref:#get_Object[get(Object)]
 +
@@ -263,7 +263,7 @@ If hiding, just pass `null` for the parameter.
 [#veto_TranslatableString]
 === veto(TranslatableString)
 
-Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
+Use instead of _#hide()_ , _#disable(org.apache.causeway.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.causeway.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
 
 If hiding, just pass `null` for the parameter.
 

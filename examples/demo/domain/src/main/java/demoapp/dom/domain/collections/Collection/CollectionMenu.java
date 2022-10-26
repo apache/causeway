@@ -21,20 +21,19 @@ package demoapp.dom.domain.collections.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.factory.FactoryService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.CollectionMenu")
 @DomainService(

@@ -18,9 +18,9 @@
  */
 package demoapp.dom.domain.actions.Action.semantics;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 

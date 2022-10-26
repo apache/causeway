@@ -152,7 +152,7 @@ div {
     /* font-family: Chicago, sans-serif;*/
 }
 
-.isis-logo-button-image:before {
+.causeway-logo-button-image:before {
     content: "";
     width: 65px;
     height: 40px;
@@ -163,7 +163,7 @@ div {
     background-repeat: no-repeat;
     background-size: contain, cover;
     /*background-image: url(/img/kroviz-logo.svg);*/
-    background-image: url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
+    background-image: url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/causeway.svg");
 }
 
 .kvision-logo-button-image:before {

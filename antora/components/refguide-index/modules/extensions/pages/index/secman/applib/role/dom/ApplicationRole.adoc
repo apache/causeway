@@ -11,8 +11,8 @@ class ApplicationRole {
   public static final String SCHEMA;
   public static final String TABLE;
   String title()
-  List<org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions()
-  int compareTo(org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole other)
+  List<org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions()
+  int compareTo(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole other)
   boolean equals(Object obj)
   int hashCode()
   String toString()

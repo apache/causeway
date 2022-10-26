@@ -1,0 +1,206 @@
+= Value types
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.value-types~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.value-types.java-lang.byte.format]]
+causeway.value-types.java-lang.byte. +
+format
+
+|
+| Configures the number format understood by ``ByteValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[causeway.value-types.java-lang.double.format]]
+causeway.value-types.java-lang.double. +
+format
+
+|
+| Configures the number format understood by ``DoubleValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[causeway.value-types.java-lang.float.format]]
+causeway.value-types.java-lang.float. +
+format
+
+|
+| Configures the number format understood by ``FloatValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[causeway.value-types.java-lang.long.format]]
+causeway.value-types.java-lang.long. +
+format
+
+|
+| Configures the number format understood by ``LongValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[causeway.value-types.java-lang.short.format]]
+causeway.value-types.java-lang.short. +
+format
+
+|
+| Configures the number format understood by ``ShortValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[causeway.value-types.java-math.big-decimal.format]]
+causeway.value-types.java-math. +
+big-decimal.format
+
+|
+| Configures the number format understood by ``BigDecimalValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-math.big-integer.format]]
+causeway.value-types.java-math. +
+big-integer.format
+
+|
+| Configures the number format understood by ``BigIntegerValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-sql.date.format]]
+causeway.value-types.java-sql.date. +
+format
+
+|  medium
+| Configures the formats understood by ``JavaSqlDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-sql.time.format]]
+causeway.value-types.java-sql.time. +
+format
+
+|  short
+| Configures the formats understood by ``JavaSqlTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-sql.timestamp.format]]
+causeway.value-types.java-sql. +
+timestamp.format
+
+|  short
+| Configures the formats understood by ``JavaSqlTimeStampValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-time.local-date-time.format]]
+causeway.value-types.java-time. +
+local-date-time.format
+
+|  medium
+| Configures the formats understood by ``LocalDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-time.local-date.format]]
+causeway.value-types.java-time. +
+local-date.format
+
+|  medium
+| Configures the formats understood by ``LocalDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-time.local-time.format]]
+causeway.value-types.java-time. +
+local-time.format
+
+|  medium
+| Configures the formats understood by ``LocalTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-time.offset-date-time.format]]
+causeway.value-types.java-time. +
+offset-date-time.format
+
+|  medium
+| Configures the formats understood by ``OffsetDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-time.offset-time.format]]
+causeway.value-types.java-time. +
+offset-time.format
+
+|  medium
+| Configures the formats understood by ``OffsetTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-time.zoned-date-time.format]]
+causeway.value-types.java-time. +
+zoned-date-time.format
+
+|  medium
+| Configures the formats understood by ``ZonedDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.java-util.date.format]]
+causeway.value-types.java-util.date. +
+format
+
+|  medium
+| Configures the formats understood by ``JavaUtilDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.joda.date-time.format]]
+causeway.value-types.joda.date-time. +
+format
+
+|  medium
+| Configures the formats understood by ``JodaDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.joda.local-date-time.format]]
+causeway.value-types.joda. +
+local-date-time.format
+
+|  medium
+| Configures the formats understood by ``JodaLocalDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.joda.local-date.format]]
+causeway.value-types.joda.local-date. +
+format
+
+|  medium
+| Configures the formats understood by ``JodaLocalDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[causeway.value-types.primitives.int.format]]
+causeway.value-types.primitives.int. +
+format
+
+|
+| Configures the number format understood by ``IntValueSemanticsProviderAbstract``. @deprecated
+
+
+
+|===
+
+include::../section-hooks/causeway.value-types~post.adoc[]

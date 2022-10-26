@@ -7,7 +7,7 @@
 
 
 
-Apache Isis has two public mailing lists.
+Apache Causeway has two public mailing lists.
 
 .Table caption
 [cols="2,3,2,3", options="header"]
@@ -20,19 +20,19 @@ Apache Isis has two public mailing lists.
 
 
 |Users
-|mailto:users@isis.apache.org[users@isis.apache.org]
-|https://lists.apache.org/list.html?users&#0064;isis.apache.org[Pony mail] +
-http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[Markmail] +
-http://mail-archives.apache.org/mod_mbox/isis-users/[mbox]
-|mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
+|mailto:users@causeway.apache.org[users@causeway.apache.org]
+|https://lists.apache.org/list.html?users&#0064;causeway.apache.org[Pony mail] +
+http://markmail.org/search/causeway-users+list:org.apache.incubator.causeway-users[Markmail] +
+http://mail-archives.apache.org/mod_mbox/causeway-users/[mbox]
+|mailto:users-subscribe@causeway.apache.org[users-subscribe@causeway.apache.org]
 
 
 |Contributors
-|mailto:dev@isis.apache.org[dev@isis.apache.org]
-|https://lists.apache.org/list.html?dev&#0064;isis.apache.org[Pony mail] +
-http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[Markmail] +
-http://mail-archives.apache.org/mod_mbox/isis-dev/[mbox]
-|mailto:dev-subscribe@isis.apache.org[dev-subscribe@isis.apache.org]
+|mailto:dev@causeway.apache.org[dev@causeway.apache.org]
+|https://lists.apache.org/list.html?dev&#0064;causeway.apache.org[Pony mail] +
+http://markmail.org/search/causeway-dev+list:org.apache.incubator.causeway-dev[Markmail] +
+http://mail-archives.apache.org/mod_mbox/causeway-dev/[mbox]
+|mailto:dev-subscribe@causeway.apache.org[dev-subscribe@causeway.apache.org]
 
 
 |===
@@ -46,11 +46,11 @@ The Markmail archives span both our current (TLP) mailing lists and also our ori
 
 To subscribe to the `users` mailing list:
 
-* send a blank email to link:mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
+* send a blank email to link:mailto:users-subscribe@causeway.apache.org[users-subscribe@causeway.apache.org]
 * You'll then get back a confirmation email.
 * To confirm, all you generally need to do is to send a blank reply (there are more detailed instructions inside that confirmation mail if that doesn't work)
 
-Then, to ask questions, simply mail to link:mailto:users@isis.apache.org[users@isis.apache.org] (nb: no `-subscribe` suffix this time).
+Then, to ask questions, simply mail to link:mailto:users@causeway.apache.org[users@causeway.apache.org] (nb: no `-subscribe` suffix this time).
 
 If you ever want to unsubscribe, then you can send a mail to the `users-unsubscribe` email address.
 

@@ -1,0 +1,60 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.facets.object.domainservice.annotation;
+
+import java.util.Optional;
+
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.domainobject.AliasedFacetForDomainObjectAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
+import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacetAbstract;
+
+/**
+ * AliasedFacet based on presence of {@link DomainService#aliased()}.
+ * <p>
+ * Analogous to {@link AliasedFacetForDomainServiceAnnotation}.
+ * @see AliasedFacetForDomainObjectAnnotation
+ */
+public class AliasedFacetForDomainServiceAnnotation
+extends AliasedFacetAbstract {
+
+    public static Optional<AliasedFacet> create(
+            final Optional<DomainService> domainServiceIfAny,
+            final Class<?> correspondingClass,
+            final FacetHolder holder) {
+
+        return domainServiceIfAny
+                .map(annot->annot.aliased())
+                .map(Can::ofArray)
+                .filter(Can::isNotEmpty)
+                .map(aliasNames -> new AliasedFacetForDomainServiceAnnotation(
+                        aliasNames
+                            .map(aliasName->LogicalType.eager(correspondingClass, aliasName)),
+                        holder));
+    }
+
+    private AliasedFacetForDomainServiceAnnotation(
+            final Can<LogicalType> aliases,
+            final FacetHolder holder) {
+        super(aliases, holder);
+    }
+}

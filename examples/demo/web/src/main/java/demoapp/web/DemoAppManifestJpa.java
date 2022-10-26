@@ -18,15 +18,15 @@
  */
 package demoapp.web;
 
-import org.apache.isis.extensions.audittrail.jpa.IsisModuleExtAuditTrailPersistenceJpa;
-import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
-import org.apache.isis.extensions.executionlog.jpa.IsisModuleExtExecutionLogPersistenceJpa;
-import org.apache.isis.extensions.executionoutbox.jpa.IsisModuleExtExecutionOutboxPersistenceJpa;
-import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
-import org.apache.isis.extensions.sessionlog.jpa.IsisModuleExtSessionLogPersistenceJpa;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrailPersistenceJpa;
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.extensions.executionlog.jpa.CausewayModuleExtExecutionLogPersistenceJpa;
+import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
+import org.apache.causeway.extensions.secman.jpa.CausewayModuleExtSecmanPersistenceJpa;
+import org.apache.causeway.extensions.sessionlog.jpa.CausewayModuleExtSessionLogPersistenceJpa;
 
 import demoapp.dom.DemoModuleJpa;
 
@@ -39,12 +39,12 @@ import demoapp.dom.DemoModuleJpa;
     DemoAppManifestCommon.class,
 
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanPersistenceJpa.class,
-    IsisModuleExtSessionLogPersistenceJpa.class,
-    IsisModuleExtCommandLogPersistenceJpa.class,
-    IsisModuleExtExecutionLogPersistenceJpa.class,
-    IsisModuleExtExecutionOutboxPersistenceJpa.class,
-    IsisModuleExtAuditTrailPersistenceJpa.class,
+    CausewayModuleExtSecmanPersistenceJpa.class,
+    CausewayModuleExtSessionLogPersistenceJpa.class,
+    CausewayModuleExtCommandLogPersistenceJpa.class,
+    CausewayModuleExtExecutionLogPersistenceJpa.class,
+    CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+    CausewayModuleExtAuditTrailPersistenceJpa.class,
 })
 
 public class DemoAppManifestJpa {

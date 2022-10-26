@@ -1,0 +1,125 @@
+= MetaModel Validator
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.core.meta-model.validator~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.core.meta-model.validator.action-collection-parameter-choices]]
+causeway.core.meta-model.validator. +
+action-collection-parameter- +
+choices
+
+|
+| Whether to validate that any actions that accept action parameters have either a corresponding choices or auto-complete for that action parameter, or are associated with a collection of the appropriate type.
+
+
+|
+[[causeway.core.meta-model.validator.allow-deprecated]]
+causeway.core.meta-model.validator. +
+allow-deprecated
+
+|
+| This setting is used to determine whether the use of such deprecated features is allowed.
+
+If not allowed, then metamodel validation errors will be flagged.
+
+Note that this settings has no effect if the programming model has been configured to ignore deprecated features (because in this case the programming model facets simply won't be included in the introspection process.
+
+
+|
+[[causeway.core.meta-model.validator.explicit-logical-type-names]]
+causeway.core.meta-model.validator. +
+explicit-logical-type-names
+
+|
+| Whether to ensure that the logical-type-name of all objects must be specified explicitly, using either ``Named``.
+
+It is _highly advisable_ to leave this set as enabled (the default). These logical-type-names should also (of course) be unique - among non-abstract types.
+
+
+|
+[[causeway.core.meta-model.validator.jaxb-view-model.date-time-type-adapter]]
+causeway.core.meta-model.validator. +
+jaxb-view-model. +
+date-time-type-adapter
+
+|
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
+
+
+|
+[[causeway.core.meta-model.validator.jaxb-view-model.no-arg-constructor]]
+causeway.core.meta-model.validator. +
+jaxb-view-model.no-arg-constructor
+
+|
+| If set, then ensures that all JAXB-style view models have a no-arg constructor.
+
+
+|
+[[causeway.core.meta-model.validator.jaxb-view-model.not-abstract]]
+causeway.core.meta-model.validator. +
+jaxb-view-model.not-abstract
+
+|
+| If set, then ensures that all JAXB-style view models are concrete classes, not abstract.
+
+
+|
+[[causeway.core.meta-model.validator.jaxb-view-model.not-inner-class]]
+causeway.core.meta-model.validator. +
+jaxb-view-model.not-inner-class
+
+|
+| If set, then ensures that all JAXB-style view models are either top-level classes or nested static classes (in other words, checks that they are not anonymous, local nor nested non-static classes).
+
+
+|
+[[causeway.core.meta-model.validator.jaxb-view-model.reference-type-adapter]]
+causeway.core.meta-model.validator. +
+jaxb-view-model. +
+reference-type-adapter
+
+|
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
+
+
+|
+[[causeway.core.meta-model.validator.jdoql.from-clause]]
+causeway.core.meta-model.validator. +
+jdoql.from-clause
+
+|
+| If set, then ensures that the 'FROM' clause within any JDOQL ``@Query``s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
+
+
+|
+[[causeway.core.meta-model.validator.jdoql.variables-clause]]
+causeway.core.meta-model.validator. +
+jdoql.variables-clause
+
+|
+| If set, then ensures that the 'VARIABLES' clause within any JDOQL ``@Query``s relates to a known entity type.
+
+
+|
+[[causeway.core.meta-model.validator.parallelize]]
+causeway.core.meta-model.validator. +
+parallelize
+
+|
+| Whether to perform metamodel validation in parallel.
+
+
+
+|===
+
+include::../section-hooks/causeway.core.meta-model.validator~post.adoc[]

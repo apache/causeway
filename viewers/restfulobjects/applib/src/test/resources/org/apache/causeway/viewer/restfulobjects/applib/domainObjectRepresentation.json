@@ -1,0 +1,250 @@
+{
+    "domainType": "Simple",
+    "instanceId": "25",
+    "title": "Untitled Simple Entity",
+    
+    "members": {
+        "ABigDecimal": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/ABigDecimal",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ABigDecimal",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "ABigInteger": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/ABigInteger",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ABigInteger",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "ADouble": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/ADouble",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "value": 0,
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ADouble",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "ALong": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/ALong",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "value": 0,
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/ALong",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "anInt": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/anInt",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "value": 0,
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anInt",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "anotherDouble": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/anotherDouble",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anotherDouble",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "anotherInt": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/anotherInt",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anotherInt",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "anotherLong": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/anotherLong",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/anotherLong",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "flag": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/flag",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "value": true,
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/flag",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+        "name": {
+            "memberType": "property",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/properties/name",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-property\""
+            },
+            "value": "New name",
+            "extensions": {},
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/properties/name",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-property\""
+                }
+            ]
+        },
+         "someCollection": {
+             "memberType": "collection",
+             "details": {
+                 "rel": "details",
+                 "href": "http://localhost:8080/objects/OID:25/collection/someCollection",
+                 "method": "GET",
+                 "type": "application/json;profile=\"urn:org.restfulobjects/object-collection\""
+             },
+             "value": true,
+             "extensions": {},
+             "links": [
+                 {
+                     "rel": "describedby",
+                     "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/collections/someCollection",
+                     "method": "GET",
+                     "type": "application/json;profile=\"urn:org.restfulobjects/type-collection\""
+                 }
+             ]
+         },
+       "toggle": {
+            "memberType": "action",
+            "details": {
+                "rel": "details",
+                "href": "http://localhost:8080/objects/OID:25/actions/toggle",
+                "method": "GET",
+                "type": "application/json;profile=\"urn:org.restfulobjects/object-action\""
+            },
+            "extensions": {
+                "actionType": "user",
+                "actionSemantics": "sideEffects"
+            },
+            "links": [
+                {
+                    "rel": "describedby",
+                    "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity/actions/toggle",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/type-action\""
+                },
+                {
+                    "rel": "contributedBy",
+                    "href": "http://localhost:8080/objects/OID:5",
+                    "method": "GET",
+                    "type": "application/json;profile=\"urn:org.restfulobjects/domain-object\""
+                }
+            ]
+        }
+    },
+    "links": [
+        {
+            "rel": "describedby",
+            "href": "http://localhost:8080/domainTypes/org.apache.causeway.tck.dom.simples.SimpleEntity",
+            "method": "GET",
+            "type": "application/json;profile=\"urn:org.restfulobjects/domain-type\""
+        }
+    ],
+    "extensions": {
+        "oid": "Simple:25"
+    }
+}

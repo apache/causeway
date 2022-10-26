@@ -28,18 +28,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,7 +47,7 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
     schema = "demo",
     name = "PropertyProjectingChildJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.PropertyProjectingChildJpa")
 @DomainObject(
     editing = Editing.DISABLED)

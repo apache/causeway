@@ -7,7 +7,7 @@
 .PrimaryConfig.java
 ----
 class PrimaryConfig {
-  PrimaryConfig(IsisConfiguration isisConfiguration)
+  PrimaryConfig(CausewayConfiguration causewayConfiguration)
   boolean isConfigured()
 }
 ----

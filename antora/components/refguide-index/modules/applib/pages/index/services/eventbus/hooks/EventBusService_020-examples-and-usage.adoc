@@ -105,7 +105,7 @@ By creating domain event subtypes we can be more semantically precise and in tur
 
 We recommend that you define event classes at (up to) four scopes:
 
-* at the top "global" scope is the Apache Isis-defined `o.a.i.applib.event.ActionDomainEvent`
+* at the top "global" scope is the Apache Causeway-defined `o.a.i.applib.event.ActionDomainEvent`
 * for the "module" scope, create a static class to represent the module itself, and creating nested classes within
 * for each "class" scope, create a nested static event class in the domain object's class for all of the domain object's actions
 * for each "action" scope, create a nested static event class for that action, inheriting from the "domain object" class.
@@ -119,12 +119,12 @@ package com.mycompany.modules.libmem;
 public static class LibMemModule {
     private LibMemModule() {}
     public abstract static class ActionDomainEvent<S>
-                extends org.apache.isis.applib.event.ActionDomainEvent<S> {}
+                extends org.apache.causeway.applib.event.ActionDomainEvent<S> {}
     ...                                                                             // <.>
     public abstract static class PropertyDomainEvent<S,T>
-                extends org.apache.isis.applib.event.PropertyDomainEvent<S,T> {}
+                extends org.apache.causeway.applib.event.PropertyDomainEvent<S,T> {}
     public abstract static class CollectionDomainEvent<S,E>
-                extends org.apache.isis.applib.event.CollectionDomainEvent<S,E> {}
+                extends org.apache.causeway.applib.event.CollectionDomainEvent<S,E> {}
 }
 ----
 <.> similar events for properties and collections should also be defined
@@ -249,10 +249,10 @@ public class ReserveStockSubscriber {
 
 == Related Services
 
-The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
+The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Causeway domain object model.
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-There are several mechanisms to suport coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system:
+There are several mechanisms to suport coarse-grained publish/subscribe for system-to-system interactions, from Apache Causeway to some other system:
 
 * Command publishing, representing the _intention_ to invoke an action or edit a property.
 +

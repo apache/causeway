@@ -16,14 +16,14 @@ by Henry Salomé le 06/12/2006
 Create banner image:
 
 ----
-convert.exe WheatFieldWithCrows.jpg -channel all isis_clut.png -clut WheatFieldWithCrows.png
+convert.exe WheatFieldWithCrows.jpg -channel all causeway_clut.png -clut WheatFieldWithCrows.png
 ----
 
 ----
-convert.exe WheatFieldWithCrows.jpg -separate -normalize -combine isis_clut.png -clut WheatFieldWithCrows.png
+convert.exe WheatFieldWithCrows.jpg -separate -normalize -combine causeway_clut.png -clut WheatFieldWithCrows.png
 ----
 
-== Apache Isis colors
+== Apache Causeway colors
 
 In the icon: green, orange, red, blue
 

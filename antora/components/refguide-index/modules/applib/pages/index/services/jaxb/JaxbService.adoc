@@ -17,7 +17,7 @@ interface JaxbService {
   T fromXml(Class<T> domainClass, String xml, Map<String, Object> unmarshallerProperties)     // <.>
   String toXml(Object domainObject)     // <.>
   String toXml(Object domainObject, Map<String, Object> marshallerProperties)     // <.>
-  Map<String, String> toXsd(Object domainObject, IsisSchemas isisSchemas)     // <.>
+  Map<String, String> toXsd(Object domainObject, CausewaySchemas causewaySchemas)     // <.>
 }
 ----
 
@@ -51,7 +51,7 @@ Marshalls the object into XML (using a _JAXBContext_ for the object's class).
 --
 Marshalls the object into XML specifying additional properties (passed to the _JAXBContext_ used for the object's class).
 --
-<.> xref:#toXsd_Object_IsisSchemas[toXsd(Object, IsisSchemas)]
+<.> xref:#toXsd_Object_CausewaySchemas[toXsd(Object, CausewaySchemas)]
 +
 --
 Generates a map of each of the schemas referenced; the key is the schema namespace, the value is the XML of the schema itself.
@@ -89,12 +89,12 @@ Marshalls the object into XML (using a _JAXBContext_ for the object's class).
 
 Marshalls the object into XML specifying additional properties (passed to the _JAXBContext_ used for the object's class).
 
-[#toXsd_Object_IsisSchemas]
-=== toXsd(Object, IsisSchemas)
+[#toXsd_Object_CausewaySchemas]
+=== toXsd(Object, CausewaySchemas)
 
 Generates a map of each of the schemas referenced; the key is the schema namespace, the value is the XML of the schema itself.
 
-A JAXB-annotated domain object will live in its own XSD namespace and may reference multiple other XSD schemas. In particular, many JAXB domain objects will reference the common isis schemas. The xref:refguide:applib:index/services/jaxb/IsisSchemas.adoc[IsisSchemas] paramter indicates whether these schemas should be included or excluded from the map.
+A JAXB-annotated domain object will live in its own XSD namespace and may reference multiple other XSD schemas. In particular, many JAXB domain objects will reference the common causeway schemas. The xref:refguide:applib:index/services/jaxb/CausewaySchemas.adoc[CausewaySchemas] paramter indicates whether these schemas should be included or excluded from the map.
 
 include::hooks/JaxbService_010-implementation.adoc[]
 

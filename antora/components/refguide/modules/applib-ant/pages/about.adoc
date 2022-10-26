@@ -4,12 +4,12 @@
 :page-partial:
 
 
-This guide describes the various annotations used by Apache Isis to provide additional metadata about the domain objects.
+This guide describes the various annotations used by Apache Causeway to provide additional metadata about the domain objects.
 Most of these are defined by the framework itself, but some are from other libraries.
 It also identifies a number of annotations that are now deprecated, and indicates their replacement.
 
 
-The annotations supported by Apache Isis break out into five categories.
+The annotations supported by Apache Causeway break out into five categories.
 
 include::about/main.adoc[leveloffset=+1]
 include::about/other.adoc[leveloffset=+1]
@@ -21,7 +21,7 @@ include::about/jee.adoc[leveloffset=+1]
 
 == Examples
 
-To give just a few examples of annotations supported by Apache Isis:
+To give just a few examples of annotations supported by Apache Causeway:
 
 * if a property is read-only, then this can be annotated with `@Property(editing=EditingDISABLED)`.
 * if a class has a small fixed set of instances (eg a picklist), then it can be annotated using `@DomainObject(bounded=true)`

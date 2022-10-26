@@ -30,7 +30,7 @@ public class WrapperLongSamples implements Samples<java.lang.Long> {
 
     @Override
     public Stream<java.lang.Long> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.LongValueSemantics()
                 .getExamples()
                 .stream();
     }

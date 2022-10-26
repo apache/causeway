@@ -7,10 +7,10 @@
 The release process consists of:
 
 * the release manager cutting the release (documented below)
-* Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* Members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Isis itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
+Apache Causeway itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -97,7 +97,7 @@ Once you've fixed all issues, run the script again to confirm that all license v
 
 === Missing License Check
 
-Although Apache Isis has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
+Although Apache Causeway has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
 Without appropriate additional configuration, this would result in the generated `DEPENDENCIES` file and generated Maven site indicating dependencies as having "unknown" licenses.
 
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
@@ -141,7 +141,7 @@ licenses to remove from supplemental-models.xml (are spurious):
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
 
-=== Reconcile isis-bom pom
+=== Reconcile causeway-bom pom
 
 The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
 
@@ -196,13 +196,13 @@ For example:
 
 [source,bash,subs="attributes+"]
 ----
-export ISISJIRA=ISIS-9999                           # <.>
-export ISISTMP=/c/tmp                               # <.>
-export ISISREL={page-isisrel}                             # <.>
-export ISISRC=RC1                                   # <.>
-export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISART=isis
-env | grep ISIS | sort
+export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
+export CAUSEWAYTMP=/c/tmp                               # <.>
+export CAUSEWAYREL={page-causewayrel}                             # <.>
+export CAUSEWAYRC=RC1                                   # <.>
+export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
+export CAUSEWAYART=causeway
+env | grep CAUSEWAY | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
 (One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
@@ -213,7 +213,7 @@ env | grep ISIS | sort
 
 [IMPORTANT]
 ====
-The branch name is intentionally *not* the same as the eventual tag names (eg `isis-{page-isisrel}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayrel}`).
 ====
 
 
@@ -224,7 +224,7 @@ Commit any changes from the preceding steps:
 [source,bash,subs="attributes+"]
 ----
 git add ..
-git commit -m "$ISISJIRA: updates to pom.xml etc for release"
+git commit -m "$CAUSEWAYJIRA: updates to pom.xml etc for release"
 ----
 
 
@@ -240,22 +240,22 @@ The original worktree can stay with the `master` branch and be used for document
 +
 [source,bash,subs="attributes+"]
 ----
-git branch $ISISBRANCH
+git branch $CAUSEWAYBRANCH
 ----
 
 * Create a worktree for this branch:
 +
 [source,bash,subs="attributes+"]
 ----
-git worktree add ../isis-release $ISISBRANCH
+git worktree add ../causeway-release $CAUSEWAYBRANCH
 ----
 
 * Switch to the new worktree and push the branch:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-release
-git push origin $ISISBRANCH -u
+cd ../causeway-release
+git push origin $CAUSEWAYBRANCH -u
 ----
 
 
@@ -269,7 +269,7 @@ The remainder of the release process is performed from the context of the `bom` 
 cd bom
 ----
 
-=== Bump projects to `$ISISREL`
+=== Bump projects to `$CAUSEWAYREL`
 
 We use `mvn versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
@@ -280,7 +280,7 @@ We use `mvn versions:set` to manually bump the release version.
 +
 [source,bash,subs="attributes+"]
 ----
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 ----
 
 * next we build the framework so that these versioned `pom.xml` files are available for the next step:
@@ -297,7 +297,7 @@ The `-Dgithub` property activates the "github" profile that references all modul
 [source,bash,subs="attributes+"]
 ----
 pushd ../starters
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 mvn install -DskipTests -o
 popd
 ----
@@ -307,7 +307,7 @@ popd
 [source,bash,subs="attributes+"]
 ----
 git add ..
-git commit -m "$ISISJIRA: bumps version to $ISISREL"
+git commit -m "$CAUSEWAYJIRA: bumps version to $CAUSEWAYREL"
 ----
 
 
@@ -315,13 +315,13 @@ git commit -m "$ISISJIRA: bumps version to $ISISREL"
 === Sanity check
 
 Perform one last sanity check on the codebase.
-Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag.
+Delete all Causeway artifacts from your local Maven repo, then build using the `-o` offline flag.
 
 Still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
-rm -rf ~/.m2/repository/org/apache/isis
+rm -rf ~/.m2/repository/org/apache/causeway
 mvn clean install -o -T1C -Dgithub
 git clean -dfx ..
 ----
@@ -450,8 +450,8 @@ Finally, tag the release:
 
 [source,bash,subs="attributes+"]
 ----
-git tag $ISISART-$ISISREL --force
-git tag $ISISART-$ISISREL-$ISISRC --force
+git tag $CAUSEWAYART-$CAUSEWAYREL --force
+git tag $CAUSEWAYART-$CAUSEWAYREL-$CAUSEWAYRC --force
 ----
 
 
@@ -470,7 +470,7 @@ image::release-process/nexus-staging-1.png[width="600px"]
 If nothing appears in a staging repo you should stop here and work out why.
 
 Assuming that the repo has been populated, make a note of its repo id; this is needed for the voting thread.
-In the screenshot above the id is `org.apache.isis-008`.
+In the screenshot above the id is `org.apache.causeway-008`.
 
 After checking that the staging repository contains the artifacts that you expect you should close the staging repository.
 This will make it available so that people can check the release.
@@ -504,7 +504,7 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 [#reset-revision-property]
 === Reset `revision` property
 
-At the <<bump-code-to-isisrel,beginning>> of the release process we bumped the version to the release version, ie `$ISISREL`.
+At the <<bump-code-to-causewayrel,beginning>> of the release process we bumped the version to the release version, ie `$CAUSEWAYREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
 
 Therefore, still in the `bom` directory:
@@ -520,7 +520,7 @@ mvn install -DskipTests -o
 popd
 
 git add ..
-git commit -m "$ISISJIRA: resetting version"
+git commit -m "$CAUSEWAYJIRA: resetting version"
 ----
 
 === Push branch & tag
@@ -529,20 +529,20 @@ Push the release branch to origin:
 
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH
+git push -u origin $CAUSEWAYBRANCH
 ----
 
 and also push tag:
 
 [source,bash,subs="attributes+"]
 ----
-git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
+git push origin refs/tags/causeway-$CAUSEWAYREL:refs/tags/causeway-$CAUSEWAYREL-$CAUSEWAYRC
 git fetch
 ----
 
 [NOTE]
 ====
-The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
+The remote tags aren't visible locally but can be seen link:https://github.com/apache/causeway/tags[online].
 ====
 
 [#update-starter-apps]
@@ -561,7 +561,7 @@ These reference the most current snapshot nightly build.
 
 The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`:
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jdo` and `$CAUSEWAYBRANCH-jpa`:
 
 === HelloWorld
 
@@ -576,13 +576,13 @@ For _helloworld_, we create a release branch for both variants:
 git checkout jpa-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jpa
+git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$ISISREL # <.>
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL # <.>
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
 +
 <.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
@@ -601,7 +601,7 @@ mvn spring-boot:run
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jpa
+git push -u origin $CAUSEWAYBRANCH-jpa
 ----
 
 * for `jdo`:
@@ -613,13 +613,13 @@ git push -u origin $ISISBRANCH-jpa
 git checkout jdo-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jdo
+git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$ISISREL
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
 ----
 
 ** Test the app
@@ -638,7 +638,7 @@ This might be easiest to just cherry-pick commits made on the `jpa` branch.
 +
 [source,bash,subs="attributes+"]
 ----
-git merge $ISISBRANCH-jpa --no-commit
+git merge $CAUSEWAYBRANCH-jpa --no-commit
 ----
 +
 The idea here is to show equivalence between the two branches.
@@ -646,14 +646,14 @@ The merge commit should end up with no changes:
 +
 [source,bash,subs="attributes+"]
 ----
-git commit -m "$ISISJIRA - merge in jpa"
+git commit -m "$CAUSEWAYJIRA - merge in jpa"
 ----
 
 ** Push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jdo
+git push -u origin $CAUSEWAYBRANCH-jdo
 ----
 
 === SimpleApp
@@ -669,13 +669,13 @@ For _simple app_, the steps are almost the same:
 git checkout jpa-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jpa
+git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$ISISREL  # <.>
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL  # <.>
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
 <.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 
@@ -693,7 +693,7 @@ mvn -pl webapp spring-boot:run
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jpa
+git push -u origin $CAUSEWAYBRANCH-jpa
 ----
 
 
@@ -706,13 +706,13 @@ git push -u origin $ISISBRANCH-jpa
 git checkout jdo-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH-jdo
+git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$ISISREL
-mvn versions:set -DnewVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL
+mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
 ----
 
 ** Test the app
@@ -731,7 +731,7 @@ This might be easiest to just cherry-pick commits made on the `jpa` branch.
 +
 [source,bash,subs="attributes+"]
 ----
-git merge $ISISBRANCH-jpa --no-commit
+git merge $CAUSEWAYBRANCH-jpa --no-commit
 ----
 +
 The idea here is to show equivalence between the two branches.
@@ -739,41 +739,41 @@ The merge commit should end up with no changes:
 +
 [source,bash,subs="attributes+"]
 ----
-git commit -m "$ISISJIRA - merge in jpa"
+git commit -m "$CAUSEWAYJIRA - merge in jpa"
 ----
 
 ** Push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
-git push -u origin $ISISBRANCH-jdo
+git push -u origin $CAUSEWAYBRANCH-jdo
 ----
 
 
 == Preview website
 
-We also prepare a preview of the next version of the website, then made accessible from link:https://isis.staged.apache.org[].
+We also prepare a preview of the next version of the website, then made accessible from link:https://causeway.staged.apache.org[].
 
 * Prerequisites:
 
-** clone the link:https://github.com/apache/isis-site[] repo, alongside the `isis` repo:
+** clone the link:https://github.com/apache/causeway-site[] repo, alongside the `causeway` repo:
 +
 [source,bash,subs="attributes+"]
 ----
-git clone https://github.com/apache/isis-site ../isis-site
+git clone https://github.com/apache/causeway-site ../causeway-site
 ----
 
-** in the `isis-site` repo, check out the `asf-staging` branch:
+** in the `causeway-site` repo, check out the `asf-staging` branch:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-site
+cd ../causeway-site
 
 git checkout asf-staging
 git pull --ff-only
 ----
 
-* still in the `isis-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
+* still in the `causeway-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -785,11 +785,11 @@ done
 popd
 ----
 
-* Back in the `isis` repo's `release` worktree, generate the Antora site (from the top-level directory).
+* Back in the `causeway` repo's `release` worktree, generate the Antora site (from the top-level directory).
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-release
+cd ../causeway-release
 
 sh preview.sh -A
 ----
@@ -798,12 +798,12 @@ sh preview.sh -A
 ====
 This procedure doesn't yet work; Antora does not yet support worktrees.
 
-So instead it's currently necessary to perform the preview in the main `../isis` directory, switching branches.
+So instead it's currently necessary to perform the preview in the main `../causeway` directory, switching branches.
 You'll also need to rebuild all and then regenerate config files and tooling:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout $ISISBRANCH
+git checkout $CAUSEWAYBRANCH
 pushd bom
 mvn clean install -DskipTests -T1C -Dgithub
 popd
@@ -814,21 +814,21 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 ====
 
 
-* Copy the generated Antora site to `isis-site` repo's `contents` directory:
+* Copy the generated Antora site to `causeway-site` repo's `contents` directory:
 +
 [source,bash,subs="attributes+"]
 ----
-cp -Rf antora/target/site/* ../isis-site/content/.
+cp -Rf antora/target/site/* ../causeway-site/content/.
 ----
 
-* Back in the `isis-site` repo, commit the changes and preview:
+* Back in the `causeway-site` repo, commit the changes and preview:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-site
+cd ../causeway-site
 
 git add .
-git commit -m "$ISISJIRA : staging changes to website"
+git commit -m "$CAUSEWAYJIRA : staging changes to website"
 
 sh preview.sh
 ----
@@ -840,7 +840,7 @@ sh preview.sh
 git push origin asf-staging -u
 ----
 
-Wait a minute or two; the site should be available at link:https://isis.staged.apache.org[]  (nb: 'staged', not 'staging').
+Wait a minute or two; the site should be available at link:https://causeway.staged.apache.org[]  (nb: 'staged', not 'staging').
 
 
 
@@ -854,29 +854,29 @@ In all cases, votes last for 72 hours and require a +3 (binding) vote from membe
 [#start-voting-thread-on-dev-mailing-list]
 === Start voting thread on dev mailing list
 
-That is, link:mailto:dev@apache.isis.org[]
+That is, link:mailto:dev@apache.causeway.org[]
 
-The following boilerplate is for a release of the Apache Isis Core.
+The following boilerplate is for a release of the Apache Causeway Core.
 Adapt as required:
 
 Use the following subject, eg:
 
 [source,subs="attributes+"]
 ----
-[VOTE] Apache Isis Core release {page-isisrel} RC1
+[VOTE] Apache Causeway Core release {page-causewayrel} RC1
 ----
 
 And use the following body:
 
 [source,subs="attributes+"]
 ----
-I've just cut a new release of the Apache Isis Framework.
+I've just cut a new release of the Apache Causeway Framework.
 
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as isis-{page-isisrel}-RC1;
-see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as causeway-{page-causewayrel}-RC1;
+see https://github.com/apache/causeway/tags
 
 To verify the source code itself, you can use the following commands
 (in an empty directory):
@@ -886,10 +886,10 @@ include::partial$verify-process.adoc[]
 ----------------------------------------------------------------
 
 You can then test the helloworld or simpleapp starter apps, see:
-https://isis.staged.apache.org/comguide/latest/verifying-releases.html.
+https://causeway.staged.apache.org/comguide/latest/verifying-releases.html.
 
 You can also inspect the website in general, available at:
-https://isis.staged.apache.org.
+https://causeway.staged.apache.org.
 
 Please verify the release and cast your vote.
 The vote will be open for a minimum of 72 hours.
@@ -901,7 +901,7 @@ The vote will be open for a minimum of 72 hours.
 
 Remember to update:
 
-* the version number (`{page-isisrel}` or whatever)
+* the version number (`{page-causewayrel}` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`11xx` or whatever)
 

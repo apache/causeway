@@ -1,0 +1,241 @@
+{
+  "data" : {
+    "__schema" : {
+      "types" : [ {
+        "name" : "Boolean"
+      }, {
+        "name" : "ID"
+      }, {
+        "name" : "Int"
+      }, {
+        "name" : "Query"
+      }, {
+        "name" : "String"
+      }, {
+        "name" : "__Directive"
+      }, {
+        "name" : "__DirectiveLocation"
+      }, {
+        "name" : "__EnumValue"
+      }, {
+        "name" : "__Field"
+      }, {
+        "name" : "__InputValue"
+      }, {
+        "name" : "__Schema"
+      }, {
+        "name" : "__Type"
+      }, {
+        "name" : "__TypeKind"
+      }, {
+        "name" : "_gql_input__gqltestdomain_E1"
+      }, {
+        "name" : "_gql_input__gqltestdomain_E2"
+      }, {
+        "name" : "_gql_input__causeway_applib_ActionNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_CollectionNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_DomainObjectList"
+      }, {
+        "name" : "_gql_input__causeway_applib_FacetAttrNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_FacetGroupNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_FacetNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_ParameterNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_PropertyNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_RoleMemento"
+      }, {
+        "name" : "_gql_input__causeway_applib_TypeNode"
+      }, {
+        "name" : "_gql_input__causeway_applib_UserMemento"
+      }, {
+        "name" : "_gql_input__causeway_conf_ConfigurationProperty"
+      }, {
+        "name" : "_gql_input__causeway_conf_ConfigurationViewmodel"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationFeatureViewModel"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationNamespace"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationType"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationTypeAction"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationTypeCollection"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationTypeMember"
+      }, {
+        "name" : "_gql_input__causeway_feat_ApplicationTypeProperty"
+      }, {
+        "name" : "_gql_input__causeway_security_LoginRedirect"
+      }, {
+        "name" : "_gql_input__causeway_testing_fixtures_FixtureResult"
+      }, {
+        "name" : "_gql_input__java_util_SortedMap"
+      }, {
+        "name" : "_gql_input__java_util_stream_Stream"
+      }, {
+        "name" : "_gql_input__org_apache_causeway_applib_services_inject_ServiceInjector"
+      }, {
+        "name" : "_gql_input__org_apache_causeway_core_metamodel_inspect_model_MMNode"
+      }, {
+        "name" : "_gql_input__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript"
+      }, {
+        "name" : "_gql_input__org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity"
+      }, {
+        "name" : "gqltestdomain_E1"
+      }, {
+        "name" : "gqltestdomain_E1__DomainObject_meta"
+      }, {
+        "name" : "gqltestdomain_E2"
+      }, {
+        "name" : "gqltestdomain_E2__DomainObject_meta"
+      }, {
+        "name" : "gqltestdomain_E2__DomainObject_mutators"
+      }, {
+        "name" : "gqltestdomain_GQLTestDomainMenu"
+      }, {
+        "name" : "causeway_applib_ActionNode"
+      }, {
+        "name" : "causeway_applib_ActionNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_ActionNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_CollectionNode"
+      }, {
+        "name" : "causeway_applib_CollectionNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_CollectionNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_DomainObjectList"
+      }, {
+        "name" : "causeway_applib_DomainObjectList__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_FacetAttrNode"
+      }, {
+        "name" : "causeway_applib_FacetAttrNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_FacetAttrNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_FacetGroupNode"
+      }, {
+        "name" : "causeway_applib_FacetGroupNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_FacetGroupNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_FacetNode"
+      }, {
+        "name" : "causeway_applib_FacetNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_FacetNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_ParameterNode"
+      }, {
+        "name" : "causeway_applib_ParameterNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_ParameterNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_PropertyNode"
+      }, {
+        "name" : "causeway_applib_PropertyNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_PropertyNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_RoleMemento"
+      }, {
+        "name" : "causeway_applib_RoleMemento__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_TypeNode"
+      }, {
+        "name" : "causeway_applib_TypeNode__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_TypeNode__DomainObject_mutators"
+      }, {
+        "name" : "causeway_applib_UserMemento"
+      }, {
+        "name" : "causeway_applib_UserMemento__DomainObject_meta"
+      }, {
+        "name" : "causeway_applib_UserMenu"
+      }, {
+        "name" : "causeway_conf_ConfigurationMenu"
+      }, {
+        "name" : "causeway_conf_ConfigurationProperty"
+      }, {
+        "name" : "causeway_conf_ConfigurationProperty__DomainObject_meta"
+      }, {
+        "name" : "causeway_conf_ConfigurationViewmodel"
+      }, {
+        "name" : "causeway_conf_ConfigurationViewmodel__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationFeatureViewModel"
+      }, {
+        "name" : "causeway_feat_ApplicationFeatureViewModel__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationNamespace"
+      }, {
+        "name" : "causeway_feat_ApplicationNamespace__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationType"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeAction__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeCollection__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeMember"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeMember__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty"
+      }, {
+        "name" : "causeway_feat_ApplicationTypeProperty__DomainObject_meta"
+      }, {
+        "name" : "causeway_feat_ApplicationType__DomainObject_meta"
+      }, {
+        "name" : "causeway_security_LoginRedirect"
+      }, {
+        "name" : "causeway_security_LoginRedirect__DomainObject_meta"
+      }, {
+        "name" : "causeway_security_LogoutMenu"
+      }, {
+        "name" : "causeway_testing_fixtures_FixtureResult"
+      }, {
+        "name" : "causeway_testing_fixtures_FixtureResult__DomainObject_meta"
+      }, {
+        "name" : "java_util_SortedMap"
+      }, {
+        "name" : "java_util_SortedMap__DomainObject_meta"
+      }, {
+        "name" : "java_util_stream_Stream"
+      }, {
+        "name" : "java_util_stream_Stream__DomainObject_meta"
+      }, {
+        "name" : "org_apache_causeway_applib_services_inject_ServiceInjector"
+      }, {
+        "name" : "org_apache_causeway_applib_services_inject_ServiceInjector__DomainObject_meta"
+      }, {
+        "name" : "org_apache_causeway_applib_services_inject_ServiceInjector__DomainObject_mutators"
+      }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode"
+      }, {
+        "name" : "org_apache_causeway_core_metamodel_inspect_model_MMNode__DomainObject_meta"
+      }, {
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript"
+      }, {
+        "name" : "org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta"
+      }, {
+        "name" : "org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity"
+      }, {
+        "name" : "org_apache_causeway_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta"
+      } ]
+    }
+  }
+}

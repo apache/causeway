@@ -9,7 +9,7 @@ For example, a set of recognizers are provided for the JPA and JDO persistence m
 
 More than one implementation of xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer] can be registered; they will all be consulted (in the order as specified by Spring's _org.springframework.core.annotation.Order_ annotation) to determine if they recognize the exception. The message returned by the first service recognizing the exception is used.
 
-The framework also provides a default implementation of this service that recognizes any _org.apache.isis.applib.exceptions.RecoverableException_ , simply returning the exception's _org.apache.isis.applib.exceptions.RecoverableException#getMessage() message_ . This allows any component or domain object to throw this exception with the knowledge that it will be handled appropriately.
+The framework also provides a default implementation of this service that recognizes any _org.apache.causeway.applib.exceptions.RecoverableException_ , simply returning the exception's _org.apache.causeway.applib.exceptions.RecoverableException#getMessage() message_ . This allows any component or domain object to throw this exception with the knowledge that it will be handled appropriately.
 
 Initially introduced for the Wicket viewer; check the documentation of other viewers to determine whether they also support this service.
 

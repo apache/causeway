@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  ~
+  -->
+
+<bs3:grid xsi:schemaLocation="http://causeway.apache.org/applib/layout/component http://causeway.apache.org/applib/layout/component/component.xsd http://causeway.apache.org/applib/layout/links http://causeway.apache.org/applib/layout/links/links.xsd http://causeway.apache.org/applib/layout/grid/bootstrap3 http://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="http://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="http://causeway.apache.org/applib/layout/component" xmlns:lnk="http://causeway.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="3">
+            <bs3:tabGroup>
+                <bs3:tab name="Identity">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identity" id="identity">
+                                <cpt:property id="interactionId"/>
+                                <cpt:property id="type"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+            <cpt:fieldSet name="Target" id="target">
+                <cpt:property id="target"/>
+                <cpt:property id="targetLogicalTypeName">
+                    <cpt:named>Logical Type Name</cpt:named>
+                </cpt:property>
+                <cpt:property id="logicalMemberIdentifier">
+                    <cpt:named>member Identifier</cpt:named>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Who and When">
+                <cpt:property id="username"/>
+                <cpt:property id="timestamp"/>
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="6">
+            <cpt:fieldSet name="Command DTO" id="commandDto">
+                <cpt:property id="commandDto" multiLine="30" labelPosition="TOP"/>
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="3">
+            <cpt:fieldSet name="Execution" id="execution">
+                <cpt:action id="retry" cssClassFa="fa-repeat" cssClass="btn-warning"/>
+                <cpt:action id="exclude" cssClassFa="fa-ban" cssClass="btn-warning"/>
+                <cpt:property id="executeIn"/>
+                <cpt:property id="parent"/>
+                <cpt:property id="replayState"/>
+                <cpt:property id="replayStateFailureReason"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Timings" id="timings">
+                <cpt:property id="startedAt"/>
+                <cpt:property id="completedAt"/>
+                <cpt:property id="duration"/>
+                <cpt:property id="complete"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Results" id="results">
+                <cpt:property id="resultSummary"/>
+                <cpt:property id="result"/>
+                <cpt:property id="exception" labelPosition="TOP"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12">
+            <bs3:tabGroup>
+                <bs3:tab name="Related Commands">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="childCommands"/>
+                            <cpt:collection id="siblingCommands"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Related Execution Log Entries">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="executionLogEntries"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Related Audit Trail Entries">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="auditTrailEntries"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="User Activity">
+                    <bs3:row>
+                        <bs3:col span="6">
+                            <cpt:collection id="recentCommandsByUser"/>
+                        </bs3:col>
+                        <bs3:col span="6">
+                            <cpt:collection id="recentExecutionsByUser"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12" unreferencedCollections="true">
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>

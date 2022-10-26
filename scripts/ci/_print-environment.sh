@@ -18,7 +18,7 @@
 
 echo ""
 
-echo "===========  ISIS CI SCRIPT [$1]  ================="
+echo "===========  CAUSEWAY CI SCRIPT [$1]  ================="
 echo "\$REVISION                  = ${REVISION}"
 echo "\$PROJECT_ROOT_PATH         = ${PROJECT_ROOT_PATH}"
 echo "\$MVN_STAGES                = ${MVN_STAGES}"

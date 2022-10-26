@@ -5,7 +5,7 @@
 :page-partial:
 
 
-This chapter explains the main APIs to extend or alter the programming conventions that Apache Isis understands to
+This chapter explains the main APIs to extend or alter the programming conventions that Apache Causeway understands to
 build up its metamodel.
 
 

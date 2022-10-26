@@ -14,25 +14,25 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-isis:
+causeway:
   extensions:
     secman:
       seed:
         admin:
           user-name: "sven"
           password: "pass"
-          role-name: "isis-ext-secman-admin"
+          role-name: "causeway-ext-secman-admin"
           namespace-permissions:
-            sticky: "isis"
+            sticky: "causeway"
             additional: "mmm"
         regular-user:
-          role-name: "isis-ext-secman-user"
+          role-name: "causeway-ext-secman-user"
       permissionsEvaluationPolicy: "ALLOW_BEATS_VETO"
 
 
   persistence:
     schema:
-      auto-create-schemas: "ISISEXTSECMAN"
+      auto-create-schemas: "CAUSEWAYEXTSECMAN"
 
 
 spring:

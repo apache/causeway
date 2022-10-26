@@ -6,7 +6,7 @@
 
 
 
-From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the Apache Isis users mailing list:
+From this link:http://causeway.markmail.org/thread/dduarjscrbnodfsi[thread] on the Apache Causeway users mailing list:
 
 * _What is the easiest way to add a spell checker to the text written in a field in
    a domain object, for instance to check English syntax?_

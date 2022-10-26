@@ -14,7 +14,7 @@ This defines a query using JDOQL:
 [source,java]
 ----
 SELECT
-FROM org.isisaddons.module.command.dom.CommandJdo
+FROM org.causewayaddons.module.command.dom.CommandJdo
 WHERE executeIn == 'FOREGROUND'
    && timestamp > :timestamp
    && startedAt != null
@@ -31,7 +31,7 @@ Running SQL Profiler showed the underlying SQL as:
 [source,sql]
 ----
 exec sp_prepexec @p1 output,N'@P0 datetime2',
-N'SELECT ''org.isisaddons.module.command.dom.CommandJdo'' AS NUCLEUS_TYPE,
+N'SELECT ''org.causewayaddons.module.command.dom.CommandJdo'' AS NUCLEUS_TYPE,
   A0.arguments,
   ...,
   A0.target,
@@ -39,7 +39,7 @@ N'SELECT ''org.isisaddons.module.command.dom.CommandJdo'' AS NUCLEUS_TYPE,
   A0.transactionId,
   A0."user",
   ''2018-01-24 17:29:18.3'' AS NUCORDER0    // <1>
-FROM isiscommand.Command A0
+FROM causewaycommand.Command A0
 WHERE A0.executeIn = ''FOREGROUND''
   AND A0."timestamp" > @P0
   AND A0.startedAt IS NOT NULL
@@ -63,7 +63,7 @@ My fix was to change the JDOQL to be:
 [source,sql]
 ----
 SELECT
-FROM org.isisaddons.module.command.dom.CommandJdo
+FROM org.causewayaddons.module.command.dom.CommandJdo
 WHERE executeIn == 'FOREGROUND'
    && timestamp > :timestamp
    && startedAt != null

@@ -162,8 +162,8 @@ public class TearDownAll extends FixtureScriptAbstract {
 
 [NOTE]
 ====
-It can occasionally be the case that Apache Isis' internal adapter for the domain object is still in memory.
-JDO/DataNucleus seems to bump up the version of the object prior to its deletion, which under normal circumstances would cause Apache Isis to throw a concurrency exception.
+It can occasionally be the case that Apache Causeway' internal adapter for the domain object is still in memory.
+JDO/DataNucleus seems to bump up the version of the object prior to its deletion, which under normal circumstances would cause Apache Causeway to throw a concurrency exception.
 Therefore to prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
 ====
 

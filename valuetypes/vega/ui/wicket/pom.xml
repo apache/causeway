@@ -15,29 +15,29 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-vega-ui</artifactId>
+		<groupId>org.apache.causeway.valuetypes</groupId>
+		<artifactId>causeway-valuetypes-vega-ui</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-vega-ui-wkt</artifactId>
-	<name>Apache Isis Val - Vega (ui wicket)</name>
+	<artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
+	<name>Apache Causeway Val - Vega (ui wicket)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.vega.ui.wkt</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/vega/ui/wkt</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.vega.ui.wkt</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/valuetypes/vega/ui/wkt</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-vega-metamodel</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-vega-metamodel</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-wicket-ui</artifactId>
+			<groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-wicket-ui</artifactId>
             <scope>provided</scope>
         </dependency>
 

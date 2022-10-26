@@ -24,16 +24,15 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
 
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(

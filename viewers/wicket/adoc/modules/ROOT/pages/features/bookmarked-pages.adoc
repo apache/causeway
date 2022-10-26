@@ -56,5 +56,5 @@ Alternatively, `alt+[` will toggle open/close the panel; it can also be closed u
 
 == Configuration
 
-The maximum number of bookmarks that are shown can be overridden using the  xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[isis.viewer.wicket.bookmarked-pages.max-size] configuration property.
+The maximum number of bookmarks that are shown can be overridden using the  xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.bookmarked-pages.max-size[causeway.viewer.wicket.bookmarked-pages.max-size] configuration property.
 

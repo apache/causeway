@@ -3,7 +3,7 @@
 
 Contributes a property exposing the logical object type of the domain object, typically as specified by _javax.inject.Named_ .
 
-The logical type name is also accessible from the _org.apache.isis.applib.services.bookmark.Bookmark_ of the object.
+The logical type name is also accessible from the _org.apache.causeway.applib.services.bookmark.Bookmark_ of the object.
 
 == API
 

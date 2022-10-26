@@ -24,12 +24,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.xml.XmlService;
-import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.applib.value.Clob;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.xml.XmlService;
+import org.apache.causeway.applib.services.xmlsnapshot.XmlSnapshotService;
+import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

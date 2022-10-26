@@ -20,7 +20,7 @@ Here's how:
 @Priority(PriorityPrecedence.EARLY)                                // <.>
 public class MyLanguageProvider implements LanguageProvider { ... }
 ----
-<.> `PriorityPrecedence` (in the Apache Isis applib) provides some standard values.
+<.> `PriorityPrecedence` (in the Apache Causeway applib) provides some standard values.
 
 
 == Decorating existing implementations

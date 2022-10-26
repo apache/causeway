@@ -6,14 +6,14 @@
 
 The `@javax.jdo.annotation.NotPersistent` annotation is used by JDO/DataNucleus to indicate that a property should not be persisted to the database.
 
-Apache Isis also uses this annotation, though (currently) only in the very minimal way to suppress checking of inconsistent metadata between JDO and Isis annotations (eg `@Column#allowsNull()` vs `@Property#optionality()`, or `@Column#length()` and `@Property#maxLength()`).
+Apache Causeway also uses this annotation, though (currently) only in the very minimal way to suppress checking of inconsistent metadata between JDO and Causeway annotations (eg `@Column#allowsNull()` vs `@Property#optionality()`, or `@Column#length()` and `@Property#maxLength()`).
 
 [NOTE]
 ====
 The framework parses the `@NotPersistent` annotation from the Java source code; it does not query the JDO metamodel.
 This means that it the `@NotPersistent` annotation must be used rather than the equivalent `<field>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/fields_properties.html[XML metadata].
 
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.
+Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Causeway (currently) only inspects the getter method.
 Therefore ensure that the annotation is placed there.
 ====
 

@@ -21,13 +21,12 @@ package demoapp.dom.domain.actions.Action.associateWith;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
 import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action

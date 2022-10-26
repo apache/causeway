@@ -18,7 +18,7 @@ enum Redirect {
 <.> xref:#AS_CONFIGURED[AS_CONFIGURED]
 +
 --
-As defined by configuration property `isis.viewer.wicket.redirectEvenIfSameObject` 
+As defined by configuration property `causeway.viewer.wicket.redirectEvenIfSameObject` 
 --
 <.> xref:#EVEN_IF_SAME[EVEN_IF_SAME]
 +
@@ -36,7 +36,7 @@ Don't redirect if the result is the same as the target, instead just update the 
 [#AS_CONFIGURED]
 === AS_CONFIGURED
 
-As defined by configuration property `isis.viewer.wicket.redirectEvenIfSameObject` 
+As defined by configuration property `causeway.viewer.wicket.redirectEvenIfSameObject` 
 
 [#EVEN_IF_SAME]
 === EVEN_IF_SAME

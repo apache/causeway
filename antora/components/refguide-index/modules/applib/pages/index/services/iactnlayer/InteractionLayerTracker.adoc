@@ -3,7 +3,7 @@
 
 Provides access to the current xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] .
 
-The bottom-most interaction "layer" can be thought of as a short-lived session with the database. A new layer can be started, for example using the _org.apache.isis.applib.services.sudo.SudoService_ , or the xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService] . These allow the user (or the clock or other environmental aspects) to be temporarily altered - similar to a "su" command in Unix.
+The bottom-most interaction "layer" can be thought of as a short-lived session with the database. A new layer can be started, for example using the _org.apache.causeway.applib.services.sudo.SudoService_ , or the xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService] . These allow the user (or the clock or other environmental aspects) to be temporarily altered - similar to a "su" command in Unix.
 
 == API
 

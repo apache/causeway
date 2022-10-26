@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<xs:schema targetNamespace="http://causeway.apache.org/schema/cmd"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://causeway.apache.org/schema/cmd"
+           xmlns:com="http://causeway.apache.org/schema/common">
+
+    <xs:import namespace="http://causeway.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
+
+    <xs:element name="commandsDto">
+        <xs:annotation>
+            <xs:documentation>Collection of commandDto's</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="2">
+                    <xs:annotation>
+                        <xs:documentation>The major version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="0">
+                    <xs:annotation>
+                        <xs:documentation>The minor version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="commandDto"/>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commandDto">
+        <xs:annotation>
+            <xs:documentation>Represents the intention to invoke an action or to edit a property, usually on one target object but possibly on multiple targets (all of the same type).
+                Commands can also be deferred, which is to say that they can be scheduled to be invoked in the background.  In such cases the originating command/action which schedules the background commands is called the _parent_ of the background commands.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
+                    <xs:annotation>
+                        <xs:documentation>The major version of the schema that an XML instance was created using.
+                            Omit if included within commandsDto.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
+                    <xs:annotation>
+                        <xs:documentation>The minor version of the schema that an XML instance was created using.
+                            Omit if included within commandsDto.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="interactionId" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>Unique identifier of the interaction that gave rise to this command.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="timestamp" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>The timestamp when this command was created, used for sequencing when replaying.  This field is optional because it was introduced in v1.4.  The framework-provided ContentMappingServiceForCommandDto populates this field dynamically whenever querying for commands through the REST API.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="username" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The name of the user that initiated/created this command.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="targets" type="com:oidsDto">
+                    <xs:annotation>
+                        <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="member" type="memberDto">
+                    <xs:annotation>
+                        <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="timings" type="com:periodDto" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The time taken to perform the command.  Used for replaying the command on a replica slave.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="userData" type="mapDto" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Custom user data.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="memberDto" abstract="true">
+        <xs:annotation>
+            <xs:documentation>Represents the information required to be able to invoke an action or modify a property on the target(s).  Specifically, is the identifier of the action/property, along with the parameter arguments.  Is subclassed by 'actionDto' and 'propertyDto'.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="logicalMemberIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Logical formal identifier of the member being interacted with (action or property).  Uses logicalTypeName, abstracts away whether the member is a declared member or a mixin.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute  name="interactionType" type="com:interactionType">
+            <xs:annotation>
+                <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="actionDto">
+        <xs:annotation>
+            <xs:documentation>Captures the information required to be able to invoke an action on the target(s).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="memberDto">
+                <xs:sequence>
+                    <xs:element name="parameters" type="paramsDto">
+                        <xs:annotation>
+                            <xs:documentation>The list of parameter/argument values for this action invocation.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="propertyDto">
+        <xs:annotation>
+            <xs:documentation>Captures the information required to be able to modify a property on the target(s).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="memberDto">
+                <xs:sequence>
+                    <xs:element name="newValue" type="com:valueWithTypeDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="paramsDto">
+        <xs:annotation>
+            <xs:documentation>A list of of parameter/argument values.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="parameter" type="paramDto"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="paramDto">
+        <xs:annotation>
+            <xs:documentation>Defines an action parameter: its name, type and value (ie provided argument).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="com:namedValueWithTypeDto">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="mapDto">
+        <xs:sequence>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="key" type="xs:string"/>
+                        <xs:element name="value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

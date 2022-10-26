@@ -27,11 +27,11 @@ The framework provides a number of mixins that contributes to `java.lang.Object`
 ** xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier] (property)
 
 * Wicket viewer:
-** xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints]
+** xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc[Object_clearHints]
 
 * All viewers:
-** xref:refguide:viewer:index/common/applib/mixins/Object_impersonate.adoc[Object_impersonate]
-** xref:refguide:viewer:index/common/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles]
+** xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate]
+** xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles]
 ** xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi]
 
 

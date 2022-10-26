@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-In Apache Isis we use Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration]s to define a module, consisting of a set of domain services and domain objects (entities, view models and mixins).
+In Apache Causeway we use Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration]s to define a module, consisting of a set of domain services and domain objects (entities, view models and mixins).
 Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] is used to express a dependency between each "configuration" module.
 
 TIP: See Spring documentation on link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-annotation-config[annotation-based container configuration], link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning[classpath scanning] and link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java[java-based configuration] for much more on this topic.
@@ -19,25 +19,25 @@ For example, the xref:vw:exceldownload:about.adoc[Excel extension] module has se
 This:
 
 * has a Maven
-** groupId = `org.apache.isis.extensions`
-** artifactId = `isis-extensions-excel-applib`
+** groupId = `org.apache.causeway.extensions`
+** artifactId = `causeway-extensions-excel-applib`
 
-* in the applib, has a top-level package of `org.apache.isis.extensions.excel.applib`
+* in the applib, has a top-level package of `org.apache.causeway.extensions.excel.applib`
 
-* defines a Spring configuration module called `IsisModuleExtExcelApplib`, that is simply:
+* defines a Spring configuration module called `CausewayModuleExtExcelApplib`, that is simply:
 +
 [source,java]
 ----
 @Configuration
 @ComponentScan                                  // <.>
-public class IsisModuleExtExcelApplib {
+public class CausewayModuleExtExcelApplib {
 }
 ----
 <.> the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan] indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
 
 When there is a dependency, this is expressed in two ways: first, as a "physical" `<dependency` in Maven; and second, as a "logical" dependency using link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] in the `@Configuration` module.
 
-We can see this for example in the `testing` module of the Excel library (artifactId of `isis-extensions-excel-testing`), where:
+We can see this for example in the `testing` module of the Excel library (artifactId of `causeway-extensions-excel-testing`), where:
 
 
 
@@ -61,21 +61,21 @@ Therefore:
 [source,xml]
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-excel-applib</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-excel-applib</artifactId>
 </dependency>
 ----
 
-* and in the testing module's `IsisModuleExtExcelTesting` we see:
+* and in the testing module's `CausewayModuleExtExcelTesting` we see:
 +
 [source,java]
 ----
 @Configuration
 @Import({                                           // <.>
-    IsisModuleExtExcelApplib.class
+    CausewayModuleExtExcelApplib.class
 })
 @ComponentScan
-public class IsisModuleExtExcelTesting {
+public class CausewayModuleExtExcelTesting {
 }
 ----
 <.> The link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation declares the dependency.
@@ -92,7 +92,7 @@ package com.mycompany.modules.customer;
 
 @Configuration                                  // <.>
 @Import({
-    IsisModuleExtExcelApplib.class       // <.>
+    CausewayModuleExtExcelApplib.class       // <.>
 })
 @ComponentScan                                  // <.>
 public class CustomerModule {}
@@ -101,18 +101,18 @@ public class CustomerModule {}
 <.> dependency on the Excel module (more precisely, its "applib")
 <.> scan for domain services and objects etc under this package (eg a `Customer` entity or a `CustomerRepository` domain service).
 
-Since `@Configuration` and `@ComponentScan` often appear together, Apache Isis provides a convenience `@Module` annotation, which is meta-annotated with both.
+Since `@Configuration` and `@ComponentScan` often appear together, Apache Causeway provides a convenience `@Module` annotation, which is meta-annotated with both.
 The above example could therefore be rewritten as:
 
 [source,java]
 ----
 package com.mycompany.modules.customer;
 ...
-import org.apache.isis.applib.annotation.Module;
+import org.apache.causeway.applib.annotation.Module;
 
 @Module
 @Import({
-    IsisModuleExtExcelApplib.class
+    CausewayModuleExtExcelApplib.class
 })
 public class CustomerModule {}
 ----

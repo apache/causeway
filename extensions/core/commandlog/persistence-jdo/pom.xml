@@ -14,17 +14,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-commandlog</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-commandlog</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
-    <name>Apache Isis Ext - Command Log Implementation (JDO)</name>
+    <artifactId>causeway-extensions-commandlog-persistence-jdo</artifactId>
+    <name>Apache Causeway Ext - Command Log Implementation (JDO)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.commandlog.persistence.jdo</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/commandlog/persistence-jdo</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.extensions.commandlog.persistence.jdo</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/extensions/commandlog/persistence-jdo</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -49,35 +49,35 @@
     <dependencies>
 
 	    <dependency>
-	        <groupId>org.apache.isis.extensions</groupId>
-	        <artifactId>isis-extensions-commandlog-applib</artifactId>
+	        <groupId>org.apache.causeway.extensions</groupId>
+	        <artifactId>causeway-extensions-commandlog-applib</artifactId>
 	    </dependency>
 
         <!-- PERSISTENCE -->
 
 		<dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+            <groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
         </dependency>
 
         <!-- TESTING -->
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-commandlog-applib</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-commandlog-applib</artifactId>
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-unittestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
             <scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
 

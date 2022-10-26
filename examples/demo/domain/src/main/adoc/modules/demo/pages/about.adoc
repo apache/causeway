@@ -2,14 +2,14 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The Demo app provides an introduction to the Apache Isis programming model, allowing you to learn the basics with a minimum of hassle.
-It's also a useful reference to help you develop your own Apache Isis applications.
+The Demo app provides an introduction to the Apache Causeway programming model, allowing you to learn the basics with a minimum of hassle.
+It's also a useful reference to help you develop your own Apache Causeway applications.
 
 
 image::teaser-light.png[]
 
-The application is packaged up as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-wicket-jdo/tags/[apacheisis/demo-wicket-jdo] or link:https://hub.docker.com/r/apacheisis/demo-wicket-jpa/tags/[apacheisis/demo-wicket-jpa]) on Docker Hub, so you can easily run it yourself (as described <<Running the Docker Image,below>>).
-You can see also try out the application online, link:https://demo-wicket.jdo.isis.incode.work[jdo] or link:https://demo-wicket.jpa.isis.incode.work[jpa].
+The application is packaged up as a Docker image (link:https://hub.docker.com/r/apachecauseway/demo-wicket-jdo/tags/[apachecauseway/demo-wicket-jdo] or link:https://hub.docker.com/r/apachecauseway/demo-wicket-jpa/tags/[apachecauseway/demo-wicket-jpa]) on Docker Hub, so you can easily run it yourself (as described <<Running the Docker Image,below>>).
+You can see also try out the application online, link:https://demo-wicket.jdo.causeway.incode.work[jdo] or link:https://demo-wicket.jpa.causeway.incode.work[jpa].
 
 == Prereqs
 
@@ -24,15 +24,15 @@ Assuming the `jdo` variant (if using `jpa`, just substitute "jdo" with "jpa" in 
 +
 [source,bash]
 ----
-docker pull apacheisis/demo-wicket-jdo:latest
+docker pull apachecauseway/demo-wicket-jdo:latest
 ----
 
 * Running the Docker Image
 +
 [source,bash]
 ----
-docker pull apacheisis/demo-wicket-jdo:latest
-docker run -d -p8080:8080 apacheisis/demo-wicket-jdo:latest
+docker pull apachecauseway/demo-wicket-jdo:latest
+docker run -d -p8080:8080 apachecauseway/demo-wicket-jdo:latest
 ----
 +
 The Demo app can then be accessed at http://localhost:8080/wicket/[].
@@ -53,13 +53,13 @@ Assuming the `jdo` variant (if using `jpa`, just substitute "jdo" with "jpa" in 
 * Prototyping mode
 +
 ----
-docker run -d -p8080:8080 -ePROTOTYPING=true apacheisis/demo-wicket-jdo:latest
+docker run -d -p8080:8080 -ePROTOTYPING=true apachecauseway/demo-wicket-jdo:latest
 ----
 
 * Attached console
 +
 ----
-docker run -it -p8080:8080 apacheisis/demo-wicket-jdo:latest
+docker run -it -p8080:8080 apachecauseway/demo-wicket-jdo:latest
 ----
 +
 Use CTRL-C to stop and detach
@@ -69,7 +69,7 @@ TIP: on Windows, you might need to prefix with `winpty`.
 * Specify a different context Path
 +
 ----
-docker run -d -p8080:8080 -eContextPath=/myPath apacheisis/demo-wicket-jdo:latest
+docker run -d -p8080:8080 -eContextPath=/myPath apachecauseway/demo-wicket-jdo:latest
 ----
 +
 then access at http://localhost:8080/myPath/wicket/[].
@@ -78,7 +78,7 @@ then access at http://localhost:8080/myPath/wicket/[].
 
 If you like to get involved quickly, please feel free to open new pull requests (at github) or just join the discussion and provide feedback.
 
-If you are interested in contributing to Apache Isis, see the xref:conguide:ROOT:about.adoc[Contributors' Guide] for details.
+If you are interested in contributing to Apache Causeway, see the xref:conguide:ROOT:about.adoc[Contributors' Guide] for details.
 
 
 == Credits

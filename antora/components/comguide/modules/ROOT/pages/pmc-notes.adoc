@@ -11,7 +11,7 @@ Every ASF project has a Project Management Committee, or PMC.
 This committee is ultimately responsible for the long-term management of the framework.
 More information about PMCs can be found link:http://www.apache.org/dev/pmc.html[here]
 
-In Apache Isis, every committer is a member of the PMC.
+In Apache Causeway, every committer is a member of the PMC.
 
 This page contains some general notes on maintenance activities required by PMC members.
 
@@ -40,7 +40,7 @@ Further notes on the steps for new PMC members can be found http://www.apache.or
 
 === Start a vote thread on private@
 
-First, send a [VOTE] email to `private@isis.apache.org`, making the case for the new committer to join.
+First, send a [VOTE] email to `private@causeway.apache.org`, making the case for the new committer to join.
 
 For example:
 
@@ -54,13 +54,13 @@ with body:
 
 [source]
 ----
-I'd like to nominate Joe Bloggs as a committer and also a PMC member for Apache Isis.   <1>
+I'd like to nominate Joe Bloggs as a committer and also a PMC member for Apache Causeway.   <1>
 
 Joe this ...                                                                            <1>
 
 Joe that ...                                                                            <1>
 
-Overall, I think Joe would be a great addition to Isis' committers and PMC; ...
+Overall, I think Joe would be a great addition to Causeway' committers and PMC; ...
 
 Voting ends in one week's time, i.e. midnight UTC on YYYY-MM-DD                         <1>
 http://www.timeanddate.com/countdown/to?year=YYYY&month=MM&day=DD
@@ -115,23 +115,23 @@ As a result of this, they should also get an @apache.org user name.
 
 More info can be found in the https://www.apache.org/dev/new-committers-guide.html#icla-required-before-account-creation[ASF new committers guide].
 
-=== Update the `isis` unix group
+=== Update the `causeway` unix group
 
-All committers must be added to the `isis` UNIX group.
-This will give them commit access to the Apache Isis git repo.
+All committers must be added to the `causeway` UNIX group.
+This will give them commit access to the Apache Causeway git repo.
 
 To do this, log onto `minotaur.apache.org`, then eg:
 
 [source,bash]
 ----
-list_unix_group.pl isis
+list_unix_group.pl causeway
 ----
 
 and
 
 [source,bash]
 ----
-modify_unix_group.pl isis --add joebloggs                                               <1>
+modify_unix_group.pl causeway --add joebloggs                                               <1>
 ----
 <1> update as required
 
@@ -144,14 +144,14 @@ This takes two steps:
 +
 [source,bash]
 ----
-list_committee.pl isis
+list_committee.pl causeway
 ----
 +
 and +
 +
 [source,bash]
 ----
-modify_committee.pl isis --add joebloggs                                                <1>
+modify_committee.pl causeway --add joebloggs                                                <1>
 ----
 <1> update as required
 
@@ -163,13 +163,13 @@ The new committer does not officially become a member of the PMC until the ASF r
 
 === Notify the ASF board and private mailing list
 
-Send a `[NOTICE]` email to `board@apache.org` and also to `private@isis.apache.org`
+Send a `[NOTICE]` email to `board@apache.org` and also to `private@causeway.apache.org`
 
 For example:
 
 [source]
 ----
-[NOTICE] Joe Bloggs to join Apache Isis as committer and member of the PMC              <1>
+[NOTICE] Joe Bloggs to join Apache Causeway as committer and member of the PMC              <1>
 ----
 <1> update as required
 
@@ -177,13 +177,13 @@ with body:
 
 [source]
 ----
-The Apache Isis PMC has voted Joe Bloggs as a committer and also member of the PMC.     <1>
+The Apache Causeway PMC has voted Joe Bloggs as a committer and also member of the PMC.     <1>
 
 Voting thread:
-https://mail-search.apache.org/members/private-arch/isis-private/xxx                    <1>
+https://mail-search.apache.org/members/private-arch/causeway-private/xxx                    <1>
 
 Results announcement:
-https://mail-search.apache.org/members/private-arch/isis-private/xxx                    <1>
+https://mail-search.apache.org/members/private-arch/causeway-private/xxx                    <1>
 
 The committee-info.txt file has been updated, as have the LDAP groups (modify_unix_group.pl,  modify_committee.pl).
 ----
@@ -196,11 +196,11 @@ update the private threads above
 
 === Update project metadata
 
-Update the `STATUS` file (in the root directory of the Apache Isis git repo) with the new committer details.
+Update the `STATUS` file (in the root directory of the Apache Causeway git repo) with the new committer details.
 
 === Announce to the world
 
-Send an `[ANNOUNCE]` email TO `users@isis.apache.org` and to `dev@isis.apache.org`.
+Send an `[ANNOUNCE]` email TO `users@causeway.apache.org` and to `dev@causeway.apache.org`.
 
 For example:
 
@@ -214,21 +214,21 @@ with body:
 
 [source]
 ----
-I'm delighted to announce that Joe Bloggs has been voted in as a committer on Isis, and also as a member of the Isis PMC.  The first gives Joe the right to commit changes directly to Isis' codebase, the second gives him the right to be involved in future votes.
+I'm delighted to announce that Joe Bloggs has been voted in as a committer on Causeway, and also as a member of the Causeway PMC.  The first gives Joe the right to commit changes directly to Causeway' codebase, the second gives him the right to be involved in future votes.
 
 Joe this ...                                                                            <1>
 
 Joe that ...
 
-I'm looking forward to working with Joe in the future; another great addition to Isis' committers.  So please join me in welcoming him to our happy band!
+I'm looking forward to working with Joe in the future; another great addition to Causeway' committers.  So please join me in welcoming him to our happy band!
 
 Dan Haywood
-Apache Isis PMC Chair
+Apache Causeway PMC Chair
 ----
 <1> update as required
 
 
-Also, write a similar blog post at https://blogs.apache.org/isis[blogs.apache.org/isis]
+Also, write a similar blog post at https://blogs.apache.org/causeway[blogs.apache.org/causeway]
 
 == Removing a committer
 
@@ -237,19 +237,19 @@ Also, write a similar blog post at https://blogs.apache.org/isis[blogs.apache.or
 these notes are only draft, will need fleshing out.
 ====
 
-* remove from `isis` UNIX group: +
+* remove from `causeway` UNIX group: +
 +
 [source]
 ----
-modify_unix_group.pl isis --remove joebloggs
+modify_unix_group.pl causeway --remove joebloggs
 ----
 
-* remove from `isis` committee: +
+* remove from `causeway` committee: +
 +
 [source]
 ----
-modify_committee.pl isis --add joebloggs
-modify_committee.pl isis --remove joebloggs
+modify_committee.pl causeway --add joebloggs
+modify_committee.pl causeway --remove joebloggs
 ----
 
 * remove from `committee-info.txt`

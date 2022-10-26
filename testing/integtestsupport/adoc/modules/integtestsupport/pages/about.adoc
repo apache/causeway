@@ -2,8 +2,8 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Apache Isis builds on top of Spring Boot's integration testing support, in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
-This configures and bootstraps the Apache Isis runtime, usually running against an in-memory database.
+Apache Causeway builds on top of Spring Boot's integration testing support, in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
+This configures and bootstraps the Apache Causeway runtime, usually running against an in-memory database.
 
 On top of that, we usually:
 
@@ -25,11 +25,11 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -45,8 +45,8 @@ In the domain module(s) of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-integtestsupport-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-integtestsupport-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -62,8 +62,8 @@ We also highly recommend using xref:fixtures:about.adoc[Fixture Scripts] to mana
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-fixtures-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-fixtures-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -75,7 +75,7 @@ include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingIntegTestSupportApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingIntegTestSupportApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -83,7 +83,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingIntegTestApplib.class,
+        CausewayModuleTestingIntegTestApplib.class,
         ...
 })
 public class AppManifest {
@@ -94,7 +94,7 @@ public class AppManifest {
 [#bootstrapping]
 == Bootstrapping
 
-We typically put the bootstrapping of Apache Isis into a superclass, one for each Maven module.
+We typically put the bootstrapping of Apache Causeway into a superclass, one for each Maven module.
 This allows an individual "slice" of the application to be tested, rather than as a monolith.
 
 So, for the `module-simple` module, we have:
@@ -106,18 +106,18 @@ So, for the `module-simple` module, we have:
         classes = SimpleModuleIntegTestAbstract.AppManifest.class
 )
 @TestPropertySource({
-        IsisPresets.H2InMemory_withUniqueSchema,
-        IsisPresets.DataNucleusAutoCreate,
-        IsisPresets.UseLog4j2Test,
+        CausewayPresets.H2InMemory_withUniqueSchema,
+        CausewayPresets.DataNucleusAutoCreate,
+        CausewayPresets.UseLog4j2Test,
 })
-public abstract class SimpleModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
+public abstract class SimpleModuleIntegTestAbstract extends CausewayIntegrationTestAbstractWithFixtures {
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,
-        IsisModuleSecurityBypass.class,
-        IsisModuleJdoDataNucleus5.class,
-        IsisModuleTestingFixturesApplib.class,
+        CausewayModuleCoreRuntimeServices.class,
+        CausewayModuleSecurityBypass.class,
+        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleTestingFixturesApplib.class,
         SimpleModule.class                      //<1>
     })
     public static class AppManifest {
@@ -135,19 +135,19 @@ while in the `webapp` module we have:
         classes = ApplicationIntegTestAbstract.AppManifest.class
 )
 @TestPropertySource({
-        IsisPresets.H2InMemory_withUniqueSchema,
-        IsisPresets.DataNucleusAutoCreate,
-        IsisPresets.UseLog4j2Test,
+        CausewayPresets.H2InMemory_withUniqueSchema,
+        CausewayPresets.DataNucleusAutoCreate,
+        CausewayPresets.UseLog4j2Test,
 })
 @ContextConfiguration
-public abstract class ApplicationIntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,
-        IsisModuleJdoDataNucleus5.class,
-        IsisModuleSecurityBypass.class,
-        IsisModuleTestingFixturesApplib.class,
+        CausewayModuleCoreRuntimeServices.class,
+        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleSecurityBypass.class,
+        CausewayModuleTestingFixturesApplib.class,
         ApplicationModule.class                 //<1>
     })
     public static class AppManifest {
@@ -163,7 +163,7 @@ They both also force an in-memory database, with JDO/DataNucleus ORM configured 
 === Faster bootstrapping
 
 By default integration tests are run in "production" deployment mode.
-With the `isis.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Isis metamodel.
+With the `causeway.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Causeway metamodel.
 
 While this _does_ have the benefit that the metamodel will be validated, the downside is that the test takes longer to bootstrap.
 
@@ -172,7 +172,7 @@ This can be done by adding:
 
 [source,java]
 ----
-@TestPropertySource(IsisPresets.IntrospectLazily)
+@TestPropertySource(CausewayPresets.IntrospectLazily)
 ----
 
 
@@ -228,8 +228,8 @@ public class SimpleObject
 Properties are visible but unmodifiable by default
 We therefore have two tests for each of these facts.
 
-NOTE: Non-editable properties is change from Isis v1.x.
-Use the `isis.applib.annotation.domain-object.editing` configuration property to pverride.
+NOTE: Non-editable properties is change from Causeway v1.x.
+Use the `causeway.applib.annotation.domain-object.editing` configuration property to pverride.
 
 By convention, we group tests into nested static classes, so the corresponding integration test is:
 
@@ -406,9 +406,9 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 Some of the methods being called here are inherited from the superclass, so let's look at that next.
 
 
-== IsisIntegrationTestAbstract
+== CausewayIntegrationTestAbstract
 
-For convenience the framework provides the `IsisIntegrationTestAbstract` as a base class for integration tests.
+For convenience the framework provides the `CausewayIntegrationTestAbstract` as a base class for integration tests.
 
 
 This is the class that provides the `wrap(...)` method (as see in the xref:about.adoc#typical-usage[previous section]).
@@ -477,7 +477,7 @@ This is usually done in the test's `setUp()` method.
 
 . the test calls the methods on the wrapper rather than the domain object itself
 
-. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Isis metamodel
+. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Causeway metamodel
 
 . (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
 
@@ -514,12 +514,12 @@ Customer wrappedCustomer = ...;
 Customer customer = wrapperFactory.unwrap(wrappedCustomer);
 ----
 
-If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__isis_wrapped()` method:
+If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__causeway_wrapped()` method:
 
 [source,java]
 ----
 Customer wrappedCustomer = ...;
-Customer customer = (Customer)((WrappingObject)wrappedCustomer).__isis_wrapped());
+Customer customer = (Customer)((WrappingObject)wrappedCustomer).__causeway_wrapped());
 ----
 
 We're not sure that's any easier (in fact we're certain it looks rather obscure).  Stick with calling `unwrap(...)`!
@@ -536,7 +536,7 @@ That means:
 
 * for *_object collections_* the test can call the getter to access the contents.
 +
-WARNING: For this to work properly, the collection should be marked as read-only, generally globally using the `isis.applib.annotation.domain-object.editing` configuration property.
+WARNING: For this to work properly, the collection should be marked as read-only, generally globally using the `causeway.applib.annotation.domain-object.editing` configuration property.
 
 * for *_object actions_* the test can call the action method itself.
 

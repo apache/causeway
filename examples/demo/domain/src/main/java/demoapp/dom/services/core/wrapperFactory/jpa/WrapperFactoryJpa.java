@@ -28,28 +28,27 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -58,7 +57,7 @@ import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePrope
   schema = "demo",
   name = "WrapperFactoryJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.WrapperFactoryEntity")
 @DomainObject(
         nature=Nature.ENTITY

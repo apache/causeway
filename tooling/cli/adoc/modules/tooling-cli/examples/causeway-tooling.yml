@@ -1,0 +1,88 @@
+#
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#
+
+
+commands:
+  overview:
+    description: "These tables summarize all Maven artifacts available with _Apache Causeway_."
+
+    sections:
+      App: org.apache.causeway.app.*
+      Mavendeps: org.apache.causeway.mavendeps.*
+      Testing: org.apache.causeway.testing.*
+      Examples: org.apache.causeway.examples.*
+
+      Root: org.apache.causeway
+      Commons: org.apache.causeway.commons.*
+
+      Core: org.apache.causeway.core.*
+
+      Persistence: org.apache.causeway.persistence
+      JDO: "org.apache.causeway.persistence:causeway-persistence-jdo.*"
+      JPA: "org.apache.causeway.persistence:causeway-persistence-jpa.*"
+
+      Security: org.apache.causeway.security
+      Bypass: "org.apache.causeway.security:causeway-security-bypass.*"
+      Keycloak: "org.apache.causeway.security:causeway-security-keycloak.*"
+      Shiro: "org.apache.causeway.security:causeway-security-shiro.*"
+      Spring: "org.apache.causeway.security:causeway-security-spring.*"
+
+      Viewer: org.apache.causeway.viewer
+      "Common": "org.apache.causeway.viewer:causeway-viewer-common.*"
+      "Restful Objects": "org.apache.causeway.viewer:causeway-viewer-restfulobjects.*"
+      Wicket: "org.apache.causeway.viewer:causeway-viewer-wicket.*"
+
+      Valuetypes: org.apache.causeway.valuetypes.*
+      "Asciidoc": "org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc.*"
+      "Markdown": "org.apache.causeway.valuetypes:causeway-valuetypes-markdown.*"
+      "SSE": "org.apache.causeway.valuetypes:causeway-valuetypes-sse.*"
+
+      Extensions: org.apache.causeway.extensions
+      "Applib: Excel": "org.apache.causeway.extensions:causeway-extensions-excel.*"
+      "Core: Command Log": "org.apache.causeway.extensions:causeway-extensions-commandlog.*"
+      "Core: Command Replay": "org.apache.causeway.extensions:causeway-extensions-commandreplay.*"
+      #"Core: Flyway": "org.apache.causeway.extensions:causeway-extensions-flyway.*"
+      "Core: Quartz": "org.apache.causeway.extensions:causeway-extensions-quartz.*"
+      #"Security: Audit Trail": "org.apache.causeway.security:causeway-extensions-audittrail.*"
+      "Security: Secman": "org.apache.causeway.security:causeway-extensions-secman.*"
+      #"Security: Session Log": "org.apache.causeway.security:causeway-extensions-sessionlog.*"
+      "Security: Shiro LDAP Realm": "org.apache.causeway.security:causeway-extensions-shiro-realm-ldap.*"
+      "RO Viewer: CORS": "org.apache.causeway.security:causeway-extensions-cors.*"
+      "Wicket Viewer: Excel Download": "org.apache.causeway.security:causeway-extensions-exceldownload.*"
+      "Wicket Viewer: Full Calendar": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
+      #"Wicket Viewer: Gmap3": "org.apache.causeway.security:causeway-extensions-gmap3.*"
+      "Wicket Viewer: Pdf.js": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
+
+      "Tooling": org.apache.causeway.tooling.*
+      "Regression Tests": org.apache.causeway.regressiontests.*
+
+      Incubator: org.apache.causeway.incubator
+      "Kroviz Client": "org.apache.causeway.incubator.clients:causeway-client-kroviz.*"
+      "GraphQL Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-graphql.*"
+      "Vaadin Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-vaadin.*"
+      "JavaFX Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-javafx.*"
+
+  index:
+
+    namespacePartsSkipCount: 3
+
+    fixOrphanedAdocIncludeStatements: false
+    skipTitleHeader: false
+    formatter: JAVA_SOURCES_WITH_SECTIONS
+

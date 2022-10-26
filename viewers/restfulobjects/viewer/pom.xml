@@ -21,35 +21,35 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.viewer</groupId>
-        <artifactId>isis-viewer-restfulobjects</artifactId>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-restfulobjects</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-viewer-restfulobjects-viewer</artifactId>
+    <artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
 
-	<name>Apache Isis Viewer - RO (Viewer)</name>
+	<name>Apache Causeway Viewer - RO (Viewer)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.viewer</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/restfulobjects/viewer</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.viewer</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/viewer/restfulobjects/viewer</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webapp</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-webapp</artifactId>
         </dependency>
 
 		<dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-commons-services</artifactId>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-commons-services</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
         </dependency>
 
         <dependency>
@@ -60,8 +60,8 @@
         <!-- TESTING -->
         
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestvintage</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestvintage</artifactId>
             <scope>test</scope>
         </dependency>
 

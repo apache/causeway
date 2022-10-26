@@ -23,7 +23,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.value.Markup;
+import org.apache.causeway.applib.value.Markup;
 
 import lombok.val;
 

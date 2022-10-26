@@ -9,7 +9,7 @@ In the same way that Java packages act as a namespace for domain objects, it's g
 
 We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] also follows the same pattern.
 
-For example, xref:security:secman:about.adoc[SecMan]' JPA implementation resides in the `IsisModuleExtSecmanPersistenceJpa` module.
+For example, xref:security:secman:about.adoc[SecMan]' JPA implementation resides in the `CausewayModuleExtSecmanPersistenceJpa` module.
 Its `ApplicationUser` entity is defined as:
 
 [source,java]
@@ -17,7 +17,7 @@ Its `ApplicationUser` entity is defined as:
 ----
 @Entity
 @Table(
-        schema = "isisExtSecman",
+        schema = "causewayExtSecman",
         name = "ApplicationUser",
         ...
 )
@@ -28,7 +28,7 @@ which results in a `CREATE TABLE` statement of:
 
 [source,sql]
 ----
-CREATE TABLE isisExtSecman."ApplicationUser" (
+CREATE TABLE causewayExtSecman."ApplicationUser" (
     ...
 )
 ----

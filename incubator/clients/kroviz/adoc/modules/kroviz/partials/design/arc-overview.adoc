@@ -27,10 +27,10 @@ component V8 <<"<JS Runtime>">> {
 
 node server{
     interface RestfulObjects as RO
-    component ApacheIsis<<NakedObjects>> [[https://isis.apache.org/]] #F79646
+    component ApacheCauseway<<NakedObjects>> [[https://causeway.apache.org/]] #F79646
 }
 
-ApacheIsis -- RO
+ApacheCauseway -- RO
 kroViz --> RO : invoke\ \nuse
 @enduml
 ----

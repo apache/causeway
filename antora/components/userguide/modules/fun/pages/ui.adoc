@@ -5,10 +5,10 @@
 :page-partial:
 
 
-In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], Apache Isis infers as much information from the domain classes as possible.
+In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], Apache Causeway infers as much information from the domain classes as possible.
 Nevertheless, some metadata relating solely to the UI is inevitably required.
 
-The Apache Isis programming model includes several mechanisms to influence the way in which the domain objects are rendered in the UI.
+The Apache Causeway programming model includes several mechanisms to influence the way in which the domain objects are rendered in the UI.
 
 * the layout of application menu items (inferred from xref:domain-entities-and-services.adoc#domain-services[domain services])
 

@@ -33,6 +33,7 @@ to allow pluggable management of identifiers in bookmarks/URLs etc
 
 * Support for Java Module System (`module.info.java`) (link:https://issues.apache.org/jira/browse/ISIS-3207[ISIS-3207])
 
+This release also fixes the security vulnerability: CVE-2022-42467, fixed by link:https://issues.apache.org/jira/browse/ISIS-3128[ISIS-3128]
 
 
 
@@ -153,7 +154,7 @@ to allow pluggable management of identifiers in bookmarks/URLs etc
 
 == Security Fixes
 
-* link:https://issues.apache.org/jira/browse/ISIS-3128[ISIS-3128] - [Security] h2 console potentially vulnerable to code execution
+* link:https://issues.apache.org/jira/browse/ISIS-3128[ISIS-3128] - CVE-2022-42467 [Security] h2 console potentially vulnerable to code execution
 * link:https://issues.apache.org/jira/browse/ISIS-3077[ISIS-3077] - [Vulnerability] Scalar Value Output Rendering is not escaped. (XSS Vulnarability)
 * link:https://issues.apache.org/jira/browse/ISIS-2977[ISIS-2977] - [Vulnerability] jdom dependency has XXE vulnerability
 

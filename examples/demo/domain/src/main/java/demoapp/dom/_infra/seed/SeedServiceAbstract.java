@@ -22,15 +22,14 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.events.metamodel.MetamodelListener;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-
-import lombok.NonNull;
+import org.apache.causeway.applib.events.metamodel.MetamodelListener;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom._infra.values.ValueHolderFixtureFactory;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.NonNull;
 
 public abstract class SeedServiceAbstract
 implements

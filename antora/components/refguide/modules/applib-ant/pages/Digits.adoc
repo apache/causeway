@@ -5,7 +5,7 @@
 
 
 
-The `@javax.validation.constraints.Digits` annotation is recognized by Apache Isis as a means to specify the precision for properties and action parameters of type `java.math.BigDecimal`.
+The `@javax.validation.constraints.Digits` annotation is recognized by Apache Causeway as a means to specify the precision for properties and action parameters of type `java.math.BigDecimal`.
 
 For example:
 

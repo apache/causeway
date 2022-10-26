@@ -5,7 +5,7 @@ Constant identifiers of the `layout.xml` that are commonly used in layouts.
 
 All of the mixins provided by the framework are bound to the _FieldSetId#METADATA metadata_ field set, and so - unless explicitly specified in the object's layout to some other location, will expect that the layout includes a field set with this id.
 
-The service that loads layouts is _org.apache.isis.applib.services.grid.GridSystemService_ , and the framework's default implementation of this service supports the notion of a fallback layout, used whenever an object has no associated layout file. This fallback layout _does_ expose a _FieldSetId#METADATA metadata_ fieldset. (The fallback layout itself can be found in the `GridFallbackLayout.xml` file).
+The service that loads layouts is _org.apache.causeway.applib.services.grid.GridSystemService_ , and the framework's default implementation of this service supports the notion of a fallback layout, used whenever an object has no associated layout file. This fallback layout _does_ expose a _FieldSetId#METADATA metadata_ fieldset. (The fallback layout itself can be found in the `GridFallbackLayout.xml` file).
 
 == API
 

@@ -22,7 +22,7 @@ import java.math.BigInteger;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

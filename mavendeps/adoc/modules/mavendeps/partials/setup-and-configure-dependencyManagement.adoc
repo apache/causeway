@@ -5,15 +5,15 @@
 
 
 
-If your application inherits from the Apache Isis starter app (`org.apache.isis.app:isis-app-starter-parent`) then that will define the version automatically:
+If your application inherits from the Apache Causeway starter app (`org.apache.causeway.app:causeway-app-starter-parent`) then that will define the version automatically:
 
 [source,xml,subs="attributes+"]
 .pom.xml
 ----
 <parent>
-    <groupId>org.apache.isis.app</groupId>
-    <artifactId>isis-app-starter-parent</artifactId>
-    <version>{page-isisrel}</version>
+    <groupId>org.apache.causeway.app</groupId>
+    <artifactId>causeway-app-starter-parent</artifactId>
+    <version>{page-causewayrel}</version>
     <relativePath/>
 </parent>
 ----
@@ -27,9 +27,9 @@ This is usually done in the top-level parent pom of your application:
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core</artifactId>
-            <version>{page-isisrel}</version>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core</artifactId>
+            <version>{page-causewayrel}</version>
             <scope>import</scope>
             <type>pom</type>
         </dependency>

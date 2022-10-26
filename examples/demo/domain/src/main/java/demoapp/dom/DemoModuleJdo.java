@@ -24,19 +24,19 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 
 @Configuration
 @Profile("demo-jdo")
 @Import({
     DemoModuleCommon.class,
-    IsisModulePersistenceJdoDatanucleus.class,
-    IsisModuleExtCommandLogPersistenceJdo.class,
+    CausewayModulePersistenceJdoDatanucleus.class,
+    CausewayModuleExtCommandLogPersistenceJdo.class,
 })
 @PropertySources({
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
 })
 public class DemoModuleJdo {
 

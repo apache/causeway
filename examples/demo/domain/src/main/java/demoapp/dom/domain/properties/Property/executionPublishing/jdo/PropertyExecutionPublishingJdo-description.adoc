@@ -1,12 +1,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `executionPublishing` element specifies that the editing of an object property should be published to registered implementation(s) of link:https://isis.apache.org/refguide/2.0.0-M5/applib-svc/ExecutionSubscriber.html#spi[`ExecutionSubscriber` SPI].
+The `executionPublishing` element specifies that the editing of an object property should be published to registered implementation(s) of link:https://causeway.apache.org/refguide/2.0.0-M5/applib-svc/ExecutionSubscriber.html#spi[`ExecutionSubscriber` SPI].
 
 This is performed _after_ the property has been changed.
 
 The publishing from the framework to the SPI is in-memory.
 A typical SPI implementation would then publish over the network, or perhaps store in a database.
-(Note that the framework provides an link:https://isis.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
+(Note that the framework provides an link:https://causeway.apache.org/mappings/2.0.0-M3/outbox-publisher/about.html[out-of-the-box implementation] of the link:https://microservices.io/patterns/data/transactional-outbox.html[outbox pattern]).
 
 The element can be specified using either the `@Property` annotation, or through a meta-annotation.
 
@@ -70,7 +70,7 @@ The demo provides a simple implementation of `PublisherService` that just stores
 ----
 include::spiimpl/PublisherServiceSpiForProperties.java[tags=class]
 ----
-<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
+<.> serializes to `InteractionDto`, as defined by the link:https://causeway.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Causeway schema].
 
 The demo implementation also provides a way to query these executions:
 
@@ -105,7 +105,7 @@ This can be configured globally:
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   applib:
     annotation:
       property:

@@ -19,15 +19,15 @@
 package demoapp.web;
 
 
-import org.apache.isis.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
-import org.apache.isis.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
-import org.apache.isis.extensions.executionoutbox.jdo.IsisModuleExtExecutionOutboxPersistenceJdo;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrailPersistenceJdo;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
+import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
+import org.apache.causeway.extensions.executionoutbox.jdo.CausewayModuleExtExecutionOutboxPersistenceJdo;
+import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
+import org.apache.causeway.extensions.sessionlog.jdo.CausewayModuleExtSessionLogPersistenceJdo;
 
 import demoapp.dom.DemoModuleJdo;
 
@@ -40,12 +40,12 @@ import demoapp.dom.DemoModuleJdo;
     DemoAppManifestCommon.class,
 
     // Security Manager Extension (secman)
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSessionLogPersistenceJdo.class,
-    IsisModuleExtCommandLogPersistenceJdo.class,
-    IsisModuleExtExecutionLogPersistenceJdo.class,
-    IsisModuleExtExecutionOutboxPersistenceJdo.class,
-    IsisModuleExtAuditTrailPersistenceJdo.class,
+    CausewayModuleExtSecmanPersistenceJdo.class,
+    CausewayModuleExtSessionLogPersistenceJdo.class,
+    CausewayModuleExtCommandLogPersistenceJdo.class,
+    CausewayModuleExtExecutionLogPersistenceJdo.class,
+    CausewayModuleExtExecutionOutboxPersistenceJdo.class,
+    CausewayModuleExtAuditTrailPersistenceJdo.class,
 
 
 })

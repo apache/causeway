@@ -12,7 +12,7 @@ class ApplicationTenancy {
   public static final String TABLE;
   String title()
   boolean isRoot()
-  int compareTo(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy other)
+  int compareTo(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy other)
   boolean equals(Object other)
   int hashCode()
   String toString()

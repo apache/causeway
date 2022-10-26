@@ -4,11 +4,11 @@
 
 
 
-Isis' Wicket viewer has an About page that, accessed by clicking on the application version in the footer.
+Causeway' Wicket viewer has an About page that, accessed by clicking on the application version in the footer.
 
 image::about-page/about-page.png[width="800px"]
 
-The about page provides a dump of the JARs that make up the webapp, along with the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.name[configured application name] and xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.about[configured about text].
+The about page provides a dump of the JARs that make up the webapp, along with the xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.name[configured application name] and xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.about[configured about text].
 
 
 

@@ -22,7 +22,7 @@ The framework provides a number of mixins that contributes to `java.lang.Object`
 ** xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
 
 * Wicket viewer:
-** xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints]
+** xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc[Object_clearHints]
 
 
 

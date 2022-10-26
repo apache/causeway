@@ -23,22 +23,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.internal.os._OsUtil;
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.config.util.SpringProfileUtil;
-import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
-import org.apache.isis.extensions.sse.wicket.IsisModuleExtSseWicket;
-import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
-import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
-import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
-import org.apache.isis.valuetypes.vega.metamodel.IsisModuleValVegaMetaModel;
-import org.apache.isis.valuetypes.vega.persistence.jpa.IsisModuleValVegaPersistenceJpa;
-import org.apache.isis.valuetypes.vega.ui.wkt.IsisModuleValVegaUiWkt;
-import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.commons.internal.os._OsUtil;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.config.util.SpringProfileUtil;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
+import org.apache.causeway.extensions.pdfjs.wkt.ui.CausewayModuleExtPdfjsWicketUi;
+import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.apache.causeway.valuetypes.asciidoc.metamodel.CausewayModuleValAsciidocMetaModel;
+import org.apache.causeway.valuetypes.asciidoc.persistence.jpa.CausewayModuleValAsciidocPersistenceJpa;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.CausewayModuleValAsciidocUiWkt;
+import org.apache.causeway.valuetypes.markdown.metamodel.CausewayModuleValMarkdownMetaModel;
+import org.apache.causeway.valuetypes.markdown.persistence.jpa.CausewayModuleValMarkdownPersistenceJpa;
+import org.apache.causeway.valuetypes.markdown.ui.wkt.CausewayModuleValMarkdownUiWkt;
+import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaModel;
+import org.apache.causeway.valuetypes.vega.persistence.jpa.CausewayModuleValVegaPersistenceJpa;
+import org.apache.causeway.valuetypes.vega.ui.wkt.CausewayModuleValVegaUiWkt;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
@@ -50,28 +50,28 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 @Import({
     // App-Manifest (Configuration)
     DemoAppManifestJpa.class,
-    //IsisModuleSecurityBypass.class, // <-- bypass authentication
+    //CausewayModuleSecurityBypass.class, // <-- bypass authentication
 
     // Metamodel
-    IsisModuleValAsciidocMetaModel.class,
-    IsisModuleValMarkdownMetaModel.class,
-    IsisModuleValVegaMetaModel.class,
+    CausewayModuleValAsciidocMetaModel.class,
+    CausewayModuleValMarkdownMetaModel.class,
+    CausewayModuleValVegaMetaModel.class,
 
     // UI (Wicket Viewer)
-    IsisModuleViewerWicketViewer.class,
-    IsisModuleExtSseWicket.class,
-    IsisModuleValAsciidocUiWkt.class,
-    IsisModuleValMarkdownUiWkt.class,
-    IsisModuleValVegaUiWkt.class,
-    IsisModuleExtPdfjsWicketUi.class,
+    CausewayModuleViewerWicketViewer.class,
+    CausewayModuleExtSseWicket.class,
+    CausewayModuleValAsciidocUiWkt.class,
+    CausewayModuleValMarkdownUiWkt.class,
+    CausewayModuleValVegaUiWkt.class,
+    CausewayModuleExtPdfjsWicketUi.class,
 
     // Custom Demo UI (Wicket Viewer)
     DemoAppWicketCommon.class,
 
     // Persistence/Converters (JPA)
-    IsisModuleValAsciidocPersistenceJpa.class,
-    IsisModuleValMarkdownPersistenceJpa.class,
-    IsisModuleValVegaPersistenceJpa.class,
+    CausewayModuleValAsciidocPersistenceJpa.class,
+    CausewayModuleValMarkdownPersistenceJpa.class,
+    CausewayModuleValVegaPersistenceJpa.class,
 
     //XrayEnable.class // for debugging only
     // WicketViewerXrayEnable.class // for debugging only
@@ -90,17 +90,17 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
         // activates when sys-env THERE_CAN_BE_ONLY_ONE=true
         _OsUtil.thereCanBeOnlyOne();
 
-    	IsisPresets.prototyping();
-        //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
-        //IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
-        //IsisPresets.logging(EntityModel.class, "debug");
-        //IsisPresets.logging(FormExecutorDefault.class, "debug");
+    	CausewayPresets.prototyping();
+        //CausewayPresets.logging(WebRequestCycleForCauseway.class, "debug");
+        //CausewayPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
+        //CausewayPresets.logging(EntityModel.class, "debug");
+        //CausewayPresets.logging(FormExecutorDefault.class, "debug");
     	//System.setProperty("spring.jpa.show-sql", "true");
 
         SpringProfileUtil.removeActiveProfile("demo-jdo"); // just in case
     	SpringProfileUtil.addActiveProfile("demo-jpa");
 
-    	IsisModuleExtCommandLogApplib.honorSystemEnvironment();
+    	CausewayModuleExtCommandLogApplib.honorSystemEnvironment();
 
         SpringApplication.run(new Class[] { DemoAppWicketJpa.class }, args);
 

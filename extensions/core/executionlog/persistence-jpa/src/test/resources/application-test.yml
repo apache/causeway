@@ -14,10 +14,10 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-isis:
+causeway:
   persistence:
     schema:
-      auto-create-schemas: "ISISEXTEXECUTIONLOG"
+      auto-create-schemas: "CAUSEWAYEXTEXECUTIONLOG"
 
   extensions:
     session-log:

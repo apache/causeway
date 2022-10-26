@@ -19,8 +19,8 @@ In the webapp module of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-spring-security-oauth2</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
     </dependency>
 </dependencies>
 ----
@@ -28,7 +28,7 @@ In the webapp module of your application, add the following dependency:
 [[_update-appmanifest]]
 == Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `IsisModuleSecuritySpring` and `IsisModuleExtSpringSecurityOAuth2` modules.
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `CausewayModuleSecuritySpring` and `CausewayModuleExtSpringSecurityOAuth2` modules.
 
 Neither of these modules provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[] SPI, so we must also configure one.
 For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
@@ -39,16 +39,16 @@ For the purpose of this walkthrough, we'll use the implementation provided by xr
 @Configuration
 @Import({
         ...
-        IsisModuleExtSpringSecurityOAuth2.class, // <.>
+        CausewayModuleExtSpringSecurityOAuth2.class, // <.>
         AuthorizorShiro.class,
         ...
 })
 public class AppManifest {
 }
 ----
-<.> The `IsisModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `IsisModuleSecuritySpring`.
+<.> The `CausewayModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `CausewayModuleSecuritySpring`.
 +
-Make sure though that no other `IsisModuleSecurityXxx` module is imported.
+Make sure though that no other `CausewayModuleSecurityXxx` module is imported.
 
 It is also possible to use with other `Authorizor` implementations; for example, using xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].
 
@@ -119,7 +119,7 @@ public class AppManifest {
 @Configuration
 @Import({
         ...
-        IsisModuleExtSpringSecurityOAuth2.class,
+        CausewayModuleExtSpringSecurityOAuth2.class,
         AuthorizorShiro.class,
         LoginController.class,
         ...
@@ -134,10 +134,10 @@ Next configure authenticationStrategy and permissenResolver for realms, and add 
 .shiro.ini
 ----
 [main]
-authenticationStrategy=org.apache.isis.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
+authenticationStrategy=org.apache.causeway.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy
 securityManager.realms = $iniRealm
-permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
+permissionResolver = org.apache.causeway.security.shiro.authorization.CausewayPermissionResolver
 iniRealm.permissionResolver = $permissionResolver
 ...
 [users]

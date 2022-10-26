@@ -35,22 +35,22 @@ Only override if zoneIdIfAny is present, otherwise acts as identity operation.
 <.> xref:#switchUser_UserMemento[switchUser(UserMemento)]
 +
 --
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 --
 <.> xref:#switchClock_VirtualClock[switchClock(VirtualClock)]
 +
 --
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
 --
 <.> xref:#switchLocale_UserLocale[switchLocale(UserLocale)]
 +
 --
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
 --
 <.> xref:#switchTimeZone_ZoneId[switchTimeZone(ZoneId)]
 +
 --
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _ZoneId_ .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _ZoneId_ .
 --
 <.> xref:#combine_UnaryOperator[combine(UnaryOperator)]
 +
@@ -83,22 +83,22 @@ Only override if zoneIdIfAny is present, otherwise acts as identity operation.
 [#switchUser_UserMemento]
 === switchUser(UserMemento)
 
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 
 [#switchClock_VirtualClock]
 === switchClock(VirtualClock)
 
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
 
 [#switchLocale_UserLocale]
 === switchLocale(UserLocale)
 
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
 
 [#switchTimeZone_ZoneId]
 === switchTimeZone(ZoneId)
 
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _ZoneId_ .
+Convenience method for use with _org.apache.causeway.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _ZoneId_ .
 
 [#combine_UnaryOperator]
 === combine(UnaryOperator)

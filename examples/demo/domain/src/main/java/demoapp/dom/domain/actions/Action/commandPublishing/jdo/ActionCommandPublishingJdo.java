@@ -26,24 +26,23 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingDisabledMetaAnnotation;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEnabledMetaAnnotation;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]

@@ -8,13 +8,13 @@ A responsibility of all ORMs is lazy loading of related objects (so as not to lo
 With JDO, this is accomplished by post-processing -- or _enhancing_ -- the compiled bytecode.
 
 This is typically performed using the `datanucleus:enhance` Maven plugin.
-This is defined as the `isis-app-starter-datanucleusenhance` profile in the xref:docs:parent-pom:about.adoc[Parent POM], and is activated by the presence of the `logging-dn-enhance.properties` file.
+This is defined as the `causeway-app-starter-datanucleusenhance` profile in the xref:docs:parent-pom:about.adoc[Parent POM], and is activated by the presence of the `logging-dn-enhance.properties` file.
 
 [source,xml]
 .App Starter Parent POM (pom.xml)
 ----
 <profile>
-  <id>isis-app-starter-datanucleusenhance</id>
+  <id>causeway-app-starter-datanucleusenhance</id>
   <activation>
     <file>
 	  <exists>${basedir}/logging-dn-enhance.properties</exists>

@@ -4,7 +4,7 @@
 :page-partial:
 
 
-The Apache Isis framework tracks the identity of each domain object.
+The Apache Causeway framework tracks the identity of each domain object.
 This identity is represented to the end-user in human-readable form so that they know which object they are interacting with, and is also used and is available internally/for integrations.
 
 This section explores these two related concepts.
@@ -38,7 +38,7 @@ Details on how to actually write titles and icons (the programming model) can be
 [[oid]]
 == OIDs
 
-As well as defining a xref:userguide:fun:concepts-patterns.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
+As well as defining a xref:userguide:fun:concepts-patterns.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Causeway also manages the runtime instances of said domain objects.
 
 When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an object identifier.
 Fundamentally this is a combination of its type (domain class), along with an identifier.
@@ -48,7 +48,7 @@ For portability and resilience, though, the object type is generally an alias fo
 This is derived from an annotation.
 The identifier meanwhile is always converted to a string.
 
-Although simple, the OID is an enormously powerful concept: it represents a URI to any domain object managed by a given Apache Isis application.
+Although simple, the OID is an enormously powerful concept: it represents a URI to any domain object managed by a given Apache Causeway application.
 With it, we have the ability to lookup any arbitrary domain objects.
 
 Some examples:

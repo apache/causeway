@@ -9,5 +9,5 @@
 
 * xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService]
 
-* xref:refguide:applib:index/services/layout/Style.adoc[Style] (enum)
+* xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle] (enum)
 

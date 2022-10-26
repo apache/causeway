@@ -8,14 +8,14 @@
 The `@javax.jdo.annotation.Discriminator` is used by JDO/DataNucleus to specify how to discriminate between subclasses of an inheritance hierarchy.
 
 It is valid to add a `@Discriminator` for any class, even those not part of an explicitly mapped inheritance hierarchy.
-Apache Isis also checks for this annotation, and if present will use the `@Discriminator#value()` as the object type, a unique alias for the object's class name.
+Apache Causeway also checks for this annotation, and if present will use the `@Discriminator#value()` as the object type, a unique alias for the object's class name.
 
 [NOTE]
 ====
-Isis parses the `@Discriminator` annotation from the Java source code; it does not query the JDO metamodel.
+Causeway parses the `@Discriminator` annotation from the Java source code; it does not query the JDO metamodel.
 This means that it the `@Discriminator` annotation must be used rather than the equivalent `<discriminator>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/inheritance.html[XML metadata].
 
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.
+Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Causeway (currently) only inspects the getter method.
 Therefore ensure that the annotation is placed there.
 ====
 

@@ -23,7 +23,7 @@ class ApplicationPermission {
   String getSort()
   ApplicationFeature findFeature(ApplicationFeatureId featureId)
   Optional<ApplicationFeatureId> asFeatureId()
-  int compareTo(org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission other)
+  int compareTo(org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission other)
   boolean equals(Object other)
   int hashCode()
   String toString()

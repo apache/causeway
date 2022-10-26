@@ -15,14 +15,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.persistence</groupId>
-		<artifactId>isis-persistence-jdo</artifactId>
+		<groupId>org.apache.causeway.persistence</groupId>
+		<artifactId>causeway-persistence-jdo</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jdo-spring</artifactId>
+	<artifactId>causeway-persistence-jdo-spring</artifactId>
 
-	<name>Apache Isis Persistence - JDO (Spring)</name>
+	<name>Apache Causeway Persistence - JDO (Spring)</name>
 	<description>
 		JDO Spring integration.
 
@@ -36,33 +36,33 @@
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jdo.spring</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jdo/spring</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jdo.spring</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/persistence/jdo/spring</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
-		<!-- ISIS -->
+		<!-- CAUSEWAY -->
 
 		<dependency>
-			<groupId>org.apache.isis.commons</groupId>
-			<artifactId>isis-commons</artifactId>
+			<groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-config</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-applib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-provider</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-provider</artifactId>
 		</dependency>
 
 		<!-- SPRING -->
@@ -88,8 +88,8 @@
 		<!-- TESTING -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-internaltestsupport</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 

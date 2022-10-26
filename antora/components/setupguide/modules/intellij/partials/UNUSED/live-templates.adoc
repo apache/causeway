@@ -11,10 +11,10 @@ image::030-import-settings/050-live-templates.png[width="600px"]
 
 The live templates have a prefix of either:
 
-* `is` : for Apache Isis domain objects
+* `is` : for Apache Causeway domain objects
 * `ju` : for JUnit tests
 * `jm` : for JMock mocks or libraries
 
-The live templates are also provided as a settings JAR file, namely *link:{attachmentsdir}/resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
+The live templates are also provided as a settings JAR file, namely *link:{attachmentsdir}/resources/intellij/causeway-settings-live-templates.jar[causeway-settings-live-templates.jar]*.
 Download and import (as for the previous settings JAR files).
 

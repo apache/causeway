@@ -21,15 +21,12 @@ package demoapp.dom.domain.actions.Action;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -43,6 +40,8 @@ import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToVm;
 import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
 import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.ActionMenu")
 @DomainService(nature=NatureOfService.VIEW)

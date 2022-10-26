@@ -9,7 +9,7 @@ To get started with a new application, download one of the two starter apps.
 
 The helloworld app is a very minimal app, intended just as a starting point to learn what the framework is all about.
 
-The source code is in this link:https://github.com/apache/isis-app-helloworld[git repo] which you can either fork, or just download as a zip:
+The source code is in this link:https://github.com/apache/causeway-app-helloworld[git repo] which you can either fork, or just download as a zip:
 
 * use JDO as the ORM, use:
 +
@@ -28,7 +28,7 @@ TIP: A much more complete explanation of the structure of the app (and how to us
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
 It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport:about.adoc[BDD (Cucumber)] specs.
 
-The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo] which you can either fork, or just download as a zip:
+The source code can be found in this link:https://github.com/apache/causeway-app-simpleapp[git repo] which you can either fork, or just download as a zip:
 
 * to use JDO as the ORM, use:
 +
@@ -51,8 +51,8 @@ For both apps you can bump to newer versions of the framework just by updating t
 .pom.xml
 ----
 <parent>
-    <groupId>org.apache.isis.app</groupId>
-    <artifactId>isis-app-starter-parent</artifactId>
+    <groupId>org.apache.causeway.app</groupId>
+    <artifactId>causeway-app-starter-parent</artifactId>
     <version>2.0.0</version>                            <!--1-->
 </parent>
 ----

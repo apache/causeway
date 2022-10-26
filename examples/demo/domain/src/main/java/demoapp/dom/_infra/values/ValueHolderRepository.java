@@ -25,13 +25,12 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 
+import demoapp.dom.types.Samples;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {

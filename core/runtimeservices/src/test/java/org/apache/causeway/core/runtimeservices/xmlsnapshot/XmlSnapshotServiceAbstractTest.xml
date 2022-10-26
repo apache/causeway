@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<app:InvoiceSummaryForPropertyDueDate xmlns:app="http://causeway.apache.org/ns/app/org.estatio.dom.invoice.viewmodel/InvoiceSummaryForPropertyDueDate" xmlns:causeway="http://causeway.apache.org/ns/0.1/metamodel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" causeway:feature="class" causeway:fqn="org.estatio.dom.invoice.viewmodel.InvoiceSummaryForPropertyDueDate" causeway:oid="viewmodel-fakeoid-90b304cf-c18a-4e36-839b-55ea285de9a6" causeway:plural="Invoice Summary For Property Due Dates" causeway:singular="Invoice Summary For Property Due Date" xsi:schemaLocation="http://causeway.apache.org/ns/app/org.estatio.dom.invoice.viewmodel/InvoiceSummaryForPropertyDueDate org.estatio.dom.invoice.viewmodel.InvoiceSummaryForPropertyDueDate.xsd">
+  <causeway:title>[OXF]  Oxford Super Mall - 01-Apr-2013</causeway:title>
+  <app:invoices causeway:feature="collection" causeway:size="1" causeway:type="app:org.estatio.dom.invoice.Invoice"/>
+  
+  <app:someString causeway:datatype="causeway:String" causeway:feature="value">OXF</app:someString>
+  <app:property causeway:feature="reference" causeway:type="app:org.estatio.dom.invoice.viewmodel.InvoiceSummaryForPropertyDueDate">
+    <causeway:title>[OXF]  Oxford Super Mall</causeway:title>
+  </app:property>
+  <app:someLocalDate causeway:datatype="causeway:LocalDate" causeway:feature="value">01-Apr-2013</app:someLocalDate>
+  <app:someInteger causeway:datatype="causeway:Integer" causeway:feature="value">123456789</app:someInteger>
+  <app:someBigDecimal causeway:datatype="causeway:BigDecimal" causeway:feature="value">123456789012345678901234567890.12345678</app:someBigDecimal>
+  <app:someBigInteger causeway:datatype="causeway:BigInteger" causeway:feature="value">12345678901234567890123456789012345678</app:someBigInteger>
+  <app:someLong causeway:datatype="causeway:Long" causeway:feature="value">1234567890123456789</app:someLong>
+  <app:someShort causeway:datatype="causeway:Short" causeway:feature="value">12345</app:someShort>
+  <app:someByte causeway:datatype="causeway:Byte" causeway:feature="value">123</app:someByte>
+  <app:someBoolean causeway:datatype="causeway:Boolean" causeway:feature="value">True</app:someBoolean>
+  <app:someBoolean2 causeway:datatype="causeway:Boolean" causeway:feature="value">False</app:someBoolean2>
+</app:InvoiceSummaryForPropertyDueDate>

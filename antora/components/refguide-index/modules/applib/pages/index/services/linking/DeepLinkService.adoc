@@ -20,7 +20,7 @@ interface DeepLinkService {
 <.> xref:#deepLinkFor_Object[deepLinkFor(Object)]
 +
 --
-Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.
+Creates a URI that can be used to obtain a representation of the provided domain object in one of the Causeway viewers.
 --
 
 == Members
@@ -28,7 +28,7 @@ Creates a URI that can be used to obtain a representation of the provided domain
 [#deepLinkFor_Object]
 === deepLinkFor(Object)
 
-Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.
+Creates a URI that can be used to obtain a representation of the provided domain object in one of the Causeway viewers.
 
 include::hooks/DeepLinkService_010-implementation.adoc[]
 

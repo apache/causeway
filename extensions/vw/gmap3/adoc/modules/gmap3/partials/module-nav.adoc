@@ -1,3 +1,0 @@
-
-** xref:vw:gmap3:about.adoc[GMap3]
-

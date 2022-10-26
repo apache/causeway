@@ -9,15 +9,15 @@
 The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
-* members of the Apache Isis PMC verifying and voting on the release (documented below)
+* members of the Apache Causeway PMC verifying and voting on the release (documented below)
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
+This section describes some guidance on what a voter (members of the Apache Causeway PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
 == Background
 
 Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:cutting-a-release.adoc#start-voting-thread-on-dev-mailing-list[release process]) on the xref:docs:support:mailing-list.adoc#mailing-lists[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
-Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
+Anyone else can also vote, but only members of the Apache Causeway PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
 
@@ -51,13 +51,13 @@ Run these commands, with the environment variables set correctly.
 include::partial$verify-process.adoc[]
 ----
 
-The `verify-isis-release.sh` script performs these steps:
+The `verify-causeway-release.sh` script performs these steps:
 
 * downloads artifacts (`.zip` file and `.asc` file) from the staging repository hosted on link:https://repository.apache.org[].
 
 * verifies that the `.asc` signature is correct
 +
-in other words, to confirm that the release was created by an Apache Isis committer
+in other words, to confirm that the release was created by an Apache Causeway committer
 
 * builds the framework code from source
 
@@ -71,7 +71,7 @@ Assuming this completes successfully, you can then test the starter applications
 +
 [source,bash]
 ----
-pushd isis-app-helloworld-jdo
+pushd causeway-app-helloworld-jdo
 mvn spring-boot:run
 popd
 ----
@@ -80,7 +80,7 @@ popd
 +
 [source,bash]
 ----
-pushd isis-app-helloworld-jpa
+pushd causeway-app-helloworld-jpa
 mvn spring-boot:run
 popd
 ----
@@ -89,7 +89,7 @@ popd
 +
 [source,bash]
 ----
-pushd isis-app-simpleapp-jdo
+pushd causeway-app-simpleapp-jdo
 mvn -pl webapp spring-boot:run
 popd
 ----
@@ -98,7 +98,7 @@ popd
 +
 [source,bash]
 ----
-pushd isis-app-simpleapp-jpa
+pushd causeway-app-simpleapp-jpa
 mvn -pl webapp spring-boot:run
 popd
 ----
@@ -110,7 +110,7 @@ And/or, you can go ahead and xref:comguide:ROOT:verifying-releases.adoc#casting-
 
 == (Optional) Verify Website
 
-The next version of the website can be found at link:https://isis.staged.apache.org[].
+The next version of the website can be found at link:https://causeway.staged.apache.org[].
 
 [#optional-creadur-tools]
 == (Optional) Creadur Tools

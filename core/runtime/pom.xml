@@ -21,20 +21,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core</artifactId>
+        <groupId>org.apache.causeway.core</groupId>
+        <artifactId>causeway-core</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-runtime</artifactId>
-    <name>Apache Isis Core - Runtime</name>
+    <artifactId>causeway-core-runtime</artifactId>
+    <name>Apache Causeway Core - Runtime</name>
     <description>
     	Bundles framework internal services, utilities and events.
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.core.runtime</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/core/runtime</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -52,7 +52,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>isis-version.properties</include>
+                    <include>causeway-version.properties</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -66,31 +66,31 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-metamodel</artifactId>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-transaction</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-transaction</artifactId>
         </dependency>
 
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-interaction</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-interaction</artifactId>
         </dependency>
         
     	<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-jodatime-integration</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-jodatime-integration</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<!--  TESTING -->
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

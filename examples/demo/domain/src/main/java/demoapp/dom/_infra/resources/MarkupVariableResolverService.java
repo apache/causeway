@@ -26,9 +26,9 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
 
@@ -39,12 +39,12 @@ public class MarkupVariableResolverService {
     private final Map<String, String> constants;
 
     @Inject
-    public MarkupVariableResolverService(IsisConfiguration configuration) {
+    public MarkupVariableResolverService(CausewayConfiguration configuration) {
         constants = _Maps.unmodifiable(
-                "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
-                "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",
+                "SOURCES_CAUSEWAY", "https://github.com/apache/causeway/blob/master/core/applib/src/main/java",
+                "SOURCES_DEMO", "https://github.com/apache/causeway/tree/master/examples/demo/domain/src/main/java",
                 "ISSUES_DEMO", "https://issues.apache.org/jira/",
-                "ISIS_VERSION", Optional.ofNullable(
+                "CAUSEWAY_VERSION", Optional.ofNullable(
                         configuration.getViewer().getWicket().getApplication().getVersion())
                         .orElse("unkown-version")
             );

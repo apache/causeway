@@ -21,21 +21,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core</artifactId>
+        <groupId>org.apache.causeway.core</groupId>
+        <artifactId>causeway-core</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-config</artifactId>
+    <artifactId>causeway-core-config</artifactId>
 
-    <name>Apache Isis Core - Configuration</name>
+    <name>Apache Causeway Core - Configuration</name>
     <description>
-        Isis configuration library for framework internal use.
+        Causeway configuration library for framework internal use.
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.config</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/config</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.core.config</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/core/config</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -60,13 +60,13 @@
     <dependencies>
     
     	<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-applib</artifactId>
         </dependency>
         
     	<dependency>
-            <groupId>org.apache.isis.commons</groupId>
-			<artifactId>isis-commons</artifactId>
+            <groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
         </dependency>
         
         <dependency>
@@ -99,8 +99,8 @@
         <!-- TESTING -->
         
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

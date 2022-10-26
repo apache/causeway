@@ -19,7 +19,7 @@ The framework provides three ways to implement a view model:
 +
 The serialized form of these view models is therefore XML, which also enables these view models to act as DTO (useful for various integration scenarios).
 
-* Using Apache Isis specific annotations.
+* Using Apache Causeway specific annotations.
 +
 This is more concise, but less powerful: only the state of the object's properties is serialized -- collections are ignored -- and not every datatype is recognized.
 +
@@ -72,7 +72,7 @@ public class CompareCustomers {
 }
 ----
 
-<.> The JAXB xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement] annotation indicates this is a view model to Apache Isis, which then uses JAXB to serialize the state of the view model between interactions
+<.> The JAXB xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement] annotation indicates this is a view model to Apache Causeway, which then uses JAXB to serialize the state of the view model between interactions
 <.> Optionally, the properties of the view model can be listed using the `XmlType#propOrder` attribute. +
 This is an all-or-nothing affair: either all properties must be listed, or else the annotation omitted.
 <.> Specifying field accessor type allows the Lombok `@Getter` and `@Setter` annotations to be used.
@@ -98,7 +98,7 @@ It's quite common for view models to be "backed by" (be projections of) some und
 For example, the `CompareCustomers` view model described xref:userguide:fun:view-models.adoc#jaxb[above] actually references two underlying ``Customer`` entities.
 
 It wouldn't make sense to serialize out the state of a persistent entity.
-However, the identity of the underlying entity is well defined; Apache Isis defines the xref:refguide:schema:common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
+However, the identity of the underlying entity is well defined; Apache Causeway defines the xref:refguide:schema:common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
 This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService].
 
 There is only one requirement to make this work: every referenced domain entity must be annotated with xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[@XmlJavaTypeAdapter], specifying the framework-provided `PersistentEntityAdapter`.
@@ -152,7 +152,7 @@ public class CompareCustomers {
 
 If your JAXB view model contains fields using the JODA datatypes (`LocalDate` and so on), then `@XmlJavaTypeAdapter` additional annotations in order to "teach" JAXB how to serialize out the state.
 
-The Apache Isis applib provides a number of adapters to use out-of-the-box.
+The Apache Causeway applib provides a number of adapters to use out-of-the-box.
 For example:
 
 [source,java]
@@ -313,7 +313,7 @@ We can characterise these as:
 * external entities
 +
 For example the application may interact synchronously with state exposed on another system through a REST or SOAP API.
-In this case the entity with your Apache Isis application is a proxy or a facade for the state on the external system
+In this case the entity with your Apache Causeway application is a proxy or a facade for the state on the external system
 
 * internal entities
 +

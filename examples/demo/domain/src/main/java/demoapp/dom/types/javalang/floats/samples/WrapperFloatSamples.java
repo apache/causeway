@@ -30,7 +30,7 @@ public class WrapperFloatSamples implements Samples<java.lang.Float> {
 
     @Override
     public Stream<java.lang.Float> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.FloatValueSemantics()
                 .getExamples()
                 .stream();
     }

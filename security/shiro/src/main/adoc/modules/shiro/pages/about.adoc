@@ -4,7 +4,7 @@
 :page-partial:
 
 
-This guide describes the design and configuration of the Apache Shiro integration with Apache Isis.
+This guide describes the design and configuration of the Apache Shiro integration with Apache Causeway.
 
 
 == Design
@@ -32,10 +32,10 @@ Permissions are ultimately represented as strings, and their interpretation of t
 An enhanced "wildcard" syntax, described  <<enhanced-wildcard-permission,below>> in more detail, incorporates the notion of read and write permissions, and also of vetoing permissions (as well as the usual allow permissions).
 
 
-[[configuring-isis-to-use-shiro]]
+[[configuring-causeway-to-use-shiro]]
 == Configuring to use Shiro
 
-Apache Isis' security mechanism is configurable, specifying an `Authenticator` and an `Authorizor` (non-public) APIs.
+Apache Causeway' security mechanism is configurable, specifying an `Authenticator` and an `Authorizor` (non-public) APIs.
 The Shiro security mechanism is an integration with Apache Shiro that implements both interfaces.
 
 [TIP]
@@ -56,20 +56,20 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleSecurityShiro.class,
+        CausewayModuleSecurityShiro.class,
         ...
 })
 public class AppManifest {
 }
 ----
 
-Make sure that no other `IsisModuleSecurityXxx` module is imported.
+Make sure that no other `CausewayModuleSecurityXxx` module is imported.
 
 === Configuration Properties
 
 The Shiro integration supports the following config properties:
 
-* xref:refguide:config:sections/isis.security.shiro.adoc#isis.security.shiro.auto-logout-if-already-authenticated[isis.security.shiro.auto-logout-if-already-authenticated]
+* xref:refguide:config:sections/causeway.security.shiro.adoc#causeway.security.shiro.auto-logout-if-already-authenticated[causeway.security.shiro.auto-logout-if-already-authenticated]
 
 === Shiro Realms and shiro.ini
 
@@ -102,7 +102,7 @@ Another option alternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP
 As noted above, as well as realms many other aspects of configuration can be specified in this file:
 
 * enable caching for performance; discussed <<caching,below>>
-* leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, by specifying the Apache Isis permission resolver; discussed <<permission-resolver-configuration,below>>.
+* leverage Apache Causeway' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, by specifying the Apache Causeway permission resolver; discussed <<permission-resolver-configuration,below>>.
 
 
 [#shiro-ini-realm]
@@ -163,8 +163,8 @@ For example:
 [source,ini]
 ----
 user_role = myapp.*,\
-            isis.security:*,\
-            isis.applib:*
+            causeway.security:*,\
+            causeway.applib:*
 admin_role = *
 ----
 
@@ -213,14 +213,14 @@ myapp                                   # ditto
 
 [TIP]
 ====
-The format of the permissions string is configurable in Shiro, and Apache Isis uses this to provide an extended wildcard format, described xref:security:shiro:about.adoc#enhanced-wildcard-permission[here].
+The format of the permissions string is configurable in Shiro, and Apache Causeway uses this to provide an extended wildcard format, described xref:security:shiro:about.adoc#enhanced-wildcard-permission[here].
 ====
 
 
 == Providing permissions to Framework-provided Features
 
 Some features of the framework are exposed as actions that must be provided as permissions.
-In particular, permission to the features in `isis.security` must be granted in order that end-users can logout.
+In particular, permission to the features in `causeway.security` must be granted in order that end-users can logout.
 
 The snippet below defines a role for each framework feature:
 
@@ -228,16 +228,16 @@ The snippet below defines a role for each framework feature:
 .shiro.ini
 ----
 [roles]
-default_role   = isis.applib,\
-                 isis.security
-fixtures_role  = isis.testing.fixtures
-features_role  = isis.feat
-metamodel_role = isis.metamodel
-h2_role        = isis.ext.h2Console
-jdo_role       = isis.persistence.jdo
-swagger_role   = isis.viewer.restfulobjects
-conf_role      = isis.conf
-sudo_role      = isis.sudo
+default_role   = causeway.applib,\
+                 causeway.security
+fixtures_role  = causeway.testing.fixtures
+features_role  = causeway.feat
+metamodel_role = causeway.metamodel
+h2_role        = causeway.ext.h2Console
+jdo_role       = causeway.persistence.jdo
+swagger_role   = causeway.viewer.restfulobjects
+conf_role      = causeway.conf
+sudo_role      = causeway.sudo
 ----
 
 Notes:
@@ -280,14 +280,14 @@ Instead, the corresponding sections from for `realm1.ini` are used instead.
 [#enhanced-wildcard-permission]
 == Enhanced Wildcard Permission
 
-If using the text-based xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm] or xref:security:shiro-realm-ldap:about.adoc[Apache Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
-Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
+If using the text-based xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm] or xref:security:shiro-realm-ldap:about.adoc[Apache Causeway' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
+Apache Causeway provides its own `CausewayPermission` which introduces the concept of a "veto".
 
 A vetoing permission is one that prevents access to a feature, rather than grants it.
 This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.
 The configuration can therefore be set up to grant fairly broad-brush permissions and then veto permission for the sensitive features for those users that do not have access.
 
-The string representation of the `IsisPermission` uses the following format:
+The string representation of the `CausewayPermission` uses the following format:
 
 [source,ini]
 ----
@@ -332,14 +332,14 @@ The net effect is therefore what we would want: that a user with both `admin_rol
 [[permission-resolver-configuration]]
 === Configuration
 
-To configure Apache Isis' extended permission support requires that a custom permission resolver is specified in `shiro.ini` file:
+To configure Apache Causeway' extended permission support requires that a custom permission resolver is specified in `shiro.ini` file:
 
 [source,ini]
 ----
-permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
+permissionResolver = org.apache.causeway.security.shiro.authorization.CausewayPermissionResolver
 myRealm.permissionResolver = $permissionResolver  # <.>
 ----
-<.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$isisLdapRealm` etc.
+<.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$causewayLdapRealm` etc.
 
 
 

@@ -81,5 +81,5 @@
 ** xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
 
 ** Viewer (Common Applib)
-*** xref:refguide:viewer:index/common/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
+*** xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService]
 

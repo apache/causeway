@@ -14,13 +14,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>isis-all</artifactId>
+	<groupId>org.apache.causeway</groupId>
+	<artifactId>causeway-all</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis (Aggregator)</name>
+	<name>Apache Causeway (Aggregator)</name>
 	<description>
         Convenience aggregator POM that references all modules, some explicitely,
         others via profiles, that are not activiated per default.
@@ -35,9 +35,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://github.com/apache/isis.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-		<url>https://github.com/apache/isis.git</url>
+		<connection>scm:git:https://github.com/apache/causeway.git</connection>
+		<developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
+		<url>https://github.com/apache/causeway.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -71,7 +71,7 @@
                 keep module declarations in alphabetical order!
 
                 also keep profiles in sync with the site documentation
-                https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc
+                https://github.com/apache/causeway/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-causeway.adoc
                     -->
                 <module>bom</module>
 				<module>core</module>
@@ -353,10 +353,10 @@
 		</profile>
 
 		<profile>
-			<id>isis-app-starter-surefire</id>
+			<id>causeway-app-starter-surefire</id>
 			<activation>
 				<property>
-					<name>!skip.isis-app-starter-surefire</name>
+					<name>!skip.causeway-app-starter-surefire</name>
 				</property>
 			</activation>
 
@@ -478,10 +478,10 @@
 		</profile>
 
 		<profile>
-			<id>isis-app-starter-docker</id>
+			<id>causeway-app-starter-docker</id>
 			<activation>
 				<property>
-					<name>!skip.isis-app-starter-docker</name>
+					<name>!skip.causeway-app-starter-docker</name>
 				</property>
 			</activation>
 			<properties>
@@ -502,10 +502,10 @@
 
 		<!-- running: mvn spring-boot:run -->
 		<profile>
-			<id>isis-app-starter-boot</id>
+			<id>causeway-app-starter-boot</id>
 			<activation>
 				<property>
-					<name>!skip.isis-app-starter-boot</name>
+					<name>!skip.causeway-app-starter-boot</name>
 				</property>
 			</activation>
 			<properties>
@@ -607,7 +607,7 @@
 				<repository>
 					<id>github</id>
 					<name>Github Releases</name>
-					<url>https://maven.pkg.github.com/apache/isis</url>
+					<url>https://maven.pkg.github.com/apache/causeway</url>
 				</repository>
 			</distributionManagement>
 		</profile>

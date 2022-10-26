@@ -15,17 +15,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.testing</groupId>
-		<artifactId>isis-testing-fixtures</artifactId>
+		<groupId>org.apache.causeway.testing</groupId>
+		<artifactId>causeway-testing-fixtures</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-testing-fixtures-applib</artifactId>
-	<name>Apache Isis Tst - Fixtures (applib)</name>
+	<artifactId>causeway-testing-fixtures-applib</artifactId>
+	<name>Apache Causeway Tst - Fixtures (applib)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.testing.fixtures.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/testing/fixtures/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.testing.fixtures.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/testing/fixtures/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -55,26 +55,26 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jdo-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jpa-applib</artifactId>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jpa-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

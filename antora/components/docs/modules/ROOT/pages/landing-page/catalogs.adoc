@@ -18,5 +18,5 @@ They are generally not consumed directly by your application.
 For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
 +
 That said, some extensions do also provide an applib.
-For example the gmap3 extension provides an applib so that domain objects can expose their location (typically a Java interface to be implemented); this allows the extension to plot them on a map.
+For example the xref:vw:fullcalendar:about.adoc[fullcalendar] extension provides an applib so that domain objects can expose a date (typically a Java interface to be implemented); this allows the extension to plot them on a calendar.
 

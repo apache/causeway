@@ -2,53 +2,53 @@
   "properties": [
     {
       "name": "datanucleus.identifier.case",
-      "type": "org.apache.isis.core.config.DatanucleusConfiguration.Identifier.Case",
+      "type": "org.apache.causeway.core.config.DatanucleusConfiguration.Identifier.Case",
       "description": "Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE."
     }
   ],
   "hints": [
     {
-      "name": "isis.testing.fixtures.initial-script",
+      "name": "causeway.testing.fixtures.initial-script",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
+          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
         }
       }]
     },
     {
-      "name": "isis.testing.fixtures.fixture-scripts-specification.recreate",
+      "name": "causeway.testing.fixtures.fixture-scripts-specification.recreate",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
+          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
         }
       }]
     },
     {
-      "name": "isis.testing.fixtures.fixture-scripts-specification.run-script-default",
+      "name": "causeway.testing.fixtures.fixture-scripts-specification.run-script-default",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
+          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
         }
       }]
     },
     {
-      "name": "isis.viewer.wicket.themes.provider",
+      "name": "causeway.viewer.wicket.themes.provider",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport"
+          "target": "org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.causewayWicketThemeSupport"
         }
       }]
     },
     {
-      "name": "isis.viewer.wicket.app",
+      "name": "causeway.viewer.wicket.app",
       "providers": [{
         "name": "class-reference",
         "parameters": {
-          "target": "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication"
+          "target": "org.apache.causeway.viewer.wicket.viewer.wicketapp.causewayWicketApplication"
         }
       }]
     },

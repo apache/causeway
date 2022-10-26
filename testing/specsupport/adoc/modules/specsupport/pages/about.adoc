@@ -12,7 +12,7 @@ The BDD tooling parses this text and uses it to actually interact with the syste
 As a byproduct the BDD frameworks generate readable output of some form; this is often an annotated version of the original specification, marked up to indicate which specifications passed, which have failed.
 This readable output is a form of "living documentation"; it captures the actual behaviour of the system, and so is guaranteed to be accurate.
 
-There are many BDD tools out there; Apache Isis provides an integration with link:https://cucumber.io/docs/installation/java/[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
+There are many BDD tools out there; Apache Causeway provides an integration with link:https://cucumber.io/docs/installation/java/[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
 
 
 == How it works
@@ -45,11 +45,11 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -65,8 +65,8 @@ In either the domain module(s) or webapp modules of your application, add the fo
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-specsupport-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-specsupport-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -81,7 +81,7 @@ include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingSpecSupportApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingSpecSupportApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -89,7 +89,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingSpecSupportApplib.class,
+        CausewayModuleTestingSpecSupportApplib.class,
         ...
 })
 public class AppManifest {

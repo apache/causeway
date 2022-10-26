@@ -3,7 +3,7 @@
 
 Allows a block of code to be executed within an arbitrary xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , allowing the who, when and where to be temporarily switched.
 
-Most typically this service is used to temporarily change the "who", that is the user reported by the xref:refguide:applib:index/services/user/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ - hence the name SudoService. But the user's locale and timezome can also be changed, as well as the time reported by _org.apache.isis.applib.services.clock.ClockService_ .
+Most typically this service is used to temporarily change the "who", that is the user reported by the xref:refguide:applib:index/services/user/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ - hence the name SudoService. But the user's locale and timezome can also be changed, as well as the time reported by _org.apache.causeway.applib.services.clock.ClockService_ .
 
 The primary use case for this service is for fixture scripts and integration tests.
 

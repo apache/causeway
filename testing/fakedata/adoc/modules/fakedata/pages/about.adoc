@@ -36,11 +36,11 @@ In addition, add a section for the BOM of all the testing support libraries:
 <dependencyManagement>
     <dependencies>
         <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
+        	<groupId>org.apache.causeway.testing</groupId>
+	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -56,8 +56,8 @@ In the domain module(s) of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-fakedata-applib</artifactId>
+        <groupId>org.apache.causeway.testing</groupId>
+        <artifactId>causeway-testing-fakedata-applib</artifactId>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -65,7 +65,7 @@ In the domain module(s) of your application, add the following dependency:
 
 === Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingFakeDataApplib` module:
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleTestingFakeDataApplib` module:
 
 [source,java]
 .AppManifest.java
@@ -73,7 +73,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleTestingFakeDataApplib.class,
+        CausewayModuleTestingFakeDataApplib.class,
         ...
 })
 public class AppManifest {
@@ -113,9 +113,9 @@ This provides numerous methods, each for a specific data type, providing an obje
 
 *More specialized value types*
 
-* xref:refguide:testing:index/fakedata/applib/services/IsisBlobs.adoc[IsisBlobs]
-* xref:refguide:testing:index/fakedata/applib/services/IsisClobs.adoc[IsisClobs]
-* xref:refguide:testing:index/fakedata/applib/services/IsisPasswords.adoc[IsisPasswords]
+* xref:refguide:testing:index/fakedata/applib/services/CausewayBlobs.adoc[CausewayBlobs]
+* xref:refguide:testing:index/fakedata/applib/services/CausewayClobs.adoc[CausewayClobs]
+* xref:refguide:testing:index/fakedata/applib/services/CausewayPasswords.adoc[CausewayPasswords]
 
 |
 *Dates and times*

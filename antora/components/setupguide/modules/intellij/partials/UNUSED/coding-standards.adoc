@@ -4,7 +4,7 @@
 
 CAUTION: seem to have mislaid this file... would need verifying/updating anyway, I think.
 
-Next, we suggest you import settings for standard ASF/Apache Isis coding conventions.
-This file is also provided as a settings file, namely *link:{attachmentsdir}/intellij/isis-settings-code-style.jar[isis-settings-code-style.jar]*.
+Next, we suggest you import settings for standard ASF/Apache Causeway coding conventions.
+This file is also provided as a settings file, namely *link:{attachmentsdir}/intellij/causeway-settings-code-style.jar[causeway-settings-code-style.jar]*.
 Download and import (as for the above settings JAR files).
 

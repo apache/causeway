@@ -8,19 +8,16 @@ footnote:[https://github.com/spring-projects/spring-framework/issues/18702[Sprin
 
 Credits to the original authors!
 
-The following is an adoption of the original
-footnote:[https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html[docs.spring.io]]
-documentation.
+The following is an adoption of the originalfootnote:[https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html[docs.spring.io]]documentation.
 
-WARNING: With the XML examples, former package names `org.springframework.orm.jdo` have not been corrected to their forked
-correspondents in `org.apache.isis.persistence.jdo.spring`. Likewise with the descriptive text, some references pointing 
-to _Spring_ have not been corrected to point to _Apache Isis_.
+WARNING: With the XML examples, former package names `org.springframework.orm.jdo` have not been corrected to their forked correspondents in `org.apache.causeway.persistence.jdo.spring`.
+Likewise with the descriptive text, some references pointing to _Spring_ have not been corrected to point to _Apache Causeway_.
 
 == JDO
 
 _Spring_ supports the standard JDO 2.0 and 2.1 APIs as data access strategy, following the same
 style as the _Hibernate_ support. The corresponding integration classes reside in the
-`org.apache.isis.persistence.jdo.spring` package. (former `org.springframework.orm.jdo`)
+`org.apache.causeway.persistence.jdo.spring` package. (former `org.springframework.orm.jdo`)
 
 === PersistenceManagerFactory setup
 
@@ -52,11 +49,11 @@ local JDO `PersistenceManagerFactory` within a _Spring_ application context:
 @Named("jdo-settings")
 public class JdoSettingsBean {
 
-    @Getter @Setter 
+    @Getter @Setter
     private Map<String, String> datanucleus; //mapped by "datanucleus"
-    @Getter @Setter 
+    @Getter @Setter
     private Map<String, String> javax; //mapped by "javax" filtered later for "javax.jdo"
-    
+
     private final Object lock = new Object();
     private Map<String, Object> properties;
 
@@ -64,19 +61,19 @@ public class JdoSettingsBean {
         synchronized(lock) {
             if(properties==null) {
                 properties = new HashMap<>();
-                
+
                 datanucleus.forEach((k, v)->properties.put("datanucleus." + k, v));
-                
+
                 javax.entrySet().stream()
                 .filter(e->e.getKey().startsWith("jdo."))
                 .forEach(e->properties.put("javax." + e.getKey(), e.getValue()));
-                
+
                 amendProperties(properties);
             }
         }
         return properties;
     }
-    
+
     private void amendProperties(final Map<String, Object> properties) {
         // add optional defaults if needed
     }
@@ -86,7 +83,7 @@ public class JdoSettingsBean {
 @Configuration
 @EnableConfigurationProperties(JdoSettingsBean.class)
 public class ConfigurationExample {
-    
+
     @Bean
     public LocalPersistenceManagerFactoryBean myPmf(JdoSettingsBean jdoSettings) {
         var myPmf = new LocalPersistenceManagerFactoryBean();
@@ -150,7 +147,7 @@ import org.springframework.context.annotation.Import;
 @Import({
 })
 public class ConfigurationExample {
-    
+
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
         var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
@@ -160,7 +157,7 @@ public class ConfigurationExample {
         dataSourceBuilder.password("");
         return dataSourceBuilder.build();
     }
-  
+
     @Bean(destroyMethod = "close")
     public PersistenceManagerFactory myPmf(DataSource dataSource) {
         var myPmf = new JDOPersistenceManagerFactory();
@@ -178,7 +175,7 @@ usually through the JCA connector provided by the particular JDO implementation.
 `JndiObjectFactoryBean / <jee:jndi-lookup>` can be used to retrieve and expose such a
 `PersistenceManagerFactory`.
 However, outside an EJB context, no real benefit exists in holding the `PersistenceManagerFactory` in
-JNDI: only choose such a setup for a good reason. See 
+JNDI: only choose such a setup for a good reason. See
 _Spring Transactions Section 13.3.6_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/orm.html#orm-hibernate-resources[Comparing container-managed and locally defined resources]
 
 “Comparing container-managed and locally defined resources” for a discussion; the arguments there
@@ -262,7 +259,7 @@ following example:
 @Import({
 })
 public class ConfigurationExample {
-    
+
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
         var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
@@ -272,7 +269,7 @@ public class ConfigurationExample {
         dataSourceBuilder.password("");
         return dataSourceBuilder.build();
     }
-  
+
     @Bean(destroyMethod = "close") @Named("myPmf")
     public PersistenceManagerFactory myPmf(DataSource dataSource) {
         var myPmf = new JDOPersistenceManagerFactory();
@@ -280,22 +277,22 @@ public class ConfigurationExample {
         myPmf.setNontransactionalRead(true);
         return myPmf;
     }
-    
+
     @Bean @Named("myPmfProxy")
     public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(PersistenceManagerFactory myPmf) {
         var myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
         return myPmfProxy;
     }
-    
+
     @Component
     public static class ExampleDao {
 
         @Inject
         @Named("myPmfProxy")
-        @Getter 
+        @Getter
         private PersistenceManagerFactory persistenceManagerFactory;
-        
+
     }
 
 }
@@ -364,7 +361,7 @@ transactions through turning off `TransactionAwarePersistenceManagerFactoryProxy
 @Import({
 })
 public class ConfigurationExample {
-    
+
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
         var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
@@ -374,7 +371,7 @@ public class ConfigurationExample {
         dataSourceBuilder.password("");
         return dataSourceBuilder.build();
     }
-  
+
     @Bean(destroyMethod = "close") @Named("myPmf")
     public PersistenceManagerFactory myPmf(DataSource dataSource) {
         var myPmf = new JDOPersistenceManagerFactory();
@@ -382,7 +379,7 @@ public class ConfigurationExample {
         myPmf.setNontransactionalRead(true);
         return myPmf;
     }
-    
+
     @Bean @Named("myPmfProxy")
     public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(PersistenceManagerFactory myPmf) {
         var myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
@@ -390,15 +387,15 @@ public class ConfigurationExample {
         myPmfProxy.setAllowCreate(false); // <.>
         return myPmfProxy;
     }
-    
+
     @Component
     public static class ExampleDao {
 
         @Inject
         @Named("myPmfProxy")
-        @Getter 
+        @Getter
         private PersistenceManagerFactory persistenceManagerFactory;
-        
+
     }
 
 }
@@ -425,7 +422,7 @@ DAOs throw plain JDOException, and you would have to convert explicitly to _Spri
 
 [NOTE]
 ====
-You are strongly encouraged to read _Spring Transactions Section 10.5_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/transaction.html#transaction-declarative[Declarative transaction management] 
+You are strongly encouraged to read _Spring Transactions Section 10.5_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/transaction.html#transaction-declarative[Declarative transaction management]
 if you have not
 done so, to get a more detailed coverage of _Spring_'s declarative transaction support.
 ====

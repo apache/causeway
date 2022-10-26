@@ -17,7 +17,7 @@ In addition to specifying optionality at the framework level, it's also importan
 * in the case of entities persisted using JDO/DataNucleus, this can be done using `@Column(allowsNull=...)`.
 * in the case of view models serialized using JAXB, this can be done using `@XmlElement(required=...)`.
 
-Also note that JDO and JAXB assume a property is not required by default, whereas Apache Isis assumes that properties are required by default.
+Also note that JDO and JAXB assume a property is not required by default, whereas Apache Causeway assumes that properties are required by default.
 ====
 
 

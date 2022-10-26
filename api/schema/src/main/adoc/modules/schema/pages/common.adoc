@@ -12,7 +12,7 @@ The "common" schema defines a number of complex types that are used by other hig
 The `oidDto` complex type captures an object's type and its identifier.
 This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService].
 
-Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by a given Apache Isis application.
+Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by a given Apache Causeway application.
 With it, we have the ability to lookup any arbitrary object.
 Further discussion and examples can be found xref:userguide:fun:overview.adoc#oid[here].
 
@@ -20,9 +20,9 @@ The `oidDto` complex type is defined as:
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/common"                           <!--.-->
+<xs:schema targetNamespace="http://causeway.apache.org/schema/common"                           <!--.-->
            elementFormDefault="qualified"
-           xmlns="http://isis.apache.org/schema/common"
+           xmlns="http://causeway.apache.org/schema/common"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:complexType name="oidDto">                                                          <!--.-->
@@ -48,7 +48,7 @@ The `oidDto` complex type is defined as:
     ...
 </xs:schema>
 ----
-<.> the common schema has a namespace URI of "http://isis.apache.org/schema/common".
+<.> the common schema has a namespace URI of "http://causeway.apache.org/schema/common".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
 <.> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.
 The `objectState` attribute can usually be omitted (indicating a persistent object)
@@ -86,7 +86,7 @@ It is used primarily to model invocations of actions with collection parameters.
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
+<xs:schema targetNamespace="http://causeway.apache.org/schema/common" ... >
     ...
     <xs:complexType name="collectionDto">
         <xs:sequence>
@@ -106,7 +106,7 @@ The common schema also defines two types representing values: the `valueDto` com
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
+<xs:schema targetNamespace="http://causeway.apache.org/schema/common" ... >
     ...
     <xs:complexType name="valueDto">                                <!--.-->
         <xs:choice minOccurs="0" maxOccurs="1">
@@ -174,7 +174,7 @@ The common schema also defines a number of ancillary types, used either by the c
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
+<xs:schema targetNamespace="http://causeway.apache.org/schema/common" ... >
     ...
     <xs:complexType name="enumDto">                                 <!--.-->
         <xs:sequence>

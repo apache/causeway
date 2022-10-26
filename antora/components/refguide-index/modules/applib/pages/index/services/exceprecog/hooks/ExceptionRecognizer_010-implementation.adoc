@@ -14,7 +14,7 @@ The framework provides a number of default implementations for JPA and JDO, to r
 * other data access problem.
 
 
-// TODO: v2 - flesh this out once ISIS-2502 is complete.
+// TODO: v2 - flesh this out once CAUSEWAY-2502 is complete.
 
 //=== Configuration Properties
 //
@@ -27,7 +27,7 @@ The framework provides a number of default implementations for JPA and JDO, to r
 //(default value)
 //|Description
 //
-//| `isis.services.` +
+//| `causeway.services.` +
 //`exceprecog.` +
 //`logRecognized` +
 //`Exceptions` +
@@ -40,7 +40,7 @@ The framework provides a number of default implementations for JPA and JDO, to r
 //
 //This is recognised by all implementations that subclass `ExceptionRecognizerAbstract`.
 //
-//| `isis.services.` +
+//| `causeway.services.` +
 //`ExceptionRecognizer` +
 //`CompositeFor` +
 //`JdoObjectStore.` +

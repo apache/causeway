@@ -27,7 +27,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <modelVersion>4.0.0</modelVersion>
     <!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
 
-    <!-- APACHE ISIS customisation 1/21: : start -->
+    <!-- APACHE CAUSEWAY customisation 1/21: : start -->
     <!--
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
@@ -36,29 +36,29 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>2.7.5</version>
         <relativePath/>
     </parent>
-    <groupId>org.apache.isis</groupId>
-    <artifactId>isis-bom</artifactId>
+    <groupId>org.apache.causeway</groupId>
+    <artifactId>causeway-bom</artifactId>
     <version>2.0.0-SNAPSHOT</version>
-    <!-- APACHE ISIS customisation 1/21: end -->
+    <!-- APACHE CAUSEWAY customisation 1/21: end -->
 
     <packaging>pom</packaging>
 
-    <!-- APACHE ISIS customisation 2/21: start -->
+    <!-- APACHE CAUSEWAY customisation 2/21: start -->
     <!--
     <name>The Apache Software Foundation</name>
     <description> The Apache Software Foundation provides support for the Apache community of open-source software projects. The Apache projects are characterized by a collaborative, consensus based development process, an open and pragmatic software license, and a desire to create high quality software that leads the way in its field. We consider ourselves not simply a group of projects sharing a server, but rather a community of developers and users. </description>
     <url>https://www.apache.org/</url>
     -->
-    <name>Apache Isis</name>
+    <name>Apache Causeway</name>
     <description>
-        Apache Isis Bill of Material (BOM).
+        Apache Causeway Bill of Material (BOM).
         Also the parent POM for the core framework and extensions.
     </description>
-    <url>https://isis.apache.org</url>
-    <!-- APACHE ISIS customisation 2/21: end -->
+    <url>https://causeway.apache.org</url>
+    <!-- APACHE CAUSEWAY customisation 2/21: end -->
 
     <organization>
         <name>The Apache Software Foundation</name>
@@ -72,7 +72,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         </license>
     </licenses>
 
-    <!-- APACHE ISIS customisation 3/21: start -->
+    <!-- APACHE CAUSEWAY customisation 3/21: start -->
     <!--
     <mailingLists>
         <mailingList>
@@ -93,26 +93,26 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <mailingLists>
         <mailingList>
             <name>developers</name>
-            <archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
-            <post>dev@isis.apache.org</post>
-            <subscribe>dev-subscribe@isis.apache.org</subscribe>
-            <unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
+            <archive>http://mail-archives.apache.org/mod_mbox/causeway-dev/</archive>
+            <post>dev@causeway.apache.org</post>
+            <subscribe>dev-subscribe@causeway.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@causeway.apache.org</unsubscribe>
         </mailingList>
         <mailingList>
             <name>users</name>
-            <archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
-            <post>users@isis.apache.org</post>
-            <subscribe>users-subscribe@isis.apache.org</subscribe>
-            <unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
+            <archive>http://mail-archives.apache.org/mod_mbox/causeway-users/</archive>
+            <post>users@causeway.apache.org</post>
+            <subscribe>users-subscribe@causeway.apache.org</subscribe>
+            <unsubscribe>users-unsubscribe@causeway.apache.org</unsubscribe>
         </mailingList>
     </mailingLists>
     <scm>
-        <connection>scm:git:http://github.com/apache/isis.git</connection>
-        <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-        <url>http://github.com/apache/isis</url>
+        <connection>scm:git:http://github.com/apache/causeway.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
+        <url>http://github.com/apache/causeway</url>
         <tag>HEAD</tag>
     </scm>
-    <!-- APACHE ISIS customisation 3/21: end -->
+    <!-- APACHE CAUSEWAY customisation 3/21: end -->
     <distributionManagement>
         <repository>
             <id>apache.releases.https</id>
@@ -125,15 +125,15 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <url>${distMgmtSnapshotsUrl}</url>
         </snapshotRepository>
     </distributionManagement>
-    <!-- APACHE ISIS customisation 4/21: start -->
+    <!-- APACHE CAUSEWAY customisation 4/21: start -->
     <inceptionYear>2010</inceptionYear>
     <issueManagement>
         <system>Jira</system>
-        <url>https://issues.apache.org/jira/browse/ISIS</url>
+        <url>https://issues.apache.org/jira/browse/CAUSEWAY</url>
     </issueManagement>
     <ciManagement>
         <system>CI</system>
-        <url>https://github.com/apache-isis-committers/isis-nightly</url>
+        <url>https://github.com/apache-causeway-committers/causeway-nightly</url>
     </ciManagement>
     <developers>
         <developer>
@@ -288,7 +288,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <timezone>+3</timezone>
         </developer>
     </developers>
-    <!-- APACHE ISIS customisation 4/21: end -->
+    <!-- APACHE CAUSEWAY customisation 4/21: end -->
     <properties>
         <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
         <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
@@ -300,27 +300,27 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <minimalMavenBuildVersion>3.2.5</minimalMavenBuildVersion>
         <minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
 
-        <!-- APACHE ISIS customisation 5/21: start -->
+        <!-- APACHE CAUSEWAY customisation 5/21: start -->
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
         <surefire.version>3.0.0-M7</surefire.version>
-        <!-- APACHE ISIS customisation 5/21: end -->
+        <!-- APACHE CAUSEWAY customisation 5/21: end -->
 
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
-        <project.build.outputTimestamp>2022-10-03T07:44:17Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2022-10-14T12:04:02Z</project.build.outputTimestamp>
 
-        <!-- APACHE ISIS customisation 6/21: start -->
+        <!-- APACHE CAUSEWAY customisation 6/21: start -->
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
         <!-- LIBRARY DEPENDENCIES -->
         <archunit.version>1.0.0</archunit.version>
-        <asciidoctorj.version>2.5.6</asciidoctorj.version>
+        <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <asm.version>9.4</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.5.0</approvaltests.version>
 
@@ -352,7 +352,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <docx4j.version>11.3.2</docx4j.version>
 
-        <easymock.version>4.3</easymock.version>
+        <easymock.version>5.0.1</easymock.version>
         <error_prone_annotations.version>2.16</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
@@ -391,7 +391,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
-        <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
+        <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
         <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
         <node.version>v16.17.0</node.version>
@@ -412,24 +412,24 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <shiro.version>1.10.0</shiro.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-        <spring-boot.version>2.7.4</spring-boot.version>
+        <spring-boot.version>2.7.5</spring-boot.version>
         <summernote.version>0.8.11</summernote.version>
         <surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
-        <swagger-core.version>1.6.7</swagger-core.version>
+        <swagger-core.version>1.6.8</swagger-core.version>
 
         <togglz.version>3.2.1</togglz.version>
 
-        <vaadin.version>23.2.4</vaadin.version>
+        <vaadin.version>23.2.6</vaadin.version>
 
-        <wicket.version>9.11.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
+        <wicket.version>9.12.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-        <wicket-webjars.version>3.0.4</wicket-webjars.version>
+        <wicket-webjars.version>3.0.6</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.6.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
         <wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
         <wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
-        <!-- APACHE ISIS customisation 6/21: end -->
+        <!-- APACHE CAUSEWAY customisation 6/21: end -->
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -441,7 +441,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         </dependencies>
     </dependencyManagement>
     <repositories>
-        <!-- APACHE ISIS customisation 7/21: start -->
+        <!-- APACHE CAUSEWAY customisation 7/21: start -->
         <!-- breaks dependabot run: timeout due to repo not accessible
         <repository>
             <id>apache.snapshots</id>
@@ -452,10 +452,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </releases>
         </repository>
         -->
-        <!-- APACHE ISIS customisation 7/21: end -->
+        <!-- APACHE CAUSEWAY customisation 7/21: end -->
     </repositories>
     <pluginRepositories>
-        <!-- APACHE ISIS customisation 8/21: start -->
+        <!-- APACHE CAUSEWAY customisation 8/21: start -->
         <!-- breaks dependabot run: timeout due to repo not accessible
         <pluginRepository>
             <id>apache.snapshots</id>
@@ -466,7 +466,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </releases>
         </pluginRepository>
         -->
-        <!-- APACHE ISIS customisation 8/21: end -->
+        <!-- APACHE CAUSEWAY customisation 8/21: end -->
     </pluginRepositories>
     <build>
         <pluginManagement>
@@ -505,7 +505,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-ear-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -625,7 +625,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire.version}</version>
-                    <!-- APACHE ISIS customisation 9/21: start -->
+                    <!-- APACHE CAUSEWAY customisation 9/21: start -->
                     <configuration>
                         <!-- override defaults and include everything unless explicitly excluded -->
                         <includes>
@@ -646,7 +646,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <isRunningWithSurefire>true</isRunningWithSurefire>
                         </systemPropertyVariables>
                     </configuration>
-                    <!-- APACHE ISIS customisation 9/21: end -->
+                    <!-- APACHE CAUSEWAY customisation 9/21: end -->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -667,7 +667,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>0.15</version>
-                    <!-- APACHE ISIS customisation 10/21: start -->
+                    <!-- APACHE CAUSEWAY customisation 10/21: start -->
                     <configuration>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                         <excludeSubProjects>true</excludeSubProjects>
@@ -689,7 +689,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
 
-                            <exclude>**/isis/tooling/model4adoc/src/test/resources/org/apache/isis/tooling/adocmodel/test/**</exclude>
+                            <exclude>**/causeway/tooling/model4adoc/src/test/resources/org/apache/causeway/tooling/adocmodel/test/**</exclude>
 
                             <exclude>**/*.iml</exclude>
                             <exclude>**/webpack.config.js</exclude>
@@ -728,7 +728,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/simple-sidebar.css</exclude>
-                            <exclude>**/isis-bootstrap-growl.js</exclude>
+                            <exclude>**/causeway-bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
                             <exclude>**/prism*.js</exclude>
                             <exclude>**/prism*.css</exclude>
@@ -840,9 +840,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             </licenseFamily>
                         </licenseFamilies>
                     </configuration>
-                    <!-- APACHE ISIS customisation 10/21: end -->
+                    <!-- APACHE CAUSEWAY customisation 10/21: end -->
                 </plugin>
-                <!-- APACHE ISIS customisation 11/21: start -->
+                <!-- APACHE CAUSEWAY customisation 11/21: start -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-docck-plugin</artifactId>
@@ -853,7 +853,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <artifactId>clirr-maven-plugin</artifactId>
                     <version>2.8</version>
                 </plugin>
-                <!-- APACHE ISIS customisation 11/21: end -->
+                <!-- APACHE CAUSEWAY customisation 11/21: end -->
             </plugins>
         </pluginManagement>
         <plugins>
@@ -871,11 +871,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <resourceBundles>
                                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
                             </resourceBundles>
-                            <!-- APACHE ISIS customisation 12/21: start -->
+                            <!-- APACHE CAUSEWAY customisation 12/21: start -->
 
                             <!-- Reference the supplemental-model artifact from module supplemental-model -->
                             <supplementalModelArtifacts>
-                                <supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
+                                <supplementalModelArtifact>org.apache.causeway:supplemental-model:1.0</supplementalModelArtifact>
                             </supplementalModelArtifacts>
 
                             <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
@@ -894,7 +894,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     ${license.additional-notes}
                                 </postDepListText>
                             </properties>
-                            <!-- APACHE ISIS customisation 12/21: end -->
+                            <!-- APACHE CAUSEWAY customisation 12/21: end -->
                         </configuration>
                     </execution>
                 </executions>
@@ -902,7 +902,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <!-- APACHE ISIS customisation 13/21: start -->
+                <!-- APACHE CAUSEWAY customisation 13/21: start -->
                 <configuration>
                     <rules>
                         <requireMavenVersion>
@@ -917,9 +917,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <DependencyConvergence />
                     </rules>
                 </configuration>
-                <!-- APACHE ISIS customisation 13/21: end -->
+                <!-- APACHE CAUSEWAY customisation 13/21: end -->
                 <executions>
-                    <!-- APACHE ISIS customisation 14/21: start -->
+                    <!-- APACHE CAUSEWAY customisation 14/21: start -->
                     <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
                     <execution>
                         <id>validate-enforce</id>
@@ -928,7 +928,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <goal>enforce</goal>
                         </goals>
                     </execution>
-                    <!-- APACHE ISIS customisation 14/21: end -->
+                    <!-- APACHE CAUSEWAY customisation 14/21: end -->
                     <execution>
                         <id>enforce-maven-version</id>
                         <goals>
@@ -970,7 +970,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </executions>
             </plugin>
         </plugins>
-        <!-- APACHE ISIS customisation 15/21: start -->
+        <!-- APACHE CAUSEWAY customisation 15/21: start -->
         <extensions>
             <!-- scp and sftp support for deployments. -->
             <extension>
@@ -985,13 +985,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <version>3.5.2</version>
             </extension>
         </extensions>
-        <!-- APACHE ISIS customisation 15/21: end -->
+        <!-- APACHE CAUSEWAY customisation 15/21: end -->
     </build>
     <profiles>
         <!--  START SNIPPET: release-profile  -->
         <profile>
             <id>apache-release</id>
-            <!-- APACHE ISIS customisation 16/21: start -->
+            <!-- APACHE CAUSEWAY customisation 16/21: start -->
             <activation>
                 <property>
                     <name>apache-release</name>
@@ -1000,10 +1000,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <properties>
                 <skipTests>true</skipTests>
             </properties>
-            <!-- APACHE ISIS customisation 16/21: end -->
+            <!-- APACHE CAUSEWAY customisation 16/21: end -->
             <build>
                 <plugins>
-                    <!-- APACHE ISIS customisation 17/21: start -->
+                    <!-- APACHE CAUSEWAY customisation 17/21: start -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -1040,7 +1040,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- APACHE ISIS customisation 17/21: end -->
+                    <!-- APACHE CAUSEWAY customisation 17/21: end -->
 
                     <!--  Create a source-release artifact that contains the fully buildable
                                    project directory source structure. This is the artifact which is
@@ -1063,9 +1063,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     <goal>single</goal>
                                 </goals>
                                 <configuration>
-                                    <!-- APACHE ISIS customisation 18/21: start -->
+                                    <!-- APACHE CAUSEWAY customisation 18/21: start -->
                                     <archiveBaseDirectory>..</archiveBaseDirectory>
-                                    <!-- APACHE ISIS customisation 18/21: end -->
+                                    <!-- APACHE CAUSEWAY customisation 18/21: end -->
                                     <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                                     <descriptorRefs>
                                         <descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
@@ -1105,7 +1105,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <!-- APACHE ISIS customisation 19/21: start -->
+                                <!-- APACHE CAUSEWAY customisation 19/21: start -->
                                 <configuration>
                                     <notimestamp>true</notimestamp>
                                     <sourcepath>${delombok.output}</sourcepath>
@@ -1126,7 +1126,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     <linksource>true</linksource>
                                     <detectOfflineLinks>false</detectOfflineLinks>
                                 </configuration>
-                                <!-- APACHE ISIS customisation 19/21: end -->
+                                <!-- APACHE CAUSEWAY customisation 19/21: end -->
                             </execution>
                         </executions>
                     </plugin>
@@ -1173,7 +1173,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     </plugin>
                 </plugins>
             </build>
-            <!-- APACHE ISIS customisation 20/21: start -->
+            <!-- APACHE CAUSEWAY customisation 20/21: start -->
             <modules>
                 <module>../core</module>
                 <module>../extensions</module>
@@ -1182,7 +1182,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <module>../testing</module>
                 <module>../valuetypes</module>
             </modules>
-            <!-- APACHE ISIS customisation 20/21: end -->
+            <!-- APACHE CAUSEWAY customisation 20/21: end -->
         </profile>
         <!--  END SNIPPET: release-profile  -->
         <profile>
@@ -1226,7 +1226,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </pluginManagement>
             </build>
         </profile>
-        <!-- APACHE ISIS customisation 21/21: start -->
+        <!-- APACHE CAUSEWAY customisation 21/21: start -->
         <profile>
             <id>enforce-output-timestamp-property</id>
             <activation>
@@ -1311,7 +1311,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <repository>
                     <id>github</id>
                     <name>Github Releases</name>
-                    <url>https://maven.pkg.github.com/apache/isis</url>
+                    <url>https://maven.pkg.github.com/apache/causeway</url>
                 </repository>
             </distributionManagement>
         </profile>
@@ -1380,6 +1380,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </plugins>
             </build>
         </profile>
-        <!-- APACHE ISIS customisation 21/21: end -->
+        <!-- APACHE CAUSEWAY customisation 21/21: end -->
     </profiles>
 </project>

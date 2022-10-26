@@ -24,9 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
 //tag::class[]
 @PropertyLayout(labelPosition = LabelPosition.LEFT)     // <.>

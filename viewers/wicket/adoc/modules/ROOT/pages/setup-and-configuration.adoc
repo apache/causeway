@@ -19,7 +19,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleViewerWicketViewer.class,
+        CausewayModuleViewerWicketViewer.class,
         ...
 })
 public class AppManifest {
@@ -29,29 +29,29 @@ public class AppManifest {
 
 == Configuration Properties
 
-The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/isis.viewer.wicket.adoc[section] for the Wicket viewer.
+The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/causeway.viewer.wicket.adoc[section] for the Wicket viewer.
 
 
 === Application Identity
 
 Configuration properties that identify the application, in the sign-in page, welcome and about pages:
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.about[isis.viewer.wicket.application.about]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-header[isis.viewer.wicket.application.brand-logo-header]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-signin[isis.viewer.wicket.application.brand-logo-signin]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.css[isis.viewer.wicket.application.css]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.js[isis.viewer.wicket.application.js]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.name[isis.viewer.wicket.application.name]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.version[isis.viewer.wicket.application.version]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.about[causeway.viewer.wicket.application.about]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.brand-logo-header[causeway.viewer.wicket.application.brand-logo-header]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.brand-logo-signin[causeway.viewer.wicket.application.brand-logo-signin]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.css[causeway.viewer.wicket.application.css]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.js[causeway.viewer.wicket.application.js]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.name[causeway.viewer.wicket.application.name]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.version[causeway.viewer.wicket.application.version]
 +
 This is discussed in more detail <<application-versioning,below>>.
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.welcome.text[isis.viewer.wicket.welcome.text]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.welcome.text[causeway.viewer.wicket.welcome.text]
 
 
 [#application-versioning]
 ==== Application versioning
 
-If the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.version[isis.viewer.wicket.application.version] configuration property is present, then this will be shown in the footer on every page as well as on the about page.
+If the xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.version[causeway.viewer.wicket.application.version] configuration property is present, then this will be shown in the footer on every page as well as on the about page.
 
 Maintaining this configuration property manually could be error prone, so an alternative approach is to configure your build system to generate a version identifier automatically.
 
@@ -86,7 +86,7 @@ Suppose we now provide a file `application-version.properties` is in the same pa
 [source,ini]
 .application-version.properties
 ----
-isis.viewer.wicket.application.version=$\{applicationVersion}
+causeway.viewer.wicket.application.version=$\{applicationVersion}
 ----
 
 then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.
@@ -99,7 +99,7 @@ One way to do this is using the Spring link:https://docs.spring.io/spring/docs/c
 @Configuration
 @Import({
         // ...
-        IsisModuleViewerWicketViewer.class,
+        CausewayModuleViewerWicketViewer.class,
 
         // ...
 })
@@ -119,31 +119,31 @@ public class AppManifest {
 Configuration properties that influence the behaviour and appearance of the sign-in page.
 
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.remember-me.cookie-key[isis.viewer.wicket.remember-me.cookie-key]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.remember-me.encryption-key[isis.viewer.wicket.remember-me.encryption-key]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.remember-me.suppress[isis.viewer.wicket.remember-me.suppress]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.suppress-password-reset[isis.viewer.wicket.suppress-password-reset]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.suppress-sign-up[isis.viewer.wicket.suppress-sign-up]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.remember-me.cookie-key[causeway.viewer.wicket.remember-me.cookie-key]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.remember-me.encryption-key[causeway.viewer.wicket.remember-me.encryption-key]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.remember-me.suppress[causeway.viewer.wicket.remember-me.suppress]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.suppress-password-reset[causeway.viewer.wicket.suppress-password-reset]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.suppress-sign-up[causeway.viewer.wicket.suppress-sign-up]
 
 
 === Header and Footer
 
 Configuration properties that influence the appearance of the header and footer panels:
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.credit[isis.viewer.wicket.credit]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.credit[causeway.viewer.wicket.credit]
 +
 For example:
 +
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   viewer:
     wicket:
       credit:
-        - url:  http://isis.apache.org
-          image: images/apache-isis/logo-48x48.png
-          name: Apache Isis
+        - url:  http://causeway.apache.org
+          image: images/apache-causeway/logo-48x48.png
+          name: Apache Causeway
 ----
 
 Up to three credits can be provided.
@@ -157,20 +157,20 @@ See also the xref:vw:ROOT:setup-and-configuration.adoc#bookmarks-and-breadcrumbs
 
 These configuration properties that effect the overall presentation and appearance of the viewer:
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.max-title-length-in-tables[isis.viewer.wicket.max-title-length-in-tables]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.max-title-length-in-parented-tables[isis.viewer.wicket.max-title-length-in-parented-tables]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.max-title-length-in-standalone-tables[isis.viewer.wicket.max-title-length-in-standalone-tables]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[isis.viewer.wicket.prompt-style]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode[isis.viewer.wicket.dialog-mode]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode-for-menu[isis.viewer.wicket.dialog-mode-for-menu]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.max-title-length-in-tables[causeway.viewer.wicket.max-title-length-in-tables]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.max-title-length-in-parented-tables[causeway.viewer.wicket.max-title-length-in-parented-tables]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.max-title-length-in-standalone-tables[causeway.viewer.wicket.max-title-length-in-standalone-tables]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.prompt-style[causeway.viewer.wicket.prompt-style]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.dialog-mode[causeway.viewer.wicket.dialog-mode]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.dialog-mode-for-menu[causeway.viewer.wicket.dialog-mode-for-menu]
 
 
 And these configuration properties provide defaults for xref:refguide:applib-ant:about.adoc[annotations] that also will effect the overall presentation and appearance of the viewer:
 
-* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.collection-layout.default-view[isis.applib.annotation.collection-layout.default-view]
-* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.collection-layout.paged[isis.applib.annotation.collection-layout.paged]
-* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.paged[isis.applib.annotation.domain-object-layout.paged]
-* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.property-layout.label-position[isis.applib.annotation.property-layout.label-position]
+* xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.collection-layout.default-view[causeway.applib.annotation.collection-layout.default-view]
+* xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.collection-layout.paged[causeway.applib.annotation.collection-layout.paged]
+* xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object-layout.paged[causeway.applib.annotation.domain-object-layout.paged]
+* xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.property-layout.label-position[causeway.applib.annotation.property-layout.label-position]
 
 
 
@@ -180,10 +180,10 @@ And these configuration properties provide defaults for xref:refguide:applib-ant
 
 These configuration properties enable or disable the mechanisms for locating previously accessed objects.
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.breadcrumbs.max-parent-chain-length[isis.viewer.wicket.breadcrumbs.max-parent-chain-length]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[isis.viewer.wicket.bookmarked-pages.max-size]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.show-chooser[isis.viewer.wicket.bookmarked-pages.show-chooser]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer[isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.breadcrumbs.max-parent-chain-length[causeway.viewer.wicket.breadcrumbs.max-parent-chain-length]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.bookmarked-pages.max-size[causeway.viewer.wicket.bookmarked-pages.max-size]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.bookmarked-pages.show-chooser[causeway.viewer.wicket.bookmarked-pages.show-chooser]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.bookmarked-pages.show-drop-down-on-footer[causeway.viewer.wicket.bookmarked-pages.show-drop-down-on-footer]
 
 
 [#themes]
@@ -191,17 +191,17 @@ These configuration properties enable or disable the mechanisms for locating pre
 
 These configuration properties control the switching of themes.
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.enabled[isis.viewer.wicket.themes.enabled]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.initial[isis.viewer.wicket.themes.initial]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.themes.enabled[causeway.viewer.wicket.themes.enabled]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.themes.initial[causeway.viewer.wicket.themes.initial]
 +
 [TIP]
 ====
 Set this configuration property to different values for different environments (dev, test, prod) so you can know at a glance which environment you are connected to.
 ====
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.show-chooser[isis.viewer.wicket.themes.show-chooser]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.enabled[isis.viewer.wicket.themes.enabled]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.initial[isis.viewer.wicket.themes.initial]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.themes.show-chooser[causeway.viewer.wicket.themes.show-chooser]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.themes.enabled[causeway.viewer.wicket.themes.enabled]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.themes.initial[causeway.viewer.wicket.themes.initial]
 
 
 The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
@@ -213,25 +213,25 @@ You can also develop and install a custom themes (eg to fit your company's look-
 
 These configuration properties influence the way in which date/times are rendered and can be selected using the date/time pickers:
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.min-date[isis.viewer.wicket.date-picker.min-date]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.max-date[isis.viewer.wicket.date-picker.max-date]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.date-picker.min-date[causeway.viewer.wicket.date-picker.min-date]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.date-picker.max-date[causeway.viewer.wicket.date-picker.max-date]
 +
 See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for further details.
 The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
 for further details).
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.min-date[isis.viewer.wicket.date-picker.min-date]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.date-picker.min-date[causeway.viewer.wicket.date-picker.min-date]
 
 
 === Debugging
 
 These configuration properties can assist with debugging the behaviour of the Wicket viewer itself:
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.ajax-debug-mode[isis.viewer.wicket.ajax-debug-mode]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.development-utilities.enable[isis.viewer.wicket.development-utilities.enable]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.live-reload-url[isis.viewer.wicket.live-reload-url]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.strip-wicket-tags[isis.viewer.wicket.strip-wicket-tags]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.wicket-source-plugin[isis.viewer.wicket.wicket-source-plugin]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.ajax-debug-mode[causeway.viewer.wicket.ajax-debug-mode]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.development-utilities.enable[causeway.viewer.wicket.development-utilities.enable]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.live-reload-url[causeway.viewer.wicket.live-reload-url]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.strip-wicket-tags[causeway.viewer.wicket.strip-wicket-tags]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.wicket-source-plugin[causeway.viewer.wicket.wicket-source-plugin]
 +
 [WARNING]
 ====
@@ -243,10 +243,10 @@ Enabling this setting can significantly slow down rendering performance of the W
 
 These configuration properties are used to enable/disable features that are either on the way to becoming the default behaviour (but can temporarily be disabled) or conversely for features that are to be removed (but can temporarily be left as enabled).
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prevent-double-click-for-form-submit[isis.viewer.wicket.prevent-double-click-for-form-submit]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prevent-double-click-for-no-arg-action[isis.viewer.wicket.prevent-double-click-for-no-arg-action]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.redirect-even-if-same-object[isis.viewer.wicket.redirect-even-if-same-object]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.replace-disabled-tag-with-readonly-tag[isis.viewer.wicket.replace-disabled-tag-with-readonly-tag]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.use-indicator-for-form-submit[isis.viewer.wicket.use-indicator-for-form-submit]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.use-indicator-for-no-arg-action[isis.viewer.wicket.use-indicator-for-no-arg-action]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.prevent-double-click-for-form-submit[causeway.viewer.wicket.prevent-double-click-for-form-submit]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.prevent-double-click-for-no-arg-action[causeway.viewer.wicket.prevent-double-click-for-no-arg-action]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.redirect-even-if-same-object[causeway.viewer.wicket.redirect-even-if-same-object]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.replace-disabled-tag-with-readonly-tag[causeway.viewer.wicket.replace-disabled-tag-with-readonly-tag]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.use-indicator-for-form-submit[causeway.viewer.wicket.use-indicator-for-form-submit]
+* xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.use-indicator-for-no-arg-action[causeway.viewer.wicket.use-indicator-for-no-arg-action]
 

@@ -20,13 +20,12 @@ package demoapp.dom.domain.properties.PropertyLayout.hidden;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.properties.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
+import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.SAFE

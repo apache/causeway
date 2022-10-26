@@ -22,14 +22,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.ValueSemantics;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import lombok.RequiredArgsConstructor;
 
 @Collection()
 @RequiredArgsConstructor

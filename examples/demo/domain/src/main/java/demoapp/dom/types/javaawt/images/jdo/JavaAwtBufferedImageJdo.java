@@ -29,16 +29,15 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]

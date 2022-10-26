@@ -6,7 +6,7 @@
 The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
-* members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an unsuccessful vote (latter documented below).
 
 If the vote did not succeed (did not achieve +3 votes after 72 hours and/or is unlikely to do so), then the vote should be closed and the following steps performed.
@@ -16,13 +16,13 @@ Note that a release manager may also decide to cancel a vote before 72 hours has
 
 == Inform dev ML
 
-Post the results to the `dev@isis.a.o` mailing list.
+Post the results to the `dev@causeway.a.o` mailing list.
 
-For example, use the following subject for a vote on Apache Isis Core:
+For example, use the following subject for a vote on Apache Causeway Core:
 
 [source,bash,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {page-isisrel}
+[RESULT] [VOTE] Apache Causeway Core release {page-causewayrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -49,10 +49,10 @@ Branches and tags need to be removed for three repos:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{page-isisrel}-RC1     # <.>
-git push --delete origin isis-{page-isisrel}-RC1        # <.>
-git tag -d isis-{page-isisrel}                          # <.>
-git tag -d isis-{page-isisrel}-RC1
+git push --delete origin release-{page-causewayrel}-RC1     # <.>
+git push --delete origin causeway-{page-causewayrel}-RC1        # <.>
+git tag -d causeway-{page-causewayrel}                          # <.>
+git tag -d causeway-{page-causewayrel}-RC1
 ----
 <.> deletes the remote branch (update `RCn` as necessary)
 <.> deletes the remote origin server's tag (update `RCn` as necessary)
@@ -62,14 +62,14 @@ git tag -d isis-{page-isisrel}-RC1
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{page-isisrel}-RC1     # <.>
+git push --delete origin release-{page-causewayrel}-RC1     # <.>
 ----
 
 * For simpleapp starter app, similarly:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{page-isisrel}-RC1     # <.>
+git push --delete origin release-{page-causewayrel}-RC1     # <.>
 ----
 
 

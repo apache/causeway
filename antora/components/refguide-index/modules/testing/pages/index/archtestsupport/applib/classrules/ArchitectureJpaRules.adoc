@@ -11,8 +11,8 @@ A library of architecture tests to ensure coding conventions are followed for cl
 class ArchitectureJpaRules {
   ArchRule every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()     // <.>
   ArchRule every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()     // <.>
-  ArchRule every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()     // <.>
-  DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener()
+  ArchRule every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener()     // <.>
+  DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_CausewayEntityListener()
   ArchRule every_jpa_Entity_must_implement_Comparable()     // <.>
   ArchRule every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()     // <.>
   ArchRule every_jpa_Entity_must_be_annotated_as_Table_with_schema()     // <.>
@@ -32,17 +32,17 @@ class ArchitectureJpaRules {
 <.> xref:#every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY_[every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.causeway.applib.annotation.Nature#ENTITY entity_ .
 --
 <.> xref:#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter_[every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.isis.applib.jaxb.PersistentEntityAdapter_ `.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
 --
-<.> xref:#every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener_[every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()]
+<.> xref:#every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener_[every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class` .
 --
 <.> xref:#every_jpa_Entity_must_implement_Comparable_[every_jpa_Entity_must_implement_Comparable()]
 +
@@ -90,19 +90,19 @@ This rule requires that concrete classes annotated with the JPA _Entity_ annotat
 [#every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY_]
 === every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.causeway.applib.annotation.Nature#ENTITY entity_ .
 
 [#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter_]
 === every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.isis.applib.jaxb.PersistentEntityAdapter_ `.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Causeway _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
 
 Tnis is so that entities can be transparently referenced from XML-style view models.
 
-[#every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener_]
-=== every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()
+[#every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener_]
+=== every_jpa_Entity_must_be_annotated_as_an_CausewayEntityListener()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener.class` .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class` .
 
 Tnis is so that entities can be transparently referenced from XML-style view models.
 

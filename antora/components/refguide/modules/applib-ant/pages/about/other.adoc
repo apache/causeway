@@ -1,12 +1,12 @@
-= Other Apache Isis Annotations
+= Other Apache Causeway Annotations
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-These annotations are also commonly used, but relate _not_ to objects or object members but instead to other aspects of the Apache Isis metamodel.
+These annotations are also commonly used, but relate _not_ to objects or object members but instead to other aspects of the Apache Causeway metamodel.
 
-.Other Isis Annotations
+.Other Causeway Annotations
 [cols="2,4a,1", options="header"]
 |===
 |Annotation
@@ -22,7 +22,7 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |UI
 
 |xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic]
-|Ignore a public method, excluded from the Apache Isis metamodel.
+|Ignore a public method, excluded from the Apache Causeway metamodel.
 |Domain
 
 |xref:refguide:applib:index/annotation/Title.adoc[@Title]

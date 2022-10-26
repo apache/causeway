@@ -38,7 +38,7 @@ end note
 component Demo <<RO App>> as APP
 FE <-> APP : request / response
 
-component "Apache Isis" <<Naked Objects FW>> as FW
+component "Apache Causeway" <<Naked Objects FW>> as FW
 APP -> FW : uses
 
 

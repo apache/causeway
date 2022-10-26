@@ -6,7 +6,7 @@
 
 
 
-From this link:http://isis.markmail.org/thread/yf7qdeiu3vrvk2ei[thread] on the Apache Isis users mailing list:
+From this link:http://causeway.markmail.org/thread/yf7qdeiu3vrvk2ei[thread] on the Apache Causeway users mailing list:
 
 * _When using a `void` action, let's say a remove action, the user is redirected to a
 page "no results".
@@ -73,8 +73,8 @@ public class RoutingServiceUsingBreadcrumbs
 <.> ensure that any persisted objects have been deleted.
 <.> reach inside the Wicket viewer's internals to obtain the list of breadcrumbs.
 <.> loop over all breadcrumbs
-<.> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Isis runtime's representation (`ManagedObject`)
-<.> unwrap the Isis runtime's representation of each domain object (`ManagedObject`) to the domain object pojo itself
+<.> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Causeway runtime's representation (`ManagedObject`)
+<.> unwrap the Causeway runtime's representation of each domain object (`ManagedObject`) to the domain object pojo itself
 <.> if object is persistable (not a view model) then make sure it is not deleted
 <.> return the first object if any, otherwise the home page object (if any).
 

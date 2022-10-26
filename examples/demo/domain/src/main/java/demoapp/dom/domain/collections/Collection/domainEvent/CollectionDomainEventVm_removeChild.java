@@ -21,15 +21,14 @@ package demoapp.dom.domain.collections.Collection.domainEvent;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(

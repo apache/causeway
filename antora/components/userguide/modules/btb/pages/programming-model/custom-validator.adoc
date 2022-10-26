@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-Apache Isis' programming model includes a validator component that detects and prevents (by failing fast) a number of situations where the domain model is logically inconsistent.
+Apache Causeway' programming model includes a validator component that detects and prevents (by failing fast) a number of situations where the domain model is logically inconsistent.
 
 For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property or action has been renamed or deleted but the supporting method was not also updated.
 Another example is that a class cannot have a title specified both using `title()` method and also using `@Title` annotation.
@@ -19,11 +19,11 @@ There are several ways to go about implementing a validator.
 
 === `MetaModelValidator`
 
-Any custom validator must implement Apache Isis' internal `MetaModelValidator` interface, so the simplest option is just to implement `MetaModelValidator` directly:
+Any custom validator must implement Apache Causeway' internal `MetaModelValidator` interface, so the simplest option is just to implement `MetaModelValidator` directly:
 
 [source,java]
 ----
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.causeway.core.metamodel.specloader.validator;
 
 public interface MetaModelValidator {
 
@@ -58,7 +58,7 @@ More often than not, you'll want to visit every element in the metamodel, and so
 
 [source,java]
 ----
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.causeway.core.metamodel.specloader.validator;
 
 public final class MetaModelValidatorVisiting
                         extends MetaModelValidatorAbstract {
@@ -84,7 +84,7 @@ As a slight refinement, you can also subclass from `MetaModelValidatorVisiting.S
 
 [source,java]
 ----
-package org.apache.isis.core.metamodel.specloader.validator;
+package org.apache.causeway.core.metamodel.specloader.validator;
 
 public final class MetaModelValidatorVisiting
                         extends MetaModelValidatorAbstract {

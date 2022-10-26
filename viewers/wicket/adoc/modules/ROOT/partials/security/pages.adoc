@@ -14,7 +14,7 @@ The subclasses of `PageAbstract` are annotated with the Wicket annotation:
 
 [source,java]
 ----
-@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
+@AuthorizeInstantiation("org.apache.causeway.viewer.wicket.roles.USER")
 ----
 
 which means that they can only be accessed by a user with an authenticated session that has this special, reserved role.
@@ -24,7 +24,7 @@ In the sign-in page the viewer calls to the xref:refguide:core:index/security/au
 It also adds in its special reserved role (per the annotation above) and then continues on to whichever page the user was attempting to access (usually the home page).
 
 And that's really all there is to it.
-When the viewer renders a domain object it queries the Apache Isis metamodel, and suppresses from the view any object members (properties, actions etc) that are invisible.
+When the viewer renders a domain object it queries the Apache Causeway metamodel, and suppresses from the view any object members (properties, actions etc) that are invisible.
 These may be invisible because the user has no (read ) permission, or they may be invisible because of domain object logic (eg a `hideXxx()` method).
 The viewer neither knows nor cares.
 

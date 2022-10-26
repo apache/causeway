@@ -47,7 +47,7 @@ Only for transient, persistable, objects
 <.> xref:#getOid_[getOid()]
 +
 --
-Isis extension.
+Causeway extension.
 --
 
 == Members
@@ -75,4 +75,4 @@ Only for transient, persistable, objects
 [#getOid_]
 === getOid()
 
-Isis extension.
+Causeway extension.

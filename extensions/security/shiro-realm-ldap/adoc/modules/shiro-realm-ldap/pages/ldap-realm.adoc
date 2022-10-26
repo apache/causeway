@@ -4,9 +4,9 @@
 :page-partial:
 
 
-Apache Isis ships with an implementation of http://shiro.apache.org[Apache Shiro]'s `Realm` class that allows user authentication and authorization to be performed against an LDAP server.
+Apache Causeway ships with an implementation of http://shiro.apache.org[Apache Shiro]'s `Realm` class that allows user authentication and authorization to be performed against an LDAP server.
 
-image::security:shiro-realm-ldap:configure-shiro-to-use-isis-ldap-realm.png[width="600px"]
+image::security:shiro-realm-ldap:configure-shiro-to-use-causeway-ldap-realm.png[width="600px"]
 
 The LDAP database stores the user/passwords and user groups, while the `shiro.ini` file is used to map the LDAP groups to roles, and to map the roles to permissions.
 
@@ -16,30 +16,30 @@ To use LDAP involves telling Shiro how to instantiate the realm.  This bootstrap
 
 [source,ini]
 ----
-contextFactory = org.apache.isis.security.shiro.IsisLdapContextFactory
+contextFactory = org.apache.causeway.security.shiro.CausewayLdapContextFactory
 contextFactory.url = ldap://localhost:10389
-contextFactory.systemUsername = uid=admin,ou=system        # <.>
+contextFactory.systemUsername = uid=admin,ou=system                 # <.>
 contextFactory.systemPassword = secret
-contextFactory.authenticationMechanism = CRAM-MD5          # <.>
+contextFactory.authenticationMechanism = CRAM-MD5                   # <.>
 contextFactory.systemAuthenticationMechanism = simple
 
-ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm   # <.>
+ldapRealm = org.apache.causeway.security.shiro.CausewayLdapRealm    # <.>
 ldapRealm.contextFactory = $contextFactory
 
-ldapRealm.searchBase = ou=groups,o=mojo                    # <.>
-ldapRealm.groupObjectClass = groupOfUniqueNames            # <.>
-ldapRealm.uniqueMemberAttribute = uniqueMember             # <.>
+ldapRealm.searchBase = ou=groups,o=mojo                             # <.>
+ldapRealm.groupObjectClass = groupOfUniqueNames                     # <.>
+ldapRealm.uniqueMemberAttribute = uniqueMember                      # <.>
 ldapRealm.uniqueMemberAttributeValueTemplate = uid={0}
 
 # optional mapping from physical groups to logical application roles
-ldapRealm.rolesByGroup = \                                 # <.>
+ldapRealm.rolesByGroup = \                                          # <.>
     LDN_USERS: user_role,\
     NYK_USERS: user_role,\
     HKG_USERS: user_role,\
     GLOBAL_ADMIN: admin_role,\
     DEMOS: self-install_role
 
-ldapRealm.permissionsByRole=\                              # <.>
+ldapRealm.permissionsByRole=\                                       # <.>
    user_role = *:ToDoItemsJdo:*:*,\
                *:ToDoItem:*:*; \
    self-install_role = *:ToDoItemsFixturesService:install:* ; \
@@ -49,7 +49,7 @@ securityManager.realms = $ldapRealm
 ----
 <.> user accounts are searched using a dedicated service account
 <.> SASL (CRAM-MD5) authentication is used for this authentication
-<.> Apache Isis' implementation of the LDAP realm.
+<.> Apache Causeway' implementation of the LDAP realm.
 <.> groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
 <.> each group has an LDAP objectClass of `groupOfUniqueNames`
 <.> each group has a vector attribute of `uniqueMember`
@@ -130,7 +130,7 @@ Create the `ou=groups,o=mojo` hierarchy:
 
 image::security:shiro-realm-ldap:activeds-ldap-mojo-root-dse.png[]
 
-Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Isis connecting to LDAP using these credentials:
+Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Causeway connecting to LDAP using these credentials:
 
 image::security:shiro-realm-ldap:activeds-ldap-sasl-authentication.png[]
 

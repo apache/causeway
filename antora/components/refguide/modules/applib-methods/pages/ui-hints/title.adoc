@@ -10,7 +10,7 @@ This appears both as a main header for the object when viewed as well as being u
 It therefore must contain enough information for the end-user to distinguish the object from any others.
 
 This is most commonly done by including some unique key within the title, for example a customer's SSN, or an order number, and so forth.
-However note that Apache Isis itself does _not_ require the title to be unique; it is merely recommended in most cases.
+However note that Apache Causeway itself does _not_ require the title to be unique; it is merely recommended in most cases.
 
 An object's title can be constructed in various ways, but the most flexible is to use the `title()` method.
 The signature of this method is usually:
@@ -22,7 +22,7 @@ public String title() {
 }
 ----
 
-Note that Apache Isis' xref:userguide:btb:i18n.adoc[i18n support] extends this so that titles can also be internationalized.
+Note that Apache Causeway' xref:userguide:btb:i18n.adoc[i18n support] extends this so that titles can also be internationalized.
 
 For example, in a todoapp we can use this technique to change the title of items that have been completed:
 

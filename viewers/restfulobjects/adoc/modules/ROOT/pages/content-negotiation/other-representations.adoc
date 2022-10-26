@@ -8,7 +8,7 @@
 Sometimes though you may want to extend or change the representations generated.
 This might be because you want to write a RESTful client that uses a particular library (say a JavaScript library or web components) that can only handle representations in a certain form.
 
-Or, you might want to have Apache Isis generate representations according to some other "standard", of which there are many:
+Or, you might want to have Apache Causeway generate representations according to some other "standard", of which there are many:
 
 * Mike Kelly's http://stateless.co/hal_specification.html[HAL] specification
 * Mike Amundsen's http://amundsen.com/media-types/collection/[Collection+JSON] specification
@@ -28,7 +28,7 @@ The existing implementations can be used as a starting point.
 
 [CAUTION]
 ====
-Any custom implementations will need to access the internal APIs for the Apache Isis metamodel.
+Any custom implementations will need to access the internal APIs for the Apache Causeway metamodel.
 You should be aware that these are not formal API.
 ====
 

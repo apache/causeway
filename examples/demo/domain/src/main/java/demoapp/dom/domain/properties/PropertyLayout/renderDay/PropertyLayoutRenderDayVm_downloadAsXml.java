@@ -20,12 +20,12 @@ package demoapp.dom.domain.properties.PropertyLayout.renderDay;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

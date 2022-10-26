@@ -7,7 +7,7 @@ The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
 
-* members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 
 * the release manager performing post-release tasks, for either a successful or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote (former documented below)
 
@@ -18,11 +18,11 @@ This section describes the steps to perform if the vote has been successful.
 
 == Inform dev ML
 
-Post the results to the `dev@isis.a.o` mailing list:
+Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {page-isisrel}
+[RESULT] [VOTE] Apache Causeway Core release {page-causewayrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -58,14 +58,14 @@ As we did for the cutting of the release, we set environment variables to parame
 
 [source,bash,subs="attributes+"]
 ----
-export ISISJIRA=ISIS-9999                           # <.>
-export ISISTMP=/c/tmp                               # <.>
-export ISISREL={page-isisrel}                           # <.>
-export ISISRC=RC1                                   # <.>
-export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISART=isis
+export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
+export CAUSEWAYTMP=/c/tmp                               # <.>
+export CAUSEWAYREL={page-causewayrel}                           # <.>
+export CAUSEWAYRC=RC1                                   # <.>
+export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
+export CAUSEWAYART=causeway
 
-env | grep ISIS | sort
+env | grep CAUSEWAY | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
 (One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
@@ -77,7 +77,7 @@ Open up a terminal, and switch to the correct release branch:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout $ISISBRANCH
+git checkout $CAUSEWAYBRANCH
 ----
 
 == Update tags
@@ -88,7 +88,7 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash,subs="attributes+"]
 ----
-sh scripts/promoterctag.sh $ISISART-$ISISREL $ISISRC
+sh scripts/promoterctag.sh $CAUSEWAYART-$CAUSEWAYREL $CAUSEWAYRC
 ----
 
 This script pushes the tag under `refs/tags/rel`.
@@ -103,14 +103,14 @@ Any tickets that were partially implemented should be closed, and new tickets cr
 
 === Mark the version as released
 
-In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the version as being released.
+In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/CAUSEWAY/versions[administration section] for the Apache Causeway project and update the version as being released.
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
 [#close-all-released-tickets]
 === Close all released tickets
 
-From the link:https://issues.apache.org/jira/projects/ISIS?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased[Releases page], review the status of all work items in the release to check that they are closed.
+From the link:https://issues.apache.org/jira/projects/CAUSEWAY?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased[Releases page], review the status of all work items in the release to check that they are closed.
 
 If any are not, open the tickets in the issue navigator (from the release page):
 
@@ -127,7 +127,7 @@ Create a new JIRA ticket as a catch-all for the _next_ release.
 
 == Update Release Notes
 
-In the main `isis` repo (ie containing the asciidoc source):
+In the main `causeway` repo (ie containing the asciidoc source):
 
 * Generate release notes
 +
@@ -135,7 +135,7 @@ From the root directory, generate the release notes for the current release, in 
 +
 [source,bash,subs="attributes+"]
 ----
-sh scripts/jira-release-notes.sh ISIS $ISISREL > /tmp/$ISISREL.adoc
+sh scripts/jira-release-notes.sh CAUSEWAY $CAUSEWAYREL > /tmp/$CAUSEWAYREL.adoc
 ----
 +
 [NOTE]
@@ -152,7 +152,7 @@ in  `antora/components/relnotes/modules/ROOT/pages/yyyy/vvv/relnotes.adoc`
 ** `vvv` is the version number
 
 +
-Copy the release notes (`/tmp/$ISISREL.adoc`) into the `relnotes.adoc`, recategorising if necessary
+Copy the release notes (`/tmp/$CAUSEWAYREL.adoc`) into the `relnotes.adoc`, recategorising if necessary
 
 * Update the table in `antora/components/relnotes/ROOT/pages/about.adoc`
 +
@@ -162,19 +162,19 @@ Date of release, number of new features, improvements and bugs fixed.
 +
 To reference these release notes.
 
-* update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
+* update the `doap_causeway.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
 Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the link:https://github.com/apache/isis/blob/master/STATUS[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
+* Update the link:https://github.com/apache/causeway/blob/master/STATUS[STATUS] file (in root of Apache Causeway' source) should be updated with details of the new release.
 
 * commit the changes
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: updates release notes, STATUS and doap_isis.rdf"
+git commit -m "$CAUSEWAYJIRA: updates release notes, STATUS and doap_causeway.rdf"
 ----
 
 == Release Source Zip
@@ -185,11 +185,11 @@ The release is then automatically pushed to http://www.apache.org/dist/[http://w
 Only the most recent release of each supported release line should be contained here, old versions should be deleted.
 
 Each project is responsible for the structure of its directory.
-The directory structure of Apache Isis reflects the directory structure in our git source code repo:
+The directory structure of Apache Causeway reflects the directory structure in our git source code repo:
 
 [source]
 ----
-isis/
+causeway/
   core/
 ----
 
@@ -197,7 +197,7 @@ If necessary, checkout this directory structure:
 
 [source,bash]
 ----
-svn co https://dist.apache.org/repos/dist/release/isis isis-dist
+svn co https://dist.apache.org/repos/dist/release/causeway causeway-dist
 ----
 
 Next, add the new release into the appropriate directory.
@@ -213,8 +213,8 @@ if [ $# -lt 1 ]; then
 fi
 
 # constants
-fullname="isis-bom"
-repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
+fullname="causeway-bom"
+repo_root=https://repository.apache.org/content/repositories/releases/org/apache/causeway
 
 # file suffices
 zip="source-release.zip"
@@ -233,7 +233,7 @@ done
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh{page-isisrel}
+sh upd.sh{page-causewayrel}
 ----
 
 The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.
@@ -254,7 +254,7 @@ Assuming all is good, commit the changes:
 
 [source,subs="attributes+"]
 ----
-svn commit -m "publishing isis source releases to dist.apache.org"
+svn commit -m "publishing causeway source releases to dist.apache.org"
 ----
 
 If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
@@ -284,7 +284,7 @@ to its versioned:
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: merging in final changes to docs"
+git commit -m "$CAUSEWAYJIRA: merging in final changes to docs"
 ----
 
 We are now ready to xref:#generate-website[generate the website].
@@ -309,7 +309,7 @@ First, we update all versions in `antora.yml`:
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-isisrel}/g' {} \;
+find . -name antora.yml -exec sed -i 's/latest/{page-causewayrel}/g' {} \;
 ----
 
 * Commit all these changes:
@@ -317,19 +317,19 @@ find . -name antora.yml -exec sed -i 's/latest/{page-isisrel}/g' {} \;
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps antora.yml versions to $ISISREL"
+git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 ----
 
 We now create a branch to reference in the `site.yml`, later on.
 
-* We create the `{page-isisrel}` branch.
+* We create the `{page-causewayrel}` branch.
 +
-This mirrors the "rel/isis-{page-isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/causeway-{page-causewayrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
-git branch {page-isisrel}
-git push origin {page-isisrel}
+git branch {page-causewayrel}
+git push origin {page-causewayrel}
 ----
 
 Finally, revert the last commit (backing out changes to `antora.yml` files):
@@ -344,7 +344,7 @@ git revert HEAD
 
 Lastly, we update `index.html` and then `site.yml`
 
-* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-isisrel}`
+* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-causewayrel}`
 +
 This should be in hyperlinks, `<a href="docs/...">`
 +
@@ -355,7 +355,7 @@ NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[prev
 This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-isisrel}]`
+** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
 
 
 * commit this change, too (there's no need to push):
@@ -363,17 +363,17 @@ Every content source needs to be updated:
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: updates references to version in index.html and site.yml"
+git commit -m "$CAUSEWAYJIRA: updates references to version in index.html and site.yml"
 ----
 
 We are now in a position to actually generate the Antora website.
-(NOTE, this needs to be performed in the `../isis` directory because Antora currently doesn't support git worktrees)
+(NOTE, this needs to be performed in the `../causeway` directory because Antora currently doesn't support git worktrees)
 
 * build prereqs
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $ISISBRANCH
+git checkout $CAUSEWAYBRANCH
 pushd bom
 mvn clean install -DskipTests -Dreleased
 popd
@@ -406,22 +406,22 @@ include::partial$publish-and-index-website.adoc[]
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
 
-In the `isis` repo ():
+In the `causeway` repo ():
 
 [source,bash,subs="attributes+"]
 ----
 RC=RC1                                                <.>
 git checkout master
 git pull
-git merge release-{page-isisrel}-$RC
-git push origin --delete release-{page-isisrel}-$RC
-git branch -d release-{page-isisrel}-$RC
+git merge release-{page-causewayrel}-$RC
+git push origin --delete release-{page-causewayrel}-$RC
+git branch -d release-{page-causewayrel}-$RC
 ----
 <.> adjust RC number as required
 
-== Bump \{page-isisrel} in `site.yml`
+== Bump \{page-causewayrel} in `site.yml`
 
-In `site.yml` file, bump the version of `\{page-isisrel}` and also `\{page-isisprev}`, and commit.
+In `site.yml` file, bump the version of `\{page-causewayrel}` and also `\{page-causewayprev}`, and commit.
 
 == Update starter projects
 
@@ -438,7 +438,7 @@ These reference the most current snapshot nightly build.
 
 The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`.
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jdo` and `$CAUSEWAYBRANCH-jpa`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
@@ -447,46 +447,46 @@ IMPORTANT: The `jdo` and `jpa` branches should always work against the most rece
 
 == Update the ASF Reporter website
 
-Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
+Log the new release in the link:https://reporter.apache.org/addrelease.html?causeway[ASF Reporter website].
 
 == Announce the release
 
-Announce the release to link:mailto:users@isis.apache.org[users mailing list].
+Announce the release to link:mailto:users@causeway.apache.org[users mailing list].
 
-For example, for a release of Apache Isis Core, use the following subject:
+For example, for a release of Apache Causeway Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Isis version {page-isisrel} Released
+[ANN] Apache Causeway version {page-causewayrel} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis {page-isisrel}.
+The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrel}.
 
 New features in this release include:
 
 * ...
 
-Full release notes are available on the Apache Isis website at [1].
+Full release notes are available on the Apache Causeway website at [1].
 
 You can access this release directly from the Maven central repo [2].
 Alternatively, download the release and build it from source [3].
 
 Enjoy!
 
---The Apache Isis team
+--The Apache Causeway team
 
-[1] https://isis.apache.org/relnotes/{page-isisrel}/about.html
+[1] https://causeway.apache.org/relnotes/{page-causewayrel}/about.html
 [2] https://search.maven.org
-[3] https://isis.apache.org/docs/{page-isisrel}/downloads/how-to.html
+[3] https://causeway.apache.org/docs/{page-causewayrel}/downloads/how-to.html
 ----
 
 == Blog post
 
-link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
+link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/causeway/[Apache blog] and create a new post.
 Copy-n-paste the above mailing list announcement should suffice.
 
 
@@ -516,7 +516,7 @@ Examples: link:https://lists.apache.org/list.html?announce\@apache.org[https://l
 
 == Social Media
 
-Announce the release using the `@ApacheIsis` Twitter account.
+Announce the release using the `@ApacheCauseway` Twitter account.
 
 
 
@@ -524,10 +524,10 @@ Announce the release using the `@ApacheIsis` Twitter account.
 
 Nightly builds of the framework's packages are available in two different locations:
 
-* First, they can be found as packages of the main link:https://github.com/apache/isis[github.com/apache/isis] repo; these can be accessed using your github credentials.
+* First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
 +
-Bump the `BASELINE` variable in link:https://github.com/apache/isis/blob/master/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
+Bump the `BASELINE` variable in link:https://github.com/apache/causeway/blob/master/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
 
-* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-isis-committers/isis-nightly[github.com/apache-isis-committers/isis-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
+* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
 +
-Bump the `BASELINE` variable in link:https://github.com/apache-isis-committers/isis-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-isis-ci-nightly.yml#L15[apache-isis-ci-nightly.yml] (workflow file).
+Bump the `BASELINE` variable in link:https://github.com/apache-causeway-committers/causeway-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-causeway-ci-nightly.yml#L15[apache-causeway-ci-nightly.yml] (workflow file).

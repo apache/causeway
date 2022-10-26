@@ -27,22 +27,21 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -51,7 +50,7 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
     schema = "demo",
     name = "TenantedJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.TenantedEntity")
 @DomainObject
 @NoArgsConstructor

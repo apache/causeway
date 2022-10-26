@@ -15,17 +15,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.testing</groupId>
-		<artifactId>isis-testing-integtestsupport</artifactId>
+		<groupId>org.apache.causeway.testing</groupId>
+		<artifactId>causeway-testing-integtestsupport</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-testing-integtestsupport-applib</artifactId>
-	<name>Apache Isis Tst - Integ Test Support (applib)</name>
+	<artifactId>causeway-testing-integtestsupport-applib</artifactId>
+	<name>Apache Causeway Tst - Integ Test Support (applib)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.testing.integtestsupport.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/testing/integtestsupport/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.testing.integtestsupport.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/testing/integtestsupport/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
@@ -96,13 +96,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.security</groupId>
-			<artifactId>isis-security-bypass</artifactId>
+			<groupId>org.apache.causeway.security</groupId>
+			<artifactId>causeway-security-bypass</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 
 		<dependency>
@@ -116,16 +116,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fakedata-applib</artifactId>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-fakedata-applib</artifactId>
 		</dependency>
 
 
 		<!-- TESTING -->
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

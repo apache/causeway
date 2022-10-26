@@ -7,7 +7,7 @@
 https://algolia.com[Algolia] is a commercial index-as-a-service offering, with a free plan for open source projects.
 It is used by many websites built with link:https://antora.org[Antora], including Antora's own https://docs.antora.org[website].
 
-This page describes how we have incorporated Algolia to provide a searchable index for link:https://isis.apache.org[isis.apache.org] website.
+This page describes how we have incorporated Algolia to provide a searchable index for link:https://causeway.apache.org[causeway.apache.org] website.
 They are based on/adapt Dan Allen's link:https://gitlab.com/antora/antora-ui-default/issues/44#note_68053321[notes] for setting up search on the Antora website.
 
 [NOTE]
@@ -18,13 +18,13 @@ The benefit of the approach described here is that it could be scripted easily i
 ====
 
 
-== Clone the isis-site
+== Clone the causeway-site
 
-If necessary, clone out the current version of the isis website:
+If necessary, clone out the current version of the causeway website:
 
 [source,bash]
 ----
-git clone https://github.com/apache/isis-site .
+git clone https://github.com/apache/causeway-site .
 git checkout asf-site
 ----
 
@@ -39,7 +39,7 @@ The "asf-site" branch is what is published, and the content of the site resides 
 
 * On website:
 ** Created app: "5ISP5TFAEN"
-** Created empty index "isis-apache-org"
+** Created empty index "causeway-apache-org"
 ** Made note of the search API key: "0fc51c28b4ad46e7318e96d4e97fab7c"
 ** Made note of the Admin API key: "xxx"
 +
@@ -58,12 +58,12 @@ include::attachment$algolia-search/config.json[]
 
 The config file reference can be found link:https://docsearch.algolia.com/docs/config-file[here].
 
-This has been checked into isis-site as `./algolia-config.json`.
+This has been checked into causeway-site as `./algolia-config.json`.
 
 
 == Update the Antora UI bundle
 
-The link:https://github.com/apache/isis-antora[Antora UI bundle] (which defines the skin of the website) was updated.
+The link:https://github.com/apache/causeway-antora[Antora UI bundle] (which defines the skin of the website) was updated.
 There are four steps:
 
 * reference the CSS

@@ -6,7 +6,7 @@
 
 
 
-The application name (as defined by xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.name[isis.viewer.wicket.application.name]) is also used in sanitized form as the CSS class in a `<div>` that wraps all the rendered content of every page.
+The application name (as defined by xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.application.name[causeway.viewer.wicket.application.name]) is also used in sanitized form as the CSS class in a `<div>` that wraps all the rendered content of every page.
 
 For example, if the application name is "ToDo App", then the `<div>` generated is:
 

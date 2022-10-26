@@ -3,7 +3,7 @@
 
 Binds an xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] ("what" is being executed) with an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] ("who" is executing, "when" and "where").
 
-xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] s are so called because they may be nested (held in a stack). For example the _org.apache.isis.applib.services.sudo.SudoService_ creates a new temporary layer with a different _InteractionContext#getUser() user_ , while fixtures that mock the clock switch out the _InteractionContext#getClock() clock_ .
+xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] s are so called because they may be nested (held in a stack). For example the _org.apache.causeway.applib.services.sudo.SudoService_ creates a new temporary layer with a different _InteractionContext#getUser() user_ , while fixtures that mock the clock switch out the _InteractionContext#getClock() clock_ .
 
 The stack of layers is per-thread, managed by xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService] as a thread-local).
 

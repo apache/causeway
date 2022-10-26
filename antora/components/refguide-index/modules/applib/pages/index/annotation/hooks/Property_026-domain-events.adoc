@@ -151,7 +151,7 @@ If the exception is a subtype of `RecoverableException` then the exception will 
 
 If the xref:refguide:applib:index/annotation/Property.adoc#domainEvent[domainEvent()] element is not explicitly specified (is left as its default value, `PropertyDomainEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the xref:config:sections/isis.applib.adoc#isis.applib.annotation.property.domain-event.post-for-default[isis.applib.annotation.property.domain-event.post-for-default] configuration property can be set to "false"; this will disable posting.
+If this is not required, then the xref:config:sections/causeway.applib.adoc#causeway.applib.annotation.property.domain-event.post-for-default[causeway.applib.annotation.property.domain-event.post-for-default] configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `domainEvent` has been explicitly specified to some subclass, then an event will be posted.
 The framework provides `PropertyDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.

@@ -30,7 +30,7 @@ class ValidateDomainModel_IntegTest
 
 To see this in action:
 
-* change the `isis.applib.annotation.action.explicit` configuration property to `false` in `application.yml`
+* change the `causeway.applib.annotation.action.explicit` configuration property to `false` in `application.yml`
 * introduce an error, for example by renaming `default0UpdateName` to `default0UpdateFoo`.
 * run the test
 

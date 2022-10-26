@@ -24,7 +24,7 @@ There are some downsides, though:
 
 * there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type).
 
-The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-classes:layout/object-layout.adoc[Grid] layout class defined within Apache Isis' applib.
+The `Xxx.layout.xml` file is just the serialized form of a xref:refguide:applib-classes:layout/object-layout.adoc[Grid] layout class defined within Apache Causeway' applib.
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 == Grids vs Components
@@ -65,12 +65,12 @@ There are two: one for the grid classes, and one for the common component classe
 	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <bs3:grid
-  xsi:schemaLocation="http://isis.apache.org/applib/layout/component
-                      http://isis.apache.org/applib/layout/component/component.xsd
-                      http://isis.apache.org/applib/layout/grid/bootstrap3
-                      http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
-  xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
-  xmlns:c="http://isis.apache.org/applib/layout/component"
+  xsi:schemaLocation="http://causeway.apache.org/applib/layout/component
+                      http://causeway.apache.org/applib/layout/component/component.xsd
+                      http://causeway.apache.org/applib/layout/grid/bootstrap3
+                      http://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+  xmlns:bs3="http://causeway.apache.org/applib/layout/grid/bootstrap3"
+  xmlns:c="http://causeway.apache.org/applib/layout/component"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     ...
 </bs3:grid>
@@ -264,7 +264,7 @@ When downloading the layout files, there are four "styles" available:
 * complete
 * minimal
 
-// TODO: ISIS-3087: let's simplify and get rid of these
+// TODO: CAUSEWAY-3087: let's simplify and get rid of these
 //* current
 //* normalized
 

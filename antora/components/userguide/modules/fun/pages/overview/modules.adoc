@@ -4,12 +4,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-Enabling and ensuring modularity is a xref:concepts-patterns.adoc#modular[key principle] for the Apache Isis framework.
+Enabling and ensuring modularity is a xref:concepts-patterns.adoc#modular[key principle] for the Apache Causeway framework.
 Modularity is the only way to ensure that a complex application domain does not over time degenerate into the infamous "big ball of mud", software that is difficult, dangerous and expensive to change.
 
 Modules chunk up the overall application into smaller pieces, usually a pacakge and subpackages.
 The smaller pieces can be either tiers (presentation / domain / persistence) or functional architectural layers (eg customer vs orders vs products vs invoice etc).
-Because Apache Isis takes care of the presentation and persistence tiers, modules for us focuses just on the important bit: considering how the functionality within the domain model should be broken up into modules, and determining the dependencies between those modules.
+Because Apache Causeway takes care of the presentation and persistence tiers, modules for us focuses just on the important bit: considering how the functionality within the domain model should be broken up into modules, and determining the dependencies between those modules.
 
 == Rules of Thumb
 
@@ -27,7 +27,7 @@ But this stuff is domain specific.
 
 Having broken up a domain into multiple modules, there is still a need for higher level modules to use lower level modules, and the application must still appear as a coherent whole to the end-user.
 
-The key features that Apache Isis provides to support this are:
+The key features that Apache Causeway provides to support this are:
 
 * dependency injection of services
 +
@@ -126,7 +126,7 @@ Customer -u.-^ DocumentHolder
 In the context of Java applications, modularity is a rather overloaded term.
 We have Maven modules, Java 9 modules and we also have Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration]s, which define a set of domain services.
 
-In the context of Apache Isis, a module is actually the last of these, a Spring module.
+In the context of Apache Causeway, a module is actually the last of these, a Spring module.
 
 The xref:docs:starters:simpleapp.adoc[simpleapp starter app] provide some structure and illustrates the idioms.
 To summarise:

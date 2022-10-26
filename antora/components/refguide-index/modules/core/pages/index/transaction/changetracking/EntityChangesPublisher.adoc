@@ -16,7 +16,7 @@ interface EntityChangesPublisher {
 <.> xref:#publishChangingEntities_HasEnlistedEntityChanges[publishChangingEntities(HasEnlistedEntityChanges)]
 +
 --
-Notifies xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] s of the changed entities within an _org.apache.isis.applib.services.iactn.Interaction_ , calling the _EntityChangesSubscriber#onChanging(EntityChanges)_ callback.
+Notifies xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] s of the changed entities within an _org.apache.causeway.applib.services.iactn.Interaction_ , calling the _EntityChangesSubscriber#onChanging(EntityChanges)_ callback.
 --
 
 == Members
@@ -24,4 +24,4 @@ Notifies xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscri
 [#publishChangingEntities_HasEnlistedEntityChanges]
 === publishChangingEntities(HasEnlistedEntityChanges)
 
-Notifies xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] s of the changed entities within an _org.apache.isis.applib.services.iactn.Interaction_ , calling the _EntityChangesSubscriber#onChanging(EntityChanges)_ callback.
+Notifies xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] s of the changed entities within an _org.apache.causeway.applib.services.iactn.Interaction_ , calling the _EntityChangesSubscriber#onChanging(EntityChanges)_ callback.

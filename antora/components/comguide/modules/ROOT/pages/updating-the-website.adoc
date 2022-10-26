@@ -4,18 +4,18 @@
 :page-partial:
 
 As part of the release process we xref:post-release-successful.adoc#generate-website[generate] and publish the website.
-An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-isisrel}`).
+An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayrel}`).
 This branch can then be used for documentation updates.
 
 == Update docs
 
-In the regular `isis` repo:
+In the regular `causeway` repo:
 
 * Check out the branch:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout {page-isisrel}
+git checkout {page-causewayrel}
 ----
 
 * make documentation updates, and commit changes

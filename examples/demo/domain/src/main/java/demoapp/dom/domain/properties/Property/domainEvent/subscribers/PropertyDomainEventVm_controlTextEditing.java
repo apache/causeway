@@ -20,16 +20,15 @@ package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.Redirect;
-import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Redirect;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(

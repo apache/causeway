@@ -14,7 +14,7 @@ You can do this easily with `git apply`
 
 [source,bash]
 ----
-git apply --stat ISIS-xxx.patch
+git apply --stat CAUSEWAY-xxx.patch
 ----
 
 Note that this command does not apply the patch, but only shows you the stats about what itâ€™ll do.
@@ -25,7 +25,7 @@ Git allows you to test the patch before you actually apply it.
 
 [source,bash]
 ----
-git apply --check ISIS-xxx.patch
+git apply --check CAUSEWAY-xxx.patch
 ----
 
 If you don't get any errors, the patch has no conflicts.
@@ -37,7 +37,7 @@ To apply a clean patch (adding the items and commit/signoff in a single step), u
 
 [source,bash]
 ----
-git am --signoff < ISIS-xxx.patch
+git am --signoff < CAUSEWAY-xxx.patch
 ----
 
 This preserves the original author's commit message.
@@ -59,7 +59,7 @@ This sequence in this case is:
 
 [source,bash]
 ----
-git apply ISIS-xxx.patch
+git apply CAUSEWAY-xxx.patch
 ----
 
 Fix up any issues.

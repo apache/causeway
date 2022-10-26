@@ -16,8 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.core.privileged {
-    exports org.apache.isis.core.privileged;
+module org.apache.causeway.core.privileged {
+    exports org.apache.causeway.core.privileged;
 
     requires lombok;
 }

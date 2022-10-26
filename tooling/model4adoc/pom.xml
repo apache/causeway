@@ -15,14 +15,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.tooling</groupId>
-		<artifactId>isis-tooling</artifactId>
+		<groupId>org.apache.causeway.tooling</groupId>
+		<artifactId>causeway-tooling</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-tooling-model4adoc</artifactId>
+	<artifactId>causeway-tooling-model4adoc</artifactId>
 
-	<name>Apache Isis - Tooling - Model for AsciiDoc</name>
+	<name>Apache Causeway - Tooling - Model for AsciiDoc</name>
 	<description>
         Library for programmatic AsciiDoc generation.
 
@@ -41,8 +41,8 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.commons</groupId>
-			<artifactId>isis-commons</artifactId>
+			<groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
 		</dependency>
 
 		<dependency>

@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core</artifactId>
+        <groupId>org.apache.causeway.core</groupId>
+        <artifactId>causeway-core</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-privileged</artifactId>
-    <name>Apache Isis Core - Privileged</name>
+    <artifactId>causeway-core-privileged</artifactId>
+    <name>Apache Causeway Core - Privileged</name>
     <description>
     	Installs as an automatic module with unrestricted access to the class-path (not module-path).
     	In the context of the Java platform module system, allows for reflective access to all classes
@@ -39,8 +39,8 @@
     		'closed' (Eclipse) or 'ignored' (IntelliJ).
     		see https://stackoverflow.com/questions/54195765/automatic-modules-not-found-in-eclipse-2018-12-when-project-is-opened 
 		-->
-        <jar-plugin.automaticModuleName>org.apache.isis.core.privileged</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/privileged</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.core.privileged</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/core/privileged</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

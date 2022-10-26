@@ -30,7 +30,7 @@ public class WrapperShortSamples implements Samples<java.lang.Short> {
 
     @Override
     public Stream<java.lang.Short> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.ShortValueSemantics()
                 .getExamples()
                 .stream();
     }

@@ -1,0 +1,69 @@
+[ {
+  "link" : {
+    "rel" : "object",
+    "href" : "http://localhost:39393/objects/OID:1",
+    "method" : "GET"
+  },
+  "type" : {
+    "rel" : "type",
+    "href" : "http://localhost:39393/types/application/vnd.org.apache.causeway.tck.objstore.dflt.scalars.ApplibValuesEntityRepositoryDefault+json",
+    "method" : "GET"
+  },
+  "title" : "ApplibValues",
+  "icon" : {
+    "rel" : "icon",
+    "href" : "http://localhost:39393/images/null.png",
+    "method" : "GET"
+  }
+}, {
+  "link" : {
+    "rel" : "object",
+    "href" : "http://localhost:39393/objects/OID:2",
+    "method" : "GET"
+  },
+  "type" : {
+    "rel" : "type",
+    "href" : "http://localhost:39393/types/application/vnd.org.apache.causeway.tck.objstore.dflt.scalars.JdkValuesEntityRepositoryDefault+json",
+    "method" : "GET"
+  },
+  "title" : "JdkValues",
+  "icon" : {
+    "rel" : "icon",
+    "href" : "http://localhost:39393/images/null.png",
+    "method" : "GET"
+  }
+}, {
+  "link" : {
+    "rel" : "object",
+    "href" : "http://localhost:39393/objects/OID:3",
+    "method" : "GET"
+  },
+  "type" : {
+    "rel" : "type",
+    "href" : "http://localhost:39393/types/application/vnd.org.apache.causeway.tck.objstore.dflt.scalars.PrimitiveValuesEntityRepositoryDefault+json",
+    "method" : "GET"
+  },
+  "title" : "PrimitiveValues",
+  "icon" : {
+    "rel" : "icon",
+    "href" : "http://localhost:39393/images/null.png",
+    "method" : "GET"
+  }
+}, {
+  "link" : {
+    "rel" : "object",
+    "href" : "http://localhost:39393/objects/OID:4",
+    "method" : "GET"
+  },
+  "type" : {
+    "rel" : "type",
+    "href" : "http://localhost:39393/types/application/vnd.org.apache.causeway.tck.objstore.dflt.scalars.WrapperValuesEntityRepositoryDefault+json",
+    "method" : "GET"
+  },
+  "title" : "WrapperValues",
+  "icon" : {
+    "rel" : "icon",
+    "href" : "http://localhost:39393/images/null.png",
+    "method" : "GET"
+  }
+} ]

@@ -23,11 +23,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.sse.wicket.IsisModuleExtSseWicket;
-import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
-import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
-import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.apache.causeway.incubator.viewer.vaadin.viewer.CausewayModuleIncViewerVaadinViewer;
+import org.apache.causeway.valuetypes.asciidoc.ui.vaa.CausewayModuleValAsciidocUiVaa;
+import org.apache.causeway.valuetypes.asciidoc.ui.wkt.CausewayModuleValAsciidocUiWkt;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.dom.DemoModuleCommon;
 import demoapp.web.DemoAppManifestJdo;
@@ -41,13 +41,13 @@ import demoapp.web.DemoAppManifestJdo;
     DemoAppManifestJdo.class,
 
     // INCUBATING
-    IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
-    IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
+    CausewayModuleIncViewerVaadinViewer.class, // vaadin viewer
+    CausewayModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
 
     // WICKET INTEGRATION ... to allow side by side comparison
-    IsisModuleViewerWicketViewer.class, // wicket viewer
-    IsisModuleExtSseWicket.class, // server sent events
-    IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
+    CausewayModuleViewerWicketViewer.class, // wicket viewer
+    CausewayModuleExtSseWicket.class, // server sent events
+    CausewayModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
 
 })
 public class DemoAppVaadin extends SpringBootServletInitializer {
@@ -60,10 +60,10 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
      */
     public static void main(final String[] args) {
 
-//        IsisPresets.logging(InteractionServiceDefault.class, "debug");
-//        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
-//        IsisPresets.logging(IsisServletForVaadin.class, "debug");
-//        IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
+//        CausewayPresets.logging(InteractionServiceDefault.class, "debug");
+//        CausewayPresets.logging(VaadinAuthenticationHandler.class, "debug");
+//        CausewayPresets.logging(CausewayServletForVaadin.class, "debug");
+//        CausewayPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
         System.setProperty("spring.profiles.active", "demo-jdo");
 

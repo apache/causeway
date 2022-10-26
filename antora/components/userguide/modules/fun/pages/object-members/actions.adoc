@@ -15,14 +15,14 @@ There are three operations here: set the end date of the original lease term, cr
 Instead, all of these operations can be combined into a single action, "renew".
 Through such means the xref:concepts-patterns.adoc#ubiquitous-language[ubiquitous language] grows.
 
-TIP: This is the reason why Apache Isis' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
+TIP: This is the reason why Apache Causeway' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
 
 You can find further discussion on when and why you should write actions xref:overview.adoc#actions[earlier].
 
 
 == Defining actions
 
-If the xref:refguide:config:sections/isis.core.meta-model.introspector.adoc#isis.core.meta-model.introspector.policy[isis.core.meta-model.introspector.policy] configuration property is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_OPTIONAL[ANNOTATION_OPTIONAL] or is left unset (the default), then any "left-over" `public` methods will be considered to be actions.
+If the xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[causeway.core.meta-model.introspector.policy] configuration property is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_OPTIONAL[ANNOTATION_OPTIONAL] or is left unset (the default), then any "left-over" `public` methods will be considered to be actions.
 These are methods that do not represent properties or collections, and that are not recognised as xref:business-rules.adoc[supporting methods] (such as `hideXxx()` or `disableXxx()`).
 
 If the policy is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_REQUIRED[ANNOTATION_REQUIRED], then the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation must be applied for the method to be treated as an action.

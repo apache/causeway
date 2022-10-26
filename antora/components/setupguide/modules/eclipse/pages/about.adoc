@@ -13,7 +13,7 @@ If you are an http://www.eclipse.org[Eclipse] user, then we recommend you downlo
 //These are used to add new methods to existing classes.
 //(These are equivalent to the xref:setupguide:intellij:about.adoc#live-templates[IntelliJ live templates]):
 //
-//* `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
+//* `is` (Apache Causeway domain objects).  link:./resources/eclipse/causeway-templates.xml[Download]
 //* `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
 //* `jm` (for JMock mocks or libraries) link:./resources/eclipse/jmock2-templates.xml[Download]
 //
@@ -22,7 +22,7 @@ If you are an http://www.eclipse.org[Eclipse] user, then we recommend you downlo
 
 == Install the DataNucleus plugin
 
-When running an Apache Isis application, it's necessary to setup the development environment so that the Java bytecode can be enhanced by the link:http://www.datanucleus.org[DataNucleus] enhancer.
+When running an Apache Causeway application, it's necessary to setup the development environment so that the Java bytecode can be enhanced by the link:http://www.datanucleus.org[DataNucleus] enhancer.
 
 If using Eclipse, then JDO enhancement is most easily done by installing the http://www.datanucleus.org/products/accessplatform/jpa/tools.html#eclipse[DataNucleus' Eclipse plugin].
 This hooks the bytecode enhancement of your domain objects into Eclipse's normal incremental compilation.
@@ -214,7 +214,7 @@ And, remember also to configure Eclipse's DataNucleus plugin for these other dom
 //
 //link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more reliable hot swapping of the implementation of existing methods.
 //
-//In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
+//In the context of Apache Causeway, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
 //
 //Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.
 //You may find that adding actions will work, but adding new properties or collections is much less likely to.

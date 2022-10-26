@@ -3,14 +3,14 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The quickest way to start learning about Apache Isis is to use the `helloworld` starter app.
+The quickest way to start learning about Apache Causeway is to use the `helloworld` starter app.
 
 There are two variations of the application (and so two branches in the git repo).
 One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
 
-The application is also deployed online for you to try out,  link:https://helloworld.jdo.isis.incode.work[here (jdo)] and link:https://helloworld.jpa.isis.incode.work[here (jpa)].
+The application is also deployed online for you to try out,  link:https://helloworld.jdo.causeway.incode.work[here (jdo)] and link:https://helloworld.jpa.causeway.incode.work[here (jpa)].
 
-Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Isis app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
+Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Causeway app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
 Both the business logic and supporting bootstrapping classes are in a single Maven module.
 
 [TIP]
@@ -22,11 +22,11 @@ It also creates a minimal application, but provides more structure along with te
 
 == Prerequisites
 
-Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
+Apache Causeway is a Java based framework, so in terms of prerequisites, you'll need to install:
 
 * Java 11 JDK (or later)
 +
-Apache Isis itself is compatible with Java 11, and the helloworld app itself is configured for Java 11.
+Apache Causeway itself is compatible with Java 11, and the helloworld app itself is configured for Java 11.
 
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
@@ -198,7 +198,7 @@ image::helloworld/using/250-retrieve-object-using-rest-api-response.png[width="6
 
 
 The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).
-The REST API implemented by Apache Isis is specified in the link:http://www.restfulobjects.org[Restful Object spec].
+The REST API implemented by Apache Causeway is specified in the link:http://www.restfulobjects.org[Restful Object spec].
 
 
 
@@ -239,7 +239,7 @@ src/main/java/
 Change as required.
 
 <.> Defines the 'hello' module.
-Apache Isis can be used for both microservice and monolithic architectures, but for the latter it encourages "modular monoliths" from the start.
+Apache Causeway can be used for both microservice and monolithic architectures, but for the latter it encourages "modular monoliths" from the start.
 
 <.> The `dom` package holds the "domain object model" for this module.
 Modules may have other packages, common ones include ``types`` (as below), also ``api``s, ``contribution``s, ``fixture``s, ``spi``s
@@ -254,7 +254,7 @@ The associated `.layout.xml` and `.png` are optional but provide metadata/resour
 <.> `HelloWorldModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
 This is discussed in more detail xref:#helloworldmodule[below].
 
-<.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `HelloWorldModule`). +
+<.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Causeway to use, along with the modules making up the application itself (ie `HelloWorldModule`). +
 This is discussed in more detail xref:#appmanifest[below].
 
 <.> `HelloWorldApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
@@ -267,7 +267,7 @@ This is discussed in more detail xref:#helloworldapp[below].
 [#helloworldmodule]
 ==== HelloWorldModule
 
-Every module within an Apache Isis application should have a module class.
+Every module within an Apache Causeway application should have a module class.
 Its purpose is to define a package to scan from, and optionally to declare any transitive dependencies.
 In the case of `HelloWorldModule`, it is extremely simple:
 
@@ -297,7 +297,7 @@ If there were, these would be expressed in terms of module classes (each being a
 
 <.> for `jpa` branch only, to automatically discover JPA entities
 
-The scanning mechanism is also leveraged by Apache Isis to pick up three types of classes:
+The scanning mechanism is also leveraged by Apache Causeway to pick up three types of classes:
 
 * all domain services
 +
@@ -336,22 +336,22 @@ In the case of the helloworld starter app *for the `jdo` branch* the `AppManifes
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                // <.>
-        IsisModuleSecurityShiro.class,                      // <.>
-        IsisModuleJdoDataNucleus5.class,                    // <.>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class, // <.>
-        IsisModuleViewerWicketViewer.class,                 // <.>
+        CausewayModuleCoreRuntimeServices.class,                // <.>
+        CausewayModuleSecurityShiro.class,                      // <.>
+        CausewayModuleJdoDataNucleus5.class,                    // <.>
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class, // <.>
+        CausewayModuleViewerWicketViewer.class,                 // <.>
 
-        IsisModuleTestingH2ConsoleUi.class,                 // <.>
+        CausewayModuleTestingH2ConsoleUi.class,                 // <.>
 
         HelloWorldModule.class                              // <.>
 })
-@PropertySource(IsisPresets.NoTranslations)                 // <.>
+@PropertySource(CausewayPresets.NoTranslations)                 // <.>
 public class AppManifest {
 }
 ----
 
-<.> Mandatory - specifies the core of the Apache Isis framework
+<.> Mandatory - specifies the core of the Apache Causeway framework
 
 <.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
@@ -368,15 +368,15 @@ Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-mode
 <.> References the application's module(s), in this case just the one, `HelloWorldModule`.
 
 <.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
-This particular one disables the framework's i18n support using the `IsisPresets` convenience class.
+This particular one disables the framework's i18n support using the `CausewayPresets` convenience class.
 
 For the `jpa` branch the `AppManifest` is almost identical, just replacing:
 
-* `IsisModuleJdoDataNucleus5.class,`
+* `CausewayModuleJdoDataNucleus5.class,`
 
 with:
 
-* `IsisModuleJpaEclipseLink.class,`
+* `CausewayModuleJpaEclipseLink.class,`
 
 This bootstraps the JPA as the ORM instead of JDO.
 
@@ -396,7 +396,7 @@ public class HelloWorldApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <.>
+        CausewayPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { HelloWorldApp.class }, args);
     }
@@ -443,11 +443,11 @@ Typically this just holds JDBC connection strings, etc.
 
 <.> The `banner.txt` is shown when bootstrapping.
 
-<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
+<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Causeway)
 
 <.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
 
-<.> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
+<.> The `shiro.ini` file configures Shiro security integration (see the `CausewayModuleSecurityShiro` module imported in the `AppManifest`, above).
 +
 [TIP]
 ====
@@ -468,7 +468,7 @@ JQuery is available by default.
 
 === No src/main/webapp
 
-Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Isis automatically.
+Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Causeway automatically.
 
 
 === No src/test/java
@@ -480,14 +480,14 @@ You will find tests in the xref:docs:starters:simpleapp.adoc[SimpleApp starter a
 === pom.xml
 
 Finally, at the root directory we of course have the `pom.xml`.
-This inherits from `isis-app-starter-parent`:
+This inherits from `causeway-app-starter-parent`:
 
 [source,xml]
 .pom.xml
 ----
 <parent>
-  <groupId>org.apache.isis.app</groupId>
-  <artifactId>isis-app-starter-parent</artifactId>
+  <groupId>org.apache.causeway.app</groupId>
+  <artifactId>causeway-app-starter-parent</artifactId>
   <version>XXX</version>
 </parent>
 ----
@@ -497,7 +497,7 @@ This means:
 
 * the set of third party dependencies declared have been validated as compatible by Spring Boot team
 * build plugins are declared and configured appropriately
-* imports to the Apache Isis dependencies are declared via `<dependencyManagement>`
+* imports to the Apache Causeway dependencies are declared via `<dependencyManagement>`
 
 
 

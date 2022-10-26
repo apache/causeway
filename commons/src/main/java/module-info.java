@@ -16,44 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.commons {
-    exports org.apache.isis.commons.binding;
-    exports org.apache.isis.commons.collections;
-    exports org.apache.isis.commons.concurrent;
-    exports org.apache.isis.commons.functional;
-    exports org.apache.isis.commons.handler;
-    exports org.apache.isis.commons.having;
-    exports org.apache.isis.commons.resource;
-    exports org.apache.isis.commons.internal;
-    exports org.apache.isis.commons.internal.assertions;
-    exports org.apache.isis.commons.internal.base;
-    exports org.apache.isis.commons.internal.binding;
-    exports org.apache.isis.commons.internal.codec;
-    exports org.apache.isis.commons.internal.collections.snapshot;
-    exports org.apache.isis.commons.internal.collections;
-    exports org.apache.isis.commons.internal.compare;
-    exports org.apache.isis.commons.internal.concurrent;
-    exports org.apache.isis.commons.internal.context;
-    exports org.apache.isis.commons.internal.debug.xray.graphics;
-    exports org.apache.isis.commons.internal.debug.xray;
-    exports org.apache.isis.commons.internal.debug;
-    exports org.apache.isis.commons.internal.delegate;
-    exports org.apache.isis.commons.internal.exceptions;
-    exports org.apache.isis.commons.internal.factory;
-    exports org.apache.isis.commons.internal.functions;
-    exports org.apache.isis.commons.internal.graph;
-    exports org.apache.isis.commons.internal.hardening;
-    exports org.apache.isis.commons.internal.hash;
-    exports org.apache.isis.commons.internal.html;
-    exports org.apache.isis.commons.internal.image;
-    exports org.apache.isis.commons.internal.ioc;
-    exports org.apache.isis.commons.internal.memento;
-    exports org.apache.isis.commons.internal.os;
-    exports org.apache.isis.commons.internal.primitives;
-    exports org.apache.isis.commons.internal.proxy;
-    exports org.apache.isis.commons.internal.reflection;
-    exports org.apache.isis.commons.internal.resources;
-    exports org.apache.isis.commons.internal.testing;
+module org.apache.causeway.commons {
+    exports org.apache.causeway.commons.binding;
+    exports org.apache.causeway.commons.collections;
+    exports org.apache.causeway.commons.concurrent;
+    exports org.apache.causeway.commons.functional;
+    exports org.apache.causeway.commons.handler;
+    exports org.apache.causeway.commons.having;
+    exports org.apache.causeway.commons.resource;
+    exports org.apache.causeway.commons.internal;
+    exports org.apache.causeway.commons.internal.assertions;
+    exports org.apache.causeway.commons.internal.base;
+    exports org.apache.causeway.commons.internal.binding;
+    exports org.apache.causeway.commons.internal.codec;
+    exports org.apache.causeway.commons.internal.collections.snapshot;
+    exports org.apache.causeway.commons.internal.collections;
+    exports org.apache.causeway.commons.internal.compare;
+    exports org.apache.causeway.commons.internal.concurrent;
+    exports org.apache.causeway.commons.internal.context;
+    exports org.apache.causeway.commons.internal.debug.xray.graphics;
+    exports org.apache.causeway.commons.internal.debug.xray;
+    exports org.apache.causeway.commons.internal.debug;
+    exports org.apache.causeway.commons.internal.delegate;
+    exports org.apache.causeway.commons.internal.exceptions;
+    exports org.apache.causeway.commons.internal.factory;
+    exports org.apache.causeway.commons.internal.functions;
+    exports org.apache.causeway.commons.internal.graph;
+    exports org.apache.causeway.commons.internal.hardening;
+    exports org.apache.causeway.commons.internal.hash;
+    exports org.apache.causeway.commons.internal.html;
+    exports org.apache.causeway.commons.internal.image;
+    exports org.apache.causeway.commons.internal.ioc;
+    exports org.apache.causeway.commons.internal.memento;
+    exports org.apache.causeway.commons.internal.os;
+    exports org.apache.causeway.commons.internal.primitives;
+    exports org.apache.causeway.commons.internal.proxy;
+    exports org.apache.causeway.commons.internal.reflection;
+    exports org.apache.causeway.commons.internal.resources;
+    exports org.apache.causeway.commons.internal.testing;
 
     requires transitive com.fasterxml.jackson.annotation;
     requires transitive com.fasterxml.jackson.core;
@@ -73,6 +73,6 @@ module org.apache.isis.commons {
     requires transitive spring.core;
 
     // JAXB JUnit test
-    opens org.apache.isis.commons.internal.resources to java.xml.bind;
+    opens org.apache.causeway.commons.internal.resources to java.xml.bind;
 
 }

@@ -20,8 +20,8 @@ package demoapp.dom._infra.fixtures;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import demoapp.dom._infra.seed.SeedService;
 

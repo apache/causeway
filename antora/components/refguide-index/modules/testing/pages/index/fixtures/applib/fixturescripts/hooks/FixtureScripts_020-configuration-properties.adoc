@@ -5,5 +5,5 @@
 
 == Configuration Properties
 
-The configuration properties used by this domain service can be found in the xref:refguide:config:sections/isis.testing.adoc[relevant section] of the config guide.
+The configuration properties used by this domain service can be found in the xref:refguide:config:sections/causeway.testing.adoc[relevant section] of the config guide.
 

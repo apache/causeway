@@ -51,7 +51,7 @@ public List<IncomingInvoice> findCompletedOrLaterWithItemsByReportedDate(final L
     final QIncomingInvoiceItem iii = QIncomingInvoiceItem.variable("iii");
 
     final TypesafeQuery<IncomingInvoice> q =
-        isisJdoSupport.newTypesafeQuery(IncomingInvoice.class);
+        causewayJdoSupport.newTypesafeQuery(IncomingInvoice.class);
 
     q.filter(
             ii.items.contains(iii)
@@ -92,7 +92,7 @@ public List<IncomingInvoice> findCompletedOrLaterWithItemsByReportedDate(final L
     final QIncomingInvoiceItem iii = QIncomingInvoiceItem.variable("iii");
 
     final TypesafeQuery<IncomingInvoice> q =
-        isisJdoSupport.newTypesafeQuery(IncomingInvoice.class);
+        causewayJdoSupport.newTypesafeQuery(IncomingInvoice.class);
 
     q.getFetchPlan().addGroup("seller_buyer_property_bankAccount");     // <1>
 

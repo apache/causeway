@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Every domain object in Apache Isis consists of (at most) three types of members:
+Every domain object in Apache Causeway consists of (at most) three types of members:
 
 * properties, such as a ``Customer``'s `firstName`
 
@@ -19,7 +19,7 @@ Typically the behaviour being contributed is an action, but it could also be a d
 
 [NOTE]
 ====
-What follows _is_ a simplification; the Apache Isis programming model also recognizes a number of other supporting methods for domain object members, for associated business logic.
+What follows _is_ a simplification; the Apache Causeway programming model also recognizes a number of other supporting methods for domain object members, for associated business logic.
 This is covered in more detail in xref:userguide:fun:business-rules.adoc[business rules].
 ====
 
@@ -107,7 +107,7 @@ In more complex domains, it's not realistic/feasible to expect the end-user to h
 Actions allow those business rules to be encoded programmatically.
 Those actions can either be defined in the domain class itself, or can be contributed by way of a xref:overview.adoc#mixins[mixin].
 
-The general philosophy for an Apache Isis (naked objects) application is _not_ to constrain the end-user in how they interact with the UI: it doesn't attempt to define a rigid business process.
+The general philosophy for an Apache Causeway (naked objects) application is _not_ to constrain the end-user in how they interact with the UI: it doesn't attempt to define a rigid business process.
 However, it _does_ aim to ensure that business rule invariants are maintained, that is that domain objects aren't allowed to enter into an invalid state.
 
 For simple domain applications, you may want to start prototyping only with properties, and only later introduce actions (representing the most common business operations).

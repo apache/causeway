@@ -266,7 +266,7 @@ mvn -pl spring-boot:run
 [source,yaml]
 .application-dev.yaml
 ----
-isis:
+causeway:
   testing:
     fixtures:
       initial-script: petclinic.webapp.application.fixture.scenarios.PetClinicDemo
@@ -322,7 +322,7 @@ using the Spring boot profile trick from before:
 [source,yaml]
 .application-custom.yaml
 ----
-isis:
+causeway:
   viewer:
     wicket:
       prompt-style: dialog
@@ -337,7 +337,7 @@ Switch the defaults so that service actions prefer to use a sidebar dialog, whil
 [source,yaml]
 .application-custom.yaml
 ----
-isis:
+causeway:
   viewer:
     wicket:
       prompt-style: dialog
@@ -354,7 +354,7 @@ Be aware that "inline" makes no sense/is not supported for service actions.
 [source,yaml]
 .application-custom.yaml
 ----
-isis:
+causeway:
   viewer:
     wicket:
       prompt-style: inline

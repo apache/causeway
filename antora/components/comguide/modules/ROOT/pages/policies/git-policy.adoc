@@ -25,20 +25,20 @@ And, of course, there is loads of good advice on http://stackoverflow.com/questi
 
 == Workflow
 
-There are many ways of using Git, but the Apache Isis committers have adopted the following workflow:
+There are many ways of using Git, but the Apache Causeway committers have adopted the following workflow:
 
 * create a topic branch for a feature +
 +
 [source,bash]
 ----
-git checkout -b ISIS-999
+git checkout -b CAUSEWAY-999
 ----
 
 * periodically, push the branch to origin (for safekeeping): +
 +
 [source,bash]
 ----
-git push origin ISIS-999
+git push origin CAUSEWAY-999
 ----
 
 * `rebase` the topic branch periodically on master.
@@ -50,9 +50,9 @@ You need to ensure that your co-worker has no outstanding work before you do thi
 ----
 git checkout master
 git pull
-git checkout ISIS-999
+git checkout CAUSEWAY-999
 git rebase master
-git push origin ISIS-999 --force
+git push origin CAUSEWAY-999 --force
 ----
 
 * when feature is complete, rebase once more (as above), then switch to master and perform a `merge --no-ff`: +
@@ -60,15 +60,15 @@ git push origin ISIS-999 --force
 [source,bash]
 ----
 git checkout master
-git merge --no-ff ISIS-999
+git merge --no-ff CAUSEWAY-999
 ----
 
 * finally, remove the branch +
 +
 [source,bash]
 ----
-git branch -d ISIS-999
-git push origin --delete ISIS-999
+git branch -d CAUSEWAY-999
+git push origin --delete CAUSEWAY-999
 ----
 
 This way of working gives us the full history on the branch as to what the thought processes were for the feature, but only a single commit on to `master` to see the ultimate impact of the changes (acting a bit like a summary).
@@ -79,13 +79,13 @@ The minimum we expect in a commit messages is:
 
 [source,bash]
 ----
-ISIS-nnn: brief summary here
+CAUSEWAY-nnn: brief summary here
 
 - optionally, longer details
 - should be written here
 - in bullet points
 ----
 
-where `ISIS-nnn` is a ticket raised in our https://issues.apache.org/jira/browse/ISIS[JIRA issue tracker].
+where `CAUSEWAY-nnn` is a ticket raised in our https://issues.apache.org/jira/browse/CAUSEWAY[JIRA issue tracker].
 
 For non-committers we typically expect more detail again; see the xref:conguide:ROOT:contributing.adoc[contributing] page for the longer format recommended for contributors to use.

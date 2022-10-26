@@ -54,7 +54,7 @@ The `NoPermissionChecks` JUnit 5 extension ensures that the user has this role, 
 [source,java]
 ----
 @ExtendWith(NoPermissionChecks.class)
-public class MyIntegrationTest extends IsisIntegrationTestAbstract {
+public class MyIntegrationTest extends CausewayIntegrationTestAbstract {
     // ...
 }
 ----
@@ -72,7 +72,7 @@ For example:
 [source,java]
 ----
 @ExtendWith({UserMementoRefiners.class})
-public class MyIntegTest extends IsisIntegrationTestAbstract {
+public class MyIntegTest extends CausewayIntegrationTestAbstract {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration

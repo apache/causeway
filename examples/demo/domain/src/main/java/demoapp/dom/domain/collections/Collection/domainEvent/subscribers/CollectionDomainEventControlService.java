@@ -23,12 +23,11 @@ import javax.inject.Inject;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
+import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service

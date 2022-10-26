@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  ~
+  -->
+
+<bs3:grid
+        xsi:schemaLocation="http://causeway.apache.org/applib/layout/component http://causeway.apache.org/applib/layout/component/component.xsd   http://causeway.apache.org/applib/layout/grid/bootstrap3 http://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+        xmlns:bs3="http://causeway.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:cpt="http://causeway.apache.org/applib/layout/component"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+            <bs3:tabGroup>
+                <bs3:tab name="Identifier">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identity" id="identity">
+                                <cpt:action id="previous"/>
+                                <cpt:action id="next"/>
+                                <cpt:property id="httpSessionId"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="" id="who-and-when">
+                                <cpt:property id="username"/>
+                                <cpt:property id="loginTimestamp"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="" id="http-id">
+                                <cpt:property id="sessionGuid"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Other">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata">
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+        <bs3:col span="6">
+            <bs3:tabGroup collapseIfOne="false">
+                <bs3:tab name="Logout">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Timestamps" id="logout">
+                                <cpt:property id="loginTimestamp"/>
+                                <cpt:property id="logoutTimestamp"/>
+                                <cpt:property id="causedBy"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+        <bs3:col span="12" unreferencedCollections="true"/>
+    </bs3:row>
+</bs3:grid>

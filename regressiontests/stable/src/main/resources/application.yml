@@ -17,7 +17,7 @@
 #  under the License.
 #
 
-isis:
+causeway:
 
   applib:
     annotation:
@@ -58,9 +58,9 @@ isis:
         about: Smoke Tests
 
         credit:
-        - url:  http://isis.apache.org
-          image: images/apache-isis/logo-48x48.png
-          name: Apache Isis
+        - url:  http://causeway.apache.org
+          image: images/apache-causeway/logo-48x48.png
+          name: Apache Causeway
 
       themes:
         initial: Flatly

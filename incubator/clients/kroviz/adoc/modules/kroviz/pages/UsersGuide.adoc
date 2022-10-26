@@ -47,7 +47,7 @@ div {
     background-position : center center;
     background-repeat:no-repeat;
     background-size: contain, cover;
-    background-image : url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
+    background-image : url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/causeway.svg");
 }
 ----
 

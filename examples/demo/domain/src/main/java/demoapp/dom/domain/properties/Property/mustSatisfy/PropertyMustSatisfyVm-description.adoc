@@ -6,7 +6,7 @@ The `mustSatisfy` element specifies an arbitrary constraint that the value enter
 
 * for parameters, the element can be specified using either the `@Parameter` annotation, or a meta-annotation.
 
-The constraint is provided as a concrete class that implements the `org.apache.isis.applib.spec.Specification` interface.
+The constraint is provided as a concrete class that implements the `org.apache.causeway.applib.spec.Specification` interface.
 This is usually done by subclassing `AbstractSpecification` or `AbstractSpecification2`:
 
 [source,java,indent=0]
@@ -50,7 +50,7 @@ The annotation could also be applied to a mixin, but would have little effect be
 
 == Meta-annotated
 
-CAUTION: this feature is currently broken, see link:https://issues.apache.org/jira/browse/ISIS-2415[ISIS-2415].
+CAUTION: this feature is currently broken, see link:https://issues.apache.org/jira/browse/CAUSEWAY-2415[CAUSEWAY-2415].
 
 The `mustSatisfy` element can also be specified using a custom meta-annotation:
 
@@ -84,7 +84,7 @@ include::PropertyMustSatisfyVm_updateWithMetaAnnotation.java[tags=meta-annotatio
 
 === Meta-annotated Overridden
 
-CAUTION: this feature is currently broken, see link:https://issues.apache.org/jira/browse/ISIS-2415[ISIS-2415].
+CAUTION: this feature is currently broken, see link:https://issues.apache.org/jira/browse/CAUSEWAY-2415[CAUSEWAY-2415].
 
 The meta-annotation can itself be overridden:
 

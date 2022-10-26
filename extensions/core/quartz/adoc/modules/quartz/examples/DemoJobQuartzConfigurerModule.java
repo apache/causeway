@@ -31,8 +31,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
-import org.apache.isis.extensions.quartz.jobs.DemoJob;
-import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
+import org.apache.causeway.extensions.quartz.jobs.DemoJob;
+import org.apache.causeway.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

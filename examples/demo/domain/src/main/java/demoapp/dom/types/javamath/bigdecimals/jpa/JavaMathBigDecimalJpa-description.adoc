@@ -14,10 +14,10 @@ include::JavaMathBigDecimalJpa.java[tags=class]
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> required property as defined to JDO/DataNucleus.
 +
-Apache Isis assumes properties are mandatory, so no additional annotation is required.
-<.> directly editable property as defined to Apache Isis
+Apache Causeway assumes properties are mandatory, so no additional annotation is required.
+<.> directly editable property as defined to Apache Causeway
 <.> `BigDecimal` with at most 2 digits to the right of the decimal point (`scale=2`)
-<.> optional property as defined to Apache Isis
+<.> optional property as defined to Apache Causeway
 <.> optional property as defined to JDO/DataNucleus
 
 

@@ -45,7 +45,7 @@ For an action:
 public class ToDoItem {
 
     public static class ActionDomainEventDefault extends
-        org.apache.isis.applib.events.domain.ActionDomainEvent<Object> { }
+        org.apache.causeway.applib.events.domain.ActionDomainEvent<Object> { }
     // ...
 
     public void updateDescription(final String description) {
@@ -81,7 +81,7 @@ For example:
 )
 public class ToDoItem {
     public static class PropertyDomainEventDefault
-        extends org.apache.isis.applib.events.domain.PropertyDomainEvent<Object> { }
+        extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<Object> { }
     ...
 
     @Getter @Setter
@@ -102,7 +102,7 @@ public class ToDoItem_priority {
     // constructor omitted
 
     public static class PropertyDomainEventDefault
-        extends org.apache.isis.applib.events.domain.PropertyDomainEvent<Object> { }
+        extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<Object> { }
 
     public Integer prop() { /* ... */ }
 }
@@ -139,7 +139,7 @@ import lombok.Setter;
 )
 public class ToDoItem {
     public static class CollectionDomainEventDefault extends
-            org.apache.isis.applib.events.domain.CollectionDomainEvent<Object> { }
+            org.apache.causeway.applib.events.domain.CollectionDomainEvent<Object> { }
     ...
 
     @Getter @Setter

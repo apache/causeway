@@ -1,0 +1,217 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.MinLength;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.query.Query;
+import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.user.UserService;
+
+import lombok.RequiredArgsConstructor;
+
+@DomainService(
+        nature = NatureOfService.VIEW
+)
+@Named("libExcelFixture.ExcelDemoToDoItemMenu")
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class ExcelDemoToDoItemMenu {
+
+    final MessageService messageService;
+    final RepositoryService repositoryService;
+    final UserService userService;
+    final ClockService clockService;
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
+    public List<ExcelDemoToDoItem> toDoItemsNotYetComplete() {
+        final List<ExcelDemoToDoItem> items = notYetCompleteNoUi();
+        if(items.isEmpty()) {
+            messageService.informUser("All to-do items have been completed :-)");
+        }
+        return items;
+    }
+
+    public List<ExcelDemoToDoItem> notYetCompleteNoUi() {
+        return repositoryService.allMatches(
+                Query.named(ExcelDemoToDoItem.class, "todo_notYetComplete")
+                .withParameter("ownedBy", currentUserName()));
+    }
+
+    public ExcelDemoToDoItem findToDoItemsByDescription(final String description) {
+        return repositoryService.firstMatch(
+                Query.named(ExcelDemoToDoItem.class, "findByDescription")
+                .withParameter("description", description)
+                .withParameter("ownedBy", currentUserName()))
+                .orElse(null);
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(sequence = "3")
+    public List<ExcelDemoToDoItem> toDoItemsComplete() {
+        final List<ExcelDemoToDoItem> items = completeNoUi();
+        if(items.isEmpty()) {
+            messageService.informUser("No to-do items have yet been completed :-(");
+        }
+        return items;
+    }
+
+    @Programmatic
+    public List<ExcelDemoToDoItem> completeNoUi() {
+        return repositoryService.allMatches(
+            Query.named(ExcelDemoToDoItem.class, "todo_complete")
+            .withParameter("ownedBy", currentUserName()));
+    }
+
+
+
+    @ActionLayout(sequence = "40")
+    public ExcelDemoToDoItem newToDoItem(
+            @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+            final String description,
+            final Category category,
+            final Subcategory subcategory,
+            @Nullable
+            final LocalDate dueBy,
+            @Nullable
+            final BigDecimal cost) {
+        final String ownedBy = currentUserName();
+        return newToDoItem(description, category, subcategory, ownedBy, dueBy, cost);
+    }
+    public Category default1NewToDoItem() {
+        return Category.Professional;
+    }
+    public Subcategory default2NewToDoItem() {
+        return Category.Professional.subcategories().get(0);
+    }
+    public LocalDate default3NewToDoItem() {
+        return currentDate().plusDays(14);
+    }
+    public List<Subcategory> choices2NewToDoItem(
+            final String description, final Category category) {
+        return Subcategory.listFor(category);
+    }
+    public String validateNewToDoItem(
+            final String description,
+            final Category category, final Subcategory subcategory,
+            final LocalDate dueBy, final BigDecimal cost) {
+        return Subcategory.validate(category, subcategory);
+    }
+
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(sequence = "50")
+    public List<ExcelDemoToDoItem> allMyToDoItems() {
+        final String currentUser = currentUserName();
+        final List<ExcelDemoToDoItem> items = repositoryService.allMatches(ExcelDemoToDoItem.class, ExcelDemoToDoItem.Predicates.thoseOwnedBy(currentUser));
+        Collections.sort(items);
+        if(items.isEmpty()) {
+            messageService.warnUser("No to-do items found.");
+        }
+        return items;
+    }
+
+
+    @Programmatic
+    public List<ExcelDemoToDoItem> autoComplete(@MinLength(1) final String description) {
+        return repositoryService.allMatches(
+                Query.named(ExcelDemoToDoItem.class, "todo_autoComplete")
+                .withParameter("ownedBy", currentUserName())
+                .withParameter("description", description));
+    }
+
+
+    @Programmatic // for use by fixtures
+    public ExcelDemoToDoItem newToDoItem(
+            final String description,
+            final Category category,
+            final Subcategory subcategory,
+            final String userName,
+            final LocalDate dueBy, final BigDecimal cost) {
+        final ExcelDemoToDoItem toDoItem = new ExcelDemoToDoItem();
+        toDoItem.setDescription(description);
+        toDoItem.setCategory(category);
+        toDoItem.setSubcategory(subcategory);
+        toDoItem.setOwnedBy(userName);
+        toDoItem.setDueBy(dueBy);
+        toDoItem.setCost(cost);
+
+//        toDoItem.setLocation(
+//                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
+
+        LocalDate today = currentDate();
+        toDoItem.setDueBy(today.plusDays(random(10)-2L));
+
+        repositoryService.persist(toDoItem);
+
+        return toDoItem;
+    }
+
+    @Programmatic
+    public ExcelDemoToDoItem newToDoItem(final String description, final String user) {
+        return newToDoItem(description, null, null, user, null, null);
+    }
+
+// not used
+//    private static double random(final double from, final double to) {
+//        return Math.random() * (to-from) + from;
+//    }
+
+    private static int random(final int n) {
+        return (int) (Math.random() * n);
+    }
+
+
+    @Programmatic
+    public List<ExcelDemoToDoItem> allInstances() {
+        return repositoryService.allInstances(ExcelDemoToDoItem.class);
+    }
+
+    private String currentUserName() {
+        return userService.currentUserNameElseNobody();
+    }
+
+    private LocalDate currentDate() {
+        return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
+    }
+
+
+}

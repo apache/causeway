@@ -23,18 +23,15 @@ import java.time.ZoneId;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
@@ -48,6 +45,8 @@ import demoapp.dom.domain.properties.PropertyLayout.renderDay.PropertyLayoutRend
 import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingVm;
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.PropertyLayoutMenu")
 @DomainService(

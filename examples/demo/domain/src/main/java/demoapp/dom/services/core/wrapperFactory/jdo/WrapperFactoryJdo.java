@@ -27,26 +27,25 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
 @Profile("demo-jdo")
 //tag::class[]

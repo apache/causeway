@@ -5,5 +5,5 @@
 
 
 TODO: v2 - JPA is now also supported as an ORM.
-(As with JDO), some of JPA's annotations are recognised by Apache Isis.
+(As with JDO), some of JPA's annotations are recognised by Apache Causeway.
 

@@ -34,4 +34,4 @@ In addition:
 
 * *xref:security:ROOT:about.adoc[Security Guide]*
 +
-Describes how to configure each of the various security implementations that integrate with Apache Isis.
+Describes how to configure each of the various security implementations that integrate with Apache Causeway.

@@ -49,7 +49,7 @@ Executes the specified xref:refguide:applib:index/services/command/Command.adoc[
 
 Executes the specified command (represented as a _CommandDto_ using the required _InteractionContextPolicy_ .
 
-IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS. Specifically, the xref:refguide:applib:index/services/command/Command.adoc[Command] of the executing thread (obtained using _org.apache.isis.applib.services.iactn.InteractionProvider_ to obtain the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] , and then _Interaction#getCommand()_ to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] ) will be UPDATED to hold the _CommandDto_ passed in.
+IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS. Specifically, the xref:refguide:applib:index/services/command/Command.adoc[Command] of the executing thread (obtained using _org.apache.causeway.applib.services.iactn.InteractionProvider_ to obtain the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] , and then _Interaction#getCommand()_ to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] ) will be UPDATED to hold the _CommandDto_ passed in.
 
 Optionally an xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler] can be provided to process the result. This is used by the persistent implementations to update their respective persistent equivalents of xref:refguide:applib:index/services/command/Command.adoc[Command] .
 

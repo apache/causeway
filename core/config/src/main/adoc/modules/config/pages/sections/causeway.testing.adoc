@@ -1,0 +1,100 @@
+= Testing
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.testing~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.testing.fixtures.fixture-scripts-specification.context-class]]
+causeway.testing.fixtures. +
+fixture-scripts-specification. +
+context-class
+
+|
+| Specifies the base package from which to search for fixture scripts.
+
+Either this or packagePrefix must be specified. This property is used by preference.
+
+@see #getPackagePrefix()
+
+
+|
+[[causeway.testing.fixtures.fixture-scripts-specification.multiple-execution-strategy]]
+causeway.testing.fixtures. +
+fixture-scripts-specification. +
+multiple-execution-strategy
+
+|
+| Indicates whether, if a fixture script (or more precisely any other fixture scripts of the same class) is encountered more than once in a graph of dependencies, it should be executed again or skipped.
+
+The default is to fixture scripts are executed only once per class.
+
+Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements ``FixtureScriptWithExecutionStrategy``.
+
+
+|
+[[causeway.testing.fixtures.fixture-scripts-specification.non-persisted-objects-strategy]]
+causeway.testing.fixtures. +
+fixture-scripts-specification. +
+non-persisted-objects-strategy
+
+|
+| Indicates whether objects that are returned as a fixture result should be automatically persisted if required (the default) or not.
+
+
+|
+[[causeway.testing.fixtures.fixture-scripts-specification.package-prefix]]
+causeway.testing.fixtures. +
+fixture-scripts-specification. +
+package-prefix
+
+|
+| Specifies the base package from which to search for fixture scripts.
+
+Either this or ``#getContextClass()`` must be specified; ``#getContextClass()`` is used by preference.
+
+@see #getContextClass()
+
+
+|
+[[causeway.testing.fixtures.fixture-scripts-specification.recreate]]
+causeway.testing.fixtures. +
+fixture-scripts-specification. +
+recreate
+
+|
+| null
+
+
+|
+[[causeway.testing.fixtures.fixture-scripts-specification.run-script-default]]
+causeway.testing.fixtures. +
+fixture-scripts-specification. +
+run-script-default
+
+|
+| null
+
+
+|
+[[causeway.testing.fixtures.initial-script]]
+causeway.testing.fixtures. +
+initial-script
+
+|
+| Indicates the fixture script class to run initially.
+
+Intended for use when prototyping against an in-memory database (but will run in production mode as well if required).
+
+
+
+|===
+
+include::../section-hooks/causeway.testing~post.adoc[]

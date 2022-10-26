@@ -5,7 +5,7 @@
 
 
 
-The `@javax.validation.constraints.Pattern` annotation is recognized by Apache Isis as a means to specify a regular expression constraint for properties and action parameters of type `java.lang.String`.
+The `@javax.validation.constraints.Pattern` annotation is recognized by Apache Causeway as a means to specify a regular expression constraint for properties and action parameters of type `java.lang.String`.
 
 For example, here's the annotation being used on an action parameter:
 

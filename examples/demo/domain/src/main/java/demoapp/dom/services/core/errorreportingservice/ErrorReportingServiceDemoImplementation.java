@@ -23,10 +23,10 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.error.ErrorDetails;
-import org.apache.isis.applib.services.error.ErrorReportingService;
-import org.apache.isis.applib.services.error.Ticket;
-import org.apache.isis.applib.services.error.Ticket.StackTracePolicy;
+import org.apache.causeway.applib.services.error.ErrorDetails;
+import org.apache.causeway.applib.services.error.ErrorReportingService;
+import org.apache.causeway.applib.services.error.Ticket;
+import org.apache.causeway.applib.services.error.Ticket.StackTracePolicy;
 
 import lombok.val;
 

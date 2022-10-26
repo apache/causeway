@@ -11,7 +11,7 @@ All of the actions provided here are restricted to PROTOTYPE mode only; this fea
 .ImpersonateMenu.java
 ----
 class ImpersonateMenu {
-  // deliberately not part of isis.applib
+  // deliberately not part of causeway.applib
 public static final String LOGICAL_TYPE_NAME;
 }
 ----

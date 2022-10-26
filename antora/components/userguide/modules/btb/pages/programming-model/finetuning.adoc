@@ -5,48 +5,48 @@
 :page-partial:
 
 
-The core metamodel defines APIs and implementations for building the Apache Isis metamodel: a description of the set of entities, domain services and values that make up the domain model.
+The core metamodel defines APIs and implementations for building the Apache Causeway metamodel: a description of the set of entities, domain services and values that make up the domain model.
 
 The description of each domain class consists of a number of elements:
 
-link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/ObjectSpecification.java[ObjectSpecification]::
+link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/spec/ObjectSpecification.java[ObjectSpecification]::
 
 Analogous to `java.lang.Class`; holds information about the class itself and holds collections of each of the three types of class' members (below);
 
 
-link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/OneToOneAssociation.java[OneToOneAssociation]::
+link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/spec/feature/OneToOneAssociation.java[OneToOneAssociation]::
 
 Represents a class member that is a single-valued property of the class.
 The property's type is either a reference to another entity, or is a value type.
 
 
-link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/OneToManyAssociation.java[OneToManyAssociation]::
+link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/spec/feature/OneToManyAssociation.java[OneToManyAssociation]::
 
 Represents a class member that is a collection of references to other entities.
-Note that Apache Isis does not currently support collections of values.
+Note that Apache Causeway does not currently support collections of values.
 
 
-link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/ObjectAction.java[ObjectAction]::
+link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/spec/feature/ObjectAction.java[ObjectAction]::
 
 Represents a class member that is an operation that can be performed on the action.
 Returns either a single value, a collection of entities, or is `void`.
 
-The metamodel is built up through the link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodel/ProgrammingModel.java[ProgrammingModel], which defines an API for registering a set of link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/FacetFactory.java[FacetFactory]s.
-Two special `FacetFactory` implementations - link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/properties/accessor/PropertyAccessorFacetViaAccessorFactory.java[PropertyAccessorFacetFactory] and link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/collections/accessor/CollectionAccessorFacetViaAccessorFactory.java[CollectionAccessorFacetFactory] - are used to identify the class members.
-Pretty much all the other ``FacetFactory``s are responsible for installing https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facetapi/Facet.java[Facet]s onto the metamodel elements.
+The metamodel is built up through the link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/progmodel/ProgrammingModel.java[ProgrammingModel], which defines an API for registering a set of link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/facets/FacetFactory.java[FacetFactory]s.
+Two special `FacetFactory` implementations - link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/facets/properties/accessor/PropertyAccessorFacetViaAccessorFactory.java[PropertyAccessorFacetFactory] and link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/facets/collections/accessor/CollectionAccessorFacetViaAccessorFactory.java[CollectionAccessorFacetFactory] - are used to identify the class members.
+Pretty much all the other ``FacetFactory``s are responsible for installing https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/facetapi/Facet.java[Facet]s onto the metamodel elements.
 
 There are many many such ``Facet``s, and are used to do such things get values from properties or collections, modify properties or collections, invoke action, hide or disable class members, provide UI hints for class members, and so on.
-In short, the ``FacetFactory``s registered defines the Apache Isis programming conventions.
+In short, the ``FacetFactory``s registered defines the Apache Causeway programming conventions.
 
 == Modifying the Prog. Model
 
-Creating the `ProgrammingModel` is the responsibility of the link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodel/ProgrammingModelService.java[ProgrammingModelService].
+Creating the `ProgrammingModel` is the responsibility of the link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/progmodel/ProgrammingModelService.java[ProgrammingModelService].
 
-The default implementation, link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/specloader/ProgrammingModelServiceDefault.java[ProgrammingModelServiceDefault], creates as the `ProgrammingModel` the concrete implementation link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodels/dflt/ProgrammingModelFacetsJava8.java[ProgrammingModelFacetsJava8], which registers a large number of ``FacetFactory``s.
-This programming model can then be added to because the service call every known implementation of link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facetapi/MetaModelRefiner.java[MetaModelRefiner].
+The default implementation, link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/specloader/ProgrammingModelServiceDefault.java[ProgrammingModelServiceDefault], creates as the `ProgrammingModel` the concrete implementation link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/progmodels/dflt/ProgrammingModelFacetsJava8.java[ProgrammingModelFacetsJava8], which registers a large number of ``FacetFactory``s.
+This programming model can then be added to because the service call every known implementation of link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/facetapi/MetaModelRefiner.java[MetaModelRefiner].
 
-The programming model can also be filtered using the link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodel/ProgrammingModelInitFilter.java[ProgrammingModelInitFilter] interface.
-The default implementation of _this_ interface, link:https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodel/ProgrammingModelInitFilterDefault.java[ProgrammingModelInitFilterDefault] accepts all facet factories though allows deprecated facet factories to be excluded through a configuration property.
+The programming model can also be filtered using the link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/progmodel/ProgrammingModelInitFilter.java[ProgrammingModelInitFilter] interface.
+The default implementation of _this_ interface, link:https://github.com/apache/causeway/blob/master/core/metamodel/src/main/java/org/apache/causeway/core/metamodel/progmodel/ProgrammingModelInitFilterDefault.java[ProgrammingModelInitFilterDefault] accepts all facet factories though allows deprecated facet factories to be excluded through a configuration property.
 
 The diagram below shows how these classes relate:
 

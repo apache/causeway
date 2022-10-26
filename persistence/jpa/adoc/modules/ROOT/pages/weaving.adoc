@@ -37,7 +37,7 @@ eclipselink.weaving.lazy=true
 These all default to `true` except for xref:refguide:config:sections/eclipselink.adoc#eclipselink.weaving.eager[eclipselink.weaving.eager], which you should only enable if you fully understand its consequences.
 
 The weaving process modifies the classes themselves, introducing additional `public` methods.
-Depending upon the value of xref:refguide:config:sections/isis.core.meta-model.introspector.adoc#isis.core.meta-model.introspector.policy[isis.core.meta-model.introspector.policy] configuration property, these could be picked up as part of the framework's metamodel, which is not what you want.
+Depending upon the value of xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[causeway.core.meta-model.introspector.policy] configuration property, these could be picked up as part of the framework's metamodel, which is not what you want.
 
 Therefore, to use JPA, you will also need to change this configuration property, either:
 
@@ -46,7 +46,7 @@ Therefore, to use JPA, you will also need to change this configuration property,
 [source,properties]
 .application.properties
 ----
-isis.core.meta-model.introspector.policy=annotation_required
+causeway.core.meta-model.introspector.policy=annotation_required
 ----
 +
 or,
@@ -56,7 +56,7 @@ or,
 [source,properties]
 .application.properties
 ----
-isis.core.meta-model.introspector.policy=encapsulation_enabled
+causeway.core.meta-model.introspector.policy=encapsulation_enabled
 ----
 
 The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps both use the latter option.
@@ -73,7 +73,7 @@ As well as setting the above configuration options, it's also neceesary to run t
 mvn dependency:get -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
 ----
 =
-changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Isis parent `pom.xml`.
+changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Causeway parent `pom.xml`.
 
 * Move and rename this file, eg to `lib/spring-instrument.jar`.
 

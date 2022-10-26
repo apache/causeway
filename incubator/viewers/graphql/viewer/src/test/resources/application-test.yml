@@ -1,4 +1,4 @@
-isis:
+causeway:
   persistence:
     schema:
       auto-create-schemas: "demo"

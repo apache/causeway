@@ -55,7 +55,7 @@ The actions/property edits made in turn via the xref:refguide:applib:index/servi
 <.> xref:#setDto_T[setDto(T)]
 +
 --
- *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
+ *NOT API* : Set by framework (implementation of _org.apache.causeway.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
 --
 
 == Members
@@ -93,7 +93,7 @@ The actions/property edits made in turn via the xref:refguide:applib:index/servi
 [#setDto_T]
 === setDto(T)
 
- *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
+ *NOT API* : Set by framework (implementation of _org.apache.causeway.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
 
 include::hooks/Execution_010-implementation.adoc[]
 

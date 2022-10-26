@@ -30,7 +30,7 @@ public class JavaUtilUuidSamples implements Samples<java.util.UUID> {
 
     @Override
     public Stream<java.util.UUID> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics()
                 .getExamples()
                 .stream();
     }

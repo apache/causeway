@@ -14,8 +14,8 @@ If your app inherits from the xref:docs:parent-pom:about.adoc[Parent POM], then 
 [source,xml]
 ----
 <parent>
-    <groupId>org.apache.isis.app</groupId>
-    <artifactId>isis-app-starter-parent</artifactId>
+    <groupId>org.apache.causeway.app</groupId>
+    <artifactId>causeway-app-starter-parent</artifactId>
     <version>2.0.0</version>                            <!--.-->
 </parent>
 ----
@@ -26,15 +26,15 @@ If your app inherits from the xref:docs:parent-pom:about.adoc[Parent POM], then 
 
 If you like to live on the bleeding edge, there are also nightly builds of the framework.
 
-* link:https://github.com/apache/isis[Packages] (ASF hosted)
+* link:https://github.com/apache/causeway[Packages] (ASF hosted)
 +
 Requires github credentials to download packages
 
-* link:https://github.com/apache-isis-committers/isis-nightly[Packages] (not ASF hosted)
+* link:https://github.com/apache-causeway-committers/causeway-nightly[Packages] (not ASF hosted)
 +
 Packages can be downloaded without authentication.
 
-* link:https://apache-isis-committers.github.io/isis-nightly[Website preview] (not ASF hosted)
+* link:https://apache-causeway-committers.github.io/causeway-nightly[Website preview] (not ASF hosted)
 
 Although these are maintained and used by the framework's committers, do be aware that *these are _not_ official ASF releases*; they are provided as a convenience only.
 

@@ -17,4 +17,4 @@ image::dialog-mode/modal.png[width="600px"]
 
 The sidebar is the default prompt style, and its benefit is that it doesn't obscure the rest of the information shown on the page; it also doesn't interrupt the end-user's context so much (they are more likely to remember why they invoked the action).
 
-The xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[isis.viewer.wicket.prompt-style] can be used to change the default style if required.
+The xref:refguide:config:sections/causeway.viewer.wicket.adoc#causeway.viewer.wicket.prompt-style[causeway.viewer.wicket.prompt-style] can be used to change the default style if required.

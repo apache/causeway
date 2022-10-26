@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 

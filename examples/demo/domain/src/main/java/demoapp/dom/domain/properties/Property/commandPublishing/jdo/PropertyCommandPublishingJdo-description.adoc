@@ -3,11 +3,11 @@
 The `commandPublishing` element is used to allow or suppress the reification of a property edit into a xref:refguide:applib:index/services/command/Command.adoc[Command].
 
 
-When allowed (the default), then the xref:refguide:applib:index/services/command/Command.adoc[Command] is sent to registered implementation(s) of https://isis.apache.org/refguide/2.0.0-M5/applib-svc/CommandSubscriber.html#section-top[CommandSubscriber] SPI, _after_ the interaction has completed.
+When allowed (the default), then the xref:refguide:applib:index/services/command/Command.adoc[Command] is sent to registered implementation(s) of https://causeway.apache.org/refguide/2.0.0-M5/applib-svc/CommandSubscriber.html#section-top[CommandSubscriber] SPI, _after_ the interaction has completed.
 One use case is to replicate and replay commands to a secondary system, for example for regression testing.
 For more on this, see the "Command Replay" section below.
 
-Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[WrapperFactory].
+Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://causeway.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[WrapperFactory].
 
 [NOTE]
 ====
@@ -73,7 +73,7 @@ include::PropertyCommandPublishingJdo.java[tags=meta-annotation-overridden]
 
 == CommandSubscriber
 
-The demo includes the link:https://isis.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension, so every command is persisted.
+The demo includes the link:https://causeway.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension, so every command is persisted.
 These can be viewed in the collection at the bottom of the left page.
 xref:refguide:applib:index/services/command/Command.adoc[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
@@ -86,7 +86,7 @@ This can be configured globally:
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   applib:
     annotation:
       property:
@@ -99,13 +99,13 @@ In other words actions are reified to commands except for those that don't chang
 
 == Command Replay
 
-The link:https://isis.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be persisted.
+The link:https://causeway.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be persisted.
 It also provides a RESTful endpoint to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be queried.
-This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/commandreplay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
+This is used by the link:https://causeway.apache.org/extensions/2.0.0-M3/commandreplay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
 
 The associated `commandDtoProcessor()` element allows the xref:refguide:applib:index/services/command/Command.adoc[Command] XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
 One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
-As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[CommandDtoProcessorService] SPI.
+As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://causeway.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[CommandDtoProcessorService] SPI.
 
 The command replay can be demonstrated by running a second instance of the demo app, using the "secondary" Spring Boot profile.
 This is most easily done by specifying a system property:
@@ -116,10 +116,10 @@ This activates the `application-secondary.properties` configuration file:
 
 [source,properties]
 ----
-isis.extensions.commandreplay.primary-access.base-url-restful=http://localhost:8080/restful/
-isis.extensions.commandreplay.primary-access.user=sven
-isis.extensions.commandreplay.primary-access.password=pass
-isis.extensions.commandreplay.primary-access.base-url-wicket=http://localhost:8080/wicket/
+causeway.extensions.commandreplay.primary-access.base-url-restful=http://localhost:8080/restful/
+causeway.extensions.commandreplay.primary-access.user=sven
+causeway.extensions.commandreplay.primary-access.password=pass
+causeway.extensions.commandreplay.primary-access.base-url-wicket=http://localhost:8080/wicket/
 
 server.port=9090
 ----

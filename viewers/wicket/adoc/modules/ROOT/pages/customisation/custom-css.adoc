@@ -20,7 +20,7 @@ These customizations should generally be added to xref:refguide:config:applicati
 
 == Individual members
 
-For example, the `ToDoItem` object of the example https://github.com/apache/isis-app-todoapp/[TodoApp] has a `notes` property.
+For example, the `ToDoItem` object of the example https://github.com/apache/causeway-app-todoapp/[TodoApp] has a `notes` property.
 The HTML for this will be something like:
 
 [source,html]

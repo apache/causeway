@@ -30,7 +30,7 @@ public class WrapperByteSamples implements Samples<java.lang.Byte> {
 
     @Override
     public Stream<java.lang.Byte> stream() {
-        return new org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics()
+        return new org.apache.causeway.core.metamodel.valuesemantics.ByteValueSemantics()
                 .getExamples()
                 .stream();
     }

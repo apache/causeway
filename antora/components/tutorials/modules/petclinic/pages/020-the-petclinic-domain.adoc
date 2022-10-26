@@ -2,7 +2,7 @@
 
 = An Example Domain
 
-By now you should understand the basics of what Apache Isis does, but there's only so much we can learn from a single domain class.
+By now you should understand the basics of what Apache Causeway does, but there's only so much we can learn from a single domain class.
 Let's therefore evolve the app into a slightly more interesting domain and explore other features of the framework.
 
 The domain we're going to work on is a version of the venerable "Pet Clinic" app.

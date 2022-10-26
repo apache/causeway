@@ -26,4 +26,4 @@ Looks up the top-level domain entity representing the persona, with the provided
 
 Looks up the top-level domain entity representing the persona, with the provided xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry] parameter providing access to all domain services available.
 
-Typically the implementation looks up the appropriate domain-specific repository domain service (or could just use the generic _org.apache.isis.applib.services.repository.RepositoryService_ in order to find by key.
+Typically the implementation looks up the appropriate domain-specific repository domain service (or could just use the generic _org.apache.causeway.applib.services.repository.RepositoryService_ in order to find by key.

@@ -19,7 +19,7 @@ interface DomainServiceResource {
   Response deleteActionPromptNotAllowed(String serviceId, String actionId)
   Response putActionPromptNotAllowed(String serviceId, String actionId)
   Response postActionPromptNotAllowed(String serviceId, String actionId)
-  Response invokeActionQueryOnly(String serviceId, String actionId, String xIsisQueryString)     // <.>
+  Response invokeActionQueryOnly(String serviceId, String actionId, String xCausewayQueryString)     // <.>
   Response invokeActionIdempotent(String serviceId, String actionId, InputStream arguments)
   Response invokeAction(String serviceId, String actionId, InputStream arguments)
   Response deleteInvokeActionNotAllowed(String serviceId, String actionId)
@@ -29,7 +29,7 @@ interface DomainServiceResource {
 <.> xref:#invokeActionQueryOnly_String_String_String[invokeActionQueryOnly(String, String, String)]
 +
 --
-Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Isis-defined query param `x-isis-querystring` .
+Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Causeway-defined query param `x-causeway-querystring` .
 --
 
 == Members
@@ -37,6 +37,6 @@ Because it isn't possible with the RestEasy client-side framework to specify a q
 [#invokeActionQueryOnly_String_String_String]
 === invokeActionQueryOnly(String, String, String)
 
-Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Isis-defined query param `x-isis-querystring` .
+Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Causeway-defined query param `x-causeway-querystring` .
 
 The content of this is taken to be the URL encoded map of arguments.

@@ -66,49 +66,49 @@ The table below summarises all the lifecycle hooks:
 | Framework event types
 
 |created
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.created-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.created-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[createdLifecycleEvent()]
 m|ObjectCreatedEvent.Default +
 ObjectCreatedEvent.Doop +
 ObjectCreatedEvent.Noop
 
 |loaded
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[loadedLifecycleEvent()]
 m|ObjectLoadedEvent.Default +
 ObjectLoadedEvent.Doop +
 ObjectLoadedEvent.Noop
 
 |persisting
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[persistingLifecycleEvent()]
 m|ObjectPersistingEvent.Default +
 ObjectPersistingEvent.Doop +
 ObjectPersistingEvent.Noop
 
 |persisted
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[persistedLifecycleEvent()]
 m|ObjectPersistedEvent.Default +
 ObjectPersistedEvent.Doop +
 ObjectPersistedEvent.Noop
 
 |updating
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.updating-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.updating-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.updating-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.updating-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
 m|ObjectUpdatingEvent.Default +
 ObjectUpdatingEvent.Doop +
 ObjectUpdatingEvent.Noop
 
 |updated
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.updated-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.updated-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.updated-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.updated-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
 m|ObjectUpdatedEvent.Default +
 ObjectUpdatedEvent.Doop +
 ObjectUpdatedEvent.Noop
 
 |removing
-|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.removing-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.removing-lifecycle-event.post-for-default]
+|xref:refguide:config:sections/causeway.applib.adoc#causeway.applib.annotation.domain-object.removing-lifecycle-event.post-for-default[causeway.applib.annotation.domain-object.removing-lifecycle-event.post-for-default]
 | xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[removingLifecycleEvent()]
 m|ObjectRemovingEvent.Default +
 ObjectRemovingEvent.Doop +
@@ -167,7 +167,7 @@ For example:
 )
 public class ToDoItem {
     public static class CreatedEvent
-        extends org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent<ToDoItem> { }
+        extends org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent<ToDoItem> { }
     ...
 }
 ----
@@ -191,7 +191,7 @@ For example:
 public class ToDoItem {
 
     public static class PersistingEvent extends
-        org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent<ToDoItem> { }
+        org.apache.causeway.applib.events.lifecycle.ObjectPersistingEvent<ToDoItem> { }
 
     // ...
 }
@@ -210,7 +210,7 @@ For example:
 public class ToDoItem {
 
     public static class PersistedEvent extends
-        org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent<ToDoItem> { }
+        org.apache.causeway.applib.events.lifecycle.ObjectPersistedEvent<ToDoItem> { }
 
     // ...
 }
@@ -228,7 +228,7 @@ For example:
 )
 public class ToDoItem {
     public static class LoadedEvent extends
-        org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent<ToDoItem> { }
+        org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent<ToDoItem> { }
     ...
 }
 ----
@@ -247,7 +247,7 @@ For example:
 public class ToDoItem {
 
     public static class UpdatingEvent extends
-        org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent<ToDoItem> { }
+        org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent<ToDoItem> { }
 
     // ...
 }
@@ -268,7 +268,7 @@ For example:
 public class ToDoItem {
 
     public static class UpdatedEvent extends
-        org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent<ToDoItem> { }
+        org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent<ToDoItem> { }
 
     // ...
 }
@@ -287,7 +287,7 @@ For example:
 public class ToDoItem {
 
     public static class RemovingEvent extends
-        org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent<ToDoItem> { }
+        org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent<ToDoItem> { }
 
     // ...
 }

@@ -27,25 +27,24 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingDisabledMetaAnnotation;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEnabledMetaAnnotation;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -54,7 +53,7 @@ import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishi
     schema = "demo",
     name = "ActionCommandPublishingJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.ActionCommandPublishingEntity")
 @DomainObject(
     editing = Editing.DISABLED)

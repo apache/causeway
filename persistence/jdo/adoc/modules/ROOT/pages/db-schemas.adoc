@@ -9,7 +9,7 @@ In the same way that Java packages act as a namespace for domain objects, it's g
 
 We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[object type] also follows the same pattern.
 
-For example, xref:security:secman:about.adoc[SecMan]' JDO implementation resides in the `IsisModuleExtSecmanPersistenceJpa` module.
+For example, xref:security:secman:about.adoc[SecMan]' JDO implementation resides in the `CausewayModuleExtSecmanPersistenceJpa` module.
 Its `ApplicationUser` entity is defined as:
 
 [source,java]
@@ -18,7 +18,7 @@ Its `ApplicationUser` entity is defined as:
 import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable(
-        schema = "isisExtSecman",
+        schema = "causewayExtSecman",
         table = "ApplicationUser",
         ...
 )
@@ -29,7 +29,7 @@ which results in a `CREATE TABLE` statement of:
 
 [source,sql]
 ----
-CREATE TABLE isisExtSecman."ApplicationUser" (
+CREATE TABLE causewayExtSecman."ApplicationUser" (
     ...
 )
 ----

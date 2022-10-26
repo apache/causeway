@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
 
@@ -37,7 +37,7 @@ class ResourceReaderService_Test {
     void setUp() {
         resourceReaderService = new ResourceReaderService();
         resourceReaderService.markupVariableResolverService = 
-                new MarkupVariableResolverService(new IsisConfiguration(null));
+                new MarkupVariableResolverService(new CausewayConfiguration(null));
     }
 
     @Test

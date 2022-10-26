@@ -31,19 +31,18 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
-import org.apache.isis.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
 
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -52,7 +51,7 @@ import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
       schema = "demo",
       name = "JavaAwtBufferedImageJpa"
 )
-@EntityListeners(IsisEntityListener.class)
+@EntityListeners(CausewayEntityListener.class)
 @Named("demo.JavaAwtBufferedImageEntity")
 @DomainObject
 @NoArgsConstructor

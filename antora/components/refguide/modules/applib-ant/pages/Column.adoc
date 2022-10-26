@@ -6,18 +6,18 @@
 
 The JDO `@javax.jdo.annotation.Column` provides metadata describing how JDO/DataNucleus should persist the property to a database RDBMS table column (or equivalent concept for other persistence stores).
 
-Apache Isis also parses and interprets this annotation in order to build up aspects of its metamodel.
+Apache Causeway also parses and interprets this annotation in order to build up aspects of its metamodel.
 
 [NOTE]
 ====
-Apache Isis parses the `@Column` annotation from the Java source code; it does not query the JDO metamodel.
+Apache Causeway parses the `@Column` annotation from the Java source code; it does not query the JDO metamodel.
 This means that it the `@Column` annotation must be used rather than the equivalent `<column>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/schema_mapping.html[XML metadata].
 
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.
+Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Causeway (currently) only inspects the getter method.
 Therefore ensure that the annotation is placed there.
 ====
 
-This section identifies which attributes of `@Column` are recognized and used by Apache Isis.
+This section identifies which attributes of `@Column` are recognized and used by Apache Causeway.
 
 [#nullability]
 == Nullability
@@ -34,11 +34,11 @@ public class Customer {
     public void setMiddleInitial(String middleInitial) { /* ... */ }
 ----
 
-Isis also provides xref:refguide:applib:index/annotation/Property.adoc#optionality[@Property#optionality] attribute.
-If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Causeway also provides xref:refguide:applib:index/annotation/Property.adoc#optionality[@Property#optionality] attribute.
+If both are specified, Apache Causeway will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
-You should also be aware that in the lack of either the `@Column#allowsNull` or the `@Property#optionality` attributes, that the JDO and Apache Isis defaults differ.
-Apache Isis rule is straight-forward: properties are assumed to be required.
+You should also be aware that in the lack of either the `@Column#allowsNull` or the `@Property#optionality` attributes, that the JDO and Apache Causeway defaults differ.
+Apache Causeway rule is straight-forward: properties are assumed to be required.
 JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.
 Therefore a lack of either annotation can also trigger the fail-fast validation check.
 
@@ -66,8 +66,8 @@ public class Customer {
     public void setLastName(String lastName) { /* ... */ }
 ----
 
-Apache Isis also provides xref:refguide:applib:index/annotation/Property.adoc#maxLength[@Property#maxLength] attribute.
-If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Apache Causeway also provides xref:refguide:applib:index/annotation/Property.adoc#maxLength[@Property#maxLength] attribute.
+If both are specified, Apache Causeway will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 [#lengthscale-for-bigdecimals]
 == Length/scale for ``BigDecimal``s
@@ -87,13 +87,13 @@ public class Customer {
 For ``BigDecimal``s it is also possible to specify the xref:refguide:applib-ant:Digits.adoc[@Digits] annotation, whose form is `@Digits(integer, fraction)`.
 There is a subtle difference here: while `@Column#scale()` corresponds to `@Digits#fraction()`, the value of `@Column#length()` (ie the precision) is actually the __sum__ of the `@Digits`' `integer()` and `fraction()` parts.
 
-If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+If both are specified, Apache Causeway will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 [[rg-ant-hints-and-tips]]
 == Hints and Tips
 
 This seems to be a good place to describe some additional common mappings that use `@Column`.
-Unlike the sections above, the attributes specified in these hints and tips aren't actually part of Apache Isis metamodel.
+Unlike the sections above, the attributes specified in these hints and tips aren't actually part of Apache Causeway metamodel.
 
 === Mapping foreign keys
 
@@ -118,7 +118,7 @@ public class PartyRelationship {
 
 === Mapping ``Blob``s and ``Clob``s
 
-Isis provides custom value types for xref:refguide:applib:index/value/Blob.adoc[Blob]s and xref:refguide:applib:index/value/Clob.adoc[Clob]s.
+Causeway provides custom value types for xref:refguide:applib:index/value/Blob.adoc[Blob]s and xref:refguide:applib:index/value/Clob.adoc[Clob]s.
 These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.
 Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
 

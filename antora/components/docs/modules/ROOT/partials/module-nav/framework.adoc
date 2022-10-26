@@ -10,8 +10,8 @@
 *** xref:tooling:ROOT:about.adoc[Tooling]
 
 ** Automated Analysis
-*** link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
-*** link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+*** link:https://sonarcloud.io/dashboard?id=apache_causeway[SonarCloud.io]
+*** link:https://fisheye.apache.org/browse/~br=master/causeway-git/[ASF Fisheye]
 
 
 ** Development

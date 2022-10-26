@@ -1,26 +1,26 @@
 [#publish-website]
 == Publish website
 
-We now copy the results of the Antora website generation over to the `isis-site` repo:
+We now copy the results of the Antora website generation over to the `causeway-site` repo:
 
-* in the `isis-site` repo, check out the `asf-site` branch:
+* in the `causeway-site` repo, check out the `asf-site` branch:
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis-site
+cd ../causeway-site
 
 git checkout asf-site
 git pull --ff-only
 ----
 
-* still in the `isis-site` repo, run the `copyover.sh` script:
+* still in the `causeway-site` repo, run the `copyover.sh` script:
 +
 [source,bash,subs="attributes+"]
 ----
 sh copyover.sh
 ----
 +
-This deletes all the files in `content/` _except_ for the `schema` and `versions` directories, and copies the generated Antora site to `isis-site` repo's `contents` directory:
+This deletes all the files in `content/` _except_ for the `schema` and `versions` directories, and copies the generated Antora site to `causeway-site` repo's `contents` directory:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -32,8 +32,8 @@ do
 done
 popd
 
-pushd ../isis
-cp -Rf antora/target/site/* ../isis-site/content/.
+pushd ../causeway
+cp -Rf antora/target/site/* ../causeway-site/content/.
 popd
 
 git add .
@@ -48,7 +48,7 @@ git commit -m "updates website"
 sh preview.sh
 ----
 
-* If everything looks ok, then push the changes to make live, and switch back to the `isis` repo:
+* If everything looks ok, then push the changes to make live, and switch back to the `causeway` repo:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -58,7 +58,7 @@ git push origin asf-site
 [#update-the-algolia-search-index]
 == Update the Algolia search index
 
-Create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `isis-site`:
+Create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `causeway-site`:
 
 [source,ini]
 .algolia.env

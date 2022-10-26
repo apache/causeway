@@ -3,7 +3,7 @@
 
 Helper methods for converting _javax.xml.bind.annotation.XmlRootElement_ -annotated class to-and-from XML.
 
-For example usage, seeIsis addons' publishmq module(non-ASF)
+For example usage, seeCauseway addons' publishmq module(non-ASF)
 
 == API
 

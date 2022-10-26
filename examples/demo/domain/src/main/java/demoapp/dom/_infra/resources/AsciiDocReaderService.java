@@ -22,10 +22,10 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.base._Refs.StringReference;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Refs.StringReference;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -36,7 +36,7 @@ import lombok.val;
 public class AsciiDocReaderService {
 
     final ResourceReaderService resourceReaderService;
-    final IsisConfiguration configuration;
+    final CausewayConfiguration configuration;
 
     public AsciiDoc readFor(final Object anObject) {
         return readFor(anObject.getClass());
@@ -65,7 +65,7 @@ public class AsciiDocReaderService {
     }
 
     private String replaceVersion(final String adoc) {
-        return adoc.replace("{isis-version}",
+        return adoc.replace("{causeway-version}",
                 configuration.getViewer().getWicket().getApplication().getVersion());
     }
 

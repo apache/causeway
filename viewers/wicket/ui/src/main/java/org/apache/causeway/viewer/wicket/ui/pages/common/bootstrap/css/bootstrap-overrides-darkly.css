@@ -1,0 +1,72 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+header nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
+header .navbar-header .navbar-brand {
+	padding-bottom: 0px;
+}
+footer nav.navbar {
+	padding: 0.5rem 0.5rem;
+}
+
+.bootstrap-datetimepicker-widget {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.sidebar-panel :focus,
+h4.iconAndTitle a:focus,
+ul.nav-tabs li.active a:focus,
+ul.nav-tabs li a:focus,
+fieldset.inputFormTable :focus,
+li.additionalLinkItem a:focus,
+a.scalarValueInlinePromptLink:focus textarea,
+:focus {
+    outline: none;
+    border-color: #0ce3ac;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #0ce3ac;
+}
+
+.ui-tooltip {
+    color: White;
+    background-color: rgb(34, 34, 34);
+}
+
+/* CAUSEWAY-2092 fixing Darkly Theme: buttons and fieldset-headers have same background-color */
+.card > .card-header {
+    background-color: #515050;
+}
+
+/* makes disabled fields even darker */
+.form-control:disabled, .form-control[readonly] {
+    background-color: #c0c0c0;
+    opacity: 1;
+}
+
+.btn[disabled="disabled"] {
+	color: rgba(255,255,255,0.5)!important;
+}
+
+/* setting the select2 dropdown background to secondary theme color */
+.select2-container.select2-container--default.select2-container--open .select2-dropdown {
+	background-color: #444!important
+}
+

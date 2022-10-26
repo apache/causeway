@@ -281,7 +281,7 @@ Rather, the ORM (DataNucleus) automatically keeps track of the state of each obj
 
 That said, it is possible to "flush" pending changes:
 
-* xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
+* xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService] acts at the Apache Causeway layer, and flushes any pending object persistence or object deletions
 
 * (if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]), the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service can be used reach down to the underlying JDO API, and perform a flush of pending object updates also.
 

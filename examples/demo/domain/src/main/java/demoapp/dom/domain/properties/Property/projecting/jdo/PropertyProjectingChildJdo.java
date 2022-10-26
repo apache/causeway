@@ -27,17 +27,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
 import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]

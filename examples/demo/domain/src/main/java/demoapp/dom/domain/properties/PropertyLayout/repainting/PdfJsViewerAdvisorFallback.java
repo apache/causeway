@@ -20,8 +20,8 @@ package demoapp.dom.domain.properties.PropertyLayout.repainting;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.pdfjs.applib.config.Scale;
-import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
+import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
+import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
 @Service
 public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {

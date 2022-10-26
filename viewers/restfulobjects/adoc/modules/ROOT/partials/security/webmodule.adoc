@@ -16,7 +16,7 @@ where the returned xref:refguide:applib:index/services/iactnlayer/InteractionCon
 
 The strategy is defined using this configuration property:
 
-* xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.authentication.strategy-class-name[isis.viewer.restfulobjects.authentication.strategy-class-name]
+* xref:refguide:config:sections/causeway.viewer.restfulobjects.adoc#causeway.viewer.restfulobjects.authentication.strategy-class-name[causeway.viewer.restfulobjects.authentication.strategy-class-name]
 
 
 The framework currently provides only HTTP Basic Auth support as a simple implementation, this is also the default strategy if none is explicitly configured.

@@ -24,7 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.ValueSemantics;
+import org.apache.causeway.applib.annotation.ValueSemantics;
 
 //tag::class[]
 @ValueSemantics(dateRenderAdjustDays = 0)               // <.>

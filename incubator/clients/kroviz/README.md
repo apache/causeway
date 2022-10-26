@@ -12,11 +12,11 @@ Notice: Licensed to the Apache Software Foundation (ASF) under one or more contr
 
 kroviz is a generic client for applications that implement the Restful Objects Specification, namely:
 
-* [Apache Isis](https://isis.apache.org/)
+* [Apache Causeway](https://causeway.apache.org/)
 * [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml)
 
-In order to see it working, setup a server with an [Apache Isis](https://isis.apache.org/) application with the restful objects interface enabled 
-[SimpleApp](https://github.com/apache/isis/tree/master/example/application/simpleapp), [ToDoApp](https://github.com/isisaddons/isis-app-todoapp), 
+In order to see it working, setup a server with an [Apache Causeway](https://causeway.apache.org/) application with the restful objects interface enabled 
+[SimpleApp](https://github.com/apache/causeway/tree/master/example/application/simpleapp), [ToDoApp](https://github.com/causewayaddons/causeway-app-todoapp), 
 etc. See [setup instructions](./docs/DevelopmentGuide.md#setup-the-back-end). 
 
 A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application should work as well, but is not tested yet.
@@ -25,7 +25,7 @@ A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application
 
 ## User Interface
 
-The GUI will be similar to the well known Wicket-UI of Apache Isis, but will make use of Tabs for Lists and Objects instead of Bookmarking URLs.
+The GUI will be similar to the well known Wicket-UI of Apache Causeway, but will make use of Tabs for Lists and Objects instead of Bookmarking URLs.
 The table widget allows filtering/sorting on the client and scrolling behavior will be more like in traditional desktop applications.  
 
 In the left upper corner you will find a burger icon with an drop down menu. Click and select -> Connect, edit/confirm the settings and press OK.

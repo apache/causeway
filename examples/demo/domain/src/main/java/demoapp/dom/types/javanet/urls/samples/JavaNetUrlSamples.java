@@ -23,9 +23,8 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import lombok.SneakyThrows;
-
 import demoapp.dom.types.Samples;
+import lombok.SneakyThrows;
 
 @Service
 public class JavaNetUrlSamples implements Samples<URL> {

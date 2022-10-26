@@ -1,0 +1,38 @@
+= Core MetaModel
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.core.meta-model~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.core.meta-model.filter-visibility]]
+causeway.core.meta-model. +
+filter-visibility
+
+|
+| Whether domain objects to which the current user does not have visibility access should be rendered within collections or drop-down choices/autocompletes.
+
+One reason this filtering may be necessary is for multi-tenanted applications, whereby an end-user should only be able to "see" what data that they own. For efficiency, the application should only query for objects that the end-user owns. This configuration property acts as a safety net to prevent the end-user from viewing domain objects _even if_ those domain objects were rehydrated from the persistence store.
+
+
+|
+[[causeway.core.meta-model.programming-model.ignore-deprecated]]
+causeway.core.meta-model. +
+programming-model. +
+ignore-deprecated
+
+|
+| If set, then any aspects of the programming model (as implemented by ``FacetFactory``s that have been indicated as deprecated will simply be ignored/excluded from the metamodel.
+
+
+
+|===
+
+include::../section-hooks/causeway.core.meta-model~post.adoc[]

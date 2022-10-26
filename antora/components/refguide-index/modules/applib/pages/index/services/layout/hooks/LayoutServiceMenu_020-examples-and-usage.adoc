@@ -5,4 +5,4 @@
 == See also
 
 * xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService]
-* xref:refguide:applib:index/services/layout/Style.adoc[Style]
+* xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle]

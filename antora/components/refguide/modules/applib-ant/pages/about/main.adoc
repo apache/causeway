@@ -4,7 +4,7 @@
 :page-partial:
 
 
-In Apache Isis every domain object is either a domain entity, a view model or a domain service.  And each of these are made up of properties, collections and actions (domain services only have actions).
+In Apache Causeway every domain object is either a domain entity, a view model or a domain service.  And each of these are made up of properties, collections and actions (domain services only have actions).
 
 For each of these domain types and members there are two annotations.  One covers the semantics intrinsic to the domain (eg whether an action parameter is optional or not), then other (suffix `...Layout`) captures semantics relating to the UI/presentation layer.
 
@@ -14,7 +14,7 @@ Most UI semantics can also be specified using xref:userguide:fun:ui.adoc#object-
 ====
 
 
-The table below summarizes these most commonly used annotations in Apache Isis.
+The table below summarizes these most commonly used annotations in Apache Causeway.
 
 
 .Core annotations for domain objects, services and members

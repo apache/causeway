@@ -4,7 +4,7 @@
 
 
 Most applications need to integrate with other apps in the enterprise.
-To facilitate such integration scenarios, Apache Isis defines a number of standard XSD schemas:
+To facilitate such integration scenarios, Apache Causeway defines a number of standard XSD schemas:
 
 
 * the xref:refguide:schema:mml.adoc[metamodel] schema, which allows the internal metamodel to be exported in a canonical fashion

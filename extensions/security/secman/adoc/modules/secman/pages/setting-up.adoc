@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-This section describes how to setup and configure SecMan for use in your Apache Isis application, for both authentication (`Authenticator` SPI) and authorization (`Authorizor` SPI).
+This section describes how to setup and configure SecMan for use in your Apache Causeway application, for both authentication (`Authenticator` SPI) and authorization (`Authorizor` SPI).
 
 It is also possible to use SecMan in conjunction with the framework's xref:security:shiro:about.adoc[integration with Shiro], where Shiro takes primary responsibility for authentication, while still using Secman for authorization.
 This mode allows a separate authentication mechanism such as LDAP to be used.
@@ -21,11 +21,11 @@ In addition, add a section for secman's own BOM:
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman</artifactId>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-secman</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-isisrel}</version>
+            <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -41,16 +41,16 @@ In the webapp module of your application, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-persistence-XXX</artifactId>    <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-persistence-XXX</artifactId>    <!--.-->
     </dependency>
     <dependency>
-        <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
     </dependency>
 </dependencies>
 ----
-<.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
+<.> specify either `causeway-extensions-secman-persistence-jpa` or `causeway-extensions-secman-persistence-jdo`, as required
 <.> provides an implementation of `PasswordEncoder`, so that passwords are only persisted in encrypted form.
 
 
@@ -67,21 +67,21 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 @Configuration
 @Import({
         ...
-        IsisModuleExtSecmanPersistenceXxx.class,        // <.>
-        IsisModuleExtSecmanEncryptionJbcrypt.class,     // <.>
+        CausewayModuleExtSecmanPersistenceXxx.class,        // <.>
+        CausewayModuleExtSecmanEncryptionJbcrypt.class,     // <.>
 
-        IsisModuleTestingFixturesApplib.class,          // <.>
+        CausewayModuleTestingFixturesApplib.class,          // <.>
         ...
 })
 public class AppManifest {
 }
 ----
 
-<.> specify either `IsisModuleExtSecmanPersistenceJdo` or `IsisModuleExtSecmanPersistenceJpa`, as required
+<.> specify either `CausewayModuleExtSecmanPersistenceJdo` or `CausewayModuleExtSecmanPersistenceJpa`, as required
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 
-In addition, you will probably want to *remove* the `IsisModuleSecurityShiro.class` dependency so that SecMan can take care of both authentication _and_ authorisation.
+In addition, you will probably want to *remove* the `CausewayModuleSecurityShiro.class` dependency so that SecMan can take care of both authentication _and_ authorisation.
 
 [NOTE]
 ====
@@ -97,10 +97,10 @@ Add the database schema used by the SecMan entities to the configuration file:
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   persistence:
     schema:
-      auto-create-schemas: isisExtSecman
+      auto-create-schemas: causewayExtSecman
 ----
 
 Optionally, modify the configuration properties for Secman itself:
@@ -108,19 +108,19 @@ Optionally, modify the configuration properties for Secman itself:
 [source,yaml]
 .application.yml
 ----
-isis:
+causeway:
   extensions:
     secman:
       seed:
         admin:
           user-name: "secman-admin"                     #<.>
           password: "pass"                              #<1>
-          role-name: "isis-ext-secman-admin"            #<.>
+          role-name: "causeway-ext-secman-admin"            #<.>
           namespace-permissions:
             sticky: ...                                 #<.>
             additional: ...                             #<.>
         regular-user:
-          role-name: "isis-ext-secman-user"             #<.>
+          role-name: "causeway-ext-secman-user"             #<.>
       permissions-evaluation-policy: allow_beats_veto   #<.>
       user-menu-me-action-policy: hide                  #<.>
       user-registration:
@@ -159,25 +159,25 @@ To get you started, the following fragment adds all of the actions to a "Securit
         <mb3:named>Security</mb3:named>
         <mb3:section>
             <mb3:named>Users</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="userManager"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="findUsers"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="userManager"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="findUsers"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Roles</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="findRoles"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="findRoles"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="newRole"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="allRoles"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Permissions</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
         </mb3:section>
         <mb3:section>
             <mb3:named>Tenancies</mb3:named>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
-            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
         </mb3:section>
     </mb3:menu>
 </mb3:secondary>
@@ -192,8 +192,8 @@ We also recommend adding the non-production "me" action to the tertiary menu, eg
     <mb3:menu>
         ...
         <mb3:section>
-            <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
-            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout"/>
+            <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
+            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
         </mb3:section>
     </mb3:menu>
 </mb3:tertiary>
@@ -223,43 +223,43 @@ This role should therefore be extremely tightly locked down.
 Regular user permissions for Secman.
 This should be granted to all users (in particular, it includes the ability to logout!)
 
-** `IsisConfigurationRoleAndPermissions.ROLE_NAME`
+** `CausewayConfigurationRoleAndPermissions.ROLE_NAME`
 +
 Access the configuration properties (from the tertiary menu))
 
 * Available only in prototype mode:
 
-** `IsisAppFeatureRoleAndPermissions.ROLE_NAME`
+** `CausewayAppFeatureRoleAndPermissions.ROLE_NAME`
 +
 Browse the application features + permissions (from the "Prototyping" menu).
 
-** `IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
+** `CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
 +
 Download the JDO metamodel (from the "Prototyping" menu).
 
 // moved to the incubator for the time being
-//** `IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
+//** `CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
 //+
 //Access to the command replay primary menu
 //
-//** `IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
+//** `CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
 //+
 //Access to the command replay secondary menu
 //
 
-** `IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME`
+** `CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME`
 +
 Access the h2 console (from the "Prototyping" menu)
 
-** `IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME`
+** `CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME`
 +
 Access the swagger UI (from the "Prototyping" menu)
 
-** `IsisSudoImpersonateRoleAndPermissions.ROLE_NAME`
+** `CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME`
 +
 Impersonate other users (from the "Prototyping" menu, and mixins)
 
-The full list can be found by searching for subclasses of xref:refguide:extensions:index/secman/applib/role/fixtures/ AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript].
+The full list can be found by searching for subclasses of xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript].
 
 [NOTE]
 ====
@@ -292,7 +292,7 @@ You then will need a way to automatically ensure these users/roles are set up on
 When developing the app you will probably be using the H2 in-memory database, and so you'll want to ensure that the roles and (perhaps) users are automatically seeded into the database.
 Even when running in production with a persistent database, running a default set of fixture scripts may be worthwihle.
 
-One option to setup these users/roles would be to use the xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.initial-script[isis.testing.fixtures.initial-script] configuration property.
+One option to setup these users/roles would be to use the xref:refguide:config:sections/causeway.testing.adoc#causeway.testing.fixtures.initial-script[causeway.testing.fixtures.initial-script] configuration property.
 However the purpose of that config property is meant to be to setup an application-specific scenario for demoing/prototyping, so that's probably not the smartest approach.
 
 A better approach is to write a little domain service to do the seeding of security data for you.
@@ -308,11 +308,11 @@ public class SeedSecurityService {
 
     private final FixtureScripts fixtureScripts;
     private final TransactionService transactionService;
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final CausewaySystemEnvironment causewaySystemEnvironment;
 
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(final MetamodelEvent event) {
-        if (event.isPostMetamodel() && isisSystemEnvironment.isPrototyping()) {
+        if (event.isPostMetamodel() && causewaySystemEnvironment.isPrototyping()) {
             runScripts();
             transactionService.flushTransaction();
         }
@@ -367,16 +367,16 @@ public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript 
       "/",                    // <.>
       AccountType.LOCAL,      // <.>
       Can.of(
-        RoleAndPerms__UserRw.ROLE_NAME                                            // <.>
-        , IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
-        , IsisAppFeatureRoleAndPermissions.ROLE_NAME                   // <.>
-        , IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME      // <7>
-        , IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME      // <7>
-        , IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME    // <7>
-        , IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME                 // <7>
-        , IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME  // <7>
-        , IsisSudoImpersonateRoleAndPermissions.ROLE_NAME              // <7>
-        , IsisConfigurationRoleAndPermissions.ROLE_NAME                // <7>
+        RoleAndPerms__UserRw.ROLE_NAME                                                // <.>
+        , CausewayConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
+        , CausewayAppFeatureRoleAndPermissions.ROLE_NAME                              // <.>
+        , CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME                 // <7>
+        , CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME                 // <7>
+        , CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME               // <7>
+        , CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME                            // <7>
+        , CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME             // <7>
+        , CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME                         // <7>
+        , CausewayConfigurationRoleAndPermissions.ROLE_NAME                           // <7>
       ));
   }
 }
@@ -434,9 +434,9 @@ public class UserToRole__joe_UserRw_but_NoDelete
       "/ITA",
       AccountType.LOCAL,
       Can.of(
-        RoleAndPerms__UserRw.ROLE_NAME                                           // <.>
-        ,RoleAndPerms__NoDelete.ROLE_NAME                                        // <1>
-        ,IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
+        RoleAndPerms__UserRw.ROLE_NAME                                               // <.>
+        ,RoleAndPerms__NoDelete.ROLE_NAME                                            // <1>
+        ,CausewayConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
     ));
   }
 }
@@ -487,7 +487,7 @@ The exact roles to setup are specified using configuration property:
 [source,yaml]
 .application.yaml
 ----
-isis:
+causeway:
   extensions:
     secman:
       user-registration:

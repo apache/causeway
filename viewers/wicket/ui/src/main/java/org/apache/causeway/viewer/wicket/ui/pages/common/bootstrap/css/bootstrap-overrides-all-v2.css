@@ -1,0 +1,1298 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+:root {
+	--form-label-width: 160px;
+	--form-field-width: calc(100% - var(--form-label-width));
+	--link-color: var(--bs-success);
+	--link-color-hover: var(--link-color);
+}
+
+#container {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+#body {
+    padding-top: 0px;
+}
+
+body {
+    padding-top: 0px;
+    margin-bottom: 0px;
+}
+
+.navbar.primary ul.dropdown-menu,
+.navbar-nav.secondary ul.dropdown-menu,
+.navbar-nav.tertiary ul.dropdown-menu {
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* emulate .dropdown-menu-right for secondary and tertiary dropdown menus */
+.navbar-nav.secondary .dropdown-menu,
+.navbar-nav.tertiary .dropdown-menu {
+	right: 0;
+	left: auto;
+}
+
+/* font-size fix for badges inside tables and form-controls */
+td .badge,
+.scalarPlaceholder .badge,
+.form-control-sm .badge {
+	font-size:.85rem
+}
+td .badge span,
+.scalarPlaceholder .badge span,
+.form-control-sm .badge span {
+  padding: 0;
+}
+
+
+.card {
+	margin-bottom: 21px;
+}
+.card .card-header {
+	padding: 3px 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 3em; /* for card-headers that contain no buttons, to make them same height */
+}
+.card .card-header .card-title {
+	margin-bottom: 0rem;
+}
+
+.card .mini-card {
+  font-size: 0.7rem;
+}
+.card .mini-card h5 {
+  font-size: 0.8rem;
+}
+.card .mini-card h6 {
+  font-size: 0.7rem;
+}
+.card .mini-card .card-header,
+.card .mini-card .card-body,
+.card .mini-card .card-footer {
+  padding: 0.2rem 0.4rem;
+  min-height: inherit;
+}
+
+.table .form-control:disabled {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    height: 23px;
+    padding: 1px 0;
+    cursor: default;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.table > thead > tr > th, td {
+    text-align: left;
+    vertical-align: middle;
+}
+
+.navbar {
+    border-radius: 0;
+    margin-bottom: 0px;
+}
+
+.nav-link, a, .btn-link {
+	color: var(--link-color);
+}
+.nav-link:focus, .nav-link:hover,
+a:focus, a:hover,
+.btn-link:focus, .btn-link:hover {
+    color: var(--link-color-hover);
+}
+
+footer > .navbar {
+    z-index: 1;
+}
+
+#veil {
+    z-index: 40000;
+    background-image: none;
+    background-color: black;
+
+    display: none;
+    position:fixed;
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+}
+
+#veil .text-center {
+    margin-top: 100px;
+}
+
+.table .table td {
+    border: none;
+}
+
+.pagination {
+    margin: 0;
+}
+
+.fontAwesomeIcon {
+	margin-right: 4px;
+}
+
+/* from ActionPromptHeaderPanel */
+
+.entityIconAndTitlePanel img {
+    width: 24px;
+    height: 24px;
+}
+
+.entityIconAndTitlePanel span.actionName {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+
+/* from SimpleClipboardPanel */
+
+.simpleClipboardPanel form {
+    margin: 20px;
+    background-color: white;
+}
+
+.simpleClipboardPanel div.inner {
+    margin: 20px;
+    width:640px;
+}
+
+.simpleClipboardPanel div.inner p.scalarName {
+    padding-top: 40px;
+    padding-bottom: 10px;
+}
+
+.simpleClipboardPanel form input.textField {
+    width:600px;
+    margin-bottom: 60px;
+}
+
+.simpleClipboardPanel form input.ok {
+    margin-bottom: 20px;
+}
+
+
+
+/* from CollectionContentsAsAjaxTablePanel.css */
+
+.collectionContentsAsAjaxTablePanel table.contents {
+    font-size: 0.9em;
+    width: 100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
+.collectionContentsAsAjaxTablePanel table.contents tr {
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr th,
+.collectionContentsAsAjaxTablePanel table.contents tr th a span {
+    text-align: left;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr th a {
+    font-weight: normal;
+}
+.collectionContentsAsAjaxTablePanel table.contents #message {
+    padding-left: 3px;
+}
+.collectionContentsAsAjaxTablePanel table.contents caption {
+    padding-bottom: 2px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents input:disabled {
+    background-color: transparent;
+    border: none;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
+.collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
+.collectionContentsAsAjaxTablePanel table.contents .bytePanel,
+.collectionContentsAsAjaxTablePanel table.contents .shortPanel,
+.collectionContentsAsAjaxTablePanel table.contents .integerPanel,
+.collectionContentsAsAjaxTablePanel table.contents .longPanel,
+.collectionContentsAsAjaxTablePanel table.contents .floatPanel,
+.collectionContentsAsAjaxTablePanel table.contents .doublePanel {
+    text-align: right;
+/*    font-family: monospace;*/
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .booleanPanel {
+    text-align: center;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
+    float: left;
+}
+
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator {
+    float: right;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents img {
+    width: 16px;
+    height: 16px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tbody .togglebox-column {
+    width: 2%;
+}
+.collectionContentsAsAjaxTablePanel table.contents thead .title-column,
+.collectionContentsAsAjaxTablePanel table.contents tbody .title-column {
+    text-align: center;
+    width: 3%;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents a:hover {
+    text-decoration:underline;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .entityLinkSelect2Panel .entityImage {
+    padding-right:6px;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot {
+    margin-top:20px;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot tr td {
+    padding:20px 4px 0;
+    /*background-color:#FFFFFF !important;*/
+}
+
+.collectionContentsAsAjaxTablePanel .entityActions {
+    margin-top: -1px;
+    margin-bottom: -10px;
+    float: left;
+    padding:0 0;
+}
+
+/* bootstrap seems to set to 'pointer' */
+.collectionContentsAsAjaxTablePanel label:hover {
+    /*cursor: default;*/
+}
+
+.collectionContentsAsAjaxTablePanel div input[type=text][disabled] {
+    padding: 0;
+}
+
+.collectionContentsAsAjaxTablePanel table tr td:first-child,
+.collectionContentsAsAjaxTablePanel table tr th:first-child {
+    border-left: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tr th:last-child,
+.collectionContentsAsAjaxTablePanel table tr td:last-child {
+    border-right: none;
+}
+
+.collectionContentsAsAjaxTablePanel .table-responsive {
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.collectionContentsAsAjaxTablePanel table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot tr:first-child td {
+    border-top: none;
+    border-bottom: none;
+}
+
+.collectionContentsAsAjaxTablePanel .table {
+    margin-bottom: 0px;
+}
+
+.collectionContentsAsAjaxTablePanel tfoot tr {
+ 	border: none;
+}
+
+
+/* from CollectionContentsMultipleViewsPanel.css */
+/* AND ALSO duplicated in from EntityLinksSelectorPanel.css */
+
+.linksSelectorPanel .viewLinks {
+    float:right;
+    display:block;
+    margin-left: 15px;
+}
+
+.linksSelectorPanel ul.dropdown-menu {
+    min-width: 0;
+}
+
+.linksSelectorPanel ul.dropdown-menu li.viewItem {
+    min-width: 0;
+}
+
+.linksSelectorPanel ul.viewList li.viewItem:first-child span {
+    border-radius:4px 0 0 4px;
+    -webkit-border-radius:4px 0 0 4px;
+}
+
+.linksSelectorPanel ul.viewList li.viewItem:last-child span {
+    border-radius:0 4px 4px 0;
+    -webkit-border-radius:0 4px 4px 0;
+}
+
+
+.linksSelectorPanel .link-selector-panel-invisible {
+    display:none;
+}
+
+.linksSelectorPanel .list-inline {
+    margin-left: 0;
+}
+
+.linksSelectorPanel .list-inline li {
+    padding-left: 0;
+}
+
+
+.collectionContentsLinksSelectorPanel select {
+    margin-bottom: 1em;
+}
+
+
+/* from CollectionContentsAsSummary */
+
+.collectionContentsAsSummary {
+    padding-top: 15px;
+}
+
+.collectionContentsAsSummary .propertyNameCell,
+.collectionContentsAsSummary .aggregatesCell {
+    vertical-align: middle;
+}
+
+.collectionContentsAsSummary .aggregateName {
+    font-style: normal;
+    text-align: left;
+    font-weight: bold !important;
+    font-size: 0.9em;
+    padding-left: 20px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.collectionContentsAsSummary .numberValue {
+    text-align: right;
+    width: 80px;
+}
+
+.collectionContentsAsSummary .chart {
+    margin-left: 30px;
+    display: inline-block;
+    min-width: 720px;
+}
+
+/*
+a span.ViewLinkItem.summary {
+    background-image:url("./icon_summary_on.png");
+    background-position: center center;
+    background-repeat:no-repeat;
+}
+
+span.ViewLinkItem.summary {
+    background-image:url("./icon_summary_off.png");
+    background-position: center center;
+    background-repeat:no-repeat;
+}
+*/
+
+
+/* from EntityHeaderPanel.css */
+
+.entityHeaderPanel {
+    clear:both;
+    padding-top:10px;
+    display:block;
+}
+
+div.entityHeaderPanel .iconAndTitle{
+    float: left;
+    padding:0;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+div.entityHeaderPanel .iconAndTitleLabel {
+    float: left;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
+    float: left;
+    margin-top: 3px;
+    margin-left: 20px;
+}
+
+.entityHeaderPanel .entityImage {
+    width: 32px;
+    height: 32px;
+    vertical-align:text-bottom;
+}
+
+.entityHeaderPanel .entityTitle {
+    font-size: 1.52em;
+    font-weight:normal;
+    text-decoration:none;
+    padding-right: 30px;
+}
+
+
+/* from BreadcrumbPanel.css */
+
+.breadcrumbPanel {
+    display: inline-block;
+    width: 300px;
+}
+
+footer nav.navbar .breadcrumbPanel {
+    vertical-align: middle;
+}
+
+
+/* from ContainedButtonPanel */
+
+span.containedButtonPanel {
+    display: inline;
+}
+
+.containedButtonPanel form {
+    display: inline;
+}
+
+
+/* from ZeroClipboardPanel */
+
+.zeroClipboardPanel .subscribingLink {
+    display: none;
+}
+
+.zeroClipboardPanel a:hover {
+    text-decoration: none;
+}
+
+.copyLink {
+    visibility: hidden;
+}
+
+
+/* other */
+
+.mandatory.scalarName:after,
+.mandatory.collectionName:after {
+    content: "*";
+    font-weight:bold;
+    color: #c2270d;
+}
+
+
+
+.navbar-text .powered-by {
+    /* margin-top: 23px; */
+    margin-right: 10px;
+    font-size: small;
+    font-style: italic;
+    /* vertical-align: middle; */
+}
+
+.navbar .creditName {
+    padding-left: 2px;
+    /* padding-right: 10px; */
+    vertical-align: middle;
+}
+
+.navbar .aboutMessage {
+    vertical-align: middle;
+}
+
+
+/* from entityPropertiesPanel */
+
+
+.entityPropertiesPanel .properties.card-body {
+    padding-bottom: 5px;
+}
+.entityPropertiesPanel .collection.card-body {
+    padding-bottom: 0px;
+}
+
+/* add some space between an FA icon and the text on the right */
+.additionalLinkItem .fa {
+	margin-right: 2px;
+}
+
+/* from additionalLinksPanel.css */
+
+.additionalLinkList {
+    float:left;
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+ul.additionalLinkList,
+div.additionalLinkList {
+	display: flex;
+	flex-wrap: wrap;
+  	justify-content: flex-end;
+}
+
+.collections div.additionalLinkList,
+.collections ul.additionalLinkList,
+.standaloneCollectionPanel div.additionalLinkList,
+.standaloneCollectionPanel ul.additionalLinkList,
+.entityCollectionsPanel div.additionalLinkList,
+.entityCollectionsPanel ul.additionalLinkList {
+    padding-bottom: 0px;
+
+}
+
+/* dropdown-menu: distinguished rendering for disabled menu-items
+   (assuming grey foreground text color is reasonable to apply to light as well as dark themes) */
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+    /*color: rgba(123, 138, 139, 0.5);*/
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* menu-bar: distinguished rendering for selected menu items
+   (assuming white-ish background overlay color is reasonable to apply to light as well as dark themes) */
+.navbar-nav .active > .nav-link,
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.show,
+.navbar-nav .show > .nav-link {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* button size fix - using size from before Bootstrap 5.x */
+.btn-group-sm > .btn, .btn-sm {
+  font-size: 0.8rem;
+}
+
+/* buttons: distinguished rendering for disabled action buttons
+   (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    cursor: not-allowed!important;
+    opacity: 0.5;
+    box-shadow: none;
+    border-style: none;
+	text-decoration-line: line-through;
+}
+
+/* make sure there is no gap between the menu toggle and its menu, otherwise menu hides on focus transition*/
+ul.dropdown-menu {
+	padding-top: 0;
+	margin-top: 0;
+}
+.dropup ul.dropdown-menu {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	top: auto;
+	bottom: 100%;
+}
+
+/* removes the caret (arrow down) from the additional links selector dropdowns */
+.additionalLinkList .btn.dropdown-toggle::after {
+	content: none;
+}
+/* removes default margin right after fa-icon in dropdown-toggles */
+.additionalLinkList .btn.dropdown-toggle .fa {
+	margin-right: 0px;
+}
+
+.additionalLinkList.additionalLinkListDropDown li.dropdown-item.additionalLinkItem {
+	padding: 0px;
+}
+
+.collection.card-body {
+    padding-top: 0px;
+}
+
+.collectionPanel .card.card-body {
+    background-color: transparent;
+    margin-bottom: 0px;
+}
+
+.nav > li > a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* fix for Firefox */
+th > a > div > strong {
+    float: left;
+}
+
+/* makes readonly textareas that act as scalar-prompt appear like normal */
+textarea.scalarPrompt[readonly] {
+    background-color: initial;
+    opacity: 1;
+}
+
+/* makes disabled fields darker */
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e6e6e6;
+    opacity: 1;
+}
+
+/* Labels on the left/top/none START */
+
+.form-group {
+    margin-bottom: 0;
+}
+
+div.label-left.form-group {
+    width: 100%;
+}
+
+div.label-left label.col-form-label {
+    width: var(--form-label-width);
+    float: left;
+    padding-top: 2px;
+    padding-right: 2px;
+    text-align: left;
+}
+
+.propertyEditForm .label-left label.col-form-label,
+.actionParametersForm .label-left label.col-form-label {
+    padding-left: 10px;
+}
+
+div.label-none label.col-form-label {
+    display: none;
+}
+
+div.label-left .scalarValueWrapper {
+    width: var(--form-field-width);
+    float: left;
+}
+
+.actions-right .additionalLinkListDropDown {
+    float:right;
+}
+
+.float-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
+    text-align: inherit;
+}
+
+
+div.label-top .scalarValueWrapper,
+div.label-none .scalarValueWrapper {
+    display: block;
+}
+
+.modal-body div.label-top .scalarValueWrapper,
+.modal-body div.label-none .scalarValueWrapper {
+    padding-right: 14px;
+}
+
+div.label-left .scalarValueWrapper .form-control {
+    width: 100%;
+}
+
+.file-preview-thumbnails {
+    overflow: auto;
+}
+
+div.label-left .scalarValueWrapper .input-group {
+    width: 100%;
+}
+
+div.label-left .scalarValueWrapper .input-group .input-group-addon {
+    width: 1%;
+}
+
+div.label-left .choicesPlaceholder {
+    display: inline-block;
+    width: 100%;
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
+}
+
+div.label-right .scalarValueWrapper {
+    padding-left: var(--form-label-width);
+}
+
+div.label-right .scalarValueWrapper .col-form-label{
+    vertical-align: sub;
+}
+
+div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
+    padding-left: var(--form-label-width);
+    width: var(--form-field-width);
+    float: left;
+}
+
+/* Labels on the left/top/none END */
+
+
+.form-horizontal.actionParametersForm .form-group,
+.form-horizontal.propertyEditForm .form-group {
+    margin-left: -5px;
+    margin-top: 5px;
+}
+
+.form-horizontal.inputForm .form-group {
+    margin-left: 0px;
+    margin-right: -25px;
+}
+
+.form-horizontal.inputForm .form-group.label-none,
+.form-horizontal.inputForm .form-group.label-top {
+    margin-left: -10px;
+}
+
+
+.scalarValueWrapper textarea {
+    resize: vertical;
+}
+
+
+.standaloneCollectionPanel .additionalLinkList {
+    margin-left: 50px;
+    margin-bottom: 0px;
+    margin-top: -4px;
+}
+.standaloneCollectionPanel .selectorDropdown {
+    /*margin-top: -4px;*/
+}
+.standaloneCollectionPanel div.iconAndTitle {
+    min-height: 45px;
+}
+
+div.referencePanel.scalarNameAndValueComponentType {
+    margin-bottom: 4px;
+}
+
+.referencePanel .entityLinkSelect2Panel .entityImage {
+    width: 20px;
+    height: 20px;
+}
+
+.referencePanel .form-group.label-left .scalarName.col-form-label {
+    padding-right: 10px;
+}
+
+.referencePanel .form-group.label-left .scalarValueWrapper .entityLinkSelect2Panel{
+    padding-top: 4px;
+    padding-bottom: 3px;
+}
+
+.prototype {
+    font-style: italic;
+}
+
+.propertyEditForm .buttons,
+.actionParametersForm .buttons {
+    padding-top: 20px;
+}
+
+.entityCollectionsPanel .card-header {
+    padding-bottom: 10px;
+}
+.standaloneCollectionPanel .card-header {
+    padding-bottom: 5px; /* different from entityCollectionsPanel because of display-inline ? of additionalLinks */
+}
+
+.additionalLinks.float-right {
+    /*margin-right: 5px;*/
+}
+
+.additionalLinks.float-right div {
+    /* display: inline-block; */
+    /*margin-left: 5px;*/
+}
+
+.additionalLinks.float-right div .additionalLinkListDropDown {
+    margin-left: 10px;
+    margin-right: 0px;
+}
+
+.placeholder-literal-null,
+.placeholder-literal-suppressed {
+	opacity: 0.85;
+}
+
+.scalarValueWrapper ul.additionalLinkList {
+    padding-bottom: 5px;
+    margin-left: -6.4px;
+}
+
+.scalarValueWrapper ul.additionalLinkListInline li.additionalLinkItem {
+    /*padding-bottom: 5px;*/
+}
+
+.scalarValueWrapper .form-text {
+    margin-bottom: 5px;
+}
+
+.scalarValueWrapper .form-text ul {
+    margin-bottom: 0px;
+}
+
+.scalarValueWrapper .form-text .alert {
+    margin-bottom: 0px;
+}
+
+.navbar-header a.navbar-brand {
+    margin-top: 0px;
+}
+.navbar-header a.navbar-brand img {
+    height: 48px;
+    margin-top: -13px;
+}
+
+.valueChoicesSelect2Panel .scalarValueWrapper .choicesPlaceholder {
+    height: 33px;
+}
+
+.ui-draggable .modal-header {
+    cursor: move;
+}
+
+.navigatorLabel .btn-link {
+    margin-top: -2px;
+    text-decoration: underline;
+}
+
+.navigatorLabel .navigator-prototyping-label {
+    color: silver;
+}
+
+tr.headers th form input {
+    margin-left: -8px;
+}
+/*
+tbody td.togglebox-column form {
+    margin-left: 6px;
+}
+*/
+
+
+footer .footer-image {
+    height: 24px;
+}
+
+#aboutLink {
+    padding-right: 30px;
+}
+
+/*
+.entityTabbed > .row > .leftColumn,
+.entityTabbed > .row > .rightColumn {
+    margin-top: 41px;
+}
+*/
+
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+.tabGroups > .row {
+    padding-bottom: 10px;
+}
+
+.tabbable {
+    padding-bottom: 10px;
+}
+
+.additionalLinkListDropDown ul.dropdown-menu li.additionalLinkItem {
+    width: 100%;
+}
+.additionalLinkListDropDown ul.dropdown-menu {
+    padding-top: 0%;
+    padding-bottom: 0%;
+}
+
+/* cheap and nasty; ought really to suppress in Java code ... */
+.propertyEditForm .additionalLinkList {
+    display: none;
+}
+
+.choicesScalarValue {
+    width: 95%;
+    display: inline-block;
+}
+
+.associatedActionLinksRight .additionalLinkListDropDown {
+    padding-right: 11px;
+}
+
+.multiLineStringPanel .scalarValueInput .editing .edit {
+    margin-top: -30px;
+}
+
+.referencePanel .scalarValueInput .editing .edit,
+.causewayBlobPanel .scalarValueInput .editing .edit,
+.causewayClobPanel .scalarValueInput .editing .edit,
+.booleanPanel .scalarValueInput .editing .edit {
+    margin-top: 0px;
+}
+
+.actions-right .scalarPlaceholder .scalarValueInput {
+    width: 90%;
+    float: left;
+    margin-bottom: 0px;
+}
+
+.characterPanel .actions-right .scalarPlaceholder .scalarValueInput {
+    margin-bottom: 4px;
+}
+.multiLineStringPanel .actions-right .scalarPlaceholder .scalarValueInput {
+    margin-bottom: 4px;
+}
+
+/* fit button-group inside surrounding value input box
+   obsolete when changing button size more generally
+.scalarValueInput .btn-group-sm > .btn {
+	padding: .20rem .5rem;
+}
+*/
+
+.booleanPanel .actions-right .additionalLinkListInline {
+    margin-top: 0px;
+}
+
+.valuePanel .actions-right .additionalLinkListInline,
+.valueChoicesSelect2Panel .actions-right .additionalLinkListInline,
+.stringPanel .actions-right .additionalLinkListInline,
+.referencePanel .actions-right .additionalLinkListInline,
+.causewayBlobPanel .actions-right .additionalLinkListInline {
+    margin-top: 5px;
+}
+
+
+.popover.confirmation .btn-group .btn {
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+}
+
+.entityHeaderPanel .entityActions ul.additionalLinkList li.additionalLinkItem {
+    padding-top: 3px;
+    /*padding-bottom: 7px;*/
+}
+
+.actionParametersForm .alert {
+    margin-top: 10px;
+}
+
+
+.propertyEditForm .buttons .wicket-ajax-indicator,
+.actionParametersForm .buttons .wicket-ajax-indicator,
+.additionalLinkList .wicket-ajax-indicator {
+    margin-left: 4px;
+    margin-right: 10px;
+}
+
+.additionalLinkList .wicket-ajax-indicator img {
+    margin-top: 7px;
+    margin-left: -5px;
+    margin-right: 10px;
+}
+
+.select2-container {
+	z-index: 1060; /* as bootstrap modal dialogs appear to have 1055 */
+}
+
+.bootstrap-datetimepicker-widget{
+  	z-index: 1065; /* as bootstrap modal dialogs appear to have 1055; slightly higher than .select2-container*/
+}
+
+.select2-container-multi.input-sm {
+    height: inherit;
+}
+
+li.select2-results__option {
+    min-height: 30px;
+}
+
+.scalarName {
+	opacity: 0.8;
+}
+
+.scalarNameAndValueComponentType .inlinePromptForm {
+    border: 2px solid;
+    padding: 10px;
+    margin-bottom: 20px
+}
+
+.scalarNameAndValueComponentType .inlinePromptForm .form-group {
+    padding-left: 5px;
+    padding-right: 15px;
+}
+
+div.scalarValueInlinePromptLink {
+	width: 100%;
+}
+.scalarValueInlinePromptLink.form-control {
+    text-decoration: none;
+    overflow: hidden;
+}
+.scalarValueInlinePromptLink.form-control:hover {
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.08);
+}
+.scalarValueInlinePromptLink .btn-group > button.btn {
+  opacity: 0.25;
+}
+.scalarValueInlinePromptLink .btn-group > button.btn:focus,
+.scalarValueInlinePromptLink:hover .btn-group > button.btn {
+  opacity: 1.0;
+}
+
+.entityUrlSource {
+	cursor: pointer;
+	display: inline;
+}
+
+.booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
+.referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
+    width: 90%;
+}
+.booleanPanel div.label-left.actions-right .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
+.referencePanel div.label-left.actions-right .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
+    width: 85%;
+}
+
+.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
+    width: 1.3em;
+	height: 1.3em;
+}
+
+.entityTitle {
+    text-decoration: none;
+    color: var(--link-color);
+}
+.entityTitle:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--link-color-hover);
+}
+
+#container.page #wicketDebugBar {
+    padding-top: 60px;
+    padding-bottom: 30px;
+}
+#container.page #wicketDebugBar a#wicketDebugBarCollapse img {
+    margin-top: 2px;
+    margin-right: 20px;
+}
+#container.page #wicketDebugBar span#wicketDebugBarContents > span {
+    vertical-align: sub;
+}
+#container.page #wicketDebugBar span.wicketversioncontrib {
+    display: none;
+}
+#container.page #wicketDebugBar span#wicketDebugBarContents a img {
+    margin-top: -5px;
+}
+#container.page #wicketDebugBar span#wicketDebugBarContents a#wicketDebugBarRemove img {
+    margin-top: 2px;
+}
+
+/* CAUSEWAY-1626, confirmation dialog for no-parameter menu actions
+   allow confirmation dialog popup to escape boundaries of parent html li element*/
+.popover .open > .dropdown-menu {
+  overflow: visible;
+}
+
+.aboutPanel .aboutMessage {
+    font-size:1.2em;
+    margin-left:50px;
+    margin-right:50px;
+    padding: 10px;
+}
+
+.aboutPanel .applicationName,
+.aboutPanel .applicationVersion {
+    text-align:center;
+}
+
+.aboutPanel .applicationName,
+.aboutPanel .applicationVersion,
+.aboutPanel .aboutMessage {
+    background:#FFFFFF;
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    padding: 5px;
+    display: block;
+}
+
+
+h4.iconAndTitle a {
+    outline: none;
+    display: inline-block;
+    text-decoration: none;
+}
+h4.iconAndTitle a span.entityTitle:focus {
+    outline: none;
+}
+
+h4.iconAndTitleLabel a:hover {
+	text-decoration: underline;
+}
+
+li.list-separator {
+	border-top: 1px solid rgba(0,0,0,0.2);
+	padding-top: .4em;
+	margin-top: .4em;
+}
+
+.sectionLabel {
+	opacity: 0.5;
+	margin-left: 0.8em;
+	margin-top: 0.5em;
+}
+
+.list-inline > li {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.list-inline > li.additionalLinkItem {
+    padding-left: 0.4em;
+    margin: 1px;
+}
+
+ul.sidebar-nav {
+    padding-bottom: 62px;
+    margin-bottom: 62px;
+}
+
+div.sidebar-panel div.extra-content {
+    margin-top: 30px;
+}
+
+/*checkbox checked color fix*/
+.cbx .fa-check {
+    color: green;
+}
+
+ul.tertiary li.dropdown img.avatar {
+    max-height: 40px;
+    margin-top: -13px;
+    padding-left: 15px;
+    padding-right: 5px;
+}
+
+ul.tertiary li.dropdown ul.dropdown-menu {
+    min-width: 0px;
+}
+
+.fs-15em {
+	font-size: 1.5em;
+}
+
+/* header/footer vertical padding fix */
+nav.sticky-top,
+footer > .navbar {
+    padding: 0 1rem;
+}
+
+/* enable line wrapping on nav-bar's content, so we don't overflow */
+div.navbar-wrap,
+ul.navbar-wrap {
+	flex-wrap:wrap;
+}
+
+.tabGroups {
+    margin-bottom: 21px;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.mr-auto, .mx-auto {
+  margin-right: auto !important;
+}
+
+/* SELECT 2 */
+
+.select2-container {
+  margin-bottom: 5px;
+}
+
+/* DATATABLES.NET */
+
+div.entityCollection div.dataTables_wrapper {
+    margin-top: 15px;
+}
+
+div.dataTables_wrapper select.form-select {
+    min-width: 60px;
+}
+
+div.dataTables_wrapper ul.pagination {
+    font-size: small;
+}
+
+/* TOOLTIPS */
+
+.tooltip {
+	max-width: 300px;
+	text-align: center;
+ 	z-index: 9999;
+}
+
+span.wkt-component-with-tooltip,
+label.wkt-component-with-tooltip,
+.wkt-component-with-tooltip label,
+strong.wkt-component-with-tooltip  {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+}
+
+.ui-helper-hidden-accessible { display:none; }
+
+/* --- */
+

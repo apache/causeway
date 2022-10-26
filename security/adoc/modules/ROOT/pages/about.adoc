@@ -4,12 +4,12 @@
 :page-partial:
 
 
-This guide describes how to secure your Apache Isis application by configuring an appropriate implementation of its authentication and authorization SPIs.
+This guide describes how to secure your Apache Causeway application by configuring an appropriate implementation of its authentication and authorization SPIs.
 
 
 == Security Architecture
 
-Apache Isis defines an SPI for both authentication and authorization:
+Apache Causeway defines an SPI for both authentication and authorization:
 
 * By "authentication" we mean logging into the application using some credentials, typically a username and password.
 Authentication also means looking up the set of roles to which a user belongs.
@@ -36,7 +36,7 @@ In addition to the security SPI implementations, there are a number of security-
 * The xref:security:shiro-realm-ldap:about.adoc[LDAP Realm] extension confiures the xref:security:shiro:about.adoc[Shiro authenticator] to use LDAP as a credential source.
 * The xref:security:secman:about.adoc[SecMan extension] provides both an authenticator and an authorizor from domain entities (users, roles and permission entities) using either xref:pjpa:ROOT:about.adoc[JPA] or xref:pjdo:ROOT:about.adoc[JDO].
 +
-As these users, roles and permissions are domain objects, they can be administered through Apache Isis itself.
+As these users, roles and permissions are domain objects, they can be administered through Apache Causeway itself.
 
 Note that authenticators and authorizor components can be mixed.
 For example, the Keycloak or Spring OAuth2 authenticator can be used with Secman for authorization.
@@ -64,7 +64,7 @@ If there is neither _read_ nor _write_ permissions then the feature will be invi
 
 A further aspect of security is auditing: recording what data was modified by which user.
 
-Apache Isis provides the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can be used to track the actions being invoked, and the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] captures what data was modified as a result (auditing).
+Apache Causeway provides the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can be used to track the actions being invoked, and the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] captures what data was modified as a result (auditing).
 When xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction]s are persisted (eg by way of the xref:userguide:executionlog:about.adoc[Execution Log] extension) then this provides excellent traceability.
 The xref:security:audittrail:about.adoc[Audit Trail] module provides an implementation of the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] that persists audit entries to the database.
 
@@ -76,7 +76,7 @@ The xref:userguide:commandlog:about.adoc[Command Log] extension provides a simpl
 
 Generally speaking your domain objects (or more generally your application) should be agnostic of the user/roles that are interacting with them; applying security permissions is the responsibility of the framework.
 
-If you need to determine the identity of the current user, you can usually use Apache Isis' xref:refguide:applib:index/services/user/UserService.adoc[UserService] API, in the form of  xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento].
+If you need to determine the identity of the current user, you can usually use Apache Causeway' xref:refguide:applib:index/services/user/UserService.adoc[UserService] API, in the form of  xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento].
 
 For example:
 
@@ -92,7 +92,7 @@ for (RoleMemento role : roles) {
 
 Each role's `name` property encodes both the realm that provided the role, and the role identity itself.
 
-If using the xref:vw::about.adoc[Wicket viewer], then note there will also be another role which is used internally (namely `org.apache.isis.viewer.wicket.roles.USER`).
+If using the xref:vw::about.adoc[Wicket viewer], then note there will also be another role which is used internally (namely `org.apache.causeway.viewer.wicket.roles.USER`).
 
 
 

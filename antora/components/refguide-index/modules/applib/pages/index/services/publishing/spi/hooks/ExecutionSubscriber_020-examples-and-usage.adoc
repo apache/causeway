@@ -29,7 +29,7 @@ All of these services collaborate implicitly by way of the xref:refguide:applib:
 
 In contrast:
 
-* The xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] differs from the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] in that the former is intended for fine-grained publish/subscribe for object-to-object interactions _within_ an Apache Isis domain object model.
+* The xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] differs from the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] in that the former is intended for fine-grained publish/subscribe for object-to-object interactions _within_ an Apache Causeway domain object model.
 +
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.
 

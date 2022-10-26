@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.isis.schema {
-    exports org.apache.isis.schema;
-    exports org.apache.isis.schema.metamodel.v2;
-    exports org.apache.isis.schema.common.v2;
-    exports org.apache.isis.schema.cmd.v2;
-    exports org.apache.isis.schema.ixn.v2;
-    exports org.apache.isis.schema.chg.v2;
+module org.apache.causeway.schema {
+    exports org.apache.causeway.schema;
+    exports org.apache.causeway.schema.metamodel.v2;
+    exports org.apache.causeway.schema.common.v2;
+    exports org.apache.causeway.schema.cmd.v2;
+    exports org.apache.causeway.schema.ixn.v2;
+    exports org.apache.causeway.schema.chg.v2;
 
     requires java.xml;
     requires java.xml.bind;
     requires spring.context;
 
-    opens org.apache.isis.schema.metamodel.v2;
-    opens org.apache.isis.schema.common.v2;
-    opens org.apache.isis.schema.cmd.v2;
-    opens org.apache.isis.schema.ixn.v2;
-    opens org.apache.isis.schema.chg.v2;
+    opens org.apache.causeway.schema.metamodel.v2;
+    opens org.apache.causeway.schema.common.v2;
+    opens org.apache.causeway.schema.cmd.v2;
+    opens org.apache.causeway.schema.ixn.v2;
+    opens org.apache.causeway.schema.chg.v2;
 }

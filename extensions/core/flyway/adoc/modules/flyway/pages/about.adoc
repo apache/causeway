@@ -11,8 +11,8 @@ Add the following dependency:
 [source,xml]
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-flyway-impl</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-flyway-impl</artifactId>
 </dependency>
 ----
 
@@ -23,7 +23,7 @@ Also add the following module to your `AppManifest`:
 @Configuration
 @Import({
     ...
-    IsisModuleExtFlywayImpl.class,
+    CausewayModuleExtFlywayImpl.class,
     ...
 })
 public static class AppManifest {
@@ -40,12 +40,12 @@ spring.flyway.default-schema=SIMPLE             // <.>
 spring.flyway.schemas=SIMPLE                    // <.>
 spring.flyway.create-schemas=true               // <.>
 
-isis.persistence.schema.auto-create-schemas=    // <.>
+causeway.persistence.schema.auto-create-schemas=    // <.>
 ----
 <.> the default schema managed by Flyway (containing the `schema_version` table); see link:https://flywaydb.org/documentation/configuration/parameters/defaultSchema[flyway.defaultSchema] config property (Flyway docs) for more info
 <.> all of the schemas managed by Flyway; see link:https://flywaydb.org/documentation/configuration/parameters/schemas[flyway.schemas] config property (Flyway docs) for more info
 <.> whether Flyway should automatically create schemas ; see link:https://flywaydb.org/documentation/configuration/parameters/createSchemas[flyway.createSchemas] for more info
-<.> instruct Apache Isis to _not_ attempt to create schemas
+<.> instruct Apache Causeway to _not_ attempt to create schemas
 
 The ORM should also be configured to _not_ automatically create tables:
 

@@ -14,7 +14,7 @@ interface HasTranslationContext {
 <.> xref:#getTranslationContext_[getTranslationContext()]
 +
 --
-The context to use when translating text, as ultimately passed through to _org.apache.isis.applib.services.i18n.TranslationService#translate(TranslationContext, String)_ .
+The context to use when translating text, as ultimately passed through to _org.apache.causeway.applib.services.i18n.TranslationService#translate(TranslationContext, String)_ .
 --
 
 == Members
@@ -22,4 +22,4 @@ The context to use when translating text, as ultimately passed through to _org.a
 [#getTranslationContext_]
 === getTranslationContext()
 
-The context to use when translating text, as ultimately passed through to _org.apache.isis.applib.services.i18n.TranslationService#translate(TranslationContext, String)_ .
+The context to use when translating text, as ultimately passed through to _org.apache.causeway.applib.services.i18n.TranslationService#translate(TranslationContext, String)_ .

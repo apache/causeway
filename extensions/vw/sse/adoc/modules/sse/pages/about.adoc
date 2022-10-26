@@ -23,8 +23,8 @@ Add the following dependency:
 .pom.xml
 ----
 <dependency>
-    <groupId>org.apache.isis.extensions</groupId>
-    <artifactId>isis-extensions-sse-wicket</artifactId>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-sse-wicket</artifactId>
 </dependency>
 ----
 
@@ -35,7 +35,7 @@ Also add the following module to your `AppManifest`:
 ----
 @Configuration
 @Import({
-        IsisModuleExtSseWicket.class,  // <.>
+        CausewayModuleExtSseWicket.class,  // <.>
         ...
 })
 public class AppManifest {

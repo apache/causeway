@@ -12,7 +12,7 @@ _AsciiDoc Working Group_) is willing to take over.
 
 WARNING: This is work-in-progress, no official Maven artifacts are published yet at the time of writing.
 However, snapshots are available with our nightly-builds:
-https://github.com/apache-isis-committers/isis-nightly[]
+https://github.com/apache-causeway-committers/causeway-nightly[]
 
 == Usage
 
@@ -38,8 +38,8 @@ Lets generate a _Document_ model programmatically, then print it to _System.out_
 [source,java]
 ----
 
-import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.*;
+import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
+import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.*;
 
 ...
 
@@ -118,13 +118,13 @@ A simple block corresponds to a normal paragraph.
 == Install
 
 Use Maven and our snapshot repository for a preview:
-https://github.com/apache-isis-committers/isis-nightly#maven[]
+https://github.com/apache-causeway-committers/causeway-nightly#maven[]
 
 [source,xml]
 ----
 <dependency>
-    <groupId>org.apache.isis.tooling</groupId>
-    <artifactId>isis-tooling-model4adoc</artifactId>
+    <groupId>org.apache.causeway.tooling</groupId>
+    <artifactId>causeway-tooling-model4adoc</artifactId>
     <version>2.0.0-???</version>
 </dependency>
 ----

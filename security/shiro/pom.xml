@@ -21,24 +21,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core</artifactId>
+        <groupId>org.apache.causeway.core</groupId>
+        <artifactId>causeway-core</artifactId>
     	<version>2.0.0-SNAPSHOT</version>
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.security</groupId>
-    <artifactId>isis-security-shiro</artifactId>
+    <groupId>org.apache.causeway.security</groupId>
+    <artifactId>causeway-security-shiro</artifactId>
 
-    <name>Apache Isis Security - Shiro</name>
+    <name>Apache Causeway Security - Shiro</name>
 	<description>
         Authentication and Authorization using Apache Shiro.
     </description>
 
     <properties>
     	<!-- apache shiro is not migrated to JPMS yet, so no point in converting ours to JPMS -->
-        <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.causeway.security.shiro</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/security/shiro</git-plugin.propertiesDir>
     </properties>
 
 
@@ -46,8 +46,8 @@
     	<!-- for benefit of application developers, using scope=import -->
     	<dependencies>
             <dependency>
-                <groupId>org.apache.isis.security</groupId>
-                <artifactId>isis-security-shiro</artifactId>
+                <groupId>org.apache.causeway.security</groupId>
+                <artifactId>causeway-security-shiro</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
             </dependency>
     	</dependencies>
@@ -56,20 +56,20 @@
     <dependencies>
     
       	<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtime</artifactId>
         </dependency>
     
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtimeservices</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtimeservices</artifactId>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webapp</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-webapp</artifactId>
             <!-- don't make these transitive, so that we can make headless use 
-                 of the isis-security-shiro module (without bringing in spring-boot-web) -->
+                 of the causeway-security-shiro module (without bringing in spring-boot-web) -->
             <exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -105,8 +105,8 @@
         <!-- TESTING -->
         
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestvintage</artifactId>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestvintage</artifactId>
             <scope>test</scope>
         </dependency>
 

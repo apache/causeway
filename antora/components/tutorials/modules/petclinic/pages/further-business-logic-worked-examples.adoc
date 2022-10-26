@@ -192,7 +192,7 @@ CAUTION: TODO
 //----
 //@Programmatic
 //public java.util.List<Visit> findNotPaid() {
-//    TypesafeQuery<Visit> q = isisJdoSupport.newTypesafeQuery(Visit.class);
+//    TypesafeQuery<Visit> q = causewayJdoSupport.newTypesafeQuery(Visit.class);
 //    final QVisit cand = QVisit.candidate();
 //    q = q.filter(
 //            cand.paidOn.eq(q.parameter("paidOn", LocalDateTime.class)
@@ -583,7 +583,7 @@ CAUTION: TODO
 //----
 //@Programmatic
 //public java.util.List<Visit> findNotPaidBy(Owner owner) {
-//    TypesafeQuery<Visit> q = isisJdoSupport.newTypesafeQuery(Visit.class);
+//    TypesafeQuery<Visit> q = causewayJdoSupport.newTypesafeQuery(Visit.class);
 //    final QVisit cand = QVisit.candidate();
 //    q = q.filter(
 //            cand.paidOn.eq(q.parameter("paidOn", LocalDateTime.class)
@@ -601,7 +601,7 @@ CAUTION: TODO
 //+
 //[source,java]
 //----
-//import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+//import org.apache.causeway.applib.services.eventbus.ActionDomainEvent;
 //...
 //public static class Delete extends ActionDomainEvent<Owner> {}  // <1>
 //@Action(
@@ -671,7 +671,7 @@ CAUTION: TODO
 //----
 //@DomainService(nature = NatureOfService.DOMAIN)
 //public class VetoDeleteOfOwnerWithUnpaidVisits
-//        extends org.apache.isis.applib.AbstractSubscriber {
+//        extends org.apache.causeway.applib.AbstractSubscriber {
 //
 //    @org.axonframework.eventhandling.annotation.EventHandler
 //    public void on(Owner.Delete ev) {
@@ -697,7 +697,7 @@ CAUTION: TODO
 //----
 //super(new PetClinicModule()
 //    .withAdditionalServices(DeploymentCategoryProviderForTesting.class)
-//    .withConfigurationProperty("isis.services.eventbus.implementation","axon")      // <1>
+//    .withConfigurationProperty("causeway.services.eventbus.implementation","axon")      // <1>
 //    .withConfigurationProperty(TranslationServicePo.KEY_PO_MODE, "write")
 //);
 //----

@@ -85,7 +85,7 @@ jobs:
       shell: bash
       run: groovy --version
 
-    - name: Build Apache Isis Site
+    - name: Build Apache Causeway Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
       run: bash -x $CI_SCRIPTS_PATH/_build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
