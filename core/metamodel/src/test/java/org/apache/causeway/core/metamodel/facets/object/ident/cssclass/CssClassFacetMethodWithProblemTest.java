@@ -23,10 +23,7 @@ import java.lang.reflect.Method;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -36,12 +33,10 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-@ExtendWith(MockitoExtension.class)
 class CssClassFacetMethodWithProblemTest {
 
     private CssClassFacetViaCssClassMethod facet;
-    @Mock FacetHolder mockFacetHolder;
-    @Mock ManagedObject mockOwningAdapter;
+    private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInCssClassMethod pojo;
 
@@ -58,9 +53,10 @@ class CssClassFacetMethodWithProblemTest {
 
         final Method iconNameMethod = DomainObjectWithProblemInCssClassMethod.class.getMethod("cssClass");
         facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
-                .create(iconNameMethod, mockFacetHolder)
+                .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                 .orElse(null);
 
+        mockOwningAdapter = Mockito.mock(ManagedObject.class);
         Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
     }
 

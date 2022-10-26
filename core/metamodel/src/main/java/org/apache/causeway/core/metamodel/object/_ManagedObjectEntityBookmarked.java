@@ -103,7 +103,8 @@ implements _Refetchable {
         val refetchedPojo = refetchedIfSuccess.get();
 
         if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
-            throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
+            throw new ObjectNotFoundException(""+bookmark);
+            //throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
         _XrayEvent.event("Entity %s refetched from persistence.", getSpecification());

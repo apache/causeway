@@ -39,7 +39,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     private TitleFacetViaTitleMethod facet;
 
-    private ManagedObject mockOwningAdapter;
+    private ManagedObject stubAdapter;
     private DomainObjectWithProblemInItsTitleMethod pojo;
     private MetaModelContext metaModelContext;
 
@@ -55,6 +55,9 @@ extends AbstractFacetFactoryJupiterTestCase {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
 
+        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
+
         pojo = new DomainObjectWithProblemInItsTitleMethod();
         //mockFacetHolder = mockery.mock(FacetHolder.class);
         //mockOwningAdapter = mockery.mock(ManagedObject.class);
@@ -63,17 +66,12 @@ extends AbstractFacetFactoryJupiterTestCase {
                 .create(iconNameMethod, mockFacetHolder)
                 .orElse(null);
 
-
-        mockOwningAdapter = Mockito.mock(ManagedObject.class);
-        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
-
-        mockFacetHolder = Mockito.mock(FacetHolder.class);
-        Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
+        stubAdapter = metaModelContext.getObjectManager().adapt(pojo);
     }
 
     @Test
     public void testTitleThrowsException() {
-        final String title = facet.title(mockOwningAdapter);
+        final String title = facet.title(stubAdapter);
         assertThat(title, is("Failed Title"));
     }
 
