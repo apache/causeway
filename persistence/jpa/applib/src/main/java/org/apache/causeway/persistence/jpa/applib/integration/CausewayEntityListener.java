@@ -76,6 +76,13 @@ public class CausewayEntityListener {
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
+
+        val entityState = entity.getEntityState();
+        if(!entityState.isAttached()) {
+            log.error("onPostLoad event while pojo not attached ({}); ignoring the event",
+                    entityState.name());
+            return;
+        }
         objectLifecyclePublisher.onPostLoad(entity);
     }
 
