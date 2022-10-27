@@ -18,11 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callbacks;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 /**
  * A {@link Facet} that represents some type of lifecycle callback on the object
@@ -31,24 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 public interface CallbackFacet
 extends ImperativeFacet {
 
-    public void invoke(ManagedObject object);
-
-    public static void callCallback(
-            final ManagedObject object,
-            final Class<? extends CallbackFacet> callbackFacetType) {
-
-        ManagedObjects.asSpecified(object)
-        .map(ManagedObject::getSpecification)
-        .flatMap(spec->spec.lookupFacet(callbackFacetType))
-        .ifPresent(callbackFacet->{
-            try {
-                callbackFacet.invoke(object);
-            } catch (final RuntimeException e) {
-                throw new DomainModelException(
-                        "Callback failed.  Calling " + callbackFacet + " on " + object, e);
-            }
-        });
-
-    }
+    void invoke(ManagedObject object);
 
 }
