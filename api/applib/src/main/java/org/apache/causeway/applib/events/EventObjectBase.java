@@ -43,7 +43,7 @@ public abstract class EventObjectBase<T> {
      * Initializes the event's source with given {@code source}.
      */
     public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSource(
-            final Class<E> eventType, final T source) {
+            final Class<E> eventType, final @Nullable T source) {
         return getInstanceWithSourceSupplier(eventType, (Supplier<T>) ()->source);
     }
 
@@ -54,7 +54,7 @@ public abstract class EventObjectBase<T> {
      * Initializes the event's source lazily, that is using given {@code eventSourceSupplier}.
      */
     public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSourceSupplier(
-            final Class<E> eventType, final Supplier<T> eventSourceSupplier) {
+            final Class<E> eventType, final @Nullable Supplier<T> eventSourceSupplier) {
         return _Reflect.getPublicConstructors(eventType)
             .filter(paramCount(0))
             .getFirst()
