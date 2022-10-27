@@ -66,9 +66,9 @@ public interface ObjectManager extends HasMetaModelContext {
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
     }
 
-    //FIXME why not use loadObject(bookmark) instead
+    //TODO why not use loadObject(bookmark) instead
     ManagedObject demementify(final ObjectMemento memento);
-    //FIXME why not use loadObject(bookmark) instead
+    //TODO why not use loadObject(bookmark) instead
     default ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
         return demementify(memento);
     }
@@ -77,7 +77,8 @@ public interface ObjectManager extends HasMetaModelContext {
 
     /**
      * Creates and initializes an instance conforming to given request parameters.
-     * @param objectCreateRequest
+     * <p>
+     * Resolves injection-points for the result. (Handles service injection.)
      */
     public default ManagedObject createObject(final ObjectSpecification objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
@@ -85,7 +86,8 @@ public interface ObjectManager extends HasMetaModelContext {
 
     /**
      * Loads an instance identified with given request parameters.
-     * @param objectLoadRequest
+     * <p>
+     * Resolves injection-points for the result. (Handles service injection.)
      */
     public default ManagedObject loadObject(final ProtoObject objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
@@ -94,7 +96,7 @@ public interface ObjectManager extends HasMetaModelContext {
     /**
      * Recovers an object (graph) from given {@code bookmark}.
      * <p>
-     * Resolves injection-points for the result.
+     * Resolves injection-points for the result. (Handles service injection.)
      * <p>
      * Supports alias lookup.
      */
@@ -107,6 +109,9 @@ public interface ObjectManager extends HasMetaModelContext {
                 .map(this::loadObject);
     }
 
+    /**
+     * @see #loadObject(Bookmark)
+     */
     default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
         val adapter = loadObject(bookmark)
                 .orElseThrow(()->
@@ -118,6 +123,9 @@ public interface ObjectManager extends HasMetaModelContext {
         return adapter;
     }
 
+    /**
+     * Resolves injection-points for the result. (Handles service injection.)
+     */
     public default Can<ManagedObject> queryObjects(final ObjectBulkLoader.Request objectQuery) {
         return getObjectBulkLoader().loadObject(objectQuery);
     }
@@ -151,8 +159,10 @@ public interface ObjectManager extends HasMetaModelContext {
     // -- ADAPTING POJOS
 
     /**
-     * Not suitable for adapting a non-scalar
+     * Not suitable for adapting a non-scalar.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
+     * <p>
+     * Resolves injection-points for the result. (Handles service injection.)
      */
     public default ManagedObject adapt(final @Nullable Object pojo) {
         return adapt(pojo, ()->specForType(Object.class).orElseThrow());
@@ -161,6 +171,8 @@ public interface ObjectManager extends HasMetaModelContext {
     /**
      * Suitable for adapting a non-scalar.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
+     * <p>
+     * Resolves injection-points for the result. (Handles service injection.)
      */
     public default ManagedObject adapt(
             final @Nullable Object pojo,

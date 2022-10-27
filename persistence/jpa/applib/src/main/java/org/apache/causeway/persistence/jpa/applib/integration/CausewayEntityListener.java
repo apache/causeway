@@ -62,23 +62,19 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CausewayEntityListener {
 
-    // not managed by Spring (directly)
-    //@Inject private ServiceInjector serviceInjector;
+    // injection points resolved via constructor ...
     @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
-    //@Inject private EventBusService eventBusService;
 
     @PrePersist void onPrePersist(final Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);
-        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPrePersist(Either.left(entity));
     }
 
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
-        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPostLoad(entity);
     }
@@ -87,7 +83,6 @@ public class CausewayEntityListener {
     @PreUpdate void onPreUpdate(final Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
 
-        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
 
         val entityManagerResult = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass());
@@ -125,7 +120,6 @@ public class CausewayEntityListener {
 
     @PreRemove void onPreRemove(final Object entityPojo) {
         log.debug("onAnyRemove: {}", entityPojo);
-        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPreRemove(entity);
     }

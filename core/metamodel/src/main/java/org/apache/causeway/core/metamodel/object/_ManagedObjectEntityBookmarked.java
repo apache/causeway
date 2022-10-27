@@ -89,6 +89,8 @@ implements _Refetchable {
             return pojo; // is attached
         }
 
+        //FIXME[ISIS-3265] this getPojo() call might originate from a CausewayEntityListener.onPostLoad event,
+        // in which case we get into a loop that results in a stack overflow
         val refetchedIfSuccess = entityFacet.fetchByBookmark(bookmark);
 
         if(refetchedIfSuccess.isEmpty()) {

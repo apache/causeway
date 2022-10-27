@@ -190,7 +190,7 @@ extends ReferentialStateManagerImpl {
     private final Map<Object, PreDirtyPropagationLock> preDirtyPropagationLocks =
             _Maps.newHashMap();
 
-    //TODO there is probably only ever one id per instance: verify an simplify
+    //TODO there is probably only ever one id per instance: verify and simplify
     private final PreDirtyPropagationLock createPreDirtyPropagationLock(final Object id) {
         return ()->preDirtyPropagationLocks.remove(id);
     }
