@@ -23,10 +23,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.commons.internal.os._OsUtil;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.config.util.SpringProfileUtil;
+import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
 import org.apache.causeway.incubator.viewer.vaadin.viewer.CausewayModuleIncViewerVaadinViewer;
+import org.apache.causeway.valuetypes.asciidoc.metamodel.CausewayModuleValAsciidocMetaModel;
+import org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.CausewayModuleValAsciidocPersistenceJdoDn;
 import org.apache.causeway.valuetypes.asciidoc.ui.vaa.CausewayModuleValAsciidocUiVaa;
 import org.apache.causeway.valuetypes.asciidoc.ui.wkt.CausewayModuleValAsciidocUiWkt;
+import org.apache.causeway.valuetypes.markdown.metamodel.CausewayModuleValMarkdownMetaModel;
+import org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.CausewayModuleValMarkdownPersistenceJdoDn;
+import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaModel;
+import org.apache.causeway.valuetypes.vega.persistence.jdo.dn.CausewayModuleValVegaPersistenceJdoDn;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.dom.DemoModuleCommon;
@@ -40,9 +50,21 @@ import demoapp.web.DemoAppManifestJdo;
     DemoModuleCommon.class,
     DemoAppManifestJdo.class,
 
+    // Metamodel
+    CausewayModuleValAsciidocMetaModel.class,
+    CausewayModuleValMarkdownMetaModel.class,
+    CausewayModuleValVegaMetaModel.class,
+    //TODO CausewayModuleExtFullCalendarVaadin.class,
+
     // INCUBATING
     CausewayModuleIncViewerVaadinViewer.class, // vaadin viewer
     CausewayModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
+
+    // Persistence (JDO/DN5)
+    CausewayModuleValAsciidocPersistenceJdoDn.class,
+    CausewayModuleValMarkdownPersistenceJdoDn.class,
+    CausewayModuleValVegaPersistenceJdoDn.class,
+
 
     // WICKET INTEGRATION ... to allow side by side comparison
     CausewayModuleViewerWicketViewer.class, // wicket viewer
@@ -60,12 +82,16 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
      */
     public static void main(final String[] args) {
 
-//        CausewayPresets.logging(InteractionServiceDefault.class, "debug");
-//        CausewayPresets.logging(VaadinAuthenticationHandler.class, "debug");
-//        CausewayPresets.logging(CausewayServletForVaadin.class, "debug");
-//        CausewayPresets.logging(_Probe.class, "debug"); // enable debug entry logging
+        // activates when sys-env THERE_CAN_BE_ONLY_ONE=true
+        _OsUtil.thereCanBeOnlyOne();
 
-        System.setProperty("spring.profiles.active", "demo-jdo");
+        CausewayPresets.prototyping();
+        //CausewayPresets.logging(WebRequestCycleForCauseway.class, "debug");
+
+        SpringProfileUtil.removeActiveProfile("demo-jpa"); // just in case
+        SpringProfileUtil.addActiveProfile("demo-jdo");
+
+        CausewayModuleExtCommandLogApplib.honorSystemEnvironment();
 
         SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }
