@@ -18,37 +18,13 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.model.context;
 
-import java.util.function.Consumer;
-
-import com.vaadin.flow.component.Component;
-
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public interface UiContextVaa {
+public interface MemberInvocationHandler<T> {
 
-    InteractionService getInteractionService();
-
-    void setNewPageHandler(Consumer<Component> onNewPage);
-    void setPageFactory(MemberInvocationHandler<Component> pageFactory);
-
-    void route(ManagedObject object);
-    void route(ManagedAction managedAction, Can<ManagedObject> params, ManagedObject actionResult);
-//    void route(Supplier<ManagedObject> objectSupplier);
-
-    // -- DECORATORS
-
-//    IconDecorator<Labeled, Labeled> getIconDecoratorForLabeled();
-//    IconDecorator<MenuItem, MenuItem> getIconDecoratorForMenuItem();
-//
-//    DisablingDecorator<Button> getDisablingDecoratorForButton();
-//    DisablingDecorator<Node> getDisablingDecoratorForFormField();
-//
-//    PrototypingDecorator<Button, Node> getPrototypingDecoratorForButton();
-//    PrototypingDecorator<Node, Node> getPrototypingDecoratorForFormField();
-
-
+    T handle(ManagedObject object);
+    T handle(ManagedAction managedAction, Can<ManagedObject> params, ManagedObject actionResult);
 
 }

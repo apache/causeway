@@ -31,7 +31,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.incubator.viewer.vaadin.model.util._vaa;
+import org.apache.causeway.incubator.viewer.vaadin.model.util.Vaa;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
@@ -48,7 +48,7 @@ final class MainView_createHeader {
             final Runnable onHomepageLinkClick) {
 
         val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
-        _vaa.setOnClick(titleOrLogo, onHomepageLinkClick);
+        Vaa.setOnClick(titleOrLogo, onHomepageLinkClick);
 
         val leftMenuBar = new MenuBar();
         val horizontalSpacer = new Div();

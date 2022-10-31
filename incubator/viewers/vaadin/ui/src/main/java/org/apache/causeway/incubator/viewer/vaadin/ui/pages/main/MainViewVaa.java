@@ -31,8 +31,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.incubator.viewer.vaadin.model.context.MemberInvocationHandler;
 import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
@@ -53,17 +59,18 @@ import lombok.extern.log4j.Log4j2;
 @CssImport("./css/menu.css")
 @Log4j2
 public class MainViewVaa extends AppLayout
-implements BeforeEnterObserver {
+implements
+    HasMetaModelContext,
+    BeforeEnterObserver,
+    MemberInvocationHandler<Component> {
 
     private static final long serialVersionUID = 1L;
 
-    private final transient MetaModelContext commonContext;
     private final transient MetaModelContext metaModelContext;
     private final transient UiContextVaa uiContext;
     private final transient UiActionHandlerVaa uiActionHandler;
     private final transient UiComponentFactoryVaa uiComponentFactory;
     private final transient HeaderUiService headerUiService;
-
 
     private Div pageContent = new Div();
 
@@ -79,14 +86,13 @@ implements BeforeEnterObserver {
             final UiComponentFactoryVaa uiComponentFactory) {
 
         this.metaModelContext = metaModelContext;
-        this.commonContext = metaModelContext;
         this.uiActionHandler = uiActionHandler;
         this.headerUiService = headerUiService;
         this.uiContext = uiContext;
         this.uiComponentFactory = uiComponentFactory;
 
         uiContext.setNewPageHandler(this::replaceContent);
-        uiContext.setPageFactory(this::uiComponentForActionResult);
+        uiContext.setPageFactory(this);
     }
 
     @Override
@@ -98,7 +104,7 @@ implements BeforeEnterObserver {
         setPrimarySection(Section.NAVBAR);
 
         val menuBarContainer = MainView_createHeader.createHeader(
-                commonContext,
+                metaModelContext,
                 headerUiService.getHeader(),
                 uiActionHandler::handleActionLinkClicked,
                 this::renderHomepage);
@@ -116,19 +122,38 @@ implements BeforeEnterObserver {
 
     private void renderHomepage() {
         log.info("about to render homepage");
-        uiContext.route(metaModelContext::getHomePageAdapter);
+        val homepage = getInteractionService().callAnonymous(metaModelContext::getHomePageAdapter);
+        uiContext.route(homepage);
     }
 
-    private Component uiComponentForActionResult(final ManagedObject actionResult) {
+    @Override
+    public Component handle(final ManagedObject object) {
+        return ObjectViewVaa.fromObject(
+                uiContext,
+                uiComponentFactory,
+                uiActionHandler::handleActionLinkClicked,
+                object);
+    }
+
+    @Override
+    public Component handle(final ManagedAction managedAction, final Can<ManagedObject> params, final ManagedObject actionResult) {
         if (actionResult.getSpecification().isPlural()) {
-            return TableViewVaa.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
+
+            val dataTableModel = DataTableModel.forAction(managedAction, params, actionResult);
+
+            return TableViewVaa.forDataTableModel(uiContext, dataTableModel, Where.STANDALONE_TABLES);
         } else {
-            return ObjectViewVaa.fromObject(
-                    uiContext,
-                    uiComponentFactory,
-                    uiActionHandler::handleActionLinkClicked,
-                    actionResult);
+            return handle(actionResult);
         }
+    }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        if(metaModelContext==null) {
+            // TODO needs static recovery
+            throw _Exceptions.notImplemented();
+        }
+        return metaModelContext;
     }
 
 

@@ -30,42 +30,45 @@ import com.vaadin.flow.component.html.Label;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Vaadin common idioms, in alphabetical order.
+ */
 @UtilityClass
-public class _vaa {
+public class Vaa {
 
     // -- COMPONENT FACTORIES
 
-    public static <T extends Component> T add(HasComponents container, T component) {
+    public <T extends Component> T add(final HasComponents container, final T component) {
         container.add(component);
         return component;
     }
 
-    public static Label newLabel(HasComponents container, String label) {
-        val component = new Label(label);
-        container.add(component);
-        return component;
-    }
-
-    public static Button newButton(String label) {
+    public Button newButton(final String label) {
         val component = new Button(label);
         component.getStyle().set("margin-left", "0.5em");
         component.addThemeVariants(ButtonVariant.LUMO_SMALL);
         return component;
     }
 
-    public static Button newButton(HasComponents container, String label, ComponentEventListener<ClickEvent<Button>> eventHandler) {
+    public Button newButton(final HasComponents container, final String label, final ComponentEventListener<ClickEvent<Button>> eventHandler) {
         val component = newButton(label);
         container.add(component);
         component.addClickListener(eventHandler);
         return component;
     }
 
+    public Label newLabel(final HasComponents container, final String label) {
+        val component = new Label(label);
+        container.add(component);
+        return component;
+    }
+
     // -- COMPONENT EVENTS
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <T extends Component> T setOnClick(
-            T component,
-            Runnable onClick) {
+    public <T extends Component> T setOnClick(
+            final T component,
+            final Runnable onClick) {
         ComponentUtil.addListener(component, ClickEvent.class,
                 (ComponentEventListener) e->onClick.run());
         return component;

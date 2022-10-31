@@ -25,17 +25,10 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.Oid;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;
 
 import lombok.AccessLevel;
@@ -57,47 +50,17 @@ public class TableViewVaa extends VerticalLayout {
     }
 
     /**
-     * Constructs a (page-able) {@link Grid} from given {@code collection}
-     * @param collection - of (wrapped) domain objects
-     * @param where
-     */
-    public static TableViewVaa fromCollection(
-            final @NonNull UiContextVaa uiContext,
-            final @NonNull ManagedObject collection,
-            final @NonNull Where where) {
-
-        val objects = Facets.collectionStream(collection)
-                .collect(Can.toCan());
-
-        return ManagedObjects.commonSpecification(objects)
-                .map(elementSpec->new TableViewVaa(elementSpec, objects, where))
-                .orElseGet(TableViewVaa::empty);
-    }
-
-    /**
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}
      * @param managedCollection
      * @param where
      */
-    public static Component forManagedCollection(
+    public static Component forDataTableModel(
             final @NonNull UiContextVaa uiContext,
-            final @NonNull ManagedCollection managedCollection,
-            final @NonNull Where where) {
-
-        val elementSpec = managedCollection.getElementType();
-        val elements = managedCollection.streamElements()
-                .collect(Can.toCan());
-        return elements.isEmpty()
+            final @NonNull DataTableModel dataTableModel,
+            final @NonNull Where where) { //TODO not used yet (or is redundant)
+        return dataTableModel.getElementCount()==0
                 ? empty()
-                : new TableViewVaa(elementSpec, elements, where);
-    }
-
-    private Can<OneToOneAssociation> columnProperties(final ObjectSpecification elementSpec, final Where where) {
-
-        //TODO honor column order (as per layout)
-        return elementSpec.streamProperties(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.staticallyVisible(where))
-                .collect(Can.toCan());
+                : new TableViewVaa(dataTableModel);
     }
 
     /**
@@ -106,9 +69,7 @@ public class TableViewVaa extends VerticalLayout {
      * @param objects - (wrapped) domain objects to be rendered by this table
      */
     private TableViewVaa(
-            final @NonNull ObjectSpecification elementSpec,
-            final @NonNull Can<ManagedObject> objects,
-            final @NonNull Where where) {
+            final @NonNull DataTableModel dataTableModel) {
 
         //            final ComboBox<ManagedObject> listBox = new ComboBox<>();
         //            listBox.setLabel(label + " #" + objects.size());
@@ -118,52 +79,37 @@ public class TableViewVaa extends VerticalLayout {
         //            }
         //            listBox.setItemLabelGenerator(o -> o.titleString());
 
-        val objectGrid = new Grid<ManagedObject>();
+        val objectGrid = new Grid<DataRow>();
         add(objectGrid);
 
-        if (objects.isEmpty()) {
+        val rows = dataTableModel.getDataRowsFiltered().getValue();
+
+        if (rows.isEmpty()) {
             //TODO show placeholder: "No rows to display"
             return;
         }
 
-        val columnProperties = columnProperties(elementSpec, where);
-
-        // rather prepare all table cells into a multi-map eagerly,
-        // than having to spawn new transactions/interactions for each table cell when rendered lazily
-        val table = _Multimaps.<Oid, String, String>newMapMultimap();
-
-        objects.stream()
-        .forEach(object->{
-
-            val id = object.getBookmark().orElse(null);
-            if(id==null) {
-                return;
-            }
-
-            columnProperties.forEach(property->{
-                table.putElement(id, property.getId(), stringifyPropertyValue(property, object));
-            });
-
-        });
+        val columns = dataTableModel.getDataColumns().getValue();
 
         // object link as first column
-        objectGrid.addColumn(targetObject->{
+        objectGrid.addColumn(row->{
             // TODO provide icon with link
-            return "obj. ref ["+targetObject.getBookmark().orElse(null)+"]";
+            return "obj. ref [" + row.getRowElement().getBookmark().orElse(null) + "]";
         });
 
         // property columns
-        columnProperties.forEach(property->{
-            objectGrid.addColumn(targetObject -> {
+        columns.forEach(column->{
+            val property = column.getPropertyMetaModel();
+            objectGrid.addColumn(row -> {
                 log.debug("about to get property value for property {}", property.getId());
-                return stringifyPropertyValue(property, targetObject);
+                return stringifyPropertyValue(property, row.getRowElement());
             })
             .setHeader(property.getCanonicalFriendlyName());
             //TODO add column description as is provided via property.getColumnDescription()
         });
 
         // populate the model
-        objectGrid.setItems(objects.toList());
+        objectGrid.setItems(rows.toList());
         objectGrid.recalculateColumnWidths();
         objectGrid.setColumnReorderingAllowed(true);
 

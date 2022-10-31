@@ -18,18 +18,21 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.ui.pages.main;
 
+import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
 import com.vaadin.flow.component.Component;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.incubator.viewer.vaadin.model.context.MemberInvocationHandler;
 import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;
 
 import lombok.Getter;
@@ -42,32 +45,42 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class UiContextVaaDefault implements UiContextVaa {
 
-//    @Getter(onMethod_ = {@Override})
-//    private final JavaFxViewerConfig javaFxViewerConfig;
     @Getter(onMethod_ = {@Override})
     private final InteractionService interactionService;
-//    @Getter(onMethod_ = {@Override})
-//    private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
 
     @Setter(onMethod_ = {@Override})
     private Consumer<Component> newPageHandler;
 
     @Setter(onMethod_ = {@Override})
-    private Function<ManagedObject, Component> pageFactory;
+    private MemberInvocationHandler<Component> pageFactory;
+
+    // might not be initialized yet
+    private Optional<MemberInvocationHandler<Component>> pageFactory() {
+        return Optional.ofNullable(pageFactory);
+    }
 
     @Override
     public void route(final ManagedObject object) {
         log.info("about to render object {}", object);
-        newPage(pageFor(object));
+        newPage(pageFactory()
+                .map(pageFactory->pageFactory.handle(object))
+                .orElse(null));
     }
 
     @Override
-    public void route(final Supplier<ManagedObject> objectSupplier) {
-        interactionService.runAnonymous(()->{
-            var object = objectSupplier.get();
-            route(object);
-        });
+    public void route(final ManagedAction managedAction, final Can<ManagedObject> params, final ManagedObject actionResult) {
+        log.info("about to render object {}", actionResult);
+        newPage(pageFactory()
+                .map(pageFactory->pageFactory.handle(managedAction, params, actionResult))
+                .orElse(null));
     }
+
+//    public void route(final Supplier<ManagedObject> objectSupplier) {
+//        interactionService.runAnonymous(()->{
+//            var object = objectSupplier.get();
+//            route(object);
+//        });
+//    }
 
     // -- DECORATORS
 
@@ -88,16 +101,10 @@ public class UiContextVaaDefault implements UiContextVaa {
 
     // -- HELPER
 
-    private void newPage(final Component content) {
+    private void newPage(final @Nullable Component content) {
         if(newPageHandler!=null && content!=null) {
             newPageHandler.accept(content);
         }
-    }
-
-    private Component pageFor(final ManagedObject object) {
-        return pageFactory!=null
-                ? pageFactory.apply(object)
-                : null;
     }
 
 }

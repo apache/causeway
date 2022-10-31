@@ -51,7 +51,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmTitleUtil;
 import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;
-import org.apache.causeway.incubator.viewer.vaadin.model.util._vaa;
+import org.apache.causeway.incubator.viewer.vaadin.model.util.Vaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
@@ -99,7 +99,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected void onObjectTitle(final HasComponents container, final DomainObjectLayoutData domainObjectData) {
-                val uiTitle = _vaa.add(container, new H1(objectTitle));
+                val uiTitle = Vaa.add(container, new H1(objectTitle));
                 //                uiTitle.addThemeVariants(
                 //                        ButtonVariant.LUMO_LARGE,
                 //                        ButtonVariant.LUMO_TERTIARY_INLINE);
@@ -107,7 +107,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected HasComponents newRow(final HasComponents container, final BSRow bsRow) {
-                val uiRow = _vaa.add(container, new FlexLayout());
+                val uiRow = Vaa.add(container, new FlexLayout());
 
                 uiRow.setWidthFull();
                 uiRow.setFlexWrap(FlexWrap.WRAP); // allow line breaking
@@ -125,7 +125,7 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected HasComponents newCol(final HasComponents container, final BSCol bscol) {
 
-                val uiCol = _vaa.add(container, new VerticalLayout());
+                val uiCol = Vaa.add(container, new VerticalLayout());
 
                 final int span = bscol.getSpan();
                 ((FlexLayout)container).setFlexGrow(span, uiCol);
@@ -138,7 +138,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected HasComponents newActionPanel(final HasComponents container) {
-                val uiActionPanel = _vaa.add(container, new FlexLayout());
+                val uiActionPanel = Vaa.add(container, new FlexLayout());
 
                 uiActionPanel.setFlexWrap(FlexWrap.WRAP); // allow line breaking
                 uiActionPanel.setAlignItems(Alignment.BASELINE);
@@ -147,7 +147,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected Tabs newTabGroup(final HasComponents container, final BSTabGroup tabGroupData) {
-                val uiTabGroup = _vaa.add(container, new Tabs());
+                val uiTabGroup = Vaa.add(container, new Tabs());
 
                 uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
                 return uiTabGroup;
@@ -155,14 +155,14 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected HasComponents newTab(final Tabs container, final BSTab tabData) {
-                val uiTab = _vaa.add(container, new Tab(tabData.getName()));
+                val uiTab = Vaa.add(container, new Tab(tabData.getName()));
                 return uiTab;
             }
 
             @Override
             protected HasComponents newFieldSet(final HasComponents container, final FieldSet fieldSetData) {
 
-                _vaa.add(container, new H2(fieldSetData.getName()));
+                Vaa.add(container, new H2(fieldSetData.getName()));
 
                 // handle associated actions
                 val actionBar = newActionPanel(container);
@@ -170,7 +170,7 @@ public class ObjectViewVaa extends VerticalLayout {
                     onAction(actionBar, actionData);
                 }
 
-                val uiFieldSet = _vaa.add(container, new FormLayout());
+                val uiFieldSet = Vaa.add(container, new FormLayout());
 
                 uiFieldSet.setResponsiveSteps(
                         new ResponsiveStep("0", 1)); // single column only
@@ -196,7 +196,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
                     interaction.checkUsability();
 
-                    val uiButton = _vaa.add(container,
+                    val uiButton = Vaa.add(container,
                             uiComponentFactory.buttonFor(
                                     UiComponentFactory.ButtonRequest.of(
                                             managedAction,
@@ -221,7 +221,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
                     val propNeg = managedProperty.startNegotiation();
 
-                    val uiProperty = _vaa.add(container,
+                    val uiProperty = Vaa.add(container,
                             uiComponentFactory.componentFor(
                                     UiComponentFactory.ComponentRequest.of(
                                             propNeg,
@@ -246,7 +246,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 .checkVisibility()
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
-                    _vaa.add(container, new H3(managedCollection.getFriendlyName()));
+                    Vaa.add(container, new H3(managedCollection.getFriendlyName()));
 
                     // handle associated actions
                     val actionBar = newActionPanel(container);
@@ -254,10 +254,10 @@ public class ObjectViewVaa extends VerticalLayout {
                         onAction(actionBar, actionData);
                     }
 
-                    val uiCollection = _vaa.add(container,
-                            TableViewVaa.forManagedCollection(
+                    val uiCollection = Vaa.add(container,
+                            TableViewVaa.forDataTableModel(
                                     uiContext,
-                                    managedCollection,
+                                    managedCollection.createDataTableModel(),
                                     Where.PARENTED_TABLES));
 
                 });
