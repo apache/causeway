@@ -582,7 +582,8 @@ implements WrapperFactory, HasMetaModelContext {
         @Getter private final UUID parentInteractionId;
 
         /**
-         * Note that is a <code>transient</code> field in order that {@link org.apache.causeway.applib.services.wrapper.callable.AsyncCallable} can be declared as
+         * Note this is a <code>transient</code> field, in order that
+         * {@link org.apache.causeway.applib.services.wrapper.callable.AsyncCallable} can be declared as
          * {@link java.io.Serializable}.
          *
          * <p>

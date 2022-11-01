@@ -256,6 +256,21 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     }
 
     /**
+     * Returns any parented commands that have not yet started.
+     *
+     * <p>
+     * This is to support the notion of background commands (the same as their implementation in v1) whereby a
+     * custom executor service for {@link org.apache.causeway.applib.services.wrapper.WrapperFactory} would
+     * &quot;execute&quot; a {@link Command} simply by persisting it as a {@link CommandLogEntry}, so that a
+     * quartz or similar background job could execute the {@link Command} at some point later.
+     * </p>
+     */
+    public Optional<C> findParentedCommandsNotYetStarted() {
+        return repositoryService().firstMatch(
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_NOT_YET_STARTED));
+    }
+
+    /**
      * The most recent replayed command previously replicated from primary to
      * secondary.
      *

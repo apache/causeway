@@ -50,7 +50,6 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
-import org.apache.causeway.applib.mixins.system.DomainChangeRecord.ChangeType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
@@ -135,6 +134,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         public static final String FIND_MOST_RECENT_REPLAYED = LOGICAL_TYPE_NAME + ".findMostRecentReplayed";
         public static final String FIND_MOST_RECENT_COMPLETED = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
         public static final String FIND_BY_REPLAY_STATE = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
+        public static final String FIND_NOT_YET_STARTED = "findNotYetStarted";
     }
 
 

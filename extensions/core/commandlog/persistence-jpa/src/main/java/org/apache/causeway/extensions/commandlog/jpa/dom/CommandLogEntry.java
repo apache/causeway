@@ -74,23 +74,6 @@ import lombok.Setter;
                   + "  FROM CommandLogEntry cl "
                   + " WHERE cl.pk.interactionId = :interactionId"),
     @NamedQuery(
-            name  = Nq.FIND_BY_PARENT,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.parent = :parent "),
-    @NamedQuery(
-            name  = Nq.FIND_CURRENT,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.completedAt is null "
-                  + " ORDER BY cl.timestamp DESC"),
-    @NamedQuery(
-            name  = Nq.FIND_COMPLETED,
-            query = "SELECT cl "
-                  + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.completedAt is not null "
-                  + " ORDER BY cl.timestamp DESC"),
-    @NamedQuery(
             name  = Nq.FIND_RECENT_BY_TARGET,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
@@ -166,6 +149,23 @@ import lombok.Setter;
                   + "  FROM CommandLogEntry cl "
                   + " WHERE cl.username = :username "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
+        @NamedQuery(
+                name  = Nq.FIND_BY_PARENT,
+                query = "SELECT cl "
+                        + "  FROM CommandLogEntry cl "
+                        + " WHERE cl.parent = :parent "),
+        @NamedQuery(
+                name  = Nq.FIND_CURRENT,
+                query = "SELECT cl "
+                        + "  FROM CommandLogEntry cl "
+                        + " WHERE cl.completedAt is null "
+                        + " ORDER BY cl.timestamp DESC"),
+        @NamedQuery(
+                name  = Nq.FIND_COMPLETED,
+                query = "SELECT cl "
+                        + "  FROM CommandLogEntry cl "
+                        + " WHERE cl.completedAt is not null "
+                        + " ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name  = Nq.FIND_FIRST,
             query = "SELECT cl "
@@ -180,6 +180,12 @@ import lombok.Setter;
                   + " WHERE cl.timestamp > :timestamp "
                   + "   AND cl.startedAt is not null "
                   + "   AND cl.completedAt is not null "
+                  + " ORDER BY cl.timestamp ASC"),
+    @NamedQuery(
+            name  = Nq.FIND_NOT_YET_STARTED,
+            query = "SELECT cl "
+                  + "  FROM CommandLogEntry cl "
+                  + " WHERE cl.startedAt is null "
                   + " ORDER BY cl.timestamp ASC"),
     // most recent (replayed) command previously replicated from primary to
     // secondary.  This should always exist except for the very first times
