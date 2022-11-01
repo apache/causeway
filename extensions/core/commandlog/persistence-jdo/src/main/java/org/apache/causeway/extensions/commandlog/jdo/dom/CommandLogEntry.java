@@ -172,7 +172,12 @@ import lombok.Setter;
                   + "   && startedAt != null "
                   + "   && completedAt != null "
                   + "ORDER BY timestamp ASC"),
-
+    @Query(
+            name  = Nq.FIND_NOT_YET_STARTED,
+            value = "SELECT "
+                  + "FROM " + CommandLogEntry.FQCN + " "
+                  + "WHERE startedAt == null "
+                  + "ORDER BY timestamp ASC "),
     // most recent (replayed) command previously replicated from primary to
     // secondary.  This should always exist except for the very first times
     // (after restored the prod DB to secondary).
@@ -305,6 +310,7 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Exception
     @Getter @Setter
     private String exception;
+
 
     @Column(allowsNull = ReplayState.ALLOWS_NULL, length = ReplayState.MAX_LENGTH)
     @ReplayState
