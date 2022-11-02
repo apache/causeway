@@ -295,7 +295,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
             val dtoInteractionId = commandDto.getInteractionId();
 
             if(!commandInteractionId.equals(dtoInteractionId)) {
-                log.warn("setting CommandDto on a Command has side-effects if "
+                log.debug("setting CommandDto on a Command has side-effects if "
                         + "their InteractionIds don't match; forcing CommandDto's Id to be same as Command's");
                 commandDto.setInteractionId(commandInteractionId);
             }

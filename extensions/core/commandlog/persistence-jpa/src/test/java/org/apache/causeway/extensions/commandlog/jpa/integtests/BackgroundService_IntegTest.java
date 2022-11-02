@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.commandlog.jdo.integtests;
+package org.apache.causeway.extensions.commandlog.jpa.integtests;
 
+import org.apache.causeway.extensions.commandlog.applib.integtest.BackgroundService_IntegTestAbstract;
+import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
+import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
-import org.apache.causeway.extensions.commandlog.jdo.integtests.model.Counter;
 
 @SpringBootTest(
         classes = AppManifest.class
 )
 @ActiveProfiles("test")
-public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
+public class BackgroundService_IntegTest extends BackgroundService_IntegTestAbstract {
 
 
     protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {

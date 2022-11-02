@@ -23,31 +23,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 import javax.annotation.Priority;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
@@ -70,6 +57,7 @@ import org.apache.causeway.schema.cmd.v2.MapDto;
 
 import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
+import lombok.val;
 
 /**
  * A persistent representation of a {@link Command}, being the intention to edit a property or invoke an action.
@@ -114,7 +102,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @UtilityClass
     public static class Nq {
         public static final String FIND_BY_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByInteractionId";
-        public static final String FIND_BY_PARENT = LOGICAL_TYPE_NAME + ".findByParent";
+        public static final String FIND_BY_PARENT_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByParentInteractionId";
         public static final String FIND_CURRENT = LOGICAL_TYPE_NAME + ".findCurrent";
         public static final String FIND_COMPLETED = LOGICAL_TYPE_NAME + ".findCompleted";
         public static final String FIND_RECENT_BY_TARGET = LOGICAL_TYPE_NAME + ".findRecentByTarget";
@@ -131,10 +119,21 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
         public static final String FIND_FIRST = LOGICAL_TYPE_NAME + ".findFirst";
         public static final String FIND_SINCE = LOGICAL_TYPE_NAME + ".findSince";
+        /**
+         * The most recent (replayed) command previously replicated from primary to secondary.
+         *
+         * <p>
+         *     This should always exist except for the very first times (after restored the prod DB to secondary).
+         * </p>
+         */
         public static final String FIND_MOST_RECENT_REPLAYED = LOGICAL_TYPE_NAME + ".findMostRecentReplayed";
+        /**
+         * The most recent completed command, as queried on the secondary, corresponding to the last command run on
+         * primary before the production database was restored to the secondary.
+         */
         public static final String FIND_MOST_RECENT_COMPLETED = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
         public static final String FIND_BY_REPLAY_STATE = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
-        public static final String FIND_NOT_YET_STARTED = "findNotYetStarted";
+        public static final String FIND_BACKGROUND_AND_NOT_YET_STARTED = "findBackgroundAndNotYetStarted";
     }
 
 
@@ -179,8 +178,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         setTarget(Bookmark.forOidDto(commandDto.getTargets().getOid().get(targetIndex)));
         setLogicalMemberIdentifier(commandDto.getMember().getLogicalMemberIdentifier());
 
-        // the hierarchy of commands calling other commands is only available on the primary system, and is
-        setParent(null);
+        // the hierarchy of commands calling other commands is only available on the primary system.
+        setParentInteractionId(null);
 
         setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimings().getStartedAt()));
         setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimings().getCompletedAt()));
@@ -300,6 +299,46 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
 
     @Property(
+            domainEvent = ExecuteIn.DomainEvent.class
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ExecuteIn {
+        class DomainEvent extends PropertyDomainEvent<org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn> {}
+        int MAX_LENGTH = 10;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
+    }
+    /**
+     * Whether the command was executed immediately in the current thread of execution, or scheduled to be
+     * executed at some time later in a &quot;background&quot; thread of execution.
+     */
+    @ExecuteIn
+    public abstract org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn getExecuteIn();
+    public abstract void setExecuteIn(org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn replayState);
+
+
+    /**
+     * The interactionId of the parent command, if any.
+     *
+     * <p>
+     *     We store only the id rather than a reference to the parent, because the
+     *     {@link org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog}'s
+     *     callback is only called at the end of the transaction, meaning that the {@link CommandLogEntry} of the
+     *     &quot;parent&quot; will be persisted only after any of its child background {@link CommandLogEntry}s are
+     *     to be persisted (within the body of the underlying action).
+     * </p>
+     *
+     * @see #getParent()
+     */
+    @Domain.Exclude
+    @InteractionId
+    public abstract UUID getParentInteractionId();
+    public abstract void setParentInteractionId(UUID parentInteractionId);
+
+
+
+    @Property(
             domainEvent = Parent.DomainEvent.class,
             optionality = Optionality.OPTIONAL
     )
@@ -318,10 +357,16 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         String ALLOWS_NULL = "true";
     }
     @Parent
-    public abstract <C extends CommandLogEntry> C getParent();
-    public abstract void setParent(CommandLogEntry parent);
+    public <C extends CommandLogEntry> C getParent() {
+        if (getParentInteractionId() == null) {
+            return null;
+        }
+        val parentCommandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(getParentInteractionId());
+        val commandLogEntry = parentCommandLogEntryIfAny.orElse(null);
+        return _Casts.uncheckedCast(commandLogEntry);
+    }
 
-
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
 
     @Property(

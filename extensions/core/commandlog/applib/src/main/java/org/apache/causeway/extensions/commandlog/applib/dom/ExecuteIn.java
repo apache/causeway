@@ -16,23 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.commandlog.jdo.integtests;
+package org.apache.causeway.extensions.commandlog.applib.dom;
 
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+/**
+ * Whether the command is executed explicitly by the end-user, or is scheduled (for example, using the
+ * {@link BackgroundService}) to be executed asynchronously at some later time.
+ *
+ * @since 2.0 {@index}
+ */
+public enum ExecuteIn {
+    /**
+     * Command executed in immediately, in the current thread of execution.
+     */
+    FOREGROUND,
 
-import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
-import org.apache.causeway.extensions.commandlog.jdo.integtests.model.Counter;
-
-@SpringBootTest(
-        classes = AppManifest.class
-)
-@ActiveProfiles("test")
-public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
-
-
-    protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {
-        return Counter.builder().name(name).build();
-    }
-
+    /**
+     * Command scheduled to be executed at some later time, in a &quot;background&quot; thread of execution.
+     */
+    BACKGROUND
 }

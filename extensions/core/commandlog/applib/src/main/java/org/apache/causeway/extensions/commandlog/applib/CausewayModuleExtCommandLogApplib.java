@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
+import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -45,9 +47,15 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         CommandLogEntry_openResultObject.class,
         CommandLogEntry_siblingCommands.class,
 
+        // @Component's
+        RunBackgroundCommandsJob.class,
+
         // @Service's
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
+
+        BackgroundService.class,
+        BackgroundService.PersistCommandExecutorService.class,
 })
 public class CausewayModuleExtCommandLogApplib {
 
