@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

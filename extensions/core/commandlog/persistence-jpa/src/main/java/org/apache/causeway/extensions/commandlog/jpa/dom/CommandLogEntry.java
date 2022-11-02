@@ -18,27 +18,15 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa.dom;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.UUID;
 
 import javax.inject.Named;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -49,12 +37,9 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry.Nq;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayCommandDtoConverter;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(
@@ -150,10 +135,10 @@ import lombok.Setter;
                   + " WHERE cl.username = :username "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
         @NamedQuery(
-                name  = Nq.FIND_BY_PARENT,
+                name  = Nq.FIND_BY_PARENT_INTERACTION_ID,
                 query = "SELECT cl "
                         + "  FROM CommandLogEntry cl "
-                        + " WHERE cl.parent = :parent "),
+                        + " WHERE cl.parentInteractionId = :parentInteractionId "),
         @NamedQuery(
                 name  = Nq.FIND_CURRENT,
                 query = "SELECT cl "
@@ -182,14 +167,12 @@ import lombok.Setter;
                   + "   AND cl.completedAt is not null "
                   + " ORDER BY cl.timestamp ASC"),
     @NamedQuery(
-            name  = Nq.FIND_NOT_YET_STARTED,
+            name  = Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.startedAt is null "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.BACKGROUND "
+                  + "   AND cl.startedAt is null "
                   + " ORDER BY cl.timestamp ASC"),
-    // most recent (replayed) command previously replicated from primary to
-    // secondary.  This should always exist except for the very first times
-    // (after restored the prod DB to secondary).
     @NamedQuery(
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             query = "SELECT cl "
@@ -271,17 +254,18 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     private Bookmark target;
 
 
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = Parent.NAME, nullable = Parent.NULLABLE, referencedColumnName = InteractionId.NAME)
-    })
-    @Parent
-    @Getter
-    private CommandLogEntry parent;
-    @Override
-    public void setParent(final org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry parent) {
-        this.parent = (CommandLogEntry)parent;
-    }
+    @Column(nullable = ExecuteIn.NULLABLE, length = ExecuteIn.MAX_LENGTH)
+    @Enumerated(EnumType.STRING)
+    @ExecuteIn
+    @Getter @Setter
+    private org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn executeIn;
+
+
+    @Convert(converter = JavaUtilUuidConverter.class)
+    @Column(nullable = Parent.NULLABLE, length = InteractionId.MAX_LENGTH)
+    @Getter @Setter
+    private UUID parentInteractionId;
+
 
 
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)

@@ -78,10 +78,12 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         return commandLogEntryClass;
     }
 
-    public C createEntryAndPersist(final Command command, CommandLogEntry parentEntryIfAny) {
+    public C createEntryAndPersist(
+            final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
         c.init(command);
-        c.setParent(parentEntryIfAny);
+        c.setParentInteractionId(parentInteractionIdIfAny);
+        c.setExecuteIn(executeIn);
         persist(c);
         return c;
     }
@@ -93,9 +95,13 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     }
 
     public List<C> findByParent(final CommandLogEntry parent) {
+        return findByParentInteractionId(parent.getInteractionId());
+    }
+
+    public List<C> findByParentInteractionId(final UUID parentInteractionId) {
         return repositoryService().allMatches(
-                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_PARENT)
-                        .withParameter("parent", parent));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_PARENT_INTERACTION_ID)
+                        .withParameter("parentInteractionId", parentInteractionId));
     }
 
     public List<C> findByFromAndTo(
@@ -256,7 +262,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     }
 
     /**
-     * Returns any parented commands that have not yet started.
+     * Returns any persisted commands that have not yet started.
      *
      * <p>
      * This is to support the notion of background commands (the same as their implementation in v1) whereby a
@@ -265,9 +271,9 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      * quartz or similar background job could execute the {@link Command} at some point later.
      * </p>
      */
-    public Optional<C> findParentedCommandsNotYetStarted() {
-        return repositoryService().firstMatch(
-                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_NOT_YET_STARTED));
+    public List<C> findBackgroundAndNotYetStarted() {
+        return repositoryService().allMatches(
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED));
     }
 
     /**

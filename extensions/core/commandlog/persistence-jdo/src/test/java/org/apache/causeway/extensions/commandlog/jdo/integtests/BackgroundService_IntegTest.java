@@ -18,17 +18,29 @@
  */
 package org.apache.causeway.extensions.commandlog.jdo.integtests;
 
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.commandlog.applib.integtest.BackgroundService_IntegTestAbstract;
 import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
+import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
+import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLogPersistenceJdo;
 import org.apache.causeway.extensions.commandlog.jdo.integtests.model.Counter;
+import org.apache.causeway.extensions.commandlog.jdo.integtests.model.CounterRepository;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(
         classes = AppManifest.class
 )
 @ActiveProfiles("test")
-public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
+public class BackgroundService_IntegTest extends BackgroundService_IntegTestAbstract {
 
 
     protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {

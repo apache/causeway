@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -58,30 +59,33 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             return;
         }
 
-        val existingCommandJdoIfAny =
+        val existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
-        if(existingCommandJdoIfAny.isPresent()) {
-            if(log.isDebugEnabled()) {
-                // this isn't expected to happen ... we just log the fact if it does
-                val existingCommandDto = existingCommandJdoIfAny.get().getCommandDto();
+        if(existingCommandLogEntryIfAny.isPresent()) {
+            val commandLogEntry = existingCommandLogEntryIfAny.get();
+            switch (commandLogEntry.getExecuteIn()) {
+                case FOREGROUND:
+                    // this isn't expected to happen ... we just log the fact if it does
+                    if(log.isWarnEnabled()) {
+                        val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
-                val existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto)
-                        .getValue().orElse("Dto to Xml failure");
-                val commandDtoXml = JaxbUtil.toXml(command.getCommandDto())
-                        .getValue().orElse("Dto to Xml failure");
+                        val existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto)
+                                .getValue().orElse("Dto to Xml failure");
+                        val commandDtoXml = JaxbUtil.toXml(command.getCommandDto())
+                                .getValue().orElse("Dto to Xml failure");
 
-                log.debug("existing: \n{}", existingCommandDtoXml);
-                log.debug("proposed: \n{}", commandDtoXml);
+                        log.warn("existing: \n{}", existingCommandDtoXml);
+                        log.warn("proposed: \n{}", commandDtoXml);
+                    }
+                    break;
+                case BACKGROUND:
+                    // this is expected behaviour; the command was already persisted when initially scheduled; we don't
+                    // need to do anything else.
+                    break;
             }
         } else {
             val parentInteractionId = command.getParentInteractionId();
-            val parentEntryIfAny =
-                    parentInteractionId != null
-                    ? commandLogEntryRepository
-                        .findByInteractionId(parentInteractionId)
-                        .orElse(null)
-                    : null;
-            commandLogEntryRepository.createEntryAndPersist(command, parentEntryIfAny);
+            commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
     }
 
