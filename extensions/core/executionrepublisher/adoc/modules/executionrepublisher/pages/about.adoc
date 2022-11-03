@@ -7,13 +7,12 @@
 
 The _executionrepublisher_ module contributes an action to allow logged executions (as per the xref:userguide:executionlog:about.adoc[] module) to be republished to the outbox (as per the xref:userguide:executionoutbox:about.adoc[] modul).
 
-WARNING: TODO: v2 - to write up...
 
 == Setup
 
 === Dependency Management
 
-Add a section for _Execution Republisher_'s own BOM:
+Add an entry for the _Execution Republisher_ module's own BOM:
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -30,3 +29,56 @@ Add a section for _Execution Republisher_'s own BOM:
     </dependencies>
 </dependencyManagement>
 ----
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-executionrepublisher-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+Note that this declares the xref:executionlog:about.adoc[] and xref:executionoutbox:about.adoc[] modules as dependencies.
+
+[[_update-appmanifest]]
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the _ExecutionLog_ modules.
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtExecutionRepublisherApplib.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+Note that this expects (and depends upon) the xref:executionlog:about.adoc[] and xref:executionoutbox:about.adoc[] modules.
+
+
+== User Interface
+
+The extension provides this mixins:
+
+* xref:refguide:extensions:index/executionrepublisher/applib/contributions/ExecutionLogEntry_copyToOutbox.adoc[]
++
+This contributes a `copyToOutbox` action to the xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[] entity.
+
+
+== See also
+
+* xref:executionlog:about.adoc[] extension
+* xref:executionoutbox:about.adoc[] extension

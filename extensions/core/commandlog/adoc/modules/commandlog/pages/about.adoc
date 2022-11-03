@@ -20,7 +20,7 @@ Sometimes the xref:executionlog:about.adoc[] extension is also configured with o
 
 === Dependency Management
 
-Add a section for the _Command Log_ module's own BOM:
+Add an entry for the _Command Log_ module's own BOM:
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -58,7 +58,6 @@ In the webapp module of your application, add the following dependency:
 
 [[_update-appmanifest]]
 === Update AppManifest
-
 
 In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the CommandLog modules.
 

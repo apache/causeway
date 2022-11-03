@@ -18,7 +18,7 @@ Sometimes the xref:commandlog:about.adoc[] extension is also configured with or 
 
 === Dependency Management
 
-Add a section for _Execution Log_'s own BOM:
+Add an entry for the _Execution Log_ module's own BOM:
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -53,11 +53,11 @@ In the webapp module of your application, add the following dependency:
 ----
 <.> specify either `causeway-extensions-executionlog-persistence-jpa` or `causeway-extensions-executionlog-persistence-jdo`, as required
 
+
 [[_update-appmanifest]]
 === Update AppManifest
 
 In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the _ExecutionLog_ modules.
-
 
 [source,java]
 .AppManifest.java
