@@ -1,0 +1,44 @@
+= ApplicationPermissionRepositoryAbstract
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.ApplicationPermissionRepositoryAbstract.java
+----
+class ApplicationPermissionRepositoryAbstract<P> {
+  ApplicationPermission newApplicationPermission()
+  List<ApplicationPermission> findByRoleCached(ApplicationRole role)
+  List<ApplicationPermission> findByRole(ApplicationRole role)
+  List<ApplicationPermission> findByUserCached(ApplicationUser user)
+  List<ApplicationPermission> findByUser(ApplicationUser user)
+  List<ApplicationPermission> findByUserMemento(UserMemento userMemento)
+  List<ApplicationPermission> findByRoleNames(List<String> roleNames)
+  Optional<ApplicationPermission> findByUserAndPermissionValue(String username, ApplicationPermissionValue permissionValue)     // <.>
+  Collection<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role, ApplicationPermissionRule rule, ApplicationFeatureSort type)
+  Collection<ApplicationPermission> findByRoleAndRuleAndFeatureType(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role, ApplicationPermissionRule rule, ApplicationFeatureSort featureSort)
+  Optional<ApplicationPermission> findByRoleAndRuleAndFeatureCached(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role, ApplicationPermissionRule rule, ApplicationFeatureSort featureSort, String featureFqn)
+  Optional<ApplicationPermission> findByRoleAndRuleAndFeature(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role, ApplicationPermissionRule rule, ApplicationFeatureSort featureSort, String featureFqn)
+  Collection<ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId)
+  Collection<ApplicationPermission> findByFeature(ApplicationFeatureId featureId)
+  ApplicationPermission newPermission(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole genericRole, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureSort featureSort, String featureFqn)
+  ApplicationPermission newPermissionNoCheck(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureSort featureSort, String featureFqn)
+  ApplicationPermission newPermission(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole genericRole, ApplicationPermissionRule rule, ApplicationPermissionMode mode, String featurePackage, String featureClassName, String featureMemberName)
+  ApplicationPermission newPermission(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole genericRole, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureId featureId)
+  Collection<ApplicationPermission> allPermissions()
+  Collection<ApplicationPermission> findOrphaned()
+}
+----
+
+<.> xref:#findByUserAndPermissionValue_String_ApplicationPermissionValue[findByUserAndPermissionValue(String, ApplicationPermissionValue)]
++
+--
+Uses the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] in order to support multiple lookups from `org.apache.causeway.extensions.secman.jdo.app.user.UserPermissionViewModel` .
+--
+
+== Members
+
+[#findByUserAndPermissionValue_String_ApplicationPermissionValue]
+=== findByUserAndPermissionValue(String, ApplicationPermissionValue)
+
+Uses the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] in order to support multiple lookups from `org.apache.causeway.extensions.secman.jdo.app.user.UserPermissionViewModel` .

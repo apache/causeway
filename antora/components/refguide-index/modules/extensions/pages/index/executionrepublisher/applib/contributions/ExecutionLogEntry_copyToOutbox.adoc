@@ -1,0 +1,18 @@
+= ExecutionLogEntry_copyToOutbox
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This contributes a copyToOutbox action to each xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[ExecutionLogEntry] (from the _Execution Log_ extension) so that it can be republished in the outbox.
+
+This is useful when both the _Execution Log_ and _Execution Outbox_ extensions are in use, and there was a downstream problem with the processing of an execution _from the outbox_ ; the mixin takes a copy of that execution from the log and copies it to the outbox in order that it can be reprocessed again.
+
+== API
+
+[source,java]
+.ExecutionLogEntry_copyToOutbox.java
+----
+class ExecutionLogEntry_copyToOutbox {
+  ExecutionLogEntry act()
+  ExecutionOutboxEntryType map(ExecutionLogEntryType executionType)
+}
+----
+

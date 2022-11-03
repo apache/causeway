@@ -7,21 +7,27 @@
 .EventObjectBase.java
 ----
 class EventObjectBase<T> {
+  Optional<E> getInstanceWithSource(Class<E> eventType, T source)     // <.>
+  Optional<E> getInstanceWithSourceSupplier(Class<E> eventType, Supplier<T> eventSourceSupplier)     // <.>
   T getSource()     // <.>
-  void initSource(T source)     // <.>
   String toString()     // <.>
 }
 ----
 
+<.> xref:#getInstanceWithSource_Class_T[getInstanceWithSource(Class, T)]
++
+--
+Optionally returns a new event instance, based on whether the eventType has a public no-arg constructor.
+--
+<.> xref:#getInstanceWithSourceSupplier_Class_Supplier[getInstanceWithSourceSupplier(Class, Supplier)]
++
+--
+Optionally returns a new event instance, based on whether the eventType has a public no-arg constructor.
+--
 <.> xref:#getSource_[getSource()]
 +
 --
-The object on which the Event initially occurred.
---
-<.> xref:#initSource_T[initSource(T)]
-+
---
-A one-shot function. Only allowed to be called if a source has not already been set.
+Returns the object on which the Event initially occurred.
 --
 <.> xref:#toString_[toString()]
 +
@@ -31,15 +37,24 @@ Returns a String representation of this EventObject.
 
 == Members
 
+[#getInstanceWithSource_Class_T]
+=== getInstanceWithSource(Class, T)
+
+Optionally returns a new event instance, based on whether the eventType has a public no-arg constructor.
+
+Initializes the event's source with given _source_ .
+
+[#getInstanceWithSourceSupplier_Class_Supplier]
+=== getInstanceWithSourceSupplier(Class, Supplier)
+
+Optionally returns a new event instance, based on whether the eventType has a public no-arg constructor.
+
+Initializes the event's source lazily, that is using given _eventSourceSupplier_ .
+
 [#getSource_]
 === getSource()
 
-The object on which the Event initially occurred.
-
-[#initSource_T]
-=== initSource(T)
-
-A one-shot function. Only allowed to be called if a source has not already been set.
+Returns the object on which the Event initially occurred.
 
 [#toString_]
 === toString()

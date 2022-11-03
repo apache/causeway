@@ -1,0 +1,59 @@
+= CommandLogEntry
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A persistent representation of a xref:refguide:applib:index/services/command/Command.adoc[Command] , being the intention to edit a property or invoke an action.Note that this class doesn't subclass from xref:refguide:applib:index/services/command/Command.adoc[Command] ( xref:refguide:applib:index/services/command/Command.adoc[Command] is not an interface), but it does implement xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto] , providing access to _CommandDto_ , a serialized representation of the xref:refguide:applib:index/services/command/Command.adoc[Command] .
+
+Use cases requiring persistence including auditing, and for replay of commands for regression testing purposes.
+
+== API
+
+[source,java]
+.CommandLogEntry.java
+----
+class CommandLogEntry {
+  public final static String LOGICAL_TYPE_NAME;
+  public static final String SCHEMA;
+  public static final String TABLE;
+  CommandLogEntry(CommandDto commandDto, org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState, int targetIndex)     // <.>
+  void init(Command command)
+  void copyOver(CommandDto commandDto, String key, Consumer<String> consume)
+  String title()
+  ChangeType getType()
+  C getParent()
+  BigDecimal getDuration()     // <.>
+  boolean isComplete()
+  void setException(Throwable exception)
+  String getResultSummary()
+  boolean isCausedException()
+  boolean hideReplayStateFailureReason()
+  void saveAnalysis(String analysis)
+  int compareTo(CommandLogEntry other)
+  String toString()
+  CommandOutcomeHandler outcomeHandler()
+}
+----
+
+<.> xref:#CommandLogEntry_CommandDto_org_apache_causeway_extensions_commandlog_applib_dom_ReplayState_int[CommandLogEntry(CommandDto, org_apache_causeway_extensions_commandlog_applib_dom_ReplayState, int)]
++
+--
+Intended for use on secondary (replay) system.
+--
+<.> xref:#getDuration_[getDuration()]
++
+--
+The number of seconds (to 3 decimal places) that this command lasted, derived from * _#getStartedAt()_ and _#getCompletedAt()_ .
+--
+
+== Members
+
+[#CommandLogEntry_CommandDto_org_apache_causeway_extensions_commandlog_applib_dom_ReplayState_int]
+=== CommandLogEntry(CommandDto, org_apache_causeway_extensions_commandlog_applib_dom_ReplayState, int)
+
+Intended for use on secondary (replay) system.
+
+[#getDuration_]
+=== getDuration()
+
+The number of seconds (to 3 decimal places) that this command lasted, derived from * _#getStartedAt()_ and _#getCompletedAt()_ .
+
+Populated only if it has _#getCompletedAt() completed_ .

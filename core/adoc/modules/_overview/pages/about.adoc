@@ -1592,7 +1592,7 @@ org.hsqldb:hsqldb:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/runtimeservices/publish/LifecycleCallbackNotifier.adoc[LifecycleCallbackNotifier], xref:refguide:core:index/runtimeservices/publish/ObjectLifecyclePublisherDefault.adoc[ObjectLifecyclePublisherDefault], xref:refguide:core:index/runtimeservices/spring/BeanDescriptor.adoc[BeanDescriptor], xref:refguide:core:index/runtimeservices/spring/ContextBeans.adoc[ContextBeans], xref:refguide:core:index/runtimeservices/spring/SpringBeansService.adoc[SpringBeansService], xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring], xref:refguide:core:index/runtimeservices/xml/XmlServiceDefault.adoc[XmlServiceDefault]
+xref:refguide:core:index/runtimeservices/publish/LifecycleCallbackNotifier.adoc[LifecycleCallbackNotifier], xref:refguide:core:index/runtimeservices/publish/ObjectLifecyclePublisherDefault.adoc[ObjectLifecyclePublisherDefault], xref:refguide:core:index/runtimeservices/spring/BeanDescriptor.adoc[BeanDescriptor], xref:refguide:core:index/runtimeservices/spring/ContextBeans.adoc[ContextBeans], xref:refguide:core:index/runtimeservices/spring/SpringBeansService.adoc[SpringBeansService], xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring], xref:refguide:core:index/runtimeservices/urlencoding/UrlEncodingServiceWithCompression.adoc[UrlEncodingServiceWithCompression], xref:refguide:core:index/runtimeservices/xml/XmlServiceDefault.adoc[XmlServiceDefault]
 ****
 
 |Apache Causeway Core - Security
@@ -4277,7 +4277,7 @@ org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<manage
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[AuditTrailMenu]
+xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[AuditTrailMenu], xref:refguide:extensions:index/audittrail/applib/contributions/HasInteractionId_auditTrailEntries.adoc[HasInteractionId_auditTrailEntries], xref:refguide:extensions:index/audittrail/applib/contributions/Object_recentAuditTrailEntries.adoc[Object_recentAuditTrailEntries], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntry.adoc[AuditTrailEntry], xref:refguide:extensions:index/audittrail/applib/dom/AuditTrailEntryRepository.adoc[AuditTrailEntryRepository], xref:refguide:extensions:index/audittrail/applib/spiimpl/EntityPropertyChangeSubscriberForAuditTrail.adoc[EntityPropertyChangeSubscriberForAuditTrail]
 ****
 
 |Apache Causeway Ext - Audit Trail Persistence (using JDO)
@@ -4393,7 +4393,7 @@ org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/executionlog/applib/app/ExecutionLogMenu.adoc[ExecutionLogMenu], xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries], xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[HasUsername_recentExecutionsByUser], xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions]
+xref:refguide:extensions:index/executionlog/applib/CausewayModuleExtExecutionLogApplib.adoc[CausewayModuleExtExecutionLogApplib], xref:refguide:extensions:index/executionlog/applib/app/ExecutionLogMenu.adoc[ExecutionLogMenu], xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries], xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[HasUsername_recentExecutionsByUser], xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[ExecutionLogEntry], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[ExecutionLogEntryRepository], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryType.adoc[ExecutionLogEntryType], xref:refguide:extensions:index/executionlog/applib/dom/mixins/ExecutionLogEntry_siblingExecutions.adoc[ExecutionLogEntry_siblingExecutions], xref:refguide:extensions:index/executionlog/applib/spiimpl/ExecutionSubscriberForExecutionLog.adoc[ExecutionSubscriberForExecutionLog]
 ****
 
 |Apache Causeway Ext - Execution Log Implementation (JDO)
@@ -4489,7 +4489,7 @@ org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/executionoutbox/applib/app/ExecutionOutboxMenu.adoc[ExecutionOutboxMenu]
+xref:refguide:extensions:index/executionoutbox/applib/CausewayModuleExtExecutionOutboxApplib.adoc[CausewayModuleExtExecutionOutboxApplib], xref:refguide:extensions:index/executionoutbox/applib/app/ExecutionOutboxMenu.adoc[ExecutionOutboxMenu], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[ExecutionOutboxEntry], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[ExecutionOutboxEntryRepository], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryType.adoc[ExecutionOutboxEntryType], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxEvents.adoc[OutboxEvents], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxRestApi.adoc[OutboxRestApi], xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ContentMappingServiceForOutboxEvents.adoc[ContentMappingServiceForOutboxEvents], xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ExecutionSubscriberForExecutionOutbox.adoc[ExecutionSubscriberForExecutionOutbox]
 ****
 
 |Apache Causeway Ext - Execution Outbox Implementation (JDO)
@@ -4582,6 +4582,11 @@ org.springframework.boot:spring-boot-starter-test:jar:<managed> +
 org.springframework.boot:spring-boot-starter-web:jar:<managed> +
 ****
 
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionoutbox/restclient/CausewayModuleExtExecutionRestClient.adoc[CausewayModuleExtExecutionRestClient], xref:refguide:extensions:index/executionoutbox/restclient/api/OutboxClient.adoc[OutboxClient]
+****
+
 |Apache Causeway Ext - Execution Republisher
 [source,yaml]
 ----
@@ -4607,6 +4612,11 @@ org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<mana
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionrepublisher/applib/contributions/ExecutionLogEntry_copyToOutbox.adoc[ExecutionLogEntry_copyToOutbox]
 ****
 
 |Apache Causeway Ext - Flyway
@@ -4878,7 +4888,7 @@ org.springframework.security:spring-security-crypto:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/secman/applib/CausewayModuleExtSecmanApplib.adoc[CausewayModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/seed/CausewayAppFeatureRoleAndPermissions.adoc[CausewayAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayConfigurationRoleAndPermissions.adoc[CausewayConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtAuditTrailRoleAndPermissions.adoc[CausewayExtAuditTrailRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtCommandLogRoleAndPermissions.adoc[CausewayExtCommandLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionLogRoleAndPermissions.adoc[CausewayExtExecutionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionOutboxRoleAndPermissions.adoc[CausewayExtExecutionOutboxRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtH2ConsoleRoleAndPermissions.adoc[CausewayExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanAdminRoleAndPermissions.adoc[CausewayExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanRegularUserRoleAndPermissions.adoc[CausewayExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSessionLogRoleAndPermissions.adoc[CausewayExtSessionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayPersistenceJdoMetaModelRoleAndPermissions.adoc[CausewayPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewaySudoImpersonateRoleAndPermissions.adoc[CausewaySudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[CausewayViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/CausewayExtSecmanAdminUser.adoc[CausewayExtSecmanAdminUser]
+xref:refguide:extensions:index/secman/applib/CausewayModuleExtSecmanApplib.adoc[CausewayModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/feature/api/ApplicationFeatureChoices.adoc[ApplicationFeatureChoices], xref:refguide:extensions:index/secman/applib/feature/contributions/ApplicationFeatureViewModel_permissions.adoc[ApplicationFeatureViewModel_permissions], xref:refguide:extensions:index/secman/applib/permission/app/ApplicationOrphanedPermissionManager.adoc[ApplicationOrphanedPermissionManager], xref:refguide:extensions:index/secman/applib/permission/app/mixins/ApplicationOrphanedPermissionManager_relocateSelected.adoc[ApplicationOrphanedPermissionManager_relocateSelected], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepositoryAbstract.adoc[ApplicationPermissionRepositoryAbstract], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_allow.adoc[ApplicationPermission_allow], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_changing.adoc[ApplicationPermission_changing], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_delete.adoc[ApplicationPermission_delete], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_feature.adoc[ApplicationPermission_feature], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_updateRole.adoc[ApplicationPermission_updateRole], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_veto.adoc[ApplicationPermission_veto], xref:refguide:extensions:index/secman/applib/permission/dom/mixins/ApplicationPermission_viewing.adoc[ApplicationPermission_viewing], xref:refguide:extensions:index/secman/applib/permission/menu/ApplicationPermissionMenu.adoc[ApplicationPermissionMenu], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepositoryAbstract.adoc[ApplicationRoleRepositoryAbstract], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_addPermission.adoc[ApplicationRole_addPermission], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_addUser.adoc[ApplicationRole_addUser], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_delete.adoc[ApplicationRole_delete], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_removePermissions.adoc[ApplicationRole_removePermissions], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_removeUsers.adoc[ApplicationRole_removeUsers], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_updateDescription.adoc[ApplicationRole_updateDescription], xref:refguide:extensions:index/secman/applib/role/dom/mixins/ApplicationRole_updateName.adoc[ApplicationRole_updateName], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/man/ApplicationRoleManager.adoc[ApplicationRoleManager], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_allRoles.adoc[ApplicationRoleManager_allRoles], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_exportAsYaml.adoc[ApplicationRoleManager_exportAsYaml], xref:refguide:extensions:index/secman/applib/role/man/mixins/ApplicationRoleManager_newRole.adoc[ApplicationRoleManager_newRole], xref:refguide:extensions:index/secman/applib/role/menu/ApplicationRoleMenu.adoc[ApplicationRoleMenu], xref:refguide:extensions:index/secman/applib/role/seed/CausewayAppFeatureRoleAndPermissions.adoc[CausewayAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayConfigurationRoleAndPermissions.adoc[CausewayConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtAuditTrailRoleAndPermissions.adoc[CausewayExtAuditTrailRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtCommandLogRoleAndPermissions.adoc[CausewayExtCommandLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionLogRoleAndPermissions.adoc[CausewayExtExecutionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionOutboxRoleAndPermissions.adoc[CausewayExtExecutionOutboxRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtH2ConsoleRoleAndPermissions.adoc[CausewayExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanAdminRoleAndPermissions.adoc[CausewayExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSecmanRegularUserRoleAndPermissions.adoc[CausewayExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtSessionLogRoleAndPermissions.adoc[CausewayExtSessionLogRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayPersistenceJdoMetaModelRoleAndPermissions.adoc[CausewayPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewaySudoImpersonateRoleAndPermissions.adoc[CausewaySudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[CausewayViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepositoryAbstract.adoc[ApplicationTenancyRepositoryAbstract], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_addChild.adoc[ApplicationTenancy_addChild], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_addUser.adoc[ApplicationTenancy_addUser], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_delete.adoc[ApplicationTenancy_delete], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_removeChild.adoc[ApplicationTenancy_removeChild], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_removeUser.adoc[ApplicationTenancy_removeUser], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_updateName.adoc[ApplicationTenancy_updateName], xref:refguide:extensions:index/secman/applib/tenancy/dom/mixins/ApplicationTenancy_users.adoc[ApplicationTenancy_users], xref:refguide:extensions:index/secman/applib/tenancy/fixtures/AbstractTenancyFixtureScript.adoc[AbstractTenancyFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/man/ApplicationTenancyManager.adoc[ApplicationTenancyManager], xref:refguide:extensions:index/secman/applib/tenancy/man/mixins/ApplicationTenancyManager_allTenancies.adoc[ApplicationTenancyManager_allTenancies], xref:refguide:extensions:index/secman/applib/tenancy/man/mixins/ApplicationTenancyManager_newTenancy.adoc[ApplicationTenancyManager_newTenancy], xref:refguide:extensions:index/secman/applib/tenancy/menu/ApplicationTenancyMenu.adoc[ApplicationTenancyMenu], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/contributions/HasUsername_open.adoc[HasUsername_open], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepositoryAbstract.adoc[ApplicationUserRepositoryAbstract], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_addRole.adoc[ApplicationUser_addRole], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_delete.adoc[ApplicationUser_delete], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_duplicate.adoc[ApplicationUser_duplicate], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_lock.adoc[ApplicationUser_lock], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_removeRoles.adoc[ApplicationUser_removeRoles], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_resetPassword.adoc[ApplicationUser_resetPassword], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_timeZone.adoc[ApplicationUser_timeZone], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_unlock.adoc[ApplicationUser_unlock], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateAccountType.adoc[ApplicationUser_updateAccountType], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateAtPath.adoc[ApplicationUser_updateAtPath], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateEmailAddress.adoc[ApplicationUser_updateEmailAddress], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateFaxNumber.adoc[ApplicationUser_updateFaxNumber], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateLocale.adoc[ApplicationUser_updateLocale], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateName.adoc[ApplicationUser_updateName], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updatePassword.adoc[ApplicationUser_updatePassword], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updatePhoneNumber.adoc[ApplicationUser_updatePhoneNumber], xref:refguide:extensions:index/secman/applib/user/dom/mixins/ApplicationUser_updateUsername.adoc[ApplicationUser_updateUsername], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/ApplicationUser_effectiveMemberPermissions.adoc[ApplicationUser_effectiveMemberPermissions], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/ApplicationUser_filterEffectiveMemberPermissions.adoc[ApplicationUser_filterEffectiveMemberPermissions], xref:refguide:extensions:index/secman/applib/user/dom/mixins/perms/UserPermissionViewModel.adoc[UserPermissionViewModel], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/man/ApplicationUserManager.adoc[ApplicationUserManager], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_allUsers.adoc[ApplicationUserManager_allUsers], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_newDelegateUser.adoc[ApplicationUserManager_newDelegateUser], xref:refguide:extensions:index/secman/applib/user/man/mixins/ApplicationUserManager_newLocalUser.adoc[ApplicationUserManager_newLocalUser], xref:refguide:extensions:index/secman/applib/user/menu/ApplicationUserMenu.adoc[ApplicationUserMenu], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/CausewayExtSecmanAdminUser.adoc[CausewayExtSecmanAdminUser], xref:refguide:extensions:index/secman/applib/util/RegexReplacer.adoc[RegexReplacer]
 ****
 
 |Apache Causeway Ext - Sec Man Delegated (Using Shiro)
@@ -5101,6 +5111,11 @@ o.a.i.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog +
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/sessionlog/applib/app/SessionLogMenu.adoc[SessionLogMenu], xref:refguide:extensions:index/sessionlog/applib/contributions/HasUsername_recentSessionsForUser.adoc[HasUsername_recentSessionsForUser], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntry.adoc[SessionLogEntry], xref:refguide:extensions:index/sessionlog/applib/dom/SessionLogEntryRepository.adoc[SessionLogEntryRepository], xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionLogServiceInitializer.adoc[SessionLogServiceInitializer], xref:refguide:extensions:index/sessionlog/applib/spiimpl/SessionSubscriberForSessionLog.adoc[SessionSubscriberForSessionLog]
 ****
 
 |Apache Causeway Ext - Session Log Persistence (using JDO)
@@ -5562,7 +5577,10 @@ Directory: /extensions/core/commandlog/applib
 ----
 |.Components
 ****
+o.a.i.extensions.commandlog.applib.dom.BackgroundService +
+o.a.i.extensions.commandlog.applib.dom.BackgroundService$PersistCommandExecutorService +
 o.a.i.extensions.commandlog.applib.dom.CommandLogEntry$TableColumnOrderDefault +
+o.a.i.extensions.commandlog.applib.job.RunBackgroundCommandsJob +
 o.a.i.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog +
 ****
 
@@ -5574,11 +5592,12 @@ org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+org.quartz-scheduler:quartz:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/commandlog/applib/app/CommandLogMenu.adoc[CommandLogMenu], xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteractionId_commandLogEntry], xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser], xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands], xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[CommandSubscriberForCommandLog]
+xref:refguide:extensions:index/commandlog/applib/app/CommandLogMenu.adoc[CommandLogMenu], xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteractionId_commandLogEntry], xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser], xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[CommandLogEntryRepository], xref:refguide:extensions:index/commandlog/applib/dom/ExecuteIn.adoc[ExecuteIn], xref:refguide:extensions:index/commandlog/applib/dom/ReplayState.adoc[ReplayState], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_childCommands.adoc[CommandLogEntry_childCommands], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_openResultObject.adoc[CommandLogEntry_openResultObject], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_siblingCommands.adoc[CommandLogEntry_siblingCommands], xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[RunBackgroundCommandsJob], xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[CommandSubscriberForCommandLog]
 ****
 
 |Apache Causeway Ext - Command Log Implementation (JDO)
@@ -5641,74 +5660,6 @@ xref:refguide:extensions:index/commandlog/jpa/CausewayModuleExtCommandLogPersist
 === Core: Command Replay
 
 === Core: Quartz
-
-[plantuml,Core~ Quartz,svg]
-----
-@startuml(id=Core:_Quartz)
-title Core: Quartz - Containers
-caption Artifact Hierarchy (Maven)
-
-skinparam {
-  shadowing false
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-hide stereotype
-left to right direction
-skinparam rectangle<<2>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<3>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-package "Core: Quartz\n[Software System]" {
-  rectangle "==Apache Causeway Ext - Quartz\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
-  rectangle "==Apache Causeway Ext - Quartz Impl\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
-}
-2 .[#707070].> 3 : ""
-@enduml
-----
-.Projects/Modules (Core: Quartz)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Causeway Ext - Quartz
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-quartz
-Type: pom
-Directory: /extensions/core/quartz
-----
-|Integrates Quartz
-
-|Apache Causeway Ext - Quartz Impl
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-quartz-impl
-Type: jar
-Directory: /extensions/core/quartz/impl
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-config:jar:<managed> +
-org.apache.causeway.core:causeway-core-security:jar:<managed> +
-org.springframework.boot:spring-boot-starter-quartz:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/quartz/CausewayModuleExtQuartzImpl.adoc[CausewayModuleExtQuartzImpl], xref:refguide:extensions:index/quartz/context/JobExecutionData.adoc[JobExecutionData], xref:refguide:extensions:index/quartz/spring/AutowiringSpringBeanJobFactory.adoc[AutowiringSpringBeanJobFactory]
-****
-|===
 
 === Security: Secman
 
@@ -5818,7 +5769,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.26.0 +
+org.checkerframework:checker-qual:jar:3.27.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.3.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -5977,12 +5928,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5997,12 +5948,12 @@ skinparam rectangle<<23>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -7152,7 +7103,6 @@ org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.core:causeway-schema:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-quartz-impl:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy4:jar:<managed> +

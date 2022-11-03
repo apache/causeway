@@ -45,7 +45,8 @@ usage() {
  echo ""                                                                                               >&2
  echo "  -p run 'git pull --ff-only' first"                                                            >&2
  echo "  -c include 'clean' goal"                                                                      >&2
- echo "  -t add '-Dmaven-timeline.version=1.8-SNAPSHOT' for improved timeline output"                  >&2
+ echo "  -t skip tests"                                                                                >&2
+ echo "  -n add '-Dmaven-timeline.version=1.8-SNAPSHOT' for improved timeline output"                  >&2
  echo "  -l single threaded, do NOT add '-T1C' flag"                                                   >&2
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
@@ -61,6 +62,7 @@ usage() {
 
 GIT_PULL=false
 CLEAN=false
+SKIP_TESTS=false
 TIMELINE=false
 SKIP_OFFLINE=false
 PACKAGE_ONLY=false
@@ -75,12 +77,13 @@ VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prctlkyIOFSwveh' opt
+while getopts 'prcntlkyIOFSwveh' opt
 do
   case $opt in
     p) export GIT_PULL=true ;;
     c) export CLEAN=true ;;
-    t) export TIMELINE=true ;;
+    t) export SKIP_TESTS=true ;;
+    n) export TIMELINE=true ;;
     O) export SKIP_OFFLINE=true ;;
     l) export SINGLE_THREADED=true ;;
     k) export PACKAGE_ONLY=true ;;
@@ -108,7 +111,8 @@ echo ""
 if [ "$VERBOSE" = "true" ]; then
   echo "-p GIT_PULL                 : $GIT_PULL"
   echo "-c CLEAN                    : $CLEAN"
-  echo "-t TIMELINE                 : $TIMELINE"
+  echo "-t SKIP_TESTS               : $SKIP_TESTS"
+  echo "-n TIMELINE                 : $TIMELINE"
   echo "-l SINGLE_THREADED          : $SINGLE_THREADED"
   echo "-k PACKAGE_ONLY             : $PACKAGE_ONLY"
   echo "-y VERIFY_ONLY              : $VERIFY_ONLY"
@@ -138,6 +142,10 @@ OPTS=""
 
 if [ "$CLEAN" = "true" ]; then
   OPTS="$OPTS clean"
+fi
+
+if [ "$SKIP_TESTS" = "true" ]; then
+  OPTS="$OPTS -DskipTests=true"
 fi
 
 if [ "$TIMELINE" = "true" ]; then
