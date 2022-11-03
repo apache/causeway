@@ -105,6 +105,9 @@ public class BackgroundService {
         );
     }
 
+    /**
+     * @since 2.0 {@index}
+     */
     @Service
     public static class PersistCommandExecutorService implements ExecutorService {
 
