@@ -152,7 +152,7 @@ This is shown below.
 .processing messages from the outbox
 image::outbox.png[width=600px]
 
-The module provides a REST service, along with a rest client, xref:refguide:extensions:index/executionlog/restclient/api/OutboxClient.adoc[OutboxClient].
+The module provides a REST service, along with a rest client, xref:refguide:extensions:index/executionoutbox/restclient/api/OutboxClient.adoc[OutboxClient].
 The `OutboxClient` is used by the _message processor_ shown in the above diagram.
 
 
