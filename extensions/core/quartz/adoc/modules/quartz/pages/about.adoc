@@ -2,6 +2,12 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+[CAUTION]
+====
+TODO - v2 I think this module may no longer be necessary; Spring Boot can inject into jobs just fine.
+Moving to incubator, pending possible deletion.
+====
+
 Quartz is (according to their link:https://www.quartz-scheduler.org/[website]) a richly featured, open source job scheduling library that can be integrated within virtually any Java application.
 
 We can configure Quartz to run ``Job``s using xref:userguide:btb:headless-access.adoc[headless access], for numerous use cases, most commonly involving the polling of work to be performed in the background.
@@ -18,7 +24,7 @@ This extension supports the use case where there is a requirement to pass state 
 
 == Simple use case
 
-The simple use case (that _doesn't_ require a dependeny on this extension) is demonstrated in the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
+The simple use case (that _doesn't_ require a dependency on this extension) is demonstrated in the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
 
 * add the dependency (eg to the webapp module):
 +
@@ -53,7 +59,7 @@ The simple use case (that _doesn't_ require a dependeny on this extension) is de
 @Slf4j
 public class SampleJob implements Job {
 
-    private final InteractionService interactionService;         // <1>
+    private final InteractionService interactionService;         // <.>
     private final TransactionalProcessor transactionalProcessor; // <1>
 
     @Override
@@ -62,7 +68,7 @@ public class SampleJob implements Job {
     }
 }
 ----
-<1> for xref:userguide:btb:headless-access.adoc[headless access] to the domain object model.
+<.> for xref:userguide:btb:headless-access.adoc[headless access] to the domain object model.
 
 * Set up beans to act as the trigger factory and a job factory:
 +
@@ -104,11 +110,28 @@ public class QuartzModule {
 
 == More complex use cases
 
-This extension supports a couple of slightly more advanced use cases.
+This _Quartz_ module is intended to support a couple of slightly more advanced use cases.
 
 If either are used:
 
-* update the `pom.xml` dependencies:
+* add an entry to the `pom.xml` `dependencyManagement` section:
++
+[source,xml]
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-quartz</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+* add the following dependency:
 +
 [source,xml]
 ----
@@ -143,9 +166,6 @@ To support this use case, this extension provides the xref:refguide:extensions:i
 
 
 === Injecting domain services into jobs
-
-CAUTION: TODO - it's possible this boilerplate may be unnecessary?
-xref:docs:starters:simpleapp.adoc[SimpleApp]'s job seems to be injected into without this extra rigamorole.
 
 If we want to inject domain services into the Quartz `Job`, then we should define a number of additional beans.
 These instantiate xref:refguide:extensions:index/quartz/spring/AutowiringSpringBeanJobFactory.adoc[] as the job factory:

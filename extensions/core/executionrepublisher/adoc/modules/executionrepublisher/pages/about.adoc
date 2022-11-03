@@ -8,3 +8,25 @@
 The _executionrepublisher_ module contributes an action to allow logged executions (as per the xref:userguide:executionlog:about.adoc[] module) to be republished to the outbox (as per the xref:userguide:executionoutbox:about.adoc[] modul).
 
 WARNING: TODO: v2 - to write up...
+
+== Setup
+
+=== Dependency Management
+
+Add a section for _Execution Republisher_'s own BOM:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionrepublisher</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----

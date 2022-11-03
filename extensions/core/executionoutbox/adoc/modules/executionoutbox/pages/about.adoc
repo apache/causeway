@@ -4,20 +4,105 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-
-
-The _executionoutbox_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s into an "outbox" (using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store).
+The _Execution Outbox_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s into an "outbox" (using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store).
 The purpose of the "outbox" is to act as a temporary store of executions to be propogated to other "downstream" systems.
 
 The module also provides a REST API, a rest client and DTOs to represent the payloads between these two services.
 The client polls the outbox through the REST API (for example every 15 seconds), and uses it to download any new executions.
 Once processed (eg published to a message bus), the client then uses the same REST API to delete the executions.
+The usage REST client is described xref:outbox-rest-client[below].
+
+== Setup
+
+=== Dependency Management
+
+Add a section for _Execution Outbox_'s own BOM:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionoutbox</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-executionoutbox-persistence-XXX</artifactId>    <!--.-->
+    </dependency>
+</dependencies>
+----
+<.> specify either `causeway-extensions-executionoutbox-persistence-jpa` or `causeway-extensions-executionoutbox-persistence-jdo`, as required
+
+[[_update-appmanifest]]
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the _ExecutionOutbox_ modules.
 
 
-WARNING: TODO: v2 - to write up...
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtExecutionOutboxPersistenceXxx.class,        // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+
+<.> specify either `CausewayModuleExtExecutionOutboxPersistenceJdo` or `CausewayModuleExtExecutionOutboxPersistenceJpa`, as required
+
+If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
+
+[#configure-properties]
+=== Configuration Properties
+
+Add the database schema used by the _Execution Outbox_ entities to the configuration file:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  persistence:
+    schema:
+      auto-create-schemas: causewayExtExecutionOutbox
+----
+
+Optionally, modify the configuration properties for the _Execution Outbox_ module itself:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  extensions:
+    execution-outbox:
+      rest-api:
+        max-pending: 100
+----
 
 
-== menubar.layout.xml
+[#menubar-layout-xml]
+=== menubar.layout.xml
 
 Once configured, the extension provides a number of menu actions.
 You can use `menubars.layout.xml` to arrange these as you see fit.
@@ -40,3 +125,110 @@ To get you started, the following fragment adds all of the actions to an "Activi
     </mb3:menu>
 </mb3:secondary>
 ----
+
+[#secman-security-roles]
+=== SecMan Security Roles
+
+If xref:security:secman:about.adoc[] extension is configured, then permissions must be granted to access the menu actions.
+
+This can be done by granting the role set up by the xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionOutboxRoleAndPermissions.adoc[] seed fixture script (see its `ROLE_NAME` constant).
+
+
+== User Interface
+
+The extension provides a number of menu actions, as listed in xref:menubar-layout-xml[], above.
+They allow the administrator to query the persisted commands.
+Typically access to these actions would be restricted, see xref:secman-security-roles[security roles] above.
+
+
+[#outbox-rest-client]
+== Outbox REST Client
+
+Once an execution has been persisted into the outbox, it will stay there until it has been processed and removed by another process.
+Typically that other process will be a microservice that forwards on the message to an event bus.
+
+This is shown below.
+
+.processing messages from the outbox
+image::outbox.png[width=600px]
+
+The module provides a REST service, along with a rest client, xref:refguide:extensions:index/executionlog/restclient/api/OutboxClient.adoc[OutboxClient].
+The `OutboxClient` is used by the _message processor_ shown in the above diagram.
+
+
+=== Prerequisites
+
+To setup the message processor:
+
+* in `dependencyManagement` section, add an entry for _Execution Outbox_'s own BOM:
++
+[source,xml]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionoutbox</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+* In the `dependencies` section, add the following dependency:
++
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
+    </dependency>
+</dependencies>
+----
+
+
+=== Usage
+
+To instantiate the `OutboxClient`, specify the URL, user and password.
+The URL will be something like: `http://localhost:8080/restful/`, where the last part is the default path obtainable from the `resteasy.jaxrs.defaultPath` configuration property of the Causeway app.
+
+The `OutboxClient` API consists of three methods:
+
+* to retrieve any pending interactions:
++
+[source,java]
+----
+List<InteractionDto> pending = outboxClient.pending();
+----
+
+* to delete a single interaction:
++
+[source,java]
+----
+val first = pending.get(0);
+val interactionId = first.getInteractionId();
+val sequence      = first.getExecution().getSequence();
+
+outboxClient.delete(interactionId, sequence);
+----
+
+* to delete many interactions:
++
+[source,java]
+----
+outboxClient.deleteMany(pending);
+----
+
+The maximum number of interactions that will be returned is configurable, see xref:configure-properties[above].
+
+
+== See also
+
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI
+* xref:executionlog:about.adoc[] extension
+

@@ -7,7 +7,7 @@
 The _Command Log_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
 
 One use case is to combine with the xref:security:audittrail:about.adoc[] extension.
-The _commandlog_ module logs the action invocations or property edits that the end-user makes, while the _audit trail_ logs the resultant changes in state to domain objects.
+The _Command Log_ module logs the action invocations or property edits that the end-user makes, while the _audit trail_ logs the resultant changes in state to domain objects.
 The two logs are correlated using the xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interactionId] of the owning xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
 
 Another use case is to support (persisted) background commands, whereby actions are not invoked immediately but instead persisted and invoked by a background thread; this is described in the xref:#background-commands[background commands] section below.
@@ -18,9 +18,9 @@ Sometimes the xref:executionlog:about.adoc[] extension is also configured with o
 
 == Setup
 
-include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+=== Dependency Management
 
-In addition, add a section for _Command Log_'s own BOM:
+Add a section for the _Command Log_ module's own BOM:
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -61,7 +61,6 @@ In the webapp module of your application, add the following dependency:
 
 
 In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the CommandLog modules.
-You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
 
 [source,java]
 .AppManifest.java
@@ -78,6 +77,7 @@ public class AppManifest {
 
 <.> specify either `CausewayModuleExtCommandLogPersistenceJdo` or `CausewayModuleExtCommandLogPersistenceJpa`, as required
 
+If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
 
 [#configure-properties]
 === Configuration Properties
@@ -93,7 +93,7 @@ causeway:
       auto-create-schemas: causewayExtCommandLog
 ----
 
-Optionally, modify the configuration properties for CommandLog itself:
+Optionally, modify the configuration properties for the _Command Log_ module itself:
 
 [source,yaml]
 .application.yml
@@ -137,22 +137,21 @@ To get you started, the following fragment adds all of the actions to an "Activi
 </mb3:secondary>
 ----
 
-[#security-roles]
-=== Security Roles
+[#secman-security-roles]
+=== SecMan Security Roles
 
-TODO - v2
+If xref:security:secman:about.adoc[] extension is configured, then permissions must be granted to access the menu actions.
+
+This can be done by granting the role set up by the xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtCommandLogRoleAndPermissions.adoc[] seed fixture script (see its `ROLE_NAME` constant).
 
 
-
-
-[#background-commands]
 == User Interface
 
 The extension provides a number of menu actions and contributions.
 
 The menu actions are as listed in xref:menubar-layout-xml[], above.
 They allow the administrator to query the persisted commands.
-Typically access to these actions would be restricted, see xref:security-roles[security roles] above.
+Typically access to these actions would be restricted, see xref:secman-security-roles[security roles] above.
 
 The extension also provides these mixins:
 
@@ -170,7 +169,9 @@ Most notably, this is xref:security:secman:about.adoc[] extension's xref:refguid
 It is also supported by xref:security:sessionlog:about.adoc
 
 * xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[]
-
++
+This contributes the `commandLogEntry` property to any object implementing xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[] interface.
+Typically these are the entities persisted by the xref:executionlog:about.adoc[] or xref:security:audittrail:about.adoc[] extensions, making it easy to traverse between these logs.
 
 
 [#background-commands]
@@ -224,7 +225,7 @@ This is a Spring `@Service` and so can be obtained through injection.
 === Executing Actions using the Quartz scheduler
 
 Once a command has been persisted as a `CommandLogEntry`, we require some other process to actually execute the command.
-The _commandlog_ module includes the `RunBackgroundCommandsJob`, a https://www.quartz-scheduler.org/[Quartz] job that does exactly this.
+The _Command Log_ module includes the `RunBackgroundCommandsJob`, a https://www.quartz-scheduler.org/[Quartz] job that does exactly this.
 Each time it is called it will query for any background commands that have not been started, and will execute each (using the xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]).
 
 The job is marked as non re-entrant, so it doesn't matter how often it is called; we recommend a 10 second delay usually works fine.
@@ -267,8 +268,8 @@ public class AppManifest {
 
 ==== Disabling Quartz
 
-The _commandlog_ module automatically references the https://www.quartz-scheduler.org/[Quartz] library.
-If you don't want to use this functionality and want to exclude quartz, then add an explicit dependency on the _commandlog_ applib but exclude the quartz dependency within it:
+The _Command Log_ module automatically references the https://www.quartz-scheduler.org/[Quartz] library.
+If you don't want to use this functionality and want to exclude quartz, then add an explicit dependency on the _Command Log_ applib but exclude the quartz dependency within it:
 
 [source,xml]
 .pom.xml

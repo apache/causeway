@@ -42,10 +42,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
 import javax.inject.Named;
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.Payload;
+import javax.validation.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -2863,8 +2862,104 @@ public class CausewayConfiguration {
     }
 
     private final Extensions extensions = new Extensions();
+    @Valid
     @Data
     public static class Extensions {
+
+        private final CommandLog commandLog = new CommandLog();
+        @Data
+        public static class CommandLog {
+
+            public enum PublishPolicy {
+                ALWAYS,
+                ONLY_IF_SYSTEM_CHANGED,
+                ;
+                public boolean isAlways() { return this == ALWAYS; }
+                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
+
+            }
+            /**
+             * Whether commands should be published always, or only if a change in the system's state has been detected.
+             *
+             * <p>
+             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
+             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
+             * changed.
+             * </p>
+             *
+             * <p>
+             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
+             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
+             * </p>
+             */
+            @Getter @Setter
+            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
+
+        }
+
+        private final CommandReplay commandReplay = new CommandReplay();
+        @Data
+        public static class CommandReplay {
+
+            private final PrimaryAccess primaryAccess = new PrimaryAccess();
+            @Data
+            public static class PrimaryAccess {
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlRestful = Optional.empty();
+                private Optional<String> user = Optional.empty();
+                private Optional<String> password = Optional.empty();
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlWicket = Optional.empty();
+            }
+
+            private final SecondaryAccess secondaryAccess = new SecondaryAccess();
+            @Data
+            public static class SecondaryAccess {
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlWicket = Optional.empty();
+            }
+
+            private Integer batchSize = 10;
+
+            private final QuartzSession quartzSession = new QuartzSession();
+            @Data
+            public static class QuartzSession {
+                /**
+                 * The user that runs the replay session secondary.
+                 */
+                private String user = "causewayModuleExtCommandReplaySecondaryUser";
+                private List<String> roles = listOf("causewayModuleExtCommandReplaySecondaryRole");
+            }
+
+            private final QuartzReplicateAndReplayJob quartzReplicateAndReplayJob = new QuartzReplicateAndReplayJob();
+            @Data
+            public static class QuartzReplicateAndReplayJob {
+                /**
+                 * Number of milliseconds before starting the job.
+                 */
+                private long startDelay = 15000;
+                /**
+                 * Number of milliseconds before running again.
+                 */
+                private long repeatInterval = 10000;
+            }
+
+            private final Analyser analyser = new Analyser();
+            @Data
+            public static class Analyser {
+                private final Result result = new Result();
+                @Data
+                public static class Result {
+                    private boolean enabled = true;
+                }
+                private final Exception exception = new Exception();
+                @Data
+                public static class Exception {
+                    private boolean enabled = true;
+                }
+
+            }
+        }
 
         private final Cors cors = new Cors();
         @Data
@@ -2975,103 +3070,21 @@ public class CausewayConfiguration {
 
         }
 
-        private final Quartz quartz = new Quartz();
+        private final ExecutionOutbox executionOutbox = new ExecutionOutbox();
+        @Valid
         @Data
-        public static class Quartz {
-        }
+        public static class ExecutionOutbox {
 
-        private final CommandLog commandLog = new CommandLog();
-        @Data
-        public static class CommandLog {
-
-            public enum PublishPolicy {
-                ALWAYS,
-                ONLY_IF_SYSTEM_CHANGED,
-                ;
-                public boolean isAlways() { return this == ALWAYS; }
-                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
-
-            }
-            /**
-             * Whether commands should be published always, or only if a change in the system's state has been detected.
-             *
-             * <p>
-             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
-             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
-             * changed.
-             * </p>
-             *
-             * <p>
-             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
-             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
-             * </p>
-             */
-            @Getter @Setter
-            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
-
-        }
-
-        private final CommandReplay commandReplay = new CommandReplay();
-        @Data
-        public static class CommandReplay {
-
-            private final PrimaryAccess primaryAccess = new PrimaryAccess();
+            private final RestApi restApi = new RestApi();
+            @Valid
             @Data
-            public static class PrimaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlRestful = Optional.empty();
-                private Optional<String> user = Optional.empty();
-                private Optional<String> password = Optional.empty();
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlWicket = Optional.empty();
-            }
-
-            private final SecondaryAccess secondaryAccess = new SecondaryAccess();
-            @Data
-            public static class SecondaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlWicket = Optional.empty();
-            }
-
-            private Integer batchSize = 10;
-
-            private final QuartzSession quartzSession = new QuartzSession();
-            @Data
-            public static class QuartzSession {
+            public static class RestApi {
                 /**
-                 * The user that runs the replay session secondary.
+                 * The maximum number of interactions that will be returned when the REST API is polled.
                  */
-                private String user = "causewayModuleExtCommandReplaySecondaryUser";
-                private List<String> roles = listOf("causewayModuleExtCommandReplaySecondaryRole");
-            }
-
-            private final QuartzReplicateAndReplayJob quartzReplicateAndReplayJob = new QuartzReplicateAndReplayJob();
-            @Data
-            public static class QuartzReplicateAndReplayJob {
-                /**
-                 * Number of milliseconds before starting the job.
-                 */
-                private long startDelay = 15000;
-                /**
-                 * Number of milliseconds before running again.
-                 */
-                private long repeatInterval = 10000;
-            }
-
-            private final Analyser analyser = new Analyser();
-            @Data
-            public static class Analyser {
-                private final Result result = new Result();
-                @Data
-                public static class Result {
-                    private boolean enabled = true;
-                }
-                private final Exception exception = new Exception();
-                @Data
-                public static class Exception {
-                    private boolean enabled = true;
-                }
-
+                @Min(value = 1)
+                @Max(value = 1000)
+                private int maxPending = 100;
             }
         }
 
