@@ -55,6 +55,12 @@ import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSession
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Represents the session of an end-user, in other words the span of time from them logging into the application until
+ * they are log out either explicitly or through some timeout.
+ *
+ * @since 2.0 {@index}
+ */
 @Named(SessionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,

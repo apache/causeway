@@ -39,6 +39,9 @@ import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMapp
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)
 @DomainService(nature = NatureOfService.REST)
 @RequiredArgsConstructor

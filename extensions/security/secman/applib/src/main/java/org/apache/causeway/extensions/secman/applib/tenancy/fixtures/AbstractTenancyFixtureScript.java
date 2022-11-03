@@ -24,6 +24,10 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 public abstract class AbstractTenancyFixtureScript extends FixtureScript {
 
 

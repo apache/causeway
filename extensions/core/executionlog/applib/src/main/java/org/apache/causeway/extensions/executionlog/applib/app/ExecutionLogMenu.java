@@ -44,6 +44,9 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryR
 import lombok.RequiredArgsConstructor;
 
 /**
+ * This service exposes a set of menu actions to search and list {@link ExecutionLogEntry execution}s, by default under
+ * the &quot;Activity&quot; secondary menu.
+ *
  * @since 2.0 {@index}
  */
 @Named(ExecutionLogMenu.LOGICAL_TYPE_NAME)

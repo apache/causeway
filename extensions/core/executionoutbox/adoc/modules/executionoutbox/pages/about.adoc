@@ -15,3 +15,28 @@ Once processed (eg published to a message bus), the client then uses the same RE
 
 
 WARNING: TODO: v2 - to write up...
+
+
+== menubar.layout.xml
+
+Once configured, the extension provides a number of menu actions.
+You can use `menubars.layout.xml` to arrange these as you see fit.
+To get you started, the following fragment adds all of the actions to an "Activity" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    ...
+    <mb3:menu>
+        <mb3:named>Activity</mb3:named>
+        ...
+        <mb3:section>
+            <mb3:named>Execution Outbox</mb3:named>
+            <mb3:serviceAction id="findOldest" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
+        </mb3:section>
+        ...
+    </mb3:menu>
+</mb3:secondary>
+----

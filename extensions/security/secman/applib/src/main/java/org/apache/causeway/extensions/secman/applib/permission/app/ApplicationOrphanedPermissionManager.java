@@ -30,6 +30,10 @@ import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanAppli
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationOrphanedPermissionManager.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)

@@ -25,7 +25,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Provides access to open up the Swagger UI.
+ * Sets up a role with access to the menu action that opens up the Swagger UI.
  *
  * @since 2.0 {@index}
  */

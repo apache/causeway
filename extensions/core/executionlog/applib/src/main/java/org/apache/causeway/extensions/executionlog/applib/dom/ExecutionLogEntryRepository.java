@@ -45,6 +45,8 @@ import lombok.val;
 /**
  * Provides supporting functionality for querying and persisting
  * {@link ExecutionLogEntry command} entities.
+ *
+ * @since 2.0 {@index}
  */
 public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
 

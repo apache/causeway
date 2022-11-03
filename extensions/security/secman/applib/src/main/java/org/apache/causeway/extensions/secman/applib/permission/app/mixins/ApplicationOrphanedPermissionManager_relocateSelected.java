@@ -41,6 +41,10 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         choicesFrom = "orphanedPermissions",
         domainEvent = DomainEvent.class,

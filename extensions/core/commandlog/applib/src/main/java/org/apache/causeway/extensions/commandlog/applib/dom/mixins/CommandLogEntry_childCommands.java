@@ -30,6 +30,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import lombok.RequiredArgsConstructor;
 
 
+/**
+ * @since 2.x {@index}
+ */
 @Collection(
     domainEvent = CommandLogEntry_childCommands.CollectionDomainEvent.class
 )

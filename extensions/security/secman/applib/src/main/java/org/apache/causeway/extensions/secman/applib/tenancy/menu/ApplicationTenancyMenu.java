@@ -42,6 +42,10 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.extensions.secman.applib.tenancy.man.ApplicationTenancyManager;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationTenancyMenu.LOGICAL_TYPE_NAME)
 @DomainService(
         nature = NatureOfService.VIEW

@@ -35,6 +35,10 @@ import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 public abstract class ApplicationTenancyRepositoryAbstract<T extends ApplicationTenancy>
 implements ApplicationTenancyRepository {
 

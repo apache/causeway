@@ -26,6 +26,10 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
+ * Sets up a role with access to the menu action to impersonate others (using
+ * {@link org.apache.causeway.applib.services.sudo.SudoService}).
+ *
+ * @see org.apache.causeway.applib.services.sudo.SudoService
  * @since 2.0 {@index}
  */
 public class CausewaySudoImpersonateRoleAndPermissions

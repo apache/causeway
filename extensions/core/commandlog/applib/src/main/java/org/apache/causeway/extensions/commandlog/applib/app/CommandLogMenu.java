@@ -45,6 +45,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import lombok.RequiredArgsConstructor;
 
 /**
+ * This service exposes a set of menu actions to search and list {@link CommandLogEntry command}s, by default under
+ * the &quot;Activity&quot; secondary menu.
+ *
  * @since 2.0 {@index}
  */
 @Named(CommandLogMenu.LOGICAL_TYPE_NAME)

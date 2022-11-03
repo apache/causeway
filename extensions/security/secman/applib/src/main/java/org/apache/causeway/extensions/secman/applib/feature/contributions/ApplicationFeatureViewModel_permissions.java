@@ -31,6 +31,10 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Collection(
 ) @CollectionLayout(
         defaultView = "table",

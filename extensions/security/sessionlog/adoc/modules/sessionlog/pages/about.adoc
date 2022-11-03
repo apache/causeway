@@ -7,3 +7,29 @@ The Session Log extension provides an implementation of the xref:refguide:applib
 When a user logs on, a `SessionLogEntry` instance is persisted; when they log off, the same instance is updated.
 
 WARNING: TODO: v2 - to write up...
+
+
+
+== menubar.layout.xml
+
+Once configured, the extension provides a number of menu actions.
+You can use `menubars.layout.xml` to arrange these as you see fit.
+To get you started, the following fragment adds all of the actions to an "Activity" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    ...
+    <mb3:menu>
+        <mb3:named>Activity</mb3:named>
+        ...
+        <mb3:section>
+            <mb3:named>Sessions</mb3:named>
+            <mb3:serviceAction id="activeSessions" objectType="isis.ext.sessionLog.SessionLogMenu"/>
+            <mb3:serviceAction id="findSessions" objectType="isis.ext.sessionLog.SessionLogMenu"/>
+        </mb3:section>
+        ...
+    </mb3:menu>
+</mb3:secondary>
+----

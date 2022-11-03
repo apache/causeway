@@ -43,6 +43,8 @@ import lombok.Getter;
 /**
  * Provides supporting functionality for querying and persisting
  * {@link ExecutionOutboxEntry command} entities.
+ *
+ * @since 2.0 {@index}
  */
 public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEntry> {
 

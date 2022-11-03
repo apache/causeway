@@ -29,6 +29,10 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.Applic
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT

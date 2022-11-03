@@ -4,9 +4,160 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The _executionlog_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
-
-WARNING: TODO: v2 - to write up...
+The _Execution Log_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
 
 
+One use case is to combine with the xref:security:audittrail:about.adoc[] extension.
+The _commandlog_ module logs the action invocations or property edits that the end-user makes, while the _audit trail_ logs the resultant changes in state to domain objects.
+The two logs are correlated using the xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interactionId] of the owning xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
+
+Sometimes the xref:commandlog:about.adoc[] extension is also configured with or instead of this extension; see the xref:#notes[notes] below to compare and contrast.
+
+
+== Setup
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+
+In addition, add a section for secman's own BOM:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionlog</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-executionlog-persistence-XXX</artifactId>    <!--.-->
+    </dependency>
+</dependencies>
+----
+<.> specify either `causeway-extensions-executionlog-persistence-jpa` or `causeway-extensions-executionlog-persistence-jdo`, as required
+
+[[_update-appmanifest]]
+=== Update AppManifest
+
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the CommandLog modules.
+You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtCommandLogPersistenceXxx.class,        // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+
+<.> specify either `CausewayModuleExtCommandLogPersistenceJdo` or `CausewayModuleExtCommandLogPersistenceJpa`, as required
+
+
+[#configure-properties]
+=== Configuration Properties
+
+Add the database schema used by the _Execution Log_ entities to the configuration file:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  persistence:
+    schema:
+      auto-create-schemas: causewayExtExecutionLog
+----
+
+This extension currently does not though define any configuration properties of its own.
+
+
+== menubar.layout.xml
+
+Once configured, the extension provides a number of menu actions.
+You can use `menubars.layout.xml` to arrange these as you see fit.
+To get you started, the following fragment adds all of the actions to an "Activity" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    ...
+    <mb3:menu>
+        <mb3:named>Activity</mb3:named>
+        <mb3:section>
+            <mb3:named>Sessions</mb3:named>
+            <mb3:serviceAction id="activeSessions" objectType="isis.ext.sessionLog.SessionLogMenu"/>
+            <mb3:serviceAction id="findSessions" objectType="isis.ext.sessionLog.SessionLogMenu"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Commands</mb3:named>
+            <mb3:serviceAction id="activeCommands" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findCommands" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.commandLog.CommandLogMenu"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Execution Log</mb3:named>
+            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.executionLog.ExecutionLogMenu"/>
+            <mb3:serviceAction id="findExecutions" objectType="isis.ext.executionLog.ExecutionLogMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.executionLog.ExecutionLogMenu"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Audit Trail</mb3:named>
+            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.auditTrail.AuditTrailMenu"/>
+            <mb3:serviceAction id="findAuditEntries" objectType="isis.ext.auditTrail.AuditTrailMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.auditTrail.AuditTrailMenu"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Execution Outbox</mb3:named>
+            <mb3:serviceAction id="findOldest" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
+        </mb3:section>
+    </mb3:menu>
+</mb3:secondary>
+----
+
+
+== Security Roles
+
+TODO - v2
+
+== Contributions
+
+
+
+[#notes]
+== Notes
+
+include::commandlog:partial$commandsubscriber-vs-executionsubscriber.adoc[]
+
+== See also
+
+* xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction]
+* xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[].
+* xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI
+* xref:commandlog:about.adoc[] extension
 

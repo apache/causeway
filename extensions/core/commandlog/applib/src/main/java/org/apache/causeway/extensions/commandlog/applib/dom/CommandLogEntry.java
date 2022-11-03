@@ -70,6 +70,8 @@ import lombok.val;
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
  * is not an interface), but it does implement {@link HasCommandDto}, providing access to
  * {@link CommandDto}, a serialized representation of the {@link Command}.
+ *
+ * @since 2.x {@index}
  */
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(

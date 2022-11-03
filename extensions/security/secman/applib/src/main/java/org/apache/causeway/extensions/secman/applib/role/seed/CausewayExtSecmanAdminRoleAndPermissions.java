@@ -37,10 +37,9 @@ import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAn
 import lombok.val;
 
 /**
- * Sets up the {@link Admin#getRoleName() secman admin role}
- * with its initial set of permissions (the union of
- * {@link NamespacePermissions#getSticky()}
- * and {@link NamespacePermissions#getAdditional()}).
+ * Sets up a role for administrators (whose name is {@link Admin#getRoleName() configurable}
+ * with an initial set of permissions being the union of {@link NamespacePermissions#getSticky()}
+ * and {@link NamespacePermissions#getAdditional()}.
  *
  * @see Secman
  *

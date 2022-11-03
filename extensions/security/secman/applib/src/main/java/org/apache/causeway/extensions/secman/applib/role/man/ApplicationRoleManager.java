@@ -31,6 +31,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationRoleManager.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)

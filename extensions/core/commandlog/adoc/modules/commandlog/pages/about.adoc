@@ -4,14 +4,23 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The _commandlog_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
-This can be useful for auditing.
+The _Command Log_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
+
+One use case is to combine with the xref:security:audittrail:about.adoc[] extension.
+The _commandlog_ module logs the action invocations or property edits that the end-user makes, while the _audit trail_ logs the resultant changes in state to domain objects.
+The two logs are correlated using the xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interactionId] of the owning xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
+
+Another use case is to support (persisted) background commands, whereby actions are not invoked immediately but instead persisted and invoked by a background thread; this is described in the xref:#background-commands[background commands] section below.
+
+Sometimes the xref:executionlog:about.adoc[] extension is also configured with or instead of this extension; see the xref:#notes[notes] below to compare and contrast.
 
 
 
-include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+== Setup
 
-In addition, add a section for secman's own BOM:
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+
+In addition, add a section for _Command Log_'s own BOM:
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -30,7 +39,7 @@ In addition, add a section for secman's own BOM:
 ----
 
 [#dependencies]
-== Dependencies
+=== Dependencies
 
 In the webapp module of your application, add the following dependency:
 
@@ -48,7 +57,7 @@ In the webapp module of your application, add the following dependency:
 
 
 [[_update-appmanifest]]
-== Update AppManifest
+=== Update AppManifest
 
 
 In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the CommandLog modules.
@@ -71,9 +80,9 @@ public class AppManifest {
 
 
 [#configure-properties]
-== Configuration Properties
+=== Configuration Properties
 
-Add the database schema used by the CommandLog entities to the configuration file:
+Add the database schema used by the _Command Log_ entities to the configuration file:
 
 [source,yaml]
 .application.yml
@@ -101,6 +110,70 @@ causeway:
 See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.publish-policy[causeway.extensions.command-log.publish-policy] configuration property for more details.
 
 
+[#menubar-layout-xml]
+=== menubar.layout.xml
+
+Once configured, the extension provides a number of menu actions.
+You can use `menubars.layout.xml` to arrange these as you see fit.
+To get you started, the following fragment adds all of the actions to an "Activity" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    ...
+    <mb3:menu>
+        <mb3:named>Activity</mb3:named>
+        ...
+        <mb3:section>
+            <mb3:named>Commands</mb3:named>
+            <mb3:serviceAction id="activeCommands" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findCommands" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.commandLog.CommandLogMenu"/>
+        </mb3:section>
+        ...
+    </mb3:menu>
+</mb3:secondary>
+----
+
+[#security-roles]
+=== Security Roles
+
+TODO - v2
+
+
+
+
+[#background-commands]
+== User Interface
+
+The extension provides a number of menu actions and contributions.
+
+The menu actions are as listed in xref:menubar-layout-xml[], above.
+They allow the administrator to query the persisted commands.
+Typically access to these actions would be restricted, see xref:security-roles[security roles] above.
+
+The extension also provides these mixins:
+
+* xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[]
++
+This contributes a `recentCommands` collection to each and every domain object.
++
+This can be explicit positioned through the domain class' own xref:userguide:fun:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
+
+* xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[]
++
+This contributes the `recentCommandsByUser` collection to any domain object that implements the xref:refguide:applib:index/mixins/security/HasUsername.adoc[] interface.
++
+Most notably, this is xref:security:secman:about.adoc[] extension's xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[] entity that represents a logged-on user.
+It is also supported by xref:security:sessionlog:about.adoc
+
+* xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[]
+
+
+
+[#background-commands]
 == Background Commands
 
 Sometimes we might want to execute an action not immediately in the current users's thread of control, but instead to perform it in the background; for example any long-running process.
@@ -217,43 +290,20 @@ If you don't want to use this functionality and want to exclude quartz, then add
 
 
 
+[#notes]
 == Notes
 
-Conceptually a *command* represents the _intention_ to execute an action or to edit a property ("before" the change), while an *interaction execution* represents the actual execution itself ("after" the change).
-
-The xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI and xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI allow either to be subscribed to.
-From an auditing perspective, their behaviour is quite similar:
-
-* even though a command represents the _intention_ to invoke an action, its xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI is only called once the action/property edit has been completed.
-
-* the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] is called as soon as the action has completed.
-In most interactions there will only be a single action called within the interaction, hence these two subscribers will be called at almost the same time with very similar payloads.
-
-However, there can be some subtle differences:
-
-* the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] service allows actions to be invoked "as if" through the user interface.
-Therefore one action can execute another can execute another, creating a nested call graph of executions.
-+
-The  xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] is called after each and every execution as it completes, so will be called several times.
-
-* In contrast, the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] is called only once, for the top-level (outermost) action.
-
+include::partial$commandsubscriber-vs-executionsubscriber.adoc[]
 
 
 
 == See also
 
+* xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction]
+* xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[].
 * xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] service
 * xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService] service
 * xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI
 * xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI
 * xref:executionlog:about.adoc[] extension
-
-
-
-
-
-
-
-
 

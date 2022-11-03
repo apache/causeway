@@ -40,6 +40,8 @@ import lombok.val;
 
 /**
  * Provides supporting functionality for querying {@link SessionLogEntry session log entry} entities.
+ *
+ * @since 2.0 {@index}
  */
 public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
 
