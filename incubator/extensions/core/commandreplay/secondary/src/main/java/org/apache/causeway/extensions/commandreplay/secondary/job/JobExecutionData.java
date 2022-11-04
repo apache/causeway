@@ -18,38 +18,38 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary.job;
 
-import org.quartz.JobExecutionContext;
-
-import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
-
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.quartz.JobExecutionContext;
+
 /**
+ * Requires that the job is annotated with the {@link org.quartz.PersistJobDataAfterExecution} annotation.
+ *
  * @since 2.0 {@index}
  */
-class SecondaryStatusData {
+@RequiredArgsConstructor
+class JobExecutionData {
 
-    private static final String KEY_SECONDARY_STATUS = SecondaryStatusData.class.getCanonicalName();
+    private final JobExecutionContext context;
 
-    private final JobExecutionData jobExecutionData;
-
-    SecondaryStatusData(final JobExecutionContext jobExecutionContext) {
-        this.jobExecutionData = new JobExecutionData((jobExecutionContext));
+    /**
+     * Lookup property from the job detail.
+     */
+    public String getString(String key, final String defaultValue) {
+        try {
+            String v = context.getJobDetail().getJobDataMap().getString(key);
+            return v != null ? v : defaultValue;
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 
-    SecondaryStatus getSecondaryStatus() {
-        return getSecondaryStatus(SecondaryStatus.UNKNOWN_STATE);
-    }
-
-    SecondaryStatus getSecondaryStatus(final SecondaryStatus defaultStatus) {
-        val mode = jobExecutionData.getString( KEY_SECONDARY_STATUS, defaultStatus.name());
-        return SecondaryStatus.valueOf(mode);
-    }
-
-    void setSecondaryStatus(final SecondaryStatus mode) {
-        jobExecutionData.setString(KEY_SECONDARY_STATUS, mode.name());
+    /**
+     * Save key into the job detail obtained from context.
+     */
+    public void setString(String key, String value) {
+        context.getJobDetail().getJobDataMap().put(key, value);
     }
 
 }
-

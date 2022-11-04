@@ -31,6 +31,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
+import org.springframework.stereotype.Component;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -38,6 +39,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0 {@index}
  */
+@Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
 @Log4j2
@@ -66,6 +68,7 @@ public class ReplicateAndReplayJob implements Job {
     @Inject protected InteractionService interactionService;
 
     private void exec(final JobExecutionContext quartzContext) {
+
         val ssh = new SecondaryStatusData(quartzContext);
         val secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
 
