@@ -56,10 +56,12 @@ implements MenuUiService {
     private final MetaModelContext metaModelContext;
     private final MenuBarsService menuBarsService;
 
+    @Override
     public MenuUiModel getMenu(final DomainServiceLayout.MenuBar menuBarSelect) {
         return MenuUiModel.of(menuBarSelect, select(menuBarSelect));
     }
 
+    @Override
     public void buildMenuItems(
             final MenuUiModel menuUiModel,
             final MenuVisitor menuBuilder) {

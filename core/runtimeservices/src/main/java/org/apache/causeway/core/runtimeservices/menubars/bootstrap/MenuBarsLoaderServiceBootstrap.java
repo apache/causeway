@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.menubars;
+package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Priority;
@@ -36,54 +38,73 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.Getter;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsLoaderServiceDefault")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsLoaderServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
-public class MenuBarsLoaderServiceDefault
-implements MenuBarsLoaderService {
+public class MenuBarsLoaderServiceBootstrap
+implements MenuBarsLoaderService<BSMenuBars> {
 
     private final JaxbService jaxbService;
     private final boolean supportsReloading;
-    private final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef;
+
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
+    private final EnumSet<CommonMimeType> supportedFormats = EnumSet.of(CommonMimeType.XML);
+
+    private final AtomicReference<AbstractResource> menubarsLayoutResourceRef;
 
     @Inject
-    public MenuBarsLoaderServiceDefault(
-            final CausewaySystemEnvironment causewaySystemEnvironment,
-            final JaxbService jaxbService,
-            final CausewayConfiguration causewayConfiguration) {
+    public MenuBarsLoaderServiceBootstrap(
+            final MetaModelContext mmc,
+            final JaxbService jaxbService) {
         this.jaxbService = jaxbService;
-        this.supportsReloading = causewaySystemEnvironment.isPrototyping();
+        this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
-        val menubarsLayoutXmlResource =
-                new ClassPathResource(causewayConfiguration.getViewer().getWicket().getApplication().getMenubarsLayoutXml());
-        this.menubarsLayoutXmlResourceRef = new AtomicReference<>(menubarsLayoutXmlResource);
+        val menubarsLayoutFile = mmc.getConfiguration().getViewer().getWicket().getApplication()
+                .getMenubarsLayoutFile();
+        val menubarsLayoutResource = new ClassPathResource(menubarsLayoutFile);
+        if(!menubarsLayoutResource.exists()) {
+            log.warn("menubarsLayoutFile {} (as configured for Apache Causeway) not found",
+                    menubarsLayoutFile);
+        }
+        this.menubarsLayoutMimeType = CommonMimeType.valueOfFileName(menubarsLayoutFile)
+                .filter(supportedFormats::contains)
+                .orElse(CommonMimeType.XML); // fallback default
+        this.menubarsLayoutResourceRef = new AtomicReference<>(menubarsLayoutResource);
     }
 
     // JUnit support
-    public MenuBarsLoaderServiceDefault(
+    public MenuBarsLoaderServiceBootstrap(
             final JaxbService jaxbService,
-            final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef) {
+            final AtomicReference<AbstractResource> menubarsLayoutResourceRef) {
         this.jaxbService = jaxbService;
         this.supportsReloading = true;
 
-        menubarsLayoutXmlResourceRef.getAndUpdate(r->r!=null
+        menubarsLayoutResourceRef.getAndUpdate(r->r!=null
                 ? r
                 : new AbstractResource() {
                     @Override public String getDescription() { return "Empty Resource"; }
                     @Override public InputStream getInputStream() throws IOException { return null; }}
                 );
-        this.menubarsLayoutXmlResourceRef = menubarsLayoutXmlResourceRef;
+        this.menubarsLayoutResourceRef = menubarsLayoutResourceRef;
+        this.menubarsLayoutMimeType = CommonMimeType.XML;
+    }
+
+    @Override
+    public Class<BSMenuBars> implementedMenuBarsClass() {
+        return BSMenuBars.class;
     }
 
     @Override
@@ -92,16 +113,23 @@ implements MenuBarsLoaderService {
     }
 
     @Override
-    public BSMenuBars menuBars() {
-        return loadMenuBars(loadMenubarsLayoutResource());
+    public Optional<BSMenuBars> menuBars() {
+        return Optional.ofNullable(loadMenuBars(loadMenubarsLayoutResource()));
     }
 
     // public, in support of JUnit testing
-    public BSMenuBars loadMenuBars(String xmlString) {
-        try {
-            return jaxbService.fromXml(BSMenuBars.class, xmlString);
-        } catch (Exception e) {
-            severeCannotLoad(menubarsLayoutXmlResourceRef.get(), e);
+    public BSMenuBars loadMenuBars(final String layoutFileContent) {
+
+        switch(menubarsLayoutMimeType) {
+        case XML:{
+            try {
+                return jaxbService.fromXml(BSMenuBars.class, layoutFileContent);
+            } catch (Exception e) {
+                severeCannotLoad(menubarsLayoutResourceRef.get(), e);
+                return null;
+            }
+        }
+        default:
             return null;
         }
     }
@@ -110,31 +138,32 @@ implements MenuBarsLoaderService {
 
     private String loadMenubarsLayoutResource() {
 
-        val menubarsLayoutXmlResource = menubarsLayoutXmlResourceRef.get();
+        val menubarsLayoutResource = menubarsLayoutResourceRef.get();
         try {
 
-            if(!menubarsLayoutXmlResource.exists()) {
+            if(!menubarsLayoutResource.exists()) {
                 return null;
             }
 
-            val source = menubarsLayoutXmlResource.getInputStream(); // throws if not found
-            final String xml =
+            val source = menubarsLayoutResource.getInputStream(); // throws if not found
+            final String layoutFileContent =
                     _Strings.read(source, StandardCharsets.UTF_8);
 
-            if(xml == null) {
-                warnNotFound(menubarsLayoutXmlResource);
+            if(layoutFileContent == null) {
+                warnNotFound(menubarsLayoutResource);
             }
-            return xml;
+            return layoutFileContent;
         } catch (Exception e) {
-            severeCannotLoad(menubarsLayoutXmlResource, e);
+            severeCannotLoad(menubarsLayoutResource, e);
             return null;
         }
 
     }
 
     private boolean warnedOnce = false;
+    private CommonMimeType menubarsLayoutMimeType;
 
-    private void warnNotFound(AbstractResource menubarsLayoutXmlResource) {
+    private void warnNotFound(final AbstractResource menubarsLayoutResource) {
         if(warnedOnce) {
             return;
         }
@@ -142,16 +171,17 @@ implements MenuBarsLoaderService {
         log.warn(
                 "{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
-                        menubarsLayoutXmlResource);
+                        menubarsLayoutResource);
         warnedOnce = true;
     }
 
-    private void severeCannotLoad(AbstractResource menubarsLayoutXmlResource, Exception cause) {
+    private void severeCannotLoad(final AbstractResource menubarsLayoutResource, final Exception cause) {
 
         log.error("{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
-                        menubarsLayoutXmlResource,
+                        menubarsLayoutResource,
                 cause);
     }
+
 }
 

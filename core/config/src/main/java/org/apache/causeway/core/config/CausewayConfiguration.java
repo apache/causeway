@@ -42,7 +42,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
 import javax.inject.Named;
-import javax.validation.*;
+import javax.validation.Constraint;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.Payload;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -2248,6 +2252,10 @@ public class CausewayConfiguration {
              */
             private boolean wicketSourcePlugin = false;
 
+            /**
+             * @deprecated common to all viewers - needs to be moved out of Wicket
+             */
+            @Deprecated
             private final Application application = new Application();
             @Data
             public static class Application {
@@ -2325,7 +2333,7 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 @NotNull @NotEmpty
-                private String menubarsLayoutXml = "menubars.layout.xml";
+                private String menubarsLayoutFile = "menubars.layout.xml";
 
                 /**
                  * Identifies the application on the sign-in page

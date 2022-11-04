@@ -63,12 +63,12 @@ public interface GridLoaderService {
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    default Grid load(Class<?> domainClass) {
+    default Grid load(final Class<?> domainClass) {
         return load(domainClass, null);
     }
 
     /**
-     * Loads a specic alternative {@link Grid} layout for the specified domain
+     * Loads a specific alternative {@link Grid} layout for the specified domain
      * class.
      *
      * <p>

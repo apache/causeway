@@ -30,7 +30,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.interaction;
     exports org.apache.causeway.core.runtimeservices.jaxb;
     exports org.apache.causeway.core.runtimeservices.locale;
-    exports org.apache.causeway.core.runtimeservices.menubars;
     exports org.apache.causeway.core.runtimeservices.menubars.bootstrap;
     exports org.apache.causeway.core.runtimeservices.message;
     exports org.apache.causeway.core.runtimeservices.placeholder;

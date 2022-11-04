@@ -39,8 +39,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
  */
 public interface MenuBarsService {
 
-    @Named(CausewayModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
-    @Value
     enum Type {
 
         /**

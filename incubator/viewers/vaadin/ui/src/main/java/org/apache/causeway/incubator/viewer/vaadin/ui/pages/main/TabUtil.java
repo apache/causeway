@@ -28,7 +28,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 
-import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
+import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 
 import lombok.experimental.UtilityClass;
 
@@ -36,7 +36,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 final class TabUtil {
 
-    static void createMenuTabs(final MenuBarsServiceBS menuBarsService, final Consumer<Tab> onTabCreated) {
+    static void createMenuTabs(final MenuBarsServiceBootstrap menuBarsService, final Consumer<Tab> onTabCreated) {
         // onTabCreated.accept(TabUtil.createTab("Dashboard", DashboardView.class));
     }
 

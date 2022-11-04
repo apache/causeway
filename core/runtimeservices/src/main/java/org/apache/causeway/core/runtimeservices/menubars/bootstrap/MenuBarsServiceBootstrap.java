@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -37,6 +36,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
+import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenu;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
@@ -51,7 +51,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -81,12 +80,12 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsServiceBS")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class MenuBarsServiceBS
+public class MenuBarsServiceBootstrap
 implements MenuBarsService {
 
     public static final String MB3_TNS = "http://causeway.apache.org/applib/layout/menubars/bootstrap3";
@@ -98,18 +97,18 @@ implements MenuBarsService {
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
 
-    private final MenuBarsLoaderService menuBarsLoaderService;
+    private final MenuBarsLoaderService<BSMenuBars> loader;
     private final MessageService messageService;
     private final JaxbService jaxbService;
-    private final CausewaySystemEnvironment causewaySystemEnvironment;
     private final MetaModelContext metaModelContext;
 
-    private final _Lazy<BSMenuBars> menuBarsFromAnnotationsOnly = _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
+    private final _Lazy<BSMenuBars> menuBarsFromAnnotationsOnly =
+            _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
 
     BSMenuBars menuBars;
 
     @Override
-    public BSMenuBars menuBars(final Type type) {
+    public MenuBars menuBars(final Type type) {
 
         val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
 
@@ -127,16 +126,17 @@ implements MenuBarsService {
         val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
 
         // load (and only fallback if nothing could be loaded)...
-        if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
+        if(menuBars == null || loader.supportsReloading()) {
             this.menuBars = loadOrElse(menuBarsFromAnnotationsOnly);
         }
 
         return menuBars;
     }
 
-    private BSMenuBars loadOrElse(final BSMenuBars menuBarsFromAnnotationsOnly) {
+    private BSMenuBars loadOrElse(
+            final BSMenuBars menuBarsFromAnnotationsOnly) {
 
-        val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
+        val menuBars = loader.menuBars()
                 .map(this::updateFacetsFromActionLayoutXml)
                 .map(this::addTnsAndSchemaLocation)
                 .orElse(menuBarsFromAnnotationsOnly);
@@ -271,7 +271,7 @@ implements MenuBarsService {
 
         menuBars.setMetadataError(
                 "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
-        if(causewaySystemEnvironment.isPrototyping()) {
+        if(metaModelContext.getSystemEnvironment().isPrototyping()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
         log.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
@@ -500,6 +500,8 @@ implements MenuBarsService {
                 LINKS_SCHEMA_LOCATION)
                 .collect(Collectors.joining(" "));
     }
+
+
 
 
 }

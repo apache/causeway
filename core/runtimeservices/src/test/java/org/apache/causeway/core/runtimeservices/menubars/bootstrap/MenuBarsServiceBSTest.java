@@ -39,15 +39,14 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.M
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
-import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 
 import lombok.val;
 
 class MenuBarsServiceBSTest
 extends RuntimeServicesTestAbstract {
 
-    private MenuBarsServiceBS menuBarsService;
-    private MenuBarsLoaderServiceDefault menuBarsLoaderService;
+    private MenuBarsServiceBootstrap menuBarsService;
+    private MenuBarsLoaderServiceBootstrap menuBarsLoaderService;
     private LayoutService layoutService;
 
     @Override
@@ -61,8 +60,8 @@ extends RuntimeServicesTestAbstract {
         getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
 
         layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
-        menuBarsService = (MenuBarsServiceBS) getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
-        menuBarsLoaderService = (MenuBarsLoaderServiceDefault) getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
+        menuBarsService = (MenuBarsServiceBootstrap) getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        menuBarsLoaderService = (MenuBarsLoaderServiceBootstrap) getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
 
         // double check, we are all set
         assertNotNull(getSpecificationLoader().loadSpecification(Bar.class));

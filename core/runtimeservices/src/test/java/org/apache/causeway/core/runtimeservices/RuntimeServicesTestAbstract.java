@@ -33,8 +33,8 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
-import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
+import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsLoaderServiceBootstrap;
+import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 
 import lombok.Getter;
 import lombok.val;
@@ -68,7 +68,7 @@ implements HasMetaModelContext {
                 .forTestingLazy(MenuBarsLoaderService.class, ()->{
 
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
-                    return new MenuBarsLoaderServiceDefault(
+                    return new MenuBarsLoaderServiceBootstrap(
                             jaxbService,
                             menubarsLayoutXmlResourceRef);
                 }));
@@ -81,13 +81,11 @@ implements HasMetaModelContext {
                     val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     val menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
-                    return new MenuBarsServiceBS(
+                    return new MenuBarsServiceBootstrap(
                             menuBarsLoaderService,
                             messageService,
                             jaxbService,
-                            getSystemEnvironment(),
                             metaModelContext);
-
                     }));
 
 
@@ -105,7 +103,7 @@ implements HasMetaModelContext {
         metaModelContext = null;
     }
 
-    protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {
+    protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
     }
 
     protected void afterSetUp() {

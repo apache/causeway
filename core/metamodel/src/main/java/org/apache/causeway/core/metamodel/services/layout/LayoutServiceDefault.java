@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
-import org.apache.causeway.applib.services.menu.MenuBarsService.Type;
 import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
@@ -104,7 +103,9 @@ public class LayoutServiceDefault implements LayoutService {
     }
 
     @Override
-    public String menuBarsLayout(final Type type, final CommonMimeType format) {
+    public String menuBarsLayout(
+            final MenuBarsService.Type type,
+            final CommonMimeType format) {
         switch(format) {
         case XML:{
             final MenuBars menuBars = menuBarsService.menuBars(type);

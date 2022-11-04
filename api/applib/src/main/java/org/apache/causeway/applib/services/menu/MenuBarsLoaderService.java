@@ -18,14 +18,17 @@
  */
 package org.apache.causeway.applib.services.menu;
 
-import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
+import java.util.EnumSet;
+import java.util.Optional;
+
+import org.apache.causeway.applib.layout.menubars.MenuBars;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 /**
- * Returns the {@link BSMenuBars} instance (bootstrap3-specific subtype of
- * {@link org.apache.causeway.applib.layout.menubars.MenuBars}, for the UI.
+ * Returns the {@link MenuBars} instance for the UI.
  *
  * <p>
- *     The default implementation deserializes the `menubars.layout.xml` file
+ *     The default implementation de-serializes the `menubars.layout...` file
  *     read from the classpath.
  * </p>
  *
@@ -34,9 +37,11 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
  *     {@link MenuBarsService}.
  * </p>
  *
- * @since 1.x {@index}
+ * @since 1.x - revised for 2.0 {@index}
  */
-public interface MenuBarsLoaderService {
+public interface MenuBarsLoaderService<T extends MenuBars> {
+
+    Class<T> implementedMenuBarsClass();
 
     /**
      * Whether dynamic reloading of layouts is enabled.
@@ -49,9 +54,15 @@ public interface MenuBarsLoaderService {
     boolean supportsReloading();
 
     /**
-     * Returns a new instance of a {@link BSMenuBars} if possible,
-     * else <tt>null</tt>.
+     * Supported format(s) for {@link #menuBars()}.
      */
-    BSMenuBars menuBars();
+    EnumSet<CommonMimeType> supportedFormats();
+
+    /**
+     * Returns a new instance of a {@link MenuBars} if possible,
+     * else <tt>Optional.empty()</tt>.
+     * @throws UnsupportedOperationException - when format is not supported
+     */
+    Optional<T> menuBars();
 
 }

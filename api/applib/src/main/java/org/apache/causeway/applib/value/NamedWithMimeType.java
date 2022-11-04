@@ -19,14 +19,19 @@
 package org.apache.causeway.applib.value;
 
 import java.io.Serializable;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * @since 1.x {@index}
@@ -205,6 +210,37 @@ extends
 
         public boolean matches(final MimeType otherMimeType) {
             return mimeType.match(otherMimeType);
+        }
+
+        /**
+         * Tries to match fileExt with any {@link CommonMimeType}.
+         */
+        public static Optional<CommonMimeType> valueOfFileExtension(final @Nullable String fileExt) {
+            if(_Strings.isNullOrEmpty(fileExt)) {
+                return Optional.empty();
+            }
+            val fileExtLower = fileExt.toLowerCase();
+            return Stream.of(CommonMimeType.values())
+                    .filter(mime->mime.getProposedFileExtensions().contains(fileExtLower))
+                    .findFirst();
+        }
+
+        /**
+         * Parses fileName for its extension and tries to match with any {@link CommonMimeType}.
+         */
+        public static Optional<CommonMimeType> valueOfFileName(final @Nullable String fileName) {
+            if(_Strings.isNullOrEmpty(fileName)) {
+                return Optional.empty();
+            }
+            final int p = fileName.lastIndexOf('.');
+            if(p<0) {
+                return Optional.empty();
+            }
+            final int beginIndex = p + 1;
+            if ((fileName.length() - beginIndex) < 0) {
+                return Optional.empty();
+            }
+            return valueOfFileExtension(fileName.substring(beginIndex));
         }
 
     }
