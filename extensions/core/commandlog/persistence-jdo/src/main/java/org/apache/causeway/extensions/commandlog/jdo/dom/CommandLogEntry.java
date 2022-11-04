@@ -32,6 +32,7 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -265,6 +266,7 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
 
 
     @Column(allowsNull = Parent.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
+    @Domain.Exclude
     @InteractionId
     @Getter @Setter
     private UUID parentInteractionId;

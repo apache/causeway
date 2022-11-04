@@ -29,6 +29,7 @@ import javax.inject.Named;
 import javax.persistence.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -262,10 +263,10 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
 
 
     @Convert(converter = JavaUtilUuidConverter.class)
+    @Domain.Exclude
     @Column(nullable = Parent.NULLABLE, length = InteractionId.MAX_LENGTH)
     @Getter @Setter
     private UUID parentInteractionId;
-
 
 
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
