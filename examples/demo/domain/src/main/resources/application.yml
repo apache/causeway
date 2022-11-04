@@ -69,9 +69,9 @@ causeway:
           mode: disabled
 
   viewer:
-    wicket:
+    common:
       application:
-        menubars-layout-xml: demoapp/dom/menubars.layout.xml
+        menubars-layout-file: demoapp/dom/menubars.layout.xml
         favicon-url: images/gift.svg
         brand-logo-header: images/gift_48.png
         brand-logo-signin: images/gift_256.png
@@ -82,6 +82,7 @@ causeway:
         css: css/application.css
         js: scripts/application.js
         about: This application demonstrates many aspects of the Apache Causeway programming model, as well as some of the most significant domain services and extensions such as the WrapperFactory, security, commands and publishing.
+      wicket:
 
       credit:
         - url:  http://causeway.apache.org

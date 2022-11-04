@@ -162,7 +162,7 @@ extends PanelAbstract<String, Model<String>> {
         add(aboutLink);
 
         final String applicationVersion =
-                getWicketViewerSettings().getApplication().getVersion();
+                getApplicationSettings().getVersion();
 
         Wkt.labelAdd(aboutLink, ID_ABOUT_MESSAGE,
                 _Strings.isNotEmpty(applicationVersion)

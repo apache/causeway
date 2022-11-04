@@ -72,7 +72,7 @@ implements MenuBarsLoaderService<BSMenuBars> {
         this.jaxbService = jaxbService;
         this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
-        val menubarsLayoutFile = mmc.getConfiguration().getViewer().getWicket().getApplication()
+        val menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
                 .getMenubarsLayoutFile();
         val menubarsLayoutResource = new ClassPathResource(menubarsLayoutFile);
         if(!menubarsLayoutResource.exists()) {

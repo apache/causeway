@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Application;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Application;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
@@ -45,7 +45,7 @@ implements BrandingUiService {
     public BrandingUiServiceDefault(final CausewayConfiguration causewayConfiguration) {
         //TODO application name/logo borrowed from Wicket's configuration,
         // we might generalize this config option to all viewers
-        this.appConfig = causewayConfiguration.getViewer().getWicket().getApplication();
+        this.appConfig = causewayConfiguration.getViewer().getCommon().getApplication();
     }
 
     @Override

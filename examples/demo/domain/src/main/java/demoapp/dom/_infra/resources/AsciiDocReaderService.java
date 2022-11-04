@@ -66,7 +66,7 @@ public class AsciiDocReaderService {
 
     private String replaceVersion(final String adoc) {
         return adoc.replace("{causeway-version}",
-                configuration.getViewer().getWicket().getApplication().getVersion());
+                configuration.getViewer().getCommon().getApplication().getVersion());
     }
 
     private AsciiDoc toAsciiDoc(final StringReference adocRef, final Class<?> aClass) {

@@ -109,7 +109,7 @@ implements
         val sb = new StringBuilder();
 
         String head = String.format("APACHE CAUSEWAY %s (%s) ",
-                configuration.getViewer().getWicket().getApplication().getVersion(),
+                configuration.getViewer().getCommon().getApplication().getVersion(),
                 systemEnvironment.getDeploymentType().name());
 
         final Map<String, ConfigurationProperty> map = config.get();
@@ -138,7 +138,7 @@ implements
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-        add("Causeway Version", configuration.getViewer().getWicket().getApplication().getVersion(), map);
+        add("Causeway Version", configuration.getViewer().getCommon().getApplication().getVersion(), map);
         add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 

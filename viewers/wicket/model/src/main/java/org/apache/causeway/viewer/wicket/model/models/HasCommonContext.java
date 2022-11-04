@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Application;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
@@ -26,6 +27,10 @@ public interface HasCommonContext extends HasMetaModelContext {
 
     default Wicket getWicketViewerSettings() {
         return getConfiguration().getViewer().getWicket();
+    }
+
+    default Application getApplicationSettings() {
+        return getConfiguration().getViewer().getCommon().getApplication();
     }
 
     /**

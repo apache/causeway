@@ -1851,6 +1851,113 @@ public class CausewayConfiguration {
     private final Viewer viewer = new Viewer();
     @Data
     public static class Viewer {
+
+        private final Common common = new Common();
+        @Data
+        public static class Common {
+
+            private final Application application = new Application();
+            @Data
+            public static class Application {
+
+                /**
+                 * Label used on the about page.
+                 */
+                private String about;
+
+                /**
+                 * Either the location of the image file (relative to the class-path resource root),
+                 * or an absolute URL.
+                 *
+                 * <p>
+                 * This is rendered on the header panel. An image with a size of 160x40 works well.
+                 * If not specified, the application.name is used instead.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> brandLogoHeader = Optional.empty();
+
+                /**
+                 * Either the location of the image file (relative to the class-path resource root),
+                 * or an absolute URL.
+                 *
+                 * <p>
+                 * This is rendered on the sign-in page. An image with a size of 400x40 works well.
+                 * If not specified, the {@link Application#getName() application name} is used instead.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> brandLogoSignin = Optional.empty();
+
+                /**
+                 * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
+                 *
+                 * <p>
+                 *     A typical value is <code>css/application.css</code>.  This will result in this file being read
+                 *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
+                 *     Spring by default under <code>static</code> package).
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> css = Optional.empty();
+
+                /**
+                 * Specifies the URL to use of the favIcon.
+                 *
+                 * <p>
+                 *     This is expected to be a local resource.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> faviconUrl = Optional.empty();
+
+                /**
+                 */
+                /**
+                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
+                 *
+                 * <p>
+                 *     A typical value is <code>js/application.js</code>.  This will result in this file being read
+                 *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
+                 *     Spring by default under <code>static</code> package).
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> js = Optional.empty();
+
+                /**
+                 * Specifies the file name containing the menubars.
+                 *
+                 * <p>
+                 *     This is expected to be a local resource.
+                 * </p>
+                 */
+                @NotNull @NotEmpty
+                private String menubarsLayoutFile = "menubars.layout.xml";
+
+                /**
+                 * Identifies the application on the sign-in page
+                 * (unless a {@link Application#brandLogoSignin sign-in} image is configured) and
+                 * on top-left in the header
+                 * (unless a {@link Application#brandLogoHeader header} image is configured).
+                 */
+                @NotNull @NotEmpty
+                private String name = "Apache Causeway ™";
+
+                /**
+                 * The version of the application, eg 1.0, 1.1, etc.
+                 *
+                 * <p>
+                 * If present, then this will be shown in the footer on every page as well as on the
+                 * about page.
+                 * </p>
+                 */
+                private String version;
+            }
+
+
+        }
+
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
@@ -2251,109 +2358,6 @@ public class CausewayConfiguration {
              * </p>
              */
             private boolean wicketSourcePlugin = false;
-
-            /**
-             * @deprecated common to all viewers - needs to be moved out of Wicket
-             */
-            @Deprecated
-            private final Application application = new Application();
-            @Data
-            public static class Application {
-
-                /**
-                 * Label used on the about page.
-                 */
-                private String about;
-
-                /**
-                 * Either the location of the image file (relative to the class-path resource root),
-                 * or an absolute URL.
-                 *
-                 * <p>
-                 * This is rendered on the header panel. An image with a size of 160x40 works well.
-                 * If not specified, the application.name is used instead.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> brandLogoHeader = Optional.empty();
-
-                /**
-                 * Either the location of the image file (relative to the class-path resource root),
-                 * or an absolute URL.
-                 *
-                 * <p>
-                 * This is rendered on the sign-in page. An image with a size of 400x40 works well.
-                 * If not specified, the {@link Application#getName() application name} is used instead.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> brandLogoSignin = Optional.empty();
-
-                /**
-                 * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
-                 *
-                 * <p>
-                 *     A typical value is <code>css/application.css</code>.  This will result in this file being read
-                 *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
-                 *     Spring by default under <code>static</code> package).
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> css = Optional.empty();
-
-                /**
-                 * Specifies the URL to use of the favIcon.
-                 *
-                 * <p>
-                 *     This is expected to be a local resource.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> faviconUrl = Optional.empty();
-
-                /**
-                 */
-                /**
-                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
-                 *
-                 * <p>
-                 *     A typical value is <code>js/application.js</code>.  This will result in this file being read
-                 *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
-                 *     Spring by default under <code>static</code> package).
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> js = Optional.empty();
-
-                /**
-                 * Specifies the file name containing the menubars.
-                 *
-                 * <p>
-                 *     This is expected to be a local resource.
-                 * </p>
-                 */
-                @NotNull @NotEmpty
-                private String menubarsLayoutFile = "menubars.layout.xml";
-
-                /**
-                 * Identifies the application on the sign-in page
-                 * (unless a {@link Application#brandLogoSignin sign-in} image is configured) and
-                 * on top-left in the header
-                 * (unless a {@link Application#brandLogoHeader header} image is configured).
-                 */
-                @NotNull @NotEmpty
-                private String name = "Apache Causeway ™";
-
-                /**
-                 * The version of the application, eg 1.0, 1.1, etc.
-                 *
-                 * <p>
-                 * If present, then this will be shown in the footer on every page as well as on the
-                 * about page.
-                 * </p>
-                 */
-                private String version;
-            }
 
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data

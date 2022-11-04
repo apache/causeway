@@ -90,7 +90,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         val passwordResetEvent = new PasswordResetEvent(
                 email,
                 confirmationUrl,
-                getWicketViewerSettings().getApplication().getName());
+                getApplicationSettings().getName());
 
         boolean emailSent = super.getEmailNotificationService().send(passwordResetEvent);
         if (emailSent) {

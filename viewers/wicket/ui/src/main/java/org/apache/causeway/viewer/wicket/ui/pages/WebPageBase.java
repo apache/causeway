@@ -56,7 +56,7 @@ implements HasCommonContext {
     // -- FAVICON SUPPORT
 
     protected void renderFavicon(final IHeaderResponse response) {
-        getWicketViewerSettings().getApplication().getFaviconUrl()
+        getApplicationSettings().getFaviconUrl()
         .filter(_Strings::isNotEmpty)
         .map(getWebAppContextPath()::prependContextPathIfLocal)
         .ifPresent(faviconUrl->{
