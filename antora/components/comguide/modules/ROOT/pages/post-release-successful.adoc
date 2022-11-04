@@ -377,7 +377,6 @@ git checkout $CAUSEWAYBRANCH
 pushd bom
 mvn clean install -DskipTests -Dreleased
 popd
-mvn clean install -pl core/config
 mvn -D module-tooling -D skip.essential install -DskipTests
 ----
 
@@ -387,6 +386,8 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 ----
 sh preview.sh
 ----
++
+NOTE: this now runs `mvn clean install -pl core/config` automatically.
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
