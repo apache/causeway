@@ -146,6 +146,12 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "causeway.viewer.common"
+    name = "Common Config for Viewers"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "causeway.viewer.restfulobjects"
     name = "Restful Objects Viewer"
     searchOrder = 501

@@ -33,101 +33,6 @@ There is usually very little reason to change this from its default.
 
 
 |
-[[causeway.viewer.wicket.application.about]]
-causeway.viewer.wicket.application. +
-about
-
-| 
-| Label used on the about page.
-
-
-|
-[[causeway.viewer.wicket.application.brand-logo-header]]
-causeway.viewer.wicket.application. +
-brand-logo-header
-
-| 
-| Either the location of the image file (relative to the class-path resource root), or an absolute URL.
-
-This is rendered on the header panel. An image with a size of 160x40 works well. If not specified, the application.name is used instead.
-
-
-|
-[[causeway.viewer.wicket.application.brand-logo-signin]]
-causeway.viewer.wicket.application. +
-brand-logo-signin
-
-| 
-| Either the location of the image file (relative to the class-path resource root), or an absolute URL.
-
-This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the name is used instead.
-
-
-|
-[[causeway.viewer.wicket.application.css]]
-causeway.viewer.wicket.application. +
-css
-
-| 
-| URL of file to read any custom CSS, relative to ``static`` package on the class path.
-
-A typical value is ``css``. This will result in this file being read from the ``static/css`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
-
-
-|
-[[causeway.viewer.wicket.application.favicon-url]]
-causeway.viewer.wicket.application. +
-favicon-url
-
-| 
-| Specifies the URL to use of the favIcon.
-
-This is expected to be a local resource.
-
-
-|
-[[causeway.viewer.wicket.application.js]]
-causeway.viewer.wicket.application. +
-js
-
-| 
-| URL of file to read any custom JavaScript, relative to ``static`` package on the class path.
-
-A typical value is ``js``. This will result in this file being read from the ``static/js`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
-
-
-|
-[[causeway.viewer.wicket.application.menubars-layout-xml]]
-causeway.viewer.wicket.application. +
-menubars-layout-xml
-
-|  menubars.layout.xml
-| Specifies the file name containing the menubars.
-
-This is expected to be a local resource.
-
-
-|
-[[causeway.viewer.wicket.application.name]]
-causeway.viewer.wicket.application. +
-name
-
-|  Apache Causeway ™
-| Identifies the application on the sign-in page (unless a sign-in image is configured) and on top-left in the header (unless a header image is configured).
-
-
-|
-[[causeway.viewer.wicket.application.version]]
-causeway.viewer.wicket.application. +
-version
-
-| 
-| The version of the application, eg 1.0, 1.1, etc.
-
-If present, then this will be shown in the footer on every page as well as on the about page.
-
-
-|
 [[causeway.viewer.wicket.base-path]]
 causeway.viewer.wicket.base-path
 
@@ -206,15 +111,13 @@ The default behaviour is to honour the original destination requested.
 
 
 |
-[[causeway.viewer.wicket.credit]]
-causeway.viewer.wicket.credit
+[[causeway.viewer.wicket.css]]
+causeway.viewer.wicket.css
 
 | 
-| List of organisations or individuals to give credit to, shown as links and icons in the footer. A maximum of 3 credits can be specified.
+| URL of file to read any custom CSS, relative to ``static`` package on the class path.
 
-IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
-
-NOTE: For further discussion, see for example https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects[this stackoverflow question] and https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo[this wiki page].
+A typical value is ``css``. This will result in this file being read from the ``static/css`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
 
 
 |
@@ -273,6 +176,16 @@ dialog-mode-for-menu
 | Whether the dialog mode rendered when invoking actions on domain services (that is, menus) should be to use a modal dialog (the default) or to use the sidebar panel.
 
 This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
+
+
+|
+[[causeway.viewer.wicket.js]]
+causeway.viewer.wicket.js
+
+| 
+| URL of file to read any custom JavaScript, relative to ``static`` package on the class path.
+
+A typical value is ``js``. This will result in this file being read from the ``static/js`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
 
 
 |

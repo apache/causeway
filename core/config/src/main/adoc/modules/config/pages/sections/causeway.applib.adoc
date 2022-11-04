@@ -122,7 +122,7 @@ domain-event.post-for-default
 
 Up to five different events can be fired during an interaction, with the event's phase determining which (hide, disable, validate, executing and executed). Subscribers can influence the behaviour at each of these phases.
 
-The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the ``Action#domainEvent()`` for the action in question:
+The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the ``Action#domainEvent()`` for the action in question
 
 * If set to some subtype of ActionDomainEvent.Noop, then _no_ event is sent.
 * If set to some subtype of ActionDomainEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
