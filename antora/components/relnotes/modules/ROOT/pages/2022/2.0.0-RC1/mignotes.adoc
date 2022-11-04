@@ -5,4 +5,34 @@
 
 This page will be added to as development progresses.
 
+== Project Rename
+Any occurrences of `isis` within source code, including configuration resources, 
+have been replaced with `causeway` while keeping variants:
 
+* lower-case `isis` -> `causeway`
+* upper-case `ISIS` -> `CAUSEWAY`
+* or capital case `Isis` -> `Causeway`
+
+== Configuration
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| causeway.viewer.wicket.application.css
+| causeway.viewer.wicket.css
+
+| causeway.viewer.wicket.application.js
+| causeway.viewer.wicket.js
+
+| causeway.viewer.wicket.application 
+| causeway.viewer.common.application
+
+| causeway.viewer.wicket.credit
+| causeway.viewer.common.credit
+
+|===
