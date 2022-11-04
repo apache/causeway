@@ -112,10 +112,10 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        getApplicationSettings().getCss()
+        getWicketViewerSettings().getCss()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
 
-        getApplicationSettings().getJs()
+        getWicketViewerSettings().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 

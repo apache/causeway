@@ -1890,18 +1890,6 @@ public class CausewayConfiguration {
                 private Optional<String> brandLogoSignin = Optional.empty();
 
                 /**
-                 * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
-                 *
-                 * <p>
-                 *     A typical value is <code>css/application.css</code>.  This will result in this file being read
-                 *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
-                 *     Spring by default under <code>static</code> package).
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> css = Optional.empty();
-
-                /**
                  * Specifies the URL to use of the favIcon.
                  *
                  * <p>
@@ -1910,20 +1898,6 @@ public class CausewayConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> faviconUrl = Optional.empty();
-
-                /**
-                 */
-                /**
-                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
-                 *
-                 * <p>
-                 *     A typical value is <code>js/application.js</code>.  This will result in this file being read
-                 *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
-                 *     Spring by default under <code>static</code> package).
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> js = Optional.empty();
 
                 /**
                  * Specifies the file name containing the menubars.
@@ -1955,7 +1929,59 @@ public class CausewayConfiguration {
                 private String version;
             }
 
+            /**
+             * List of organisations or individuals to give credit to, shown as links and icons in the footer.
+             * A maximum of 3 credits can be specified.
+             *
+             * <p>
+             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+             * </p>
+             *
+             * <p>
+             * @implNote - For further discussion, see for example
+             * <a href="https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects">this stackoverflow question</a>
+             * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
+             * </p>
+             */
+            private List<Credit> credit = new ArrayList<>();
 
+            @Data
+            public static class Credit {
+                /**
+                 * URL of an organisation or individual to give credit to, appearing as a link in the footer.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
+                private String url;
+                /**
+                 * URL of an organisation or individual to give credit to, appearing as text in the footer.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                private String name;
+                /**
+                 * Name of an image resource of an organisation or individual, appearing as an icon in the footer.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private String image;
+
+                /**
+                 * Whether enough information has been defined for the credit to be appear.
+                 */
+                public boolean isDefined() { return (name != null || image != null) && url != null; }
+            }
         }
 
         private final Restfulobjects restfulobjects = new Restfulobjects();
@@ -2132,6 +2158,18 @@ public class CausewayConfiguration {
             private boolean clearFieldButtonEnabled = true;
 
             /**
+             * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
+             *
+             * <p>
+             *     A typical value is <code>css/application.css</code>.  This will result in this file being read
+             *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
+             *     Spring by default under <code>static</code> package).
+             * </p>
+             */
+            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            private Optional<String> css = Optional.empty();
+
+            /**
              * Whether the dialog mode rendered when invoking actions on domain objects should be to use
              * the sidebar (the default) or to use a modal dialog.
              *
@@ -2150,6 +2188,18 @@ public class CausewayConfiguration {
              * </p>
              */
             private DialogMode dialogModeForMenu = DialogMode.MODAL;
+
+            /**
+             * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
+             *
+             * <p>
+             *     A typical value is <code>js/application.js</code>.  This will result in this file being read
+             *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
+             *     Spring by default under <code>static</code> package).
+             * </p>
+             */
+            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            private Optional<String> js = Optional.empty();
 
             /**
              * If specified, then is rendered on each page to enable live reload.
@@ -2396,61 +2446,6 @@ public class CausewayConfiguration {
                  */
                 private int maxParentChainLength = 64;
             }
-
-            /**
-             * List of organisations or individuals to give credit to, shown as links and icons in the footer.
-             * A maximum of 3 credits can be specified.
-             *
-             * <p>
-             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
-             * </p>
-             *
-             * <p>
-             * @implNote - For further discussion, see for example
-             * <a href="https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects">this stackoverflow question</a>
-             * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
-             * </p>
-             */
-            private List<Credit> credit = new ArrayList<>();
-
-            @Data
-            public static class Credit {
-                /**
-                 * URL of an organisation or individual to give credit to, appearing as a link in the footer.
-                 *
-                 * <p>
-                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
-                 *     {@link #getName() name} and/or {@link #getImage() image}.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
-                private String url;
-                /**
-                 * URL of an organisation or individual to give credit to, appearing as text in the footer.
-                 *
-                 * <p>
-                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
-                 *     {@link #getName() name} and/or {@link #getImage() image}.
-                 * </p>
-                 */
-                private String name;
-                /**
-                 * Name of an image resource of an organisation or individual, appearing as an icon in the footer.
-                 *
-                 * <p>
-                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
-                 *     {@link #getName() name} and/or {@link #getImage() image}.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private String image;
-
-                /**
-                 * Whether enough information has been defined for the credit to be appear.
-                 */
-                public boolean isDefined() { return (name != null || image != null) && url != null; }
-            }
-
 
             private final DatePicker datePicker = new DatePicker();
             @Data

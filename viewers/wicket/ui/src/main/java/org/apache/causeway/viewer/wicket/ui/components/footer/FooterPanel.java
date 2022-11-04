@@ -33,7 +33,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket.Credit;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Credit;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
@@ -79,7 +79,7 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addCredits() {
 
-        val credits = super.getWicketViewerSettings().getCredit();
+        val credits = super.getCommonViewerSettings().getCredit();
         val hasAnyCredits = !_NullSafe.isEmpty(credits);
 
         val creditItems = new RepeatingView("creditItems");

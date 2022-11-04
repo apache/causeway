@@ -261,12 +261,12 @@ implements ActionPromptProvider {
         new JGrowlBehaviour(getMetaModelContext())
             .renderFeedbackMessages(response);
 
-        getApplicationSettings().getCss()
+        getWicketViewerSettings().getCss()
         .ifPresent(applicationCss -> {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         });
 
-        getApplicationSettings().getJs()
+        getWicketViewerSettings().getJs()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         });

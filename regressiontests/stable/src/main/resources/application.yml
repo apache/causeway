@@ -53,14 +53,14 @@ causeway:
     common:
       application:
         name: Smoke Tests
-        css: css/application.css
-        js: scripts/application.js
         about: Smoke Tests
-        credit:
+      credit:
         - url:  http://causeway.apache.org
           image: images/apache-causeway/logo-48x48.png
           name: Apache Causeway
     wicket:
+      css: css/application.css
+      js: scripts/application.js
       themes:
         initial: Flatly
         showChooser: true
