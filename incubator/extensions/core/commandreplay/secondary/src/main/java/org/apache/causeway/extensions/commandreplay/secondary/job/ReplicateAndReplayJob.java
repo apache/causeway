@@ -68,6 +68,7 @@ public class ReplicateAndReplayJob implements Job {
     @Inject protected InteractionService interactionService;
 
     private void exec(final JobExecutionContext quartzContext) {
+
         val ssh = new SecondaryStatusData(quartzContext);
         val secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
 
