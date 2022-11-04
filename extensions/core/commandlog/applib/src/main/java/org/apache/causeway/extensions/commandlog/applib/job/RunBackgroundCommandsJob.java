@@ -1,10 +1,17 @@
 package org.apache.causeway.extensions.commandlog.applib.job;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -16,10 +23,12 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.util.JaxbUtil;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -37,14 +46,13 @@ import org.springframework.transaction.annotation.Propagation;
 @Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
+@Log4j2
 public class RunBackgroundCommandsJob implements Job {
 
     @Inject InteractionService interactionService;
     @Inject TransactionService transactionService;
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
-
-    private final static JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter gregorianCalendarAdapter  = new JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter();;
 
     public void execute(final JobExecutionContext quartzContext) {
         val user = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
@@ -56,40 +64,35 @@ public class RunBackgroundCommandsJob implements Job {
 
         @Override
         public void run() {
-            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                val notYetStartedEntries = commandLogEntryRepository.findBackgroundAndNotYetStarted();
-                for (val commandLogEntry : notYetStartedEntries) {
-                    val commandDto = commandLogEntry.getCommandDto();
-                    commandExecutorService.executeCommand(CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto, new OutcomeHandler(commandLogEntry));
+
+            // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
+            val commandDtosIfAny =
+                    transactionService.callTransactional(
+                            Propagation.REQUIRES_NEW,
+                            () -> commandLogEntryRepository.findBackgroundAndNotYetStarted()
+                                    .stream()
+                                    .map(CommandLogEntry::getCommandDto)
+                                    .collect(Collectors.toList())
+                    )
+                    .ifFailureFail()    // we give up if unable to find these
+                    .getValue();        // the success case wrapped in an optional
+
+            // for each command, we execute within its own transaction.  Failure of one should not impact the next.
+            commandDtosIfAny.ifPresent(
+                commandDtos -> {
+                for (val commandDto : commandDtos) {
+                    transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                        // it's necessary to look up the CommandLogEntry again because we are within a new transaction.
+                        val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+
+                        // finally, we execute
+                        commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                                commandExecutorService.executeCommand(
+                                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto, commandLogEntry.outcomeHandler()));
+                    }).ifFailure(throwable -> log.error("Failed to execute command: " + JaxbUtil.toXml(commandDto), throwable));
                 }
-            }).ifFailureFail();
-
+            });
         }
     }
 
-    @RequiredArgsConstructor
-    private class OutcomeHandler implements CommandOutcomeHandler {
-
-        private final CommandLogEntry commandLogEntry;
-
-        @Override
-        public Timestamp getStartedAt() {
-            return commandLogEntry.getStartedAt();
-        }
-
-        @Override
-        public void setStartedAt(Timestamp startedAt) {
-            commandLogEntry.setStartedAt(startedAt);
-        }
-
-        @Override
-        public void setCompletedAt(Timestamp completedAt) {
-            commandLogEntry.setCompletedAt(completedAt);
-        }
-
-        @Override
-        public void setResult(Try<Bookmark> resultBookmark) {
-            resultBookmark.ifSuccess(bookmarkIfAny -> bookmarkIfAny.ifPresent(commandLogEntry::setResult));
-        }
-    }
 }

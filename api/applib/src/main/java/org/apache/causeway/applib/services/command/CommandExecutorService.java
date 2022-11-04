@@ -27,6 +27,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -99,10 +100,10 @@ public interface CommandExecutorService {
      * persistent equivalent) afterwards (for example, setting its {@link Command#getCommandDto() commandDto} field.
      *
      * @param interactionContextPolicy - policy to use
-     * @param command - the {@link Command} to be executed
+     * @param command                  - the {@link Command} to be executed
      * @return - a bookmark representing the result of executing the command (could be null)
      */
-    Bookmark executeCommand(
+    Try<Bookmark> executeCommand(
             InteractionContextPolicy interactionContextPolicy,
             Command command
     );
@@ -111,10 +112,10 @@ public interface CommandExecutorService {
      * Executes the specified command (represented as a {@link CommandDto} using the required {@link InteractionContextPolicy}.
      *
      * <p>
-     *     IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS.  Specifically, the {@link Command} of the executing
-     *     thread (obtained using {@link org.apache.causeway.applib.services.iactn.InteractionProvider} to obtain the
-     *     {@link Interaction}, and then {@link Interaction#getCommand()} to obtain the {@link Command}) will be
-     *     UPDATED to hold the {@link CommandDto} passed in.
+     * IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS.  Specifically, the {@link Command} of the executing
+     * thread (obtained using {@link org.apache.causeway.applib.services.iactn.InteractionProvider} to obtain the
+     * {@link Interaction}, and then {@link Interaction#getCommand()} to obtain the {@link Command}) will be
+     * UPDATED to hold the {@link CommandDto} passed in.
      * </p>
      *
      * <p>
@@ -123,12 +124,11 @@ public interface CommandExecutorService {
      * </p>
      *
      * @param interactionContextPolicy - policy to use
-     * @param commandDto - the {@link CommandDto} to be executed
-     * @param outcomeHandler - callback to handle the result
-     *
+     * @param commandDto               - the {@link CommandDto} to be executed
+     * @param outcomeHandler           - callback to handle the result
      * @return - a bookmark representing the result of executing the command (could be null)
      */
-    Bookmark executeCommand(
+    Try<Bookmark> executeCommand(
             InteractionContextPolicy interactionContextPolicy,
             CommandDto commandDto,
             CommandOutcomeHandler outcomeHandler);
@@ -137,12 +137,12 @@ public interface CommandExecutorService {
      * As per {@link #executeCommand(InteractionContextPolicy, Command)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
      *
      * <p>
-     *     Note that this method updates the Command as a side-effect.
+     * Note that this method updates the Command as a side-effect.
      * </p>
      *
      * @see #executeCommand(InteractionContextPolicy, Command)
      */
-    Bookmark executeCommand(
+    Try<Bookmark> executeCommand(
             Command command
     );
 
@@ -150,15 +150,14 @@ public interface CommandExecutorService {
      * As per {@link #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
      *
      * <p>
-     *     Note that this method has significant side-effects.
+     * Note that this method has significant side-effects.
      * </p>
-     *
-     * @see #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)
      *
      * @param commandDto
      * @param outcomeHandler
+     * @see #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)
      */
-    Bookmark executeCommand(
+    Try<Bookmark> executeCommand(
             CommandDto commandDto,
             CommandOutcomeHandler outcomeHandler);
 
