@@ -22,10 +22,7 @@ package org.apache.causeway.extensions.executionrepublisher.applib.contributions
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
@@ -80,6 +77,7 @@ public class ExecutionLogEntry_copyToOutbox {
         return executionLogEntry;
     }
 
+    @Programmatic
     static ExecutionOutboxEntryType map(ExecutionLogEntryType executionType) {
         return executionType == ExecutionLogEntryType.ACTION_INVOCATION
                 ? ExecutionOutboxEntryType.ACTION_INVOCATION

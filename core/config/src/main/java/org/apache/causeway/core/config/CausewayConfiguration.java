@@ -790,7 +790,7 @@ public class CausewayConfiguration {
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is actually sent depends
                      *     on the value of the {@link org.apache.causeway.applib.annotation.Action#domainEvent()} for the
-                     *     action in question:
+                     *     action in question
                      * </p>
                      *
                      * <ul>

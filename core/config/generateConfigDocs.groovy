@@ -19,7 +19,7 @@
  */
 
 //
-// groovy generateConfigDocs -f "target/classes/META-INF/spring-configuration-metadata.json" -o /tmp
+// groovy generateConfigDocs -f "target/classes/META-INF/spring-configuration-metadata.json" -o /c/tmp
 
 import groovy.json.JsonSlurper
 
@@ -195,32 +195,14 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "causeway.subdomains"
-    name = "Subdomains"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "causeway.testing"
     name = "Testing"
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "causeway.mappings"
-    name = "Bounded Context Mappings"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "causeway.incubator"
     name = "Incubator"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "causeway.legacy"
-    name = "Legacy"
     searchOrder = 501
 }}
 
@@ -369,8 +351,12 @@ static String toAsciidoc(String str) {
     if (str == null) return null;
 
     System.out.print(".");
-    str = str.replaceAll( /\{@link[ ]+?([^}]+?)[ ]+?([^}]+?)}/, '$2')
-    str = str.replaceAll( /\{@link (?:(?:[^}]|[.])+[.])*([^}]+)}/, '``$1``')
+    String orig = str;
+
+    str = str.replaceAll( /\{@link[ ]+(?:[^ }]+)[^}]+?[ ]+([^})]+)}/, '$1')          // {@link org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent.Noop ObjectLoadedEvent.Noop}: ObjectLoadedEvent.Noop
+    str = str.replaceAll( /\{@link[ ]+?(?:[^ }]+?[ ]+?([^})]+))}/, '$1')             // {@link Foo foo bar} and {@link Foo#bar foo bar} : "foo bar"
+    str = str.replaceAll( /\{@link[ ]+?(?:[^}]+?[ ]+?([^})]+))}/, '$1') // {@link Foo#bar(abc, def) foo bar} and {@link Foo#bar() foo bar} : "foo bar" ;
+    str = str.replaceAll( /\{@link (?:(?:[^} ]|[.])+[.])*([^}]+)}/, '``$1``')        // {@link org.apache.causeway.applib.annotation.Action#domainEvent()} : ``Action#domainEvent()``
     str = str.replaceAll( /<tt>(?:(?:[^<]|[.])+[.])*([^<]+)<\/tt>/, '``$1``')
     str = str.replaceAll( /<code>(?:(?:[^<]|[.])+[.])*([^<]+)<\/code>/, '``$1``')
     str = str.replaceAll( /@apiNote -/, 'TIP:')
@@ -384,6 +370,10 @@ static String toAsciidoc(String str) {
 
     File tf = File.createTempFile("input",".html")
     tf.write(str)   // write to the file
+
+    if (str.contains("@link")) {
+        System.out.println(str);
+    }
 
     String cmd = "pandoc --wrap=none -f html -t asciidoc " + tf.getCanonicalPath()
     String adoc = cmd.execute().text
