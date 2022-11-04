@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -55,7 +56,7 @@ extends MetaModelTestAbstract {
         val domainClassAndLayout = new GridLoaderServiceDefault.DomainClassAndLayout(Bar.class, null);
         gridLoaderService.loadXml(domainClassAndLayout);
 
-        val xml = layoutService.toXml(Bar.class, LayoutExportStyle.MINIMAL);
+        val xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
         System.out.println(xml);
     }
 

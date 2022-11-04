@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.services.layout;
 
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.layout.grid.Grid;
 
 /**
  * Format option when generating a layout file (while prototyping).
@@ -30,27 +29,14 @@ import org.apache.causeway.applib.layout.grid.Grid;
  * @since 2.x {@index}
  */
 @Value
-public enum LayoutExportStyle {
+public enum LayoutFileFormat {
 
-    /**
-     * Format that yields a full representation for the <code>layout.xml</code>,
-     * such that any layout metadata annotations could be removed from the code,
-     * without affecting the resulting {@link Grid}, when loaded from <code>layout.xml</code>.
-     */
-    COMPLETE,
+    XML,
+    YAML,
+    ;
 
-    /**
-     * Format that yields a minimal representation for the <code>layout.xml</code>,
-     * such that layout annotations are required in code to at least 'bind'
-     * the properties/collections/actions to their regions (groups and tabs).
-     * <p>
-     * In other words: the <code>layout.xml</code> is used only to specify the positioning of the
-     * groups and tabs.
-     */
-    MINIMAL,;
-
-    public static LayoutExportStyle defaults() {
-        return MINIMAL;
+    public static LayoutFileFormat defaults() {
+        return XML;
     }
 
 }

@@ -30,7 +30,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
-import org.apache.causeway.applib.mixins.layout.Object_downloadLayoutXml;
+import org.apache.causeway.applib.mixins.layout.Object_downloadLayout;
 import org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
@@ -51,8 +51,8 @@ public class PrototypeActionsVisibilityAdvisor {
         if(doNotShow) ev.hide();
     }
 
-    @EventListener(Object_downloadLayoutXml.ActionDomainEvent.class)
-    public void on(final Object_downloadLayoutXml.ActionDomainEvent ev) {
+    @EventListener(Object_downloadLayout.ActionDomainEvent.class)
+    public void on(final Object_downloadLayout.ActionDomainEvent ev) {
         if(doNotShow) ev.hide();
     }
 

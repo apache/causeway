@@ -18,30 +18,51 @@
  */
 package org.apache.causeway.applib.services.layout;
 
+import java.util.EnumSet;
+
 import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 /**
- * Provides the ability to obtain the XML layout for a single domain object or
- * for all domain objects.
+ * Provides the ability to obtain the serialized layout (eg. XML) for a single domain object or
+ * for all domain objects, as well as the serialized layout for the application's menu-bars.
  *
- * @since 1.x {@index}
+ * @since 1.x - revised for 2.0 {@index}
  */
 public interface LayoutService {
 
-    /**
-     * Obtains the serialized XML form of the layout (grid) for the specified domain class.
-     */
-    String toXml(Class<?> domainClass, LayoutExportStyle style);
+    // -- OBJECT LAYOUT
 
     /**
-     * Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
+     * Supported format(s) for {@link #objectLayout(Class, LayoutExportStyle, CommonMimeType)}
+     * and {@link #toZip(LayoutExportStyle, CommonMimeType)}.
      */
-    byte[] toZip(final LayoutExportStyle style);
+    EnumSet<CommonMimeType> supportedObjectLayoutFormats();
 
     /**
-     * Obtains the serialized XML form of the menu bars layout ({@link MenuBarsService}).
-     * @param type - either the current menubars (could be loaded from a file) or the fallback (obtained from metamodel facets)
+     * Obtains the serialized form of the object layout (grid) for the specified domain class.
+     * @throws UnsupportedOperationException - when format is not supported
      */
-    String toMenuBarsXml(final MenuBarsService.Type type);
+    String objectLayout(Class<?> domainClass, LayoutExportStyle style, CommonMimeType format);
+
+    /**
+     * Obtains a zip file of the serialized layouts (grids) of all domain entities and view models.
+     * @throws UnsupportedOperationException - when format is not supported
+     */
+    byte[] toZip(LayoutExportStyle style, CommonMimeType format);
+
+    // -- MENUBARS LAYOUT
+
+    /**
+     * Supported format(s) for
+     * {@link #menuBarsLayout(org.apache.causeway.applib.services.menu.MenuBarsService.Type, CommonMimeType)}.
+     */
+    EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats();
+
+    /**
+     * Obtains the serialized form of the menu bars layout ({@link MenuBarsService}).
+     * @throws UnsupportedOperationException - when format is not supported
+     */
+    String menuBarsLayout(MenuBarsService.Type type, CommonMimeType format);
 
 }

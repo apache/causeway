@@ -47,10 +47,16 @@ class BSMenuBarsTest {
     @Test
     void happy_case() throws Exception {
 
-        BSMenuBars menuBars = jaxbService.fromXml(BSMenuBars.class,
+        final BSMenuBars menuBars = jaxbService.fromXml(BSMenuBars.class,
                 _Resources.loadAsString(getClass(), "menubars.layout.xml", StandardCharsets.UTF_8));
 
-        Map<String, String> schemas = jaxbService.toXsd(menuBars, CausewaySchemas.INCLUDE);
+        final Map<String, String> schemas = jaxbService.toXsd(menuBars, CausewaySchemas.INCLUDE);
+
+        menuBars.visit(data->{
+            System.err.printf("%s%n", data);
+        });
+
+
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             println(entry.getKey() + ":");
             println(entry.getValue());
@@ -59,6 +65,7 @@ class BSMenuBarsTest {
 
     private void println(final String string) {
         //for test debugging only
+        //System.err.printf("%s%n", string);
     }
 
 }

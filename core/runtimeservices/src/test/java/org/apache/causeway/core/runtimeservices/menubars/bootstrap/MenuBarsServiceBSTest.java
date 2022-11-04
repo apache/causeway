@@ -21,6 +21,9 @@ package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.core.io.ByteArrayResource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -78,8 +82,9 @@ extends RuntimeServicesTestAbstract {
         assertEquals("Create Simple Object", objectAction.getStaticFriendlyName().orElse(null));
     }
 
-    @Test
-    void roundtrip() {
+    @ParameterizedTest
+    @EnumSource(mode = Mode.INCLUDE, value = CommonMimeType.class, names = {"XML"})
+    void roundtrip(final CommonMimeType format) {
         val menuBars = menuBarsService.menuBars();
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
@@ -88,7 +93,7 @@ extends RuntimeServicesTestAbstract {
         assertEquals("Create Simple Object", layoutData.getNamed());
         assertEquals(null, layoutData.getNamedEscaped()); // deprecated: always escape
 
-        val xml = layoutService.toMenuBarsXml(MenuBarsService.Type.DEFAULT);
+        val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, format);
 
         // after round-trip
         val menuBars2 = menuBarsLoaderService.loadMenuBars(xml);
@@ -155,7 +160,7 @@ extends RuntimeServicesTestAbstract {
     // -- HELPER
 
     private String sampleMenuBarsXmlWithCustomName(final String customNamed) {
-        val xml = layoutService.toMenuBarsXml(MenuBarsService.Type.DEFAULT)
+        val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, CommonMimeType.XML)
                     .replace(
                             "<cpt:named>Create Simple Object</cpt:named>",
                             "<cpt:named>"+customNamed+"</cpt:named>");

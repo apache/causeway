@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.mixins.layout;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -38,13 +40,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Provides the ability to download the layout XML for any domain
+ * Provides the ability to download the serialized layout (eg. XML) for any domain
  * entity or view model.
  *
- * @since 1.x {@index}
+ * @since 1.x - revised for 2.0 {@index}
  */
 @Action(
-        domainEvent = Object_downloadLayoutXml.ActionDomainEvent.class,
+        domainEvent = Object_downloadLayout.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
@@ -52,17 +54,16 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-download",
-        describedAs = "Downloads the Xxx.layout.xml layout file effective/inferred for this object",
+        describedAs = "Downloads the Xxx.layout... layout file effective/inferred for this object",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.1"
 )
-//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
-public class Object_downloadLayoutXml {
+public class Object_downloadLayout {
 
     public static class ActionDomainEvent
-    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadLayoutXml> {}
+    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadLayout> {}
 
     private final Object holder;
 
@@ -71,10 +72,11 @@ public class Object_downloadLayoutXml {
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            final LayoutExportStyle style) {
+            final LayoutExportStyle style,
+            final CommonMimeType format) {
 
-        val xmlString = layoutService.toXml(holder.getClass(), style);
-        return Clob.of(fileName, CommonMimeType.XML, xmlString);
+        val xmlString = layoutService.objectLayout(holder.getClass(), style, format);
+        return Clob.of(fileName, format, xmlString);
     }
 
     /**
@@ -83,13 +85,17 @@ public class Object_downloadLayoutXml {
     @MemberSupport public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
-
     /**
      * Default style is {@link LayoutExportStyle#MINIMAL}.
      */
     @MemberSupport public LayoutExportStyle default1Act() {
         return LayoutExportStyle.defaults();
     }
+
+    @MemberSupport public CommonMimeType default2Act() {
+        return layoutService.supportedObjectLayoutFormats().iterator().next(); }
+    @MemberSupport public Set<CommonMimeType> choices2Act() {
+        return layoutService.supportedObjectLayoutFormats(); }
 
     @Inject LayoutService layoutService;
 

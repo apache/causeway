@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXml;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
-import org.apache.causeway.applib.mixins.layout.Object_downloadLayoutXml;
+import org.apache.causeway.applib.mixins.layout.Object_downloadLayout;
 import org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
@@ -108,7 +108,7 @@ import org.apache.causeway.schema.CausewayModuleSchema;
     // Mixins (prototyping)
     Dto_downloadXml.class,
     Dto_downloadXsd.class,
-    Object_downloadLayoutXml.class,
+    Object_downloadLayout.class,
     Object_downloadMetamodelXml.class,
     Object_openRestApi.class,
     Object_rebuildMetamodel.class,

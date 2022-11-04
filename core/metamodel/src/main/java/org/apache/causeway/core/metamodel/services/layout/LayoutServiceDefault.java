@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.layout;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.Objects;
 
 import javax.annotation.Priority;
@@ -38,9 +39,12 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.applib.services.menu.MenuBarsService.Type;
 import org.apache.causeway.applib.util.ZipWriter;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -62,14 +66,61 @@ public class LayoutServiceDefault implements LayoutService {
     private final GridService gridService;
     private final MenuBarsService menuBarsService;
 
+    // -- OBJECT LAYOUT
+
     @Override
-    public String toXml(final Class<?> domainClass, final LayoutExportStyle style) {
-        final Grid grid = gridService.toGridForExport(domainClass, style);
-        return gridToXml(grid);
+    public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
+        return EnumSet.of(CommonMimeType.XML);
     }
 
     @Override
-    public byte[] toZip(final LayoutExportStyle style) {
+    public String objectLayout(final Class<?> domainClass, final LayoutExportStyle style, final CommonMimeType format) {
+        switch(format) {
+        case XML:{
+            final Grid grid = gridService.toGridForExport(domainClass, style);
+            return gridToXml(grid);
+        }
+        default:
+            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
+        }
+    }
+
+    @Override
+    public byte[] toZip(final LayoutExportStyle style, final CommonMimeType format) {
+        switch(format) {
+        case XML:{
+            return toZipAsXml(style);
+        }
+        default:
+            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
+        }
+    }
+
+    // -- MENUBARS LAYOUT
+
+    @Override
+    public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
+        return EnumSet.of(CommonMimeType.XML);
+    }
+
+    @Override
+    public String menuBarsLayout(final Type type, final CommonMimeType format) {
+        switch(format) {
+        case XML:{
+            final MenuBars menuBars = menuBarsService.menuBars(type);
+            return jaxbService.toXml(menuBars, _Maps.unmodifiable(
+                    Marshaller.JAXB_SCHEMA_LOCATION,
+                    menuBars.getTnsAndSchemaLocation()
+                    ));
+        }
+        default:
+            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
+        }
+    }
+
+    // -- HELPER
+
+    private byte[] toZipAsXml(final LayoutExportStyle style) {
         val domainObjectSpecs = specificationLoader.snapshotSpecifications()
         .filter(spec ->
                 !spec.isAbstract()
@@ -96,18 +147,6 @@ public class LayoutServiceDefault implements LayoutService {
         return zipWriter.toBytes();
     }
 
-    @Override
-    public String toMenuBarsXml(final MenuBarsService.Type type) {
-        final MenuBars menuBars = menuBarsService.menuBars(type);
-
-        return jaxbService.toXml(menuBars, _Maps.unmodifiable(
-                Marshaller.JAXB_SCHEMA_LOCATION,
-                menuBars.getTnsAndSchemaLocation()
-                ));
-    }
-
-    // -- HELPER
-
     private Try<String> tryGridToXml(final Class<?> domainClass, final LayoutExportStyle style) {
         return Try.call(()->
             gridToXml(gridService.toGridForExport(domainClass, style)));
@@ -128,5 +167,7 @@ public class LayoutServiceDefault implements LayoutService {
         final String fqn = objectSpec.getFullIdentifier();
         return fqn.replace(".", File.separator)+".layout.xml";
     }
+
+
 
 }

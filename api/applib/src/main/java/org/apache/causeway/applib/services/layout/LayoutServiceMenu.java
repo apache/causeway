@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.layout;
 
+import java.util.Set;
+
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Named;
@@ -35,7 +37,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 /**
  * Provides a UI to allow layouts (obtained from {@link LayoutService}) to be downloaded.
@@ -81,17 +83,19 @@ public class LayoutServiceMenu {
 
         public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadLayouts> {}
 
-        @MemberSupport public Blob act(final LayoutExportStyle style) {
-
+        @MemberSupport public Blob act(final LayoutExportStyle style, final CommonMimeType format) {
             final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
-
-            final byte[] zipBytes = layoutService.toZip(style);
+            final byte[] zipBytes = layoutService.toZip(style, format);
             return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
         }
 
-        @MemberSupport public LayoutExportStyle default0Act() { return LayoutExportStyle.defaults(); }
+        @MemberSupport public LayoutExportStyle default0Act() {
+            return LayoutExportStyle.defaults(); }
+        @MemberSupport public CommonMimeType default1Act() {
+            return layoutService.supportedObjectLayoutFormats().iterator().next(); }
+        @MemberSupport public Set<CommonMimeType> choices1Act() {
+            return layoutService.supportedObjectLayoutFormats(); }
     }
-
 
 
     @Action(
@@ -101,23 +105,28 @@ public class LayoutServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Menu Bars Layout (XML)",
+            named = "Download Menu Bars Layout",
             sequence="500.400.2")
     public class downloadMenuBarsLayout{
 
         public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadMenuBarsLayout> {}
 
         @MemberSupport public Clob act(
-                @ParameterLayout(named = "File name") final String fileName,
-                final MenuBarsService.Type type) {
+                @ParameterLayout(named = "File name (no need to add the file extension)")
+                final String fileName,
+                final MenuBarsService.Type type,
+                final CommonMimeType format) {
 
-            final String xml = layoutService.toMenuBarsXml(type);
-
-            return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
+            final String serializedLayout = layoutService.menuBarsLayout(type, format);
+            return Clob.of(fileName, format, serializedLayout);
         }
 
-        @MemberSupport public String default0Act() { return "menubars.layout.xml"; }
+        @MemberSupport public String default0Act() { return "menubars.layout"; }
         @MemberSupport public MenuBarsService.Type default1Act() { return MenuBarsService.Type.DEFAULT; }
+        @MemberSupport public CommonMimeType default2Act() {
+            return layoutService.supportedMenuBarsLayoutFormats().iterator().next(); }
+        @MemberSupport public Set<CommonMimeType> choices2Act() {
+            return layoutService.supportedMenuBarsLayoutFormats(); }
     }
 
 }
