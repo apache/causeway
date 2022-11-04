@@ -21,6 +21,9 @@ package org.apache.causeway.extensions.commandreplay.secondary;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
+import org.apache.causeway.schema.CausewayModuleSchema;
+import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -59,7 +62,13 @@ import lombok.val;
 @Configuration
 @Import({
         // @Configuration's
-        CausewayModuleExtQuartzImpl.class,
+        CausewayModuleCoreRuntime.class,
+        CausewayModuleSchema.class,
+        CausewayModuleTestingFixturesApplib.class,
+        CausewayModuleExtCommandLogApplib.class,
+
+        // @Component's
+        ReplicateAndReplayJob.class,
 
         // @Service's
         CommandFetcher.class,
@@ -102,7 +111,8 @@ public class CausewayModuleExtCommandReplaySecondary {
     }
 
     @Bean(name = "ReplicateAndReplayTrigger" )
-    public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(@Qualifier("ReplicateAndReplayJob") final JobDetail job) {
+    public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(
+            final @Qualifier("ReplicateAndReplayJob") JobDetail job) {
         val triggerFactory = new SimpleTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
         val config = causewayConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();
@@ -110,38 +120,6 @@ public class CausewayModuleExtCommandReplaySecondary {
         triggerFactory.setStartDelay(config.getStartDelay());
         triggerFactory.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
         return triggerFactory;
-    }
-
-    @Bean(name = "ReplicateAndReplaySbjf")
-    public SpringBeanJobFactory springBeanJobFactory() {
-        val jobFactory = new AutowiringSpringBeanJobFactory();
-        jobFactory.setApplicationContext(applicationContext);
-        return jobFactory;
-    }
-
-    @Bean(name = "ReplicateAndReplaySfb")
-    public SchedulerFactoryBean scheduler(
-            @Qualifier("ReplicateAndReplayTrigger") final Trigger trigger,
-            @Qualifier("ReplicateAndReplayJob") final JobDetail jobDetail,
-            @Qualifier("ReplicateAndReplaySbjf") final SpringBeanJobFactory sbjf) {
-        val schedulerFactory = new SchedulerFactoryBean();
-
-        schedulerFactory.setJobFactory(sbjf);
-        schedulerFactory.setJobDetails(jobDetail);
-        schedulerFactory.setTriggers(trigger);
-
-        return schedulerFactory;
-    }
-
-    @Bean(name = "ReplicateAndReplayScheduler")
-    public Scheduler scheduler(
-            @Qualifier("ReplicateAndReplayTrigger") final Trigger trigger,
-            @Qualifier("ReplicateAndReplayJob") final JobDetail job,
-            @Qualifier("ReplicateAndReplaySfb") final SchedulerFactoryBean factory)
-            throws SchedulerException {
-        val scheduler = factory.getScheduler();
-        scheduler.start();
-        return scheduler;
     }
 
 }
