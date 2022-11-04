@@ -32,6 +32,6 @@ import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 })
 public class CausewayModuleExtExcelApplib {
 
-    public static final String NAMESPACE = "causeway.sub.excel";
+    public static final String NAMESPACE = "causeway.ext.excel";
 
 }

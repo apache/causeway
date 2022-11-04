@@ -9,6 +9,14 @@ This branch can then be used for documentation updates.
 
 == Update docs
 
+Prereqs:
+
+* jdk 11
+* mvn 3.x
+* groovy 3.x
+* pandoc 2.x
+* dos2unix
+
 In the regular `causeway` repo:
 
 * Check out the branch:

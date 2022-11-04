@@ -27,6 +27,8 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
+ * Sets up a role with access to the menu actions exposing the application metamodel (as a navigable set of view models).
+ *
  * @since 2.0 {@index}
  */
 public class CausewayAppFeatureRoleAndPermissions

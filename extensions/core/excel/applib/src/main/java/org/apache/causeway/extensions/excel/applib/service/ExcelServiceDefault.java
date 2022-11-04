@@ -28,6 +28,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.extensions.excel.applib.*;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,17 +38,15 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.extensions.excel.applib.ExcelService;
-import org.apache.causeway.extensions.excel.applib.Mode;
-import org.apache.causeway.extensions.excel.applib.WorksheetContent;
-import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 
 
 @Service
-@Named("causeway.sub.excel.ExcelServiceDefault")
+@Named(ExcelServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExcelServiceDefault implements ExcelService {
+
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExcelApplib.NAMESPACE + ".ExcelServiceDefault";
 
     private _ExcelServiceHelper helper;
 

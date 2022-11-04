@@ -37,6 +37,10 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT

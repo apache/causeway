@@ -22,10 +22,7 @@ package org.apache.causeway.extensions.executionrepublisher.applib.contributions
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
@@ -35,6 +32,18 @@ import org.apache.causeway.extensions.executionrepublisher.applib.CausewayModule
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * This contributes a copyToOutbox action to each {@link ExecutionLogEntry} (from the <i>Execution Log</i> extension)
+ * so that it can be republished in the outbox.
+ *
+ * <p>
+ *     This is useful when both the <i>Execution Log</i> and <i>Execution Outbox</i> extensions are in use, and there
+ *     was a downstream problem with the processing of an execution <i>from the outbox</i>; the mixin takes a copy of
+ *     that execution from the log and copies it to the outbox in order that it can be reprocessed again.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = ExecutionLogEntry_copyToOutbox.ActionDomainEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
@@ -68,6 +77,7 @@ public class ExecutionLogEntry_copyToOutbox {
         return executionLogEntry;
     }
 
+    @Programmatic
     static ExecutionOutboxEntryType map(ExecutionLogEntryType executionType) {
         return executionType == ExecutionLogEntryType.ACTION_INVOCATION
                 ? ExecutionOutboxEntryType.ACTION_INVOCATION

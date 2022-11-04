@@ -32,6 +32,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         semantics = SemanticsOf.SAFE,
         domainEvent = HasUsername_open.ActionDomainEvent.class

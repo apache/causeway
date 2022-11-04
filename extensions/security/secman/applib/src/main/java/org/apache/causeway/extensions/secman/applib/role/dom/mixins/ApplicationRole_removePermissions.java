@@ -42,6 +42,10 @@ import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationR
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         choicesFrom = "permissions",
         domainEvent = DomainEvent.class,

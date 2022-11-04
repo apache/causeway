@@ -32,6 +32,9 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryR
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Collection(
         domainEvent = ExecutionLogEntry_siblingExecutions.CollectionDomainEvent.class
 )

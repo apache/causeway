@@ -67,11 +67,6 @@
 			<artifactId>causeway-extensions-commandlog-applib</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-quartz-impl</artifactId>
-		</dependency>
-
 		<!-- TESTING -->
 
 		<dependency>

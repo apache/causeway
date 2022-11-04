@@ -74,6 +74,8 @@ import lombok.experimental.UtilityClass;
  *
  *  Note that this class implements {@link HasInteractionDto}, providing access to
  *  {@link org.apache.causeway.applib.services.iactn.Interaction}, a serialized representation containing the {@link org.apache.causeway.applib.services.iactn.Execution}.
+ *
+ * @since 2.0 {@index}
  */
 @Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(

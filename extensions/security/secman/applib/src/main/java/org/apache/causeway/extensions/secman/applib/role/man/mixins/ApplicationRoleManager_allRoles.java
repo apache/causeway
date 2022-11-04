@@ -29,6 +29,10 @@ import org.apache.causeway.extensions.secman.applib.role.man.ApplicationRoleMana
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @org.apache.causeway.applib.annotation.Collection
 @RequiredArgsConstructor
 public class ApplicationRoleManager_allRoles {

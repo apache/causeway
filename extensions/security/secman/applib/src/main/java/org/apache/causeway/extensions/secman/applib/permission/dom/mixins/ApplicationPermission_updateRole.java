@@ -35,6 +35,10 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepo
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT

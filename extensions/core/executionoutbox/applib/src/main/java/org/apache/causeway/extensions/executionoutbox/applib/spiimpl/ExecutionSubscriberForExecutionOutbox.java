@@ -28,6 +28,9 @@ import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutbox
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @RequiredArgsConstructor
 public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscriber {

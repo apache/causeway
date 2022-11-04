@@ -28,6 +28,9 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryR
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @RequiredArgsConstructor
 public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {

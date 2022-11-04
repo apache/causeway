@@ -34,6 +34,16 @@ import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepos
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Initializes the <i>Session Log</i> extension when the application is first bootstrapped.
+ *
+ * <p>
+ *     In particular, will automatically logout all sessions from a previous run of the application, if configured to
+ *     do so.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SessionLogServiceInitializer implements MetamodelListener {

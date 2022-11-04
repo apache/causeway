@@ -20,6 +20,29 @@
 #
 #
 
+BASENAME_0=$(basename $0)
+
+usage() {
+ echo ""                                          >&2
+ echo "$BASENAME_0 options:                     " >&2
+ echo "                                         " >&2
+ echo "  Skip options:                          " >&2
+ echo "  -e|-E skip|only examples               " >&2
+ echo "  -k|-K skip|only stale example check    " >&2
+ echo "  -b|-B skip|only mvn -pl core/config    " >&2
+ echo "  -c|-C skip|only config doc generation  " >&2
+ echo "  -d|-D skip|only projdoc generation     " >&2
+ echo "  -l|-L skip|only fix adoc line endings  " >&2
+ echo "  -a|-A skip|only Antora generation      " >&2
+ echo "  -s|-S skip|only serving generated site " >&2
+ echo ""                                          >&2
+ echo "  -y skip clear project site             " >&2
+ echo "  -z skip cache (template)               " >&2
+ echo ""                                          >&2
+ echo "  -f antora/playbooks/site-xxx.yml       " >&2
+ exit 1
+}
+
 export ANTORA_CACHE_DIR=.antora-cache-dir
 export ANTORA_TARGET_SITE=antora/target/site
 
@@ -36,115 +59,132 @@ BRANCH=$(git branch --show-current)
 DATE=$(date +%Y%m%d-%H%M)
 export REVISION="${BRANCH}.${DATE}"
 
-while getopts 'ECDAKSLecdaksxylhf:' opt
+
+while getopts 'bBECDAKSLecdakszylhf:' opt
 do
   case $opt in
-    E) export SKIP_EXAMPLES=false
+    E) export EXAMPLES=exec
        forcing=true ;;
-    C) export SKIP_CONFIGS=false
+    B) export BUILD_CONFIGS=exec
        forcing=true ;;
-    D) export SKIP_PROJDOC_GENERATION=false
+    C) export CONFIGS=exec
        forcing=true ;;
-    L) export SKIP_FIX_ADOC_LINE_ENDINGS=false
+    D) export PROJDOC_GENERATION=exec
        forcing=true ;;
-    A) export SKIP_ANTORA_GENERATION=false
-       export SKIP_CLEAR_CACHE=false
-       export SKIP_CLEAR_PREVIOUS=false
+    L) export FIX_ADOC_LINE_ENDINGS=exec
        forcing=true ;;
-    K) export SKIP_STALE_EXAMPLE_CHECK=false
+    A) export ANTORA_GENERATION=exec
+       export CLEAR_CACHE=exec
+       export CLEAR_PREVIOUS=exec
        forcing=true ;;
-    S) export SKIP_SERVE=false
+    K) export STALE_EXAMPLE_CHECK=exec
+       forcing=true ;;
+    S) export SERVE=exec
        forcing=true ;;
 
-    e) export SKIP_EXAMPLES=true ;;
-    c) export SKIP_CONFIGS=true ;;
-    d) export SKIP_PROJDOC_GENERATION=true ;;
-    l) export SKIP_FIX_ADOC_LINE_ENDINGS=true ;;
-    a) export SKIP_ANTORA_GENERATION=true
-       export SKIP_CLEAR_CACHE=true
-       export SKIP_CLEAR_PREVIOUS=true
+    e) export EXAMPLES=skip ;;
+    b) export BUILD_CONFIGS=skip ;;
+    c) export CONFIGS=skip ;;
+    d) export PROJDOC_GENERATION=skip ;;
+    l) export FIX_ADOC_LINE_ENDINGS=skip ;;
+    a) export ANTORA_GENERATION=skip
+       export CLEAR_CACHE=skip
+       export CLEAR_PREVIOUS=skip
       ;;
-    k) export SKIP_STALE_EXAMPLE_CHECK=true ;;
-    s) export SKIP_SERVE=true ;;
+    k) export STALE_EXAMPLE_CHECK=skip ;;
+    s) export SERVE=skip ;;
 
-    x) export SKIP_CLEAR_CACHE=true ;;
-    y) export SKIP_CLEAR_PREVIOUS=true ;;
+    z) export CLEAR_CACHE=skip ;;
+    y) export CLEAR_PREVIOUS=skip ;;
+
     f) PLAYBOOK_FILE=$OPTARG ;;
-    h) echo ""
-       echo "preview.sh options:"
-       echo ""
-       echo "  Skip options:"
-       echo "  -e skip examples"
-       echo "  -k skip stale example check"
-       echo "  -c skip config doc generation"
-       echo "  -d skip projdoc generation"
-       echo "  -l skip fix adoc line endings"
-       echo "  -a skip Antora generation"
-       echo "  -s skip serving generated site"
-       echo ""
-       echo "  Force options (override skip):"
-       echo "  -E force examples"
-       echo "  -K force stale example check"
-       echo "  -C force config doc generation"
-       echo "  -D force projdoc generation"
-       echo "  -L force fix adoc line endings"
-       echo "  -A force Antora generation"
-       echo "  -S force serving generated site"
-       echo ""
-       echo "  -f antora/playbooks/site-xxx.yml"
+    h) usage
        exit 1
        ;;
     *) echo "unknown option $opt - aborting" >&2
+       usage
        exit 1
       ;;
   esac
 done
 
 if [ "$forcing" = "true" ]; then
-    if [ -z "$SKIP_EXAMPLES" ]; then
-      export SKIP_EXAMPLES=true
+    if [ -z "$EXAMPLES" ]; then
+      export EXAMPLES=skip
     fi
-    if [ -z "$SKIP_CONFIGS" ]; then
-      export SKIP_CONFIGS=true
+    if [ -z "$BUILD_CONFIGS" ]; then
+      export BUILD_CONFIGS=skip
     fi
-    if [ -z "$SKIP_PROJDOC_GENERATION" ]; then
-      export SKIP_PROJDOC_GENERATION=true
+    if [ -z "$CONFIGS" ]; then
+      export CONFIGS=skip
     fi
-    if [ -z "$SKIP_FIX_ADOC_LINE_ENDINGS" ]; then
-      export SKIP_FIX_ADOC_LINE_ENDINGS=true
+    if [ -z "$PROJDOC_GENERATION" ]; then
+      export PROJDOC_GENERATION=skip
     fi
-    if [ -z "$SKIP_ANTORA_GENERATION" ]; then
-      export SKIP_ANTORA_GENERATION=true
-      export SKIP_CLEAR_CACHE=true
-      export SKIP_CLEAR_PREVIOUS=true
+    if [ -z "$FIX_ADOC_LINE_ENDINGS" ]; then
+      export FIX_ADOC_LINE_ENDINGS=skip
     fi
-    if [ -z "$SKIP_STALE_EXAMPLE_CHECK" ]; then
-      export SKIP_STALE_EXAMPLE_CHECK=true
+    if [ -z "$ANTORA_GENERATION" ]; then
+      export ANTORA_GENERATION=skip
+      export CLEAR_CACHE=skip
+      export CLEAR_PREVIOUS=skip
     fi
-    if [ -z "$SKIP_SERVE" ]; then
-      export SKIP_SERVE=true
+    if [ -z "$STALE_EXAMPLE_CHECK" ]; then
+      export STALE_EXAMPLE_CHECK=skip
+    fi
+    if [ -z "$SERVE" ]; then
+      export SERVE=skip
     fi
 fi
 
 echo ""
-echo "SKIP_EXAMPLES              : $SKIP_EXAMPLES"
-echo "SKIP_STALE_EXAMPLE_CHECK   : $SKIP_STALE_EXAMPLE_CHECK"
-echo "SKIP_PROJDOC_GENERATION    : $SKIP_PROJDOC_GENERATION"
-echo "SKIP_FIX_ADOC_LINE_ENDINGS : $SKIP_FIX_ADOC_LINE_ENDINGS"
-echo "SKIP_CONFIGS               : $SKIP_CONFIGS"
-echo "SKIP_ANTORA_GENERATION     : $SKIP_ANTORA_GENERATION"
-echo "SKIP_SERVE                 : $SKIP_SERVE"
-echo "SKIP_CLEAR_PREVIOUS (site) : $SKIP_CLEAR_PREVIOUS"
-echo "SKIP_CLEAR_CACHE (template): $SKIP_SKIP_CLEAR_CACHE"
+echo "-e|-E skip|only examples              : $EXAMPLES"
+echo "-k|-K skip|only stale example check   : $STALE_EXAMPLE_CHECK"
+echo "-b|-B skip|only mvn -pl core/config   : $BUILD_CONFIGS"
+echo "-c|-C skip|only configs               : $CONFIGS"
+echo "-d|-D skip|only projdoc generation    : $PROJDOC_GENERATION"
+echo "-l|-L skip|only fix adoc line endings : $FIX_ADOC_LINE_ENDINGS"
+echo "-a|-A skip|only antora generation     : $ANTORA_GENERATION"
+echo "-s|-S skip|only serve                 : $SERVE"
+echo "-y    skip clearing previous site     : $CLEAR_PREVIOUS"
+echo "-z    skip clear cache (template)     : $CLEAR_CACHE"
 echo ""
 
-if [[ "$SKIP_CLEAR_CACHE" == "true" ]]; then
+if [[ "$EXAMPLES" == "skip" ]]; then
+  export SKIP_EXAMPLES=true
+fi
+if [[ "$CONFIGS" == "skip" ]]; then
+  export SKIP_CONFIGS=true
+fi
+if [[ "$STALE_EXAMPLE_CHECK" == "skip" ]]; then
+  export SKIP_STALE_EXAMPLE_CHECK=true
+fi
+if [[ "$PROJDOC_GENERATION" == "skip" ]]; then
+  export SKIP_PROJDOC_GENERATION=true
+fi
+if [[ "$FIX_ADOC_LINE_ENDINGS" == "skip" ]]; then
+  export SKIP_FIX_ADOC_LINE_ENDINGS=true
+fi
+if [[ "$ANTORA_GENERATION" == "skip" ]]; then
+  export SKIP_ANTORA_GENERATION=true
+fi
+if [[ "$SERVE" == "skip" ]]; then
+  export SKIP_SERVE=true
+fi
+
+if [[ "$BUILD_CONFIGS" == "skip" ]]; then
+  echo "skipping mvn -pl core/config"
+else
+  mvn clean install -pl core/config
+fi
+
+if [[ "$CLEAR_CACHE" == "skip" ]]; then
   echo "skipping clearing the Antora cache"
 else
   rm -rf $ANTORA_CACHE_DIR
 fi
 
-if [[ "$SKIP_CLEAR_PREVIOUS" == "true" ]]; then
+if [[ "$CLEAR_PREVIOUS" == "skip" ]]; then
   echo "skipping clearing any previous build site"
 else
   rm -rf $ANTORA_TARGET_SITE
@@ -161,7 +201,7 @@ SECONDS=0
 echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
 bash build-site.sh $PLAYBOOK_FILE || exit 1
 
-if [[ "$SKIP_SERVE" == "true" ]]; then
+if [[ "$SERVE" == "skip" ]]; then
   echo "skipping serving"
 else
   echo ""

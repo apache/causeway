@@ -49,6 +49,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 public abstract class ApplicationPermissionRepositoryAbstract<P extends ApplicationPermission>
 implements ApplicationPermissionRepository {
 

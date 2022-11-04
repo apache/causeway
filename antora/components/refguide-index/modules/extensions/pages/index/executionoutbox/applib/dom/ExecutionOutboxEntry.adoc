@@ -1,0 +1,36 @@
+= ExecutionOutboxEntry
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A persistent representation of an xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (property edit or action invocation), within a wider _org.apache.causeway.applib.services.iactn.Interaction interaction_ . Note that this class implements _HasInteractionDto_ , providing access to _org.apache.causeway.applib.services.iactn.Interaction_ , a serialized representation containing the xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] .
+
+== API
+
+[source,java]
+.ExecutionOutboxEntry.java
+----
+class ExecutionOutboxEntry {
+  public final static String LOGICAL_TYPE_NAME;
+  public static final String SCHEMA;
+  public static final String TABLE;
+  ExecutionOutboxEntry(Execution<? extends MemberExecutionDto, ?> execution)
+  void init(Execution<? extends MemberExecutionDto, ?> execution)
+  String title()
+  ChangeType getType()
+  BigDecimal getDuration()     // <.>
+  int compareTo(ExecutionOutboxEntry other)
+  String toString()
+}
+----
+
+<.> xref:#getDuration_[getDuration()]
++
+--
+The number of seconds (to 3 decimal places) that this execution lasted, derived from _#getStartedAt()_ and _#getCompletedAt()_ .
+--
+
+== Members
+
+[#getDuration_]
+=== getDuration()
+
+The number of seconds (to 3 decimal places) that this execution lasted, derived from _#getStartedAt()_ and _#getCompletedAt()_ .

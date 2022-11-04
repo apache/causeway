@@ -43,6 +43,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @since 2.0 {@index}
+ */
 @XmlRootElement
 @XmlType(
         propOrder = {

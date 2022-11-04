@@ -29,6 +29,10 @@ import org.apache.causeway.extensions.secman.applib.user.man.ApplicationUserMana
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @org.apache.causeway.applib.annotation.Collection
 @RequiredArgsConstructor
 public class ApplicationUserManager_allUsers {

@@ -18,6 +18,15 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
+/**
+ * Curently unused.
+ *
+ * <p>
+ *     This enum to support the (incubating) <i>Command Replay</i> extension.
+ * </p>
+ *
+ * @since 2.x {@index}
+ */
 public enum ReplayState {
     /**
      * As used on primary system.

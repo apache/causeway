@@ -30,6 +30,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Collection(
         domainEvent = ApplicationTenancy_users.DomainEvent.class)
 @CollectionLayout(

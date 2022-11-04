@@ -97,12 +97,6 @@ under the License.
 			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
 </project>

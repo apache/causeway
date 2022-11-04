@@ -12,11 +12,24 @@ include::../section-hooks/causeway.extensions~pre.adoc[]
 |Default
 |Description
 |
+[[causeway.extensions.command-log.publish-policy]]
+causeway.extensions.command-log. +
+publish-policy
+
+| 
+| Whether commands should be published always, or only if a change in the system's state has been detected.
+
+In general, the default of ``PublishPolicy#ALWAYS`` should be used, _unless_ the _Audit Trail_ extension is also in use, which is able to advise on whether the systems state has changed.
+
+Put another way, if this policy is set to ``PublishPolicy#ONLY_IF_SYSTEM_CHANGED`` but the _Audit Trail_ extension is _not_ enabled, then nothing will be logged.
+
+
+|
 [[causeway.extensions.command-replay.analyser.exception.enabled]]
 causeway.extensions.command-replay. +
 analyser.exception.enabled
 
-|
+|  true
 | null
 
 
@@ -25,7 +38,7 @@ analyser.exception.enabled
 causeway.extensions.command-replay. +
 analyser.result.enabled
 
-|
+|  true
 | null
 
 
@@ -34,7 +47,7 @@ analyser.result.enabled
 causeway.extensions.command-replay. +
 batch-size
 
-|
+|  10
 | null
 
 
@@ -43,7 +56,7 @@ batch-size
 causeway.extensions.command-replay. +
 primary-access.base-url-restful
 
-|
+| 
 | null
 
 
@@ -52,7 +65,7 @@ primary-access.base-url-restful
 causeway.extensions.command-replay. +
 primary-access.base-url-wicket
 
-|
+| 
 | null
 
 
@@ -61,7 +74,7 @@ primary-access.base-url-wicket
 causeway.extensions.command-replay. +
 primary-access.password
 
-|
+| 
 | null
 
 
@@ -70,7 +83,7 @@ primary-access.password
 causeway.extensions.command-replay. +
 primary-access.user
 
-|
+| 
 | null
 
 
@@ -80,7 +93,7 @@ causeway.extensions.command-replay. +
 quartz-replicate-and-replay-job. +
 repeat-interval
 
-|
+|  10000
 | Number of milliseconds before running again.
 
 
@@ -90,7 +103,7 @@ causeway.extensions.command-replay. +
 quartz-replicate-and-replay-job. +
 start-delay
 
-|
+|  15000
 | Number of milliseconds before starting the job.
 
 
@@ -99,7 +112,8 @@ start-delay
 causeway.extensions.command-replay. +
 quartz-session.roles
 
-|
+|  causewayModuleExtCommandReplaySeco +
+ndaryRole
 | null
 
 
@@ -108,7 +122,8 @@ quartz-session.roles
 causeway.extensions.command-replay. +
 quartz-session.user
 
-|
+|  causewayModuleExtCommandReplaySeco +
+ndaryUser
 | The user that runs the replay session secondary.
 
 
@@ -117,7 +132,7 @@ quartz-session.user
 causeway.extensions.command-replay. +
 secondary-access.base-url-wicket
 
-|
+| 
 | null
 
 
@@ -126,8 +141,14 @@ secondary-access.base-url-wicket
 causeway.extensions.cors. +
 allow-credentials
 
-|
-| TODO missing java-doc
+| 
+| Whether the resource supports user credentials.
+
+This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response. It helps browser determine whether or not an actual request can be made using credentials.
+
+By default this is not set (i.e. user credentials are not supported).
+
+For more information, check the usage of the ``credentials`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 |
@@ -135,8 +156,10 @@ allow-credentials
 causeway.extensions.cors. +
 allowed-headers
 
-|
-| Which HTTP headers are allowed in a CORS request.
+| 
+| Which HTTP headers can be allowed in a CORS request.
+
+These header will also be returned as part of 'Access-Control-Allow-Headers' header in a pre-flight response.
 
 For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
@@ -146,8 +169,12 @@ For more information, check the usage of the ``headers`` init parameter for http
 causeway.extensions.cors. +
 allowed-methods
 
-|
+| 
 | Which HTTP methods are permitted in a CORS request.
+
+A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. These are the methods which will also be included as part of 'Access-Control-Allow-Methods' header in a pre-flight response.
+
+Default is ``GET``, ``POST``, ``HEAD``, ``OPTIONS``.
 
 For more information, check the usage of the ``methods`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
@@ -157,10 +184,12 @@ For more information, check the usage of the ``methods`` init parameter for http
 causeway.extensions.cors. +
 allowed-origins
 
-|
+|  *
 | Which origins are allowed to make CORS requests.
 
-The default is the wildcard ("*") but this can be made more restrictive if necessary.
+The default is the wildcard ("*"), meaning any origin is allowed to access the resource, but this can be made more restrictive if necessary using a whitelist of comma separated origins eg:
+
+``org``
 
 For more information, check the usage of the ``origins`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
@@ -170,10 +199,24 @@ For more information, check the usage of the ``origins`` init parameter for http
 causeway.extensions.cors. +
 exposed-headers
 
-|
+|  Authorization
 | Which HTTP headers are exposed in a CORS request.
 
+A comma separated list of headers other than the simple response headers that browsers are allowed to access. These are the headers which will also be included as part of 'Access-Control-Expose-Headers' header in the pre-flight response.
+
+Default is none.
+
 For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+
+
+|
+[[causeway.extensions.execution-outbox.rest-api.max-pending]]
+causeway.extensions. +
+execution-outbox.rest-api. +
+max-pending
+
+|  100
+| The maximum number of interactions that will be returned when the REST API is polled.
 
 
 |
@@ -181,10 +224,23 @@ For more information, check the usage of the ``headers`` init parameter for http
 causeway.extensions.secman. +
 delegated-users.auto-create-policy
 
-|
+| 
 | Whether delegated users should be autocreated as locked (the default) or unlocked.
 
 BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that they are given should be highly restricted !!!
+
+NOTE also that this configuration policy is ignored if running secman with Spring OAuth2 or Keycloak as the authenticator; users are always auto-created.
+
+
+|
+[[causeway.extensions.secman.delegated-users.initial-role-names]]
+causeway.extensions.secman. +
+delegated-users.initial-role-names
+
+| 
+| The set of roles that users that have been automatically created are granted automatically.
+
+Typically the regular user role (as per ``role-name``, default value of ``causeway-ext-secman-user``) will be one of the roles listed here, to provide the ability for the end-user to logout, among other things (!).
 
 
 |
@@ -192,19 +248,20 @@ BE AWARE THAT if any users are auto-created as unlocked, then the set of roles t
 causeway.extensions.secman. +
 permissions-evaluation-policy
 
-|
+| 
 | If there are conflicting (allow vs veto) permissions at the same scope, then this policy determines whether to prefer to allow the permission or to veto it.
 
-This is only used if a ``PermissionsEvaluationService`` has not been declared explicitly.
+This is only used an implementation of secman's ``PermissionsEvaluationService`` SPI has not been provided explicitly.
 
 
 |
 [[causeway.extensions.secman.seed.admin.namespace-permissions.additional]]
-causeway.extensions.secman.seed.admin. +
-namespace-permissions.additional
+causeway.extensions.secman.seed. +
+admin.namespace-permissions. +
+additional
 
-|
-| An (optional) additional set of namespaces that the admin role is granted.
+| 
+| An (optional) additional set of namespaces that the role is granted.
 
 These are in addition to the main namespaces granted.
 
@@ -213,11 +270,11 @@ These are in addition to the main namespaces granted.
 
 |
 [[causeway.extensions.secman.seed.admin.namespace-permissions.sticky]]
-causeway.extensions.secman.seed.admin. +
-namespace-permissions.sticky
+causeway.extensions.secman.seed. +
+admin.namespace-permissions.sticky
 
-|
-| The set of namespaces to which the admin role is granted.
+| 
+| The set of namespaces to which the role is granted.
 
 These namespaces are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles. The security user is not necessarily able to use the main business logic within the domain application itself, though.
 
@@ -230,35 +287,35 @@ WARNING: normally these should not be overridden. Instead, specify additional na
 
 |
 [[causeway.extensions.secman.seed.admin.password]]
-causeway.extensions.secman.seed.admin. +
-password
+causeway.extensions.secman.seed. +
+admin.password
 
-|
-| The corresponding password for admin user. @see #getUserName()
+| 
+| The corresponding password for user. @see #getUserName()
 
 
 |
 [[causeway.extensions.secman.seed.admin.role-name]]
-causeway.extensions.secman.seed.admin. +
-role-name
+causeway.extensions.secman.seed. +
+admin.role-name
 
-|
+| 
 | The name of security admin role.
 
-Users with this role (in particular, the default admin user are granted access to a set of namespaces (``NamespacePermissions#getSticky()`` and ``NamespacePermissions#getAdditional()``) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
+Users with this role (in particular, the default user are granted access to a set of namespaces (``NamespacePermissions#getSticky()`` and ``NamespacePermissions#getAdditional()``) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
 
 @see Admin#getUserName() @see NamespacePermissions#getSticky() @see NamespacePermissions#getAdditional()
 
 
 |
 [[causeway.extensions.secman.seed.admin.user-name]]
-causeway.extensions.secman.seed.admin. +
-user-name
+causeway.extensions.secman.seed. +
+admin.user-name
 
-|
+| 
 | The name of the security super user.
 
-This user is automatically made a member of the admin role, from which it is granted permissions to administer other users.
+This user is automatically made a member of the role, from which it is granted permissions to administer other users.
 
 The password for this user is set in ``Admin#getPassword()``.
 
@@ -270,7 +327,7 @@ The password for this user is set in ``Admin#getPassword()``.
 causeway.extensions.secman.seed. +
 regular-user.role-name
 
-|
+| 
 | The role name for regular users of the application, granting them access to basic security features.
 
 The exact set of permissions is hard-wired in the ``CausewayExtSecmanRegularUserRoleAndPermissions`` fixture.
@@ -281,10 +338,10 @@ The exact set of permissions is hard-wired in the ``CausewayExtSecmanRegularUser
 causeway.extensions.secman. +
 user-menu-me-action-policy
 
-|
-| Whether the presence of SecMan should result in the automatic suppression of the ``UserMenu``'s me action.
+| 
+| Whether the presence of SecMan should result in the automatic suppression of the ``UserMenu``'s ``me#act() me()`` action.
 
-This is normally what is required as SecMan's ``ApplicationUser`` is a more comprehensive representation of the current user. If the default me action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
+This is normally what is required as SecMan's ``ApplicationUser`` is a more comprehensive representation of the current user. If the default ``me#act() me()`` action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
 
 
 |
@@ -293,7 +350,7 @@ causeway.extensions.secman. +
 user-registration. +
 initial-role-names
 
-|
+| 
 | The set of roles that users registering with the app are granted automatically.
 
 If using the wicket viewer, also requires causeway.viewer.wicket.suppress-signup to be set ``false``, along with any other of its other prereqs.
@@ -304,7 +361,7 @@ If using the wicket viewer, also requires causeway.viewer.wicket.suppress-signup
 causeway.extensions.session-log. +
 auto-logout-on-restart
 
-|
+|  true
 | null
 
 

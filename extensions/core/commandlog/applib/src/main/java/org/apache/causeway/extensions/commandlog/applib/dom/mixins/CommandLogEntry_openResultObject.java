@@ -32,6 +32,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.x {@index}
+ */
 @Action(
     semantics = SemanticsOf.SAFE,
     domainEvent = CommandLogEntry_openResultObject.ActionDomainEvent.class

@@ -3,7 +3,7 @@
 
 Emitted for subscribers to provide a cssClass hint (equivalent to the `iconName()` supporting method).
 
-If the domain object defines its own xref:refguide:applib-methods:ui-hints/iconName.adoc[iconName()] supporting method, or if it has the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
+If the domain object defines its own xref:refguide:applib-methods:ui-hints.adoc[iconName()] supporting method, or if it has the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
 
 The class has a number of responsibilities:
 

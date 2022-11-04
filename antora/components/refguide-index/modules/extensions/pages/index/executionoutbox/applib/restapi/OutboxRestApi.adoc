@@ -1,0 +1,29 @@
+= OutboxRestApi
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.OutboxRestApi.java
+----
+class OutboxRestApi {
+  OutboxEvents pending()     // <.>
+  void delete(String interactionId, int sequence)
+  void deleteMany(String interactionsDtoXml)
+}
+----
+
+<.> xref:#pending_[pending()]
++
+--
+This action is intended to be invoked with `Accept` header set to `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=org.apache.causeway.schema.ixn.v2.InteractionsDto` 
+--
+
+== Members
+
+[#pending_]
+=== pending()
+
+This action is intended to be invoked with `Accept` header set to `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=org.apache.causeway.schema.ixn.v2.InteractionsDto` 
+
+The xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ContentMappingServiceForOutboxEvents.adoc[ContentMappingServiceForOutboxEvents] will then serialize the resultant xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxEvents.adoc[OutboxEvents] view model into XML.

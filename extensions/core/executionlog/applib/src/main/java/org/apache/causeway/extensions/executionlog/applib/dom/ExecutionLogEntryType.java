@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.extensions.executionlog.applib.dom;
 
+/**
+ * @since 2.0 {@index}
+ */
 public enum ExecutionLogEntryType {
     ACTION_INVOCATION,
     PROPERTY_EDIT;

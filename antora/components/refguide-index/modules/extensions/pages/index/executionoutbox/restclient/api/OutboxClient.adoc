@@ -1,0 +1,62 @@
+= OutboxClient
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.OutboxClient.java
+----
+class OutboxClient {
+  OutboxClient()
+  OutboxClient(String base, String username, String password)     // <.>
+  OutboxClient withConnectTimeoutInSecs(int connectTimeoutInSecs)     // <.>
+  OutboxClient withReadTimeoutInSecs(int readTimeoutInSecs)     // <.>
+  void init()     // <.>
+  List<InteractionDto> pending()
+  void delete(String interactionId, int sequence)
+  void deleteMany(List<InteractionDto> interactionDtos)
+}
+----
+
+<.> xref:#OutboxClient_String_String_String[OutboxClient(String, String, String)]
++
+--
+Will automatically call _#init()_ since all properties already supplied.
+--
+<.> xref:#withConnectTimeoutInSecs_int[withConnectTimeoutInSecs(int)]
++
+--
+for debugging
+--
+<.> xref:#withReadTimeoutInSecs_int[withReadTimeoutInSecs(int)]
++
+--
+for debugging
+--
+<.> xref:#init_[init()]
++
+--
+Should be called once all properties have been injected.
+--
+
+== Members
+
+[#OutboxClient_String_String_String]
+=== OutboxClient(String, String, String)
+
+Will automatically call _#init()_ since all properties already supplied.
+
+[#withConnectTimeoutInSecs_int]
+=== withConnectTimeoutInSecs(int)
+
+for debugging
+
+[#withReadTimeoutInSecs_int]
+=== withReadTimeoutInSecs(int)
+
+for debugging
+
+[#init_]
+=== init()
+
+Should be called once all properties have been injected.

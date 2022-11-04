@@ -46,13 +46,14 @@ echo ""
 echo "\$GROOVY_CMD   : ${GROOVY_CMD}"
 echo "\$DOS2UNIX_CMD : ${DOS2UNIX_CMD}"
 echo ""
- 
-# for now meant to run with nightly builds only 
+
+# for now meant to run with nightly builds only
 if [ -z "${GROOVY_CMD}" ]; then
   echo "doc gen: no groovy, skipping"
 else
   if [ ! -f "$PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json" ]; then
     echo "doc gen: no spring-configuration-metadata.json to parse: skipping"
+    echo "         $PROJECT_ROOT_PATH/core/config/target/classes/META-INF/spring-configuration-metadata.json"
   else
     # generate automated site content (adoc files)
     echo "doc gen: generating config .adoc from Spring metadata ..."

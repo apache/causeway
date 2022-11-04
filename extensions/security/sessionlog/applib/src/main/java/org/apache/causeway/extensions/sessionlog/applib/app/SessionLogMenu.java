@@ -44,7 +44,10 @@ import lombok.RequiredArgsConstructor;
 
 
 /**
- * This service exposes a &lt;Sessions&gt; menu to the secondary menu bar for searching for sessions.
+ * This service exposes a set of menu actions to search and list {@link SessionLogEntry session}s, by default under
+ * the &quot;Activity&quot; secondary menu.
+ *
+ * @since 2.0 {@index}
  */
 @Named(SessionLogMenu.LOGICAL_TYPE_NAME)
 @DomainService(nature = NatureOfService.VIEW)

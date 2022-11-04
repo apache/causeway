@@ -39,6 +39,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = ApplicationUser_filterEffectiveMemberPermissions.DomainEvent.class,
         semantics = SemanticsOf.SAFE

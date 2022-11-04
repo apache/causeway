@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.extensions.executionoutbox.applib.dom;
 
+/**
+ * @since 2.0 {@index}
+ */
 public enum ExecutionOutboxEntryType {
     ACTION_INVOCATION,
     PROPERTY_EDIT;

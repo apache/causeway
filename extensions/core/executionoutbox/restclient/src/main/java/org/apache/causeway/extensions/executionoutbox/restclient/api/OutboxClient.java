@@ -44,6 +44,9 @@ import lombok.Setter;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @since 2.x {@index}
+ */
 @Slf4j
 public class OutboxClient {
 

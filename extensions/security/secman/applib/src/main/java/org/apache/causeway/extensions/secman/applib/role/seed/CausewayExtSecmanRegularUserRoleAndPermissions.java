@@ -35,7 +35,7 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 import lombok.val;
 
 /**
- * Role for regular users of the security module.
+ * Sets up a role for regular users of the security module.
  *
  * <p>
  * These permissions are intended to be sufficient for most regular users

@@ -51,6 +51,11 @@ import org.apache.causeway.schema.common.v2.InteractionType;
 import lombok.Getter;
 import lombok.val;
 
+/**
+ * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
+ *
+ * @since 2.0 {@index}
+ */
 public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public static class NotFoundException extends RecoverableException {
