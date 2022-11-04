@@ -51,7 +51,8 @@ usage() {
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
  echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
- echo "  -I append '-Dmodule-all-except-incubator"                                                     >&2
+ echo "  -A append '-Dmodule-all.  Cannot combine with '-I'"                                           >&2
+ echo "  -I append '-Dmodule-all-except-incubator.  Cannot combine with '-A'"                          >&2
  echo "  -F do NOT search for Failures and Errors at the end"                                          >&2
  echo "  -S do NOT print summary or last 50 lines at the end"                                          >&2
  echo "  -w whatif - don't run the command but do print it out.  Implies -v (verbose)"                 >&2
@@ -71,13 +72,14 @@ WHATIF=false
 SINGLE_THREADED=false
 SKIP_SEARCH_FOR_FAILURES=false
 SKIP_SUMMARY=false
+ALL=false
 ALL_EXCEPT_INCUBATOR=false
 EDIT=false
 VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prcntlkyIOFSwveh' opt
+while getopts 'prcntlkyAIOFSwveh' opt
 do
   case $opt in
     p) export GIT_PULL=true ;;
@@ -88,6 +90,7 @@ do
     l) export SINGLE_THREADED=true ;;
     k) export PACKAGE_ONLY=true ;;
     y) export VERIFY_ONLY=true ;;
+    A) export ALL=true ;;
     I) export ALL_EXCEPT_INCUBATOR=true ;;
     F) export SKIP_SEARCH_FOR_FAILURES=true ;;
     S) export SKIP_SUMMARY=true ;;
@@ -117,6 +120,7 @@ if [ "$VERBOSE" = "true" ]; then
   echo "-k PACKAGE_ONLY             : $PACKAGE_ONLY"
   echo "-y VERIFY_ONLY              : $VERIFY_ONLY"
   echo "-O SKIP_OFFLINE             : $SKIP_OFFLINE"
+  echo "-A ALL                      : $ALL"
   echo "-I ALL_EXCEPT_INCUBATOR     : $ALL_EXCEPT_INCUBATOR"
   echo "-F SKIP_SEARCH_FOR_FAILURES : $SKIP_SEARCH_FOR_FAILURES"
   echo "-S SKIP_SUMMARY             : $SKIP_SUMMARY"
@@ -127,6 +131,12 @@ fi
 
 if [ "$PACKAGE_ONLY" = "true" ] && [ "$VERIFY_ONLY" = "true" ]; then
   echo "$BASENAME_0 : cannot use '-y' and '-k' flags together"  >&2
+  usage
+  exit 1
+fi
+
+if [ "$ALL" = "true" ] && [ "$ALL_EXCEPT_INCUBATOR" = "true" ]; then
+  echo "$BASENAME_0 : cannot use '-A' and '-I' flags together"  >&2
   usage
   exit 1
 fi
@@ -150,6 +160,10 @@ fi
 
 if [ "$TIMELINE" = "true" ]; then
   OPTS="$OPTS -Dmaven-timeline.version=1.8-SNAPSHOT"
+fi
+
+if [ "$ALL" = "true" ]; then
+  OPTS="$OPTS -Dmodule-all"
 fi
 
 if [ "$ALL_EXCEPT_INCUBATOR" = "true" ]; then
