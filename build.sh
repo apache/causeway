@@ -51,7 +51,7 @@ usage() {
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
  echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
- echo "  -A append '-Dmodule-all'.  Cannot combine with '-I' or '-K'"                                  >&2
+ echo "  -a append '-Dmodule-all'.  Cannot combine with '-I' or '-K'"                                  >&2
  echo "  -K append '-Dmodule-all-except-kroviz'.  Cannot combine with '-a' or '-I'"                    >&2
  echo "  -I append '-Dmodule-all-except-incubator'.  Cannot combine with '-a' or '-K'"                 >&2
  echo "  -F do NOT search for Failures and Errors at the end"                                          >&2
