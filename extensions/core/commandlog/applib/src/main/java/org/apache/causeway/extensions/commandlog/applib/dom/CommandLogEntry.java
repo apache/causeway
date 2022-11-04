@@ -334,7 +334,6 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * @see #getParent()
      */
     @Domain.Exclude
-    @InteractionId
     public abstract UUID getParentInteractionId();
     public abstract void setParentInteractionId(UUID parentInteractionId);
 

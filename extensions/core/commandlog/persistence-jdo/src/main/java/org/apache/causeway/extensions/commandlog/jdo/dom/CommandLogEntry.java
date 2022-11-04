@@ -267,7 +267,6 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
 
     @Column(allowsNull = Parent.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
     @Domain.Exclude
-    @InteractionId
     @Getter @Setter
     private UUID parentInteractionId;
 
