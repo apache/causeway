@@ -29,10 +29,13 @@ The following changed:
 | causeway.viewer.wicket.application.js
 | causeway.viewer.wicket.js
 
-| causeway.viewer.wicket.application 
-| causeway.viewer.common.application
+| causeway.viewer.*wicket*.application.menubars-layout-*xml*
+| causeway.viewer.*common*.application.menubars-layout-*file*
 
-| causeway.viewer.wicket.credit
-| causeway.viewer.common.credit
+| causeway.viewer.*wicket*.application 
+| causeway.viewer.*common*.application
+
+| causeway.viewer.*wicket*.credit
+| causeway.viewer.*common*.credit
 
 |===
