@@ -164,10 +164,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                     return;
                 }
             }
-
         });
-
-
     }
 
     private ReplayState executeCommandInTranAndAnalyse(final CommandLogEntry commandLogEntry) {

@@ -685,6 +685,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Programmatic
     public CommandOutcomeHandler outcomeHandler() {
         return new CommandOutcomeHandler() {
+
             @Override
             public java.sql.Timestamp getStartedAt() {
                 return CommandLogEntry.this.getStartedAt();
@@ -701,9 +702,9 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
             }
 
             @Override
-            public void setResult(final Try<Bookmark> resultBookmark) {
-                CommandLogEntry.this.setResult(resultBookmark.getValue().orElse(null));
-                CommandLogEntry.this.setException(resultBookmark.getFailure().orElse(null));
+            public void setResult(Try<Bookmark> result) {
+                result.ifSuccess(bookmarkIfAny -> bookmarkIfAny.ifPresent(CommandLogEntry.this::setResult));
+                result.ifFailure(CommandLogEntry.this::setException);
             }
         };
     }
