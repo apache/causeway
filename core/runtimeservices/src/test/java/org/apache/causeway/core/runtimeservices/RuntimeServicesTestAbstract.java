@@ -29,12 +29,13 @@ import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsLoaderServiceBootstrap;
+import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 
@@ -77,12 +78,10 @@ implements HasMetaModelContext {
         mmcBuilder.singletonProvider(
                 _ManagedBeanAdapter
                 .forTestingLazy(MenuBarsLoaderService.class, ()->{
-                    val menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
-                    return new MenuBarsLoaderServiceBootstrap(
-                            menuBarsMenuBarsMarshaller,
-                            menubarsLayoutXmlResourceRef);
+                    return new MenuBarsLoaderServiceDefault(
+                            menubarsLayoutXmlResourceRef,
+                            CommonMimeType.XML); // format under test
                 }));
-
 
         mmcBuilder.singletonProvider(
                 _ManagedBeanAdapter

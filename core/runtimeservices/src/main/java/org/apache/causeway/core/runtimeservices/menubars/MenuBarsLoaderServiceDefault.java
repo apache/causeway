@@ -16,12 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
+package org.apache.causeway.core.runtimeservices.menubars;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,42 +34,33 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
+import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsLoaderServiceBootstrap")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
-public class MenuBarsLoaderServiceBootstrap
-implements MenuBarsLoaderService<BSMenuBars> {
+public class MenuBarsLoaderServiceDefault
+implements MenuBarsLoaderService {
 
-    private final MenuBarsMarshallerService<BSMenuBars> marshaller;
     private final boolean supportsReloading;
-
-    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
-    private final EnumSet<CommonMimeType> supportedFormats = EnumSet.of(CommonMimeType.XML);
-
     private final AtomicReference<AbstractResource> menubarsLayoutResourceRef;
+    private final CommonMimeType menubarsLayoutMimeType;
 
     @Inject
-    public MenuBarsLoaderServiceBootstrap(
-            final MetaModelContext mmc,
-            final MenuBarsMarshallerService<BSMenuBars> marshaller) {
-        this.marshaller = marshaller;
+    public MenuBarsLoaderServiceDefault(final MetaModelContext mmc) {
         this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
         val menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
@@ -80,19 +70,16 @@ implements MenuBarsLoaderService<BSMenuBars> {
             log.warn("menubarsLayoutFile {} (as configured for Apache Causeway) not found",
                     menubarsLayoutFile);
         }
-        this.menubarsLayoutMimeType = CommonMimeType.valueOfFileName(menubarsLayoutFile)
-                .filter(supportedFormats::contains)
-                .orElse(CommonMimeType.XML); // fallback default
         this.menubarsLayoutResourceRef = new AtomicReference<>(menubarsLayoutResource);
+        this.menubarsLayoutMimeType = CommonMimeType.valueOfFileName(menubarsLayoutFile)
+                .orElse(CommonMimeType.XML); // fallback default
     }
 
     // JUnit support
-    public MenuBarsLoaderServiceBootstrap(
-            final MenuBarsMarshallerService<BSMenuBars> marshaller,
-            final AtomicReference<AbstractResource> menubarsLayoutResourceRef) {
-        this.marshaller = marshaller;
+    public MenuBarsLoaderServiceDefault(
+            final AtomicReference<AbstractResource> menubarsLayoutResourceRef,
+            final CommonMimeType formatUnderTest) {
         this.supportsReloading = true;
-
         menubarsLayoutResourceRef.getAndUpdate(r->r!=null
                 ? r
                 : new AbstractResource() {
@@ -100,7 +87,7 @@ implements MenuBarsLoaderService<BSMenuBars> {
                     @Override public InputStream getInputStream() throws IOException { return null; }}
                 );
         this.menubarsLayoutResourceRef = menubarsLayoutResourceRef;
-        this.menubarsLayoutMimeType = CommonMimeType.XML;
+        this.menubarsLayoutMimeType = formatUnderTest;
     }
 
     @Override
@@ -109,15 +96,10 @@ implements MenuBarsLoaderService<BSMenuBars> {
     }
 
     @Override
-    public Optional<BSMenuBars> menuBars() {
-        return tryLoadMenuBars(loadMenubarsLayoutResource())
-                .ifFailure(failure->severeCannotLoad(menubarsLayoutResourceRef.get(), failure))
-                .getValue();
-    }
-
-    // public, in support of JUnit testing
-    public Try<BSMenuBars> tryLoadMenuBars(final String layoutFileContent) {
-        return marshaller.unmarshal(layoutFileContent, menubarsLayoutMimeType);
+    public <T extends MenuBars> Optional<T> menuBars(@NonNull final MenuBarsMarshallerService<T> marshaller) {
+        return marshaller.unmarshal(loadMenubarsLayoutResource(), menubarsLayoutMimeType)
+            .ifFailure(failure->severeCannotLoad(menubarsLayoutResourceRef.get(), failure))
+            .getValue();
     }
 
     // -- HELPER
@@ -147,13 +129,11 @@ implements MenuBarsLoaderService<BSMenuBars> {
     }
 
     private boolean warnedOnce = false;
-    private CommonMimeType menubarsLayoutMimeType;
 
     private void warnNotFound(final AbstractResource menubarsLayoutResource) {
         if(warnedOnce) {
             return;
         }
-
         log.warn(
                 "{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
@@ -162,12 +142,13 @@ implements MenuBarsLoaderService<BSMenuBars> {
     }
 
     private void severeCannotLoad(final AbstractResource menubarsLayoutResource, final Throwable cause) {
-
         log.error("{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
                         menubarsLayoutResource,
                 cause);
     }
+
+
 
 }
 

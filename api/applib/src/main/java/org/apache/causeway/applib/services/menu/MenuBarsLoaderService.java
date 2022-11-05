@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.applib.services.menu;
 
-import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.menubars.MenuBars;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+
+import lombok.NonNull;
 
 /**
  * Returns the {@link MenuBars} instance for the UI.
@@ -39,7 +39,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
  *
  * @since 1.x - revised for 2.0 {@index}
  */
-public interface MenuBarsLoaderService<T extends MenuBars> {
+public interface MenuBarsLoaderService {
 
     /**
      * Whether dynamic reloading of layouts is enabled.
@@ -52,15 +52,10 @@ public interface MenuBarsLoaderService<T extends MenuBars> {
     boolean supportsReloading();
 
     /**
-     * Supported format(s) for {@link #menuBars()}.
-     */
-    EnumSet<CommonMimeType> supportedFormats();
-
-    /**
      * Returns a new instance of a {@link MenuBars} if possible,
      * else <tt>Optional.empty()</tt>.
      * @throws UnsupportedOperationException - when format is not supported
      */
-    Optional<T> menuBars();
+    <T extends MenuBars> Optional<T> menuBars(@NonNull MenuBarsMarshallerService<T> marshaller);
 
 }

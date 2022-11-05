@@ -99,7 +99,7 @@ implements MenuBarsService {
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
 
-    private final MenuBarsLoaderService<BSMenuBars> loader;
+    private final MenuBarsLoaderService loader;
     private final MenuBarsMarshallerService<BSMenuBars> marshaller;
     private final MessageService messageService;
     private final JaxbService jaxbService;
@@ -144,7 +144,7 @@ implements MenuBarsService {
     private BSMenuBars loadOrElse(
             final BSMenuBars menuBarsFromAnnotationsOnly) {
 
-        val menuBars = loader.menuBars()
+        val menuBars = loader.menuBars(marshaller)
                 .map(this::updateFacetsFromActionLayoutXml)
                 .map(this::addTnsAndSchemaLocation)
                 .orElse(menuBarsFromAnnotationsOnly);
