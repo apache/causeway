@@ -43,8 +43,10 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
+import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -98,6 +100,7 @@ implements MenuBarsService {
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
 
     private final MenuBarsLoaderService<BSMenuBars> loader;
+    private final MenuBarsMarshallerService<BSMenuBars> marshaller;
     private final MessageService messageService;
     private final JaxbService jaxbService;
     private final MetaModelContext metaModelContext;
@@ -108,28 +111,33 @@ implements MenuBarsService {
     BSMenuBars menuBars;
 
     @Override
-    public MenuBars menuBars(final Type type) {
-
+    public BSMenuBars menuBars(final Type type) {
         val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
-
         if(type == Type.ANNOTATED) {
             return menuBarsFromAnnotationsOnly;
         }
-
         return menuBarsDefault();
+    }
+
+    @Override
+    public String menuBarsFormatted(final Type type, final CommonMimeType format) {
+        val menuBars = menuBars(type);
+        return marshaller.marshal(menuBars, format);
+    }
+
+    @Override
+    public MenuBarsMarshallerService<? extends MenuBars> marshaller() {
+        return marshaller;
     }
 
     // -- HELPER
 
     private BSMenuBars menuBarsDefault() {
-
         val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
-
         // load (and only fallback if nothing could be loaded)...
         if(menuBars == null || loader.supportsReloading()) {
             this.menuBars = loadOrElse(menuBarsFromAnnotationsOnly);
         }
-
         return menuBars;
     }
 

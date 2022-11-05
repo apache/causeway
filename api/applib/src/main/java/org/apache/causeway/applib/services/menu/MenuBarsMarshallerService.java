@@ -19,48 +19,43 @@
 package org.apache.causeway.applib.services.menu;
 
 import java.util.EnumSet;
-import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.layout.menubars.MenuBars;
+import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.functional.Try;
+
+import lombok.NonNull;
 
 /**
- * Returns the {@link MenuBars} instance for the UI.
- *
+ * Supports {@link MenuBars} marshaling and unmarshaling.
  * <p>
- *     The default implementation de-serializes the `menubars.layout...` file
- *     read from the classpath.
- * </p>
+ * The service is <i>called</i> by the default implementations of
+ * {@link MenuBarsService} and {@link LayoutService}.
  *
- * <p>
- *     The service is <i>called</i> by the default implementation of
- *     {@link MenuBarsService}.
- * </p>
- *
- * @since 1.x - revised for 2.0 {@index}
+ * @since 2.0 {@index}
  */
-public interface MenuBarsLoaderService<T extends MenuBars> {
+public interface MenuBarsMarshallerService<T extends MenuBars> {
+
+    Class<T> implementedMenuBarsClass();
 
     /**
-     * Whether dynamic reloading of layouts is enabled.
-     *
-     * <p>
-     * If not, then the calling {@link MenuBarsService}will cache the layout
-     * once loaded.
-     * </p>
-     */
-    boolean supportsReloading();
-
-    /**
-     * Supported format(s) for {@link #menuBars()}.
+     * Supported format(s) for {@link #unmarshal(String, CommonMimeType)}
+     * and {@link #marshal(MenuBars, CommonMimeType)}.
      */
     EnumSet<CommonMimeType> supportedFormats();
 
     /**
-     * Returns a new instance of a {@link MenuBars} if possible,
-     * else <tt>Optional.empty()</tt>.
-     * @throws UnsupportedOperationException - when format is not supported
+     * @throws UnsupportedOperationException when format is not supported
      */
-    Optional<T> menuBars();
+    String marshal(@NonNull T menuBars, @NonNull CommonMimeType format);
+
+    /**
+     * Returns a new instance of a {@link MenuBars} wrapped in a {@link Try}.
+     * @throws UnsupportedOperationException when format is not supported (not wrapped)
+     */
+    Try<T> unmarshal(@Nullable String layoutFileContent, @NonNull CommonMimeType format);
 
 }

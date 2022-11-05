@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
@@ -74,99 +73,86 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public String objectLayout(final Class<?> domainClass, final LayoutExportStyle style, final CommonMimeType format) {
-        switch(format) {
-        case XML:{
-            final Grid grid = gridService.toGridForExport(domainClass, style);
-            return gridToXml(grid);
-        }
-        default:
-            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
-        }
+        final Grid grid = gridService.toGridForExport(domainClass, style);
+        return gridToFormatted(grid, format);
     }
 
     @Override
     public byte[] toZip(final LayoutExportStyle style, final CommonMimeType format) {
-        switch(format) {
-        case XML:{
-            return toZipAsXml(style);
-        }
-        default:
-            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
-        }
-    }
-
-    // -- MENUBARS LAYOUT
-
-    @Override
-    public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
-        return EnumSet.of(CommonMimeType.XML);
-    }
-
-    @Override
-    public String menuBarsLayout(
-            final MenuBarsService.Type type,
-            final CommonMimeType format) {
-        switch(format) {
-        case XML:{
-            final MenuBars menuBars = menuBarsService.menuBars(type);
-            return jaxbService.toXml(menuBars, _Maps.unmodifiable(
-                    Marshaller.JAXB_SCHEMA_LOCATION,
-                    menuBars.getTnsAndSchemaLocation()
-                    ));
-        }
-        default:
-            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
-        }
-    }
-
-    // -- HELPER
-
-    private byte[] toZipAsXml(final LayoutExportStyle style) {
         val domainObjectSpecs = specificationLoader.snapshotSpecifications()
-        .filter(spec ->
-                !spec.isAbstract()
-                && (spec.isEntity() || spec.isViewModel()));
+                .filter(spec ->
+                        !spec.isAbstract()
+                        && (spec.isEntity() || spec.isViewModel()));
 
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
 
         for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
 
-            tryGridToXml(domainClass, style)
-            .accept(failure->{
-                log.warn("failed to generate layout XML for {}", domainClass);//, failure);
-            },
-            xmlIfAny->{
-                xmlIfAny.ifPresent(xmlString->{
-                    zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->
-                        writer.writeCharactersUtf8(xmlString)
-                    );
-                });
-            });
+            tryGridToFormatted(domainClass, style, format)
+            .accept(
+                    failure->
+                        log.warn("failed to generate layout file for {}", domainClass),
+                    contentIfAny->{
+                        contentIfAny.ifPresent(contentString->{
+                            zipWriter.nextEntry(zipEntryNameFor(objectSpec, format), writer->
+                                writer.writeCharactersUtf8(contentString)
+                            );
+                        });
+                    });
         }
 
         return zipWriter.toBytes();
     }
 
-    private Try<String> tryGridToXml(final Class<?> domainClass, final LayoutExportStyle style) {
-        return Try.call(()->
-            gridToXml(gridService.toGridForExport(domainClass, style)));
+    // -- MENUBARS LAYOUT
+
+    @Override
+    public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
+        return menuBarsService.marshaller().supportedFormats();
     }
 
-    private String gridToXml(final @Nullable Grid grid) {
+    @Override
+    public String menuBarsLayout(
+            final MenuBarsService.Type type,
+            final CommonMimeType format) {
+        return menuBarsService.menuBarsFormatted(type, format);
+    }
+
+    // -- HELPER
+
+    private Try<String> tryGridToFormatted(
+            final Class<?> domainClass,
+            final LayoutExportStyle style,
+            final CommonMimeType format) {
+        return Try.call(()->
+            gridToFormatted(gridService.toGridForExport(domainClass, style), format));
+    }
+
+    private String gridToFormatted(final @Nullable Grid grid, final CommonMimeType format) {
         if(grid==null) {
             return null;
         }
-        return jaxbService.toXml(grid,
-                _Maps.unmodifiable(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        Objects.requireNonNull(grid.getTnsAndSchemaLocation())
-                        ));
+        switch(format) {
+        case XML:{
+            return jaxbService.toXml(grid,
+                    _Maps.unmodifiable(
+                            Marshaller.JAXB_SCHEMA_LOCATION,
+                            Objects.requireNonNull(grid.getTnsAndSchemaLocation())
+                            ));
+        }
+        default:
+            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
+        }
     }
 
-    private static String zipEntryNameFor(final ObjectSpecification objectSpec) {
+    private static String zipEntryNameFor(
+            final ObjectSpecification objectSpec,
+            final CommonMimeType format) {
         final String fqn = objectSpec.getFullIdentifier();
-        return fqn.replace(".", File.separator)+".layout.xml";
+        return fqn.replace(".", File.separator)
+                + ".layout."
+                + format.getProposedFileExtensions().getFirstOrFail();
     }
 
 

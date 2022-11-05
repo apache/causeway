@@ -36,9 +36,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
+import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -57,7 +58,7 @@ import lombok.extern.log4j.Log4j2;
 public class MenuBarsLoaderServiceBootstrap
 implements MenuBarsLoaderService<BSMenuBars> {
 
-    private final JaxbService jaxbService;
+    private final MenuBarsMarshallerService<BSMenuBars> marshaller;
     private final boolean supportsReloading;
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
@@ -68,8 +69,8 @@ implements MenuBarsLoaderService<BSMenuBars> {
     @Inject
     public MenuBarsLoaderServiceBootstrap(
             final MetaModelContext mmc,
-            final JaxbService jaxbService) {
-        this.jaxbService = jaxbService;
+            final MenuBarsMarshallerService<BSMenuBars> marshaller) {
+        this.marshaller = marshaller;
         this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
         val menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
@@ -87,9 +88,9 @@ implements MenuBarsLoaderService<BSMenuBars> {
 
     // JUnit support
     public MenuBarsLoaderServiceBootstrap(
-            final JaxbService jaxbService,
+            final MenuBarsMarshallerService<BSMenuBars> marshaller,
             final AtomicReference<AbstractResource> menubarsLayoutResourceRef) {
-        this.jaxbService = jaxbService;
+        this.marshaller = marshaller;
         this.supportsReloading = true;
 
         menubarsLayoutResourceRef.getAndUpdate(r->r!=null
@@ -103,35 +104,20 @@ implements MenuBarsLoaderService<BSMenuBars> {
     }
 
     @Override
-    public Class<BSMenuBars> implementedMenuBarsClass() {
-        return BSMenuBars.class;
-    }
-
-    @Override
     public boolean supportsReloading() {
         return supportsReloading;
     }
 
     @Override
     public Optional<BSMenuBars> menuBars() {
-        return Optional.ofNullable(loadMenuBars(loadMenubarsLayoutResource()));
+        return tryLoadMenuBars(loadMenubarsLayoutResource())
+                .ifFailure(failure->severeCannotLoad(menubarsLayoutResourceRef.get(), failure))
+                .getValue();
     }
 
     // public, in support of JUnit testing
-    public BSMenuBars loadMenuBars(final String layoutFileContent) {
-
-        switch(menubarsLayoutMimeType) {
-        case XML:{
-            try {
-                return jaxbService.fromXml(BSMenuBars.class, layoutFileContent);
-            } catch (Exception e) {
-                severeCannotLoad(menubarsLayoutResourceRef.get(), e);
-                return null;
-            }
-        }
-        default:
-            return null;
-        }
+    public Try<BSMenuBars> tryLoadMenuBars(final String layoutFileContent) {
+        return marshaller.unmarshal(layoutFileContent, menubarsLayoutMimeType);
     }
 
     // -- HELPER
@@ -175,7 +161,7 @@ implements MenuBarsLoaderService<BSMenuBars> {
         warnedOnce = true;
     }
 
-    private void severeCannotLoad(final AbstractResource menubarsLayoutResource, final Exception cause) {
+    private void severeCannotLoad(final AbstractResource menubarsLayoutResource, final Throwable cause) {
 
         log.error("{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),

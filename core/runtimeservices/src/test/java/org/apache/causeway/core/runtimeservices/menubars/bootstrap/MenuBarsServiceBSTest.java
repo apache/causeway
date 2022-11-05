@@ -95,7 +95,7 @@ extends RuntimeServicesTestAbstract {
         val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, format);
 
         // after round-trip
-        val menuBars2 = menuBarsLoaderService.loadMenuBars(xml);
+        val menuBars2 = menuBarsLoaderService.tryLoadMenuBars(xml).getValue().orElse(null);
         assertNotNull(menuBars2);
         assertEquals(1L, menuBars2.stream().count());
 
@@ -111,7 +111,7 @@ extends RuntimeServicesTestAbstract {
         val xml = sampleMenuBarsXmlWithCustomName(customNamed);
 
         // create menubars-xml from scratch (annotations and fallback naming only)
-        val menuBars = menuBarsLoaderService.loadMenuBars(xml);
+        val menuBars = menuBarsLoaderService.tryLoadMenuBars(xml).getValue().orElse(null);
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
 

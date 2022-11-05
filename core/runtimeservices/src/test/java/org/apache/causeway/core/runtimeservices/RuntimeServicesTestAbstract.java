@@ -26,6 +26,7 @@ import org.springframework.core.io.AbstractResource;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
+import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.internal.ioc._ManagedBeanAdapter;
@@ -34,6 +35,7 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.M
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsLoaderServiceBootstrap;
+import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 
 import lombok.Getter;
@@ -65,11 +67,19 @@ implements HasMetaModelContext {
 
         mmcBuilder.singletonProvider(
                 _ManagedBeanAdapter
-                .forTestingLazy(MenuBarsLoaderService.class, ()->{
-
+                .forTestingLazy(MenuBarsMarshallerService.class, ()->{
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+                    return new MenuBarsMarshallerServiceBootstrap(
+                            jaxbService);
+                }));
+
+
+        mmcBuilder.singletonProvider(
+                _ManagedBeanAdapter
+                .forTestingLazy(MenuBarsLoaderService.class, ()->{
+                    val menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
                     return new MenuBarsLoaderServiceBootstrap(
-                            jaxbService,
+                            menuBarsMenuBarsMarshaller,
                             menubarsLayoutXmlResourceRef);
                 }));
 
@@ -80,9 +90,11 @@ implements HasMetaModelContext {
 
                     val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+                    val menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
                     val menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
                     return new MenuBarsServiceBootstrap(
                             menuBarsLoaderService,
+                            menuBarsMenuBarsMarshaller,
                             messageService,
                             jaxbService,
                             metaModelContext);

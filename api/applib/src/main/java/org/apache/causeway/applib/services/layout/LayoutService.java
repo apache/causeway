@@ -41,13 +41,13 @@ public interface LayoutService {
 
     /**
      * Obtains the serialized form of the object layout (grid) for the specified domain class.
-     * @throws UnsupportedOperationException - when format is not supported
+     * @throws UnsupportedOperationException when format is not supported
      */
     String objectLayout(Class<?> domainClass, LayoutExportStyle style, CommonMimeType format);
 
     /**
      * Obtains a zip file of the serialized layouts (grids) of all domain entities and view models.
-     * @throws UnsupportedOperationException - when format is not supported
+     * @throws UnsupportedOperationException when format is not supported
      */
     byte[] toZip(LayoutExportStyle style, CommonMimeType format);
 
@@ -61,7 +61,7 @@ public interface LayoutService {
 
     /**
      * Obtains the serialized form of the menu bars layout ({@link MenuBarsService}).
-     * @throws UnsupportedOperationException - when format is not supported
+     * @throws UnsupportedOperationException when format is not supported
      */
     String menuBarsLayout(MenuBarsService.Type type, CommonMimeType format);
 
