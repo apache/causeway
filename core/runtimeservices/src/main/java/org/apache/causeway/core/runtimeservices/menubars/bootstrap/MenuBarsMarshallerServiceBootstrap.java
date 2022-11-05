@@ -65,7 +65,7 @@ implements MenuBarsMarshallerService<BSMenuBars> {
     }
 
     @Override
-    public Class<BSMenuBars> implementedMenuBarsClass() {
+    public Class<BSMenuBars> supportedClass() {
         return BSMenuBars.class;
     }
 

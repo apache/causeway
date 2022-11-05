@@ -52,8 +52,8 @@ public interface MenuBarsLoaderService {
     boolean supportsReloading();
 
     /**
-     * Returns a new instance of a {@link MenuBars} if possible,
-     * else <tt>Optional.empty()</tt>.
+     * Optionally returns a new instance of a {@link MenuBars},
+     * based on whether the underlying resource could be found, loaded and parsed.
      * @throws UnsupportedOperationException - when format is not supported
      */
     <T extends MenuBars> Optional<T> menuBars(@NonNull MenuBarsMarshallerService<T> marshaller);

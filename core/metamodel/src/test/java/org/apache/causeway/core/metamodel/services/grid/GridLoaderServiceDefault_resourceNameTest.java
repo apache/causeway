@@ -18,12 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import java.util.EnumSet;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.DomainClassAndLayout;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.LayoutKey;
 
 class GridLoaderServiceDefault_resourceNameTest {
 
@@ -31,41 +34,41 @@ class GridLoaderServiceDefault_resourceNameTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, null, false);
+        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, false);
     }
 
     @Test
     void when_default_exists() {
         assertEquals(
                 "Foo.layout.xml",
-                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo.class, null)));
+                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo.class, null)));
     }
 
     @Test
     void when_fallback_exists() {
         assertEquals(
                 "Foo2.layout.fallback.xml",
-                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo2.class, null)));
+                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo2.class, null)));
     }
 
     @Test
     void when_default_and_fallback_both_exist() {
         assertEquals(
                 "Foo3.layout.xml",
-                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo3.class, null)));
+                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo3.class, null)));
     }
 
     @Test
     void when_neither_exist() {
         assertEquals(
                 (String)null,
-                resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo4.class, null)));
+                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo4.class, null)));
     }
 
     // -- HELPER
 
-    private String resourceNameFor(DomainClassAndLayout dcal) {
-        return gridLoaderServiceDefault.loadXml(dcal)
+    private String resourceNameFor(final LayoutKey dcal) {
+        return gridLoaderServiceDefault.loadLayoutResource(dcal, EnumSet.of(CommonMimeType.XML))
         .map(xml->xml.getResourceName())
         .orElse(null);
     }

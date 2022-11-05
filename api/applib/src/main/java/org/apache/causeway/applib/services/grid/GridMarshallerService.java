@@ -16,20 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.menu;
+package org.apache.causeway.applib.services.grid;
 
-import org.apache.causeway.applib.layout.menubars.MenuBars;
-import org.apache.causeway.applib.services.layout.LayoutService;
+import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.marshal.MarshallerService;
 
 /**
- * Supports {@link MenuBars} marshaling and unmarshaling.
- * <p>
- * The service is <i>called</i> by the default implementations of
- * {@link MenuBarsService} and (indirectly) {@link LayoutService}.
+ * Supports {@link Grid} marshaling and unmarshaling.
  *
  * @since 2.0 {@index}
  */
-public interface MenuBarsMarshallerService<T extends MenuBars>
+public interface GridMarshallerService<T extends Grid>
 extends MarshallerService<T> {
 }

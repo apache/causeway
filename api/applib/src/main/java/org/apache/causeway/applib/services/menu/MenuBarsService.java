@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.services.menu;
 
 import org.apache.causeway.applib.layout.menubars.MenuBars;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
@@ -69,8 +68,6 @@ public interface MenuBarsService {
     // -- LAYOUT EXPORT
 
     MenuBarsMarshallerService<? extends MenuBars> marshaller();
-    String menuBarsFormatted(Type type, CommonMimeType format);
-
 
     // -- JUNIT SUPPORT
 
@@ -81,9 +78,6 @@ public interface MenuBarsService {
                 throw _Exceptions.unsupportedOperation(); }
             @Override
             public MenuBarsMarshallerService<? extends MenuBars> marshaller() {
-                throw _Exceptions.unsupportedOperation(); }
-            @Override
-            public String menuBarsFormatted(final Type type, final CommonMimeType format) {
                 throw _Exceptions.unsupportedOperation(); }
         };
     }

@@ -20,12 +20,10 @@ package org.apache.causeway.core.metamodel.services.layout;
 
 import java.io.File;
 import java.util.EnumSet;
-import java.util.Objects;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -34,15 +32,13 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -60,21 +56,37 @@ import lombok.extern.log4j.Log4j2;
 public class LayoutServiceDefault implements LayoutService {
 
     private final SpecificationLoader specificationLoader;
-    private final JaxbService jaxbService;
     private final GridService gridService;
     private final MenuBarsService menuBarsService;
+
+    // -- MENUBARS LAYOUT
+
+    @Override
+    public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
+        return menuBarsService.marshaller().supportedFormats();
+    }
+
+    @Override
+    public String menuBarsLayout(
+            final MenuBarsService.Type type,
+            final CommonMimeType format) {
+        val menuBars = menuBarsService.menuBars(type);
+        return menuBarsService.marshaller().marshal(_Casts.uncheckedCast(menuBars), format);
+    }
 
     // -- OBJECT LAYOUT
 
     @Override
     public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
-        return EnumSet.of(CommonMimeType.XML);
+        return gridService.marshaller().supportedFormats();
     }
 
     @Override
     public String objectLayout(final Class<?> domainClass, final LayoutExportStyle style, final CommonMimeType format) {
-        final Grid grid = gridService.toGridForExport(domainClass, style);
-        return gridToFormatted(grid, format);
+        return tryGridToFormatted(domainClass, style, format)
+                .ifFailureFail()
+                .getValue()
+                .orElse(null);
     }
 
     @Override
@@ -105,20 +117,6 @@ public class LayoutServiceDefault implements LayoutService {
         return zipWriter.toBytes();
     }
 
-    // -- MENUBARS LAYOUT
-
-    @Override
-    public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
-        return menuBarsService.marshaller().supportedFormats();
-    }
-
-    @Override
-    public String menuBarsLayout(
-            final MenuBarsService.Type type,
-            final CommonMimeType format) {
-        return menuBarsService.menuBarsFormatted(type, format);
-    }
-
     // -- HELPER
 
     private Try<String> tryGridToFormatted(
@@ -133,17 +131,7 @@ public class LayoutServiceDefault implements LayoutService {
         if(grid==null) {
             return null;
         }
-        switch(format) {
-        case XML:{
-            return jaxbService.toXml(grid,
-                    _Maps.unmodifiable(
-                            Marshaller.JAXB_SCHEMA_LOCATION,
-                            Objects.requireNonNull(grid.getTnsAndSchemaLocation())
-                            ));
-        }
-        default:
-            throw _Exceptions.unsupportedOperation("format %s not supported", format.name());
-        }
+        return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
     }
 
     private static String zipEntryNameFor(
@@ -154,7 +142,5 @@ public class LayoutServiceDefault implements LayoutService {
                 + ".layout."
                 + format.getProposedFileExtensions().getFirstOrFail();
     }
-
-
 
 }

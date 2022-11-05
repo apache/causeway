@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,7 +36,9 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -44,10 +47,12 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -58,49 +63,35 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {
 
-    private final GridReaderUsingJaxb gridReader;
     private final MessageService messageService;
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final boolean supportsReloading;
 
     @Inject
     public GridLoaderServiceDefault(
-           final GridReaderUsingJaxb gridReader,
            final MessageService messageService,
            final CausewaySystemEnvironment causewaySystemEnvironment) {
-        this.gridReader = gridReader;
         this.messageService = messageService;
         this.supportsReloading = causewaySystemEnvironment.isPrototyping();
     }
 
     @Value
-    static class DomainClassAndLayout {
-        private final Class<?> domainClass;
-        private final String layoutIfAny;
+    static class LayoutKey {
+        private final @NonNull Class<?> domainClass;
+        private final @Nullable String layoutIfAny; // layout suffix
     }
 
     @Value
-    static class XmlAndResourceName {
-        private final @NonNull String xmlContent;
+    static class LayoutResource {
         private final @NonNull String resourceName;
+        private final @NonNull CommonMimeType format;
+        private final @NonNull String content;
     }
-
 
     // for better logging messages (used only in prototyping mode)
-    private final Map<DomainClassAndLayout, String> badXmlByDomainClassAndLayout = _Maps.newHashMap();
-
-    @Value
-    static class DomainClassAndLayoutAndXml {
-        private final DomainClassAndLayout domainClassAndLayout;
-        private final XmlAndResourceName xml;
-    }
-
+    private final Map<LayoutKey, String> badContentByKey = _Maps.newHashMap();
     // cache (used only in prototyping mode)
-    private final Map<DomainClassAndLayoutAndXml, Grid> gridByDomainClassAndLayoutAndXml = _Maps.newHashMap();
-
-    @Override
-    public boolean supportsReloading() {
-        return supportsReloading;//causewaySystemEnvironment.isPrototyping();
-    }
+    private final Map<LayoutKey, Grid> gridCache = _Maps.newHashMap();
 
     @Override
     public void remove(final Class<?> domainClass) {
@@ -108,90 +99,96 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             return;
         }
         final String layoutIfAny = null;
-        final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
-        badXmlByDomainClassAndLayout.remove(dcal);
-        final XmlAndResourceName xml = loadXml(dcal).orElse(null);
-        if(xml == null) {
-            return;
-        }
-        gridByDomainClassAndLayoutAndXml.remove(new DomainClassAndLayoutAndXml(dcal, xml));
+        val layoutKey = new LayoutKey(domainClass, layoutIfAny);
+        badContentByKey.remove(layoutKey);
+        gridCache.remove(layoutKey);
     }
 
     @Override
-    public boolean existsFor(final Class<?> domainClass) {
-        return loadXml(new DomainClassAndLayout(domainClass, null)).isPresent();
+    public boolean existsFor(final Class<?> domainClass, final EnumSet<CommonMimeType> supportedFormats) {
+        return loadLayoutResource(new LayoutKey(domainClass, null), supportedFormats).isPresent();
     }
 
     @Override
-    public Grid load(final Class<?> domainClass, final String layoutIfAny) {
-        final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
-        final XmlAndResourceName xml = loadXml(dcal).orElse(null);
-        if(xml == null) {
-            return null;
+    public <T extends Grid> Optional<T> load(
+            final Class<?> domainClass,
+            final String layoutIfAny,
+            final @NonNull GridMarshallerService<T> marshaller) {
+
+        val supportedFormats = marshaller.supportedFormats();
+
+        val layoutKey = new LayoutKey(domainClass, layoutIfAny);
+        val layoutResource = loadLayoutResource(layoutKey, supportedFormats).orElse(null);
+        if(layoutResource == null) {
+            return Optional.empty();
         }
 
-        final DomainClassAndLayoutAndXml dcalax = new DomainClassAndLayoutAndXml(dcal, xml);
         if(supportsReloading()) {
-            final String badXml = badXmlByDomainClassAndLayout.get(dcal);
-            if(badXml != null) {
-                if(Objects.equals(xml.getXmlContent(), badXml)) {
+            final String badContent = badContentByKey.get(layoutKey);
+            if(badContent != null) {
+                if(Objects.equals(layoutResource.getContent(), badContent)) {
                     // seen this before and already logged; just quit
-                    return null;
+                    return Optional.empty();
                 } else {
-                    // this different XML might be good
-                    badXmlByDomainClassAndLayout.remove(dcal);
+                    // this different content might be good
+                    badContentByKey.remove(layoutKey);
                 }
             }
         } else {
             // if cached, serve from cache - otherwise fall through
-            final Grid grid = gridByDomainClassAndLayoutAndXml.get(dcalax);
+            final Grid grid = gridCache.get(layoutKey);
             if(grid != null) {
-                return grid;
+                return Optional.of((T)grid);
             }
         }
 
         try {
-            final Grid grid = gridReader.loadGrid(xml.getXmlContent());
+            final T grid = marshaller
+                    .unmarshal(layoutResource.getContent(), layoutResource.getFormat())
+                    .getValue().orElseThrow();
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
-                gridByDomainClassAndLayoutAndXml.put(dcalax, grid);
+                gridCache.put(layoutKey, grid);
             }
-            return grid;
+            return Optional.of(grid);
         } catch(Exception ex) {
 
             if(supportsReloading()) {
-                // save fact that this was bad XML, so that we don't log again if called next time
-                badXmlByDomainClassAndLayout.put(dcal, xml.getXmlContent());
+                // save fact that this was bad content, so that we don't log again if called next time
+                badContentByKey.put(layoutKey, layoutResource.getContent());
             }
 
             // note that we don't blacklist if the file exists but couldn't be parsed;
             // the developer might fix so we will want to retry.
-            final String resourceName = xml.getResourceName();
+            final String resourceName = layoutResource.getResourceName();
             final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
             if(supportsReloading()) {
                 messageService.warnUser(message);
             }
             log.warn(message);
 
-            return null;
+            return Optional.empty();
         }
     }
 
     // -- HELPER
 
-    Optional<XmlAndResourceName> loadXml(final DomainClassAndLayout dcal) {
+    Optional<LayoutResource> loadLayoutResource(
+            final LayoutKey dcal,
+            final EnumSet<CommonMimeType> supportedFormats) {
         return _Reflect.streamTypeHierarchy(dcal.getDomainClass(), InterfacePolicy.EXCLUDE)
-        .map(type->loadXml(type, dcal.getLayoutIfAny()))
+        .map(type->loadContent(type, dcal.getLayoutIfAny(), supportedFormats))
         .filter(Optional::isPresent)
         .findFirst()
         .map(Optional::get);
     }
 
-    private Optional<XmlAndResourceName> loadXml(
+    private Optional<LayoutResource> loadContent(
             final @NonNull Class<?> domainClass,
-            final @Nullable String layoutIfAny) {
-        return streamResourceNameCandidatesFor(domainClass, layoutIfAny)
-        .map(candidateResourceName->tryLoadXml(domainClass, candidateResourceName))
+            final @Nullable String layoutIfAny,
+            final EnumSet<CommonMimeType> supportedFormats) {
+        return streamResourceNameCandidatesFor(domainClass, layoutIfAny, supportedFormats)
+        .map(candidateResourceName->tryLoadLayoutResource(domainClass, candidateResourceName))
         .filter(Optional::isPresent)
         .findFirst()
         .map(Optional::get);
@@ -199,27 +196,47 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     private Stream<String> streamResourceNameCandidatesFor(
             final @NonNull Class<?> domainClass,
-            final @Nullable String layoutIfAny) {
+            final @Nullable String layoutIfAny,
+            final @NonNull  EnumSet<CommonMimeType> supportedFormats) {
+        return supportedFormats.stream()
+                .flatMap(format->streamResourceNameCandidatesFor(domainClass, layoutIfAny, format));
+    }
+
+    private Stream<String> streamResourceNameCandidatesFor(
+            final @NonNull Class<?> domainClass,
+            final @Nullable String layoutIfAny,
+            final @NonNull CommonMimeType format) {
+        return format.getProposedFileExtensions().stream()
+                .flatMap(fileExtension->streamResourceNameCandidatesFor(domainClass, layoutIfAny, fileExtension));
+    }
+
+    private Stream<String> streamResourceNameCandidatesFor(
+            final @NonNull Class<?> domainClass,
+            final @Nullable String layoutIfAny,
+            final @NonNull String fileExtension) {
 
         val typeSimpleName = domainClass.getSimpleName();
 
         return _Strings.isNotEmpty(layoutIfAny)
                 ? Stream.of(
-                        String.format("%s-%s.layout.xml", typeSimpleName, layoutIfAny),
-                        String.format("%s.layout.xml", typeSimpleName),
-                        String.format("%s.layout.fallback.xml", typeSimpleName))
+                        String.format("%s-%s.layout.%s", typeSimpleName, layoutIfAny, fileExtension),
+                        String.format("%s.layout.%s", typeSimpleName, fileExtension),
+                        String.format("%s.layout.fallback.%s", typeSimpleName, fileExtension))
                 : Stream.of(
-                        String.format("%s.layout.xml", typeSimpleName),
-                        String.format("%s.layout.fallback.xml", typeSimpleName));
+                        String.format("%s.layout.%s", typeSimpleName, fileExtension),
+                        String.format("%s.layout.fallback.%s", typeSimpleName,fileExtension));
     }
 
-    private Optional<XmlAndResourceName> tryLoadXml(
+    private Optional<LayoutResource> tryLoadLayoutResource(
             final @NonNull Class<?> type,
             final @NonNull String candidateResourceName) {
         try {
             return Optional.ofNullable(
                     _Resources.loadAsStringUtf8(type, candidateResourceName))
-                    .map(xml->new XmlAndResourceName(xml, candidateResourceName));
+                    .map(fileContent->new LayoutResource(
+                            candidateResourceName,
+                            CommonMimeType.valueOfFileName(candidateResourceName).orElseThrow(),
+                            fileContent));
         } catch (IOException ex) {
             log.error(
                     "Failed to load layout file {} (relative to {}.class)",

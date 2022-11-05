@@ -36,7 +36,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
-import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenu;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
@@ -46,7 +45,6 @@ import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -77,8 +75,10 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -100,6 +100,8 @@ implements MenuBarsService {
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
 
     private final MenuBarsLoaderService loader;
+
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final MenuBarsMarshallerService<BSMenuBars> marshaller;
     private final MessageService messageService;
     private final JaxbService jaxbService;
@@ -117,17 +119,6 @@ implements MenuBarsService {
             return menuBarsFromAnnotationsOnly;
         }
         return menuBarsDefault();
-    }
-
-    @Override
-    public String menuBarsFormatted(final Type type, final CommonMimeType format) {
-        val menuBars = menuBars(type);
-        return marshaller.marshal(menuBars, format);
-    }
-
-    @Override
-    public MenuBarsMarshallerService<? extends MenuBars> marshaller() {
-        return marshaller;
     }
 
     // -- HELPER

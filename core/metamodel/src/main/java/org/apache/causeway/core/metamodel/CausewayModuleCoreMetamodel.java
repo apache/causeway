@@ -57,8 +57,8 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
@@ -182,7 +182,7 @@ import lombok.NonNull;
         MetamodelEventService.class,
         ExceptionRecognizerForRecoverableException.class,
         GridLoaderServiceDefault.class,
-        GridReaderUsingJaxb.class,
+        GridMarshallerServiceBootstrap.class,
         GridServiceDefault.class,
         GridSystemServiceBootstrap.class,
         LayoutServiceDefault.class,

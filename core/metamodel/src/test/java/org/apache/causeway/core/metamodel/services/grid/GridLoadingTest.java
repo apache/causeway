@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import java.util.EnumSet;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -53,8 +55,8 @@ extends MetaModelTestAbstract {
 
     @Test @Disabled("just a blueprint")
     void blueprint() {
-        val domainClassAndLayout = new GridLoaderServiceDefault.DomainClassAndLayout(Bar.class, null);
-        gridLoaderService.loadXml(domainClassAndLayout);
+        val domainClassAndLayout = new GridLoaderServiceDefault.LayoutKey(Bar.class, null);
+        gridLoaderService.loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
 
         val xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
         System.out.println(xml);
