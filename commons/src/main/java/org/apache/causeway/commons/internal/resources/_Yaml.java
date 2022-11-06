@@ -25,7 +25,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
 
+import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.Yaml;
@@ -127,22 +130,36 @@ public class _Yaml {
 
     // -- WRITING
 
+    public static Try<String> toString(
+            final @Nullable Object pojo) {
+        return Try.call(()->_toString(pojo, null));
+    }
+
+    public static Try<String> toString(
+            final @Nullable Object pojo,
+            final @Nullable UnaryOperator<DumperOptions> customizer) {
+        return Try.call(()->_toString(pojo, customizer));
+    }
+
     @SneakyThrows
-    private static String _toString(final Object pojo) {
+    private static String _toString(
+            final @Nullable Object pojo,
+            final @Nullable UnaryOperator<DumperOptions> customizer) {
         try(val writer = new StringWriter()){
-            val options = new DumperOptions();
-            options.setIndent(2);
-            options.setLineBreak(LineBreak.UNIX); // fixated for consistency
+            val defaultOptions = new DumperOptions();
+            defaultOptions.setIndent(2);
+            defaultOptions.setLineBreak(LineBreak.UNIX); // fixated for consistency
             //options.setPrettyFlow(true);
             //options.setDefaultFlowStyle(FlowStyle.BLOCK);
+
+            val options = Optional.ofNullable(customizer)
+            .map(f->f.apply(defaultOptions))
+            .orElse(defaultOptions);
+
             val yaml = new Yaml(options);
             yaml.dump(pojo, writer);
             return writer.toString();
         }
-    }
-
-    public static Try<String> toString(final Object pojo) {
-        return Try.call(()->_toString(pojo));
     }
 
 }
