@@ -145,6 +145,9 @@ public class _Yaml {
     private static String _toString(
             final @Nullable Object pojo,
             final @Nullable UnaryOperator<DumperOptions> customizer) {
+        if(pojo==null) {
+            return "";
+        }
         try(val writer = new StringWriter()){
             val defaultOptions = new DumperOptions();
             defaultOptions.setIndent(2);
