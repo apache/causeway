@@ -174,6 +174,13 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
                   + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.BACKGROUND "
                   + "   AND cl.startedAt is null "
                   + " ORDER BY cl.timestamp ASC"),
+        @NamedQuery(
+            name  = Nq.FIND_RECENT_BACKGROUND_BY_TARGET,
+            query = "SELECT cl "
+                  + "  FROM CommandLogEntry cl "
+                  + " WHERE cl.executeIn = org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn.BACKGROUND "
+                  + "   AND cl.target    = :target "
+                  + " ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             query = "SELECT cl "

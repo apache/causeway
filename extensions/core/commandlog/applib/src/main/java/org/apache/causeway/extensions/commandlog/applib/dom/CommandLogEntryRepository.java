@@ -281,6 +281,15 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
                 Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED));
     }
 
+    public List<C> findRecentBackgroundByTarget(Bookmark target) {
+        return repositoryService().allMatches(
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BACKGROUND_BY_TARGET)
+                        .withParameter("target", target)
+                        .withLimit(30L)
+        );
+    }
+
+
     /**
      * The most recent replayed command previously replicated from primary to
      * secondary.

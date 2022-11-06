@@ -181,6 +181,13 @@ import lombok.Setter;
                   + "    && startedAt == null "
                   + " ORDER BY timestamp ASC "),
     @Query(
+            name  = Nq.FIND_RECENT_BACKGROUND_BY_TARGET,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE executeIn == 'BACKGROUND' "
+                    + "    && target    == :target "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "

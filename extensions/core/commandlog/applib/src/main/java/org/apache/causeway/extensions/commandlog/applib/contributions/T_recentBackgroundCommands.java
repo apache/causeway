@@ -18,65 +18,51 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.contributions;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
-import lombok.RequiredArgsConstructor;
-
 /**
- * This mixin contributes a <tt>recentCommands</tt> action to any domain object
- * (unless also {@link HasInteractionId} - commands don't themselves have commands).
+ * This (abstract) mixin contributes a <tt>recentBackgroundCommands</tt> collection to any domain object.
+ *
+ * <p>
+ *     To surface this collection, create a trivial subclass for the target domain class.
+ * </p>
  *
  * @since 2.0 {@index}
  */
-@Action(
-        domainEvent = Object_recentCommands.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
-        commandPublishing = Publishing.DISABLED,
-        executionPublishing = Publishing.DISABLED
-)
-@ActionLayout(
-        cssClassFa = "fa-bolt",
-        position = ActionLayout.Position.PANEL_DROPDOWN,
-        fieldSetId = LayoutConstants.FieldSetId.METADATA,
-        sequence = "900.1"
-)
+@Collection
 @RequiredArgsConstructor
-public class Object_recentCommands {
+public abstract class T_recentBackgroundCommands<T> {
 
-    public static class ActionDomainEvent
-            extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<Object_recentCommands> { }
+    private final T domainObject;
 
-    private final Object domainObject;
-
-    @MemberSupport public List<? extends CommandLogEntry> act() {
+    public static class ActionDomainEvent extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T_recentBackgroundCommands> { }
+    @Action(
+            domainEvent = ActionDomainEvent.class
+    )
+    @MemberSupport public List<? extends CommandLogEntry> coll() {
         return bookmarkService.bookmarkFor(domainObject)
-        .map(commandLogEntryRepository::findRecentByTargetOrResult)
-        .orElse(Collections.emptyList());
-    }
-
-    /**
-     * Hide if the mixee itself implements {@link HasInteractionId}.
-     * (commands don't have commands).
-     */
-    @MemberSupport public boolean hideAct() {
-        return (domainObject instanceof HasInteractionId);
+                .map(bookmark -> queryResultsCache.execute(
+                        () -> commandLogEntryRepository.findRecentBackgroundByTarget(bookmark),
+                                T_recentBackgroundCommands.class, "T_recentBackgroundCommands",
+                                bookmark))
+                .orElse(Collections.emptyList());
     }
 
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
+    @Inject QueryResultsCache queryResultsCache;
 }
