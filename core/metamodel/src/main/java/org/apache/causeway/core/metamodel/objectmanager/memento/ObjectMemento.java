@@ -35,10 +35,15 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
+import lombok.val;
+
 /**
  * @since 2.0
  */
 public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializable {
+
+    /** arbitrary/random string */
+    static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
 
     /**
      * The object's title for rendering (before translation).
@@ -75,23 +80,29 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
 
     @Nullable
     static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
-        return memento!=null
+        val base64UrlEncodedMemento = memento!=null
                 ? _Strings.ofBytes(
                     _Bytes.asUrlBase64.apply(
                             _Serializables.write(memento)),
                     StandardCharsets.US_ASCII)
                 : null;
+        return base64UrlEncodedMemento;
     }
 
     @Nullable
     static ObjectMemento destringFromUrlBase64(final @Nullable String base64UrlEncodedMemento) {
-        return _Strings.isNotEmpty(base64UrlEncodedMemento)
-                ? _Serializables.read(
-                        ObjectMemento.class,
-                        _Bytes.ofUrlBase64.apply(
-                                base64UrlEncodedMemento.getBytes(StandardCharsets.US_ASCII)))
-                : null;
-    }
+        try {
+            return _Strings.isNotEmpty(base64UrlEncodedMemento)
+                    && !NULL_ID.equals(base64UrlEncodedMemento)
+                    ? _Serializables.read(
+                            ObjectMemento.class,
+                            _Bytes.ofUrlBase64.apply(
+                                    base64UrlEncodedMemento.getBytes(StandardCharsets.US_ASCII)))
+                    : null;
+        } catch (Exception e) {
+            return null; // map to null if anything goes wrong
+        }
 
+    }
 
 }
