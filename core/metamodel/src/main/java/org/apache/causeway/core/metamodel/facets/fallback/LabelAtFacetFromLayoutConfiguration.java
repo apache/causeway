@@ -24,8 +24,9 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFace
 
 public class LabelAtFacetFromLayoutConfiguration extends LabelAtFacetAbstract {
 
-    public LabelAtFacetFromLayoutConfiguration(LabelPosition labelPosition, FacetHolder facetHolder) {
-        super(labelPosition, facetHolder);
+    public LabelAtFacetFromLayoutConfiguration(
+            final LabelPosition labelPosition, final FacetHolder facetHolder) {
+        super(labelPosition, facetHolder, Precedence.LOW);
     }
 
 }

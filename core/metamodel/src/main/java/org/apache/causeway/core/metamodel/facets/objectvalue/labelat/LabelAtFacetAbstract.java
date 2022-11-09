@@ -38,7 +38,11 @@ implements LabelAtFacet {
     private final LabelPosition value;
 
     public LabelAtFacetAbstract(final LabelPosition value, final FacetHolder holder) {
-        super(type(), holder);
+        this(value, holder, Precedence.DEFAULT);
+    }
+
+    public LabelAtFacetAbstract(final LabelPosition value, final FacetHolder holder, final Precedence precedence) {
+        super(type(), holder, precedence);
         this.value = value;
     }
 
