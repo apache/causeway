@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
 
+import java.io.Serializable;
+
 import org.apache.wicket.model.IModel;
 
 @FunctionalInterface
-public interface MarkupComponentFactory<T extends IModel<?>> {
+public interface MarkupComponentFactory<T extends IModel<?>> extends Serializable {
 
     MarkupComponent newMarkupComponent(String id, T model);
 
