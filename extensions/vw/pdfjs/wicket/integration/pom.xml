@@ -45,7 +45,7 @@
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>pdfjs-dist</artifactId>
 		    <!--  keep in sync with o.a.i.extensions.pdfjs.wkt.integration.PdfJsVersion -->
-		    <version>2.16.105</version>
+		    <version>3.0.279</version>
 		</dependency>
 
 	</dependencies>
