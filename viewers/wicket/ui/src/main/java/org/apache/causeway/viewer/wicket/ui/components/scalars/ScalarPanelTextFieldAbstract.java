@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
