@@ -9,8 +9,7 @@ Known issues of this release:
 * Wicket Viewer
 ** Date/Time picking not fully supported for temporal value types with zone or offset information.
 ** The extension in support of Server Sent Events (SSE), as used for progress bars, 
-is experimental and not recommended for production.
-** File Upload widget produces visual artifacts if used with _Actions_ that take more than one argument.	   
+is experimental and not recommended for production.	   
 
 (This page will be updated once the release candidate is released).
 
