@@ -25,6 +25,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 
 import lombok.NonNull;
@@ -37,18 +38,26 @@ implements IHeaderContributor {
 
     // -- FACTORIES
 
+    /**
+     * Reading JS from source, it skips 18 license header lines
+     * and any single line comments as well as empty lines.
+     * @apiNote that could be done by the yui-compressor maven plugin as well,
+     *      but at the time of writing did not look into it
+     */
     public static OnDomReadyHeaderContributor forScriptReference(
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName) {
         return new OnDomReadyHeaderContributor(readJsResource(resourceLocation, resourceName));
     }
 
+    /** skips 18 license header lines and any single line comments as well as empty lines */
     @SneakyThrows
     private static String readJsResource(
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName) {
         return _Text.readLinesFromResource(
                 resourceLocation, resourceName, StandardCharsets.UTF_8)
+                .filter(_Strings::isNotEmpty)
                 .filter(line->!line.trim().startsWith("//"))
                 .stream()
                 .skip(18) // skip license header
