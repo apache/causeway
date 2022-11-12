@@ -24,6 +24,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.viewer.wicket.ui.util.OnDomReadyHeaderContributor;
+
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
 import lombok.SneakyThrows;
@@ -32,20 +34,28 @@ public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
 
     private static final long serialVersionUID = 1L;
 
-    public FileUploadFieldWithNestingFix(final String id, final IModel<List<FileUpload>> model, final FileInputConfig config) {
+    private static final OnDomReadyHeaderContributor FILE_UPLOAD_NESTING_FIX_JS =
+            OnDomReadyHeaderContributor.forScriptReference(
+                    FileUploadFieldWithNestingFix.class, "causeway-file-upload-nesting-fix.nocompress.js");
+
+    public FileUploadFieldWithNestingFix(final String id,
+            final IModel<List<FileUpload>> model, final FileInputConfig config) {
         super(id, model, config);
     }
-
 
     @Override @SneakyThrows
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        FileUploadNestingFixJsReference.INSTANCE.renderHead(response);
-
-
-//        val cleanupScript = _Resources.loadAsString(Wkt.class, "file-input-cleanup.js", StandardCharsets.UTF_8);
-//        response.render(OnDomReadyHeaderItem.forScript(cleanupScript));
+        FILE_UPLOAD_NESTING_FIX_JS.renderHead(response);
     }
+
+    @Override
+    public boolean isRequired() {
+        //FIXME[ISIS-3203]
+        return false; // nothing else worked yet
+    }
+
+//experiments ...
 //        @Override
 //        public void convertInput() {
 //            super.convertInput(); // keep side-effects
@@ -65,10 +75,5 @@ public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
 //        }
 //        private boolean isModelEmpty() { return getModel().getObject()==null; }
 //        private boolean isConvertedInputNull() { return getConvertedInput()==null; }
-    @Override
-    public boolean isRequired() {
-        //FIXME[ISIS-3203]
-        return false; // nothing else worked yet
-    }
 
 }

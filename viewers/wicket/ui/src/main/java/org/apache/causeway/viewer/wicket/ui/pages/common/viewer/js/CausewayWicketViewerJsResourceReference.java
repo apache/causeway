@@ -43,6 +43,6 @@ extends JavaScriptResourceReference {
      * Private constructor.
      */
     private CausewayWicketViewerJsResourceReference() {
-        super(CausewayWicketViewerJsResourceReference.class, "jquery.causeway.wicket.viewer.js");
+        super(CausewayWicketViewerJsResourceReference.class, "causeway-jquery-wicket-viewer.nocompress.js");
     }
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput;
+package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
@@ -27,24 +27,42 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 
 import org.apache.causeway.commons.internal.base._Text;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-final class FileUploadNestingFixJsReference implements IHeaderContributor {
-    private static final long serialVersionUID = 1L;
-    public static final FileUploadNestingFixJsReference INSTANCE = new FileUploadNestingFixJsReference();
-    private String jsScriptSource;
+@RequiredArgsConstructor
+public class OnDomReadyHeaderContributor
+implements IHeaderContributor {
+
+    // -- FACTORIES
+
+    public static OnDomReadyHeaderContributor forScriptReference(
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName) {
+        return new OnDomReadyHeaderContributor(readJsResource(resourceLocation, resourceName));
+    }
 
     @SneakyThrows
-    private FileUploadNestingFixJsReference() {
-        this.jsScriptSource = _Text.readLinesFromResource(
-                FileUploadNestingFixJsReference.class, "file-upload-nesting-fix.js", StandardCharsets.UTF_8)
+    private static String readJsResource(
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName) {
+        return _Text.readLinesFromResource(
+                resourceLocation, resourceName, StandardCharsets.UTF_8)
+                .filter(line->!line.trim().startsWith("//"))
                 .stream()
                 .skip(18) // skip license header
                 .collect(Collectors.joining("\n"));
     }
 
+    // -- HEADER CONTRIBUTOR
+
+    private final String jsScriptSource;
+
     @Override
     public void renderHead(final IHeaderResponse response) {
         response.render(OnDomReadyHeaderItem.forScript(jsScriptSource));
     }
+
+
 }

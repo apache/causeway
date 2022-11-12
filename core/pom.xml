@@ -340,8 +340,7 @@
 						<suffix>.min</suffix>
 						<excludes>
 							<!-- -->
-							<exclude>**/jquery.causeway.wicket.viewer.js</exclude>
-							<exclude>**/file-upload-nesting-fix.js</exclude>
+							<exclude>**/*.nocompress.js</exclude>
 							<!-- select 2 -->
 							<exclude>**/i18n/*.js</exclude>
 							<exclude>**/select2*.js</exclude>
