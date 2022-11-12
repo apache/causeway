@@ -21,20 +21,24 @@ package org.apache.causeway.viewer.wicket.ui.util;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
-@RequiredArgsConstructor
-public class OnDomReadyHeaderContributor
-implements IHeaderContributor {
+@UtilityClass
+public class WktHeaderItems {
 
     // -- FACTORIES
 
@@ -44,15 +48,34 @@ implements IHeaderContributor {
      * @apiNote that could be done by the yui-compressor maven plugin as well,
      *      but at the time of writing did not look into it
      */
-    public static OnDomReadyHeaderContributor forScriptReference(
+    public OnDomReadyHeaderItem forScriptReferenceAsOnDomReady(
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName) {
-        return new OnDomReadyHeaderContributor(readJsResource(resourceLocation, resourceName));
+        return OnDomReadyHeaderItem.forScript(readJsResource(resourceLocation, resourceName));
     }
+
+    public JavaScriptReferenceHeaderItem forScriptReference(
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName) {
+        return JavaScriptReferenceHeaderItem.forReference(
+                new JavaScriptResourceReference(resourceLocation, resourceName));
+    }
+
+    @RequiredArgsConstructor
+    public class HeaderContributor
+    implements IHeaderContributor {
+        private static final long serialVersionUID = 1L;
+        @Getter private final HeaderItem headerItem;
+        @Override public void renderHead(final IHeaderResponse response) {
+            response.render(headerItem);
+        }
+    }
+
+    // -- HELPER
 
     /** skips 18 license header lines and any single line comments as well as empty lines */
     @SneakyThrows
-    private static String readJsResource(
+    private String readJsResource(
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName) {
         return _Text.readLinesFromResource(
@@ -63,15 +86,5 @@ implements IHeaderContributor {
                 .skip(18) // skip license header
                 .collect(Collectors.joining("\n"));
     }
-
-    // -- HEADER CONTRIBUTOR
-
-    private final String jsScriptSource;
-
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        response.render(OnDomReadyHeaderItem.forScript(jsScriptSource));
-    }
-
 
 }

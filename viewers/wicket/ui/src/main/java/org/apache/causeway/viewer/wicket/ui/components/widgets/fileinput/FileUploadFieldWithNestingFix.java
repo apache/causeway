@@ -20,23 +20,27 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput;
 
 import java.util.List;
 
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.viewer.wicket.ui.util.OnDomReadyHeaderContributor;
+import org.apache.causeway.viewer.wicket.ui.util.WktHeaderItems;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 
 public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
 
     private static final long serialVersionUID = 1L;
 
-    private static final OnDomReadyHeaderContributor FILE_UPLOAD_NESTING_FIX_JS =
-            OnDomReadyHeaderContributor.forScriptReference(
-                    FileUploadFieldWithNestingFix.class, "causeway-file-upload-nesting-fix.nocompress.js");
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final HeaderItem headerItem =
+                WktHeaderItems.forScriptReferenceAsOnDomReady(
+                        FileUploadFieldWithNestingFix.class, "causeway-file-upload-nesting-fix.nocompress.js");
 
     public FileUploadFieldWithNestingFix(final String id,
             final IModel<List<FileUpload>> model, final FileInputConfig config) {
@@ -46,7 +50,7 @@ public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
     @Override @SneakyThrows
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        FILE_UPLOAD_NESTING_FIX_JS.renderHead(response);
+        response.render(headerItem());
     }
 
     @Override

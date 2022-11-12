@@ -18,31 +18,31 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js;
 
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.markup.head.HeaderItem;
+
+import org.apache.causeway.viewer.wicket.ui.util.WktHeaderItems;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
  * Javascript (client-side) extensions and fixes.
  */
-public class CausewayWicketViewerJsResourceReference
-extends JavaScriptResourceReference {
-    private static final long serialVersionUID = 1L;
+@RequiredArgsConstructor
+public class CausewayWicketViewerJsResourceReference {
 
     @Getter(lazy = true) @Accessors(fluent = true)
     private static final CausewayWicketViewerJsResourceReference instance =
-        new CausewayWicketViewerJsResourceReference();
+        new CausewayWicketViewerJsResourceReference(
+                WktHeaderItems.forScriptReference(
+                        CausewayWicketViewerJsResourceReference.class,
+                        "causeway-jquery-wicket-viewer.nocompress.js"));
 
-    public static JavaScriptReferenceHeaderItem asHeaderItem() {
-        return JavaScriptReferenceHeaderItem.forReference(CausewayWicketViewerJsResourceReference.instance());
+    private final HeaderItem headerItem;
+
+    public static HeaderItem asHeaderItem() {
+        return instance().headerItem;
     }
 
-    /**
-     * Private constructor.
-     */
-    private CausewayWicketViewerJsResourceReference() {
-        super(CausewayWicketViewerJsResourceReference.class, "causeway-jquery-wicket-viewer.nocompress.js");
-    }
 }
