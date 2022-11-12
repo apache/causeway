@@ -23,26 +23,28 @@ import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.causeway.viewer.wicket.ui.util.WktHeaderItems;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
  * Javascript (client-side) extensions and fixes.
  */
-@RequiredArgsConstructor
-public class CausewayWicketViewerJsResourceReference {
+public class CausewayWicketViewerJsResourceReference
+extends WktHeaderItems.HeaderContributor {
+
+    private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
     private static final CausewayWicketViewerJsResourceReference instance =
-        new CausewayWicketViewerJsResourceReference(
-                WktHeaderItems.forScriptReference(
-                        CausewayWicketViewerJsResourceReference.class,
-                        "causeway-jquery-wicket-viewer.nocompress.js"));
+        new CausewayWicketViewerJsResourceReference();
 
-    private final HeaderItem headerItem;
+    public CausewayWicketViewerJsResourceReference() {
+        super(WktHeaderItems.forScriptReference(
+                CausewayWicketViewerJsResourceReference.class,
+                "causeway-jquery-wicket-viewer.nocompress.js"));
+    }
 
     public static HeaderItem asHeaderItem() {
-        return instance().headerItem;
+        return instance().getHeaderItem();
     }
 
 }

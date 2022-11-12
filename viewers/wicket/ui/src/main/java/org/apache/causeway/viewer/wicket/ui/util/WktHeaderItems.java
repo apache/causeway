@@ -43,7 +43,7 @@ public class WktHeaderItems {
     // -- FACTORIES
 
     /**
-     * Reading JS from source, it skips 18 license header lines
+     * Reading JS from source, it (hardcoded) skips 18 license header lines
      * and any single line comments as well as empty lines.
      * @apiNote that could be done by the yui-compressor maven plugin as well,
      *      but at the time of writing did not look into it
