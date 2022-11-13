@@ -37,13 +37,13 @@ class _ColumnUtil {
 
     void processColumnAnnotations(final ProcessMethodContext processMethodContext,
             final Consumer<Optional<javax.jdo.annotations.Column>> onJdoColumn,
-            final Consumer<Optional<javax.persistence.Column>> onJpaColumn) {
+            final Consumer<Optional<jakarta.persistence.Column>> onJpaColumn) {
 
         val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(javax.jdo.annotations.Column.class);
         if(jdoColumnIfAny.isPresent()) {
             onJdoColumn.accept(jdoColumnIfAny);
         } else {
-            val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(javax.persistence.Column.class);
+            val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(jakarta.persistence.Column.class);
             if(jpaColumnIfAny.isPresent()) {
                 onJpaColumn.accept(jpaColumnIfAny);
             }
@@ -59,7 +59,7 @@ class _ColumnUtil {
             onColumnPresent.accept(inferSemantics(processMethodContext, jdoColumnIfAny));
             return;
         }
-        val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(javax.persistence.Column.class);
+        val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(jakarta.persistence.Column.class);
         if(jpaColumnIfAny.isPresent()) {
             onColumnPresent.accept(Semantics.of(!jpaColumnIfAny.get().nullable()));
             return;

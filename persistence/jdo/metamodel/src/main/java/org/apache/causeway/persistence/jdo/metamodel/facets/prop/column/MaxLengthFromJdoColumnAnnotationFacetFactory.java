@@ -20,7 +20,7 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

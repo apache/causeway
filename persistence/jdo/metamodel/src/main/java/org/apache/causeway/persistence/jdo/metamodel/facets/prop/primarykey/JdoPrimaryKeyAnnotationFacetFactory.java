@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

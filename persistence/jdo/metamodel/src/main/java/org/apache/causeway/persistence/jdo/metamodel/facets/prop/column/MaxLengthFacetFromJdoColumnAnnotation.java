@@ -40,7 +40,7 @@ extends MaxLengthFacetAbstract {
     }
 
     public static Optional<MaxLengthFacet> createJpa(
-            final Optional<javax.persistence.Column> jpaColumnIfAny,
+            final Optional<jakarta.persistence.Column> jpaColumnIfAny,
             final FacetHolder holder) {
 
         return jpaColumnIfAny

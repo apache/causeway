@@ -42,7 +42,7 @@ extends MaxFractionalDigitsFacetAbstract {
     }
 
     public static Optional<MaxFractionalDigitsFacet> createJpa(
-            final Optional<javax.persistence.Column> jdoColumnIfAny,
+            final Optional<jakarta.persistence.Column> jdoColumnIfAny,
             final FacetHolder holder) {
 
         return jdoColumnIfAny

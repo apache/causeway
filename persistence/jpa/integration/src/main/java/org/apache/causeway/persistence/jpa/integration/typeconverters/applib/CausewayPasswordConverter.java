@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.integration.typeconverters.applib;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 import org.apache.causeway.applib.value.Password;
 
