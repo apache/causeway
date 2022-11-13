@@ -20,10 +20,10 @@ package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.util.EnumSet;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.Marshaller;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
