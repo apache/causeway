@@ -62,7 +62,6 @@ module org.apache.causeway.commons {
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
-    requires transitive java.xml.bind;
     requires transitive lombok;
     requires transitive org.apache.logging.log4j;
     requires transitive org.jdom2;
@@ -71,8 +70,9 @@ module org.apache.causeway.commons {
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
+    requires transitive jakarta.xml.bind;
 
     // JAXB JUnit test
-    opens org.apache.causeway.commons.internal.resources to java.xml.bind;
+    opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;
 
 }
