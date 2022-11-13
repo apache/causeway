@@ -21,10 +21,10 @@ package org.apache.causeway.extensions.commandreplay.secondary.fetch;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service()
 @Named(CausewayModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY + ".CommandFetcher")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE) // JUnit Support
 @Log4j2
 public class CommandFetcher {

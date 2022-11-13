@@ -19,8 +19,8 @@
 
 package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
-import javax.validation.Pattern;
-import javax.validation.Patterns;
+import jakarta.validation.Pattern;
+import jakarta.validation.Patterns;
 
 
 public class DomainObjectWithBuiltInValidation {

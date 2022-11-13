@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import java.util.Set;
 
-import javax.validation.InvalidConstraint;
-import javax.validation.ValidationProviderFactory;
-import javax.validation.Validator;
+import jakarta.validation.InvalidConstraint;
+import jakarta.validation.ValidationProviderFactory;
+import jakarta.validation.Validator;
 
 import org.apache.causeway.applib.events.ValidityEvent;
 import org.apache.causeway.core.metamodel.adapter.ObjectAdapter;

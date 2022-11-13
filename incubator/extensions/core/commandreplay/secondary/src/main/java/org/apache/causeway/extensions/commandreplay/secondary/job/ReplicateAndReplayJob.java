@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary.job;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
