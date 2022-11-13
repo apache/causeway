@@ -67,7 +67,7 @@
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>2.7.11</version>
+				<version>4.0.0</version>
 				<exclusions>
 					<exclusion>
 						<groupId>org.ow2.asm</groupId>
@@ -86,7 +86,7 @@
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
-				<version>2.7.11</version>
+				<version>4.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ow2.asm</groupId>
@@ -197,25 +197,25 @@
 		<dependency>
 			<groupId>com.sun.xml.bind.external</groupId>
 			<artifactId>rngom</artifactId>
-			<version>2.3.6</version> 
+			<version>4.0.1</version> 
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind.external</groupId>
 			<artifactId>relaxng-datatype</artifactId>
-			<version>2.3.6</version> 
+			<version>4.0.1</version> 
 		</dependency>
 		
 		<dependency>
 			<!-- provides @Inject, @Qualifier, -->
 		    <groupId>jakarta.inject</groupId>
 		    <artifactId>jakarta.inject-api</artifactId>
-		    <version>1.0.5</version> <!-- do not upgrade until Spring 6 -->
+		    <version>2.0.1</version>
 		</dependency>
 		<dependency>
         	<!-- provides javax.enterprise.inject.* -->
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>2.0.1</version> <!-- do not upgrade before Spring 6 -->
+            <version>4.0.1</version>
             <exclusions>
             	<exclusion>
             		<groupId>jakarta.inject</groupId>
