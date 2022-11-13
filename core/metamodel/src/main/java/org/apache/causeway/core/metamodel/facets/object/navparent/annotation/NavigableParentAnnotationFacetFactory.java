@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.commons.collections.Can;

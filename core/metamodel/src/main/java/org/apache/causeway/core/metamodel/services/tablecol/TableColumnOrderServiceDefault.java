@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.services.tablecol;
 
 import java.util.List;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

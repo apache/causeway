@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

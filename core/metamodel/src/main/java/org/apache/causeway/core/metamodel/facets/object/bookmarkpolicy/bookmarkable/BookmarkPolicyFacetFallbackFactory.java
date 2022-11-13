@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmark
 
 import java.util.function.Predicate;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

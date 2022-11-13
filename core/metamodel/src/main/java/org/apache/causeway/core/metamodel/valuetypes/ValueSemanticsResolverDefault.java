@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ValueSemanticsResolverDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ValueSemanticsResolverDefault
 implements ValueSemanticsResolver {

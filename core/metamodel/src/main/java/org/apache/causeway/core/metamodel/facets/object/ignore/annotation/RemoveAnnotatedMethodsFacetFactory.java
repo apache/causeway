@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MethodExcludeMarker;

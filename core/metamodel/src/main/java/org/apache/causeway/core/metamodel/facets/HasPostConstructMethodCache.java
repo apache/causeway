@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.causeway.core.metamodel.methods.MethodByClassMap;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;

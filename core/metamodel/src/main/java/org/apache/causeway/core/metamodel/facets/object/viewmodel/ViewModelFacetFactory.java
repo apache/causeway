@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

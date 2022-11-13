@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.deriv
 
 import java.lang.reflect.Method;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

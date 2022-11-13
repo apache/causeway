@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.util.Optional;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.jaxb.JaxbService;

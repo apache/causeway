@@ -109,7 +109,7 @@ implements RegExFacet {
 
     // -- UTILITY
 
-    protected static int asMask(final javax.validation.constraints.Pattern.Flag[] flags) {
+    protected static int asMask(final jakarta.validation.constraints.Pattern.Flag[] flags) {
         int mask = 0;
         for (val flag : flags) {
             mask |= flag.getValue();

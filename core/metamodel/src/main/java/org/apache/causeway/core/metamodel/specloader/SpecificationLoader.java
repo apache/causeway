@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.specloader;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 

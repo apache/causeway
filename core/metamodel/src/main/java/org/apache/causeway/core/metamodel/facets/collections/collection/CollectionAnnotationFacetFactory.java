@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.collections.collection;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;

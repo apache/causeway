@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.postprocessors.members;
 
 import java.lang.reflect.Method;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Property;

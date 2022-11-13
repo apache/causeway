@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
