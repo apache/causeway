@@ -1453,7 +1453,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>11</version>
+									<version>17</version>
 									<vendor>openjdk</vendor>
 								</jdk>
 							</toolchains>
@@ -1464,9 +1464,9 @@
 		</profile>
 
 		<profile>
-			<id>jdk11</id>
+			<id>jdk17</id>
 			<activation>
-				<jdk>[11,)</jdk>
+				<jdk>[17,)</jdk>
 			</activation>
 
 			<build>

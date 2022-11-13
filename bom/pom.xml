@@ -36,7 +36,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.0.0-RC2</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -301,10 +301,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
 
         <!-- APACHE CAUSEWAY customisation 5/21: start -->
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <surefire.version>3.0.0-M7</surefire.version>
         <!-- APACHE CAUSEWAY customisation 5/21: end -->
 
@@ -364,8 +364,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.29.2-GA</javassist.version>
         <javax-servlet.version>4.0.1</javax-servlet.version>
-        <jaxb-impl.version>2.3.6</jaxb-impl.version>
-        <jaxws-ri.version>2.3.5</jaxws-ri.version>
+        <jaxb-impl.version>4.0.1</jaxb-impl.version>
+        <jaxws-ri.version>4.0.0</jaxws-ri.version>
 
         <jbcrypt.version>0.4</jbcrypt.version>
         <jboss-jaxrs-api_2.1_spec.version>2.0.2.Final</jboss-jaxrs-api_2.1_spec.version>
@@ -412,7 +412,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <shiro.version>1.10.0</shiro.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-        <spring-boot.version>2.7.5</spring-boot.version>
+        <spring-boot.version>3.0.0-RC2</spring-boot.version>
         <summernote.version>0.8.11</summernote.version>
         <surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
         <swagger-core.version>1.6.8</swagger-core.version>
@@ -442,6 +442,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     </dependencyManagement>
     <repositories>
         <!-- APACHE CAUSEWAY customisation 7/21: start -->
+        <!-- temporary till Nov 24, 2022 -->
+        <repository>
+            <id>spring.snapshots</id>
+            <name>Spring Milestones Repository</name>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
         <!-- breaks dependabot run: timeout due to repo not accessible
         <repository>
             <id>apache.snapshots</id>
@@ -909,7 +916,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <version>[3.6,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <version>[11,)</version>
+                            <version>[17,)</version>
                         </requireJavaVersion>
                         <!-- seemingly not compatible with use of 3.0.0-SNAPSHOT placeholders
                             <requirePluginVersions> <message>All plugin versions must be defined!</message>
@@ -1121,7 +1128,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     <splitindex>true</splitindex>
                                     <encoding>${project.build.sourceEncoding}</encoding>
                                     <links>
-                                        <link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+                                        <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
                                     </links>
                                     <linksource>true</linksource>
                                     <detectOfflineLinks>false</detectOfflineLinks>
@@ -1159,6 +1166,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         </executions>
                     </plugin>
                     <!--  We want to sign the artifact, the POM, and all attached artifacts (except for SHA-512 checksum)  -->
+                    <!--TODO[ISIS-3275]
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -1171,6 +1179,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
             <!-- APACHE CAUSEWAY customisation 20/21: start -->
