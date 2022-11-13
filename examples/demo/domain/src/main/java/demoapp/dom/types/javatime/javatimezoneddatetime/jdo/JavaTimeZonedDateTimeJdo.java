@@ -20,7 +20,7 @@ package demoapp.dom.types.javatime.javatimezoneddatetime.jdo;
 
 import java.time.ZonedDateTime;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;

@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.projecting.persistence;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

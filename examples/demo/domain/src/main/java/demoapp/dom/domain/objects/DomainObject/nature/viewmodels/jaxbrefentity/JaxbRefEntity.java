@@ -20,7 +20,7 @@ package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
 import java.util.Objects;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.ObjectSupport;

@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;

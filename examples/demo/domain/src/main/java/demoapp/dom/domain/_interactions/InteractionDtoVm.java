@@ -21,7 +21,7 @@ package demoapp.dom.domain._interactions;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;

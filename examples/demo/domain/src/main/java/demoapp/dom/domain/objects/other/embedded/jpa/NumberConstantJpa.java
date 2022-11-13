@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jpa;
 
-import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.inject.Named;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
@@ -75,7 +75,7 @@ public class NumberConstantJpa
     @Getter @Setter
     private String name;
 
-    @javax.persistence.Embedded
+    @jakarta.persistence.Embedded
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private ComplexNumberJpa number;

@@ -18,8 +18,6 @@
  */
 package demoapp.webapp.wicket.common.ui.custom;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
@@ -32,6 +30,7 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFac
 
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+import jakarta.inject.Inject;
 
 //tag::class[]
 @org.springframework.stereotype.Component
@@ -48,7 +47,7 @@ public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract 
     }
 
     @Override
-    protected ApplicationAdvice doAppliesTo(UiObjectWkt entityModel) {    // <.>
+    protected ApplicationAdvice doAppliesTo(final UiObjectWkt entityModel) {    // <.>
         final ManagedObject managedObject = entityModel.getObject();      // <.>
         final Object domainObject = managedObject.getPojo();              // <.>
         return ApplicationAdvice.appliesIf(

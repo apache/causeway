@@ -19,7 +19,7 @@
  */
 package demoapp.dom.types.javamath;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -39,7 +39,7 @@ import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 @DomainObjectLayout(
         named="JavaMathTypes"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaMathTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

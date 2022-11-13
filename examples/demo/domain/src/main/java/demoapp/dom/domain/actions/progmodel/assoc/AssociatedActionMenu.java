@@ -18,8 +18,8 @@
  */
 package demoapp.dom.domain.actions.progmodel.assoc;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 @DomainObjectLayout(
         named="Associated Action"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class AssociatedActionMenu {
 
     @Inject private FactoryService factoryService;

@@ -18,15 +18,14 @@
  */
 package demoapp.dom._infra;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
-
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Named;
 import lombok.val;
 
 @Service
