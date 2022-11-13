@@ -20,8 +20,8 @@ package org.apache.causeway.testing.h2console.ui.services;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -48,7 +48,7 @@ import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class H2ManagerMenu {
 
     private final WebModuleH2Console webModule;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testing.fixtures.applib.teardown.jdo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.annotations.DiscriminatorStrategy;
 import javax.jdo.annotations.InheritanceStrategy;

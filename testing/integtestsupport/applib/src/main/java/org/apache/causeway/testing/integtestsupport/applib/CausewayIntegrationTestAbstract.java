@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ public abstract class CausewayIntegrationTestAbstract {
      * therefore also {@link Command}s (currently unused).
      */
     @Service
-    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+    @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class InteractionSupport {
 

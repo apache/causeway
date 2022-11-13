@@ -18,20 +18,9 @@
  */
 package org.apache.causeway.testing.h2console.ui.webmodule;
 
-import java.util.function.Consumer;
-
 import org.h2.server.web.ConnectionInfo;
-import org.h2.server.web.WebServer;
-import org.h2.server.web.WebServlet;
-
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Reflect;
-
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.val;
+//import org.h2.server.web.WebServer;
+//import org.h2.server.web.WebServlet;
 
 /**
  * Provides programmatic access to otherwise protected H2 {@link WebServer} configuration.
@@ -59,6 +48,9 @@ public interface H2WebServerWrapper {
     void setAdminPassword(String password);
 
     // -- UTILITY
+
+  //TODO[ISIS-3275] H2WebServlet (com.h2database:h2) does not support jakarta API
+    /*
 
     @SneakyThrows
     static void withH2WebServerWrapperDo(
@@ -123,6 +115,6 @@ public interface H2WebServerWrapper {
         };
 
     }
-
+*/
 
 }

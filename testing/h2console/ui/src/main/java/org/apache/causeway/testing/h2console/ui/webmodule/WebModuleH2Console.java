@@ -18,34 +18,25 @@
  */
 package org.apache.causeway.testing.h2console.ui.webmodule;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-
-import org.h2.server.web.ConnectionInfo;
-import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
-import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console.H2WebServlet;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -53,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("causeway.test.WebModuleH2Console")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2
 public class WebModuleH2Console extends WebModuleAbstract {
@@ -87,8 +78,14 @@ public class WebModuleH2Console extends WebModuleAbstract {
     @Getter
     private final String name = "H2Console";
 
+
+
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
+
+        /*
+
+            //TODO[ISIS-3275] H2WebServlet (com.h2database:h2) does not support jakarta API
 
         registerServlet(ctx, SERVLET_NAME, H2WebServlet.class)
             .ifPresent(servletReg -> {
@@ -100,6 +97,8 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
             });
 
+            */
+
         return Can.empty(); // registers no listeners
     }
 
@@ -110,6 +109,8 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
     // -- WRAPPER AROUND H2'S SERVLET
 
+  //TODO[ISIS-3275] H2WebServlet (com.h2database:h2) does not support jakarta API
+    /*
     public static class H2WebServlet extends WebServlet {
 
         private static final long serialVersionUID = 1L;
@@ -164,6 +165,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
         }
 
     }
+    */
 
     // -- HELPER
 
@@ -179,7 +181,10 @@ public class WebModuleH2Console extends WebModuleAbstract {
         .anyMatch(jdbcUrl->{
             if(jdbcUrl.contains(":h2:mem:")) {
                 log.info("found h2 in-memory data-source: {}", jdbcUrl);
+                //TODO[ISIS-3275] H2WebServlet (com.h2database:h2) does not support jakarta API
+                /*
                 H2WebServlet.configure(jdbcUrl);
+                */
                 return true;
             }
             return false;
