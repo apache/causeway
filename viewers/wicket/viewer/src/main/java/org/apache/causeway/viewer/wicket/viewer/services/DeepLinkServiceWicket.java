@@ -21,8 +21,8 @@ package org.apache.causeway.viewer.wicket.viewer.services;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("causeway.viewer.wicket.DeepLinkServiceWicket")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeepLinkServiceWicket implements DeepLinkService {

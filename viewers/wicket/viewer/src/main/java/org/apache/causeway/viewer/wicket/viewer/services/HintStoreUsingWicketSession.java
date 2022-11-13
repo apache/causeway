@@ -22,7 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.wicket.Session;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("causeway.viewer.wicket.HintStoreUsingWicketSession")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {

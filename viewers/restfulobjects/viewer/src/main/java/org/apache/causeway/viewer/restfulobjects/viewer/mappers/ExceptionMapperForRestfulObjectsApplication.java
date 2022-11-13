@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.mappers;
 
-import javax.inject.Singleton;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 @Component
 @Provider
 @Singleton
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ExceptionMapperForRestfulObjectsApplication
 extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 

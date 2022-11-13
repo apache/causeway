@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.webmodule;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
@@ -57,7 +57,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 

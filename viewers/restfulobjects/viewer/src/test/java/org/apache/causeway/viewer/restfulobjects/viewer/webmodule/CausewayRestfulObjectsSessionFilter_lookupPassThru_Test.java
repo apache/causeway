@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
 
 import java.util.List;
 
-import javax.servlet.FilterConfig;
+import jakarta.servlet.FilterConfig;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

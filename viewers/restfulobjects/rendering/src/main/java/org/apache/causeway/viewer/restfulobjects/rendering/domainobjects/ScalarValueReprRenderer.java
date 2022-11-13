@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

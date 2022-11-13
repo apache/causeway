@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.viewer.integration;
 
 import java.util.Locale;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.util.convert.IConverter;
 

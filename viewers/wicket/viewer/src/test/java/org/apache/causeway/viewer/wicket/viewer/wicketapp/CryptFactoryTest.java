@@ -21,8 +21,8 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;

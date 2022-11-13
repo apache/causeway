@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.login;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.IHeaderResponse;

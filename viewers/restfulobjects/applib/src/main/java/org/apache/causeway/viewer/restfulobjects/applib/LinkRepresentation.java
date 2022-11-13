@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;

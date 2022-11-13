@@ -23,8 +23,8 @@ module org.apache.causeway.viewer.commons.services {
     exports org.apache.causeway.viewer.commons.services.menu;
     exports org.apache.causeway.viewer.commons.services;
 
-    requires java.annotation;
-    requires java.inject;
+    requires jakarta.annotation;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

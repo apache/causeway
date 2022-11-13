@@ -1186,7 +1186,7 @@
 			<dependency>
 			    <groupId>org.jboss.resteasy</groupId>
 			    <artifactId>resteasy-jaxb-provider</artifactId>
-			    <version>${resteasy.version}</version>
+			    <version>${resteasy-jaxb-provider.version}</version>
 			</dependency>
 
 			<dependency>

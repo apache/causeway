@@ -20,13 +20,7 @@ package org.apache.causeway.viewer.wicket.viewer.webmodule;
 
 import static java.util.Objects.requireNonNull;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-
-import org.apache.wicket.protocol.http.WicketFilter;
+//import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +32,11 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 import lombok.Getter;
 
 /**
@@ -46,7 +45,7 @@ import lombok.Getter;
  */
 @Service
 @Named("causeway.viewer.wicket.WebModuleWicket")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
 public final class WebModuleWicket extends WebModuleAbstract {
 
@@ -96,6 +95,8 @@ public final class WebModuleWicket extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
+        /* TODO[ISIS-3275] no jakarta API support
+
         registerFilter(ctx, WICKET_FILTER_NAME, WicketFilter.class)
             .ifPresent(filterReg -> {
                 filterReg.setInitParameter("applicationClassName", wicketApp);
@@ -106,6 +107,8 @@ public final class WebModuleWicket extends WebModuleAbstract {
                         true,
                         urlPattern);
             });
+
+        */
 
         return Can.empty(); // registers no listeners
     }

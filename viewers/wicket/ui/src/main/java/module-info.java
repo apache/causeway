@@ -121,10 +121,10 @@ module org.apache.causeway.viewer.wicket.ui {
     requires glassfish.corba.omgapi;
     requires jakarta.activation;
     requires java.desktop;
-    requires java.inject;
+    requires jakarta.inject;
     requires java.sql;
-    requires java.validation;
-    requires javax.servlet.api;
+    requires jakarta.validation;
+    requires jakarta.servlet;
     requires jquery.selectors;
     requires lombok;
     requires org.apache.causeway.applib;
