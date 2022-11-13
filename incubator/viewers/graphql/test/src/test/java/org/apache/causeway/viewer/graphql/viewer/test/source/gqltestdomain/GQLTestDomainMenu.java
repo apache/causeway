@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @Named("gqltestdomain.GQLTestDomainMenu")
 @DomainService(
         nature=NatureOfService.VIEW)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GQLTestDomainMenu {
 

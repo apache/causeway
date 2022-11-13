@@ -20,7 +20,7 @@ package org.apache.causeway.incubator.viewer.javafx.ui.components.temporal;
 
 import java.time.LocalDate;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TemporalFieldFactory implements UiComponentHandlerFx {
 

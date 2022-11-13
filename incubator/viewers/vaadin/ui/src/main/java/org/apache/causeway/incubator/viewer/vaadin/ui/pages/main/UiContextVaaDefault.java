@@ -21,7 +21,7 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.pages.main;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.vaadin.flow.component.Component;
 

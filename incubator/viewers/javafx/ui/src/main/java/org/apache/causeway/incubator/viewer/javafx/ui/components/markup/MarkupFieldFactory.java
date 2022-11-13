@@ -21,7 +21,7 @@ package org.apache.causeway.incubator.viewer.javafx.ui.components.markup;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 import netscape.javascript.JSException;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class MarkupFieldFactory implements UiComponentHandlerFx {
 

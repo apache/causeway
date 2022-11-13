@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.components.text;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.incubator.viewer.javafx.model.binding.BindingsFx;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TextFieldFactory implements UiComponentHandlerFx {
 

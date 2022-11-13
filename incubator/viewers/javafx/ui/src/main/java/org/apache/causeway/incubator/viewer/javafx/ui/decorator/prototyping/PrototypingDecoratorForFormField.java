@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.decorator.prototyping;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 

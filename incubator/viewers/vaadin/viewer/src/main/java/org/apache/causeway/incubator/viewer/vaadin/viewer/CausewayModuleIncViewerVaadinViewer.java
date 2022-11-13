@@ -18,33 +18,24 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.viewer;
 
-import java.util.HashMap;
-
-import javax.inject.Inject;
-
-import com.vaadin.flow.server.InitParameters;
-import com.vaadin.flow.spring.RootMappedCondition;
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;
-import com.vaadin.flow.spring.SpringServlet;
 import com.vaadin.flow.spring.VaadinConfigurationProperties;
 import com.vaadin.flow.spring.VaadinServletContextInitializer;
 import com.vaadin.flow.spring.VaadinWebsocketEndpointExporter;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.incubator.viewer.vaadin.ui.CausewayModuleIncViewerVaadinUi;
 
-import lombok.val;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -89,6 +80,7 @@ public class CausewayModuleIncViewerVaadinViewer {
      *
      * @return a custom ServletRegistrationBean instance
      */
+    /* TODO[ISIS-3275] no support for jakarta API
     @Bean
     public ServletRegistrationBean<SpringServlet> servletRegistrationBean() {
         String urlMapping = configurationProperties.getUrlMapping();
@@ -106,7 +98,7 @@ public class CausewayModuleIncViewerVaadinViewer {
         registration.setAsyncSupported(configurationProperties.isAsyncSupported());
         registration.setName(ClassUtils.getShortNameAsProperty(SpringServlet.class));
         return registration;
-    }
+    }*/
 
     /**
      * Deploys JSR-356 websocket endpoints when Atmosphere is available.

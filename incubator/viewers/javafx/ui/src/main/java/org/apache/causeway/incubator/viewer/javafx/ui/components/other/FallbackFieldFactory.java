@@ -27,7 +27,7 @@ import javafx.scene.control.Label;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.LAST)
+@jakarta.annotation.Priority(PriorityPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerFx {
 
     @Override

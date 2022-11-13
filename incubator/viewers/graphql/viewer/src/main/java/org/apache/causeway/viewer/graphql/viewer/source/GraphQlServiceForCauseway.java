@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.source;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.graphql.ExecutionGraphQlRequest;
 import org.springframework.graphql.ExecutionGraphQlResponse;
