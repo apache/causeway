@@ -27,8 +27,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
@@ -50,6 +48,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
+import jakarta.inject.Named;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

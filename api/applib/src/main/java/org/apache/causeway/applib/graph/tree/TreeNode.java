@@ -27,8 +27,6 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.inject.Named;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -41,6 +39,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import jakarta.inject.Named;
 import lombok.SneakyThrows;
 
 /**

@@ -20,13 +20,12 @@ package org.apache.causeway.applib.services.registry;
 
 import java.util.Comparator;
 
-import javax.annotation.Priority;
-
 import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
+import jakarta.annotation.Priority;
 import lombok.val;
 
 /**
@@ -44,7 +43,7 @@ public class InstanceByPriorityComparator implements Comparator<Object> {
     }
 
     @Override
-    public int compare(Object o1, Object o2) {
+    public int compare(final Object o1, final Object o2) {
 
         if (o1 == null) {
             if (o2 == null) {

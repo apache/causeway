@@ -24,22 +24,21 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.commons.internal.resources._Xml.ReadOptions;
 import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 
 /**
- * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.
+ * Helper methods for converting {@link jakarta.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.
  *
  * <p>
  * For example usage, see <a href="https://github.com/causewayaddons/causeway-module-publishmq">Causeway addons' publishmq module</a>

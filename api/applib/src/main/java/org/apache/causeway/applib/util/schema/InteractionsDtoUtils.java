@@ -27,17 +27,16 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.causeway.applib.util.JaxbUtil;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.InteractionsDto;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import lombok.val;
 
 /**
@@ -103,7 +102,7 @@ public final class InteractionsDtoUtils {
 
     // -- other
 
-    public static List<InteractionDto> split(InteractionsDto interactionsDto) {
+    public static List<InteractionDto> split(final InteractionsDto interactionsDto) {
         List<InteractionDto> interactionDtos = new ArrayList<>();
         interactionsDto.getInteractionDto().forEach(interactionDto -> {
             copyVersion(interactionsDto, interactionDto);

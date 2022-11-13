@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.applib.services.bookmark;
 
-import javax.inject.Inject;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 /**

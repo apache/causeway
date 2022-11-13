@@ -27,7 +27,7 @@ import java.util.Optional;
  * <p>
  *     The intention is that viewers provide an implementation of this service.
  *     Note that the Wicket viewer <i>does</i> implement this service and
- *     uses an {@link javax.servlet.http.HttpSession}; this will have the side-effect
+ *     uses an {@link jakarta.servlet.http.HttpSession}; this will have the side-effect
  * </p>
  *
  * @since 2.0 {@index}

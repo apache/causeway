@@ -20,8 +20,6 @@ package org.apache.causeway.applib.util.schema;
 
 import java.io.Writer;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
 import org.apache.causeway.schema.common.v2.DifferenceDto;
@@ -30,6 +28,7 @@ import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
 
+import jakarta.xml.bind.JAXBException;
 import lombok.NonNull;
 
 /**

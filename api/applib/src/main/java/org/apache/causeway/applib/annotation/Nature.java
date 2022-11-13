@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.springframework.cglib.proxy.Mixin;
 
 import org.apache.causeway.applib.ViewModel;

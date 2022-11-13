@@ -20,8 +20,6 @@ package org.apache.causeway.applib.services.user;
 
 import java.io.Serializable;
 
-import javax.inject.Named;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
@@ -32,6 +30,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;

@@ -22,8 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
-import javax.inject.Named;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -33,6 +31,7 @@ import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.schema.common.v2.OidDto;
 
+import jakarta.inject.Named;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;

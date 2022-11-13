@@ -25,11 +25,6 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.util.JaxbUtil;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -40,6 +35,11 @@ import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 
 /**
  * @since 1.x {@index}
