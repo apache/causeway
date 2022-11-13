@@ -21,8 +21,8 @@ package org.apache.causeway.core.config.beans;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
-import javax.persistence.Entity;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.Entity;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

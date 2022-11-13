@@ -54,7 +54,7 @@ public class RestEasyConfiguration {
          *
          * @see <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md">resteasy-spring-boot-starter docs</a>
          */
-        @javax.validation.constraints.Pattern(regexp="^[/].*[^/]$")
+        @jakarta.validation.constraints.Pattern(regexp="^[/].*[^/]$")
         private String defaultPath = "/restful";
 
         private final App app = new App();
