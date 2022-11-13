@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.persistence.jpa;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;

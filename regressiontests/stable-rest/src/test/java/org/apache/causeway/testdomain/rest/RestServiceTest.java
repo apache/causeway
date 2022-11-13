@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testdomain.rest;
 
-import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

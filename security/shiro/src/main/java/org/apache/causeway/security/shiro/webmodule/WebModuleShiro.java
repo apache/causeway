@@ -55,8 +55,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebModuleShiro extends WebModuleAbstract {
 
-    //TODO[ISIS-3275] shiro-web no jakarta API support
-
     private static final String SHIRO_FILTER_NAME = "ShiroFilter";
 
     @Inject
@@ -66,7 +64,7 @@ public class WebModuleShiro extends WebModuleAbstract {
 
     // -- CONFIGURATION
 
-    /*
+    /* TODO[ISIS-3275] shiro-web no jakarta API support
     public static void setShiroEnvironmentClass(final Class<? extends WebEnvironment> shiroEnvironmentClass) {
         if(shiroEnvironmentClass==null) {
             System.setProperty("shiroEnvironmentClass", null);
@@ -94,8 +92,9 @@ public class WebModuleShiro extends WebModuleAbstract {
             return defaults;
         }
     }
-
+*/
     public static void setShiroIniResource(final String resourcePath) {
+        /* TODO[ISIS-3275] shiro-web no jakarta API support
         if(resourcePath==null) {
             System.setProperty("shiroIniResource", null);
             setShiroEnvironmentClass(null);
@@ -103,11 +102,12 @@ public class WebModuleShiro extends WebModuleAbstract {
         }
         System.setProperty("shiroIniResource", resourcePath);
         setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
+        */
     }
-*/
 
 
-    /*
+
+    /* TODO[ISIS-3275] shiro-web no jakarta API support
      * Adds support for dependency injection into security realms
      * @since 2.0
      *
@@ -173,7 +173,7 @@ public class WebModuleShiro extends WebModuleAbstract {
 
     @Override
     public void prepare(final WebModuleContext ctx) {
-        super.prepare(ctx);/*
+        super.prepare(ctx);/*TODO[ISIS-3275] shiro-web no jakarta API support
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isEmpty(customShiroEnvironmentClassName)) {
             setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
@@ -182,7 +182,7 @@ public class WebModuleShiro extends WebModuleAbstract {
 
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
-/*
+/* TODO[ISIS-3275] shiro-web no jakarta API support
         registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
             .ifPresent(filterReg -> {
                 filterReg.addMappingForUrlPatterns(

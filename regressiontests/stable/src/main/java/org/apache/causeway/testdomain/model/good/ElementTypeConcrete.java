@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.model.good;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

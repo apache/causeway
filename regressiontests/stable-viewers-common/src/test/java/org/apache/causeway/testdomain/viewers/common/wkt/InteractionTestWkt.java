@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.viewers.common.wkt;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

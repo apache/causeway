@@ -39,32 +39,12 @@
 
 		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
-		<gradle-tooling.version>7.1.1</gradle-tooling.version>
+		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
 		<maven-model-builder.version>3.8.6</maven-model-builder.version>
 		<picocli.version>4.7.0</picocli.version>
 		<structurizr.version>1.6.2</structurizr.version>
 
 	</properties>
-
-	<repositories>
-        <!-- temporary till Nov 24, 2022 -->
-        <repository>
-            <id>spring.snapshots</id>
-            <name>Spring Milestones Repository</name>
-            <url>https://repo.spring.io/milestone/</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-		<repository>
-			<id>gradle-repo</id>
-			<url>https://repo.gradle.org/gradle/libs-releases-local/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-    </repositories>
 
 	<build>
 		<resources>

@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

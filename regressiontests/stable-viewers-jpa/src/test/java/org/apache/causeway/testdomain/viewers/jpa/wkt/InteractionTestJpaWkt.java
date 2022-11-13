@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.viewers.jpa.wkt;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;

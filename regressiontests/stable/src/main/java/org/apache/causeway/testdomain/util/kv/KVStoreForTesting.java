@@ -24,7 +24,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 

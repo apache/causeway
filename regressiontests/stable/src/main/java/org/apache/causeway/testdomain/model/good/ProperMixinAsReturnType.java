@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.model.good;
 import java.time.LocalDate;
 import java.util.Random;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Domain;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.publishing.stubs;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;

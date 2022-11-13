@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

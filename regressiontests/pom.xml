@@ -27,14 +27,14 @@
 	<name>Apache Causeway - Regression Tests</name>
 	<description>
         Collection of JUnit tests covering core functionalities of the framework.
-        (Targeted for JVM 11+)
+        (Targeted for JVM 17+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 
 		<skip.regressionTests>false</skip.regressionTests>
 		<skipTests>${skip.regressionTests}</skipTests>
@@ -252,7 +252,7 @@
 
 			<dependency>
 				<groupId>org.glassfish.jersey.ext</groupId>
-				<artifactId>jersey-spring5</artifactId>
+				<artifactId>jersey-spring6</artifactId>
 				<scope>test</scope>
 			</dependency>
 

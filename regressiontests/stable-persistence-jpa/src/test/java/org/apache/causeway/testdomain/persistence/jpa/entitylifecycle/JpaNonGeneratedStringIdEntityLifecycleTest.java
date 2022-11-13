@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.persistence.jpa.entitylifecycle;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
