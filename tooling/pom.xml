@@ -28,14 +28,14 @@
 	<description>
         Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
-        (Targeted for JVM 11+)
+        (Targeted for JVM 17+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 
 		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
@@ -47,6 +47,13 @@
 	</properties>
 
 	<repositories>
+        <!-- temporary till Nov 24, 2022 -->
+        <repository>
+            <id>spring.snapshots</id>
+            <name>Spring Milestones Repository</name>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
 		<repository>
 			<id>gradle-repo</id>
 			<url>https://repo.gradle.org/gradle/libs-releases-local/</url>
@@ -57,7 +64,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-	</repositories>
+    </repositories>
 
 	<build>
 		<resources>
@@ -316,8 +323,6 @@
 		<module>cli</module>
 	</modules>
 
-	<profiles>
-	</profiles>
 </project>
 
 

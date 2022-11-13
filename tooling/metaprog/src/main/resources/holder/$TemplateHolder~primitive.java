@@ -18,7 +18,7 @@
  */
 package /*${java-package}*/;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 /*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Holder")
