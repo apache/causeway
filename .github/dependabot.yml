@@ -21,5 +21,14 @@ updates:
       interval: "daily"
     # Allow up to 10 open pull requests for maven dependencies
     open-pull-requests-limit: 20
+    
+  # Maintain dependencies for Maven (3.0.0 milestones)
+  - package-ecosystem: "maven"
+    target-branch: "spring6"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "daily"
+    # Allow up to 10 open pull requests for maven dependencies
+    open-pull-requests-limit: 20
 
 
