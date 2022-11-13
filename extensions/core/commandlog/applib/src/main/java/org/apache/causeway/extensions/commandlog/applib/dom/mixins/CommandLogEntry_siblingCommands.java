@@ -59,7 +59,7 @@ public class CommandLogEntry_siblingCommands {
     }
 
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     private CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
 }

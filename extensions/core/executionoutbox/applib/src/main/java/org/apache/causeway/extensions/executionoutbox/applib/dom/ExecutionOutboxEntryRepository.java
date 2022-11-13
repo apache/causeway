@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.exceptions.RecoverableException;

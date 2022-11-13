@@ -23,7 +23,7 @@ import lombok.val;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;

@@ -21,8 +21,8 @@ package org.apache.causeway.extensions.secman.applib.tenancy.dom;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.factory.FactoryService;

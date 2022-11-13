@@ -26,15 +26,15 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 
 
 
 /**
- * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  Intended primarily for
+ * Helper methods for converting {@link jakarta.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  Intended primarily for
  * test use only (the {@link JAXBContext} is not cached).
  *
  * <p>

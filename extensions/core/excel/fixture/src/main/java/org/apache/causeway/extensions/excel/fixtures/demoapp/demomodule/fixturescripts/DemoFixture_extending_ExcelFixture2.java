@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturescripts;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.commons.internal.resources._Resources;

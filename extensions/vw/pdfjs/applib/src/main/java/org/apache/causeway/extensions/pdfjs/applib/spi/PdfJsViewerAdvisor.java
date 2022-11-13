@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.pdfjs.applib.spi;
 
 import java.io.Serializable;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import org.springframework.stereotype.Service;
 

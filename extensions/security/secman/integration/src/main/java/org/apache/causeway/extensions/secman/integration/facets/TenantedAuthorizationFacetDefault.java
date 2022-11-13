@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.integration.facets;
 
 import java.util.List;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;

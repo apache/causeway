@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.executionoutbox.applib.spiimpl;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 

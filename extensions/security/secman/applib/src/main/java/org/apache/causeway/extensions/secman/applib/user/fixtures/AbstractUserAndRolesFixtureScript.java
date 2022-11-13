@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.applib.user.fixtures;
 
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.value.Password;

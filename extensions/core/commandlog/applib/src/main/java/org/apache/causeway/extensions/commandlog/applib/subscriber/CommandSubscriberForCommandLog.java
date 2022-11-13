@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.subscriber;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named(CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandSubscriberForCommandLog implements CommandSubscriber {

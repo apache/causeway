@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 

@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

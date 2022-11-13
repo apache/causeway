@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.applib.tenancy.man.mixins;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;

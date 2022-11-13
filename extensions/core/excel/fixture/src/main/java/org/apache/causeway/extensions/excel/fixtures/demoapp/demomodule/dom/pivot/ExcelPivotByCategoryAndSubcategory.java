@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.piv
 
 import java.math.BigDecimal;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

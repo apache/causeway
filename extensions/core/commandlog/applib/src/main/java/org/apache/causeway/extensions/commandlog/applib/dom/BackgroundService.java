@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

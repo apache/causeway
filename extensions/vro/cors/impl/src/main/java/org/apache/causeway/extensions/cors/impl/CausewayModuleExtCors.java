@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.cors.impl;
 
 import java.util.Collections;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

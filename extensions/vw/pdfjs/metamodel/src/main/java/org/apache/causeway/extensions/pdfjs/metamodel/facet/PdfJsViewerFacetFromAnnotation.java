@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

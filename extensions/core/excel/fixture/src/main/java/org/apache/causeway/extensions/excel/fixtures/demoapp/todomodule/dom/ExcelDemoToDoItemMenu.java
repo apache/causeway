@@ -24,8 +24,8 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
@@ -51,7 +51,7 @@ import lombok.RequiredArgsConstructor;
         nature = NatureOfService.VIEW
 )
 @Named("libExcelFixture.ExcelDemoToDoItemMenu")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExcelDemoToDoItemMenu {
 

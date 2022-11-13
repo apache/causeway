@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.applib.permission.dom.mixins;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
