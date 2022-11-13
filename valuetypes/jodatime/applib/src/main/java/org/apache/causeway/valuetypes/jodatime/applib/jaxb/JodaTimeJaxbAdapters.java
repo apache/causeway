@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.valuetypes.jodatime.applib.jaxb;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.DateTime;
