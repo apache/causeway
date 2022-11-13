@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 @DomainService(
         nature = NatureOfService.REST
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class RoSpecSampler {
 
     // -- VOID

@@ -58,7 +58,7 @@ import lombok.RequiredArgsConstructor;
 public class Configuration_headless {
 
     @Service
-    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+    @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class HeadlessCommandSupport
     implements TransactionBoundaryAware {

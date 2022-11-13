@@ -36,7 +36,7 @@ import lombok.val;
 @DomainObjectLayout(
         named="Blob Demo Menu"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class BlobDemoMenu {
 
     @Inject private FactoryService factoryService;

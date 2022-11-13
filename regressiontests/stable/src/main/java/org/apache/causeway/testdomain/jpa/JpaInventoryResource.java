@@ -45,7 +45,7 @@ import lombok.val;
 
 @Named("testdomain.jpa.InventoryResource")
 @DomainService(nature = NatureOfService.REST)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JpaInventoryResource {
 

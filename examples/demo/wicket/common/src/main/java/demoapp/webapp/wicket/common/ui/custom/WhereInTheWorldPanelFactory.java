@@ -34,7 +34,7 @@ import jakarta.inject.Inject;
 
 //tag::class[]
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.EARLY)                                             // <.>
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)                                             // <.>
 public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;

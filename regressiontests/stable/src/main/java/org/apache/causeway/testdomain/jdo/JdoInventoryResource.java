@@ -50,7 +50,7 @@ import lombok.val;
         nature = NatureOfService.REST,
         aliased = "testdomain.jdo.InventoryResourceAlias" // <-- as tested with RestEndpointService
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoInventoryResource {
 

@@ -20,8 +20,8 @@ package org.apache.causeway.testdomain.ldap;
 
 import java.util.concurrent.CountDownLatch;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 import org.junit.runners.model.InitializationError;
 import org.springframework.stereotype.Service;

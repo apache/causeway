@@ -18,8 +18,8 @@
  */
 package demoapp.web.linebreaker;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -41,7 +41,7 @@ import lombok.extern.log4j.Log4j2;
 @DomainService(
         nature = NatureOfService.REST
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 @Log4j2
 public class LineBreaker {

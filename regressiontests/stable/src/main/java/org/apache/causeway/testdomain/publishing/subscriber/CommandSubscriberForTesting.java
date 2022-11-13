@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.publishing.subscriber;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
