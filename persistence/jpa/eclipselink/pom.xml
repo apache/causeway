@@ -93,7 +93,7 @@
 			</exclusions>
 		</dependency>
         <dependency>
-        	<!-- provides javax.el.* -->
+        	<!-- provides jakarta.el.* -->
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
 		    <version>5.0.1</version>
@@ -114,8 +114,12 @@
 					<artifactId>hibernate-core</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>javax.validation</groupId>
-					<artifactId>validation-api</artifactId>
+					<groupId>jakarta.inject</groupId>
+					<artifactId>jakarta.inject-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jakarta.interceptor</groupId>
+					<artifactId>jakarta.interceptor-api</artifactId>
 				</exclusion>
 				<exclusion>
 					<!-- we use log4j-2 instead -->
