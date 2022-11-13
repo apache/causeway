@@ -19,7 +19,6 @@
 package org.apache.causeway.security.keycloak;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -27,12 +26,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
@@ -40,20 +35,15 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.core.security.authentication.login.LoginSuccessHandlerUNUSED;
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.security.keycloak.handler.LogoutHandlerForKeycloak;
 import org.apache.causeway.security.keycloak.services.KeycloakOauth2UserService;
 import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -77,17 +67,20 @@ import lombok.val;
 @EnableWebSecurity
 public class CausewayModuleSecurityKeycloak {
 
-    @Bean
-    public WebSecurityConfigurerAdapter webSecurityConfigurer(
-            final CausewayConfiguration causewayConfiguration,
-            final KeycloakOauth2UserService keycloakOidcUserService,
-            final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
-            final List<LogoutHandler> logoutHandlers
-            ) {
-        //val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
-        return new KeycloakWebSecurityConfigurerAdapter(keycloakOidcUserService, logoutHandlers, causewayConfiguration
-        );
-    }
+    //TODO[ISIS-3275] WebSecurityConfigurerAdapter was removed
+    // see https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+
+//    @Bean
+//    public WebSecurityConfigurerAdapter webSecurityConfigurer(
+//            final CausewayConfiguration causewayConfiguration,
+//            final KeycloakOauth2UserService keycloakOidcUserService,
+//            final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
+//            final List<LogoutHandler> logoutHandlers
+//            ) {
+//        //val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
+//        return new KeycloakWebSecurityConfigurerAdapter(keycloakOidcUserService, logoutHandlers, causewayConfiguration
+//        );
+//    }
 
 
     @Bean
@@ -102,6 +95,10 @@ public class CausewayModuleSecurityKeycloak {
 
         return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper, causewayConfiguration);
     }
+
+/*
+    //TODO[ISIS-3275] WebSecurityConfigurerAdapter was removed
+    // see https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
 
     @RequiredArgsConstructor
     public static class KeycloakWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
@@ -152,6 +149,7 @@ public class CausewayModuleSecurityKeycloak {
                     .loginPage(loginPage);
         }
     }
+*/
 
     // -- HELPER
 

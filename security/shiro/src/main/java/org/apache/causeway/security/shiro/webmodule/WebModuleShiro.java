@@ -18,45 +18,27 @@
  */
 package org.apache.causeway.security.shiro.webmodule;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-
-import org.apache.shiro.config.Ini;
-import org.apache.shiro.realm.Realm;
-import org.apache.shiro.web.config.ShiroFilterConfiguration;
-import org.apache.shiro.web.env.EnvironmentLoaderListener;
-import org.apache.shiro.web.env.IniWebEnvironment;
-import org.apache.shiro.web.env.MutableWebEnvironment;
-import org.apache.shiro.web.env.WebEnvironment;
-import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
-import org.apache.shiro.web.servlet.ShiroFilter;
+//import org.apache.shiro.web.env.IniWebEnvironment;
+//import org.apache.shiro.web.env.WebEnvironment;
+//import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
+//import org.apache.shiro.web.servlet.ShiroFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
+//import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForCauseway;
+//import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.IniWebEnvironmentUsingSystemProperty;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -68,11 +50,12 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("causeway.security.WebModuleShiro")
-@javax.annotation.Priority(PriorityPrecedence.FIRST + 100)
+@jakarta.annotation.Priority(PriorityPrecedence.FIRST + 100)
 @Qualifier("Shiro")
 @Log4j2
 public class WebModuleShiro extends WebModuleAbstract {
 
+    //TODO[ISIS-3275] shiro-web no jakarta API support
 
     private static final String SHIRO_FILTER_NAME = "ShiroFilter";
 
@@ -83,6 +66,7 @@ public class WebModuleShiro extends WebModuleAbstract {
 
     // -- CONFIGURATION
 
+    /*
     public static void setShiroEnvironmentClass(final Class<? extends WebEnvironment> shiroEnvironmentClass) {
         if(shiroEnvironmentClass==null) {
             System.setProperty("shiroEnvironmentClass", null);
@@ -120,11 +104,13 @@ public class WebModuleShiro extends WebModuleAbstract {
         System.setProperty("shiroIniResource", resourcePath);
         setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
     }
+*/
 
-    /**
+
+    /*
      * Adds support for dependency injection into security realms
      * @since 2.0
-     */
+     *
     @NoArgsConstructor // don't remove, this is class is managed by Causeway
     public static class EnvironmentLoaderListenerForCauseway extends EnvironmentLoaderListener {
 
@@ -178,6 +164,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         }
 
     }
+    */
 
     // --
 
@@ -186,16 +173,16 @@ public class WebModuleShiro extends WebModuleAbstract {
 
     @Override
     public void prepare(final WebModuleContext ctx) {
-        super.prepare(ctx);
+        super.prepare(ctx);/*
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isEmpty(customShiroEnvironmentClassName)) {
             setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
-        }
+        }*/
     }
 
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
-
+/*
         registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
             .ifPresent(filterReg -> {
                 filterReg.addMappingForUrlPatterns(
@@ -211,7 +198,8 @@ public class WebModuleShiro extends WebModuleAbstract {
 
         val listener = createListener(EnvironmentLoaderListenerForCauseway.class);
         return Can.ofSingleton(listener);
-
+*/
+        return Can.empty();
     }
 
 
