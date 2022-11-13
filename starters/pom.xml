@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
+		<version>3.0.0-RC2</version>
 		<relativePath />
 	</parent>
 
@@ -39,9 +39,9 @@
 
 	<properties>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 
-		<spring-boot.version>2.7.5</spring-boot.version>
+		<spring-boot.version>3.0.0-RC2</spring-boot.version>
 		<approvaltests.version>18.5.0</approvaltests.version>
 
 		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
@@ -80,6 +80,15 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<repositories>
+        <!-- temporary till Nov 24, 2022 -->
+        <repository>
+            <id>spring.snapshots</id>
+            <name>Spring Milestones Repository</name>
+            <url>https://repo.spring.io/milestone/</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
