@@ -25,7 +25,7 @@ module org.apache.causeway.schema {
     exports org.apache.causeway.schema.chg.v2;
 
     requires java.xml;
-    requires java.xml.bind;
+    requires jakarta.xml.bind;
     requires spring.context;
 
     opens org.apache.causeway.schema.metamodel.v2;
