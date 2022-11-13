@@ -22,9 +22,9 @@ module org.apache.causeway.core.transaction {
     exports org.apache.causeway.core.transaction.changetracking.events;
     exports org.apache.causeway.core.transaction.events;
 
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.sql;
-    requires java.inject;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
