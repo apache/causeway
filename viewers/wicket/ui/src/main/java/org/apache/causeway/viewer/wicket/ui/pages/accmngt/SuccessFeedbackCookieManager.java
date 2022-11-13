@@ -20,14 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.pages.accmngt;
 
 import java.util.function.Consumer;
 
-import org.apache.wicket.util.cookies.CookieUtils;
+//import org.apache.wicket.util.cookies.CookieUtils; TODO[ISIS-3275] no jakarta API support
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.functions._Functions;
-
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -46,6 +42,7 @@ public class SuccessFeedbackCookieManager {
      * messages.
      */
     public static void storeSuccessFeedback(final @Nullable String successFeedback) {
+        /* TODO[ISIS-3275] no jakarta API support
         val cookieUtils = new CookieUtils();
         if (_Strings.isNotEmpty(successFeedback)) {
             cookieUtils.save(FEEDBACK_COOKIE_NAME, _Strings.base64UrlEncode(successFeedback));
@@ -53,7 +50,7 @@ public class SuccessFeedbackCookieManager {
             // if successFeedback is empty we interpret that as a cookie remove request
             drainSuccessFeedback(_Functions.noopConsumer());
         }
-
+        */
     }
 
     /**
@@ -62,12 +59,15 @@ public class SuccessFeedbackCookieManager {
      * messages.
      */
     public static void drainSuccessFeedback(final @NonNull Consumer<String> onSuccessFeedback) {
+        /* TODO[ISIS-3275] no jakarta API support
+
         val cookieUtils = new CookieUtils();
         final String successFeedback = cookieUtils.load(FEEDBACK_COOKIE_NAME);
         if (_Strings.isNotEmpty(successFeedback)) {
             onSuccessFeedback.accept(_Strings.base64UrlDecode(successFeedback));
         }
         cookieUtils.remove(FEEDBACK_COOKIE_NAME);
+        */
     }
 
 }
