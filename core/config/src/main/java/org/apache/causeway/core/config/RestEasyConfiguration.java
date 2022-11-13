@@ -48,7 +48,7 @@ public class RestEasyConfiguration {
          *
          * <p>
          * Note that this is used rather than <code>resteasy.servlet.mapping.prefix</code>
-         * because there is <i>NO</i> implementation of {@link javax.ws.rs.core.Application}, so we rely on it being
+         * because there is <i>NO</i> implementation of {@link jakarta.ws.rs.core.Application}, so we rely on it being
          * automatically created.
          * </p>
          *

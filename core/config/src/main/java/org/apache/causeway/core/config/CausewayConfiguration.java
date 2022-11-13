@@ -2093,8 +2093,8 @@ public class CausewayConfiguration {
             private boolean suppressUpdateLink = false;
 
             /**
-             * If left unset (the default), then the RO viewer will use the {@link javax.ws.rs.core.UriInfo}
-             * (injected using {@link javax.ws.rs.core.Context}) to figure out the base Uri (used to render
+             * If left unset (the default), then the RO viewer will use the {@link jakarta.ws.rs.core.UriInfo}
+             * (injected using {@link jakarta.ws.rs.core.Context}) to figure out the base Uri (used to render
              * <code>href</code>s).
              *
              * <p>
