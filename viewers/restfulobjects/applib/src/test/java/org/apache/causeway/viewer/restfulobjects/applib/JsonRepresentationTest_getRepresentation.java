@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -29,11 +29,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_getRepresentation {
+class JsonRepresentationTest_getRepresentation {
 
     private JsonRepresentation jsonRepresentation;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }

@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,11 +30,11 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class DomainObjectRepresentationTest_getProperties {
+class DomainObjectRepresentationTest_getProperties {
 
     private DomainObjectRepresentation representation;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         representation = new DomainObjectRepresentation(readJson("domainObjectRepresentation.json"));
     }

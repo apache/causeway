@@ -20,23 +20,23 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_getLink_isLink {
+class JsonRepresentationTest_getLink_isLink {
 
     private LinkRepresentation link;
     private JsonRepresentation jsonRepresentation;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         link = new LinkRepresentation().withHref("http://foo/bar").withMethod(RestfulHttpMethod.GET);
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));

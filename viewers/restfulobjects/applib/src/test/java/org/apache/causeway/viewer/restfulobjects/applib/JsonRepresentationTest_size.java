@@ -20,14 +20,15 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_size {
+class JsonRepresentationTest_size {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -55,11 +56,13 @@ public class JsonRepresentationTest_size {
         assertThat(jsonRepresentation.size(), is(2));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void size_forValue() throws IOException {
-        jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
-        valueRepresentation.size();
+        assertThrows(IllegalStateException.class, ()->{
+            jsonRepresentation = new JsonRepresentation(readJson("map.json"));
+            final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
+            valueRepresentation.size();
+        });
     }
 
 }

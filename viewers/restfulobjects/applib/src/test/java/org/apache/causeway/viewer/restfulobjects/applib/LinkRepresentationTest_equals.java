@@ -20,14 +20,14 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.UnsupportedEncodingException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class LinkRepresentationTest_equals {
+class LinkRepresentationTest_equals {
 
     @Test
     public void equalDependsOnMethodAndHref() throws UnsupportedEncodingException {
