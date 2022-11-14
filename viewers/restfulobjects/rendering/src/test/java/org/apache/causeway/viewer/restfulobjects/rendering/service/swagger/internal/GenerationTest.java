@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +31,9 @@ public class GenerationTest {
     @Test
     public void testAddReference() throws Exception {
 
-        Generation context = new Generation(null, null, null, new TaggerDefault(), new ClassExcluderDefault(), new ValuePropertyFactoryDefault());
+        Generation context =
+                new Generation(null, null, null, new TaggerDefault(),
+                        new ClassExcluderDefault(), new ValuePropertyFactoryDefault());
 
         context.addSwaggerReference("foo");
         context.addSwaggerReference("bar");
