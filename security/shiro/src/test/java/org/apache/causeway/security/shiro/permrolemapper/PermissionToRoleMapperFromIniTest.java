@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.config.Ini;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,10 +28,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 
-public class PermissionToRoleMapperFromIniTest {
+class PermissionToRoleMapperFromIniTest {
 
     @Test
-    public void test() {
+    void test() {
         final Ini ini = Ini.fromResourcePath("classpath:org/apache/causeway/security/shiro/permrolemapper/my.ini");
         final Map<String, Set<String>> permissionsByRole =
                 new PermissionToRoleMapperFromIni(ini).getPermissionsByRole();

@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -19,7 +19,7 @@ package org.apache.causeway.security.shiro.permrolemapper;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -27,10 +27,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 
-public class PermissionToRoleMapperFromStringTest {
+class PermissionToRoleMapperFromStringTest {
 
     @Test
-    public void test() {
+    void test() {
         final Map<String, Set<String>> permissionsByRole = new PermissionToRoleMapperFromString(
                 "role1 = foo,bar;"
                         + "role2 = fiz:x,bip:bop:* ;"
