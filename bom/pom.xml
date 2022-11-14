@@ -415,7 +415,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <spring-boot.version>3.0.0-RC2</spring-boot.version>
-        <summernote.version>0.8.11</summernote.version>
+        <summernote.version>0.8.16</summernote.version>
         <surefire-plugin.argLine>
 			-Xmx512m 
 			--add-modules com.sun.tools.xjc 
