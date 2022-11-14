@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.conneg.RestfulObjectsJaxbWriterForXml;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.webmodule.WebModuleJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 /**
@@ -34,13 +34,13 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
         CausewayModuleViewerRestfulObjectsViewer.class,
 
         // @Service's
-        WebModuleJaxrsResteasy4.class,
+        WebModuleJaxrsResteasy.class,
 
         // @Component's
         RestfulObjectsJaxbWriterForXml.class,
 
 
 })
-public class CausewayModuleViewerRestfulObjectsJaxrsResteasy4 {
+public class CausewayModuleViewerRestfulObjectsJaxrsResteasy {
 
 }

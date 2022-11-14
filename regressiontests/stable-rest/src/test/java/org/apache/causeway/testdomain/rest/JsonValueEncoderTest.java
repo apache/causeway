@@ -42,7 +42,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
@@ -50,7 +50,7 @@ import lombok.val;
 
 @SpringBootTest(classes={
         Configuration_headless.class,
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
 //@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true") //TODO WIP
 @TestPropertySource(CausewayPresets.UseLog4j2Test)

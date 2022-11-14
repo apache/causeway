@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.webmodule;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule;
 
 import org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
@@ -58,7 +58,7 @@ import lombok.val;
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
-public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
+public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
 
     private static final String INTERACTION_FILTER_NAME = "CausewayRestfulObjectsInteractionFilter";
 
@@ -69,7 +69,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     private final String urlPattern;
 
     @Inject
-    public WebModuleJaxrsResteasy4(
+    public WebModuleJaxrsResteasy(
             final CausewayConfiguration causewayConfiguration,
             final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {

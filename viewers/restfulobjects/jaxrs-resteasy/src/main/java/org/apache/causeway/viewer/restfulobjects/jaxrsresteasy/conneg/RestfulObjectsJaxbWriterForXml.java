@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.conneg;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;

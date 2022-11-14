@@ -31,7 +31,7 @@ import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExt
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
 import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.CausewayModuleExtExcelDownloadWicketUi;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 
     // REST
     CausewayModuleViewerRestfulObjectsViewer.class,
-    CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
 
     // CORS
     CausewayModuleExtCors.class,
