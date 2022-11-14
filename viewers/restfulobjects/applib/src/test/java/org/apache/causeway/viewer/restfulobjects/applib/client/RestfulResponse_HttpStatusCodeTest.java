@@ -20,14 +20,14 @@ package org.apache.causeway.viewer.restfulobjects.applib.client;
 
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 
-public class RestfulResponse_HttpStatusCodeTest {
+class RestfulResponse_HttpStatusCodeTest {
 
     @Test
     public void knownStatusCode() {

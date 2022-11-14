@@ -22,12 +22,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class JsonRepresentationTest_urlEncoding {
+class JsonRepresentationTest_urlEncoding {
 
     @Test
     public void test() throws UnsupportedEncodingException {

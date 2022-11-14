@@ -21,21 +21,21 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_streamArrayElements {
+class JsonRepresentationTest_streamArrayElements {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
     public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
-        final Iterator<JsonRepresentation> arrayIterator = 
+        final Iterator<JsonRepresentation> arrayIterator =
                 jsonRepresentation.streamArrayElements(JsonRepresentation.class)
                 .iterator();
         assertThat(arrayIterator.hasNext(), is(true));
@@ -48,7 +48,7 @@ public class JsonRepresentationTest_streamArrayElements {
     @Test
     public void forString() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("listOfStrings.json"));
-        final Iterator<String> arrayIterator = 
+        final Iterator<String> arrayIterator =
                 jsonRepresentation.streamArrayElements(String.class)
                 .iterator();
         assertThat(arrayIterator.hasNext(), is(true));

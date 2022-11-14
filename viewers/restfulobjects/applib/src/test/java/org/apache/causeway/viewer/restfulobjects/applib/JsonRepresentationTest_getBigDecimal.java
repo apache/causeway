@@ -21,25 +21,23 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_getBigDecimal {
+import lombok.val;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+class JsonRepresentationTest_getBigDecimal {
 
     private JsonRepresentation jsonRepresentation;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
@@ -66,10 +64,12 @@ public class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void invalidFormat() throws IOException {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Value '12345678901234567890.1234' larger than that allowed by format 'big-decimal(22,3)'");
 
-        assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(22,3)"), is(new BigDecimal("12345678901234567890")));
+        val expectMessage = "Value '12345678901234567890.1234' larger than that allowed by format 'big-decimal(22,3)'";
+
+        assertThrows(IllegalArgumentException.class, ()->{
+            assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(22,3)"), is(new BigDecimal("12345678901234567890")));
+        }, expectMessage);
     }
 
     @Test
@@ -79,10 +79,11 @@ public class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void invalidFormattedFromPath() throws IOException {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Value '123.45' larger than that allowed by format 'big-decimal(4,2)'");
+        val expectMessage = "Value '123.45' larger than that allowed by format 'big-decimal(4,2)'";
 
-        jsonRepresentation.getBigDecimal("yetAnotherSubMap.anInvalidFormattedBigDecimal.value");
+        assertThrows(IllegalArgumentException.class, ()->{
+            jsonRepresentation.getBigDecimal("yetAnotherSubMap.anInvalidFormattedBigDecimal.value");
+        }, expectMessage);
     }
 
     @Test
@@ -97,26 +98,28 @@ public class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void forNonParseableString() throws IOException {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("'aString' is not a bigdecimal");
+        val expectMessage = "'aString' is not a bigdecimal";
 
-        jsonRepresentation.getBigDecimal("aString");
+        assertThrows(IllegalArgumentException.class, ()->{
+            jsonRepresentation.getBigDecimal("aString");
+        }, expectMessage);
     }
 
     @Test
     public void forMap() throws IOException {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("'aSubMap' is not a bigdecimal");
+        val expectMessage = "'aSubMap' is not a bigdecimal";
 
-        jsonRepresentation.getBigDecimal("aSubMap");
+        assertThrows(IllegalArgumentException.class, ()->{
+            jsonRepresentation.getBigDecimal("aSubMap");
+        }, expectMessage);
     }
 
     @Test
     public void forList() throws IOException {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("'aSubList' is not a bigdecimal");
-
-        jsonRepresentation.getBigDecimal("aSubList");
+        val expectMessage = "'aSubList' is not a bigdecimal";
+        assertThrows(IllegalArgumentException.class, ()->{
+            jsonRepresentation.getBigDecimal("aSubList");
+        }, expectMessage);
     }
 
     @Test
