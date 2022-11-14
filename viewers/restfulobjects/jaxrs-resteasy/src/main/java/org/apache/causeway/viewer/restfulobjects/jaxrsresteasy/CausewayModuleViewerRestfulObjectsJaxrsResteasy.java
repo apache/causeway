@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 /**
@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
         CausewayModuleViewerRestfulObjectsViewer.class,
 
         // @Service's
-        WebModuleJaxrsResteasy4.class,
+        WebModuleJaxrsResteasy.class,
 
         // @Component's
         RestfulObjectsJaxbWriterForXml.class,
