@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
-public class LinkFollowSpecsTest_follow {
+class LinkFollowSpecsTest_follow {
 
     @Test
     public void simple() throws Exception {

@@ -21,8 +21,9 @@ package org.apache.causeway.persistence.jdo.metamodel.testing;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.jmock.Expectations;
-import org.junit.Rule;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
@@ -32,7 +33,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.config.beans.PersistenceStack;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -40,17 +40,11 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import junit.framework.TestCase;
-
-public abstract class AbstractFacetFactoryTest extends TestCase {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+public abstract class AbstractFacetFactoryTest {
 
     public static class Customer {
 
@@ -77,17 +71,13 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected MetaModelContext_forTesting metaModelContext;
     protected JdoFacetContext jdoFacetContext;
 
-    @Override
     protected void setUp() throws Exception {
-        super.setUp();
-
-        // PRODUCTION
 
         methodRemover = new MethodRemover_forTesting();
 
-        mockInteractionService = context.mock(InteractionService.class);
-        mockTranslationService = context.mock(TranslationService.class);
-        mockSpecificationLoader = context.mock(SpecificationLoader.class);
+        mockInteractionService = Mockito.mock(InteractionService.class);
+        mockTranslationService = Mockito.mock(TranslationService.class);
+        mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
@@ -95,11 +85,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 .interactionService(mockInteractionService)
                 .build();
 
-        context.checking(new Expectations() {{
-
-            allowing(mockInteractionService).currentInteractionContext();
-            will(returnValue(Optional.of(iaContext)));
-        }});
+        Mockito
+        .when(mockInteractionService.currentInteractionContext())
+        .thenReturn(Optional.of(iaContext));
 
         facetHolder = FacetHolder.simple(
                 metaModelContext,
@@ -114,19 +102,10 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         jdoFacetContext = jdoFacetContextForTesting();
     }
 
-    protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).specForType(with(any(Class.class)));
-            will(returnValue(Optional.of(objectSpecification)));
-        }});
-    }
-
-    @Override
     protected void tearDown() throws Exception {
         mockSpecificationLoader = null;
         methodRemover = null;
         facetedMethod = null;
-        super.tearDown();
     }
 
     protected static boolean contains(final Class<?>[] types, final Class<?> type) {

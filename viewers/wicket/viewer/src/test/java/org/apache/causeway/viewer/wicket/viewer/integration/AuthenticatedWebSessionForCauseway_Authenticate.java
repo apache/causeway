@@ -23,11 +23,9 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.wicket.request.Request;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -37,8 +35,6 @@ import static org.hamcrest.Matchers.nullValue;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.ImpersonatedUserHolder;
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security._testing.InteractionService_forTesting;
@@ -49,25 +45,20 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
-public class AuthenticatedWebSessionForCauseway_Authenticate {
-
-    @Rule
-    public final JUnitRuleMockery2 context =
-            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+class AuthenticatedWebSessionForCauseway_Authenticate {
 
     private AuthenticationManager authMgr;
-
-    @Mock protected Request mockRequest;
-    @Mock protected Authenticator mockAuthenticator;
-    @Mock protected InteractionService mockInteractionService;
-    @Mock protected ImpersonatedUserHolder mockImpersonatedUserHolder;
-    @Mock protected InteractionLayerTracker mockInteractionLayerTracker;
+    protected Request mockRequest = Mockito.mock(Request.class);
+    protected Authenticator mockAuthenticator = Mockito.mock(Authenticator.class);
+    protected InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
+    protected ImpersonatedUserHolder mockImpersonatedUserHolder = Mockito.mock(ImpersonatedUserHolder.class);
+    protected InteractionLayerTracker mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
 
     protected AuthenticatedWebSessionForCauseway webSession;
     private MetaModelContext mmc;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
 
         mmc = MetaModelContext_forTesting.builder()
                 .singleton(mockInteractionService)
@@ -81,60 +72,42 @@ public class AuthenticatedWebSessionForCauseway_Authenticate {
                 Optional.empty(),
                 Collections.emptyList());
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockInteractionLayerTracker).currentInteractionContext();
-                will(returnValue(Optional.of(InteractionContextFactory.testing())));
+        Mockito
+        .when(mockInteractionLayerTracker.currentInteractionContext())
+        .thenReturn(Optional.of(InteractionContextFactory.testing()));
 
-                allowing(mockInteractionService)
-                .run(with(InteractionContextFactory.testing()), with(any(ThrowingRunnable.class)));
-
-                allowing(mockInteractionService)
-                .runAnonymous(with(any(ThrowingRunnable.class)));
-
-                // ignore
-
-                // must provide explicit expectation, since Locale is final.
-                allowing(mockRequest).getLocale();
-                will(returnValue(Locale.getDefault()));
-
-                // stub everything else out
-                ignoring(mockRequest);
-            }
-        });
-
+        Mockito
+        // must provide explicit expectation, since Locale is final.
+        .when(mockRequest.getLocale())
+        .thenReturn(Locale.getDefault());
     }
 
     protected void setupWebSession() {
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
-
-            {
-                metaModelContext = mmc;
-            }
-
-            @Override
-            public AuthenticationManager getAuthenticationManager() {
+            { metaModelContext = mmc; }
+            @Override public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
             }
         };
     }
 
-
-
     @Test
-    public void delegatesToAuthenticationManagerAndCachesAuthSessionIfOk() {
+    void delegatesToAuthenticationManagerAndCachesAuthSessionIfOk() {
 
-        context.checking(new Expectations() {
-            {
-                oneOf(mockImpersonatedUserHolder).getUserMemento();
-                will(returnValue(Optional.empty()));
-                oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
-                will(returnValue(true));
-                oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(InteractionContextFactory.testing()));
-            }
-        });
+        Mockito
+        .when(mockImpersonatedUserHolder.getUserMemento())
+        .thenReturn(Optional.empty());
+
+        Mockito
+        .when(mockAuthenticator.canAuthenticate(AuthenticationRequestPassword.class))
+        .thenReturn(true);
+
+        Mockito
+        .when(mockAuthenticator.authenticate(
+                Mockito.any(AuthenticationRequest.class),
+                Mockito.any(String.class)))
+        .thenReturn(InteractionContextFactory.testing());
 
         setupWebSession();
 
@@ -146,15 +119,17 @@ public class AuthenticatedWebSessionForCauseway_Authenticate {
     }
 
     @Test
-    public void delegatesToAuthenticationManagerAndHandlesIfNotAuthenticated() {
-        context.checking(new Expectations() {
-            {
-                oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
-                will(returnValue(true));
-                oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(null));
-            }
-        });
+    void delegatesToAuthenticationManagerAndHandlesIfNotAuthenticated() {
+
+        Mockito
+        .when(mockAuthenticator.canAuthenticate(AuthenticationRequestPassword.class))
+        .thenReturn(true);
+
+        Mockito
+        .when(mockAuthenticator.authenticate(
+                Mockito.any(AuthenticationRequest.class),
+                Mockito.any(String.class)))
+        .thenReturn(null);
 
         setupWebSession();
 

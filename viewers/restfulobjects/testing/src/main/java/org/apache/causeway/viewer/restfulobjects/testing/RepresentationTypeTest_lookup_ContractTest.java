@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.restfulobjects.testing;
 
 import jakarta.ws.rs.core.MediaType;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 
@@ -74,7 +74,5 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
         assertThat(
                 RepresentationType.lookup(toLookup), is(RepresentationType.DOMAIN_OBJECT));
     }
-
-
 
 }

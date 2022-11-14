@@ -21,11 +21,9 @@ package org.apache.causeway.viewer.restfulobjects.viewer.context;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -34,9 +32,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -47,59 +42,57 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestPa
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
-public class ResourceContext_getArg_Test {
+class ResourceContext_getArg_Test {
 
-    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock private HttpServletRequest mockHttpServletRequest;
-    @Mock private ServletContext mockServletContext;
-    @Mock private CausewayInteraction mockCausewayInteraction;
-    @Mock private InteractionService mockInteractionService;
-    @Mock private InteractionLayerTracker mockInteractionLayerTracker;
-    @Mock private AuthenticationManager mockAuthenticationManager;
-    @Mock private SpecificationLoader mockSpecificationLoader;
-    @Mock private WebApplicationContext webApplicationContext;
+    private HttpServletRequest mockHttpServletRequest;
+    private ServletContext mockServletContext;
+    private InteractionService mockInteractionService;
+    private InteractionLayerTracker mockInteractionLayerTracker;
+    private AuthenticationManager mockAuthenticationManager;
+    private SpecificationLoader mockSpecificationLoader;
+    private WebApplicationContext webApplicationContext;
 
     private ResourceContext resourceContext;
     private MetaModelContext metaModelContext;
 
-    @Before
-    public void setUp() throws Exception {
-
-        // PRODUCTION;
+    @BeforeEach
+    void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .singleton(mockInteractionService)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockInteractionLayerTracker)
-                //                .serviceInjector(mockServiceInjector)
-                //                .serviceRegistry(mockServiceRegistry)
-                //                .translationService(mockTranslationService)
-                //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
-                //                .authenticationProvider(mockAuthenticationProvider)
                 .build();
 
+        mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
+        mockServletContext = Mockito.mock(ServletContext.class);
+        mockInteractionService = Mockito.mock(InteractionService.class);
+        mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
+        mockAuthenticationManager = Mockito.mock(AuthenticationManager.class);
+        mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
+        webApplicationContext = Mockito.mock(WebApplicationContext.class);
 
-        context.checking(new Expectations() {{
+        Mockito
+        .when(webApplicationContext.getBean(MetaModelContext.class))
+        .thenReturn(metaModelContext);
 
-                allowing(webApplicationContext).getBean(MetaModelContext.class);
-                will(returnValue(metaModelContext));
+        Mockito
+        .when(mockServletContext.getAttribute("org.springframework.web.context.WebApplicationContext.ROOT"))
+        .thenReturn(webApplicationContext);
 
-                allowing(mockServletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
-                will(returnValue(webApplicationContext));
+        Mockito
+        .when(mockHttpServletRequest.getServletContext())
+        .thenReturn(mockServletContext);
 
-                allowing(mockHttpServletRequest).getServletContext();
-                will(returnValue(mockServletContext));
+        Mockito
+        .when(mockHttpServletRequest.getQueryString())
+        .thenReturn("");
 
-                allowing(mockHttpServletRequest).getQueryString();
-                will(returnValue(""));
-
-        }});
     }
 
     @Test
-    public void whenArgExists() throws Exception {
+    void whenArgExists() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
@@ -116,7 +109,7 @@ public class ResourceContext_getArg_Test {
     }
 
     @Test
-    public void whenArgDoesNotExist() throws Exception {
+    void whenArgDoesNotExist() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
@@ -131,6 +124,5 @@ public class ResourceContext_getArg_Test {
         final Integer arg = resourceContext.getArg(RequestParameter.PAGE);
         assertThat(arg, equalTo(RequestParameter.PAGE.getDefault()));
     }
-
 
 }

@@ -22,77 +22,69 @@ import java.util.List;
 
 import jakarta.servlet.FilterConfig;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-
-public class CausewayRestfulObjectsSessionFilter_lookupPassThru_Test {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+class CausewayRestfulObjectsSessionFilter_lookupPassThru_Test {
 
     CausewayRestfulObjectsInteractionFilter causewayInteractionFilter;
 
-    @Mock
     FilterConfig mockFilterConfig;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         causewayInteractionFilter = new CausewayRestfulObjectsInteractionFilter();
+        mockFilterConfig = Mockito.mock(FilterConfig.class);
     }
 
     @Test
-    public void when_null() throws Exception {
-        context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY);
-            will(returnValue(null));
-        }});
+    void when_null() throws Exception {
+
+        Mockito
+        .when(mockFilterConfig.getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY))
+        .thenReturn(null);
 
         final List<String> x = causewayInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
-        Assert.assertThat(x.size(), is(0));
+        assertEquals(0, x.size());
     }
 
     @Test
-    public void when_none() throws Exception {
-        context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY);
-            will(returnValue(""));
-        }});
+    void when_none() throws Exception {
+
+        Mockito
+        .when(mockFilterConfig.getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY))
+        .thenReturn("");
 
         final List<String> x = causewayInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
-        Assert.assertThat(x.size(), is(0));
+        assertEquals(0, x.size());
     }
 
     @Test
-    public void when_one() throws Exception {
-        context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY);
-            will(returnValue("/abc"));
-        }});
+    void when_one() throws Exception {
+
+        Mockito
+        .when(mockFilterConfig.getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY))
+        .thenReturn("/abc");
 
         final List<String> x = causewayInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
-        Assert.assertThat(x.size(), is(1));
-        Assert.assertThat(x.get(0), is("/abc"));
+        assertEquals(1, x.size());
+        assertEquals("/abc", x.get(0));
     }
 
     @Test
-    public void when_several() throws Exception {
-        context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY);
-            will(returnValue("/abc,/def"));
-        }});
+    void when_several() throws Exception {
+
+        Mockito
+        .when(mockFilterConfig.getInitParameter(CausewayRestfulObjectsInteractionFilter.PASS_THRU_KEY))
+        .thenReturn("/abc,/def");
 
         final List<String> x = causewayInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
-        Assert.assertThat(x.size(), is(2));
-        Assert.assertThat(x.get(0), is("/abc"));
-        Assert.assertThat(x.get(1), is("/def"));
+        assertEquals(2, x.size());
+        assertEquals("/abc", x.get(0));
+        assertEquals("/def", x.get(1));
     }
 
 }

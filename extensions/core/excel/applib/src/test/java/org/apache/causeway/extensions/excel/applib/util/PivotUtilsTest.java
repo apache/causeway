@@ -28,12 +28,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PivotUtilsTest {
+class PivotUtilsTest {
 
     @Test
-    public void createAnnotationRowTest() {
+    void createAnnotationRowTest() {
 
         // given
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -53,7 +53,7 @@ public class PivotUtilsTest {
     }
 
     @Test
-    public void createOrderRowTest() {
+    void createOrderRowTest() {
 
         // given
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -73,7 +73,7 @@ public class PivotUtilsTest {
     }
 
     @Test
-    public void cellValueEqualsTest() {
+    void cellValueEqualsTest() {
 
         // given
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -200,7 +200,7 @@ public class PivotUtilsTest {
     }
 
     @Test
-    public void addCellValueToTest(){
+    void addCellValueToTest(){
 
         // given
         XSSFWorkbook workbook = new XSSFWorkbook();

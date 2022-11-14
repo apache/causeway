@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.testing;
 
 import jakarta.ws.rs.core.CacheControl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

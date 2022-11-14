@@ -20,37 +20,37 @@ package org.apache.causeway.viewer.wicket.viewer.services;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assume.assumeThat;
 
-public class TranslationsResolverWicketTest {
+import org.apache.causeway.commons.internal.base._Files;
 
-    public static class NewFile extends TranslationsResolverWicketTest {
+import lombok.val;
 
-        @Before
-        public void setUp() throws Exception {
-            assumeThat(System.getProperty("os.name").startsWith("Windows"), is(true));
-        }
+class TranslationsResolverWicketTest {
 
-        @Test
-        public void simple() throws Exception {
-            final File file = TranslationsResolverWicket.newFile("c:/foo", "bar").toFile();
-            final String absolutePath = file.getAbsolutePath();
-            assertThat(absolutePath, is("c:\\foo\\bar"));
-        }
+    private File tempDir;
 
-        @Test
-        public void nestedChild() throws Exception {
-            final File file = TranslationsResolverWicket.newFile("c:/foo", "bar/baz").toFile();
-            final String absolutePath = file.getAbsolutePath();
-            assertThat(absolutePath, is("c:\\foo\\bar\\baz"));
-        }
-
+    @BeforeEach
+    public void setUp() throws Exception {
+        tempDir = _Files.tempDir("foo");
     }
 
+    @Test
+    public void simple() throws Exception {
+        final File file = TranslationsResolverWicket.newFile(tempDir.getAbsolutePath(), "bar").toFile();
+        val expected = new File(tempDir, "bar");
+        assertThat(file.getAbsolutePath(), is(expected.getAbsolutePath()));
+    }
+
+    @Test
+    public void nestedChild() throws Exception {
+        final File file = TranslationsResolverWicket.newFile(tempDir.getAbsolutePath(), "bar/baz").toFile();
+        val expected = new File(tempDir, "bar/baz");
+        assertThat(file.getAbsolutePath(), is(expected.getAbsolutePath()));
+    }
 
 }

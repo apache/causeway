@@ -26,24 +26,23 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
-public class SheetPivoterTest {
+class SheetPivoterTest {
 
     XSSFWorkbook workbook;
     XSSFSheet sourceSheet;
     XSSFSheet targetSheet;
     SheetPivoter p;
 
-    @Before
+    @BeforeEach
     public void setup() {
         workbook = new XSSFWorkbook();
         sourceSheet = workbook.createSheet();
@@ -52,7 +51,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void poi_method_lastCellNumber_yields_1_higher_than_expected(){
+    void poi_method_lastCellNumber_yields_1_higher_than_expected(){
 
         // when
         Cell c = targetSheet.createRow(0).createCell(0);
@@ -60,28 +59,28 @@ public class SheetPivoterTest {
 
         // then
         // ************** NOTE ***************************************************************************
-        Assertions.assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)1); // NOTE !!!!!!!
-        Assertions.assertThat(targetSheet.getRow(0).getCell(1)).isEqualTo(null);
+        assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)1); // NOTE !!!!!!!
+        assertThat(targetSheet.getRow(0).getCell(1)).isEqualTo(null);
         // ************** NOTE ***************************************************************************
 
-        Assertions.assertThat(c).isNotNull();
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(0); // Expected
+        assertThat(c).isNotNull();
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(0); // Expected
 
         // and when
         targetSheet.getRow(0).createCell(0).setCellValue("a");
 
         // then still
-        Assertions.assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)1); // NOTE !!!!!!!
-        Assertions.assertThat(c.getCellType()).isEqualTo(CellType.STRING);
+        assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)1); // NOTE !!!!!!!
+        assertThat(c.getCellType()).isEqualTo(CellType.STRING);
 
         // and when
         targetSheet.getRow(0).createCell(1).setCellValue("b");
-        Assertions.assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)2); // NOTE !!!!!!!
+        assertThat(targetSheet.getRow(0).getLastCellNum()).isEqualTo((short)2); // NOTE !!!!!!!
 
     }
 
     @Test
-    public void empty_value_rows_works(){
+    void empty_value_rows_works(){
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column");
@@ -94,18 +93,18 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(p.valueRowOffsetY).isEqualTo(1);
-        Assertions.assertThat(p.columnLabelOffsetX).isEqualTo(1);
-        Assertions.assertThat(p.decoRowOffsetX).isEqualTo(1);
-        Assertions.assertThat(p.valuesStartAtRownumber).isEqualTo(2); // even though there are no values
+        assertThat(p.valueRowOffsetY).isEqualTo(1);
+        assertThat(p.columnLabelOffsetX).isEqualTo(1);
+        assertThat(p.decoRowOffsetX).isEqualTo(1);
+        assertThat(p.valuesStartAtRownumber).isEqualTo(2); // even though there are no values
 
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(2);
-        Assertions.assertThat(targetSheet.getRow(1).getLastCellNum()).isEqualTo((short)2);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(2);
+        assertThat(targetSheet.getRow(1).getLastCellNum()).isEqualTo((short)2);
         testRow(0, "fn3", null);
         testRow(1, "fn1", null);
         // last row is for summing
-        Assertions.assertThat(targetSheet.getRow(2).getCell(0).getCellType()).isEqualTo(CellType.BLANK);
-        Assertions.assertThat(targetSheet.getRow(2).getCell(1).getCellType()).isEqualTo(CellType.FORMULA);
+        assertThat(targetSheet.getRow(2).getCell(0).getCellType()).isEqualTo(CellType.BLANK);
+        assertThat(targetSheet.getRow(2).getCell(1).getCellType()).isEqualTo(CellType.FORMULA);
 
         org.junit.jupiter.api.Assertions.assertTrue(
                 "SUM(B3:B2)".equals(targetSheet.getRow(2).getCell(1).getCellFormula())
@@ -114,7 +113,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void setOffsets_works(){
+    void setOffsets_works(){
         // given
         List<String> annotations = Arrays.asList("row", "value", "value", "column", "deco");
         List<Integer> orderNumbers = Arrays.asList(0, 0, 1, 1, 1);
@@ -126,10 +125,10 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(p.valueRowOffsetY).isEqualTo(1);
-        Assertions.assertThat(p.columnLabelOffsetX).isEqualTo(2);
-        Assertions.assertThat(p.decoRowOffsetX).isEqualTo(1);
-        Assertions.assertThat(p.valuesStartAtRownumber).isEqualTo(2);
+        assertThat(p.valueRowOffsetY).isEqualTo(1);
+        assertThat(p.columnLabelOffsetX).isEqualTo(2);
+        assertThat(p.decoRowOffsetX).isEqualTo(1);
+        assertThat(p.valuesStartAtRownumber).isEqualTo(2);
 
         // given
         annotations = Arrays.asList("row", "value", "value", "column", "deco", "column");
@@ -142,18 +141,15 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(p.valueRowOffsetY).isEqualTo(2);
-        Assertions.assertThat(p.columnLabelOffsetX).isEqualTo(2);
-        Assertions.assertThat(p.decoRowOffsetX).isEqualTo(1);
-        Assertions.assertThat(p.valuesStartAtRownumber).isEqualTo(3);
+        assertThat(p.valueRowOffsetY).isEqualTo(2);
+        assertThat(p.columnLabelOffsetX).isEqualTo(2);
+        assertThat(p.decoRowOffsetX).isEqualTo(1);
+        assertThat(p.valuesStartAtRownumber).isEqualTo(3);
 
     }
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     @Test
-    public void validateSourceData_works(){
+    void validateSourceData_works(){
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "value", "column");
@@ -164,16 +160,17 @@ public class SheetPivoterTest {
         sourceSheetBuilder(annotations, orderNumbers, typeList, fieldNameList, v1);
 
         // then
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Values other than CELL_TYPE_NUMERIC found");
+        assertThrows(IllegalArgumentException.class, ()->{
 
-        // when
-        p.pivot(sourceSheet, targetSheet);
+            // when
+            p.pivot(sourceSheet, targetSheet);
+
+        }, "Values other than CELL_TYPE_NUMERIC found");
 
     }
 
     @Test
-    public void replaceEmptyRowAndColumns_when_validating_sourcedata_works(){
+    void replaceEmptyRowAndColumns_when_validating_sourcedata_works(){
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column");
@@ -187,12 +184,12 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(sourceSheet.getRow(4).getCell(0).getStringCellValue()).isEqualTo("(empty)");
-        Assertions.assertThat(sourceSheet.getRow(4).getCell(2).getStringCellValue()).isEqualTo("(empty)");
+        assertThat(sourceSheet.getRow(4).getCell(0).getStringCellValue()).isEqualTo("(empty)");
+        assertThat(sourceSheet.getRow(4).getCell(2).getStringCellValue()).isEqualTo("(empty)");
     }
 
     @Test
-    public void headerRow_Fill_works() {
+    void headerRow_Fill_works() {
         // given case for 3 col, 2 val
         List<String> annotations = Arrays.asList("row", "column", "column", "column", "value", "value", "deco", "deco");
         List<Integer> orderNumbers = Arrays.asList(0, 1, 2, 3, 1, 2, 1, 2);
@@ -207,7 +204,7 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(7);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(7);
         testRow(0, null, null, "fn-c", "a", null, null, null, null, null, null, null, null, null, null, null, "b"); //etc
         testRow(1, null, null, "fn-c1", "c1-1", null, null, null, "c1-2", null, null, null, "c1-3", null, null, null, "c1-1"); //etc
         testRow(2, null, null, "fn-c2", "c2-1", null, "c2-2", null, "c2-1", null, "c2-2", null, "c2-1", null, "c2-2", null, "c2-1"); //etc
@@ -220,7 +217,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void testPivoting_works() throws Exception {
+    void testPivoting_works() throws Exception {
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column", "deco", "deco");
@@ -238,24 +235,24 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(5);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(5);
         testRow(0, null, null, "fn3", "c1", "c2");
         testRow(1, "fn1", "fn5", "fn4", "fn2 (sum)", "fn2 (sum)");
         testRow(2, "l1", "d2-f-l1", "d1-f-l1", 4, null);
-        Assertions.assertThat(targetSheet.getRow(2).getCell(5).getCellFormula()).isEqualTo("SUM(D3:E3)");
+        assertThat(targetSheet.getRow(2).getCell(5).getCellFormula()).isEqualTo("SUM(D3:E3)");
         testRow(3, "l2", null, "deco for l2", null, 2);
-        Assertions.assertThat(targetSheet.getRow(3).getCell(5).getCellFormula()).isEqualTo("SUM(D4:E4)");
+        assertThat(targetSheet.getRow(3).getCell(5).getCellFormula()).isEqualTo("SUM(D4:E4)");
         testRow(4, "l3", null, null, 33, null);
-        Assertions.assertThat(targetSheet.getRow(4).getCell(5).getCellFormula()).isEqualTo("SUM(D5:E5)");
+        assertThat(targetSheet.getRow(4).getCell(5).getCellFormula()).isEqualTo("SUM(D5:E5)");
 
-        Assertions.assertThat(targetSheet.getRow(5).getCell(3).getCellFormula()).isEqualTo("SUM(D3:D5)");
-        Assertions.assertThat(targetSheet.getRow(5).getCell(4).getCellFormula()).isEqualTo("SUM(E3:E5)");
-        Assertions.assertThat(targetSheet.getRow(5).getCell(5).getCellFormula()).isEqualTo("SUM(F3:F5)");
+        assertThat(targetSheet.getRow(5).getCell(3).getCellFormula()).isEqualTo("SUM(D3:D5)");
+        assertThat(targetSheet.getRow(5).getCell(4).getCellFormula()).isEqualTo("SUM(E3:E5)");
+        assertThat(targetSheet.getRow(5).getCell(5).getCellFormula()).isEqualTo("SUM(F3:F5)");
 
     }
 
     @Test
-    public void testPivoting_WithTwoValues_works() throws Exception {
+    void testPivoting_WithTwoValues_works() throws Exception {
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column", "deco", "deco", "value");
@@ -273,22 +270,22 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(5);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(5);
         testRow(0, null, null, "fn3", "c1", null, "c2", null);
         testRow(1, "fn1", "fn5", "fn4", "fn2 (sum)", "fn2a (count)", "fn2 (sum)", "fn2a (count)");
         testRow(2, "l1", "d2-f-l1", "d1-f-l1", 4, 2, null, null);
         testRow(3, "l2", null, "deco for l2", null, null, 2, 1);
         testRow(4, "l3", null, null, 33, 1, null, null);
 
-        Assertions.assertThat(targetSheet.getRow(5).getCell(3).getCellFormula()).isEqualTo("SUM(D3:D5)");
-        Assertions.assertThat(targetSheet.getRow(5).getCell(4).getCellFormula()).isEqualTo("SUM(E3:E5)");
-        Assertions.assertThat(targetSheet.getRow(5).getCell(5).getCellFormula()).isEqualTo("SUM(F3:F5)");
-        Assertions.assertThat(targetSheet.getRow(5).getCell(6).getCellFormula()).isEqualTo("SUM(G3:G5)");
+        assertThat(targetSheet.getRow(5).getCell(3).getCellFormula()).isEqualTo("SUM(D3:D5)");
+        assertThat(targetSheet.getRow(5).getCell(4).getCellFormula()).isEqualTo("SUM(E3:E5)");
+        assertThat(targetSheet.getRow(5).getCell(5).getCellFormula()).isEqualTo("SUM(F3:F5)");
+        assertThat(targetSheet.getRow(5).getCell(6).getCellFormula()).isEqualTo("SUM(G3:G5)");
 
     }
 
     @Test
-    public void testPivoting_decovalues() throws Exception {
+    void testPivoting_decovalues() throws Exception {
 
         // given
         List<String> annotations = Arrays.asList("deco", "row", "value", "column");
@@ -305,14 +302,14 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(3);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(3);
         testRow(0, null, "fn4", "c1", "c2", "c3");
         testRow(1, "fn2", "fn1", "fn3 (sum)", "fn3 (sum)", "fn3 (sum)");
         testRow(2, "l1", "deco used", 1, 1, 1);
     }
 
     @Test
-    public void testPivoting_NotSupportedValueType_Boolean() throws Exception {
+    void testPivoting_NotSupportedValueType_Boolean() throws Exception {
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column");
@@ -329,7 +326,7 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(4);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(4);
         testRow(0, "fn3", "c1", "c2");
         testRow(1, "fn1", "fn2 (sum)", "fn2 (sum)");
         testRow(2, "l1", null, null);
@@ -338,7 +335,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void testPivoting_Numeric_As_Rowlabel() throws Exception {
+    void testPivoting_Numeric_As_Rowlabel() throws Exception {
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column");
@@ -355,7 +352,7 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(4);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(4);
         testRow(0, "fn3", "c1", "c2");
         testRow(1, "fn1", "fn2 (sum)", "fn2 (sum)");
         testRow(2, 1, 2, null);
@@ -363,7 +360,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void emptyRowValuesAreSupported() {
+    void emptyRowValuesAreSupported() {
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column");
@@ -379,7 +376,7 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(3);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(3);
         testRow(0, "fn3", "c1");
         testRow(1, "fn1", "fn2 (sum)");
         testRow(2, "(empty)", 2);
@@ -387,7 +384,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void emptyColumnValuesAreSupported() {
+    void emptyColumnValuesAreSupported() {
 
         // given
         List<String> annotations = Arrays.asList("row", "value", "column");
@@ -403,7 +400,7 @@ public class SheetPivoterTest {
         p.pivot(sourceSheet, targetSheet);
 
         // then
-        Assertions.assertThat(targetSheet.getLastRowNum()).isEqualTo(3);
+        assertThat(targetSheet.getLastRowNum()).isEqualTo(3);
         testRow(0, "fn3", "(empty)");
         testRow(1, "fn1", "fn2 (sum)");
         testRow(2, "l1", 2);
@@ -411,7 +408,7 @@ public class SheetPivoterTest {
     }
 
     @Test
-    public void getDistinctValuesInSourceSheetColumnTest() {
+    void getDistinctValuesInSourceSheetColumnTest() {
 
         // given (only headers in source)
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -424,7 +421,7 @@ public class SheetPivoterTest {
         List<Cell> l = p.getDistinctValuesInSourceSheetColumn(sheet, 0);
 
         // then
-        Assertions.assertThat(l.size()).isEqualTo(0);
+        assertThat(l.size()).isEqualTo(0);
 
         // and when (values are added)
         sheet.createRow(3).createCell(0).setCellValue("a");
@@ -437,7 +434,7 @@ public class SheetPivoterTest {
         l = p.getDistinctValuesInSourceSheetColumn(sheet, 0);
 
         // then
-        Assertions.assertThat(l.size()).isEqualTo(5);
+        assertThat(l.size()).isEqualTo(5);
 
     }
 
@@ -464,19 +461,19 @@ public class SheetPivoterTest {
                     if (c.getCellType() == CellType.NUMERIC) {
                         assertTrue(Double.isFinite(c.getNumericCellValue()));
                     } else {
-                        Assertions.assertThat(c.getStringCellValue()).isEqualTo("");
+                        assertThat(c.getStringCellValue()).isEqualTo("");
                     }
                 }
             }
         } else {
             if (expectedValue.getClass()==String.class) {
-                Assertions.assertThat(targetSheet.getRow(x).getCell(y).getStringCellValue()).isEqualTo(expectedValue);
+                assertThat(targetSheet.getRow(x).getCell(y).getStringCellValue()).isEqualTo(expectedValue);
             } else {
                 if (expectedValue.getClass() == Integer.class) {
                     val cellValue = targetSheet.getRow(x).getCell(y);
                     if (cellValue != null){
                         val expectedDouble = Double.valueOf(expectedValue.toString());
-                        Assertions.assertThat(cellValue.getNumericCellValue()).isEqualTo(expectedDouble);
+                        assertThat(cellValue.getNumericCellValue()).isEqualTo(expectedDouble);
                     }
                 } else {
                     //fail!

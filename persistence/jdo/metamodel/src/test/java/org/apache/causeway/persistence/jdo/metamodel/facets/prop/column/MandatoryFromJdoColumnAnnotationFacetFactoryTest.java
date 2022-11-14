@@ -22,6 +22,9 @@ import java.lang.reflect.Method;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -30,7 +33,7 @@ import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactor
 
 import lombok.val;
 
-public class MandatoryFromJdoColumnAnnotationFacetFactoryTest
+class MandatoryFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private MandatoryFromColumnAnnotationFacetFactory facetFactory;

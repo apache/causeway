@@ -21,12 +21,12 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.object.version;
 import javax.jdo.annotations.Version;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
@@ -37,12 +37,12 @@ import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactor
 
 import lombok.val;
 
-public class JdoVersionAnnotationFacetFactoryTest_validate {
+class JdoVersionAnnotationFacetFactoryTest_validate {
 
     private MetaModelContext_forTesting metaModelContext;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
 
         val configuration = new CausewayConfiguration(null);
 
@@ -69,7 +69,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
     }
 
     @Test
-    public void whenNoFacet() {
+    void whenNoFacet() {
 
         class Child {}
 
@@ -78,7 +78,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
     }
 
     @Test
-    public void whenHasFacetNoSuperType() {
+    void whenHasFacetNoSuperType() {
 
         @Version
         class Child {}
@@ -88,7 +88,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
     }
 
     @Test
-    public void whenHasFacetWithSuperTypeHasNoFacet() {
+    void whenHasFacetWithSuperTypeHasNoFacet() {
 
         class Parent {}
 
@@ -101,7 +101,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
 
     @Test
-    public void whenHasFacetWithParentTypeHasFacet() {
+    void whenHasFacetWithParentTypeHasFacet() {
 
         @Version
         class Parent {}
@@ -118,7 +118,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
 
     @Test
-    public void whenHasFacetWithGrandParentTypeHasFacet() {
+    void whenHasFacetWithGrandParentTypeHasFacet() {
 
         @Version
         class GrandParent {}
@@ -136,7 +136,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
     }
 
     @Test
-    public void whenHasFacetWithAbstactParentTypeHasFacet() {
+    void whenHasFacetWithAbstactParentTypeHasFacet() {
 
         @Version
         abstract class Parent {}
@@ -147,7 +147,6 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
         assertThat(failures.getNumberOfFailures(), is(0));
     }
-
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
         val specLoader = metaModelContext.getSpecificationLoader();
