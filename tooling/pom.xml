@@ -42,7 +42,7 @@
 		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
 		<maven-model-builder.version>3.8.6</maven-model-builder.version>
 		<picocli.version>4.7.0</picocli.version>
-		<structurizr.version>1.6.2</structurizr.version>
+		<structurizr.version>1.6.3</structurizr.version>
 
 	</properties>
 
