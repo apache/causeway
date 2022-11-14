@@ -21,6 +21,11 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.object.version;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Version;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -29,7 +34,7 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.vers
 
 import lombok.val;
 
-public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JdoVersionAnnotationFacetFactory facetFactory;
 

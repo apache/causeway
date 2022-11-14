@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.query;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-public class JdoQueryAnnotationFacetFactoryTest {
+class JdoQueryAnnotationFacetFactoryTest {
 
     public static class From_Test extends JdoQueryAnnotationFacetFactoryTest {
 
