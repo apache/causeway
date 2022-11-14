@@ -20,16 +20,16 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+	<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
 
-	<name>Apache Causeway Viewer - RO (JAX-RS Resteasy v4)</name>
+	<name>Apache Causeway Viewer - RO (JAX-RS Resteasy)</name>
 	<description>
         JAX-RS plugin using jboss resteasy.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/viewer.restfulobjects/jaxrsresteasy4</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.jaxrsresteasy</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/viewer.restfulobjects/jaxrsresteasy</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
