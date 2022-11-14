@@ -44,7 +44,7 @@
 		<spring-boot.version>3.0.0-RC2</spring-boot.version>
 		<approvaltests.version>18.5.0</approvaltests.version>
 
-		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy-spring-boot-starter -->
+		<resteasy.version>6.0.0.Alpha2</resteasy.version> <!-- keep in sync with property defined in resteasy-spring-boot-starter -->
 
 	</properties>
 
