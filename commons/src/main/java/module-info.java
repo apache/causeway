@@ -58,7 +58,7 @@ module org.apache.causeway.commons {
     requires transitive com.fasterxml.jackson.annotation;
     requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
-    requires transitive com.fasterxml.jackson.module.jaxb;
+    requires transitive com.fasterxml.jackson.module.jakarta.xmlbind;
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;

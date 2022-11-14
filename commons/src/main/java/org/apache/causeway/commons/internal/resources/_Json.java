@@ -29,7 +29,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
 import org.springframework.lang.Nullable;
 
@@ -219,7 +219,7 @@ public class _Json {
 
     /** add support for JAXB annotations */
     public static ObjectMapper jaxbAnnotationSupport(final ObjectMapper mapper) {
-        return mapper.registerModule(new JaxbAnnotationModule());
+        return mapper.registerModule(new JakartaXmlBindAnnotationModule());
     }
 
     @SneakyThrows

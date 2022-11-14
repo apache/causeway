@@ -68,7 +68,7 @@
 			<artifactId>causeway-core-privileged</artifactId>
 		</dependency>
 		
-		<!-- provides @Nullable that's required by Spring 5.x (as Spring is on the module path) -->
+		<!-- provides @Nullable that's required by Spring 5.x (as Spring is on the module path) 
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
@@ -83,6 +83,12 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
+        -->
+        
+        <dependency>
+		    <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+		    <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jsoup</groupId>
