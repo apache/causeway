@@ -38,7 +38,7 @@ import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
 import lombok.val;
 
@@ -48,7 +48,7 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
     Configuration_usingJdo.class,
-    CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
 class RestServiceTest {
 

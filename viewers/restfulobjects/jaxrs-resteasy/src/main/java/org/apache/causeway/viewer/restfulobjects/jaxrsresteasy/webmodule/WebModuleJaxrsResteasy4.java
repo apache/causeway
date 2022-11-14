@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.webmodule;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule;
 
 import javax.inject.Inject;
 import javax.inject.Named;
