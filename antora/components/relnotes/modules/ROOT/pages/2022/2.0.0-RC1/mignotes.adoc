@@ -39,3 +39,27 @@ The following changed:
 | causeway.viewer.*common*.credit
 
 |===
+
+== Maven Artifacts
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| 
+[source,xml]
+----
+<groupId>org.apache.causeway.viewer</groupId>
+<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+----
+| 
+[source,xml]
+----
+<groupId>org.apache.causeway.viewer</groupId>
+<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+----
+|===

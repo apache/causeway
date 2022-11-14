@@ -39,7 +39,7 @@
         <module>rendering</module>
         <module>viewer</module>
         <module>testing</module>
-        <module>jaxrs-resteasy-4</module>
+        <module>jaxrs-resteasy</module>
     </modules>
 
 </project>
