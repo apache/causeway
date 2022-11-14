@@ -1682,7 +1682,7 @@
 		<module>security</module>
 		<module>../security/bypass</module>
 		<module>../security/keycloak</module>
-		<module>../security/shiro</module>
+<!--		<module>../security/shiro</module> TODO[ISIS-3275] no jakarta namespace support on 2.0.0-SNAPSHOT as of Nov 2022 -->
 		<module>../security/spring</module>
 
 		<module>../viewers/commons</module>
