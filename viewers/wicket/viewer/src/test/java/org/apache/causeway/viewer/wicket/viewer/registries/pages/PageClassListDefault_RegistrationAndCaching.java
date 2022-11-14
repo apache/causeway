@@ -19,8 +19,8 @@
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
 import org.apache.wicket.Page;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -28,12 +28,12 @@ import static org.hamcrest.Matchers.is;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 
-public class PageClassListDefault_RegistrationAndCaching {
+class PageClassListDefault_RegistrationAndCaching {
 
     private PageClassRegistryDefault registryImpl;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         // necessary to provide an implementation that will register
         // all pages with the registry.
         final PageClassListDefault pageClassList = new PageClassListDefault();
@@ -41,7 +41,7 @@ public class PageClassListDefault_RegistrationAndCaching {
     }
 
     @Test
-    public void canRegisterNewPageType() {
+    void canRegisterNewPageType() {
         class TestingStandaloneCollectionPage extends StandaloneCollectionPage {
             private static final long serialVersionUID = 1L;
 

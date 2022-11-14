@@ -22,58 +22,42 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.wicket.request.Request;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Rule;
+import org.mockito.Mockito;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 
 public abstract class AuthenticatedWebSessionForCauseway_TestAbstract {
 
-    @Rule public final JUnitRuleMockery2 context =
-            JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock protected Request mockRequest;
-    @Mock protected AuthenticationManager mockAuthMgr;
-    @Mock protected MetaModelContext mockCommonContext;
-    @Mock protected InteractionService mockInteractionService;
-    @Mock protected ServiceRegistry mockServiceRegistry;
+    protected Request mockRequest = Mockito.mock(Request.class);
+    protected AuthenticationManager mockAuthMgr = Mockito.mock(AuthenticationManager.class);
+    protected MetaModelContext mockCommonContext = Mockito.mock(MetaModelContext.class);
+    protected InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
+    protected ServiceRegistry mockServiceRegistry = Mockito.mock(ServiceRegistry.class);
 
     protected AuthenticatedWebSessionForCauseway webSession;
 
     protected void setUp() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockCommonContext).getServiceRegistry();
-                will(returnValue(mockServiceRegistry));
 
-                allowing(mockServiceRegistry).lookupService(SessionSubscriber.class);
-                will(returnValue(Optional.empty()));
+        Mockito
+        // must provide explicit expectation, since Locale is final.
+        .when(mockRequest.getLocale())
+        .thenReturn(Locale.getDefault());
 
-                allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
-                will(returnValue(mockInteractionService));
+        Mockito
+        .when(mockCommonContext.getServiceRegistry())
+        .thenReturn(mockServiceRegistry);
 
-                allowing(mockInteractionService).run(
-                        InteractionContextFactory.testing(),
-                        with(any(ThrowingRunnable.class)));
-                // ignore
+        Mockito
+        .when(mockServiceRegistry.lookupService(SessionSubscriber.class))
+        .thenReturn(Optional.empty());
 
-                // must provide explicit expectation, since Locale is final.
-                allowing(mockRequest).getLocale();
-                will(returnValue(Locale.getDefault()));
-
-                // stub everything else out
-                ignoring(mockRequest);
-            }
-        });
+        Mockito
+        .when(mockServiceRegistry.lookupServiceElseFail(InteractionService.class))
+        .thenReturn(mockInteractionService);
 
     }
 
