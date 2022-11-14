@@ -18,19 +18,20 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
-public class JsonParserHelper_Test {
+class JsonParserHelper_Test {
 
     @Test
-    public void oidFromLink() throws Exception {
+    void oidFromLink() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPutString("href", "http://localhost/objects/OID/1");
         final String oidFromHref = JsonParserHelper.encodedOidFromLink(link);
-        Assert.assertEquals("OID:1", oidFromHref);
+        assertEquals("OID:1", oidFromHref);
     }
 
 }
