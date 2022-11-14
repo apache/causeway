@@ -411,12 +411,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         
 
         <select2.version>4.0.13</select2.version>
-        <shiro.version>1.10.0</shiro.version>
+        <shiro.version>2.0.0-SNAPSHOT</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <spring-boot.version>3.0.0-RC2</spring-boot.version>
         <summernote.version>0.8.11</summernote.version>
-        <surefire-plugin.argLine>-Xmx512m --add-modules com.sun.tools.xjc --add-reads org.eclipse.persistence.moxy=com.sun.tools.xjc</surefire-plugin.argLine>
+        <surefire-plugin.argLine>
+			-Xmx512m 
+			--add-modules com.sun.tools.xjc 
+			--add-reads org.eclipse.persistence.moxy=com.sun.tools.xjc
+		</surefire-plugin.argLine>
         <swagger-core.version>1.6.8</swagger-core.version>
 
         <togglz.version>3.2.1</togglz.version>
@@ -444,12 +448,19 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     </dependencyManagement>
     <repositories>
         <!-- APACHE CAUSEWAY customisation 7/21: start -->
-        <!-- temporary till Nov 24, 2022 -->
         <repository>
+			<!-- temporary till Nov 24, 2022 -->
             <id>spring.snapshots</id>
             <name>Spring Milestones Repository</name>
             <url>https://repo.spring.io/milestone/</url>
             <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+			<!-- temporary till release of shiro 2.0.0 -->
+            <id>shiro.snapshots</id>
+            <name>Shiro Snapshot Repository</name>
+            <url>https://repository.apache.org/content/groups/snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <!-- breaks dependabot run: timeout due to repo not accessible
         <repository>
@@ -1362,7 +1373,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </property>
             </activation>
             <properties>
-                <surefire-plugin.argLine>@{argLine} -Xmx512m</surefire-plugin.argLine>
+                <surefire-plugin.argLine>
+					@{argLine}
+					--add-modules com.sun.tools.xjc 
+					--add-reads org.eclipse.persistence.moxy=com.sun.tools.xjc 
+				</surefire-plugin.argLine>
             </properties>
             <build>
                 <plugins>
