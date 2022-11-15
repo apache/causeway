@@ -135,7 +135,8 @@ public class JdoProgrammingModel implements MetaModelRefiner {
     private void addValidatorToCheckForUnsupportedAnnotations(final ProgrammingModel pm) {
 
         pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
-            if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
+            if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class)
+                    && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
                 ValidationFailure.raiseFormatted(
                         objSpec,
                         "%s: JDO/DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
