@@ -56,7 +56,8 @@ import lombok.val;
  *
  */
 @Service
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
+//CAUTION: SwaggerServiceMenu refers to this name
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
@@ -85,7 +86,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     private final String name = "JaxrsRestEasy4";
 
     @Override
-    public void prepare(WebModuleContext ctx) {
+    public void prepare(final WebModuleContext ctx) {
 
         // forces RuntimeDelegate.getInstance() to be provided by RestEasy
         // (and not by eg. the JEE container if any)
@@ -101,7 +102,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     }
 
     @Override
-    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         val authenticationStrategyClassName = causewayConfiguration.getViewer()
                 .getRestfulobjects().getAuthentication().getStrategyClassName()

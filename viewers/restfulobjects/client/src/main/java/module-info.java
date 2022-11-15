@@ -16,22 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services;
+module org.apache.causeway.viewer.restfulobjects.client {
+    exports org.apache.causeway.viewer.restfulobjects.client.log;
+    exports org.apache.causeway.viewer.restfulobjects.client;
+    exports org.apache.causeway.viewer.restfulobjects.client.auth;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-public final class ServiceUtil {
-
-    private ServiceUtil() {
-    }
-
-    public static String idOfSpec(final ObjectSpecification serviceSpec) {
-        return serviceSpec.getLogicalTypeName();
-    }
-
-    public static String idOfAdapter(final ManagedObject serviceAdapter) {
-        return idOfSpec(serviceAdapter.getSpecification());
-    }
-
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    requires java.annotation;
+    requires java.ws.rs;
+    requires java.xml.bind;
+    requires lombok;
+    requires org.apache.causeway.applib;
+    requires org.apache.causeway.commons;
+    requires org.apache.causeway.viewer.restfulobjects.applib;
+    requires org.apache.logging.log4j;
+    requires spring.core;
 }
