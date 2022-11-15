@@ -20,9 +20,9 @@ module org.apache.causeway.persistence.commons {
     exports org.apache.causeway.persistence.jpa.integration.changetracking;
     exports org.apache.causeway.persistence.commons;
 
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.desktop;
-    requires java.inject;
+    requires jakarta.inject;
     requires java.sql;
     requires java.xml;
     requires lombok;
