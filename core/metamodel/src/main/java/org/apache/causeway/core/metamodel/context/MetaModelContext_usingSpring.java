@@ -49,7 +49,6 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.services.ServiceUtil;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
@@ -194,7 +193,11 @@ class MetaModelContext_usingSpring implements MetaModelContext {
         return getServiceRegistry()
                 .streamRegisteredBeans()
                 .map(this::toManagedObject)
-                .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
+                .collect(Collectors.toMap(
+                        service->service.getSpecification().getLogicalTypeName(),
+                        v->v,
+                        (o,n)->n,
+                        LinkedHashMap::new));
     }
 
     private ManagedObject toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {

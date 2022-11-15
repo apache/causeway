@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.services.ServiceUtil;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
@@ -29,7 +28,7 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
 
     @Override
     public ObjectAdapterLinkTo with(final ManagedObject objectAdapter) {
-        serviceId = ServiceUtil.idOfAdapter(objectAdapter);
+        serviceId = objectAdapter.getSpecification().getLogicalTypeName();
         return super.with(objectAdapter);
     }
 

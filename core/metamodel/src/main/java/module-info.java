@@ -36,6 +36,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.all.i8n.imperative;
     exports org.apache.causeway.core.metamodel.facets.all.i8n.staatic;
     exports org.apache.causeway.core.metamodel.facets.all.named;
+    exports org.apache.causeway.core.metamodel.facets.collections;
     exports org.apache.causeway.core.metamodel.facets.members.cssclass;
     exports org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop;
     exports org.apache.causeway.core.metamodel.facets.members.cssclassfa;
@@ -53,11 +54,15 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.object.viewmodel;
     exports org.apache.causeway.core.metamodel.facets.objectvalue.labelat;
     exports org.apache.causeway.core.metamodel.facets.properties.property.modify;
+    exports org.apache.causeway.core.metamodel.facets.properties.update.clear;
+    exports org.apache.causeway.core.metamodel.facets.properties.update.modify;
     exports org.apache.causeway.core.metamodel.facets.value.semantics;
 
     exports org.apache.causeway.core.metamodel.interactions;
     exports org.apache.causeway.core.metamodel.interactions.managed;
     exports org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
+
+    exports org.apache.causeway.core.metamodel.methods;
 
     exports org.apache.causeway.core.metamodel.object;
     exports org.apache.causeway.core.metamodel.objectmanager.memento;
@@ -92,7 +97,10 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.specloader
         to org.apache.causeway.core.runtimeservices,
         //TODO probably don't expose SpecificationLoader to viewers
-        org.apache.causeway.viewer.wicket.model, org.apache.causeway.viewer.wicket.ui,
+        org.apache.causeway.viewer.restfulobjects.rendering,
+        org.apache.causeway.viewer.restfulobjects.viewer,
+        org.apache.causeway.viewer.wicket.model,
+        org.apache.causeway.viewer.wicket.ui,
         org.apache.causeway.incubator.viewer.graphql.viewer;
 
     exports org.apache.causeway.core.metamodel.specloader.validator;

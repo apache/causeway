@@ -55,7 +55,8 @@ import lombok.val;
  *
  */
 @Service
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
+//CAUTION: SwaggerServiceMenu refers to this name
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
