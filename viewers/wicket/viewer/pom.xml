@@ -34,6 +34,9 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.viewer</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/viewer</git-plugin.propertiesDir>
+        
+        <!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
     </properties>
 
     <build>
