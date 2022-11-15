@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.integration.metamodel;
 
-
 import java.util.function.Predicate;
 
 import javax.jdo.annotations.PrimaryKey;
