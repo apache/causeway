@@ -30,6 +30,9 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jdo.datanucleus</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/persistence/jdo/datanucleus</git-plugin.propertiesDir>
+		
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
 	</properties>
 
 	<dependencies>
