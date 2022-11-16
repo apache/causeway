@@ -59,7 +59,7 @@ import lombok.val;
 //CAUTION: SwaggerServiceMenu refers to this name
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
-@Qualifier("JaxrsRestEasy4")
+@Qualifier("JaxrsRestEasy")
 public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
 
     private static final String INTERACTION_FILTER_NAME = "CausewayRestfulObjectsInteractionFilter";
@@ -83,7 +83,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     }
 
     @Getter
-    private final String name = "JaxrsRestEasy4";
+    private final String name = "JaxrsRestEasy";
 
     @Override
     public void prepare(final WebModuleContext ctx) {

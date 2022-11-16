@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.mappers;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy;
 
-import org.apache.causeway.viewer.restfulobjects.testing.RestfulObjectsApplicationExceptionMapper_Test_Contract;
+import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_parser_ContractTest;
 
-public class RestfulObjectsApplicationExceptionMapper_Test extends
-        RestfulObjectsApplicationExceptionMapper_Test_Contract {
+public abstract class RepresentationTypeTest_parser extends RepresentationTypeTest_parser_ContractTest {
 
 }
