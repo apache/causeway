@@ -19,12 +19,25 @@
 // ISIS-3071 file-input nesting issue
 let scalarFrames = document.querySelectorAll("span.uploadFile");
 scalarFrames.forEach((scalarFrame) => {
-	let fileInputFrames = scalarFrame.querySelectorAll("div.file-input-ajax-new");
+	let fileInputFrames = scalarFrame.querySelectorAll("div.file-input");
 	let isNested = fileInputFrames.length>1;
 	// replace the outermost with the innermost
 	if(isNested) {
-		let outermost = fileInputFrames[0]; 
+		let outermost = fileInputFrames[0];
+		//let outermostInput = outermost.querySelector("input");
+		//let outermostPreview = outermost.querySelector("div.file-preview");
+		//console.log("outermostInput: " + outermostInput);
+		//console.log("outermostPreview: " + outermostPreview);
+		 
 		let innermost = fileInputFrames[fileInputFrames.length-1];
+		//let innermostInput = innermost.querySelector("input");
+		//let innermostPreview = innermost.querySelector("div.file-preview");
+		
+		//console.log("innermostInput: " + innermostInput);
+		//console.log("innermostPreview: " + innermostPreview);
+		
+		//innermostInput.parentNode.replaceChild(outermostInput, innermostInput);
+		//innermostPreview.parentNode.replaceChild(outermostPreview, innermostPreview);
 		outermost.parentNode.replaceChild(innermost, outermost);
 	}
 })
