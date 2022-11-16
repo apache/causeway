@@ -1307,7 +1307,7 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.webjars.bower</groupId>
+				<groupId>org.webjars.npm</groupId>
 				<artifactId>summernote</artifactId>
 				<version>${summernote.version}</version>
 			</dependency>

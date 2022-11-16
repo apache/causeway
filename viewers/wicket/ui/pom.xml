@@ -224,7 +224,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.webjars.bower</groupId>
+			<groupId>org.webjars.npm</groupId>
 			<artifactId>summernote</artifactId>
 		</dependency>
 		<!-- required by tempus-dominus up to v5 -->
