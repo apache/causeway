@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy;
 
-import org.apache.causeway.viewer.restfulobjects.testing.Parser_forJaxRsMediaType_ContractTest;
+import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_lookup_ContractTest;
 
-public class Parser_forJaxRsMediaType_Test extends Parser_forJaxRsMediaType_ContractTest {
+public class RepresentationTypeTest_lookup extends RepresentationTypeTest_lookup_ContractTest {
+
+
 
 }

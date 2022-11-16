@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4;
+package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy;
 
 import org.apache.causeway.viewer.restfulobjects.testing.Parser_forCacheControl_ContractTest;
 

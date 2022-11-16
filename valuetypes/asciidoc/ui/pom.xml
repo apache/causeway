@@ -78,7 +78,7 @@
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-posix</artifactId>
-			<version>3.1.15</version>
+			<version>3.1.16</version>
 			<exclusions>
 				<!-- convergence issues -->
 				<exclusion>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-enxio</artifactId>
-			<version>0.32.13</version>
+			<version>0.32.14</version>
 			<exclusions>
 				<!-- convergence issues -->
 				<exclusion>
@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-constants</artifactId>
-			<version>0.10.3</version>
+			<version>0.10.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.jnr</groupId>
