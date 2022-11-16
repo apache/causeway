@@ -13,21 +13,21 @@ hide stereotype
 skinparam rectangle<<1>> {
   BackgroundColor #08427b
   FontColor #ffffff
-  BorderColor #052E56
+  BorderColor #052e56
 }
 skinparam rectangle<<2>> {
   BackgroundColor #dddddd
   FontColor #fffffe
-  BorderColor #9A9A9A
+  BorderColor #9a9a9a
 }
 skinparam rectangle<<3>> {
   BackgroundColor #dddddd
   FontColor #fffffe
-  BorderColor #9A9A9A
+  BorderColor #9a9a9a
 }
 rectangle "==Merchant\n<size:10>[Person]</size>\n\nMerchant" <<1>> as 1
 rectangle "==Fraud Detector\n<size:10>[Software System]</size>\n\nFraud Detector" <<3>> as 3
 rectangle "==Payment Terminal\n<size:10>[Software System]</size>\n\nPayment Terminal" <<2>> as 2
-1 .[#707070].> 2 : "Makes payment"
-2 .[#707070].> 3 : "Obtains fraud score"
+1 .[#707070,thickness=2].> 2 : "Makes payment"
+2 .[#707070,thickness=2].> 3 : "Obtains fraud score"
 @enduml

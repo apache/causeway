@@ -53,14 +53,14 @@ class C4Test {
      */
     @Test
     void testStructurizr_native() throws IOException {
-        
+
         // First, we need to create a Workspace and a Model:
-        
+
         val workspace = new Workspace("Payment Gateway", "Payment Gateway");
         val model = workspace.getModel();
-        
+
         // We also define a user and two software systems within that model:
-        
+
         Person user = model.addPerson("Merchant", "Merchant");
         SoftwareSystem paymentTerminal = model
                 .addSoftwareSystem("Payment Terminal", "Payment Terminal");
@@ -68,63 +68,63 @@ class C4Test {
         SoftwareSystem fraudDetector = model
                 .addSoftwareSystem("Fraud Detector", "Fraud Detector");
         paymentTerminal.uses(fraudDetector, "Obtains fraud score");
-        
+
         // Now that our system is defined, we can create a view
-        // Here we created a view that includes all software systems and persons. 
-        
+        // Here we created a view that includes all software systems and persons.
+
         val viewSet = workspace.getViews();
-        
+
         SystemContextView contextView = viewSet
                 .createSystemContextView(paymentTerminal, "context", "Payment Gateway Diagram");
         contextView.addAllSoftwareSystems();
         contextView.addAllPeople();
-        
+
         // Now the view needs to be rendered.
-        
+
         val stringWriter = new StringWriter();
         val plantUMLWriter = new BasicPlantUMLWriter();
         plantUMLWriter.write(workspace, stringWriter);
-        
+
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8), 
+                _Text.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8),
                 stringWriter.toString());
     }
-    
+
     /**
      * see https://www.baeldung.com/structurizr
      */
     @Test
     void testStructurizr_usingFactory() throws IOException {
-        
+
         val c4 = C4.of("Payment Gateway", "Payment Gateway");
-        
+
         // We also define a user and two software systems within that model:
-        
+
         Person user = c4.person("Merchant", "Merchant");
         SoftwareSystem paymentTerminal = c4.softwareSystem("Payment Terminal", "Payment Terminal");
         SoftwareSystem fraudDetector = c4.softwareSystem("Fraud Detector", "Fraud Detector");
-        
-        user.uses(paymentTerminal, "Makes payment");        
+
+        user.uses(paymentTerminal, "Makes payment");
         paymentTerminal.uses(fraudDetector, "Obtains fraud score");
-        
+
         // Now that our system is defined, we can create a view
-        // Here we created a view that includes all software systems and persons. 
-        
+        // Here we created a view that includes all software systems and persons.
+
         SystemContextView contextView = c4.systemContextView(paymentTerminal, "context", "Payment Gateway Diagram");
         contextView.addAllSoftwareSystems();
         contextView.addAllPeople();
-        
+
         // Now the view needs to be rendered.
-        
+
         val plantUmlSource = c4.toPlantUML(contextView);
-        
-        // System.out.println(plantUmlSource); //debug
-        
+
+        System.out.println(plantUmlSource); //debug
+
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), "baeldung-example-v2.puml", StandardCharsets.UTF_8), 
+                _Text.readLinesFromResource(this.getClass(), "baeldung-example-v2.puml", StandardCharsets.UTF_8),
                 plantUmlSource);
-        
+
     }
-    
+
 
 }
