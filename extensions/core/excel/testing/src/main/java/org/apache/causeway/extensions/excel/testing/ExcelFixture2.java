@@ -35,22 +35,26 @@ import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
 import org.apache.causeway.extensions.excel.applib.ExcelService;
 import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * This class should be executed using
- * {@link org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE}
- * (it has value semantics).
  *
  * @since 2.0 {@index}
  */
 @Named(ExcelFixture2.LOGICAL_TYPE_NAME)
 @DomainObject
-public class ExcelFixture2 extends FixtureScript {
+public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExecutionStrategy {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExcelApplib.NAMESPACE + ".ExcelFixture2";
+
+
+    @Inject FactoryService factoryService;
+    @Inject ExcelService excelService;
+
 
     /**
      * Input, optional: defines the name of the resource.
@@ -85,50 +89,6 @@ public class ExcelFixture2 extends FixtureScript {
     private WorksheetSpec.Sequencer sequencer;
 
 
-    /**
-     * Output... a list of list of objects (each representing a row of a sheet)
-     */
-    @Getter
-    private List<List<?>> lists;
-
-
-    @Override
-    protected void execute(final ExecutionContext executionContext) {
-
-        if (blob == null){
-            byte[] bytes = getBytes();
-            blob = new Blob("unused", ExcelService.XSLX_MIME_TYPE, bytes);
-        }
-
-        this.lists = excelService.fromExcel(blob, matcher, sequencer);
-
-    }
-
-    //region > bytes
-    private byte[] bytes;
-
-    private byte[] getBytes() {
-        if (bytes == null) {
-            if (blob != null){
-                bytes = blob.getBytes();
-            } else {
-                bytes = readBytes();
-            }
-        }
-        return bytes;
-    }
-
-    private byte[] readBytes() {
-        try(final InputStream is = getExcelResource().openStream()) {
-            return _Bytes.of(is);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Could not read from resource: " + getExcelResource());
-        }
-    }
-
-    //endregion
-
-
     protected <T> WorksheetSpec.RowFactory<T> rowFactoryFor(
             final Class<T> rowClass,
             final ExecutionContext ec) {
@@ -153,7 +113,52 @@ public class ExcelFixture2 extends FixtureScript {
             }
         };
     }
-    //region > hashCode, equals
+
+
+    /**
+     * Output... a list of list of objects (each representing a row of a sheet)
+     */
+    @Getter
+    private List<List<?>> lists;
+
+
+    @Override
+    protected void execute(final ExecutionContext executionContext) {
+
+        if (blob == null){
+            byte[] bytes = getBytes();
+            blob = new Blob("unused", ExcelService.XSLX_MIME_TYPE, bytes);
+        }
+
+        this.lists = excelService.fromExcel(blob, matcher, sequencer);
+    }
+
+
+    private byte[] bytes;
+    private byte[] getBytes() {
+        if (bytes == null) {
+            if (blob != null){
+                bytes = blob.getBytes();
+            } else {
+                bytes = readBytes();
+            }
+        }
+        return bytes;
+    }
+
+    private byte[] readBytes() {
+        try(final InputStream is = getExcelResource().openStream()) {
+            return _Bytes.of(is);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not read from resource: " + getExcelResource());
+        }
+    }
+
+
+    @Override
+    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+        return FixtureScripts.MultipleExecutionStrategy.EXECUTE_ONCE_BY_VALUE;
+    }
 
     @Override
     public boolean equals(final Object o) {
@@ -173,19 +178,5 @@ public class ExcelFixture2 extends FixtureScript {
         return Arrays.hashCode(getBytes());
     }
 
-    //endregion
-
-//    @javax.inject.Inject
-//    private RepositoryService repositoryService;
-//    @javax.inject.Inject
-//    private BookmarkService bookmarkService;
-//    @javax.inject.Inject
-//    private ServiceRegistry serviceRegistry;
-
-    @Inject
-    FactoryService factoryService;
-
-    @Inject
-    ExcelService excelService;
 
 }

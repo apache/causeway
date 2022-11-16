@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.incubator.viewer.vaadin.model.util._vaa;
+import org.apache.causeway.incubator.viewer.vaadin.model.util.Vaa;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ButtonRequest;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
@@ -62,7 +62,7 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
         val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
         val actionEventHandler = request.getActionEventHandler();
 
-        val uiButton = _vaa.newButton(managedAction.getFriendlyName());
+        val uiButton = Vaa.newButton(managedAction.getFriendlyName());
 
         disablingUiModelIfAny.ifPresent(disablingUiModel->{
 //            uiContext.getDisablingDecoratorForButton()

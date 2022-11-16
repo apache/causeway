@@ -27,6 +27,7 @@ import java.util.List;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
@@ -178,11 +179,7 @@ public class DomainEventHelper {
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor!=null) {
-
-            final Object event = invokeConstructor(noArgConstructor);
-            final ActionDomainEvent<S> ade = uncheckedCast(event);
-
-            ade.initSource(source);
+            final ActionDomainEvent<S> ade = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();
             ade.setIdentifier(identifier);
             ade.setArguments(asList(arguments));
             return ade;
@@ -283,17 +280,14 @@ public class DomainEventHelper {
             final T oldValue,
             final T newValue) throws NoSuchMethodException, SecurityException, IllegalArgumentException {
 
+
         val constructors = _Reflect.getPublicConstructors(type);
 
         val noArgonstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgonstructor != null) {
-            final Object event = invokeConstructor(noArgonstructor);
-            final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
-            if(source!=null) {
-                pde.initSource(source);
-            }
+            final PropertyDomainEvent<S, T> pde = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();
             pde.setIdentifier(identifier);
             pde.setOldValue(oldValue);
             pde.setNewValue(newValue);
@@ -376,10 +370,7 @@ public class DomainEventHelper {
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor != null) {
-            final Object event = invokeConstructor(noArgConstructor);
-            final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
-
-            cde.initSource(source);
+            final CollectionDomainEvent<S, T> cde = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();;
             cde.setIdentifier(identifier);
             return cde;
         }

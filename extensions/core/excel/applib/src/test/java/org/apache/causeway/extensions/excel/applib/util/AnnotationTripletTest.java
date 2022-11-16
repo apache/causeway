@@ -23,12 +23,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AnnotationTripletTest {
+class AnnotationTripletTest {
 
     @Test
-    public void testCompareTo() throws Exception {
+    void testCompareTo() throws Exception {
 
         // given
         AnnotationTriplet t0 = new AnnotationTriplet("column", 0, 0);
@@ -63,4 +63,4 @@ public class AnnotationTripletTest {
     }
 
 
-} 
+}

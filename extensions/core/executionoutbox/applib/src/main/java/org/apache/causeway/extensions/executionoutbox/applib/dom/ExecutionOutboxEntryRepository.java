@@ -34,6 +34,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
@@ -43,6 +44,8 @@ import lombok.Getter;
 /**
  * Provides supporting functionality for querying and persisting
  * {@link ExecutionOutboxEntry command} entities.
+ *
+ * @since 2.0 {@index}
  */
 public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEntry> {
 
@@ -63,6 +66,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject CausewayConfiguration causewayConfiguration;
 
     protected ExecutionOutboxEntryRepository(Class<E> executionOutboxEntryClass) {
         this.executionOutboxEntryClass = executionOutboxEntryClass;
@@ -100,7 +104,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
     public List<E> findOldest() {
         return repositoryService().allMatches(
                 Query.named(executionOutboxEntryClass, ExecutionOutboxEntry.Nq.FIND_OLDEST)
-                        .withLimit(100));
+                        .withLimit(causewayConfiguration.getExtensions().getExecutionOutbox().getRestApi().getMaxPending()));
     }
 
     public ExecutionOutboxEntry upsert(

@@ -59,6 +59,12 @@
 		<dependency>
 			<groupId>org.apache.causeway.persistence</groupId>
 			<artifactId>causeway-persistence-jdo-applib</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.transaction</groupId>
+					<artifactId>javax.transaction-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.causeway.persistence</groupId>

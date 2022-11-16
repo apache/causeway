@@ -36,32 +36,59 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.all.i8n.imperative;
     exports org.apache.causeway.core.metamodel.facets.all.i8n.staatic;
     exports org.apache.causeway.core.metamodel.facets.all.named;
+    exports org.apache.causeway.core.metamodel.facets.collections;
     exports org.apache.causeway.core.metamodel.facets.members.cssclass;
     exports org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop;
     exports org.apache.causeway.core.metamodel.facets.members.cssclassfa;
+    exports org.apache.causeway.core.metamodel.facets.members.disabled;
     exports org.apache.causeway.core.metamodel.facets.members.layout.group;
     exports org.apache.causeway.core.metamodel.facets.members.publish.command;
     exports org.apache.causeway.core.metamodel.facets.members.publish.execution;
     exports org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
     exports org.apache.causeway.core.metamodel.facets.object.callbacks;
+    exports org.apache.causeway.core.metamodel.facets.object.domainobject;
     exports org.apache.causeway.core.metamodel.facets.object.domainservice;
     exports org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
     exports org.apache.causeway.core.metamodel.facets.object.entity;
     exports org.apache.causeway.core.metamodel.facets.object.icon;
     exports org.apache.causeway.core.metamodel.facets.object.mixin;
+    exports org.apache.causeway.core.metamodel.facets.object.objectvalidprops;
+    exports org.apache.causeway.core.metamodel.facets.object.publish.entitychange;
+    exports org.apache.causeway.core.metamodel.facets.object.title;
     exports org.apache.causeway.core.metamodel.facets.object.value;
     exports org.apache.causeway.core.metamodel.facets.object.viewmodel;
+    exports org.apache.causeway.core.metamodel.facets.objectvalue.digits;
     exports org.apache.causeway.core.metamodel.facets.objectvalue.labelat;
+    exports org.apache.causeway.core.metamodel.facets.objectvalue.mandatory;
+    exports org.apache.causeway.core.metamodel.facets.objectvalue.maxlen;
+
+    exports org.apache.causeway.core.metamodel.facets.propcoll.accessor;
+    exports org.apache.causeway.core.metamodel.facets.properties.defaults;
+    exports org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing;
+    exports org.apache.causeway.core.metamodel.facets.properties.property.mandatory;
     exports org.apache.causeway.core.metamodel.facets.properties.property.modify;
+    exports org.apache.causeway.core.metamodel.facets.properties.update.clear;
+    exports org.apache.causeway.core.metamodel.facets.properties.update.modify;
     exports org.apache.causeway.core.metamodel.facets.value.semantics;
+
+    exports org.apache.causeway.core.metamodel.facets.object.parented
+        to org.apache.causeway.persistence.jdo.metamodel;
+    exports org.apache.causeway.core.metamodel.facets.object.ignore.datanucleus
+        to org.apache.causeway.persistence.jdo.metamodel;
+    exports org.apache.causeway.core.metamodel.facets.object.ignore.jdo
+        to org.apache.causeway.persistence.jdo.metamodel;
 
     exports org.apache.causeway.core.metamodel.interactions;
     exports org.apache.causeway.core.metamodel.interactions.managed;
     exports org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
 
+    exports org.apache.causeway.core.metamodel.methods;
+
     exports org.apache.causeway.core.metamodel.object;
     exports org.apache.causeway.core.metamodel.objectmanager.memento;
     exports org.apache.causeway.core.metamodel.objectmanager;
+
+    exports org.apache.causeway.core.metamodel.progmodel;
 
     exports org.apache.causeway.core.metamodel.services.appfeat;
     exports org.apache.causeway.core.metamodel.services.classsubstitutor;
@@ -91,8 +118,13 @@ open module org.apache.causeway.core.metamodel {
 
     exports org.apache.causeway.core.metamodel.specloader
         to org.apache.causeway.core.runtimeservices,
+        //TODO probably don't expose SpecificationLoader to persistence
+        org.apache.causeway.persistence.jdo.metamodel,
         //TODO probably don't expose SpecificationLoader to viewers
-        org.apache.causeway.viewer.wicket.model, org.apache.causeway.viewer.wicket.ui,
+        org.apache.causeway.viewer.restfulobjects.rendering,
+        org.apache.causeway.viewer.restfulobjects.viewer,
+        org.apache.causeway.viewer.wicket.model,
+        org.apache.causeway.viewer.wicket.ui,
         org.apache.causeway.incubator.viewer.graphql.viewer;
 
     exports org.apache.causeway.core.metamodel.specloader.validator;

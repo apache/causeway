@@ -46,7 +46,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     private AuthorizorShiro authorizor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
         // PRODUCTION
 
@@ -59,7 +59,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         Subject subject = ThreadContext.getSubject();
         if(subject != null) {
             subject.logout();
@@ -68,7 +68,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     }
 
     @Test
-    public void vetoing() throws Exception {
+    void vetoing() throws Exception {
         // given
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
         SecurityManager securityManager = factory.getInstance();
@@ -85,7 +85,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     }
 
     @Test
-    public void vetoingOverridden() throws Exception {
+    void vetoingOverridden() throws Exception {
         // given
         Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
         SecurityManager securityManager = factory.getInstance();
@@ -99,6 +99,5 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
                 TypeIdentifierTestFactory.customer(), "remove");
         assertThat(authorizor.isVisible(authentication, removeCustomerIdentifier), is(true));
     }
-
 
 }

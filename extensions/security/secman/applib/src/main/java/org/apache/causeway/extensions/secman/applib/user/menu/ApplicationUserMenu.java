@@ -41,6 +41,10 @@ import org.apache.causeway.extensions.secman.applib.user.man.ApplicationUserMana
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationUserMenu.LOGICAL_TYPE_NAME)
 @DomainService(
         nature = NatureOfService.VIEW

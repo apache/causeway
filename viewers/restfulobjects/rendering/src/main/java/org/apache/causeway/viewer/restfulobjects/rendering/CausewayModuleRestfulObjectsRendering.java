@@ -67,5 +67,5 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 })
 public class CausewayModuleRestfulObjectsRendering {
 
-    public static final String NAMESPACE = "causeway.viewer.restfulobjects";
+    public static final String NAMESPACE = "causeway.viewer.roRendering";
 }

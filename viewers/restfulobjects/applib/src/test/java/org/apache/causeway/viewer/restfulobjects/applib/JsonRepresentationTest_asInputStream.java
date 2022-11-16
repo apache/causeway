@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -35,11 +35,11 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_asInputStream {
+class JsonRepresentationTest_asInputStream {
 
     private JsonRepresentation jsonRepresentation;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }

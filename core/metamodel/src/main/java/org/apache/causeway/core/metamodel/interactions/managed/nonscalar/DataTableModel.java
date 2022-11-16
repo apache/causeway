@@ -169,6 +169,9 @@ implements MultiselectChoices {
             .getFriendlyName());
     }
 
+    /**
+     * Count filtered data rows.
+     */
     public int getElementCount() {
         return dataRowsFiltered.getValue().size();
     }

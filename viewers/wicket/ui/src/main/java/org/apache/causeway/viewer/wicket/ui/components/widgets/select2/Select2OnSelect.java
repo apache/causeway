@@ -107,9 +107,13 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     private void updatePendingModels() {
         PageParameterUtils.streamCurrentRequestParameters()
         .forEach(pair->
-            Event.valueOf(pair).ifPresent(event->{
-                val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+            Event.valueOf(pair)
+            .ifPresent(event->{
                 if(getComponent() instanceof Select2MultiChoiceExt) {
+                    val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    if(objectMementoFromEvent==null) {
+                        return; // add or remove nothing is a no-op
+                    }
                     val component = (Select2MultiChoiceExt)getComponent();
                     switch(event) {
                     case SELECT:{
@@ -137,6 +141,13 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                     val component = (Select2ChoiceExt)getComponent();
                     switch(event) {
                     case SELECT:
+                        val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                        if(objectMementoFromEvent==null) {
+                            // select nothing is rather a CLEAR operation
+                            component.clearInput();
+                            clearUpdateReceiver();
+                            return;
+                        }
                         component.setModelObject(objectMementoFromEvent);
                         updateReceiver().setValue(demementify(objectMementoFromEvent));
                         break;
@@ -150,7 +161,12 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                 } else return;
 
                 if(XrayUi.isXrayEnabled()) {
-                    _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.getBookmark());
+                    val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    if(objectMementoFromEvent!=null) {
+                        _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.getBookmark());
+                    } else {
+                        _XrayEvent.event("Select2 event: %s %s", event, "(none)");
+                    }
                 }
 
                 // schedule form update (AJAX)

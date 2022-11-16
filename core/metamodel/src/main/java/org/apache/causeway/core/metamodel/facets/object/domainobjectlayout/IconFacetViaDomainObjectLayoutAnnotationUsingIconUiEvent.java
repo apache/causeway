@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
-import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -56,7 +55,7 @@ extends IconFacetAbstract {
                 });
     }
 
-    private final Class<? extends IconUiEvent<?>> iconUiEventClass;
+    private final Class<? extends IconUiEvent<Object>> iconUiEventClass;
     private final MetamodelEventService metamodelEventService;
 
     public IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
@@ -64,7 +63,7 @@ extends IconFacetAbstract {
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
         super(holder, Precedence.EVENT);
-        this.iconUiEventClass = iconUiEventClass;
+        this.iconUiEventClass = _Casts.uncheckedCast(iconUiEventClass);
         this.metamodelEventService = metamodelEventService;
     }
 
@@ -97,21 +96,7 @@ extends IconFacetAbstract {
     }
 
     private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter) {
-        final Object domainObject = owningAdapter.getPojo();
-        return newIconUiEventForPojo(domainObject);
-    }
-
-    private IconUiEvent<Object> newIconUiEventForPojo(final Object domainObject) {
-        try {
-            final IconUiEvent<Object> iconUiEvent = _Casts.uncheckedCast(
-                    iconUiEventClass.getConstructor().newInstance());
-            iconUiEvent.initSource(domainObject);
-            return iconUiEvent;
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException ex) {
-            throw new UnrecoverableException(ex);
-        }
+        return EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo).orElseThrow();
     }
 
     @Override

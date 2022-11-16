@@ -26,11 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +38,6 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -58,27 +55,22 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
     /*sonar-ignore-on*/
 
-    @Rule public JUnitRuleMockery2 context =
-            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
 
-    @Mock HttpHeaders mockHttpHeaders;
-    @Mock HttpServletRequest mockHttpServletRequest;
-    @Mock ServletContext mockServletContext;
-    @Mock InteractionService mockInteractionService;
-    @Mock Interaction mockInteraction;
-    @Mock SpecificationLoader mockSpecificationLoader;
-    @Mock WebApplicationContext webApplicationContext;
-    @Mock InteractionLayerTracker mockInteractionLayerTracker;
-    @Mock AuthenticationManager mockAuthenticationManager;
+    HttpHeaders mockHttpHeaders = Mockito.mock(HttpHeaders.class);
+    HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
+    ServletContext mockServletContext = Mockito.mock(ServletContext.class);
+    InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
+    Interaction mockInteraction = Mockito.mock(Interaction.class);
+    SpecificationLoader mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
+    WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
+    InteractionLayerTracker mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
+    AuthenticationManager mockAuthenticationManager = Mockito.mock(AuthenticationManager.class);
 
     MetaModelContext metaModelContext;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-
-        // PRODUCTION
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
@@ -88,23 +80,22 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 .singleton(mockInteractionService)
                 .build();
 
-        context.checking(new Expectations() {
-            {
+        Mockito
+        .when(webApplicationContext.getBean(MetaModelContext.class))
+        .thenReturn(metaModelContext);
 
-                allowing(mockServletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
-                will(returnValue(webApplicationContext));
+        Mockito
+        .when(mockServletContext.getAttribute("org.springframework.web.context.WebApplicationContext.ROOT"))
+        .thenReturn(webApplicationContext);
 
-                allowing(webApplicationContext).getBean(MetaModelContext.class);
-                will(returnValue(metaModelContext));
+        Mockito
+        .when(mockHttpServletRequest.getServletContext())
+        .thenReturn(mockServletContext);
 
-                allowing(mockHttpServletRequest).getServletContext();
-                will(returnValue(mockServletContext));
+        Mockito
+        .when(mockHttpServletRequest.getQueryString())
+        .thenReturn("");
 
-                allowing(mockHttpServletRequest).getQueryString();
-                will(returnValue(""));
-
-            }
-        });
     }
 
     @Test
@@ -184,12 +175,9 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     }
 
     private void givenHttpHeadersGetAcceptableMediaTypesReturns(final List<MediaType> mediaTypes) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockHttpHeaders).getAcceptableMediaTypes();
-                will(returnValue(mediaTypes));
-            }
-        });
+        Mockito
+        .when(mockHttpHeaders.getAcceptableMediaTypes())
+        .thenReturn(mediaTypes);
     }
 
     private ResourceContext instantiateResourceContext(

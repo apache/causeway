@@ -26,13 +26,13 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class Parser_Test {
+class Parser_Test {
 
     @Test
     public void forBoolean() {
@@ -127,7 +127,7 @@ public class Parser_Test {
     //
     //        assertThat(list, sameContentsAs(valueOf));
     //    }
-    //    
+    //
     //    @Test
     //    public void forMediaTypeJson() {
     //        final MediaType mediaType = MediaType.valueOf("application/json");

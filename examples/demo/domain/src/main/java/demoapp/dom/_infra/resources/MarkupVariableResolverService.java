@@ -39,13 +39,13 @@ public class MarkupVariableResolverService {
     private final Map<String, String> constants;
 
     @Inject
-    public MarkupVariableResolverService(CausewayConfiguration configuration) {
+    public MarkupVariableResolverService(final CausewayConfiguration configuration) {
         constants = _Maps.unmodifiable(
                 "SOURCES_CAUSEWAY", "https://github.com/apache/causeway/blob/master/core/applib/src/main/java",
                 "SOURCES_DEMO", "https://github.com/apache/causeway/tree/master/examples/demo/domain/src/main/java",
                 "ISSUES_DEMO", "https://issues.apache.org/jira/",
                 "CAUSEWAY_VERSION", Optional.ofNullable(
-                        configuration.getViewer().getWicket().getApplication().getVersion())
+                        configuration.getViewer().getCommon().getApplication().getVersion())
                         .orElse("unkown-version")
             );
     }
@@ -54,7 +54,7 @@ public class MarkupVariableResolverService {
      * For the given {@code input} replaces '${var-name}' with the variable's value.
      * @param input
      */
-    public String resolveVariables(String input) {
+    public String resolveVariables(final String input) {
         val stringRef = _Refs.objectRef(input);
         constants.forEach((k, v)->{
             stringRef.update(string->string.replace(var(k), v));
@@ -62,7 +62,7 @@ public class MarkupVariableResolverService {
         return stringRef.getValueElseDefault(input);
     }
 
-    private String var(String name) {
+    private String var(final String name) {
         return String.format("${%s}", name);
     }
 

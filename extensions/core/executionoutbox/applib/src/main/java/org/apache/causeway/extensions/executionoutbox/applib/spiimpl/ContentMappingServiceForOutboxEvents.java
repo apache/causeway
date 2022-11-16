@@ -34,6 +34,9 @@ import org.apache.causeway.schema.ixn.v2.InteractionsDto;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 public class ContentMappingServiceForOutboxEvents implements ContentMappingService {
 

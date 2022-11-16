@@ -89,6 +89,34 @@ implements _Refetchable {
             return pojo; // is attached
         }
 
+        //[ISIS-3265] this getPojo() call might originate from a CausewayEntityListener.onPostLoad event,
+        // in which case potentially runs into a nested loop resulting in a stack overflow;
+        if(refetching) {
+            throw _Exceptions.unrecoverable("framework bug: nested call to getPojo() while already refetching");
+        }
+
+        refetching = true;
+        val refetchedPojo = refetchPojo(entityState);
+        refetching = false;
+
+        return this.pojo = assertCompliance(refetchedPojo);
+    }
+
+    @Override
+    public @NonNull EntityState getEntityState() {
+        val entityFacet = entityFacet();
+        return entityFacet.getEntityState(pojo);
+    }
+
+    // -- HELPER
+
+    private boolean refetching;
+
+    private Object refetchPojo(final EntityState entityState) {
+
+        val entityFacet = entityFacet();
+
+        // triggers live-cycle events
         val refetchedIfSuccess = entityFacet.fetchByBookmark(bookmark);
 
         if(refetchedIfSuccess.isEmpty()) {
@@ -103,21 +131,14 @@ implements _Refetchable {
         val refetchedPojo = refetchedIfSuccess.get();
 
         if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
-            throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
+            throw new ObjectNotFoundException(""+bookmark);
+            //throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
         _XrayEvent.event("Entity %s refetched from persistence.", getSpecification());
 
-        return this.pojo = assertCompliance(refetchedPojo);
+        return refetchedPojo;
     }
-
-    @Override
-    public @NonNull EntityState getEntityState() {
-        val entityFacet = entityFacet();
-        return entityFacet.getEntityState(pojo);
-    }
-
-    // -- HELPER
 
     private EntityFacet entityFacet() {
         return getSpecification().entityFacetElseFail();

@@ -25,7 +25,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Access to the command replay primary menu.
+ * Sets up a role with access to the menu actions contributed by the <i>Audit Trail</i> extension.
  *
  * @since 2.0 {@index}
  */

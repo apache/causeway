@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.CssClassUiEvent;
-import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -57,16 +56,16 @@ extends CssClassFacetAbstract {
 
     }
 
-    private final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass;
+    private final Class<? extends CssClassUiEvent<Object>> cssClassUiEventClass;
     private final MetamodelEventService metamodelEventService;
 
     private CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
             final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
-                    final MetamodelEventService metamodelEventService,
-                    final FacetHolder holder) {
+            final MetamodelEventService metamodelEventService,
+            final FacetHolder holder) {
 
         super(holder, Precedence.EVENT);
-        this.cssClassUiEventClass = cssClassUiEventClass;
+        this.cssClassUiEventClass = _Casts.uncheckedCast(cssClassUiEventClass);
         this.metamodelEventService = metamodelEventService;
     }
 
@@ -104,16 +103,7 @@ extends CssClassFacetAbstract {
     }
 
     private CssClassUiEvent<Object> newCssClassUiEventForPojo(final Object domainObject) {
-        try {
-            final CssClassUiEvent<Object> cssClassUiEvent = _Casts.uncheckedCast(
-                    cssClassUiEventClass.getConstructor().newInstance());
-            cssClassUiEvent.initSource(domainObject);
-            return cssClassUiEvent;
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException ex) {
-            throw new UnrecoverableException(ex);
-        }
+        return EventObjectBase.getInstanceWithSource(cssClassUiEventClass, domainObject).orElseThrow();
     }
 
     @Override

@@ -20,7 +20,7 @@ sudo apt install npm
 +
 [source,bash]
 ----
-npm i -g @antora/cli@2.3.4 @antora/site-generator-default@2.3.4 asciidoctor-kroki@0.15.4
+npm i -g @antora/cli@^3.1.1 @antora/site-generator-default@^3.1.1 asciidoctor-kroki
 ----
 +
 See the link:https://docs.antora.org/antora/2.3/install/install-antora/[Antora docs] for details.
@@ -29,7 +29,7 @@ See the link:https://docs.antora.org/antora/2.3/install/install-antora/[Antora d
 +
 [source,bash]
 ----
-npm i -g serve@13.0.2
+npm i -g serve@^13.0.2
 ----
 
 We also generate some Asciidoc files dynamically from other source code.

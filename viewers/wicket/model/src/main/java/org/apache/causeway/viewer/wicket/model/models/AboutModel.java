@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
  * Model providing welcome text.
  */
 public final class AboutModel
-extends ModelAbstract<CausewayConfiguration.Viewer.Wicket.Application> {
+extends ModelAbstract<CausewayConfiguration.Viewer.Common.Application> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,8 +35,8 @@ extends ModelAbstract<CausewayConfiguration.Viewer.Wicket.Application> {
     }
 
     @Override
-    protected CausewayConfiguration.Viewer.Wicket.Application load() {
-        return getWicketViewerSettings().getApplication();
+    protected CausewayConfiguration.Viewer.Common.Application load() {
+        return getApplicationSettings();
     }
 
 }

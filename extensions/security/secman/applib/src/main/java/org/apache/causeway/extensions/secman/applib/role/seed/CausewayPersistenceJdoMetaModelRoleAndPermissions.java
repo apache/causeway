@@ -25,7 +25,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Provides access to download the JDO metamodel.
+ * Sets up a role with access to the menu actions to download the JDO metamodel.
  *
  * @since 2.0 {@index}
  */

@@ -18,15 +18,21 @@
  */
 package org.apache.causeway.applib.services.grid;
 
+import java.util.EnumSet;
+import java.util.Optional;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+
+import lombok.NonNull;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.
  *
- * @since 1.x {@index}
+ * @since 1.x - revised for 2.0 {@index}
  */
 public interface GridLoaderService {
 
@@ -57,29 +63,33 @@ public interface GridLoaderService {
      *     to obtain a default grid for the domain class).
      * </p>
      */
-    boolean existsFor(Class<?> domainClass);
+    boolean existsFor(Class<?> domainClass, EnumSet<CommonMimeType> supportedFormats);
 
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>layout.xml</code> file, else <code>null</code>.
-     */
-    default Grid load(Class<?> domainClass) {
-        return load(domainClass, null);
-    }
-
-    /**
-     * Loads a specic alternative {@link Grid} layout for the specified domain
-     * class.
-     *
+     * Optionally returns a new instance of a {@link Grid},
+     * based on whether the underlying resource could be found, loaded and parsed.
      * <p>
      *     The layout alternative will typically be specified through a
      *     `layout()` method on the domain object, the value of which is used
      *     for the suffix of the layout file (eg "Customer-layout.archived.xml"
      *     to use a different layout for customers that have been archived).
      * </p>
+     * @throws UnsupportedOperationException - when format is not supported
      */
-    Grid load(
+    <T extends Grid> Optional<T> load(
             Class<?> domainClass,
-            @Nullable String layout);
+            @Nullable String layoutIfAny,
+            @NonNull GridMarshallerService<T> marshaller);
+
+    /**
+     * Optionally returns a new instance of a {@link Grid},
+     * based on whether the underlying resource could be found, loaded and parsed.
+     * @throws UnsupportedOperationException - when format is not supported
+     */
+    default <T extends Grid> Optional<T> load(
+            final Class<?> domainClass,
+            final @NonNull GridMarshallerService<T> marshaller) {
+        return load(domainClass, null, marshaller);
+    }
 
 }

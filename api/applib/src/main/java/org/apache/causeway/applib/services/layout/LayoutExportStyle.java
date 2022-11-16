@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.services.layout;
 
-import javax.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.layout.grid.Grid;
 
@@ -32,7 +29,6 @@ import org.apache.causeway.applib.layout.grid.Grid;
  *
  * @since 2.x {@index}
  */
-@Named(CausewayModuleApplib.NAMESPACE + ".services.layout.LayoutFormat")
 @Value
 public enum LayoutExportStyle {
 

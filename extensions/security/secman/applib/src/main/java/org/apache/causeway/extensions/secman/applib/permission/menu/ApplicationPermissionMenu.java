@@ -39,6 +39,10 @@ import org.apache.causeway.extensions.secman.applib.permission.app.ApplicationOr
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationPermissionMenu.LOGICAL_TYPE_NAME)
 @DomainService(
         nature = NatureOfService.VIEW

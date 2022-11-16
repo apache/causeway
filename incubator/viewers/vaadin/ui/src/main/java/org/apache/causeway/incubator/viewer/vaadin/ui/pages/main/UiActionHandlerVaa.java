@@ -81,7 +81,7 @@ public class UiActionHandlerVaa {
             val actionResultOrVeto = managedAction.invoke(params);
 
             actionResultOrVeto.getSuccess()
-            .ifPresent(actionResult->uiContext.route(actionResult));
+            .ifPresent(actionResult->uiContext.route(managedAction, params, actionResult));
 
         });
     }

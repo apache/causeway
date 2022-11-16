@@ -39,6 +39,11 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-rdbms</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-metamodel</artifactId>
 		</dependency>

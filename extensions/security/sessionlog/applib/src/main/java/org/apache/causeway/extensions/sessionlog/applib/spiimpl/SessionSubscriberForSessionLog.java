@@ -45,9 +45,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Implementation of the Causeway {@link SessionSubscriber} creates a log
- * entry to the database (the {@link SessionLogEntry} entity) each time a
- * user either logs on or logs out, or if their session expires.
+ * Implementation of the {@link SessionSubscriber} SPI, which persists a log entry to the database (the
+ * {@link SessionLogEntry} entity) each time a user either logs on or logs out, or if their session expires.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

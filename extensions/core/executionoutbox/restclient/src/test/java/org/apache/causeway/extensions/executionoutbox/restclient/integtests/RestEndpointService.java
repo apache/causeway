@@ -39,10 +39,8 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class RestEndpointService {
 
-    private final Environment environment;
     private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
-    private final InteractionService interactionService;
 
     public OutboxClient newClient(int port, String username, String password) {
 

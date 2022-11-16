@@ -32,6 +32,7 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -139,10 +140,10 @@ import lombok.Setter;
                   + " ORDER BY timestamp DESC "
                   + " RANGE 0,30"),
     @Query(
-            name  = Nq.FIND_BY_PARENT,
+            name  = Nq.FIND_BY_PARENT_INTERACTION_ID,
             value = "SELECT "
                     + "  FROM " + CommandLogEntry.FQCN + " "
-                    + " WHERE parent == :parent "),
+                    + " WHERE parentInteractionId == :parentInteractionId "),
     @Query(
             name  = Nq.FIND_CURRENT,
             value = "SELECT "
@@ -172,10 +173,20 @@ import lombok.Setter;
                   + "   && startedAt != null "
                   + "   && completedAt != null "
                   + "ORDER BY timestamp ASC"),
-
-    // most recent (replayed) command previously replicated from primary to
-    // secondary.  This should always exist except for the very first times
-    // (after restored the prod DB to secondary).
+    @Query(
+            name  = Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED,
+            value = "SELECT "
+                  + "  FROM " + CommandLogEntry.FQCN + " "
+                  + " WHERE executeIn == 'BACKGROUND' "
+                  + "    && startedAt == null "
+                  + " ORDER BY timestamp ASC "),
+    @Query(
+            name  = Nq.FIND_RECENT_BACKGROUND_BY_TARGET,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE executeIn == 'BACKGROUND' "
+                    + "    && target    == :target "
+                    + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             value = "SELECT "
@@ -185,9 +196,6 @@ import lombok.Setter;
                   + " RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
 
-    // the most recent completed command, as queried on the
-    // secondary, corresponding to the last command run on primary before the
-    // production database was restored to the secondary
     @Query(
             name  = Nq.FIND_MOST_RECENT_COMPLETED,
             value = "SELECT "
@@ -258,14 +266,16 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     private Bookmark target;
 
 
-    @Column(name = Parent.NAME, allowsNull = Parent.ALLOWS_NULL)
-    @Parent
-    @Getter
-    private CommandLogEntry parent;
-    @Override
-    public void setParent(final org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry parent) {
-        this.parent = (CommandLogEntry)parent;
-    }
+    @Column(allowsNull = ExecuteIn.ALLOWS_NULL, length = ExecuteIn.MAX_LENGTH)
+    @ExecuteIn
+    @Getter @Setter
+    private org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn executeIn;
+
+
+    @Column(allowsNull = Parent.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
+    @Domain.Exclude
+    @Getter @Setter
+    private UUID parentInteractionId;
 
 
     @Column(allowsNull = LogicalMemberIdentifier.ALLOWS_NULL, length = LogicalMemberIdentifier.MAX_LENGTH)
@@ -278,7 +288,7 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Column(allowsNull = CommandDtoAnnot.ALLOWS_NULL, jdbcType = "CLOB")
     @CommandDtoAnnot
     @Getter @Setter
-    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+    private CommandDto commandDto;
 
 
     @Column(allowsNull = StartedAt.ALLOWS_NULL)
@@ -305,6 +315,7 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Exception
     @Getter @Setter
     private String exception;
+
 
     @Column(allowsNull = ReplayState.ALLOWS_NULL, length = ReplayState.MAX_LENGTH)
     @ReplayState

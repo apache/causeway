@@ -309,7 +309,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <!-- APACHE CAUSEWAY customisation 5/21: end -->
 
         <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
+        <maven.plugin.tools.version>3.7.0</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <project.build.outputTimestamp>2022-10-14T12:04:02Z</project.build.outputTimestamp>
@@ -326,13 +326,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <assertj-guava.version>3.5.0</assertj-guava.version>
 
-        <camel.version>3.14.5</camel.version>
+        <camel.version>3.14.6</camel.version>
 
         <commons-email.version>1.5</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.11.0</commons-io.version>
 
-        <cucumber.version>7.8.1</cucumber.version>
+        <cucumber.version>7.9.0</cucumber.version>
 
         <cxf-rt-rs-client.version>3.5.4</cxf-rt-rs-client.version>
 
@@ -375,7 +375,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.12.0</jmock.version>
-        <joda-time.version>2.12.0</joda-time.version>
+        <joda-time.version>2.12.1</joda-time.version>
         <jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
         <jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
@@ -389,13 +389,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
 
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
+        <maven-release-plugin.version>3.0.0-M7</maven-release-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
         <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-        <node.version>v16.17.0</node.version>
-        <npm.version>8.15.0</npm.version>
+		<node.version>v18.12.0</node.version>
+		<npm.version>8.19.2</npm.version>
 
         <objenesis.version>3.3</objenesis.version>
         <ognl.version>3.3.4</ognl.version>
@@ -413,13 +413,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <spring-boot.version>2.7.5</spring-boot.version>
-        <summernote.version>0.8.11</summernote.version>
+        <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
-        <swagger-core.version>1.6.8</swagger-core.version>
+        <swagger-core.version>1.6.9</swagger-core.version>
 
-        <togglz.version>3.2.1</togglz.version>
+        <togglz.version>3.3.1</togglz.version>
 
-        <vaadin.version>23.2.6</vaadin.version>
+        <vaadin.version>23.2.8</vaadin.version>
 
         <wicket.version>9.12.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -661,7 +661,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.4.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.rat</groupId>

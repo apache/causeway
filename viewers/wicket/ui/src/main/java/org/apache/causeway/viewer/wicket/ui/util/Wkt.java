@@ -93,6 +93,7 @@ import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
@@ -103,7 +104,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
 import de.agilecoders.wicket.jquery.Key;
 import lombok.NonNull;
 import lombok.val;
@@ -570,40 +571,15 @@ public class Wkt {
             final String id,
             final String initialCaption,
             final IModel<List<FileUpload>> model) {
-        val fileUploadField = new BootstrapFileInputField(id, model) {
-            private static final long serialVersionUID = 1L;
-//            @Override
-//            public void convertInput() {
-//                super.convertInput(); // keep side-effects
-//                if(!isRequired()) {return;}
-//                /*[CAUSEWAY-3203]: in the context of mandatory property or action parameter negotiation,
-//                 * we need to set the converted input to something other than null, even an empty list will do
-//                 */
-//                if(isConvertedInputNull()
-//                        && !isModelEmpty()) {
-//                    super.setConvertedInput(Collections.emptyList()); // always pass
-//                }
-//            }
-//            @Override
-//            public boolean checkRequired() {
-//                super.checkRequired(); // keep side-effects
-//                return true; // always pass otherwise workaround won't work
-//            }
-//            private boolean isModelEmpty() { return getModel().getObject()==null; }
-//            private boolean isConvertedInputNull() { return getConvertedInput()==null; }
-            @Override
-            public boolean isRequired() {
-                //FIXME[CAUSEWAY-3203]
-                return false; // nothing else worked yet
-            }
-        };
-        fileUploadField.getConfig()
-            .maxFileCount(1)
-            .mainClass("input-group-sm")
-            .initialCaption(initialCaption)
-            .captionClass("form-control-sm")
-            .showUpload(false)
-            ;
+        val fileUploadField = new FileUploadFieldWithNestingFix(
+                id,
+                model,
+                new FileInputConfig()
+                    .maxFileCount(1)
+                    .mainClass("input-group-sm")
+                    .initialCaption(initialCaption)
+                    .captionClass("form-control-sm")
+                    .showUpload(false));
         return fileUploadField;
     }
 

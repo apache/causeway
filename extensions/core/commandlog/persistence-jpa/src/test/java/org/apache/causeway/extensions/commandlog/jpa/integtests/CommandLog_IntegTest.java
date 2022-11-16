@@ -18,45 +18,17 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa.integtests;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
-import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
-import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
 import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
-        classes = CommandLog_IntegTest.AppManifest.class
+        classes = AppManifest.class
 )
 @ActiveProfiles("test")
 public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
-
-
-    @SpringBootConfiguration
-    @EnableAutoConfiguration
-    @Import({
-            CausewayModuleCoreRuntimeServices.class,
-            CausewayModuleSecurityBypass.class,
-            CausewayModuleExtCommandLogPersistenceJpa.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
-    @EntityScan(basePackageClasses = {Counter.class})
-    @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class})
-    public static class AppManifest {
-    }
 
 
     protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {

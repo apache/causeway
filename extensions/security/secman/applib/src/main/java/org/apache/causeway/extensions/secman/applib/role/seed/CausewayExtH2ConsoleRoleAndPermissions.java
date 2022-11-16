@@ -25,7 +25,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Access to the h2 console UI.
+ * Sets up a role with access to the menu actions providing access to the h2 web console..
  *
  * @since 2.0 {@index}
  */

@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -39,8 +40,10 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
@@ -56,6 +59,8 @@ public class GridServiceDefault implements GridService {
     public static final String LINKS_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/links/links.xsd";
 
     private final GridLoaderService gridLoaderService;
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
+    private final GridMarshallerService<? extends Grid> marshaller;
     private final List<GridSystemService<? extends Grid>> gridSystemServices;
 
     // //////////////////////////////////////
@@ -72,17 +77,17 @@ public class GridServiceDefault implements GridService {
 
     @Override
     public boolean existsFor(final Class<?> domainClass) {
-        return gridLoaderService.existsFor(domainClass);
+        return gridLoaderService.existsFor(domainClass, marshaller.supportedFormats());
     }
 
     @Override
     public Grid load(final Class<?> domainClass) {
-        return gridLoaderService.load(domainClass);
+        return gridLoaderService.load(domainClass, marshaller).orElse(null);
     }
 
     @Override
     public Grid load(final Class<?> domainClass, final String layout) {
-        return gridLoaderService.load(domainClass, layout);
+        return gridLoaderService.load(domainClass, layout, marshaller).orElse(null);
     }
 
     // //////////////////////////////////////
@@ -202,8 +207,5 @@ public class GridServiceDefault implements GridService {
                 ? gridSystemServices
                 : gridSystemServicesForTest;
     }
-
-
-
 
 }

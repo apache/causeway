@@ -36,8 +36,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 
+@ToString
 public final class ObjectMementoForScalar
 implements HasLogicalType, Serializable, ObjectMemento {
 
@@ -66,6 +68,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
     @Getter(onMethod_ = {@Override}) private final String title;
     @Getter final Bookmark bookmark;
 
+    @ToString.Exclude
     byte[] serializedPayload;
 
     private ObjectMementoForScalar(

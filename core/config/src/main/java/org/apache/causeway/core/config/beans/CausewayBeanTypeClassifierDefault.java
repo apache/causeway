@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
 import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -157,6 +158,11 @@ implements CausewayBeanTypeClassifier {
                 //because object is not associated with a persistence context unless discovered above
                 return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, type);
             }
+        }
+
+        val jaxbAnnotation = _Annotations.synthesize(type, XmlRootElement.class).orElse(null);
+        if(jaxbAnnotation!=null) {
+            return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, type);
         }
 
         if(_Annotations.isPresent(type, Component.class)) {

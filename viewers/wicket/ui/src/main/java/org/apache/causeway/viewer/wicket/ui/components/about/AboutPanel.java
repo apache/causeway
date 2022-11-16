@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
  * {@link HomePage}).
  */
 public class AboutPanel
-extends PanelAbstract<CausewayConfiguration.Viewer.Wicket.Application, AboutModel> {
+extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutModel> {
 
     private static final long serialVersionUID = 1L;
 

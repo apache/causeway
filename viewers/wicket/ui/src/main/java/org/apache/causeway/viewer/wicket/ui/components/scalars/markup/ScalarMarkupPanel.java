@@ -23,7 +23,6 @@ import java.util.EnumSet;
 import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 
 /**
@@ -33,14 +32,13 @@ public class ScalarMarkupPanel<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
-    private final transient MarkupComponentFactory<ScalarModel> markupComponentFactory;
+    private final MarkupComponentFactory<ScalarModel> markupComponentFactory; // serializable!
 
     public ScalarMarkupPanel(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> valueType,
             final MarkupComponentFactory<ScalarModel> markupComponentFactory) {
-
         super(id, scalarModel, valueType);
         this.markupComponentFactory = markupComponentFactory;
     }
@@ -59,4 +57,5 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     protected final MarkupComponent createMarkupComponent(final String id) {
         return markupComponentFactory.newMarkupComponent(id, scalarModel());
     }
+
 }

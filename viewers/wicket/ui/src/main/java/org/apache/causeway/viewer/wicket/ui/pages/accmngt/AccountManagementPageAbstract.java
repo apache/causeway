@@ -92,7 +92,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
 
     private void addPageTitle() {
-        val applicationName = getWicketViewerSettings().getApplication().getName();
+        val applicationName = getApplicationSettings().getName();
         Wkt.labelAdd(this, ID_PAGE_TITLE, applicationName);
     }
 
@@ -112,10 +112,10 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        getWicketViewerSettings().getApplication().getCss()
+        getWicketViewerSettings().getCss()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
 
-        getWicketViewerSettings().getApplication().getJs()
+        getWicketViewerSettings().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 

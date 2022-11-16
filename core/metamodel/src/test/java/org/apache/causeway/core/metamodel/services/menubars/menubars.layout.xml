@@ -60,7 +60,7 @@
                     <cpt:named>Download Object Layouts (ZIP)</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout">
-                    <cpt:named>Download Menu Bars Layout (XML)</cpt:named>
+                    <cpt:named>Download Menu Bars Layout</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>

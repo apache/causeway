@@ -51,9 +51,11 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
+import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -66,7 +68,6 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
-import org.apache.causeway.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -97,7 +98,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
-    private GridReaderUsingJaxb gridReader;
+    private GridMarshallerService<BSGrid> marshaller;
 
     @Inject
     public GridSystemServiceBootstrap(
@@ -131,7 +132,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         try {
             final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
             return Optional.ofNullable(content)
-                    .map(xml -> gridReader.loadGrid(xml))
+                    .map(xml -> marshaller.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null))
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
                     .map(bsGrid -> withDomainClass(bsGrid, domainClass))

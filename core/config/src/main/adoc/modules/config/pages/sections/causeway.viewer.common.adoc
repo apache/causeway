@@ -1,0 +1,102 @@
+= Common Config for Viewers
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.viewer.common~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.viewer.common.application.about]]
+causeway.viewer.common.application. +
+about
+
+| 
+| Label used on the about page.
+
+
+|
+[[causeway.viewer.common.application.brand-logo-header]]
+causeway.viewer.common.application. +
+brand-logo-header
+
+| 
+| Either the location of the image file (relative to the class-path resource root), or an absolute URL.
+
+This is rendered on the header panel. An image with a size of 160x40 works well. If not specified, the application.name is used instead.
+
+
+|
+[[causeway.viewer.common.application.brand-logo-signin]]
+causeway.viewer.common.application. +
+brand-logo-signin
+
+| 
+| Either the location of the image file (relative to the class-path resource root), or an absolute URL.
+
+This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the name is used instead.
+
+
+|
+[[causeway.viewer.common.application.favicon-url]]
+causeway.viewer.common.application. +
+favicon-url
+
+| 
+| Specifies the URL to use of the favIcon.
+
+This is expected to be a local resource.
+
+
+|
+[[causeway.viewer.common.application.menubars-layout-file]]
+causeway.viewer.common.application. +
+menubars-layout-file
+
+|  menubars.layout.xml
+| Specifies the file name containing the menubars.
+
+This is expected to be a local resource.
+
+
+|
+[[causeway.viewer.common.application.name]]
+causeway.viewer.common.application. +
+name
+
+|  Apache Causeway ™
+| Identifies the application on the sign-in page (unless a sign-in image is configured) and on top-left in the header (unless a header image is configured).
+
+
+|
+[[causeway.viewer.common.application.version]]
+causeway.viewer.common.application. +
+version
+
+| 
+| The version of the application, eg 1.0, 1.1, etc.
+
+If present, then this will be shown in the footer on every page as well as on the about page.
+
+
+|
+[[causeway.viewer.common.credit]]
+causeway.viewer.common.credit
+
+| 
+| List of organisations or individuals to give credit to, shown as links and icons in the footer. A maximum of 3 credits can be specified.
+
+IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+
+NOTE: For further discussion, see for example https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects[this stackoverflow question] and https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo[this wiki page].
+
+
+
+|===
+
+include::../section-hooks/causeway.viewer.common~post.adoc[]

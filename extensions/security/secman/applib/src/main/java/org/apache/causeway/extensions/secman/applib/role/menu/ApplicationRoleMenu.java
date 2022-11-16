@@ -42,6 +42,10 @@ import org.apache.causeway.extensions.secman.applib.role.man.ApplicationRoleMana
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationRoleMenu.LOGICAL_TYPE_NAME)
 @DomainService(
         nature = NatureOfService.VIEW

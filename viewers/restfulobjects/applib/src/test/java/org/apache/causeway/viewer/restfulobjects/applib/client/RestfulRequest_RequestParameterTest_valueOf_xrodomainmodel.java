@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.client;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,13 +29,13 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 
-public class RestfulRequest_RequestParameterTest_valueOf_xrodomainmodel {
+class RestfulRequest_RequestParameterTest_valueOf_xrodomainmodel {
 
     private final RequestParameter<DomainModel> requestParameter = RestfulRequest.RequestParameter.DOMAIN_MODEL;
 
     private JsonRepresentation repr;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         repr = JsonRepresentation.newMap();
     }

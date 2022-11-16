@@ -19,7 +19,7 @@
 package org.apache.causeway.applib.events.lifecycle;
 
 /**
- * Broadcast when an object (entiy or view model) is first instantiated using
+ * Broadcast when an object (entity or view model) is first instantiated using
  * the {@link org.apache.causeway.applib.services.factory.FactoryService}.
  *
  * @see org.apache.causeway.applib.services.factory.FactoryService#detachedEntity(Class)

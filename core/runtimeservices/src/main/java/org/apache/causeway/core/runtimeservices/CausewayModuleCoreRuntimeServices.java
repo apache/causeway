@@ -45,7 +45,8 @@ import org.apache.causeway.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.causeway.core.runtimeservices.locale.LanguageProviderDefault;
 import org.apache.causeway.core.runtimeservices.locale.LocaleChoiceProviderDefault;
 import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
-import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
+import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
+import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.message.MessageServiceDefault;
 import org.apache.causeway.core.runtimeservices.placeholder.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.publish.CommandPublisherDefault;
@@ -104,7 +105,8 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         LocaleChoiceProviderDefault.class,
         MemberExecutorServiceDefault.class,
         MenuBarsLoaderServiceDefault.class,
-        MenuBarsServiceBS.class,
+        MenuBarsMarshallerServiceBootstrap.class,
+        MenuBarsServiceBootstrap.class,
         MessageServiceDefault.class,
         ObjectIconServiceDefault.class,
         ObjectLifecyclePublisherDefault.class,

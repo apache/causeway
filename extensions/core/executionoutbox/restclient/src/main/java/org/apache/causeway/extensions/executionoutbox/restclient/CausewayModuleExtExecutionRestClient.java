@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.schema.CausewayModuleSchema;
 
+/**
+ * @since 2.x {@index}
+ */
 @Configuration
 @Import({
         CausewayModuleSchema.class,

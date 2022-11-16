@@ -1,0 +1,18 @@
+Conceptually a *command* represents the _intention_ to execute an action or to edit a property ("before" the change), while an *interaction execution* represents the actual execution itself ("after" the change).
+
+The xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI and xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI allow either to be subscribed to.
+From an auditing perspective, their behaviour is quite similar:
+
+* even though a command represents the _intention_ to invoke an action, its xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI is only called once the action/property edit has been completed.
+
+* the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] is called as soon as the action has completed.
+In most interactions there will only be a single action called within the interaction, hence these two subscribers will be called at almost the same time with very similar payloads.
+
+However, there can be some subtle differences:
+
+* the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] service allows actions to be invoked "as if" through the user interface.
+Therefore one action can execute another can execute another, creating a nested call graph of executions.
++
+The  xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] is called after each and every execution as it completes, so will be called several times.
+
+* In contrast, the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] is called only once, for the top-level (outermost) action.

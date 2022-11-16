@@ -46,6 +46,9 @@ import lombok.RequiredArgsConstructor;
 
 
 /**
+ * This service exposes a set of menu actions to search and list {@link AuditTrailEntry audit record}s,
+ * by default under the &quot;Activity&quot; secondary menu.
+ *
  * @since 2.0 {@index}
  */
 @Named(AuditTrailMenu.LOGICAL_TYPE_NAME)

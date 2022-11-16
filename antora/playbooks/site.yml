@@ -123,9 +123,6 @@ content:
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
-    - url: .
-      start_path: extensions/core/quartz/adoc # userguide
-      branches: HEAD
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security

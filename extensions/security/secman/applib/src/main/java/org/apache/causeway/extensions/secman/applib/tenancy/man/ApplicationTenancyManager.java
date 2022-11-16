@@ -31,6 +31,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ApplicationTenancyManager.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)

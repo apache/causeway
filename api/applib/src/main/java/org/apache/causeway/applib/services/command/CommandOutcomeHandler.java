@@ -34,7 +34,7 @@ public interface CommandOutcomeHandler {
         @Override public Timestamp getStartedAt() { return null; }
         @Override public void setStartedAt(final Timestamp startedAt) { }
         @Override public void setCompletedAt(final Timestamp completedAt) { }
-        @Override public void setResult(final Try<Bookmark> resultBookmark) { }
+        @Override public void setResult(final Try<Bookmark> result) { }
     };
 
     /**
@@ -64,8 +64,10 @@ public interface CommandOutcomeHandler {
     void setCompletedAt(Timestamp completedAt);
 
     /**
-     * Sets the result of the execute, represented as a {@link Bookmark}, on the underlying {@link Command} (or persistent equivalent).
+     * Handle the result of the execute, represented either as a {@link Bookmark} (success case) or an exception (failure),
+     * on the underlying {@link Command} (or persistent equivalent).
      */
-    void setResult(Try<Bookmark> resultBookmark);
+    void setResult(Try<Bookmark> result);
+
 
 }

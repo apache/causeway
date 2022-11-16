@@ -57,15 +57,18 @@ public final class ManagedObjects {
 
     // -- CATEGORISATION
 
-    /** is null or has neither an ObjectSpecification and a value (pojo) */
+    /** is null or has no ObjectSpecification or has no value (pojo) */
     public static boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
         if(adapter==null
-                || adapter==ManagedObject.unspecified()) {
+                || adapter==ManagedObject.unspecified()
+                || adapter.getSpecialization()==null
+                || adapter.getSpecialization().isEmpty()) {
             return true;
         }
-        return adapter instanceof PackedManagedObject
-                ? ((PackedManagedObject)adapter).unpack().isEmpty()
-                : adapter.getPojo()==null;
+        if(adapter instanceof PackedManagedObject) {
+            return ((PackedManagedObject)adapter).unpack().isEmpty();
+        }
+        return adapter.getPojo()==null;
     }
 
     /**
@@ -324,11 +327,18 @@ public final class ManagedObjects {
             : adapter;
     }
 
+    /**
+     * Only applies to value types, otherwise acts as identity operation.
+     * <p>
+     * @implNote TODO this implementation ignores any registered value-semantics,
+     *  which should be used for the non-primitive, mandatory case instead
+     */
     public static ManagedObject emptyToDefault(
             final ObjectSpecification elementSpec,
             final boolean mandatory,
             final @NonNull ManagedObject input) {
-        if(!isSpecified(input)) {
+        if(!isSpecified(input)
+                || !elementSpec.isValue()) {
             return input;
         }
         if(input.getPojo()!=null) {

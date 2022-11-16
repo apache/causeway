@@ -17,7 +17,7 @@ causeway.core.meta-model.validator. +
 action-collection-parameter- +
 choices
 
-|
+|  true
 | Whether to validate that any actions that accept action parameters have either a corresponding choices or auto-complete for that action parameter, or are associated with a collection of the appropriate type.
 
 
@@ -26,12 +26,12 @@ choices
 causeway.core.meta-model.validator. +
 allow-deprecated
 
-|
+|  true
 | This setting is used to determine whether the use of such deprecated features is allowed.
 
 If not allowed, then metamodel validation errors will be flagged.
 
-Note that this settings has no effect if the programming model has been configured to ignore deprecated features (because in this case the programming model facets simply won't be included in the introspection process.
+Note that this settings has no effect if the programming model has been configured to deprecated features (because in this case the programming model facets simply won't be included in the introspection process.
 
 
 |
@@ -39,7 +39,7 @@ Note that this settings has no effect if the programming model has been configur
 causeway.core.meta-model.validator. +
 explicit-logical-type-names
 
-|
+| 
 | Whether to ensure that the logical-type-name of all objects must be specified explicitly, using either ``Named``.
 
 It is _highly advisable_ to leave this set as enabled (the default). These logical-type-names should also (of course) be unique - among non-abstract types.
@@ -51,7 +51,7 @@ causeway.core.meta-model.validator. +
 jaxb-view-model. +
 date-time-type-adapter
 
-|
+|  true
 | If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
 
 
@@ -60,7 +60,7 @@ date-time-type-adapter
 causeway.core.meta-model.validator. +
 jaxb-view-model.no-arg-constructor
 
-|
+| 
 | If set, then ensures that all JAXB-style view models have a no-arg constructor.
 
 
@@ -69,7 +69,7 @@ jaxb-view-model.no-arg-constructor
 causeway.core.meta-model.validator. +
 jaxb-view-model.not-abstract
 
-|
+|  true
 | If set, then ensures that all JAXB-style view models are concrete classes, not abstract.
 
 
@@ -78,7 +78,7 @@ jaxb-view-model.not-abstract
 causeway.core.meta-model.validator. +
 jaxb-view-model.not-inner-class
 
-|
+|  true
 | If set, then ensures that all JAXB-style view models are either top-level classes or nested static classes (in other words, checks that they are not anonymous, local nor nested non-static classes).
 
 
@@ -88,7 +88,7 @@ causeway.core.meta-model.validator. +
 jaxb-view-model. +
 reference-type-adapter
 
-|
+|  true
 | If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
 
 
@@ -97,7 +97,7 @@ reference-type-adapter
 causeway.core.meta-model.validator. +
 jdoql.from-clause
 
-|
+|  true
 | If set, then ensures that the 'FROM' clause within any JDOQL ``@Query``s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
 
 
@@ -106,7 +106,7 @@ jdoql.from-clause
 causeway.core.meta-model.validator. +
 jdoql.variables-clause
 
-|
+|  true
 | If set, then ensures that the 'VARIABLES' clause within any JDOQL ``@Query``s relates to a known entity type.
 
 
@@ -115,7 +115,7 @@ jdoql.variables-clause
 causeway.core.meta-model.validator. +
 parallelize
 
-|
+|  true
 | Whether to perform metamodel validation in parallel.
 
 

@@ -15,7 +15,7 @@ class HasInteractionId_commandLogEntry {
 <.> xref:#hideProp_[hideProp()]
 +
 --
-Hide if the contributee is a _CommandLogEntry_ , because we don't want to navigate to ourselves, and there are other ways to navigate to the parent or child commands.
+Hide if the contributee is a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] , because we don't want to navigate to ourselves, and there are other ways to navigate to the parent or child commands.
 --
 
 == Members
@@ -23,4 +23,4 @@ Hide if the contributee is a _CommandLogEntry_ , because we don't want to naviga
 [#hideProp_]
 === hideProp()
 
-Hide if the contributee is a _CommandLogEntry_ , because we don't want to navigate to ourselves, and there are other ways to navigate to the parent or child commands.
+Hide if the contributee is a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] , because we don't want to navigate to ourselves, and there are other ways to navigate to the parent or child commands.

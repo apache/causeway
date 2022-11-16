@@ -340,7 +340,7 @@
 						<suffix>.min</suffix>
 						<excludes>
 							<!-- -->
-							<exclude>**/jquery.causeway.wicket.viewer.js</exclude>
+							<exclude>**/*.nocompress.js</exclude>
 							<!-- select 2 -->
 							<exclude>**/i18n/*.js</exclude>
 							<exclude>**/select2*.js</exclude>
@@ -462,11 +462,6 @@
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-internaltestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.core</groupId>
-				<artifactId>causeway-core-internaltestvintage</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -623,7 +618,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -1301,7 +1296,7 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.webjars.bower</groupId>
+				<groupId>org.webjars.npm</groupId>
 				<artifactId>summernote</artifactId>
 				<version>${summernote.version}</version>
 			</dependency>
@@ -1672,7 +1667,6 @@
 		<module>config</module>
 		<module>interaction</module>
 		<module>internaltestsupport</module>
-		<module>internaltestvintage</module>
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtimeservices</module>

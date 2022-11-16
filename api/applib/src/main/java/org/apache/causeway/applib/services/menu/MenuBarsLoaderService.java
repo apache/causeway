@@ -18,14 +18,17 @@
  */
 package org.apache.causeway.applib.services.menu;
 
-import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
+import java.util.Optional;
+
+import org.apache.causeway.applib.layout.menubars.MenuBars;
+
+import lombok.NonNull;
 
 /**
- * Returns the {@link BSMenuBars} instance (bootstrap3-specific subtype of
- * {@link org.apache.causeway.applib.layout.menubars.MenuBars}, for the UI.
+ * Returns the {@link MenuBars} instance for the UI.
  *
  * <p>
- *     The default implementation deserializes the `menubars.layout.xml` file
+ *     The default implementation de-serializes the `menubars.layout...` file
  *     read from the classpath.
  * </p>
  *
@@ -34,7 +37,7 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
  *     {@link MenuBarsService}.
  * </p>
  *
- * @since 1.x {@index}
+ * @since 1.x - revised for 2.0 {@index}
  */
 public interface MenuBarsLoaderService {
 
@@ -49,9 +52,10 @@ public interface MenuBarsLoaderService {
     boolean supportsReloading();
 
     /**
-     * Returns a new instance of a {@link BSMenuBars} if possible,
-     * else <tt>null</tt>.
+     * Optionally returns a new instance of a {@link MenuBars},
+     * based on whether the underlying resource could be found, loaded and parsed.
+     * @throws UnsupportedOperationException - when format is not supported
      */
-    BSMenuBars menuBars();
+    <T extends MenuBars> Optional<T> menuBars(@NonNull MenuBarsMarshallerService<T> marshaller);
 
 }

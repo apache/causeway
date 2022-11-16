@@ -66,12 +66,12 @@ public class MmvErrorPage extends WebPageBase {
 
     private void addPageTitle() {
         Wkt.labelAdd(this, ID_PAGE_TITLE,
-                getWicketViewerSettings().getApplication().getName());
+                getApplicationSettings().getName());
     }
 
     private void addApplicationName() {
         Wkt.labelAdd(this, ID_APPLICATION_NAME,
-                getWicketViewerSettings().getApplication().getName());
+                getApplicationSettings().getName());
     }
 
     private void addValidationErrors() {
@@ -87,10 +87,10 @@ public class MmvErrorPage extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
 
-        getWicketViewerSettings().getApplication().getCss()
+        getWicketViewerSettings().getCss()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
 
-        getWicketViewerSettings().getApplication().getJs()
+        getWicketViewerSettings().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 

@@ -20,14 +20,14 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
 import javax.jdo.annotations.Column;
 
-public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
+abstract class SimpleObjectWithColumnAllowsNullAnnotations {
 
 
     private int primitiveWithNoAnnotation;
     public int getPrimitiveWithNoAnnotation() {
         return primitiveWithNoAnnotation;
     }
-    public void setPrimitiveWithNoAnnotation(int primitive) {
+    public void setPrimitiveWithNoAnnotation(final int primitive) {
         this.primitiveWithNoAnnotation = primitive;
     }
 
@@ -36,7 +36,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public int getPrimitiveWithNoAllowsNull() {
         return primitiveWithNoAllowsNull;
     }
-    public void setPrimitiveWithNoAllowsNull(int primitive) {
+    public void setPrimitiveWithNoAllowsNull(final int primitive) {
         this.primitiveWithNoAllowsNull = primitive;
     }
 
@@ -45,7 +45,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public int getPrimitiveWithAllowsNullFalse() {
         return primitiveWithAllowsNullFalse;
     }
-    public void setPrimitiveWithAllowsNullFalse(int primitive) {
+    public void setPrimitiveWithAllowsNullFalse(final int primitive) {
         this.primitiveWithAllowsNullFalse = primitive;
     }
 
@@ -55,7 +55,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public int getPrimitiveWithAllowsNullTrue() {
         return primitiveWithAllowsNullTrue;
     }
-    public void setPrimitiveWithAllowsNullTrue(int primitive) {
+    public void setPrimitiveWithAllowsNullTrue(final int primitive) {
         this.primitiveWithAllowsNullTrue = primitive;
     }
 
@@ -64,7 +64,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public String getReferenceWithNoAnnotation() {
         return referenceWithNoAnnotation;
     }
-    public void setReferenceWithNoAnnotation(String reference) {
+    public void setReferenceWithNoAnnotation(final String reference) {
         this.referenceWithNoAnnotation = reference;
     }
 
@@ -73,7 +73,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public String getReferenceWithNoAllowsNull() {
         return referenceWithNoAllowsNull;
     }
-    public void setReferenceWithNoAllowsNull(String reference) {
+    public void setReferenceWithNoAllowsNull(final String reference) {
         this.referenceWithNoAllowsNull = reference;
     }
 
@@ -82,7 +82,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public String getReferenceWithAllowsNullFalse() {
         return referenceWithAllowsNullFalse;
     }
-    public void setReferenceWithAllowsNullFalse(String referenceWithAllowsNullFalse) {
+    public void setReferenceWithAllowsNullFalse(final String referenceWithAllowsNullFalse) {
         this.referenceWithAllowsNullFalse = referenceWithAllowsNullFalse;
     }
 
@@ -92,7 +92,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public String getReferenceWithAllowsNullTrue() {
         return referenceWithAllowsNullTrue;
     }
-    public void setReferenceWithAllowsNullTrue(String referenceWithAllowsNullTrue) {
+    public void setReferenceWithAllowsNullTrue(final String referenceWithAllowsNullTrue) {
         this.referenceWithAllowsNullTrue = referenceWithAllowsNullTrue;
     }
 

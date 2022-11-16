@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.LayoutUiEvent;
-import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetAbstract;
@@ -58,7 +56,7 @@ implements LayoutFacet {
                 });
     }
 
-    private final Class<? extends LayoutUiEvent<?>> layoutUiEventClass;
+    private final Class<? extends LayoutUiEvent<Object>> layoutUiEventClass;
     private final MetamodelEventService metamodelEventService;
 
     private LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
@@ -66,7 +64,7 @@ implements LayoutFacet {
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
         super(holder, Precedence.EVENT);
-        this.layoutUiEventClass = layoutUiEventClass;
+        this.layoutUiEventClass = _Casts.uncheckedCast(layoutUiEventClass);
         this.metamodelEventService = metamodelEventService;
     }
 
@@ -99,22 +97,7 @@ implements LayoutFacet {
     }
 
     private LayoutUiEvent<Object> newLayoutUiEvent(final ManagedObject owningAdapter) {
-        final Object domainObject = owningAdapter.getPojo();
-        return newLayoutUiEvent(domainObject);
-    }
-
-    private LayoutUiEvent<Object> newLayoutUiEvent(final Object domainObject) {
-        try {
-            final LayoutUiEvent<Object> layoutUiEvent =
-                    _Casts.uncheckedCast(
-                            layoutUiEventClass.getConstructor().newInstance());
-            layoutUiEvent.initSource(domainObject);
-            return layoutUiEvent;
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException ex) {
-            throw new UnrecoverableException(ex);
-        }
+        return EventObjectBase.getInstanceWithSourceSupplier(layoutUiEventClass, owningAdapter::getPojo).orElseThrow();
     }
 
     @Override

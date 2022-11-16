@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.client;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
 import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
-public class RestfulRequest_DomainModelTest_parser {
+class RestfulRequest_DomainModelTest_parser {
 
     @Test
     public void parser_roundtrips() {

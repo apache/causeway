@@ -27,6 +27,9 @@ import org.apache.causeway.extensions.executionoutbox.applib.restapi.OutboxRestA
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @DomainService's

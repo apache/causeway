@@ -22,6 +22,12 @@ import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -30,7 +36,7 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.data
 
 import lombok.val;
 
-public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest
+class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private JdoDatastoreIdentityAnnotationFacetFactory facetFactory;
@@ -38,7 +44,6 @@ extends AbstractFacetFactoryTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
         facetFactory = new JdoDatastoreIdentityAnnotationFacetFactory(metaModelContext, jdoFacetContext);
     }
 

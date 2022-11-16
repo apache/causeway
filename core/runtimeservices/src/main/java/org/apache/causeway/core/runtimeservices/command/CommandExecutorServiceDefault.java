@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.command;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -28,6 +29,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.commons.functional.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,6 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
-import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -98,12 +99,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override
-    public Bookmark executeCommand(final Command command) {
+    public Try<Bookmark> executeCommand(final Command command) {
         return executeCommand(InteractionContextPolicy.NO_SWITCH, command);
     }
 
     @Override
-    public Bookmark executeCommand(
+    public Try<Bookmark> executeCommand(
             final InteractionContextPolicy interactionContextPolicy,
             final Command command) {
 
@@ -111,7 +112,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     @Override
-    public Bookmark executeCommand(
+    public Try<Bookmark> executeCommand(
             final CommandDto dto,
             final CommandOutcomeHandler outcomeHandler) {
 
@@ -119,7 +120,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     @Override
-    public Bookmark executeCommand(
+    public Try<Bookmark> executeCommand(
             final InteractionContextPolicy interactionContextPolicy,
             final CommandDto dto,
             final CommandOutcomeHandler outcomeHandler) {
@@ -127,10 +128,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return doExecute(interactionContextPolicy, dto, outcomeHandler);
     }
 
-    private Bookmark doExecute(
+    private Try<Bookmark> doExecute(
             final InteractionContextPolicy interactionContextPolicy,
             final CommandDto dto,
-            final CommandOutcomeHandler commandUpdater) {
+            final CommandOutcomeHandler commandOutcomeHandler) {
 
         val interaction = iInteractionLayerTracker.currentInteractionElseFail();
         val command = interaction.getCommand();
@@ -138,9 +139,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             command.updater().setCommandDto(dto);
         }
 
-        copyStartedAtFromInteractionExecution(commandUpdater);
+        copyStartedAtFromInteractionExecution(commandOutcomeHandler);
 
-        val result = transactionService.callWithinCurrentTransactionElseCreateNew(
+        Try<Bookmark> result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> {
                 if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH) {
                     // short-circuit
@@ -151,12 +152,30 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                         () -> doExecuteCommand(dto));
             });
 
-        result.ifFailure(ex->{
-            log.warn("Exception when executing : {}",
-                    dto.getMember().getLogicalMemberIdentifier(), ex);
-        });
+        // capture result (success or failure)
+        commandOutcomeHandler.setResult(result);
 
-        return handleOutcomeAndSetCompletedAt(commandUpdater, result);
+
+        //
+        // also, copy over the completedAt at to the command.
+        //
+        // NB: it's possible that there is no priorExecution, specifically if
+        // there was an exception when performing the action invocation/property
+        // edit.  We therefore need to guard that case.
+        //
+        val priorExecution = interaction.getPriorExecution();
+        if(priorExecution != null) {
+
+            if (commandOutcomeHandler.getStartedAt() == null) {
+                // TODO: REVIEW - don't think this can happen ...
+                //  Interaction/Execution is an in-memory object.
+                commandOutcomeHandler.setStartedAt(priorExecution.getStartedAt());
+            }
+            val completedAt = priorExecution.getCompletedAt();
+            commandOutcomeHandler.setCompletedAt(completedAt);
+        }
+
+        return result;
     }
 
     private void copyStartedAtFromInteractionExecution(
@@ -178,18 +197,18 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 dto.getMember().getLogicalMemberIdentifier(),
                 dto.getTimestamp(), dto.getInteractionId());
 
-        final MemberDto memberDto = dto.getMember();
-        final String logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();
+        val memberDto = dto.getMember();
+        val logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();
 
-        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-        final List<OidDto> targetOidDtos = oidsDto.getOid();
+        val oidsDto = CommandDtoUtils.targetsFor(dto);
+        val targetOidDtoList = oidsDto.getOid();
 
-        final InteractionType interactionType = memberDto.getInteractionType();
+        val interactionType = memberDto.getInteractionType();
         if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-            final ActionDto actionDto = (ActionDto) memberDto;
+            val actionDto = (ActionDto) memberDto;
 
-            for (OidDto targetOidDto : targetOidDtos) {
+            for (val targetOidDto : targetOidDtoList) {
 
                 val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
                 val objectAction = findObjectAction(targetAdapter, logicalMemberIdentifier);
@@ -198,9 +217,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 // it will switch the targetAdapter to be the mixedInAdapter transparently
                 val argAdapters = argAdaptersFor(actionDto);
 
-                final InteractionHead head = objectAction.interactionHead(targetAdapter);
+                val interactionHead = objectAction.interactionHead(targetAdapter);
 
-                val resultAdapter = objectAction.execute(head, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                val resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                 // flush any Causeway PersistenceCommands pending
                 // (else might get transient objects for the return value)
@@ -222,9 +241,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             }
         } else {
 
-            final PropertyDto propertyDto = (PropertyDto) memberDto;
+            val propertyDto = (PropertyDto) memberDto;
 
-            for (OidDto targetOidDto : targetOidDtos) {
+            for (val targetOidDto : targetOidDtoList) {
 
                 val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
@@ -233,7 +252,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                             Bookmark.forOidDto(targetOidDto));
                 }
 
-                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
+                val property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
 
                 val newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
 
@@ -245,55 +264,19 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return null;
     }
 
-    private Bookmark handleOutcomeAndSetCompletedAt(
-            final CommandOutcomeHandler outcomeHandler,
-            final Try<Bookmark> result) {
-
-
-        //
-        // copy over the outcome
-        //
-        outcomeHandler.setResult(result);
-
-        //
-        // also, copy over the completedAt at to the command.
-        //
-        // NB: it's possible that there is no priorExecution, specifically if
-        // there was an exception when performing the action invocation/property
-        // edit.  We therefore need to guard that case.
-        //
-        val interaction = iInteractionLayerTracker.currentInteractionElseFail();
-
-        final Execution<?, ?> priorExecution = interaction.getPriorExecution();
-        if(priorExecution != null) {
-
-            if (outcomeHandler.getStartedAt() == null) {
-                // TODO: REVIEW - don't think this can happen ...
-                //  Interaction/Execution is an in-memory object.
-                outcomeHandler.setStartedAt(priorExecution.getStartedAt());
-            }
-            final Timestamp completedAt =
-                    priorExecution.getCompletedAt();
-            outcomeHandler.setCompletedAt(completedAt);
-        }
-
-        return result.getValue().orElse(null);
-    }
-
-    // //////////////////////////////////////
 
     private static ObjectAction findObjectAction(
             final ManagedObject targetAdapter,
             final String logicalMemberIdentifier) throws RuntimeException {
 
-        final ObjectSpecification specification = targetAdapter.getSpecification();
+        val objectSpecification = targetAdapter.getSpecification();
 
         // we use the local identifier because the fullyQualified version includes the class name.
         // that is a problem for us if the property is inherited, because it will be the class name of the declaring
         // superclass, rather than the concrete class of the target that we are inspecting here.
         val localActionId = localPartOf(logicalMemberIdentifier);
 
-        final ObjectAction objectAction = findActionElseNull(specification, localActionId);
+        val objectAction = findActionElseNull(objectSpecification, localActionId);
         if(objectAction == null) {
             throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
         }
@@ -309,9 +292,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // superclass, rather than the concrete class of the target that we are inspecting here.
         val localPropertyId = localPartOf(logicalMemberIdentifier);
 
-        final ObjectSpecification specification = targetAdapter.getSpecification();
+        val objectSpecification = targetAdapter.getSpecification();
 
-        final OneToOneAssociation property = findOneToOneAssociationElseNull(specification, localPropertyId);
+        val property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
         if(property == null) {
             throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
         }
@@ -344,7 +327,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
 
-        final Identifier actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
+        val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
 
         return streamParamDtosFrom(actionDto)
                 .map(IndexedFunction.zeroBased((i, paramDto)->

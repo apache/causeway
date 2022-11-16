@@ -20,12 +20,12 @@ package org.apache.causeway.viewer.restfulobjects.applib.util;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class PathNodeTest_split {
+class PathNodeTest_split {
 
     @Test
     public void simple() throws Exception {

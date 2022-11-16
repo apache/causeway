@@ -68,6 +68,8 @@ import lombok.val;
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an
  * {@link ApplicationFeature}.
+ *
+ * @since 2.0 {@index}
  */
 @Named(UserPermissionViewModel.LOGICAL_TYPE_NAME)
 @DomainObject(

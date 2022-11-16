@@ -30,6 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -37,6 +38,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.commons.functional.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -582,7 +584,8 @@ implements WrapperFactory, HasMetaModelContext {
         @Getter private final UUID parentInteractionId;
 
         /**
-         * Note that is a <code>transient</code> field in order that {@link org.apache.causeway.applib.services.wrapper.callable.AsyncCallable} can be declared as
+         * Note this is a <code>transient</code> field, in order that
+         * {@link org.apache.causeway.applib.services.wrapper.callable.AsyncCallable} can be declared as
          * {@link java.io.Serializable}.
          *
          * <p>
@@ -640,20 +643,23 @@ implements WrapperFactory, HasMetaModelContext {
         val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
 
-        val bookmark = commandExecutorServiceProvider.get()
+        val tryBookmark = commandExecutorServiceProvider.get()
                 .executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
-        if (bookmark == null) {
-            return null;
-        }
-        val spec = getSpecificationLoader().specForBookmark(bookmark).orElse(null);
-        if(spec==null) {
-            return null;
-        }
-        R domainObject = bookmarkServiceProvider.get().lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
-        if(spec.isEntity()) {
-            domainObject = repositoryServiceProvider.get().detach(domainObject);
-        }
-        return domainObject;
+
+        return tryBookmark.fold(
+                throwable -> null,                  // failure
+                bookmarkIfAny -> bookmarkIfAny.map( // success
+                    bookmark -> {
+                        val spec = getSpecificationLoader().specForBookmark(bookmark).orElse(null);
+                        if(spec==null) {
+                            return null;
+                        }
+                        R domainObject = bookmarkServiceProvider.get().lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
+                        if(spec.isEntity()) {
+                            domainObject = repositoryServiceProvider.get().detach(domainObject);
+                        }
+                        return domainObject;
+                    }).orElse(null));
     }
 
 }

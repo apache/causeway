@@ -157,18 +157,7 @@ Locate this property in `bom/pom.xml` and update to the current date/time.
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
 
-* Be careful that sometimes the configuration property pages (that are generated from the `core/config/target/classes/META-INF/spring-configuration-metadata.json` file) may be malformed; in particular for default values going missing.
-+
-This seems to occur if the IDE (IntelliJ) has compiled the codebase.
-+
-The workaround is to rebuild the `core/config` Maven module using `mvn` command line first.
-+
-[source,bash,subs="attributes+"]
-----
-mvn clean install -pl core/config -DskipTests
-----
-
-* It's also necessary to make sure the tooling is built:
+* Make sure the tooling is built:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -181,6 +170,8 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 ----
 sh preview.sh
 ----
++
+NOTE: this now runs `mvn clean install -pl core/config` automatically.
 
 Check for any Asciidoc errors, and fix.
 Also double-check that the config property files are correctly formatted.
@@ -791,7 +782,7 @@ popd
 ----
 cd ../causeway-release
 
-sh preview.sh -A
+sh preview.sh -AB
 ----
 +
 [WARNING]
@@ -807,7 +798,6 @@ git checkout $CAUSEWAYBRANCH
 pushd bom
 mvn clean install -DskipTests -T1C -Dgithub
 popd
-mvn clean install -pl core/config
 mvn -D module-tooling -D skip.essential install -DskipTests
 ----
 

@@ -13,18 +13,67 @@ include::../section-hooks/causeway.security.keycloak~pre.adoc[]
 |Description
 |
 [[causeway.security.keycloak.base-url]]
-causeway.security.keycloak.base-url
+causeway.security.keycloak. +
+base-url
 
-|
+| 
 | The base URL for the keycloak server.
 
 For example, if running a keycloak using Docker container, such as:
 
 ....
-         docker run -p 9090:8080 \             -e KEYCLOAK_USER=admin \             -e KEYCLOAK_PASSWORD=admin \             quay.io/keycloak/keycloak:14.0.0
+         docker run -p 9090:8080 \             -e KEYCLOAK_USER=admin \             -e KEYCLOAK_PASSWORD=admin \             quay.io/keycloak/keycloak:19.0.1     
 ....
 
 , then the URL would be "http://localhost:9090/auth".
+
+
+|
+[[causeway.security.keycloak.client-role-prefix]]
+causeway.security.keycloak. +
+client-role-prefix
+
+| 
+| If ``#isExtractClientRoles()`` client roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+
+
+|
+[[causeway.security.keycloak.extract-client-roles]]
+causeway.security.keycloak. +
+extract-client-roles
+
+|  true
+| Whether to (attempt to) extract client roles and copy into the ``DefaultOidcUser``.
+
+By default, client roles are extracted using the "User Client Role" mapping type, into a token claim name "resource_access.$\{client_id}.roles"
+
+This has been made a configuration option because some versions of Keycloak seemingly do not correctly extract these roles, see for example https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3[this discussion] and https://issues.redhat.com/browse/KEYCLOAK-9874[KEYCLOAK-9874].
+
+
+|
+[[causeway.security.keycloak.extract-realm-roles]]
+causeway.security.keycloak. +
+extract-realm-roles
+
+|  true
+| Whether to (attempt to) extract realm roles and copy into the ``DefaultOidcUser``.
+
+By default, realm roles are obtained from the token claims using the "User Realm Role" mapping type, into a token claim name "realm_access.roles"
+
+This has been made a configuration option because some versions of Keycloak seemingly do not correctly extract these roles, see for example https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3[this discussion] and https://issues.redhat.com/browse/KEYCLOAK-9874[KEYCLOAK-9874].
+
+
+|
+[[causeway.security.keycloak.extract-roles]]
+causeway.security.keycloak. +
+extract-roles
+
+| 
+| Whether to (attempt to) extract any available roles and into the ``DefaultOidcUser``.
+
+This is to support any custom mapping type which maps into a token claim name called simply "roles"
+
+This has been made a configuration option so that the workaround described in https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3[this discussion] and https://issues.redhat.com/browse/KEYCLOAK-9874[KEYCLOAK-9874] can be implemented.
 
 
 |
@@ -32,7 +81,7 @@ For example, if running a keycloak using Docker container, such as:
 causeway.security.keycloak. +
 login-success-url
 
-|
+|  /wicket
 | Specifies where users will be redirected after authenticating successfully if they have not visited a secured page prior to authenticating or \{@code alwaysUse} is true.
 
 
@@ -40,8 +89,26 @@ login-success-url
 [[causeway.security.keycloak.realm]]
 causeway.security.keycloak.realm
 
-|
+| 
 | The name of the realm for the Apache Causeway application, as configured in Keycloak.
+
+
+|
+[[causeway.security.keycloak.realm-role-prefix]]
+causeway.security.keycloak. +
+realm-role-prefix
+
+| 
+| If roles are to be extracted, this allows the resultant role to be optionally prefixed.
+
+
+|
+[[causeway.security.keycloak.role-prefix]]
+causeway.security.keycloak. +
+role-prefix
+
+| 
+| If ``#isExtractRoles()`` roles are to be extracted}, this allows the resultant role to be optionally prefixed.
 
 
 

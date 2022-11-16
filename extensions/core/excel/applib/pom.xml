@@ -82,7 +82,7 @@
         <!-- test -->
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
-             <artifactId>causeway-core-internaltestvintage</artifactId>
+             <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

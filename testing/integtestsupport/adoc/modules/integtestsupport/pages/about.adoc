@@ -17,7 +17,7 @@ To explain further, let's walk through of the xref:docs:starters:simpleapp.adoc[
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
 
-In addition, add a section for the BOM of all the testing support libraries:
+In addition, add an entry for the BOM of all the testing support libraries:
 
 [source,xml,subs="attributes+"]
 .pom.xml

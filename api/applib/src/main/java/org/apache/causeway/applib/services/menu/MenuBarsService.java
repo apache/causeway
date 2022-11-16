@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.applib.services.menu;
 
-import javax.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
@@ -39,8 +35,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
  */
 public interface MenuBarsService {
 
-    @Named(CausewayModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
-    @Value
     enum Type {
 
         /**
@@ -71,16 +65,21 @@ public interface MenuBarsService {
      */
     MenuBars menuBars(final Type type);
 
+    // -- LAYOUT EXPORT
+
+    MenuBarsMarshallerService<? extends MenuBars> marshaller();
+
     // -- JUNIT SUPPORT
 
     static MenuBarsService forTesting() {
         return new MenuBarsService() {
-
             @Override
             public MenuBars menuBars(final Type type) {
-                throw _Exceptions.unsupportedOperation();
-            }
-
+                throw _Exceptions.unsupportedOperation(); }
+            @Override
+            public MenuBarsMarshallerService<? extends MenuBars> marshaller() {
+                throw _Exceptions.unsupportedOperation(); }
         };
     }
+
 }

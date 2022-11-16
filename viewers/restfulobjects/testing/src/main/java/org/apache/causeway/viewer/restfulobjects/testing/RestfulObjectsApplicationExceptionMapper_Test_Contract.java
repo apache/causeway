@@ -21,17 +21,15 @@ package org.apache.causeway.viewer.restfulobjects.testing;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
@@ -47,13 +45,9 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
     private ExceptionMapperForRestfulObjectsApplication exceptionMapper;
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    HttpHeaders mockHttpHeaders = Mockito.mock(HttpHeaders.class);
 
-    @Mock
-    HttpHeaders mockHttpHeaders = context.mock(HttpHeaders.class);
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         /*sonar-ignore-on*/
         exceptionMapper = new ExceptionMapperForRestfulObjectsApplication() {
@@ -68,8 +62,6 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
     public void simpleNoMessage() throws Exception {
 
         // given
-        context.allowing(mockHttpHeaders);
-
         final HttpStatusCode status = HttpStatusCode.BAD_REQUEST;
         final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.create(status);
 
@@ -89,8 +81,8 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
     public void entity_withMessage() throws Exception {
 
         // givens
-        context.allowing(mockHttpHeaders);
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "foobar");
+        final RestfulObjectsApplicationException ex =
+                RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);
@@ -107,9 +99,9 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
     public void entity_forException() throws Exception {
 
         // given
-        context.allowing(mockHttpHeaders);
         final Exception exception = new Exception("barfoo");
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, exception, "foobar");
+        final RestfulObjectsApplicationException ex =
+                RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, exception, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);
@@ -128,7 +120,6 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
     public void entity_forExceptionWithCause() throws Exception {
 
         // given
-        context.allowing(mockHttpHeaders);
         val cause = new Exception("barfoo", new Exception("root-cause-message"));
         val ex = RestfulObjectsApplicationException
                 .createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");

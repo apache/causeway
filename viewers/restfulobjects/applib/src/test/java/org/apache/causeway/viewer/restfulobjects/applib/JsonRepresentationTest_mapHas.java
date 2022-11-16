@@ -20,14 +20,15 @@ package org.apache.causeway.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_mapHas {
+class JsonRepresentationTest_mapHas {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -40,11 +41,12 @@ public class JsonRepresentationTest_mapHas {
         assertThat(jsonRepresentation.mapHas("nonExistent"), is(false));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void forList() throws IOException {
-        jsonRepresentation = new JsonRepresentation(readJson("list.json"));
-
-        jsonRepresentation.mapHas("aString");
+        assertThrows(IllegalStateException.class, ()->{
+            jsonRepresentation = new JsonRepresentation(readJson("list.json"));
+            jsonRepresentation.mapHas("aString");
+        });
     }
 
 }

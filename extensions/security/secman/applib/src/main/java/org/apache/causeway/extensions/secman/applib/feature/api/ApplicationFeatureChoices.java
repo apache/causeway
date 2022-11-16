@@ -52,6 +52,8 @@ import lombok.val;
  * Supports mixins to add and filter permissions of
  * {@link org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole}
  * and {@link org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser}.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

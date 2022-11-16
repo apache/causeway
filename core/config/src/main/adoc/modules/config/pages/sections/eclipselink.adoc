@@ -32,7 +32,7 @@ database-event-listener
 [[eclipselink.cache.shared]]
 eclipselink.cache.shared
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDEJCJJ[eclipselink.cache.shared] docs
 
 
@@ -40,7 +40,7 @@ eclipselink.cache.shared
 [[eclipselink.cache.size]]
 eclipselink.cache.size
 
-| 
+|  100
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDIGIEC[eclipselink.cache.size] docs
 
 
@@ -57,7 +57,7 @@ eclipselink.cache.type
 eclipselink.concurrency.manager. +
 allow.concurrencyexception
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#concurrency.manager.allow.concurrencyexception[eclipselink.concurrency.manager.allow.concurrencyexception] docs
 
 
@@ -66,7 +66,7 @@ allow.concurrencyexception
 eclipselink.concurrency.manager. +
 allow.interruptedexception
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#concurrency.manager.allow.interruptedexception[eclipselink.concurrency.manager.allow.interruptedexception] docs
 
 
@@ -75,7 +75,7 @@ allow.interruptedexception
 eclipselink.concurrency.manager. +
 allow.readlockstacktrace
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#concurrency.manager.allow.readlockstacktrace[eclipselink.concurrency.manager.allow.readlockstacktrace] docs
 
 
@@ -84,7 +84,7 @@ allow.readlockstacktrace
 eclipselink.concurrency.manager. +
 maxfrequencytodumpmassivemessage
 
-| 
+|  60000
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#concurrency.manager.maxfrequencytodumptinymessage[eclipselink.concurrency.manager.maxfrequencytodumpmassivemessage] docs
 
 
@@ -93,7 +93,7 @@ maxfrequencytodumpmassivemessage
 eclipselink.concurrency.manager. +
 maxfrequencytodumptinymessage
 
-| 
+|  40000
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#concurrency.manager.maxfrequencytodumptinymessage[eclipselink.concurrency.manager.maxfrequencytodumptinymessage] docs
 
 
@@ -102,7 +102,7 @@ maxfrequencytodumptinymessage
 eclipselink.concurrency.manager. +
 maxsleeptime
 
-| 
+|  40000
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#concurrency.manager.maxsleeptime[eclipselink.concurrency.manager.maxsleeptime] docs
 
 
@@ -128,7 +128,7 @@ create-ddl-jdbc-file-name
 [[eclipselink.ddl-generation]]
 eclipselink.ddl-generation
 
-| 
+|  none
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABHEJJI[eclipselink.ddl-generation] docs
 
 
@@ -137,7 +137,7 @@ eclipselink.ddl-generation
 eclipselink.ddl-generation. +
 output-mode
 
-| 
+|  database
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABCDHBB[eclipselink.ddl-generation.output-mode] docs
 
 
@@ -204,7 +204,7 @@ eclipselink.id-validation
 eclipselink.jdbc. +
 allow-native-sql-queries
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CIHHJBFB[eclipselink.jdbc.allow-native-sql-queries] docs
 
 
@@ -212,7 +212,7 @@ allow-native-sql-queries
 [[eclipselink.jdbc.batch-writing]]
 eclipselink.jdbc.batch-writing
 
-| 
+|  none
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CIHIAGAF[eclipselink.jdbc.batch-writing] docs
 
 
@@ -229,7 +229,7 @@ size
 [[eclipselink.jdbc.cache-statements]]
 eclipselink.jdbc.cache-statements
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDHAFAA[eclipselink.jdbc.cache-statements] docs
 
 
@@ -246,7 +246,7 @@ size
 [[eclipselink.jdbc.native-sql]]
 eclipselink.jdbc.native-sql
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm[eclipselink.jdbc.native-sql] docs
 
 
@@ -263,7 +263,7 @@ upper-case-column-names
 [[eclipselink.jpql.validation]]
 eclipselink.jpql.validation
 
-| 
+|  EclipseLink
 | null
 
 
@@ -271,7 +271,7 @@ eclipselink.jpql.validation
 [[eclipselink.logging.connection]]
 eclipselink.logging.connection
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDJCBIF[eclipselink.logging.connection] docs
 
 
@@ -279,7 +279,7 @@ eclipselink.logging.connection
 [[eclipselink.logging.exceptions]]
 eclipselink.logging.exceptions
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BEIFJBIE[eclipselink.logging.exceptions] docs
 
 
@@ -303,7 +303,7 @@ eclipselink.logging.level
 [[eclipselink.logging.session]]
 eclipselink.logging.session
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BEIHGGHH[eclipselink.logging.session]
 
 
@@ -311,7 +311,7 @@ eclipselink.logging.session
 [[eclipselink.logging.thread]]
 eclipselink.logging.thread
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BEIFFGGB[eclipselink.logging.thread]
 
 
@@ -319,7 +319,7 @@ eclipselink.logging.thread
 [[eclipselink.logging.timestamp]]
 eclipselink.logging.timestamp
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BEIJCEBJ[eclipselink.logging.timestamp]
 
 
@@ -327,7 +327,7 @@ eclipselink.logging.timestamp
 [[eclipselink.profiler]]
 eclipselink.profiler
 
-| 
+|  NoProfiler
 | The "``profiler``" property configures the type of profiler used to capture runtime statistics.
 
 *Allowed Values:*
@@ -403,7 +403,7 @@ eclipselink.weaving
 [[eclipselink.weaving.changetracking]]
 eclipselink.weaving.changetracking
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDCEEFC[eclipse.weaving.changetracking] docs
 
 
@@ -419,7 +419,7 @@ eclipselink.weaving.eager
 [[eclipselink.weaving.fetchgroups]]
 eclipselink.weaving.fetchgroups
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDDIFGE[eclipse.weaving.fetchgroups] docs
 
 
@@ -427,7 +427,7 @@ eclipselink.weaving.fetchgroups
 [[eclipselink.weaving.internal]]
 eclipselink.weaving.internal
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABJICDJ[eclipse.weaving.internal] docs
 
 
@@ -435,7 +435,7 @@ eclipselink.weaving.internal
 [[eclipselink.weaving.lazy]]
 eclipselink.weaving.lazy
 
-| 
+|  true
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDBIFE[eclipse.weaving.lazy] docs
 
 

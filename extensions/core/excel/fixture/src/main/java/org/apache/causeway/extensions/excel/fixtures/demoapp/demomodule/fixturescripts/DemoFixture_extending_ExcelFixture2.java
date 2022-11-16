@@ -22,6 +22,7 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.extensions.excel.applib.CausewayModuleExtExcelApplib;
 import org.apache.causeway.extensions.excel.applib.Mode;
 import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
@@ -30,9 +31,11 @@ import org.apache.causeway.extensions.excel.testing.ExcelFixture2;
 import lombok.Getter;
 import lombok.Setter;
 
-@Named("causeway.sub.excel.DemoFixture_extending_ExcelFixture2")
+@Named(DemoFixture_extending_ExcelFixture2.LOGICAL_TYPE_NAME)
 @DomainObject
 public class DemoFixture_extending_ExcelFixture2 extends ExcelFixture2 {
+
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExcelApplib.NAMESPACE + ".DemoFixture_extending_ExcelFixture2";
 
     public DemoFixture_extending_ExcelFixture2(){
         this.resourceName = "ToDoItems.xlsx";

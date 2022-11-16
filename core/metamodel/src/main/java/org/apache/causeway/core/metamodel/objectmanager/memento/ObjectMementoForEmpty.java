@@ -26,10 +26,12 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * @since 2.0
  */
+@ToString
 @RequiredArgsConstructor
 public class ObjectMementoForEmpty implements ObjectMemento {
 

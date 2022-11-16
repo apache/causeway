@@ -21,7 +21,6 @@ package org.apache.causeway.extensions.commandreplay.secondary.job;
 import org.quartz.JobExecutionContext;
 
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
-import org.apache.causeway.extensions.quartz.context.JobExecutionData;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +28,6 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
 class SecondaryStatusData {
 
     private static final String KEY_SECONDARY_STATUS = SecondaryStatusData.class.getCanonicalName();

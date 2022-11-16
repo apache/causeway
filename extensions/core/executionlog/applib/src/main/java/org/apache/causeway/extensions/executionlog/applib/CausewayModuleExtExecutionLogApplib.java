@@ -30,6 +30,9 @@ import org.apache.causeway.extensions.executionlog.applib.dom.mixins.ExecutionLo
 import org.apache.causeway.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @DomainService's

@@ -155,6 +155,7 @@
 				<module>incubator/viewers/javafx</module>
 				<module>incubator/viewers/vaadin</module>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
+				<module>incubator/extensions/core/commandreplay</module>
 
 				<module>regressiontests</module>
 				<module>tooling</module>
@@ -485,7 +486,7 @@
 				</property>
 			</activation>
 			<properties>
-				<jib-maven-plugin.version>3.3.0</jib-maven-plugin.version>
+				<jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
 			</properties>
 			<build>
 				<pluginManagement>

@@ -79,5 +79,4 @@ public class Object_recentCommands {
 
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
-
 }

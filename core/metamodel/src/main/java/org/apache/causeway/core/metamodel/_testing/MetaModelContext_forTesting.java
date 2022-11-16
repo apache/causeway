@@ -34,6 +34,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
@@ -87,8 +88,8 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
@@ -440,17 +441,17 @@ implements MetaModelContext {
     }
 
     @Getter(lazy = true)
-    private final GridReaderUsingJaxb gridReader = createGridReader();
+    private final GridMarshallerService gridMarshallerService = createGridMarshallerService();
     //XXX lombok issue: won't compile if inlined
-    private final GridReaderUsingJaxb createGridReader() {
-        return new GridReaderUsingJaxb(getJaxbService(), getServiceRegistry());
+    private final GridMarshallerService createGridMarshallerService() {
+        return new GridMarshallerServiceBootstrap(getJaxbService());
     }
 
     @Getter(lazy = true)
     private final GridLoaderService gridLoaderService = createGridLoaderService();
     //XXX lombok issue: won't compile if inlined
     private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getGridReader(), getMessageService(), /*support reloading*/true);
+        return new GridLoaderServiceDefault(getMessageService(), /*support reloading*/true);
     }
 
     @Getter(lazy = true)
@@ -458,14 +459,16 @@ implements MetaModelContext {
     //XXX lombok issue: won't compile if inlined
     private final GridService createGridService() {
         return new GridServiceDefault(
-            getGridLoaderService(), _Lists.of(
+            getGridLoaderService(),
+            getGridMarshallerService(),
+            _Lists.of(
                     new GridSystemServiceBootstrap(
                             getSpecificationLoader(),
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),
                             getSystemEnvironment())
-                            .setGridReader(getGridReader())
+                            .setMarshaller(getGridMarshallerService())
                     )); // support reloading
     }
 
@@ -475,7 +478,6 @@ implements MetaModelContext {
     private final LayoutService createLayoutService() {
         return new LayoutServiceDefault(
                 getSpecificationLoader(),
-                getJaxbService(),
                 getGridService(),
                 getMenuBarsService());
     }

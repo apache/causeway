@@ -51,6 +51,11 @@ import org.apache.causeway.schema.common.v2.InteractionType;
 import lombok.Getter;
 import lombok.val;
 
+/**
+ * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
+ *
+ * @since 2.0 {@index}
+ */
 public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public static class NotFoundException extends RecoverableException {
@@ -78,10 +83,12 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         return commandLogEntryClass;
     }
 
-    public C createEntryAndPersist(final Command command, CommandLogEntry parentEntryIfAny) {
+    public C createEntryAndPersist(
+            final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
         c.init(command);
-        c.setParent(parentEntryIfAny);
+        c.setParentInteractionId(parentInteractionIdIfAny);
+        c.setExecuteIn(executeIn);
         persist(c);
         return c;
     }
@@ -93,9 +100,13 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     }
 
     public List<C> findByParent(final CommandLogEntry parent) {
+        return findByParentInteractionId(parent.getInteractionId());
+    }
+
+    public List<C> findByParentInteractionId(final UUID parentInteractionId) {
         return repositoryService().allMatches(
-                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_PARENT)
-                        .withParameter("parent", parent));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_PARENT_INTERACTION_ID)
+                        .withParameter("parentInteractionId", parentInteractionId));
     }
 
     public List<C> findByFromAndTo(
@@ -254,6 +265,30 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
                 .map(Collections::singletonList)
                 .orElse(Collections.emptyList());
     }
+
+    /**
+     * Returns any persisted commands that have not yet started.
+     *
+     * <p>
+     * This is to support the notion of background commands (the same as their implementation in v1) whereby a
+     * custom executor service for {@link org.apache.causeway.applib.services.wrapper.WrapperFactory} would
+     * &quot;execute&quot; a {@link Command} simply by persisting it as a {@link CommandLogEntry}, so that a
+     * quartz or similar background job could execute the {@link Command} at some point later.
+     * </p>
+     */
+    public List<C> findBackgroundAndNotYetStarted() {
+        return repositoryService().allMatches(
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED));
+    }
+
+    public List<C> findRecentBackgroundByTarget(Bookmark target) {
+        return repositoryService().allMatches(
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BACKGROUND_BY_TARGET)
+                        .withParameter("target", target)
+                        .withLimit(30L)
+        );
+    }
+
 
     /**
      * The most recent replayed command previously replicated from primary to

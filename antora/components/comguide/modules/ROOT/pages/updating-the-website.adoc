@@ -9,6 +9,14 @@ This branch can then be used for documentation updates.
 
 == Update docs
 
+Prereqs:
+
+* jdk 11
+* mvn 3.x
+* groovy 3.x
+* pandoc 2.x
+* dos2unix
+
 In the regular `causeway` repo:
 
 * Check out the branch:
@@ -19,25 +27,6 @@ git checkout {page-causewayrel}
 ----
 
 * make documentation updates, and commit changes
-
-* make sure config properties are up-to-date:
-+
-This is most easily done by rebuilding all:
-+
-[source,bash,subs="attributes+"]
-----
-pushd bom
-mvn clean install -DskipTests -Dreleased
-popd
-----
-+
-Though it might be sufficient to just build the core/config module
-+
-[source,bash,subs="attributes+"]
-----
-mvn clean install -pl core/config
-----
-
 
 * make sure the tooling is also built:
 +
@@ -53,9 +42,9 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 sh preview.sh
 ----
 +
-This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
-+
-NOTE: this requires Java 11 for the projdoc tooling.
+NOTE: this now runs `mvn clean install -pl core/config` automatically (unless suppressed with a flag)
+
+This updated website is written to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
 
 

@@ -13,7 +13,7 @@ The menu appears under the "Prototyping" menu.
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
 
-In addition, add a section for the BOM of all the testing support libraries:
+In addition, add an entry for the BOM of all the testing support libraries:
 
 [source,xml,subs="attributes+"]
 .pom.xml

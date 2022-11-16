@@ -21,6 +21,9 @@ package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.springframework.core.io.ByteArrayResource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,21 +32,22 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.layout.LayoutService;
-import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
+import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
-import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 
 import lombok.val;
 
 class MenuBarsServiceBSTest
 extends RuntimeServicesTestAbstract {
 
-    private MenuBarsServiceBS menuBarsService;
-    private MenuBarsLoaderServiceDefault menuBarsLoaderService;
+    private MenuBarsServiceBootstrap menuBarsService;
+    //private MenuBarsLoaderServiceDefault menuBarsLoaderService;
+    private MenuBarsMarshallerServiceBootstrap menuBarsMarshallerService;
     private LayoutService layoutService;
 
     @Override
@@ -56,9 +60,14 @@ extends RuntimeServicesTestAbstract {
 
         getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
 
-        layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
-        menuBarsService = (MenuBarsServiceBS) getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
-        menuBarsLoaderService = (MenuBarsLoaderServiceDefault) getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
+        layoutService = getServiceRegistry()
+                .lookupServiceElseFail(LayoutService.class);
+        menuBarsMarshallerService = (MenuBarsMarshallerServiceBootstrap) getServiceRegistry()
+                .lookupServiceElseFail(MenuBarsMarshallerService.class);
+        menuBarsService = (MenuBarsServiceBootstrap) getServiceRegistry()
+                .lookupServiceElseFail(MenuBarsService.class);
+//        menuBarsLoaderService = (MenuBarsLoaderServiceDefault) getServiceRegistry()
+//                .lookupServiceElseFail(MenuBarsLoaderService.class);
 
         // double check, we are all set
         assertNotNull(getSpecificationLoader().loadSpecification(Bar.class));
@@ -78,8 +87,9 @@ extends RuntimeServicesTestAbstract {
         assertEquals("Create Simple Object", objectAction.getStaticFriendlyName().orElse(null));
     }
 
-    @Test
-    void roundtrip() {
+    @ParameterizedTest
+    @EnumSource(mode = Mode.INCLUDE, value = CommonMimeType.class, names = {"XML"})
+    void roundtrip(final CommonMimeType format) {
         val menuBars = menuBarsService.menuBars();
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
@@ -88,10 +98,10 @@ extends RuntimeServicesTestAbstract {
         assertEquals("Create Simple Object", layoutData.getNamed());
         assertEquals(null, layoutData.getNamedEscaped()); // deprecated: always escape
 
-        val xml = layoutService.toMenuBarsXml(MenuBarsService.Type.DEFAULT);
+        val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, format);
 
         // after round-trip
-        val menuBars2 = menuBarsLoaderService.loadMenuBars(xml);
+        val menuBars2 = menuBarsMarshallerService.unmarshal(xml, format).getValue().orElse(null);
         assertNotNull(menuBars2);
         assertEquals(1L, menuBars2.stream().count());
 
@@ -107,7 +117,8 @@ extends RuntimeServicesTestAbstract {
         val xml = sampleMenuBarsXmlWithCustomName(customNamed);
 
         // create menubars-xml from scratch (annotations and fallback naming only)
-        val menuBars = menuBarsLoaderService.loadMenuBars(xml);
+        val menuBars = menuBarsMarshallerService.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null);
+
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
 
@@ -155,7 +166,7 @@ extends RuntimeServicesTestAbstract {
     // -- HELPER
 
     private String sampleMenuBarsXmlWithCustomName(final String customNamed) {
-        val xml = layoutService.toMenuBarsXml(MenuBarsService.Type.DEFAULT)
+        val xml = layoutService.menuBarsLayout(MenuBarsService.Type.DEFAULT, CommonMimeType.XML)
                     .replace(
                             "<cpt:named>Create Simple Object</cpt:named>",
                             "<cpt:named>"+customNamed+"</cpt:named>");

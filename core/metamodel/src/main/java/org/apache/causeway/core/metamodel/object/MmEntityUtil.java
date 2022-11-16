@@ -101,6 +101,17 @@ public final class MmEntityUtil {
     }
 
     /**
+     * Side-effect free check for whether given entity is attached.
+     */
+    public static boolean isAttachedEntity(final @Nullable ManagedObject entity) {
+        return entity!=null
+                ? entity.getSpecialization().isEntity()
+                    && entity.isBookmarkMemoized()
+                    && entity.getEntityState().isAttached()
+                : false;
+    }
+
+    /**
      * @param managedObject
      * @return managedObject
      * @throws AssertionError if managedObject is a detached entity

@@ -19,26 +19,24 @@
 package org.apache.causeway.incubator.viewer.vaadin.model.context;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.vaadin.flow.component.Component;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public interface UiContextVaa {
 
-    //JavaFxViewerConfig getJavaFxViewerConfig();
-
     InteractionService getInteractionService();
-    //ActionUiModelFactoryFx getActionUiModelFactory();
 
     void setNewPageHandler(Consumer<Component> onNewPage);
-    void setPageFactory(Function<ManagedObject, Component> pageFactory);
+    void setPageFactory(MemberInvocationHandler<Component> pageFactory);
 
     void route(ManagedObject object);
-    void route(Supplier<ManagedObject> objectSupplier);
+    void route(ManagedAction managedAction, Can<ManagedObject> params, ManagedObject actionResult);
+//    void route(Supplier<ManagedObject> objectSupplier);
 
     // -- DECORATORS
 

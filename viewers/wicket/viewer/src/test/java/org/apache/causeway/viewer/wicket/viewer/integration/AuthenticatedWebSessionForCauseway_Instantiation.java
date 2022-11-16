@@ -21,41 +21,30 @@ package org.apache.causeway.viewer.wicket.viewer.integration;
 import java.util.Locale;
 
 import org.apache.wicket.request.Request;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.causeway.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AuthenticatedWebSessionForCauseway_Instantiation {
+class AuthenticatedWebSessionForCauseway_Instantiation {
 
-    @Rule
-    public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
-    private Request stubRequest;
+    private Request mockRequest = Mockito.mock(Request.class);
 
     @Test
-    public void canInstantiateIfProvideRequest() {
-        context.checking(new Expectations() {
-            {
-                // must provide explicit expectation, since Locale is final.
-                allowing(stubRequest).getLocale();
-                will(returnValue(Locale.getDefault()));
+    void canInstantiateIfProvideRequest() {
+        Mockito
+        // must provide explicit expectation, since Locale is final.
+        .when(mockRequest.getLocale())
+        .thenReturn(Locale.getDefault());
 
-                // stub everything else out
-                ignoring(stubRequest);
-            }
-        });
-
-        new AuthenticatedWebSessionForCauseway(stubRequest);
+        new AuthenticatedWebSessionForCauseway(mockRequest);
     }
 
-    @Test(expected = Exception.class)
-    public void requestMustBeProvided() {
-        new AuthenticatedWebSessionForCauseway(null);
+    @Test
+    void requestMustBeProvided() {
+        assertThrows(Exception.class, ()->{
+            new AuthenticatedWebSessionForCauseway(null);
+        });
     }
 
 }

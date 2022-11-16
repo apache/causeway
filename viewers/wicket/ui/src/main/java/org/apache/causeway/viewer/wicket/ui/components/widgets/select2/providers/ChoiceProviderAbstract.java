@@ -41,9 +41,6 @@ extends ChoiceProvider<ObjectMemento>
 implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
-    /** arbitrary string */
-    private static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
-
     /**
      * Whether to not prepend <code>null</code> as choice candidate.
      */
@@ -66,15 +63,12 @@ implements HasCommonContext {
     @Override
     public final String getIdValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null) {
-            return NULL_ID;
+            return ObjectMemento.NULL_ID;
         }
         return ObjectMemento.enstringToUrlBase64(choiceMemento);
     }
 
     protected final @Nullable ObjectMemento mementoFromId(final @Nullable String id) {
-        if(NULL_ID.equals(id)) {
-            return null;
-        }
         return ObjectMemento.destringFromUrlBase64(id);
     }
 
@@ -137,7 +131,7 @@ implements HasCommonContext {
     // -- HELPER
 
     private @Nullable ObjectMemento mementoFromIdWithNullHandling(final String id) {
-        if(NULL_ID.equals(id)) {
+        if(ObjectMemento.NULL_ID.equals(id)) {
             return null;
         }
         return mementoFromId(id);

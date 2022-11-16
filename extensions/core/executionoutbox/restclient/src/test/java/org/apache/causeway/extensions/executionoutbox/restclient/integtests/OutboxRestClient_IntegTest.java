@@ -59,7 +59,7 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
 @SpringBootTest(
         classes = OutboxRestClient_IntegTest.AppManifest.class,
@@ -76,7 +76,7 @@ public class OutboxRestClient_IntegTest  {
             CausewayModulePersistenceJpaEclipselink.class,
             CausewayModuleTestingFixturesApplib.class,
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
-            CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,
+            CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
             CausewayModuleCoreWebapp.class,
 
             // mixins

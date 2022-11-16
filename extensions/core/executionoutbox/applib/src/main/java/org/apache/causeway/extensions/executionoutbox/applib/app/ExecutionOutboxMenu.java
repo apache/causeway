@@ -41,6 +41,9 @@ import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutbox
 import lombok.RequiredArgsConstructor;
 
 /**
+ * This service exposes a set of menu actions to search and list {@link ExecutionOutboxEntry execution}s in the outbox,
+ * by default under the &quot;Activity&quot; secondary menu.
+ *
  * @since 2.0 {@index}
  */
 @Named(ExecutionOutboxMenu.LOGICAL_TYPE_NAME)

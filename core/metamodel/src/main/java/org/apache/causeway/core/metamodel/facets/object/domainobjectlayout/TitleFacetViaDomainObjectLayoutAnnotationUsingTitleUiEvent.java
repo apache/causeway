@@ -18,18 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.TitleUiEvent;
-import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -73,18 +71,18 @@ extends TitleFacetAbstract {
                 });
     }
 
-    private final Class<? extends TitleUiEvent<?>> titleUiEventClass;
+    private final Class<? extends TitleUiEvent<Object>> titleUiEventClass;
     private final TranslationService translationService;
     private final TranslationContext translationContext;
     private final MetamodelEventService metamodelEventService;
 
     public TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
             final Class<? extends TitleUiEvent<?>> titleUiEventClass,
-                    final TranslationContext translationContext,
-                    final MetamodelEventService metamodelEventService,
-                    final FacetHolder holder) {
+            final TranslationContext translationContext,
+            final MetamodelEventService metamodelEventService,
+            final FacetHolder holder) {
         super(holder, Precedence.EVENT);
-        this.titleUiEventClass = titleUiEventClass;
+        this.titleUiEventClass = _Casts.uncheckedCast(titleUiEventClass);
         this.translationService = super.getTranslationService();
         this.translationContext = translationContext;
         this.metamodelEventService = metamodelEventService;
@@ -139,21 +137,7 @@ extends TitleFacetAbstract {
     }
 
     private TitleUiEvent<Object> newTitleUiEvent(final ManagedObject owningAdapter) {
-        final Object domainObject = owningAdapter.getPojo();
-        return newTitleUiEvent(domainObject);
-    }
-
-    private TitleUiEvent<Object> newTitleUiEvent(final Object domainObject) {
-        try {
-            final TitleUiEvent<Object> titleUiEvent = _Casts.uncheckedCast(
-                    titleUiEventClass.getConstructor().newInstance());
-            titleUiEvent.initSource(domainObject);
-            return titleUiEvent;
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException ex) {
-            throw new UnrecoverableException(ex);
-        }
+        return EventObjectBase.getInstanceWithSourceSupplier(titleUiEventClass, owningAdapter::getPojo).orElseThrow();
     }
 
 }

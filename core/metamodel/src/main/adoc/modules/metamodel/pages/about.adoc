@@ -28,8 +28,8 @@ endlegend
 together {
     rectangle "<$database_cube><$at>\n<<Annotation>>\nORM (JPA/JDO)" as PERS
     rectangle "<$envira><$at>\n<<Annotation>>\nSpring" as SPRING
-    rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-56x64.png><$at>\n<<Annotation>>\nApache Causeway" as FW
-    rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-56x64.png><$java>\n<<Supporting Methods>>\nApache Causeway" as SM
+    rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-79x64.png><$at>\n<<Annotation>>\nApache Causeway" as FW
+    rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-79x64.png><$java>\n<<Supporting Methods>>\nApache Causeway" as SM
     rectangle "<$java><$ma_xml><$at>\n<<Annotation>>\nJAXB" as JAXB
 
     SPRING -[hidden]- PERS

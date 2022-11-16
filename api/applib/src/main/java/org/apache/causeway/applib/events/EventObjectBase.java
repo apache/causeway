@@ -18,62 +18,88 @@
  */
 package org.apache.causeway.applib.events;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.NonNull;
+import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
 
 /**
  * @since 2.0 {@index}
  */
 public abstract class EventObjectBase<T> {
 
+    // -- FACTORIES
+
     /**
-     * The object on which the Event initially occurred.
+     * Optionally returns a new event instance,
+     * based on whether the eventType has a public no-arg constructor.
+     * <p>
+     * Initializes the event's source with given {@code source}.
      */
-    protected transient T source;
+    public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSource(
+            final Class<E> eventType, final @Nullable T source) {
+        return getInstanceWithSourceSupplier(eventType, (Supplier<T>) ()->source);
+    }
+
+    /**
+     * Optionally returns a new event instance,
+     * based on whether the eventType has a public no-arg constructor.
+     * <p>
+     * Initializes the event's source lazily, that is using given {@code eventSourceSupplier}.
+     */
+    public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSourceSupplier(
+            final Class<E> eventType, final @Nullable Supplier<T> eventSourceSupplier) {
+        return _Reflect.getPublicConstructors(eventType)
+            .filter(paramCount(0))
+            .getFirst()
+            .map(_Reflect::invokeConstructor)
+            .flatMap(Try::getValue)
+            .map(evnt->{
+                final E event = _Casts.uncheckedCast(evnt);
+                event.sourceSupplier = eventSourceSupplier;
+                return event;
+            });
+    }
+
+    // --
+
+    /**
+     * Provides the object on which the Event initially occurred.
+     */
+    protected transient Supplier<T> sourceSupplier = null;
 
     /**
      * Constructs a prototypical Event.
      *
-     * @param    source    The object on which the Event initially occurred.
+     * @param source object on which the Event initially occurred (nullable)
      */
     protected EventObjectBase(final @Nullable T source) {
-        this.source = source;
+        this.sourceSupplier = source!=null
+                ? ()->source
+                : null;
     }
 
     /**
-     * The object on which the Event initially occurred.
-     *
-     * @return   The object on which the Event initially occurred.
+     * Returns the object on which the Event initially occurred.
      */
     public @Nullable T getSource() {
-        return source;
-    }
-
-    /**
-     * A one-shot function. Only allowed to be called if a source has not already been set.
-     *
-     * @apiNote reserved for framework internal use
-     *
-     * @param source non-null
-     */
-    public void initSource(final @NonNull T source) {
-        if(this.source!=null) {
-            throw _Exceptions.illegalState(getClass().getName() + " cannot init when source is already set");
-        }
-        this.source = source;
+        return sourceSupplier!=null
+                ? sourceSupplier.get()
+                : null;
     }
 
     /**
      * Returns a String representation of this EventObject.
-     *
-     * @return  a String representation of this EventObject
      */
     @Override
     public String toString() {
-        return getClass().getName() + "[source=" + source + "]";
+        return getClass().getName() + "[source=" + getSource() + "]";
     }
 
 }

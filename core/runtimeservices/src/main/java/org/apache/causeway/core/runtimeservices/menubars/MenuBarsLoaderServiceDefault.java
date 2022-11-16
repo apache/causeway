@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.menubars;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Priority;
@@ -33,15 +34,16 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.menu.MenuBarsLoaderService;
+import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,37 +55,39 @@ import lombok.extern.log4j.Log4j2;
 public class MenuBarsLoaderServiceDefault
 implements MenuBarsLoaderService {
 
-    private final JaxbService jaxbService;
     private final boolean supportsReloading;
-    private final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef;
+    private final AtomicReference<AbstractResource> menubarsLayoutResourceRef;
+    private final CommonMimeType menubarsLayoutMimeType;
 
     @Inject
-    public MenuBarsLoaderServiceDefault(
-            final CausewaySystemEnvironment causewaySystemEnvironment,
-            final JaxbService jaxbService,
-            final CausewayConfiguration causewayConfiguration) {
-        this.jaxbService = jaxbService;
-        this.supportsReloading = causewaySystemEnvironment.isPrototyping();
+    public MenuBarsLoaderServiceDefault(final MetaModelContext mmc) {
+        this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
-        val menubarsLayoutXmlResource =
-                new ClassPathResource(causewayConfiguration.getViewer().getWicket().getApplication().getMenubarsLayoutXml());
-        this.menubarsLayoutXmlResourceRef = new AtomicReference<>(menubarsLayoutXmlResource);
+        val menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
+                .getMenubarsLayoutFile();
+        val menubarsLayoutResource = new ClassPathResource(menubarsLayoutFile);
+        if(!menubarsLayoutResource.exists()) {
+            log.warn("menubarsLayoutFile {} (as configured for Apache Causeway) not found",
+                    menubarsLayoutFile);
+        }
+        this.menubarsLayoutResourceRef = new AtomicReference<>(menubarsLayoutResource);
+        this.menubarsLayoutMimeType = CommonMimeType.valueOfFileName(menubarsLayoutFile)
+                .orElse(CommonMimeType.XML); // fallback default
     }
 
     // JUnit support
     public MenuBarsLoaderServiceDefault(
-            final JaxbService jaxbService,
-            final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef) {
-        this.jaxbService = jaxbService;
+            final AtomicReference<AbstractResource> menubarsLayoutResourceRef,
+            final CommonMimeType formatUnderTest) {
         this.supportsReloading = true;
-
-        menubarsLayoutXmlResourceRef.getAndUpdate(r->r!=null
+        menubarsLayoutResourceRef.getAndUpdate(r->r!=null
                 ? r
                 : new AbstractResource() {
                     @Override public String getDescription() { return "Empty Resource"; }
                     @Override public InputStream getInputStream() throws IOException { return null; }}
                 );
-        this.menubarsLayoutXmlResourceRef = menubarsLayoutXmlResourceRef;
+        this.menubarsLayoutResourceRef = menubarsLayoutResourceRef;
+        this.menubarsLayoutMimeType = formatUnderTest;
     }
 
     @Override
@@ -92,41 +96,33 @@ implements MenuBarsLoaderService {
     }
 
     @Override
-    public BSMenuBars menuBars() {
-        return loadMenuBars(loadMenubarsLayoutResource());
-    }
-
-    // public, in support of JUnit testing
-    public BSMenuBars loadMenuBars(String xmlString) {
-        try {
-            return jaxbService.fromXml(BSMenuBars.class, xmlString);
-        } catch (Exception e) {
-            severeCannotLoad(menubarsLayoutXmlResourceRef.get(), e);
-            return null;
-        }
+    public <T extends MenuBars> Optional<T> menuBars(@NonNull final MenuBarsMarshallerService<T> marshaller) {
+        return marshaller.unmarshal(loadMenubarsLayoutResource(), menubarsLayoutMimeType)
+            .ifFailure(failure->severeCannotLoad(menubarsLayoutResourceRef.get(), failure))
+            .getValue();
     }
 
     // -- HELPER
 
     private String loadMenubarsLayoutResource() {
 
-        val menubarsLayoutXmlResource = menubarsLayoutXmlResourceRef.get();
+        val menubarsLayoutResource = menubarsLayoutResourceRef.get();
         try {
 
-            if(!menubarsLayoutXmlResource.exists()) {
+            if(!menubarsLayoutResource.exists()) {
                 return null;
             }
 
-            val source = menubarsLayoutXmlResource.getInputStream(); // throws if not found
-            final String xml =
+            val source = menubarsLayoutResource.getInputStream(); // throws if not found
+            final String layoutFileContent =
                     _Strings.read(source, StandardCharsets.UTF_8);
 
-            if(xml == null) {
-                warnNotFound(menubarsLayoutXmlResource);
+            if(layoutFileContent == null) {
+                warnNotFound(menubarsLayoutResource);
             }
-            return xml;
+            return layoutFileContent;
         } catch (Exception e) {
-            severeCannotLoad(menubarsLayoutXmlResource, e);
+            severeCannotLoad(menubarsLayoutResource, e);
             return null;
         }
 
@@ -134,24 +130,25 @@ implements MenuBarsLoaderService {
 
     private boolean warnedOnce = false;
 
-    private void warnNotFound(AbstractResource menubarsLayoutXmlResource) {
+    private void warnNotFound(final AbstractResource menubarsLayoutResource) {
         if(warnedOnce) {
             return;
         }
-
         log.warn(
                 "{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
-                        menubarsLayoutXmlResource);
+                        menubarsLayoutResource);
         warnedOnce = true;
     }
 
-    private void severeCannotLoad(AbstractResource menubarsLayoutXmlResource, Exception cause) {
-
+    private void severeCannotLoad(final AbstractResource menubarsLayoutResource, final Throwable cause) {
         log.error("{}: could not find readable resource {} for the Menubars-Layout.",
                         WebAppContextPath.class.getName(),
-                        menubarsLayoutXmlResource,
+                        menubarsLayoutResource,
                 cause);
     }
+
+
+
 }
 

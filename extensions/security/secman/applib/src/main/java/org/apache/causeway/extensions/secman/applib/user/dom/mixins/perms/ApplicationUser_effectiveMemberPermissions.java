@@ -35,6 +35,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Collection(
         domainEvent = ApplicationUser_effectiveMemberPermissions.DomainEvent.class)
 @CollectionLayout(

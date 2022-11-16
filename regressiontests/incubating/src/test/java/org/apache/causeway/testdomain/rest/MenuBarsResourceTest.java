@@ -46,11 +46,11 @@ import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingActionSemantics.class,
                 MenuBarsResourceTest.TestSetup.class
-        }, 
+        },
         properties = {
                 "causeway.core.meta-model.introspector.mode=FULL",
                 "causeway.applib.annotation.domain-object.editing=TRUE",
@@ -62,7 +62,7 @@ import lombok.val;
     CausewayPresets.SilenceProgrammingModel
 })
 class MenuBarsResourceTest {
-    
+
     @Inject private MenuBarsResourceServerside menuBarsResourceServerside;
     @Inject private MenuBarsService menuBarsService;
 
@@ -71,50 +71,50 @@ class MenuBarsResourceTest {
         MenuBarsResourceServerside.class
     })
     static class TestSetup {
-        
+
     }
-    
+
     @Test
     void blobDemoMenu_fromMenuBarsResourceServerside_shouldBe_GET() {
-        
+
         assertNotNull(menuBarsResourceServerside);
-        
-        val layoutResourceDescriptor = 
+
+        val layoutResourceDescriptor =
                 ResourceDescriptor
                 .of(RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
-        
+
         val resourceContext = menuBarsResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
         val linksForServiceActionsAddingVisitor = MenuBarsResourceServerside.linksForServiceActionsAddingVisitor(resourceContext);
-        
+
         val menuBars = menuBarsService.menuBars();
-        
+
         menuBars.visit(linksForServiceActionsAddingVisitor);
-        
+
         assertNotNull(menuBars);
-        
+
         val blobDemoMenuRef = _Refs.<ServiceActionLayoutData>objectRef(null);
-        
+
         // find service action by object-type
         menuBars.visit(actionLayoutData->{
             if("regressiontests.BlobDemoMenu".equals(actionLayoutData.getObjectType())) {
                 blobDemoMenuRef.setValue(actionLayoutData);
             }
         });
-        
+
         val blobDemoMenu = blobDemoMenuRef.getValue().orElse(null);
-        
+
         assertNotNull(blobDemoMenu);
-        
+
         val jaxbEntity = SerializationStrategy.JSON_INDENTED.entity(blobDemoMenu);
-        
+
         assertNotNull(jaxbEntity);
-        
+
         final long methodCount = _Strings.grep(jaxbEntity.toString(), "\"method\"")
         .filter(line->line.contains("GET"))
         .count();
-        
+
         assertEquals(1L, methodCount);
-        
+
     }
 
 }

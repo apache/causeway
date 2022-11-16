@@ -19,12 +19,11 @@
 package org.apache.causeway.core.metamodel.services.layout;
 
 import java.io.File;
-import java.util.Objects;
+import java.util.EnumSet;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -32,15 +31,14 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.util.ZipWriter;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -58,75 +56,91 @@ import lombok.extern.log4j.Log4j2;
 public class LayoutServiceDefault implements LayoutService {
 
     private final SpecificationLoader specificationLoader;
-    private final JaxbService jaxbService;
     private final GridService gridService;
     private final MenuBarsService menuBarsService;
 
+    // -- MENUBARS LAYOUT
+
     @Override
-    public String toXml(final Class<?> domainClass, final LayoutExportStyle style) {
-        final Grid grid = gridService.toGridForExport(domainClass, style);
-        return gridToXml(grid);
+    public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
+        return menuBarsService.marshaller().supportedFormats();
     }
 
     @Override
-    public byte[] toZip(final LayoutExportStyle style) {
+    public String menuBarsLayout(
+            final MenuBarsService.Type type,
+            final CommonMimeType format) {
+        val menuBars = menuBarsService.menuBars(type);
+        return menuBarsService.marshaller().marshal(_Casts.uncheckedCast(menuBars), format);
+    }
+
+    // -- OBJECT LAYOUT
+
+    @Override
+    public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
+        return gridService.marshaller().supportedFormats();
+    }
+
+    @Override
+    public String objectLayout(final Class<?> domainClass, final LayoutExportStyle style, final CommonMimeType format) {
+        return tryGridToFormatted(domainClass, style, format)
+                .ifFailureFail()
+                .getValue()
+                .orElse(null);
+    }
+
+    @Override
+    public byte[] toZip(final LayoutExportStyle style, final CommonMimeType format) {
         val domainObjectSpecs = specificationLoader.snapshotSpecifications()
-        .filter(spec ->
-                !spec.isAbstract()
-                && (spec.isEntity() || spec.isViewModel()));
+                .filter(spec ->
+                        !spec.isAbstract()
+                        && (spec.isEntity() || spec.isViewModel()));
 
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
 
         for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
 
-            tryGridToXml(domainClass, style)
-            .accept(failure->{
-                log.warn("failed to generate layout XML for {}", domainClass);//, failure);
-            },
-            xmlIfAny->{
-                xmlIfAny.ifPresent(xmlString->{
-                    zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->
-                        writer.writeCharactersUtf8(xmlString)
-                    );
-                });
-            });
+            tryGridToFormatted(domainClass, style, format)
+            .accept(
+                    failure->
+                        log.warn("failed to generate layout file for {}", domainClass),
+                    contentIfAny->{
+                        contentIfAny.ifPresent(contentString->{
+                            zipWriter.nextEntry(zipEntryNameFor(objectSpec, format), writer->
+                                writer.writeCharactersUtf8(contentString)
+                            );
+                        });
+                    });
         }
 
         return zipWriter.toBytes();
     }
 
-    @Override
-    public String toMenuBarsXml(final MenuBarsService.Type type) {
-        final MenuBars menuBars = menuBarsService.menuBars(type);
-
-        return jaxbService.toXml(menuBars, _Maps.unmodifiable(
-                Marshaller.JAXB_SCHEMA_LOCATION,
-                menuBars.getTnsAndSchemaLocation()
-                ));
-    }
-
     // -- HELPER
 
-    private Try<String> tryGridToXml(final Class<?> domainClass, final LayoutExportStyle style) {
+    private Try<String> tryGridToFormatted(
+            final Class<?> domainClass,
+            final LayoutExportStyle style,
+            final CommonMimeType format) {
         return Try.call(()->
-            gridToXml(gridService.toGridForExport(domainClass, style)));
+            gridToFormatted(gridService.toGridForExport(domainClass, style), format));
     }
 
-    private String gridToXml(final @Nullable Grid grid) {
+    private String gridToFormatted(final @Nullable Grid grid, final CommonMimeType format) {
         if(grid==null) {
             return null;
         }
-        return jaxbService.toXml(grid,
-                _Maps.unmodifiable(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        Objects.requireNonNull(grid.getTnsAndSchemaLocation())
-                        ));
+        return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
     }
 
-    private static String zipEntryNameFor(final ObjectSpecification objectSpec) {
+    private static String zipEntryNameFor(
+            final ObjectSpecification objectSpec,
+            final CommonMimeType format) {
         final String fqn = objectSpec.getFullIdentifier();
-        return fqn.replace(".", File.separator)+".layout.xml";
+        return fqn.replace(".", File.separator)
+                + ".layout."
+                + format.getProposedFileExtensions().getFirstOrFail();
     }
 
 }

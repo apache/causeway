@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
  */
 public interface GridService {
 
-
     /**
      * Whether dynamic reloading of layouts is enabled.
      *
@@ -155,6 +154,10 @@ public interface GridService {
      * @param grid
      */
     Grid minimal(Grid grid);
+
+    // -- LAYOUT EXPORT
+
+    GridMarshallerService<? extends Grid> marshaller();
 
     default Grid toGridForExport(
             final Class<?> domainClass,

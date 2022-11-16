@@ -46,6 +46,9 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -791,7 +794,7 @@ public class CausewayConfiguration {
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is actually sent depends
                      *     on the value of the {@link org.apache.causeway.applib.annotation.Action#domainEvent()} for the
-                     *     action in question:
+                     *     action in question
                      * </p>
                      *
                      * <ul>
@@ -1848,6 +1851,139 @@ public class CausewayConfiguration {
     private final Viewer viewer = new Viewer();
     @Data
     public static class Viewer {
+
+        private final Common common = new Common();
+        @Data
+        public static class Common {
+
+            private final Application application = new Application();
+            @Data
+            public static class Application {
+
+                /**
+                 * Label used on the about page.
+                 */
+                private String about;
+
+                /**
+                 * Either the location of the image file (relative to the class-path resource root),
+                 * or an absolute URL.
+                 *
+                 * <p>
+                 * This is rendered on the header panel. An image with a size of 160x40 works well.
+                 * If not specified, the application.name is used instead.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> brandLogoHeader = Optional.empty();
+
+                /**
+                 * Either the location of the image file (relative to the class-path resource root),
+                 * or an absolute URL.
+                 *
+                 * <p>
+                 * This is rendered on the sign-in page. An image with a size of 400x40 works well.
+                 * If not specified, the {@link Application#getName() application name} is used instead.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> brandLogoSignin = Optional.empty();
+
+                /**
+                 * Specifies the URL to use of the favIcon.
+                 *
+                 * <p>
+                 *     This is expected to be a local resource.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private Optional<String> faviconUrl = Optional.empty();
+
+                /**
+                 * Specifies the file name containing the menubars.
+                 *
+                 * <p>
+                 *     This is expected to be a local resource.
+                 * </p>
+                 */
+                @NotNull @NotEmpty
+                private String menubarsLayoutFile = "menubars.layout.xml";
+
+                /**
+                 * Identifies the application on the sign-in page
+                 * (unless a {@link Application#brandLogoSignin sign-in} image is configured) and
+                 * on top-left in the header
+                 * (unless a {@link Application#brandLogoHeader header} image is configured).
+                 */
+                @NotNull @NotEmpty
+                private String name = "Apache Causeway ™";
+
+                /**
+                 * The version of the application, eg 1.0, 1.1, etc.
+                 *
+                 * <p>
+                 * If present, then this will be shown in the footer on every page as well as on the
+                 * about page.
+                 * </p>
+                 */
+                private String version;
+            }
+
+            /**
+             * List of organisations or individuals to give credit to, shown as links and icons in the footer.
+             * A maximum of 3 credits can be specified.
+             *
+             * <p>
+             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+             * </p>
+             *
+             * <p>
+             * @implNote - For further discussion, see for example
+             * <a href="https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects">this stackoverflow question</a>
+             * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
+             * </p>
+             */
+            private List<Credit> credit = new ArrayList<>();
+
+            @Data
+            public static class Credit {
+                /**
+                 * URL of an organisation or individual to give credit to, appearing as a link in the footer.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
+                private String url;
+                /**
+                 * URL of an organisation or individual to give credit to, appearing as text in the footer.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                private String name;
+                /**
+                 * Name of an image resource of an organisation or individual, appearing as an icon in the footer.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                private String image;
+
+                /**
+                 * Whether enough information has been defined for the credit to be appear.
+                 */
+                public boolean isDefined() { return (name != null || image != null) && url != null; }
+            }
+        }
+
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
@@ -2022,6 +2158,18 @@ public class CausewayConfiguration {
             private boolean clearFieldButtonEnabled = true;
 
             /**
+             * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
+             *
+             * <p>
+             *     A typical value is <code>css/application.css</code>.  This will result in this file being read
+             *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
+             *     Spring by default under <code>static</code> package).
+             * </p>
+             */
+            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            private Optional<String> css = Optional.empty();
+
+            /**
              * Whether the dialog mode rendered when invoking actions on domain objects should be to use
              * the sidebar (the default) or to use a modal dialog.
              *
@@ -2040,6 +2188,18 @@ public class CausewayConfiguration {
              * </p>
              */
             private DialogMode dialogModeForMenu = DialogMode.MODAL;
+
+            /**
+             * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
+             *
+             * <p>
+             *     A typical value is <code>js/application.js</code>.  This will result in this file being read
+             *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
+             *     Spring by default under <code>static</code> package).
+             * </p>
+             */
+            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            private Optional<String> js = Optional.empty();
 
             /**
              * If specified, then is rendered on each page to enable live reload.
@@ -2249,105 +2409,6 @@ public class CausewayConfiguration {
              */
             private boolean wicketSourcePlugin = false;
 
-            private final Application application = new Application();
-            @Data
-            public static class Application {
-
-                /**
-                 * Label used on the about page.
-                 */
-                private String about;
-
-                /**
-                 * Either the location of the image file (relative to the class-path resource root),
-                 * or an absolute URL.
-                 *
-                 * <p>
-                 * This is rendered on the header panel. An image with a size of 160x40 works well.
-                 * If not specified, the application.name is used instead.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> brandLogoHeader = Optional.empty();
-
-                /**
-                 * Either the location of the image file (relative to the class-path resource root),
-                 * or an absolute URL.
-                 *
-                 * <p>
-                 * This is rendered on the sign-in page. An image with a size of 400x40 works well.
-                 * If not specified, the {@link Application#getName() application name} is used instead.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> brandLogoSignin = Optional.empty();
-
-                /**
-                 * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
-                 *
-                 * <p>
-                 *     A typical value is <code>css/application.css</code>.  This will result in this file being read
-                 *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
-                 *     Spring by default under <code>static</code> package).
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> css = Optional.empty();
-
-                /**
-                 * Specifies the URL to use of the favIcon.
-                 *
-                 * <p>
-                 *     This is expected to be a local resource.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> faviconUrl = Optional.empty();
-
-                /**
-                 */
-                /**
-                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
-                 *
-                 * <p>
-                 *     A typical value is <code>js/application.js</code>.  This will result in this file being read
-                 *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
-                 *     Spring by default under <code>static</code> package).
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private Optional<String> js = Optional.empty();
-
-                /**
-                 * Specifies the file name containing the menubars.
-                 *
-                 * <p>
-                 *     This is expected to be a local resource.
-                 * </p>
-                 */
-                @NotNull @NotEmpty
-                private String menubarsLayoutXml = "menubars.layout.xml";
-
-                /**
-                 * Identifies the application on the sign-in page
-                 * (unless a {@link Application#brandLogoSignin sign-in} image is configured) and
-                 * on top-left in the header
-                 * (unless a {@link Application#brandLogoHeader header} image is configured).
-                 */
-                @NotNull @NotEmpty
-                private String name = "Apache Causeway ™";
-
-                /**
-                 * The version of the application, eg 1.0, 1.1, etc.
-                 *
-                 * <p>
-                 * If present, then this will be shown in the footer on every page as well as on the
-                 * about page.
-                 * </p>
-                 */
-                private String version;
-            }
-
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data
             public static class BookmarkedPages {
@@ -2385,61 +2446,6 @@ public class CausewayConfiguration {
                  */
                 private int maxParentChainLength = 64;
             }
-
-            /**
-             * List of organisations or individuals to give credit to, shown as links and icons in the footer.
-             * A maximum of 3 credits can be specified.
-             *
-             * <p>
-             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
-             * </p>
-             *
-             * <p>
-             * @implNote - For further discussion, see for example
-             * <a href="https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects">this stackoverflow question</a>
-             * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
-             * </p>
-             */
-            private List<Credit> credit = new ArrayList<>();
-
-            @Data
-            public static class Credit {
-                /**
-                 * URL of an organisation or individual to give credit to, appearing as a link in the footer.
-                 *
-                 * <p>
-                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
-                 *     {@link #getName() name} and/or {@link #getImage() image}.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
-                private String url;
-                /**
-                 * URL of an organisation or individual to give credit to, appearing as text in the footer.
-                 *
-                 * <p>
-                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
-                 *     {@link #getName() name} and/or {@link #getImage() image}.
-                 * </p>
-                 */
-                private String name;
-                /**
-                 * Name of an image resource of an organisation or individual, appearing as an icon in the footer.
-                 *
-                 * <p>
-                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
-                 *     {@link #getName() name} and/or {@link #getImage() image}.
-                 * </p>
-                 */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private String image;
-
-                /**
-                 * Whether enough information has been defined for the credit to be appear.
-                 */
-                public boolean isDefined() { return (name != null || image != null) && url != null; }
-            }
-
 
             private final DatePicker datePicker = new DatePicker();
             @Data
@@ -2863,8 +2869,104 @@ public class CausewayConfiguration {
     }
 
     private final Extensions extensions = new Extensions();
+    @Valid
     @Data
     public static class Extensions {
+
+        private final CommandLog commandLog = new CommandLog();
+        @Data
+        public static class CommandLog {
+
+            public enum PublishPolicy {
+                ALWAYS,
+                ONLY_IF_SYSTEM_CHANGED,
+                ;
+                public boolean isAlways() { return this == ALWAYS; }
+                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
+
+            }
+            /**
+             * Whether commands should be published always, or only if a change in the system's state has been detected.
+             *
+             * <p>
+             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
+             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
+             * changed.
+             * </p>
+             *
+             * <p>
+             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
+             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
+             * </p>
+             */
+            @Getter @Setter
+            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
+
+        }
+
+        private final CommandReplay commandReplay = new CommandReplay();
+        @Data
+        public static class CommandReplay {
+
+            private final PrimaryAccess primaryAccess = new PrimaryAccess();
+            @Data
+            public static class PrimaryAccess {
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlRestful = Optional.empty();
+                private Optional<String> user = Optional.empty();
+                private Optional<String> password = Optional.empty();
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlWicket = Optional.empty();
+            }
+
+            private final SecondaryAccess secondaryAccess = new SecondaryAccess();
+            @Data
+            public static class SecondaryAccess {
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                private Optional<String> baseUrlWicket = Optional.empty();
+            }
+
+            private Integer batchSize = 10;
+
+            private final QuartzSession quartzSession = new QuartzSession();
+            @Data
+            public static class QuartzSession {
+                /**
+                 * The user that runs the replay session secondary.
+                 */
+                private String user = "causewayModuleExtCommandReplaySecondaryUser";
+                private List<String> roles = listOf("causewayModuleExtCommandReplaySecondaryRole");
+            }
+
+            private final QuartzReplicateAndReplayJob quartzReplicateAndReplayJob = new QuartzReplicateAndReplayJob();
+            @Data
+            public static class QuartzReplicateAndReplayJob {
+                /**
+                 * Number of milliseconds before starting the job.
+                 */
+                private long startDelay = 15000;
+                /**
+                 * Number of milliseconds before running again.
+                 */
+                private long repeatInterval = 10000;
+            }
+
+            private final Analyser analyser = new Analyser();
+            @Data
+            public static class Analyser {
+                private final Result result = new Result();
+                @Data
+                public static class Result {
+                    private boolean enabled = true;
+                }
+                private final Exception exception = new Exception();
+                @Data
+                public static class Exception {
+                    private boolean enabled = true;
+                }
+
+            }
+        }
 
         private final Cors cors = new Cors();
         @Data
@@ -2975,103 +3077,21 @@ public class CausewayConfiguration {
 
         }
 
-        private final Quartz quartz = new Quartz();
+        private final ExecutionOutbox executionOutbox = new ExecutionOutbox();
+        @Valid
         @Data
-        public static class Quartz {
-        }
+        public static class ExecutionOutbox {
 
-        private final CommandLog commandLog = new CommandLog();
-        @Data
-        public static class CommandLog {
-
-            public enum PublishPolicy {
-                ALWAYS,
-                ONLY_IF_SYSTEM_CHANGED,
-                ;
-                public boolean isAlways() { return this == ALWAYS; }
-                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
-
-            }
-            /**
-             * Whether commands should be published always, or only if a change in the system's state has been detected.
-             *
-             * <p>
-             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
-             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
-             * changed.
-             * </p>
-             *
-             * <p>
-             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
-             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
-             * </p>
-             */
-            @Getter @Setter
-            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
-
-        }
-
-        private final CommandReplay commandReplay = new CommandReplay();
-        @Data
-        public static class CommandReplay {
-
-            private final PrimaryAccess primaryAccess = new PrimaryAccess();
+            private final RestApi restApi = new RestApi();
+            @Valid
             @Data
-            public static class PrimaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlRestful = Optional.empty();
-                private Optional<String> user = Optional.empty();
-                private Optional<String> password = Optional.empty();
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlWicket = Optional.empty();
-            }
-
-            private final SecondaryAccess secondaryAccess = new SecondaryAccess();
-            @Data
-            public static class SecondaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlWicket = Optional.empty();
-            }
-
-            private Integer batchSize = 10;
-
-            private final QuartzSession quartzSession = new QuartzSession();
-            @Data
-            public static class QuartzSession {
+            public static class RestApi {
                 /**
-                 * The user that runs the replay session secondary.
+                 * The maximum number of interactions that will be returned when the REST API is polled.
                  */
-                private String user = "causewayModuleExtCommandReplaySecondaryUser";
-                private List<String> roles = listOf("causewayModuleExtCommandReplaySecondaryRole");
-            }
-
-            private final QuartzReplicateAndReplayJob quartzReplicateAndReplayJob = new QuartzReplicateAndReplayJob();
-            @Data
-            public static class QuartzReplicateAndReplayJob {
-                /**
-                 * Number of milliseconds before starting the job.
-                 */
-                private long startDelay = 15000;
-                /**
-                 * Number of milliseconds before running again.
-                 */
-                private long repeatInterval = 10000;
-            }
-
-            private final Analyser analyser = new Analyser();
-            @Data
-            public static class Analyser {
-                private final Result result = new Result();
-                @Data
-                public static class Result {
-                    private boolean enabled = true;
-                }
-                private final Exception exception = new Exception();
-                @Data
-                public static class Exception {
-                    private boolean enabled = true;
-                }
-
+                @Min(value = 1)
+                @Max(value = 1000)
+                private int maxPending = 100;
             }
         }
 

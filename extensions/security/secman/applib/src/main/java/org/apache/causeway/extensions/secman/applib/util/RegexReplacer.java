@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.extensions.secman.applib.util;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 public interface RegexReplacer {
 
     public String asRegex(String str);

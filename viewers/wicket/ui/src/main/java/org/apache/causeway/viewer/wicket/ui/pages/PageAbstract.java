@@ -144,7 +144,7 @@ implements ActionPromptProvider {
 
             themeDiv = Wkt.containerAdd(this, ID_THEME);
 
-            String applicationName = getWicketViewerSettings().getApplication().getName();
+            String applicationName = getApplicationSettings().getName();
             Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
@@ -227,7 +227,7 @@ implements ActionPromptProvider {
     protected void setTitle(final String title) {
         Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
                 ? title
-                : getWicketViewerSettings().getApplication().getName());
+                : getApplicationSettings().getName());
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -261,12 +261,12 @@ implements ActionPromptProvider {
         new JGrowlBehaviour(getMetaModelContext())
             .renderFeedbackMessages(response);
 
-        getWicketViewerSettings().getApplication().getCss()
+        getWicketViewerSettings().getCss()
         .ifPresent(applicationCss -> {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         });
 
-        getWicketViewerSettings().getApplication().getJs()
+        getWicketViewerSettings().getJs()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         });

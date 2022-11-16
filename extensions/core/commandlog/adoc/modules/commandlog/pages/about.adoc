@@ -4,13 +4,306 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The _commandlog_ module provides an implementation that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
+The _Command Log_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI that persists xref:refguide:applib:index/services/command/Command.adoc[Command]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
 
-WARNING: TODO: v2 - to write up...
+One use case is to combine with the xref:security:audittrail:about.adoc[] extension.
+The _Command Log_ module logs the action invocations or property edits that the end-user makes, while the _audit trail_ logs the resultant changes in state to domain objects.
+The two logs are correlated using the xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interactionId] of the owning xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
+
+Another use case is to support (persisted) background commands, whereby actions are not invoked immediately but instead persisted and invoked by a background thread; this is described in the xref:#background-commands[background commands] section below.
+
+Sometimes the xref:executionlog:about.adoc[] extension is also configured with or instead of this extension; see the xref:#notes[notes] below to compare and contrast.
 
 
 
+== Setup
+
+=== Dependency Management
+
+Add an entry for the _Command Log_ module's own BOM:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-commandlog</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-commandlog-persistence-XXX</artifactId>    <!--.-->
+    </dependency>
+</dependencies>
+----
+<.> specify either `causeway-extensions-commandlog-persistence-jpa` or `causeway-extensions-commandlog-persistence-jdo`, as required
+
+
+[[_update-appmanifest]]
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the CommandLog modules.
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtCommandLogPersistenceXxx.class,        // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+
+<.> specify either `CausewayModuleExtCommandLogPersistenceJdo` or `CausewayModuleExtCommandLogPersistenceJpa`, as required
+
+If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
+
+[#configure-properties]
+=== Configuration Properties
+
+Add the database schema used by the _Command Log_ entities to the configuration file:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  persistence:
+    schema:
+      auto-create-schemas: causewayExtCommandLog
+----
+
+Optionally, modify the configuration properties for the _Command Log_ module itself:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  extensions:
+    command-log:
+      publish-policy: "always"    # <.>
+----
+
+
+<.> the alternative is `"only-if-system-changed"`, which suppresses the persisting of `CommandLogEntry`s for commands where no other system state was changed (for example a finder action with safe semantics).
++
+See xref:refguide:config:sections/causeway.extensions.adoc#causeway.extensions.command-log.publish-policy[causeway.extensions.command-log.publish-policy] configuration property for more details.
+
+
+[#menubar-layout-xml]
+=== menubar.layout.xml
+
+Once configured, the extension provides a number of menu actions.
+You can use `menubars.layout.xml` to arrange these as you see fit.
+To get you started, the following fragment adds all of the actions to an "Activity" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    ...
+    <mb3:menu>
+        <mb3:named>Activity</mb3:named>
+        ...
+        <mb3:section>
+            <mb3:named>Commands</mb3:named>
+            <mb3:serviceAction id="activeCommands" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findCommands" objectType="isis.ext.commandLog.CommandLogMenu"/>
+            <mb3:serviceAction id="findAll" objectType="isis.ext.commandLog.CommandLogMenu"/>
+        </mb3:section>
+        ...
+    </mb3:menu>
+</mb3:secondary>
+----
+
+[#secman-security-roles]
+=== SecMan Security Roles
+
+If xref:security:secman:about.adoc[] extension is configured, then permissions must be granted to access the menu actions.
+
+This can be done by granting the role set up by the xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtCommandLogRoleAndPermissions.adoc[] seed fixture script (see its `ROLE_NAME` constant).
+
+
+== User Interface
+
+The extension provides a number of menu actions and contributions.
+
+The menu actions are as listed in xref:menubar-layout-xml[], above.
+They allow the administrator to query the persisted commands.
+Typically access to these actions would be restricted, see xref:secman-security-roles[security roles] above.
+
+The extension also provides these mixins:
+
+* xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[]
++
+This contributes a `recentCommands` collection to each and every domain object.
++
+This can be explicit positioned through the domain class' own xref:userguide:fun:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
+
+* xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[]
++
+This contributes the `recentCommandsByUser` collection to any domain object that implements the xref:refguide:applib:index/mixins/security/HasUsername.adoc[] interface.
++
+Most notably, this is xref:security:secman:about.adoc[] extension's xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[] entity that represents a logged-on user.
+It is also supported by xref:security:sessionlog:about.adoc
+
+* xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[]
++
+This contributes the `commandLogEntry` property to any object implementing xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[] interface.
+Typically these are the entities persisted by the xref:executionlog:about.adoc[] or xref:security:audittrail:about.adoc[] extensions, making it easy to traverse between these logs.
+
+
+[#background-commands]
+== Background Commands
+
+Sometimes we might want to execute an action not immediately in the current users's thread of control, but instead to perform it in the background; for example any long-running process.
+
+One way to accomplish this is to use xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap(...)], where the command is executed by another thread obtained from a thread pool (`ForkJoinPool.commonPool()`).
+This works well, but has the slight risk that it is not transactionally safe - the async thread executes in its own interaction/transaction, and so might fail even though the initiating command succeeds; or vice versa.
+
+An alternative approach is to use the xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService].
+This persists the command as an `CommandLogEntry` instance, indicating that it is to be executed in the background.
+Then, a separate thread - eg scheduling using Quartz - can pick up the queued `CommandLogEntry` and execute it.
+
+=== Submitting Actions
+
+For example, suppose we have a long-running action to export all the invoices we have received from a supplier, perhaps to be sent to some other system.
+Assuming that the `exportInvoices()` action is a regular action on the `Supplier` domain class, we would use:
+
+[source,java]
+.example usage of `BackgroundService` to invoke a regular action
+----
+@Action
+public void exportInvoices(Supplier supplier) {
+    backgroundService.execute(supplier).exportInvoices();
+}
+----
+
+If instead this functionality is implemented as a mixin, we would use something like:
+
+[source,java]
+.example usage of `BackgroundService` to invoke a mixin action:
+----
+@Action
+public void exportInvoices(Supplier supplier) {
+    backgroundService.executeMixin(Supplier_exportInvoices.class, supplier).act();
+}
+----
+
+The action being invoked must be part of the Causeway metamodel, in other words it cannot be marked uses
+xref:refguide:applib:index/annotation/Programmatic.adoc[] or xref:refguide:applib:index/annotation/Domain_Exclude.adoc[].
+
+By default all the usual hide/disable/validate rules will be checked, but there are also methods to allow these rules to be skipped.
+
+Behind the scenes this service uses xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap(...)] using xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc#with_ExecutorService[AsyncControl#with(ExecutorService)] to pass an implementation of `ExecutorService` that persists the command as a `CommandLogEntry` instance.
+
+If you require more fine-grained control, you can always just use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] async method yourself.
+The `ExecutorService` to use is xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService].
+This is a Spring `@Service` and so can be obtained through injection.
+
+=== Executing Actions using the Quartz scheduler
+
+Once a command has been persisted as a `CommandLogEntry`, we require some other process to actually execute the command.
+The _Command Log_ module includes the `RunBackgroundCommandsJob`, a https://www.quartz-scheduler.org/[Quartz] job that does exactly this.
+Each time it is called it will query for any background commands that have not been started, and will execute each (using the xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]).
+
+The job is marked as non re-entrant, so it doesn't matter how often it is called; we recommend a 10 second delay usually works fine.
+
+To configure Quartz, add the following to your `AppManifest`:
+
+[source,java]
+.AppManifest.java
+----
+public class AppManifest {
+
+    @Bean(name = "RunBackgroundCommandsJob")                                // <.>
+    public JobDetailFactoryBean jobDetail() {
+        val jobDetailFactory = new JobDetailFactoryBean();
+        jobDetailFactory.setJobClass(RunBackgroundCommandsJob.class);
+        jobDetailFactory.setDurability(true);
+        return jobDetailFactory;
+    }
+
+    @Bean
+    public SimpleTriggerFactoryBean trigger(
+            final @Qualifier("RunBackgroundCommandsJob") JobDetail job) {   // <1>
+        val trigger = new SimpleTriggerFactoryBean();
+        trigger.setJobDetail(job);
+        trigger.setStartDelay(60_000);                                      // <.>
+        trigger.setRepeatInterval(10_000);                                  // <.>
+        trigger.setRepeatCount(REPEAT_INDEFINITELY);
+        return trigger;
+    }
+
+    // ...
+}
+----
+
+<.> name and qualify the job (so will not interfere with any other Quartz jobs you may have defined)
+<.> 60 secs to wait for the app to be ready
+<.> check every 10 seconds
 
 
 
+==== Disabling Quartz
+
+The _Command Log_ module automatically references the https://www.quartz-scheduler.org/[Quartz] library.
+If you don't want to use this functionality and want to exclude quartz, then add an explicit dependency on the _Command Log_ applib but exclude the quartz dependency within it:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-commandlog-applib</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>org.quartz-scheduler</groupId>                 <!--.-->
+                <artifactId>quartz</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+</dependencies>
+----
+<.> exclude reference to quartz
+
+
+
+[#notes]
+== Notes
+
+include::partial$commandsubscriber-vs-executionsubscriber.adoc[]
+
+
+
+== See also
+
+* xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction]
+* xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[].
+* xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] service
+* xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService] service
+* xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] SPI
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[] SPI
+* xref:executionlog:about.adoc[] extension
 
