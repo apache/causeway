@@ -190,7 +190,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public <T> Optional<T> uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
-        final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
+        final List<T> instances = allMatches(type, predicate);
         if (instances.size() > 1) {
             throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
         }
