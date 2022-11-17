@@ -18,15 +18,24 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa.dom;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.UUID;
 
 import javax.inject.Named;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.Domain;
@@ -41,6 +50,10 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.Cau
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayCommandDtoConverter;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -238,7 +251,7 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     }
     @Transient
     @Override
-    public void setInteractionId(UUID interactionId) {
+    public void setInteractionId(final UUID interactionId) {
         this.pk = new CommandLogEntryPK(interactionId);
     }
 

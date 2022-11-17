@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.PostProcessingOrder;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.EqualsAndHashCode;

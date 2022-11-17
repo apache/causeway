@@ -23,7 +23,6 @@ import org.quartz.JobExecutionContext;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}

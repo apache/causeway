@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 

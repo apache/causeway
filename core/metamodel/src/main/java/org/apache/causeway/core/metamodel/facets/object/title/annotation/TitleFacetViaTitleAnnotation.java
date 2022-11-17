@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
 import org.apache.causeway.core.metamodel.facets.Evaluators.MethodEvaluator;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;

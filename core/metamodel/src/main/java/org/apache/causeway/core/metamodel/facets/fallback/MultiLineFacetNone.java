@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.fallback;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;

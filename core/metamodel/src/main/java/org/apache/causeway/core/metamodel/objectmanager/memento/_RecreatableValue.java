@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.objectmanager.memento._Recreatable.RecreateStrategy;
 
 class _RecreatableValue implements _Recreatable{
 

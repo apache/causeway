@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator;
-import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -41,7 +40,7 @@ public class PrototypingDecoratorForButton implements PrototypingDecorator<Butto
     private final PrototypingInfoPopupProvider prototypingInfoService;
 
     @Override
-    public Node decorate(Button uiButton, PrototypingDecorationModel prototypingDecorationModel) {
+    public Node decorate(final Button uiButton, final PrototypingDecorationModel prototypingDecorationModel) {
         val span = new HBox();
         val prototypingLabel = _fx.add(span, new Label("ⓘ"));
         _fx.add(span, uiButton);

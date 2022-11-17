@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
-import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
