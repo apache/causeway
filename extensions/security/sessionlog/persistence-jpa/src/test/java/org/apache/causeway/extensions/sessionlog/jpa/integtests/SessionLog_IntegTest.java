@@ -31,6 +31,8 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.extensions.sessionlog.applib.integtests.SessionLogIntegTestAbstract;
 import org.apache.causeway.extensions.sessionlog.jpa.CausewayModuleExtSessionLogPersistenceJpa;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = SessionLog_IntegTest.AppManifest.class
@@ -45,6 +47,9 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
+
+            FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
+            ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test),

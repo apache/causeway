@@ -35,6 +35,8 @@ import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Exe
 import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
 import org.apache.causeway.extensions.executionoutbox.jpa.integtests.model.Counter;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = ExecutionOutbox_IntegTest.AppManifest.class
@@ -48,6 +50,9 @@ public class ExecutionOutbox_IntegTest extends ExecutionOutbox_IntegTestAbstract
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+
+            FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
+            ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)
@@ -58,7 +63,8 @@ public class ExecutionOutbox_IntegTest extends ExecutionOutbox_IntegTestAbstract
     }
 
 
-    protected org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter newCounter(String name) {
+    @Override
+    protected org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 

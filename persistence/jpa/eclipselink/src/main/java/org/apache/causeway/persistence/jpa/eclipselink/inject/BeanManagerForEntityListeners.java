@@ -122,12 +122,6 @@ public class BeanManagerForEntityListeners implements BeanManager {
         _Exceptions.throwNotImplemented();
     }
 
-//TODO[ISIS-3275] investigate this removal
-//    @Override
-//    public void fireEvent(final Object event, final Annotation... qualifiers) {
-//        _Exceptions.throwNotImplemented();
-//    }
-
     @Override
     public <T> Set<ObserverMethod<? super T>> resolveObserverMethods(final T event, final Annotation... qualifiers) {
         _Exceptions.throwNotImplemented();

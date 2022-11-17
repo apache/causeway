@@ -35,6 +35,8 @@ import org.apache.causeway.extensions.executionlog.applib.integtest.model.Execut
 import org.apache.causeway.extensions.executionlog.jpa.CausewayModuleExtExecutionLogPersistenceJpa;
 import org.apache.causeway.extensions.executionlog.jpa.integtests.model.Counter;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = ExecutionLog_IntegTest.AppManifest.class
@@ -48,6 +50,9 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionLogPersistenceJpa.class,
+
+            FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
+            ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)
@@ -58,7 +63,8 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
     }
 
 
-    protected org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter newCounter(String name) {
+    @Override
+    protected org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 
