@@ -19,9 +19,9 @@ For example:
 public InvoiceSummary {
 
     @Property(
-        projecting = Projecting.PROJECTED   // <.>
+        projecting = Projecting.PROJECTED,  // <.>
         hidden = Where.EVERYWHERE           // <.>
-    }
+    )
     @Getter @Setter
     private Invoice invoice;
 
