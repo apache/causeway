@@ -245,8 +245,8 @@ public interface RepositoryService {
      * of persisted instances of specified type (including subtypes).
      *
      * <p>
-     * If the optional range parameters are used, the dataset returned starts
-     * from (0 based) index, and consists of only up to count items.
+     * If the optional range parameters are used, the dataset considered (before filtering) starts
+     * from (0 based) index, runs through up to count items.
      * </p>
      *
      * @param ofType
