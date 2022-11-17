@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.value.vsp;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacetAbstract;
 

@@ -23,7 +23,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.val;

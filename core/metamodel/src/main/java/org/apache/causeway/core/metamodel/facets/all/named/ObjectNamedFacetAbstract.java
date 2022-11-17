@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.named;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNounFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;

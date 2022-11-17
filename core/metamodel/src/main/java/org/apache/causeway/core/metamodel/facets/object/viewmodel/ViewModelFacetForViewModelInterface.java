@@ -25,6 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

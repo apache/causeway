@@ -23,6 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.memento._Recreatable.RecreateStrategy;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
