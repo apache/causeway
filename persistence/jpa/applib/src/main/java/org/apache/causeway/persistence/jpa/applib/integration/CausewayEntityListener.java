@@ -18,16 +18,6 @@
  */
 package org.apache.causeway.persistence.jpa.applib.integration;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Provider;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostRemove;
-import jakarta.persistence.PostUpdate;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreRemove;
-import jakarta.persistence.PreUpdate;
-
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
@@ -41,6 +31,15 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChang
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
+import jakarta.persistence.PostUpdate;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreRemove;
+import jakarta.persistence.PreUpdate;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -62,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CausewayEntityListener {
 
-    // injection points resolved via constructor ...
+    // injection points resolved via BeanManagerForEntityListeners ...
     @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;

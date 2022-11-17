@@ -35,6 +35,7 @@ import jakarta.enterprise.inject.spi.AnnotatedMethod;
 import jakarta.enterprise.inject.spi.AnnotatedType;
 import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.enterprise.inject.spi.InjectionTarget;
+import jakarta.enterprise.inject.spi.InjectionTargetFactory;
 import jakarta.inject.Provider;
 import lombok.SneakyThrows;
 
@@ -152,6 +153,46 @@ final class _Util {
                 // silently ignore
             }
         };
+    }
+
+    static <T> InjectionTargetFactory<T> createInjectionTargetFactory(
+            final AnnotatedType<T> type,
+            final Provider<ServiceInjector> serviceInjectorProvider) {
+
+        return bean -> new InjectionTarget<T>() {
+
+            @Override @SneakyThrows
+            public T produce(final CreationalContext<T> ctx) {
+                return type.getJavaClass().getConstructor(_Constants.emptyClasses).newInstance();
+            }
+
+            @Override
+            public void inject(final T instance, final CreationalContext<T> ctx) {
+                serviceInjectorProvider.get().injectServicesInto(instance);
+            }
+
+            @Override
+            public void dispose(final T instance) {
+                // silently ignore
+            }
+
+            @Override
+            public Set<InjectionPoint> getInjectionPoints() {
+                // silently ignore
+                return Collections.emptySet();
+            }
+
+            @Override
+            public void postConstruct(final T instance) {
+                // silently ignore
+            }
+
+            @Override
+            public void preDestroy(final T instance) {
+                // silently ignore
+            }
+        };
+
     }
 
 }

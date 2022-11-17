@@ -79,12 +79,6 @@ public class BeanManagerForEntityListeners implements BeanManager {
         return _Util.createAnnotatedType(type);
     }
 
-//TODO[ISIS-3275] investigate this removal
-//    @Override
-//    public <T> InjectionTarget<T> createInjectionTarget(final AnnotatedType<T> type) {
-//        return _Util.createInjectionTarget(type, serviceInjectorProvider);
-//    }
-
     // -- IGNORED
 
     @Override
@@ -245,8 +239,7 @@ public class BeanManagerForEntityListeners implements BeanManager {
 
     @Override
     public <T> InjectionTargetFactory<T> getInjectionTargetFactory(final AnnotatedType<T> annotatedType) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        return _Util.createInjectionTargetFactory(annotatedType, serviceInjectorProvider);
     }
 
     @Override
