@@ -40,6 +40,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
@@ -98,12 +99,13 @@ import lombok.val;
  */
 @ConfigurationProperties(CausewayConfiguration.ROOT_PREFIX)
 @Data
-@Validated
+//@Validated //TODO[ISIS-3275] re-enable validation
 public class CausewayConfiguration {
 
     public static final String ROOT_PREFIX = "causeway";
 
     private final ConfigurableEnvironment environment;
+    @Autowired
     public CausewayConfiguration(final ConfigurableEnvironment environment) {
         this.environment = environment;
     }
@@ -136,7 +138,7 @@ public class CausewayConfiguration {
              * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
              * configured. Yet EXPERIMENTAL.
              *
-             * @see <code>org.springframework.security.web.csrf.CsrfFilter</code>
+             * @see org.springframework.security.web.csrf.CsrfFilter
              * @see "https://www.baeldung.com/spring-security-registered-filters"
              */
             private boolean allowCsrfFilters = false;
