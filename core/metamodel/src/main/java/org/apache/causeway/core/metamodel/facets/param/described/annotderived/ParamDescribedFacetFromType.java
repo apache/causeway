@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.param.described.annotderived;
 import java.util.Optional;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;

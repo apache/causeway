@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.actions.position;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 

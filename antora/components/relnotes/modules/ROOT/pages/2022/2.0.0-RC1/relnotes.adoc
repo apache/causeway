@@ -8,6 +8,7 @@ Known issues of this release:
 
 * Wicket Viewer
 ** Date/Time picking not fully supported for temporal value types with zone or offset information.
+** File Upload _Action Parameters_ are forced non-manadatory and also always cleared in case a dependent parameter changes (during parameter negotiation). 
 ** The extension in support of Server Sent Events (SSE), as used for progress bars, 
 is experimental and not recommended for production.	   
 

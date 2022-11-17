@@ -23,7 +23,6 @@ import jakarta.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator;
-import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;

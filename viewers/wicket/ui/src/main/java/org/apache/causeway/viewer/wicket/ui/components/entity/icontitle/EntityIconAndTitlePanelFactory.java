@@ -28,7 +28,6 @@ import org.apache.causeway.viewer.wicket.model.models.ChainingObjectModel;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.val;

@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ThrowableExtensions;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;

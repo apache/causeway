@@ -24,7 +24,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 public class UnknownModelPanelFactory implements ComponentFactory {

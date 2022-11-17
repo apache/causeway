@@ -32,9 +32,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
-import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ButtonRequest;
-import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
-import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.LabelAndPosition;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import javafx.scene.Node;

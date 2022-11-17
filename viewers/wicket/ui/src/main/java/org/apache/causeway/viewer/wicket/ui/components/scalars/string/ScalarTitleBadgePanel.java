@@ -24,7 +24,6 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 

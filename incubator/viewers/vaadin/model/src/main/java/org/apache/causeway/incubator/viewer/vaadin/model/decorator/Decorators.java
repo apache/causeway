@@ -60,7 +60,7 @@ public class Decorators {
     public final static class Tooltip implements TooltipDecorator<Component> {
 
         @Override
-        public void decorate(Component uiComponent, TooltipDecorationModel tooltipDecorationModel) {
+        public void decorate(final Component uiComponent, final TooltipDecorationModel tooltipDecorationModel) {
             log.warn("not implemented yet");
         }
 
@@ -107,7 +107,7 @@ public class Decorators {
             val icon = getTopLevelMenuIcon();
             val layout =  new HorizontalLayout(label, icon);
             layout.setVerticalComponentAlignment(Alignment.END, icon);
-            return (Component) layout;
+            return layout;
         }
 
         private Component getTopLevelMenuIcon() {
@@ -155,7 +155,7 @@ public class Decorators {
 
         }
 
-        private Component getUserIcon(URL avatarUrl) {
+        private Component getUserIcon(final URL avatarUrl) {
             return new Image(avatarUrl.toExternalForm(), "avatar");
         }
 

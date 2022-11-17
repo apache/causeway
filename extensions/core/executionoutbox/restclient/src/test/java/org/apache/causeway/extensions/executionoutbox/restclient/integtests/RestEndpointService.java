@@ -22,10 +22,8 @@ package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 
 import jakarta.inject.Inject;
 
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
@@ -42,7 +40,7 @@ public class RestEndpointService {
     private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
 
-    public OutboxClient newClient(int port, String username, String password) {
+    public OutboxClient newClient(final int port, final String username, final String password) {
 
         val restRootPath =
                 String.format("http://localhost:%d%s/",
