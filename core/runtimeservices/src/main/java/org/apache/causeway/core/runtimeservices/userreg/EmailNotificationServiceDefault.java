@@ -18,19 +18,12 @@
  */
 package org.apache.causeway.core.runtimeservices.userreg;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -41,8 +34,14 @@ import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.causeway.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.causeway.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailNotificationServiceDefault")
@@ -87,9 +86,10 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     protected String loadResource(final String resourceName) {
         try {
             return _Resources.loadAsStringUtf8(EmailNotificationServiceDefault.class, resourceName);
-        } catch (IOException e) {
-            final URL templateUrl = _Resources.getResourceUrl(EmailNotificationServiceDefault.class, resourceName);
-            throw new IllegalStateException(String.format("Unable to read resource URL '%s'", templateUrl));
+        } catch (Exception e) {
+            throw _Exceptions.illegalState(e, "Unable to read resource '%s' relative to %s",
+                    resourceName,
+                    EmailNotificationServiceDefault.class.getName());
         }
     }
 
