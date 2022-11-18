@@ -52,8 +52,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used 
-				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
@@ -212,7 +210,7 @@
 		    <version>2.0.1</version>
 		</dependency>
 		<dependency>
-        	<!-- provides javax.enterprise.inject.* -->
+        	<!-- provides jakarta.enterprise.inject.* -->
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
             <version>4.0.1</version>
@@ -228,7 +226,7 @@
             </exclusions>
         </dependency>
         <dependency>
-        	<!-- provides javax.transaction.TransactionalException -->
+        	<!-- provides jakarta.transaction.TransactionalException -->
 		    <groupId>jakarta.transaction</groupId>
 		    <artifactId>jakarta.transaction-api</artifactId>
 		</dependency>
@@ -238,8 +236,8 @@
 		</dependency>
 		<dependency>
 			<!-- MediaType support -->
-            <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
         </dependency>
 		
 	</dependencies>

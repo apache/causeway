@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.testdomain.rest;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.JAXBException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,8 +35,12 @@ import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBException;
 import lombok.val;
 
 @SpringBootTest(
@@ -48,7 +49,10 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
     Configuration_usingJdo.class,
-    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
+
+    FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
+    ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
 })
 class RestServiceTest {
 

@@ -21,8 +21,6 @@ package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import jakarta.inject.Inject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +57,11 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
+
+import jakarta.inject.Inject;
 
 @SpringBootTest(
         classes = OutboxRestClient_IntegTest.AppManifest.class,
@@ -81,7 +83,10 @@ public class OutboxRestClient_IntegTest  {
 
             // mixins
             Counter_bumpUsingMixin.class,
-            Counter_bumpUsingMixinWithExecutionPublishingDisabled.class
+            Counter_bumpUsingMixinWithExecutionPublishingDisabled.class,
+
+            FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
+            ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)
@@ -237,7 +242,7 @@ public class OutboxRestClient_IntegTest  {
 
     }
 
-    private void bump(org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter counter, int numberOfTimes) {
+    private void bump(final org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter counter, final int numberOfTimes) {
         IntStream.range(0, numberOfTimes).forEach(x -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter).act();
         });
