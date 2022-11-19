@@ -39,4 +39,5 @@ module org.apache.causeway.security.keycloak {
     requires spring.security.oauth2.jose;
     requires spring.security.web;
     requires spring.web;
+    requires org.apache.causeway.commons;
 }
