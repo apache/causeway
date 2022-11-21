@@ -27,7 +27,11 @@ import java.lang.annotation.Target;
 
 /**
  * Annotated on a view model to indicate that it should be used as the home page.
- *
+ * <p>
+ *     If - for the currently logged on user - none of the view model's members are effectively visible,
+ *     (or if there are no members to begin with), the view model instance is considered hidden. Hence
+ *     a NOT-AUTHORIZED page will be displayed instead.
+ * </p>
  * <p>
  *     The view model is instantiated through a no-arg constructor, so must in effect be stateless.
  *     Typically it will use injected repositories in order to display a dashboard, and offer actions
