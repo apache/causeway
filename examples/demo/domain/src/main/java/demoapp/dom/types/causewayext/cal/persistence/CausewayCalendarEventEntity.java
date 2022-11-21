@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.causewayext.cal.persistence;
 
-import jakarta.inject.Named;
+import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
@@ -27,6 +27,7 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.causewayext.cal.holder.CausewayCalendarEventHolder2;
+import jakarta.inject.Named;
 
 @Named("demo.CalendarEventEntity") // shared permissions with concrete sub class
 @DomainObject
@@ -46,7 +47,9 @@ implements
 
     @Override
     public String getCalendarName() {
-        return toCalendarEvent().getCalendarName();
+        return Optional.ofNullable(toCalendarEvent())
+                .map(CalendarEvent::getCalendarName)
+                .orElse(null);
     }
 
     @Override
