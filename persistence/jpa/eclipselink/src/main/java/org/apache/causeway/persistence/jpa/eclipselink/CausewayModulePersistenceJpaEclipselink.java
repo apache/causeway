@@ -40,6 +40,7 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
@@ -197,6 +198,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                                     "JPA operation: " + nextEx.getMessage(),
                                     extractSqlStringFromException(nextEx),
                                     nextEx))
+                    .filter(_NullSafe::isPresent) //ISIS-3282
                     .findFirst()
                     .orElse(null);
 
