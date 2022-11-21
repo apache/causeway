@@ -24,7 +24,6 @@ import java.util.WeakHashMap;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.ProxyEnhanced;
 
 import lombok.NonNull;
 
@@ -38,7 +37,7 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
     private final Map<Class<?>, _ProxyFactory<?>> proxyFactoryByClass = Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
-    public <T> _ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass) {
+    public <T> _ProxyFactory<T> factory(final Class<T> toProxyClass, final Class<?> additionalClass) {
         _ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(toProxyClass));
         if(proxyFactory == null) {
             proxyFactory = createFactory(toProxyClass, additionalClass);

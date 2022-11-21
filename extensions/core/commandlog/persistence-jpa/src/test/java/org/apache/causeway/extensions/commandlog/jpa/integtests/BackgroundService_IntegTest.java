@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.commandlog.jpa.integtests;
 
-import org.apache.causeway.extensions.commandlog.applib.integtest.BackgroundService_IntegTestAbstract;
-import org.apache.causeway.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
-import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.apache.causeway.extensions.commandlog.applib.integtest.BackgroundService_IntegTestAbstract;
+import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 
 @SpringBootTest(
         classes = AppManifest.class
@@ -31,7 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 public class BackgroundService_IntegTest extends BackgroundService_IntegTestAbstract {
 
 
-    protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {
+    @Override
+    protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 

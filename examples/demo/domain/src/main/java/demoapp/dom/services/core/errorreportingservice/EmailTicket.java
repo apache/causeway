@@ -67,7 +67,7 @@ public class EmailTicket extends SimpleTicket {
 
         // -- STACKTRACE FORMATTING
 
-        public static String mailBodyOf(ErrorDetails errorDetails) {
+        public static String mailBodyOf(final ErrorDetails errorDetails) {
             return "Stacktrace:%0D%0A=================%0D%0A" +
                     stream(errorDetails.getStackTraceDetailPerCause())
             .map(MailTo::causeToString)
@@ -75,7 +75,7 @@ public class EmailTicket extends SimpleTicket {
             ;
         }
 
-        private static String causeToString(List<String> list) {
+        private static String causeToString(final List<String> list) {
             return "Cause%0D%0A------------%0D%0A" +
                     stream(list)
             .map(entry->String.format("# %s", entry))
@@ -92,12 +92,12 @@ public class EmailTicket extends SimpleTicket {
     private MailTo mailTo;
 
     public EmailTicket(
-            MailTo mailTo,
-            String reference,
-            String userMessage,
-            String details,
-            StackTracePolicy stackTracePolicy,
-            String kittenUrl) {
+            final MailTo mailTo,
+            final String reference,
+            final String userMessage,
+            final String details,
+            final StackTracePolicy stackTracePolicy,
+            final String kittenUrl) {
         super(reference, userMessage, details, stackTracePolicy, kittenUrl);
         this.mailTo = mailTo;
     }

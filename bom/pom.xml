@@ -409,12 +409,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
         <select2.version>4.0.13</select2.version>
-        <shiro.version>1.10.0</shiro.version>
+        <shiro.version>1.10.1</shiro.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
-        <slf4j-api.version>2.0.3</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+        <slf4j-api.version>2.0.4</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <spring-boot.version>2.7.5</spring-boot.version>
         <summernote.version>0.8.20</summernote.version>
-        <surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
+        <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <swagger-core.version>1.6.9</swagger-core.version>
 
         <togglz.version>3.3.1</togglz.version>
@@ -535,7 +535,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.1</version>    <!--bumped-->
+                    <version>3.1.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -1351,7 +1351,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </property>
             </activation>
             <properties>
-                <surefire-plugin.argLine>@{argLine} -Xmx512m</surefire-plugin.argLine>
+                <surefire-plugin.argLine>@{argLine} -Xmx384m</surefire-plugin.argLine>
             </properties>
             <build>
                 <plugins>

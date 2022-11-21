@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.ActionSupport;
 import org.apache.causeway.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
 import lombok.val;

@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.val;

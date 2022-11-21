@@ -31,9 +31,6 @@ import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.incubator.viewer.vaadin.model.util.Vaa;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
-import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ButtonRequest;
-import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
-import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.LabelAndPosition;
 
 import lombok.Getter;
 import lombok.val;

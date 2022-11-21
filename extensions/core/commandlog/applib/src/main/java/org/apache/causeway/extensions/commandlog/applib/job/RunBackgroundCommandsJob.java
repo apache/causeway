@@ -1,40 +1,29 @@
 package org.apache.causeway.extensions.commandlog.applib.job;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.command.CommandOutcomeHandler;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.applib.util.JaxbUtil;
-import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
+
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.applib.util.JaxbUtil;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * An implementation of a Quartz {@link Job} that queries for {@link CommandLogEntry}s that have been persisted by
@@ -54,6 +43,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
 
+    @Override
     public void execute(final JobExecutionContext quartzContext) {
         val user = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
         val interactionContext = InteractionContext.builder().user(user).build();
