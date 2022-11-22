@@ -417,7 +417,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <swagger-core.version>1.6.9</swagger-core.version>
 
-        <togglz.version>3.3.1</togglz.version>
+        <togglz.version>3.3.2</togglz.version>
 
         <vaadin.version>23.2.8</vaadin.version>
 
