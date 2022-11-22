@@ -66,17 +66,9 @@
            theme: "nord"
         },
         withCredentials: true,
-        onComplete: function() {
-        	console.log("pre-auth");
-    		ui.preauthorizeBasic("basicAuth", "sven", "pass");
-    	}
       });
       /* End Swagger UI call region */
       window.ui = ui;
-      
-      console.log("pre-auth2");
-      ui.preauthorizeBasic("basicAuth", "sven", "pass");
-      
     }
   </script>
   </body>
