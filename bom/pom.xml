@@ -319,7 +319,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
         <!-- LIBRARY DEPENDENCIES -->
-        <archunit.version>1.0.0</archunit.version>
+        <archunit.version>1.0.1</archunit.version>
         <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <asm.version>9.4</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.5.0</approvaltests.version>
