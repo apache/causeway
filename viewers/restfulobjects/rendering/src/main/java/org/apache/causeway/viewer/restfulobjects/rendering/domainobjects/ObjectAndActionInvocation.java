@@ -128,6 +128,10 @@ public class ObjectAndActionInvocation {
 
     // -- UTILITY
 
+    /**
+     * Returns the action result as either as is (singular/left) or a list (plural/right), based on
+     * whether the action return type has collection semantics.
+     */
     public Either<ManagedObject, List<ManagedObject>> asEitherSingularOrPlural() {
         return getReturnTypeSpecification().isPlural()
                 ? Either.right(Facets.collectionStream(getReturnTypeSpecification(), getReturnedAdapter())
