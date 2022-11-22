@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import io.swagger.models.Response;
-import io.swagger.models.properties.IntegerProperty;
+import io.swagger.v3.oas.models.headers.Header;
+import io.swagger.v3.oas.models.media.IntegerSchema;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
@@ -41,26 +42,26 @@ import io.swagger.models.properties.IntegerProperty;
  */
 enum Caching {
     TRANSACTIONAL {
-        @Override public void withHeaders(final Response response) {
+        @Override public void withHeaders(final ApiResponse response) {
 
         }
     },
     USER_INFO {
-        @Override public void withHeaders(final Response response) {
+        @Override public void withHeaders(final ApiResponse response) {
             response
-            .header("Cache-Control",
-                    new IntegerProperty()
-                    ._default(3600));
+            .addHeaderObject("Cache-Control",
+                    new Header().schema(
+                            new IntegerSchema()._default(3600)));
         }
     },
     NON_EXPIRING {
-        @Override public void withHeaders(final Response response) {
+        @Override public void withHeaders(final ApiResponse response) {
             response
-            .header("Cache-Control",
-                    new IntegerProperty()
-                    ._default(86400).description(_Util.roSpec("2.13")));
+            .addHeaderObject("Cache-Control",
+                    new Header().schema(
+                            new IntegerSchema()._default(86400).description(_Util.roSpec("2.13"))));
         }
     };
 
-    public abstract void withHeaders(final Response response);
+    public abstract void withHeaders(final ApiResponse response);
 }

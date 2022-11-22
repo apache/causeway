@@ -43,21 +43,21 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import io.swagger.models.Info;
-import io.swagger.models.ModelImpl;
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
-import io.swagger.models.Response;
-import io.swagger.models.Swagger;
-import io.swagger.models.parameters.BodyParameter;
-import io.swagger.models.parameters.PathParameter;
-import io.swagger.models.parameters.QueryParameter;
-import io.swagger.models.properties.ArrayProperty;
-import io.swagger.models.properties.MapProperty;
-import io.swagger.models.properties.ObjectProperty;
-import io.swagger.models.properties.Property;
-import io.swagger.models.properties.RefProperty;
-import io.swagger.models.properties.StringProperty;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.ArraySchema;
+import io.swagger.v3.oas.models.media.MapSchema;
+import io.swagger.v3.oas.models.media.ObjectSchema;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.PathParameter;
+import io.swagger.v3.oas.models.parameters.QueryParameter;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.servers.Server;
 import lombok.val;
 
 class Generation {
@@ -75,7 +75,7 @@ class Generation {
 
     private final Set<String> references = _Sets.newLinkedHashSet();
     private final Set<String> definitions = _Sets.newLinkedHashSet();
-    private Swagger swagger;
+    private OpenAPI swagger;
 
     public Generation(
             final String basePath,
@@ -92,20 +92,21 @@ class Generation {
         this.valuePropertyFactory = valuePropertyFactory;
     }
 
-    Swagger generate() {
-        this.swagger = new Swagger();
+    OpenAPI generate() {
+        this.swagger = new OpenAPI();
 
         final String swaggerVersionInfo =
                 String.format("swagger.io (%s)",
-                        Swagger.class.getPackage().getImplementationVersion()
+                        OpenAPI.class.getPackage().getImplementationVersion()
                         );
 
-        swagger.basePath(basePath);
+        swagger.addServersItem(new Server()
+                .url(basePath));
         swagger.info(new Info()
                 .version(swaggerVersionInfo)
                 .title(visibility.name() + " API")
                 );
-
+        swagger.setComponents(new Components());
 
         appendRestfulObjectsSupportingPathsAndDefinitions();
         appendLinkModelDefinition();
@@ -120,27 +121,31 @@ class Generation {
         return swagger;
     }
 
-    private Map<String, Path> sorted(final Map<String, Path> paths) {
+    private Paths sorted(final Map<String, PathItem> paths) {
 
-        final List<Map.Entry<String, Path>> entries = new ArrayList<>(paths.entrySet());
-        entries.sort(new Comparator<Map.Entry<String, Path>>() {
+        final List<Map.Entry<String, PathItem>> entries = new ArrayList<>(paths.entrySet());
+        entries.sort(new Comparator<Map.Entry<String, PathItem>>() {
             @Override
-            public int compare(final Map.Entry<String, Path> o1, final Map.Entry<String, Path> o2) {
+            public int compare(final Map.Entry<String, PathItem> o1, final Map.Entry<String, PathItem> o2) {
                 final String tag1 = tagFor(o1);
                 final String tag2 = tagFor(o2);
                 final int tag = tag1.compareTo(tag2);
                 return tag != 0 ? tag : o1.getKey().compareTo(o2.getKey());
             }
 
-            protected String tagFor(final Map.Entry<String, Path> o1) {
-                return o1.getValue().getOperations().stream().findFirst().map(operation -> operation.getTags().stream().findFirst().orElse("(no tag)")).orElse("(no tag)");
+            protected String tagFor(final Map.Entry<String, PathItem> o1) {
+                return o1.getValue().readOperations().stream()
+                        .findFirst()
+                        .map(operation -> operation.getTags().stream().findFirst().orElse("(no tag)")).orElse("(no tag)");
             }
         });
 
-        final LinkedHashMap<String, Path> sorted = new LinkedHashMap<>();
+        final LinkedHashMap<String, PathItem> sorted = new LinkedHashMap<>();
         entries.forEach(entry -> sorted.put(entry.getKey(), entry.getValue()));
 
-        return sorted;
+        val _paths = new Paths();
+        _paths.putAll(sorted);
+        return _paths;
     }
 
     void appendServicePathsAndDefinitions() {
@@ -207,7 +212,7 @@ class Generation {
                     && objectCollections.isEmpty()) {
                 continue;
             }
-            final ModelImpl causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
+            final Schema causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
             updateObjectModel(causewayModel, objectSpec, objectProperties, objectCollections);
 
             for (final OneToManyAssociation objectCollection : objectCollections) {
@@ -225,99 +230,96 @@ class Generation {
         final String tag = ". restful objects supporting resources";
 
         swagger.path("/",
-                new Path()
-                .get(newOperation("home-page")
-                        .tag(tag)
-                        .description(_Util.roSpec("5.1"))
-                        .response(200,
-                                newResponse(Caching.NON_EXPIRING)
-                                .description("OK")
-                                .schema(newRefProperty("RestfulObjectsSupportingHomePageRepr"))
-                                )));
+                new PathItem()
+                .get(_Util.response(
+                        newOperation("home-page")
+                            .addTagsItem(tag)
+                            .description(_Util.roSpec("5.1")),
+                        200,
+                        newResponse(Caching.NON_EXPIRING, newRefProperty("RestfulObjectsSupportingHomePageRepr"))
+                            .description("OK"))));
         addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(_Util.roSpec("5.2")));
 
         swagger.path("/user",
-                new Path()
-                .get(newOperation("user")
-                        .tag(tag)
-                        .description(_Util.roSpec("6.1"))
-                        .response(200,
-                                newResponse(Caching.USER_INFO)
-                                .description("OK")
-                                .schema(newRefProperty("RestfulObjectsSupportingUserRepr"))
-                                )));
+                new PathItem()
+                .get(_Util.response(
+                        newOperation("user")
+                            .addTagsItem(tag)
+                            .description(_Util.roSpec("6.1")),
+                        200,
+                        newResponse(Caching.USER_INFO, newRefProperty("RestfulObjectsSupportingUserRepr"))
+                            .description("OK"))));
         addDefinition("RestfulObjectsSupportingUserRepr",
                 newModel(_Util.roSpec("6.2"))
-                .property("userName", stringProperty())
-                .property("roles", arrayOfStrings())
-                .property("links", arrayOfLinks())
-                .required("userName")
-                .required("roles"));
+                .addProperty("userName", stringProperty())
+                .addProperty("roles", arrayOfStrings())
+                .addProperty("links", arrayOfLinks())
+                .addRequiredItem("userName")
+                .addRequiredItem("roles"));
 
         swagger.path("/services",
-                new Path()
-                .get(newOperation("services")
-                        .tag(tag)
-                        .description(_Util.roSpec("7.1"))
-                        .response(200,
-                                newResponse(Caching.USER_INFO)
-                                .description("OK")
-                                .schema(newRefProperty("RestfulObjectsSupportingServicesRepr"))
-                                )));
+                new PathItem()
+                .get(_Util.response(
+                        newOperation("services")
+                            .addTagsItem(tag)
+                            .description(_Util.roSpec("7.1")),
+                        200,
+                        newResponse(Caching.USER_INFO, newRefProperty("RestfulObjectsSupportingServicesRepr"))
+                            .description("OK"))));
         addDefinition("RestfulObjectsSupportingServicesRepr",
                 newModel(_Util.roSpec("7.2"))
-                .property("value", arrayOfLinks())
-                .required("userName")
-                .required("roles"));
+                .addProperty("value", arrayOfLinks())
+                .addRequiredItem("userName")
+                .addRequiredItem("roles"));
 
         swagger.path("/version",
-                new Path()
-                .get(newOperation("RestfulObjectsSupportingServicesRepr")
-                        .tag(tag)
-                        .description(_Util.roSpec("8.1"))
-                        .response(200,
-                                newResponse(Caching.NON_EXPIRING)
-                                .description("OK")
-                                .schema(new ObjectProperty())
-                                )));
-        swagger.addDefinition("RestfulObjectsSupportingServicesRepr",
+                new PathItem()
+                .get(_Util.response(
+                        newOperation("RestfulObjectsSupportingServicesRepr")
+                            .addTagsItem(tag)
+                            .description(_Util.roSpec("8.1")),
+                        200,
+                        newResponse(Caching.NON_EXPIRING, new ObjectSchema())
+                            .description("OK"))));
+
+        swagger.getComponents().addSchemas("RestfulObjectsSupportingServicesRepr",
                 newModel(_Util.roSpec("8.2"))
-                .property("specVersion", stringProperty())
-                .property("implVersion", stringProperty())
-                .property("optionalCapabilities",
-                        new ObjectProperty()
-                        .property("blobsClobs", stringProperty())
-                        .property("deleteObjects", stringProperty())
-                        .property("domainModel", stringProperty())
-                        .property("validateOnly", stringProperty())
-                        .property("protoPersistentObjects", stringProperty())
+                .addProperty("specVersion", stringProperty())
+                .addProperty("implVersion", stringProperty())
+                .addProperty("optionalCapabilities",
+                        new ObjectSchema()
+                        .addProperty("blobsClobs", stringProperty())
+                        .addProperty("deleteObjects", stringProperty())
+                        .addProperty("domainModel", stringProperty())
+                        .addProperty("validateOnly", stringProperty())
+                        .addProperty("protoPersistentObjects", stringProperty())
                         )
-                .required("userName")
-                .required("roles"));
+                .addRequiredItem("userName")
+                .addRequiredItem("roles"));
     }
 
     void appendLinkModelDefinition() {
-        swagger.addDefinition("LinkRepr",
-                new ModelImpl()
+        swagger.getComponents().addSchemas("LinkRepr",
+                new Schema()
                 .type("object")
-                .property("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
-                .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
-                .property("title", stringProperty().description("title to render"))
-                .property("method", stringPropertyEnum("GET", "POST", "PUT", "DELETE").description("HTTP verb to access"))
-                .property("type", stringProperty().description("Content-Type recognized by the resource (for HTTP Accept header)"))
-                .property("arguments", new ObjectProperty().description("Any arguments, to send as query strings or in body"))
-                .property("value", stringProperty().description("the representation of the link if followed"))
-                .required("rel")
-                .required("href")
-                .required("method")
+                .addProperty("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
+                .addProperty("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
+                .addProperty("title", stringProperty().description("title to render"))
+                .addProperty("method", stringPropertyEnum("GET", "POST", "PUT", "DELETE").description("HTTP verb to access"))
+                .addProperty("type", stringProperty().description("Content-Type recognized by the resource (for HTTP Accept header)"))
+                .addProperty("arguments", new ObjectSchema().description("Any arguments, to send as query strings or in body"))
+                .addProperty("value", stringProperty().description("the representation of the link if followed"))
+                .addRequiredItem("rel")
+                .addRequiredItem("href")
+                .addRequiredItem("method")
                 );
 
-        swagger.addDefinition("HrefRepr",
-                new ModelImpl()
+        swagger.getComponents().addSchemas("HrefRepr",
+                new Schema()
                 .type("object")
                 .description("Abbreviated version of the Link resource, used primarily to reference non-value objects")
-                .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
-                .required("href")
+                .addProperty("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
+                .addRequiredItem("href")
                 );
 
     }
@@ -326,76 +328,75 @@ class Generation {
 
         final String serviceId = objectSpec.getLogicalTypeName();
 
-        final Path path = new Path();
+        final PathItem path = new PathItem();
         swagger.path(String.format("/services/%s", serviceId), path);
 
         final String serviceModelDefinition = serviceId + "Repr";
 
         final String tag = tagForlogicalTypeName(serviceId, "> services");
-        path.get(
+        path.get(_Util.response(
                 newOperation("object")
-                .tag(tag)
-                .description(_Util.roSpec("15.1"))
-                .response(200,
-                        newResponse(Caching.TRANSACTIONAL)
-                        .description("OK")
-                        .schema(newRefProperty(serviceModelDefinition)))
-                );
+                    .addTagsItem(tag)
+                    .description(_Util.roSpec("15.1")),
+                200,
+                newResponse(Caching.TRANSACTIONAL, newRefProperty(serviceModelDefinition))
+                    .description("OK")));
 
-        final ModelImpl model =
+        final Schema model =
                 newModel(_Util.roSpec("15.1.2") + ": representation of " + serviceId)
-                .property("title", stringProperty())
-                .property("serviceId", stringProperty()._default(serviceId))
-                .property("members", new ObjectProperty());
+                .addProperty("title", stringProperty())
+                .addProperty("serviceId", stringProperty()._default(serviceId))
+                .addProperty("members", new ObjectSchema());
 
         addDefinition(serviceModelDefinition, model);
     }
 
-    ModelImpl appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
+    Schema appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
 
         final String logicalTypeName = objectSpec.getLogicalTypeName();
 
-        final Path path = new Path();
+        final PathItem path = new PathItem();
         swagger.path(String.format("/objects/%s/{objectId}", logicalTypeName), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation operation = newOperation("object");
         path.get(operation);
         operation
-        .tag(tag)
+        .addTagsItem(tag)
         .description(_Util.roSpec("14.1"))
-        .parameter(
+        .addParametersItem(
+                _Util.typed(
                 new PathParameter()
-                .name("objectId")
-                .type("string"));
+                .name("objectId"),
+                "string"));
 
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
         // modelled representations per path and response code;
         // in particular cannot associate representation/model with Accept header ('produces(...) method)
         final String restfulObjectsModelDefinition = logicalTypeName + "RestfulObjectsRepr";
         if (false) {
-            operation.response(200,
-                    newResponse(Caching.TRANSACTIONAL)
-                    .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object")
-                    .schema(newRefProperty(restfulObjectsModelDefinition)));
+            _Util.response(operation,
+                    200,
+                    newResponse(Caching.TRANSACTIONAL, newRefProperty(restfulObjectsModelDefinition))
+                    .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object"));
 
-            final ModelImpl roSpecModel =
+            final Schema roSpecModel =
                     newModel(_Util.roSpec("14.4") + ": representation of " + logicalTypeName)
-                    .property("title", stringProperty())
-                    .property("domainType", stringProperty()._default(logicalTypeName))
-                    .property("instanceId", stringProperty())
-                    .property("members", new ObjectProperty());
-            swagger.addDefinition(restfulObjectsModelDefinition, roSpecModel);
+                    .addProperty("title", stringProperty())
+                    .addProperty("domainType", stringProperty()._default(logicalTypeName))
+                    .addProperty("instanceId", stringProperty())
+                    .addProperty("members", new ObjectSchema());
+            swagger.getComponents().addSchemas(restfulObjectsModelDefinition, roSpecModel);
         }
 
         final String causewayModelDefinition = logicalTypeName + "Repr";
-        operation
-        .response(200,
-                newResponse(Caching.TRANSACTIONAL)
-                .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
-                .schema(newRefProperty(causewayModelDefinition)));
 
-        final ModelImpl causewayModel = new ModelImpl();
+        _Util.response(operation,
+                200,
+                newResponse(Caching.TRANSACTIONAL, newRefProperty(causewayModelDefinition))
+                .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
+
+        final Schema causewayModel = new Schema();
         addDefinition(causewayModelDefinition, causewayModel);
 
         // return so can be appended to
@@ -403,21 +404,21 @@ class Generation {
     }
 
     // UNUSED
-    void appendServiceActionPromptTo(final ObjectProperty serviceMembers, final ObjectAction action) {
+    void appendServiceActionPromptTo(final ObjectSchema serviceMembers, final ObjectAction action) {
         String actionId = action.getId();
 
-        serviceMembers.property(actionId,
-                new ObjectProperty()
-                .property("id", stringPropertyEnum(actionId))
-                .property("memberType", stringPropertyEnum("action"))
-                .property("links",
-                        new ObjectProperty()
-                        .property("rel", stringPropertyEnum( String.format(
+        serviceMembers.addProperty(actionId,
+                new ObjectSchema()
+                .addProperty("id", stringPropertyEnum(actionId))
+                .addProperty("memberType", stringPropertyEnum("action"))
+                .addProperty("links",
+                        new ObjectSchema()
+                        .addProperty("rel", stringPropertyEnum( String.format(
                                 "urn:org.restfulobjects:rels/details;action=%s", actionId)))
-                        .property("href", stringPropertyEnum(String.format(
+                        .addProperty("href", stringPropertyEnum(String.format(
                                 "actions/%s", actionId))))
-                .property("method", stringPropertyEnum("GET"))
-                .property("type", stringPropertyEnum(
+                .addProperty("method", stringPropertyEnum("GET"))
+                .addProperty("type", stringPropertyEnum(
                         "application/json;profile=urn:org.restfulobjects:repr-types/object-action"))
                 );
     }
@@ -430,13 +431,13 @@ class Generation {
         final String actionId = serviceAction.getId();
 
         val parameters = serviceAction.getParameters();
-        final Path path = new Path();
+        final PathItem path = new PathItem();
         swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
         final String tag = tagForlogicalTypeName(serviceId, "> services");
         final Operation invokeOperation =
                 newOperation("object", "action-result")
-                .tag(tag)
+                .addTagsItem(tag)
                 .description(_Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId);
 
         final SemanticsOf semantics = serviceAction.getSemantics();
@@ -448,23 +449,21 @@ class Generation {
                 val describedAs = parameter.getStaticDescription().orElse(null);
 
                 invokeOperation
-                .parameter(
-                        new QueryParameter()
+                .addParametersItem(_Util.typed(new QueryParameter()
                         .name(parameter.getId())
                         .description(_Util.roSpec("2.9.1")
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
-                        .required(false)
-                        .type("string")
-                        );
+                        .required(false),
+                        "string"));
             }
             if(!parameters.isEmpty()) {
-                invokeOperation.parameter(new QueryParameter()
+                invokeOperation.addParametersItem(_Util.typed(new QueryParameter()
                         .name("x-causeway-querystring")
                         .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
-                        .required(false)
-                        .type("string"));
+                        .required(false),
+                        "string"));
             }
 
         } else {
@@ -474,38 +473,34 @@ class Generation {
                 path.post(invokeOperation);
             }
 
-            final ModelImpl bodyParam =
-                    new ModelImpl()
+            final Schema bodyParam =
+                    new Schema()
                     .type("object");
             for (final ObjectActionParameter parameter : parameters) {
 
-                final Property valueProperty;
+                final Schema valueProperty;
                 // TODO: need to switch on parameter's type and create appropriate impl of valueProperty
                 // if(parameter.getSpecification().isValue()) ...
                 valueProperty = stringProperty();
 
                 bodyParam
-                .property(parameter.getId(),
-                        new ObjectProperty()
-                        .property("value", valueProperty)
+                .addProperty(parameter.getId(),
+                        new ObjectSchema()
+                        .addProperty("value", valueProperty)
                         );
             }
 
-            invokeOperation
-            .consumes("application/json")
-            .parameter(
+            _Util.consumes(invokeOperation, "application/json")
+            .addParametersItem(
                     new BodyParameter()
                     .name("body")
                     .schema(bodyParam));
 
         }
 
-        invokeOperation
-        .response(
-                200, new Response()
-                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
-                .schema(actionReturnTypeFor(serviceAction))
-                );
+        _Util.response(invokeOperation,
+                200, newResponse(actionReturnTypeFor(serviceAction))
+                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
 
     void appendCollectionTo(
@@ -515,26 +510,23 @@ class Generation {
         final String logicalTypeName = objectSpec.getLogicalTypeName();
         final String collectionId = collection.getId();
 
-        final Path path = new Path();
+        final PathItem path = new PathItem();
         swagger.path(String.format("/objects/%s/{objectId}/collections/%s", logicalTypeName, collectionId), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation collectionOperation =
                 newOperation("object-collection")
-                .tag(tag)
+                .addTagsItem(tag)
                 .description(_Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
-                .parameter(
-                        new PathParameter()
-                        .name("objectId")
-                        .type("string"));
+                .addParametersItem(
+                        _Util.typed(new PathParameter(), "string")
+                        .name("objectId"));
 
         path.get(collectionOperation);
-        collectionOperation
-        .response(
-                200, new Response()
-                .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
-                .schema(modelFor(collection))
-                );
+        _Util.response(collectionOperation,
+                200,
+                newResponse(modelFor(collection))
+                .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
 
     void appendObjectActionInvokePath(
@@ -545,18 +537,19 @@ class Generation {
         final String actionId = objectAction.getId();
 
         val parameters = objectAction.getParameters();
-        final Path path = new Path();
+        final PathItem path = new PathItem();
         swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", logicalTypeName, actionId), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation invokeOperation =
                 newOperation("action-result")
-                .tag(tag)
+                .addTagsItem(tag)
                 .description(_Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
-                .parameter(
+                .addParametersItem(
+                        _Util.typed(
                         new PathParameter()
-                        .name("objectId")
-                        .type("string"));
+                        .name("objectId"),
+                        "string"));
 
         final SemanticsOf semantics = objectAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -567,23 +560,26 @@ class Generation {
                 val describedAs = parameter.getStaticDescription().orElse(null);
 
                 invokeOperation
-                .parameter(
+                .addParametersItem(
+                        _Util.typed(
                         new QueryParameter()
                         .name(parameter.getId())
                         .description(_Util.roSpec("2.9.1")
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
-                        .required(false)
-                        .type("string")
+                        .required(false),
+                        "string")
                         );
             }
             if(!parameters.isEmpty()) {
-                invokeOperation.parameter(new QueryParameter()
+                invokeOperation.addParametersItem(
+                        _Util.typed(
+                        new QueryParameter()
                         .name("x-causeway-querystring")
                         .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
-                        .required(false)
-                        .type("string"));
+                        .required(false),
+                        "string"));
             }
 
         } else {
@@ -593,82 +589,78 @@ class Generation {
                 path.post(invokeOperation);
             }
 
-            final ModelImpl bodyParam =
-                    new ModelImpl()
+            final Schema bodyParam =
+                    new Schema()
                     .type("object");
             for (final ObjectActionParameter parameter : parameters) {
 
                 final ObjectSpecification specification = parameter.getElementType();
-                final Property valueProperty = specification.isValue() ? modelFor(specification) : refToLinkModel() ;
+                final Schema valueProperty = specification.isValue() ? modelFor(specification) : refToLinkModel() ;
                 bodyParam
-                .property(parameter.getId(),
-                        new ObjectProperty()
-                        .property("value", valueProperty)
+                .addProperty(parameter.getId(),
+                        new ObjectSchema()
+                        .addProperty("value", valueProperty)
                         );
             }
 
-            invokeOperation
-            .consumes("application/json")
-            .parameter(
+            _Util.consumes(invokeOperation, "application/json")
+            .addParametersItem(
                     new BodyParameter()
                     .name("body")
                     .schema(bodyParam));
 
         }
 
-        invokeOperation
-        .response(
-                200, new Response()
-                .description(logicalTypeName + "#" + actionId)
-                .schema(actionReturnTypeFor(objectAction))
-                );
+        _Util.response(invokeOperation,
+                200, newResponse(actionReturnTypeFor(objectAction))
+                .description(logicalTypeName + "#" + actionId));
     }
 
     void appendDefinitionsForOrphanedReferences() {
         final Set<String> referencesWithoutDefinition = getReferencesWithoutDefinition();
         for (String reference : referencesWithoutDefinition) {
-            swagger.addDefinition(reference, new ModelImpl());
+            swagger.getComponents().addSchemas(reference, new Schema());
         }
     }
 
-    Property actionReturnTypeFor(final ObjectAction objectAction) {
+    Schema actionReturnTypeFor(final ObjectAction objectAction) {
         return objectAction.getReturnType().isPlural()
                 ? arrayPropertyOf(objectAction.getElementType())
                 : modelFor(objectAction.getReturnType());
     }
 
-    private Property modelFor(final OneToManyAssociation collection) {
+    private Schema modelFor(final OneToManyAssociation collection) {
         ObjectSpecification collectionSpecification = collection.getElementType();
         return arrayPropertyOf(collectionSpecification);
     }
 
-    private Property arrayPropertyOf(final ObjectSpecification objectSpecification) {
-        final ArrayProperty arrayProperty = new ArrayProperty();
+    private Schema arrayPropertyOf(final ObjectSpecification objectSpecification) {
+        final ArraySchema arrayProperty = new ArraySchema();
         if(objectSpecification != null && objectSpecification.getCorrespondingClass() != Object.class) {
             arrayProperty
             .description("List of " + objectSpecification.getLogicalTypeName())
             .items(modelFor(objectSpecification));
         } else {
-            arrayProperty.items(new ObjectProperty());
+            arrayProperty.items(new ObjectSchema());
         }
         return arrayProperty;
     }
 
-    private Property modelFor(final ObjectSpecification specification) {
+    private Schema modelFor(final ObjectSpecification specification) {
         if(specification == null) {
-            return new ObjectProperty();
+            return new ObjectSchema();
         }
 
         // no "simple" representation for void or values
         final Class<?> correspondingClass = specification.getCorrespondingClass();
         if(correspondingClass == void.class || correspondingClass == Void.class) {
-            return new ObjectProperty();
+            return new ObjectSchema();
         }
         // no "simple" representation for values
-        final Property property = valuePropertyFactory.newProperty(correspondingClass);
+        final Schema property = valuePropertyFactory.newProperty(correspondingClass);
         if(property != null) {
             // was recognized as a value
-            return new ObjectProperty();
+            return new ObjectSchema();
         }
 
         if(specification.isPlural()) {
@@ -679,16 +671,16 @@ class Generation {
         }
 
         if(specification.getCorrespondingClass() == java.lang.Object.class) {
-            return new ObjectProperty();
+            return new ObjectSchema();
         }
         if(specification.getCorrespondingClass() == java.lang.Enum.class) {
-            return new StringProperty();
+            return new StringSchema();
         }
         return newRefProperty(specification.getLogicalTypeName() + "Repr");
     }
 
     void updateObjectModel(
-            final ModelImpl model,
+            final Schema model,
             final ObjectSpecification objectSpecification,
             final List<OneToOneAssociation> objectProperties,
             final List<OneToManyAssociation> objectCollections) {
@@ -701,22 +693,22 @@ class Generation {
         .description(String.format("%s (%s)", logicalTypeName, className));
 
         for (OneToOneAssociation objectProperty : objectProperties) {
-            model.property(
+            model.addProperty(
                     objectProperty.getId(),
                     propertyFor(objectProperty.getElementType()));
         }
 
         for (OneToManyAssociation objectCollection : objectCollections) {
             final ObjectSpecification elementSpec = objectCollection.getElementType();
-            model.property(
+            model.addProperty(
                     objectCollection.getId(),
                     arrayPropertyOf(elementSpec)
                     );
         }
     }
 
-    Property propertyFor(final ObjectSpecification objectSpecification) {
-        final Property property =
+    Schema propertyFor(final ObjectSpecification objectSpecification) {
+        final Schema property =
                 valuePropertyFactory.newProperty(objectSpecification.getCorrespondingClass());
         if (property != null) {
             return property;
@@ -742,22 +734,22 @@ class Generation {
         }
     }
 
-    static ModelImpl newModel(final String description) {
-        return new ModelImpl()
+    static Schema newModel(final String description) {
+        return new Schema()
                 .description(description)
                 .type("object")
-                .property("links", arrayOfLinks())
-                .property("extensions", new MapProperty())
-                .required("links")
-                .required("extensions");
+                .addProperty("links", arrayOfLinks())
+                .addProperty("extensions", new MapSchema())
+                .addRequiredItem("links")
+                .addRequiredItem("extensions");
     }
 
-    static StringProperty stringProperty() {
-        return new StringProperty();
+    static StringSchema stringProperty() {
+        return new StringSchema();
     }
 
-    static StringProperty stringPropertyEnum(final String... enumValues) {
-        final StringProperty stringProperty = stringProperty();
+    static StringSchema stringPropertyEnum(final String... enumValues) {
+        final StringSchema stringProperty = stringProperty();
         stringProperty._enum(Arrays.asList(enumValues));
         if(enumValues.length >= 1) {
             stringProperty._default(enumValues[0]);
@@ -765,39 +757,44 @@ class Generation {
         return stringProperty;
     }
 
-    static ArrayProperty arrayOfLinks() {
-        return new ArrayProperty()
+    static ArraySchema arrayOfLinks() {
+        return new ArraySchema()
                 .items(refToLinkModel());
     }
 
-    static RefProperty refToLinkModel() {
-        return new RefProperty("#/definitions/LinkRepr");
+    static RefSchema refToLinkModel() {
+        return new RefSchema("#/definitions/LinkRepr");
     }
 
-    static RefProperty refToHrefModel() {
-        return new RefProperty("#/definitions/HrefRepr");
+    static RefSchema refToHrefModel() {
+        return new RefSchema("#/definitions/HrefRepr");
     }
 
-    static ArrayProperty arrayOfStrings() {
-        return new ArrayProperty().items(stringProperty());
+    static ArraySchema arrayOfStrings() {
+        return new ArraySchema().items(stringProperty());
     }
 
-    static Response newResponse(final Caching caching) {
-        return _Util.withCachingHeaders(new Response(), caching);
+    //TODO[ISIS-3292] honor schema
+    static ApiResponse newResponse(final Schema schema) {
+        return new ApiResponse();
+    }
+
+    static ApiResponse newResponse(final Caching caching, final Schema schema) {
+        return _Util.withCachingHeaders(newResponse(schema), caching);
     }
 
     String tagForlogicalTypeName(final String logicalTypeName, final String fallback) {
         return tagger.tagForLogicalTypeName(logicalTypeName, fallback);
     }
 
-    private Property newRefProperty(final String model) {
+    private Schema newRefProperty(final String model) {
         addSwaggerReference(model);
-        return new RefProperty("#/definitions/" + model);
+        return new RefSchema("#/definitions/" + model);
     }
 
-    private void addDefinition(final String key, final ModelImpl model) {
+    private void addDefinition(final String key, final Schema model) {
         addSwaggerDefinition(key);
-        swagger.addDefinition(key, model);
+        swagger.getComponents().addSchemas(key, model);
     }
 
     void addSwaggerReference(final String model) {
@@ -815,8 +812,8 @@ class Generation {
     }
 
     private static Operation newOperation(final String ... reprTypes) {
-        Operation operation = new Operation()
-                .produces("application/json");
+        Operation operation =
+                _Util.produces(new Operation(), "application/json");
 
         boolean supportsV1 = false;
 
@@ -827,15 +824,16 @@ class Generation {
                     supportsV1 = true;
                 }
 
-                operation = operation.produces(
+                operation = _Util.produces(operation,
                         "application/json;profile=" + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
             }
         }
 
         if(supportsV1) {
-            operation = operation
-                .produces("application/json;profile=" + DQ + "urn:org.apache.causeway/v2" + DQ)
-                .produces("application/json;profile=" + DQ + "urn:org.apache.causeway/v2;suppress=all" + DQ);
+            operation = _Util.produces(operation,
+                    "application/json;profile=" + DQ + "urn:org.apache.causeway/v2" + DQ);
+            operation = _Util.produces(operation,
+                    "application/json;profile=" + DQ + "urn:org.apache.causeway/v2;suppress=all" + DQ);
         }
 
         return operation;

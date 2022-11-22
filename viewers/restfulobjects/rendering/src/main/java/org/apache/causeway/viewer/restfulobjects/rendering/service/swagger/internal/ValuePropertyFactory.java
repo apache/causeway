@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import io.swagger.models.properties.Property;
+import io.swagger.v3.oas.models.media.Schema;
 
 public interface ValuePropertyFactory {
-    Property newProperty(Class<?> cls);
+    Schema newProperty(Class<?> cls);
 }

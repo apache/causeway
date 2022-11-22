@@ -37,7 +37,9 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import io.swagger.models.Response;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -100,12 +102,7 @@ final class _Util {
     }
 
     Predicate<ObjectAssociation> associationsWith(final Visibility visibility) {
-        return new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation objectAssociation) {
-                return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
-            }
-        };
+        return objectAssociation -> !visibility.isPublic() || isVisibleForPublic(objectAssociation);
     }
 
     List<OneToOneAssociation> propertiesOf(
@@ -148,7 +145,7 @@ final class _Util {
         return "RO Spec v1.0, section " + section;
     }
 
-    Response withCachingHeaders(final Response response, final Caching caching) {
+    ApiResponse withCachingHeaders(final ApiResponse response, final Caching caching) {
         caching.withHeaders(response);
 
         return response;
@@ -163,5 +160,25 @@ final class _Util {
             return ActionScope.ANY;
         }
         throw _Exceptions.unmatchedCase(visibility);
+    }
+
+    Operation produces(final Operation operation, final String string) {
+        // TODO[ISIS-3292] Auto-generated method stub
+        return operation;
+    }
+
+    <T extends Parameter> T typed(final T parameter, final String typeLiteral) {
+        // TODO[ISIS-3292] Auto-generated method stub
+        return parameter;
+    }
+
+    Operation response(final Operation operation, final int code, final ApiResponse response) {
+        // TODO[ISIS-3292] Auto-generated method stub
+        return operation;
+    }
+
+    Operation consumes(final Operation operation, final String string) {
+        // TODO[ISIS-3292] Auto-generated method stub
+        return operation;
     }
 }

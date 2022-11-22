@@ -30,9 +30,9 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
-import io.swagger.models.Swagger;
-import io.swagger.util.Json;
-import io.swagger.util.Yaml;
+import io.swagger.v3.core.util.Json;
+import io.swagger.v3.core.util.Yaml;
+import io.swagger.v3.oas.models.OpenAPI;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".SwaggerSpecGenerator")
@@ -61,7 +61,7 @@ public class SwaggerSpecGenerator {
             final Format format) {
 
         final Generation generation = newGeneration(basePath, visibility);
-        final Swagger swagger = generation.generate();
+        final OpenAPI swagger = generation.generate();
 
         switch (format) {
         case JSON:

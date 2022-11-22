@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -40,18 +39,15 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 
-import io.swagger.models.properties.BooleanProperty;
-import io.swagger.models.properties.ByteArrayProperty;
-import io.swagger.models.properties.DateProperty;
-import io.swagger.models.properties.DateTimeProperty;
-import io.swagger.models.properties.DecimalProperty;
-import io.swagger.models.properties.DoubleProperty;
-import io.swagger.models.properties.FloatProperty;
-import io.swagger.models.properties.IntegerProperty;
-import io.swagger.models.properties.LongProperty;
-import io.swagger.models.properties.Property;
-import io.swagger.models.properties.StringProperty;
-import io.swagger.models.properties.UUIDProperty;
+import io.swagger.v3.oas.models.media.BooleanSchema;
+import io.swagger.v3.oas.models.media.ByteArraySchema;
+import io.swagger.v3.oas.models.media.DateSchema;
+import io.swagger.v3.oas.models.media.DateTimeSchema;
+import io.swagger.v3.oas.models.media.IntegerSchema;
+import io.swagger.v3.oas.models.media.NumberSchema;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.media.UUIDSchema;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ValuePropertyFactoryDefault")
@@ -61,49 +57,52 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     @Autowired(required = false) private List<ValuePropertyPlugin> valuePropertyPlugins;
 
-    public static interface Factory extends Supplier<Property> {};
+    public static interface Factory extends Supplier<Schema> {};
 
     public ValuePropertyFactoryDefault() {
 
-        propertyFactoryByClass.put(boolean.class, BooleanProperty::new);
-        propertyFactoryByClass.put(Boolean.class, BooleanProperty::new);
+        propertyFactoryByClass.put(boolean.class, BooleanSchema::new);
+        propertyFactoryByClass.put(Boolean.class, BooleanSchema::new);
 
-        propertyFactoryByClass.put(byte.class, IntegerProperty::new);
-        propertyFactoryByClass.put(Byte.class, IntegerProperty::new);
-        propertyFactoryByClass.put(short.class, IntegerProperty::new);
-        propertyFactoryByClass.put(Short.class, IntegerProperty::new);
-        propertyFactoryByClass.put(int.class, IntegerProperty::new);
-        propertyFactoryByClass.put(Integer.class, IntegerProperty::new);
-        propertyFactoryByClass.put(BigInteger.class, IntegerProperty::new);
+        propertyFactoryByClass.put(byte.class, IntegerSchema::new);
+        propertyFactoryByClass.put(Byte.class, IntegerSchema::new);
+        propertyFactoryByClass.put(short.class, IntegerSchema::new);
+        propertyFactoryByClass.put(Short.class, IntegerSchema::new);
+        propertyFactoryByClass.put(int.class, IntegerSchema::new);
+        propertyFactoryByClass.put(Integer.class, IntegerSchema::new);
 
-        propertyFactoryByClass.put(long.class, LongProperty::new);
-        propertyFactoryByClass.put(Long.class, LongProperty::new);
-        propertyFactoryByClass.put(java.sql.Timestamp.class, LongProperty::new);
+      //TODO[ISIS-3292] implement or replace ...
+//        propertyFactoryByClass.put(BigInteger.class, IntegerSchema::new);
 
-        propertyFactoryByClass.put(BigDecimal.class, DecimalProperty::new);
+//        propertyFactoryByClass.put(long.class, LongSchema::new);
+//        propertyFactoryByClass.put(Long.class, LongSchema::new);
+//        propertyFactoryByClass.put(java.sql.Timestamp.class, LongSchema::new);
 
-        propertyFactoryByClass.put(float.class, FloatProperty::new);
-        propertyFactoryByClass.put(Float.class, FloatProperty::new);
+        propertyFactoryByClass.put(BigDecimal.class, NumberSchema::new);
 
-        propertyFactoryByClass.put(double.class, DoubleProperty::new);
-        propertyFactoryByClass.put(Double.class, DoubleProperty::new);
+      //TODO[ISIS-3292] implement or replace ...
+//        propertyFactoryByClass.put(float.class, FloatSchema::new);
+//        propertyFactoryByClass.put(Float.class, FloatSchema::new);
+//
+//        propertyFactoryByClass.put(double.class, DoubleSchema::new);
+//        propertyFactoryByClass.put(Double.class, DoubleSchema::new);
 
-        propertyFactoryByClass.put(char.class, StringProperty::new);
-        propertyFactoryByClass.put(Character.class, StringProperty::new);
-        propertyFactoryByClass.put(char[].class, StringProperty::new);
-        propertyFactoryByClass.put(String.class, StringProperty::new);
+        propertyFactoryByClass.put(char.class, StringSchema::new);
+        propertyFactoryByClass.put(Character.class, StringSchema::new);
+        propertyFactoryByClass.put(char[].class, StringSchema::new);
+        propertyFactoryByClass.put(String.class, StringSchema::new);
 
-        propertyFactoryByClass.put(UUID.class, UUIDProperty::new);
+        propertyFactoryByClass.put(UUID.class, UUIDSchema::new);
 
-        propertyFactoryByClass.put(java.util.Date.class, DateTimeProperty::new);
-        propertyFactoryByClass.put(DateTime.class, DateTimeProperty::new);
-        propertyFactoryByClass.put(LocalDateTime.class, DateTimeProperty::new);
+        propertyFactoryByClass.put(java.util.Date.class, DateTimeSchema::new);
+        propertyFactoryByClass.put(DateTime.class, DateTimeSchema::new);
+        propertyFactoryByClass.put(LocalDateTime.class, DateTimeSchema::new);
 
-        propertyFactoryByClass.put(java.sql.Date.class, DateProperty::new);
-        propertyFactoryByClass.put(LocalDate.class, DateProperty::new);
+        propertyFactoryByClass.put(java.sql.Date.class, DateSchema::new);
+        propertyFactoryByClass.put(LocalDate.class, DateSchema::new);
 
-        propertyFactoryByClass.put(byte[].class, ByteArrayProperty::new);
-        propertyFactoryByClass.put(org.apache.causeway.applib.value.Blob.class, ByteArrayProperty::new);
+        propertyFactoryByClass.put(byte[].class, ByteArraySchema::new);
+        propertyFactoryByClass.put(org.apache.causeway.applib.value.Blob.class, ByteArraySchema::new);
 
         // add propertyFactories from plugins
         discoverValueProperties().visitEntries(propertyFactoryByClass::put);
@@ -111,7 +110,7 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
     }
 
     @Override
-    public Property newProperty(Class<?> cls) {
+    public Schema newProperty(final Class<?> cls) {
         if(cls == null) {
             return null;
         }
@@ -123,7 +122,7 @@ public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
         // special case, want to treat as a value
         if(cls.isEnum()) {
-            final StringProperty property = new StringProperty();
+            final StringSchema property = new StringSchema();
             final Object[] enumConstants = cls.getEnumConstants();
 
             final List<String> enumNames = _Lists.map(
