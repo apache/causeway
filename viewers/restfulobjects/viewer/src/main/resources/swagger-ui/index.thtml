@@ -41,8 +41,9 @@
     <script src="./swagger-initializer.js" charset="UTF-8"> </script>
     <script>
     window.onload = function() {
-      // Begin Swagger UI call region
+      /* Begin Swagger UI call region */
       const ui = SwaggerUIBundle({
+    	dom_id: '#swagger-ui',
     	urls: [{
     		url: "${restful-base}/swagger/public", name: "public"
     	},{
@@ -50,8 +51,6 @@
     	},{
     		url: "${restful-base}/swagger/private", name: "private"
     	}],
-        dom_id: '#swagger-ui',
-        deepLinking: true,
         presets: [
           SwaggerUIBundle.presets.apis,
           SwaggerUIStandalonePreset
@@ -59,11 +58,25 @@
         plugins: [
           SwaggerUIBundle.plugins.DownloadUrl
         ],
-        layout: "StandaloneLayout"
-      })
-      // End Swagger UI call region
-
-      window.ui = ui
+        layout: "StandaloneLayout",
+        deepLinking: true,
+        filter: true,
+        syntaxHighlight: {
+           activate: true,
+           theme: "nord"
+        },
+        withCredentials: true,
+        onComplete: function() {
+        	console.log("pre-auth");
+    		ui.preauthorizeBasic("basicAuth", "sven", "pass");
+    	}
+      });
+      /* End Swagger UI call region */
+      window.ui = ui;
+      
+      console.log("pre-auth2");
+      ui.preauthorizeBasic("basicAuth", "sven", "pass");
+      
     }
   </script>
   </body>
