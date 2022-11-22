@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.causewayext.cal.persistence;
 
+import java.util.Optional;
+
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -46,7 +48,9 @@ implements
 
     @Override
     public String getCalendarName() {
-        return toCalendarEvent().getCalendarName();
+        return Optional.ofNullable(toCalendarEvent())
+                .map(CalendarEvent::getCalendarName)
+                .orElse(null);
     }
 
     @Override

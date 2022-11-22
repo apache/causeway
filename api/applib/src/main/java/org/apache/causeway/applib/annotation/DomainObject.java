@@ -44,6 +44,11 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 /**
  * Domain semantics for domain objects (entities and view models;
  * for services see {@link org.apache.causeway.applib.annotation.DomainService}).
+ * <p>
+ *     If - for the currently logged on user - none of the domain object's members are effectively visible,
+ *     (or if there are no members to begin with), the object instance is considered hidden. Hence
+ *     a NOT-AUTHORIZED page will be displayed instead.
+ * </p>
  *
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the
  * annotated type.
