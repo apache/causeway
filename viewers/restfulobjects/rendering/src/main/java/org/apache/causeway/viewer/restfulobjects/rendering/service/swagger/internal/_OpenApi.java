@@ -19,11 +19,15 @@
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.PathParameter;
 import io.swagger.v3.oas.models.parameters.QueryParameter;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import lombok.experimental.UtilityClass;
 
@@ -52,6 +56,16 @@ class _OpenApi {
                 .schema(new StringSchema());
     }
 
+    MediaType mediaType(final ObjectSchema schema) {
+        return new MediaType().schema(schema);
+    }
+
+    RequestBody requestBody(final String mimeLiteral, final ObjectSchema bodySchema) {
+        return new RequestBody()
+        .content(new Content()
+                .addMediaType(mimeLiteral, mediaType(bodySchema)));
+    }
+
     //TODO[ISIS-3292] honor schema
     ApiResponse response(final Schema schema) {
         return new ApiResponse();
@@ -67,19 +81,7 @@ class _OpenApi {
         return operation;
     }
 
-    Operation consumes(final Operation operation, final String string) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return operation;
-    }
-
-    // -- CUSTOM PARAM TYPES
-
-    private static class BodyParameter extends Parameter {
-        //TODO[ISIS-3292] implement or replace
-    }
-    Parameter bodyParameter() {
-        return new BodyParameter();
-    }
+    // -- CUSTOM TYPES
 
     private static class RefSchema extends Schema<Object> {
         public RefSchema(final String schemaRefLiteral) {
@@ -97,6 +99,5 @@ class _OpenApi {
 //  Link link(final String schemaRefLiteral) {
 //  return new Link().$ref(schemaRefLiteral);
 //}
-
 
 }

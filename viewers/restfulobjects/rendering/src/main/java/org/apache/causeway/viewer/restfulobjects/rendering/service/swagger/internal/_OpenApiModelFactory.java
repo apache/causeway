@@ -481,12 +481,8 @@ class _OpenApiModelFactory {
                         );
             }
 
-            _OpenApi.consumes(invokeOperation, "application/json")
-            .addParametersItem(
-                    _OpenApi.bodyParameter()
-                    .name("body")
-                    .schema(bodyParam));
-
+            invokeOperation
+            .requestBody(_OpenApi.requestBody("application/json", bodyParam));
         }
 
         _OpenApi.response(invokeOperation,
@@ -587,12 +583,8 @@ class _OpenApiModelFactory {
                         );
             }
 
-            _OpenApi.consumes(invokeOperation, "application/json")
-            .addParametersItem(
-                    _OpenApi.bodyParameter()
-                    .name("body")
-                    .schema(bodyParam));
-
+            invokeOperation
+            .requestBody(_OpenApi.requestBody("application/json", bodyParam));
         }
 
         _OpenApi.response(invokeOperation,
