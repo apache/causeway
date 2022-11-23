@@ -27,11 +27,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.swagger.Visibility;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -229,24 +232,24 @@ class _OpenApiModelFactory {
 
         swagger.path("/",
                 new PathItem()
-                .get(_OpenApi.response(
-                        newOperation("home-page")
+                .get(
+                        newOperation("home-page",
+                                Caching.NON_EXPIRING,
+                                newRefProperty("RestfulObjectsSupportingHomePageRepr"),
+                                response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("5.1")),
-                        200,
-                        newResponse(Caching.NON_EXPIRING, newRefProperty("RestfulObjectsSupportingHomePageRepr"))
-                            .description("OK"))));
+                            .description(_Util.roSpec("5.1"))));
         addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(_Util.roSpec("5.2")));
 
         swagger.path("/user",
                 new PathItem()
-                .get(_OpenApi.response(
-                        newOperation("user")
+                .get(
+                        newOperation("user",
+                                Caching.USER_INFO,
+                                newRefProperty("RestfulObjectsSupportingUserRepr"),
+                                response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("6.1")),
-                        200,
-                        newResponse(Caching.USER_INFO, newRefProperty("RestfulObjectsSupportingUserRepr"))
-                            .description("OK"))));
+                            .description(_Util.roSpec("6.1"))));
         addDefinition("RestfulObjectsSupportingUserRepr",
                 newModel(_Util.roSpec("6.2"))
                 .addProperty("userName", stringProperty())
@@ -257,13 +260,13 @@ class _OpenApiModelFactory {
 
         swagger.path("/services",
                 new PathItem()
-                .get(_OpenApi.response(
-                        newOperation("services")
+                .get(
+                        newOperation("services",
+                                Caching.USER_INFO,
+                                newRefProperty("RestfulObjectsSupportingServicesRepr"),
+                                response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("7.1")),
-                        200,
-                        newResponse(Caching.USER_INFO, newRefProperty("RestfulObjectsSupportingServicesRepr"))
-                            .description("OK"))));
+                            .description(_Util.roSpec("7.1"))));
         addDefinition("RestfulObjectsSupportingServicesRepr",
                 newModel(_Util.roSpec("7.2"))
                 .addProperty("value", arrayOfLinks())
@@ -272,13 +275,13 @@ class _OpenApiModelFactory {
 
         swagger.path("/version",
                 new PathItem()
-                .get(_OpenApi.response(
-                        newOperation("RestfulObjectsSupportingServicesRepr")
+                .get(
+                        newOperation("RestfulObjectsSupportingServicesRepr",
+                                Caching.NON_EXPIRING,
+                                new ObjectSchema(),
+                                response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("8.1")),
-                        200,
-                        newResponse(Caching.NON_EXPIRING, new ObjectSchema())
-                            .description("OK"))));
+                            .description(_Util.roSpec("8.1"))));
 
         swagger.getComponents().addSchemas("RestfulObjectsSupportingServicesRepr",
                 newModel(_Util.roSpec("8.2"))
@@ -330,13 +333,13 @@ class _OpenApiModelFactory {
         final String serviceModelDefinition = serviceId + "Repr";
 
         final String tag = tagForlogicalTypeName(serviceId, "> services");
-        path.get(_OpenApi.response(
-                newOperation("object")
+        path.get(
+                newOperation("object",
+                        Caching.TRANSACTIONAL,
+                        newRefProperty(serviceModelDefinition),
+                        response->response.description("OK"))
                     .addTagsItem(tag)
-                    .description(_Util.roSpec("15.1")),
-                200,
-                newResponse(Caching.TRANSACTIONAL, newRefProperty(serviceModelDefinition))
-                    .description("OK")));
+                    .description(_Util.roSpec("15.1")));
 
         val model =
                 newModel(_Util.roSpec("15.1.2") + ": representation of " + serviceId)
@@ -351,11 +354,20 @@ class _OpenApiModelFactory {
 
         final String logicalTypeName = objectSpec.getLogicalTypeName();
 
+        val causewayModel = new ObjectSchema();
+        val causewayModelDefinition = logicalTypeName + "Repr";
+        addDefinition(causewayModelDefinition, causewayModel);
+
         final PathItem path = new PathItem();
         swagger.path(String.format("/objects/%s/{objectId}", logicalTypeName), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
-        final Operation operation = newOperation("object");
+        final Operation operation = newOperation("object",
+                Caching.TRANSACTIONAL,
+                newRefProperty(causewayModelDefinition),
+                response->response.description(logicalTypeName
+                        + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
+                );
         path.get(operation);
         operation
         .addTagsItem(tag)
@@ -365,33 +377,23 @@ class _OpenApiModelFactory {
                 .name("objectId"));
 
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
-        // modelled representations per path and response code;
+        // modeled representations per path and response code;
         // in particular cannot associate representation/model with Accept header ('produces(...) method)
-        final String restfulObjectsModelDefinition = logicalTypeName + "RestfulObjectsRepr";
-        if (false) {
-            _OpenApi.response(operation,
-                    200,
-                    newResponse(Caching.TRANSACTIONAL, newRefProperty(restfulObjectsModelDefinition))
-                    .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object"));
-
-            final Schema roSpecModel =
-                    newModel(_Util.roSpec("14.4") + ": representation of " + logicalTypeName)
-                    .addProperty("title", stringProperty())
-                    .addProperty("domainType", stringProperty()._default(logicalTypeName))
-                    .addProperty("instanceId", stringProperty())
-                    .addProperty("members", new ObjectSchema());
-            swagger.getComponents().addSchemas(restfulObjectsModelDefinition, roSpecModel);
-        }
-
-        final String causewayModelDefinition = logicalTypeName + "Repr";
-
-        _OpenApi.response(operation,
-                200,
-                newResponse(Caching.TRANSACTIONAL, newRefProperty(causewayModelDefinition))
-                .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
-
-        val causewayModel = new ObjectSchema();
-        addDefinition(causewayModelDefinition, causewayModel);
+//        final String restfulObjectsModelDefinition = logicalTypeName + "RestfulObjectsRepr";
+//        if (false) {
+//            _OpenApi.response(operation,
+//                    200,
+//                    newResponse(Caching.TRANSACTIONAL, newRefProperty(restfulObjectsModelDefinition))
+//                    .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object"));
+//
+//            final Schema roSpecModel =
+//                    newModel(_Util.roSpec("14.4") + ": representation of " + logicalTypeName)
+//                    .addProperty("title", stringProperty())
+//                    .addProperty("domainType", stringProperty()._default(logicalTypeName))
+//                    .addProperty("instanceId", stringProperty())
+//                    .addProperty("members", new ObjectSchema());
+//            swagger.getComponents().addSchemas(restfulObjectsModelDefinition, roSpecModel);
+//        }
 
         // return so can be appended to
         return causewayModel;
@@ -432,7 +434,13 @@ class _OpenApiModelFactory {
 
         final String tag = tagForlogicalTypeName(serviceId, "> services");
         final Operation invokeOperation =
-                newOperation("object", "action-result")
+                newOperation(List.of("object", "action-result"),
+                        Caching.UNSPECIFIED,
+                        actionReturnTypeFor(serviceAction),
+                        response->
+                            response.description(serviceId + "#" + actionId
+                                    + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
+                )
                 .addTagsItem(tag)
                 .description(_Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId);
 
@@ -484,10 +492,6 @@ class _OpenApiModelFactory {
             invokeOperation
             .requestBody(_OpenApi.requestBody("application/json", bodyParam));
         }
-
-        _OpenApi.response(invokeOperation,
-                200, _OpenApi.response(actionReturnTypeFor(serviceAction))
-                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
 
     void appendCollectionTo(
@@ -502,7 +506,11 @@ class _OpenApiModelFactory {
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation collectionOperation =
-                newOperation("object-collection")
+                newOperation("object-collection",
+                        Caching.UNSPECIFIED,
+                        modelFor(collection),
+                        response->response.description(logicalTypeName + "#" + collectionId
+                                + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"))
                 .addTagsItem(tag)
                 .description(_Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
                 .addParametersItem(
@@ -510,10 +518,6 @@ class _OpenApiModelFactory {
                         .name("objectId"));
 
         path.get(collectionOperation);
-        _OpenApi.response(collectionOperation,
-                200,
-                _OpenApi.response(modelFor(collection))
-                .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
 
     void appendObjectActionInvokePath(
@@ -528,8 +532,12 @@ class _OpenApiModelFactory {
         swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", logicalTypeName, actionId), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
+
         final Operation invokeOperation =
-                newOperation("action-result")
+                newOperation("action-result",
+                        Caching.UNSPECIFIED,
+                        actionReturnTypeFor(objectAction),
+                        response->response.description(logicalTypeName + "#" + actionId))
                 .addTagsItem(tag)
                 .description(_Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
                 .addParametersItem(
@@ -587,9 +595,7 @@ class _OpenApiModelFactory {
             .requestBody(_OpenApi.requestBody("application/json", bodyParam));
         }
 
-        _OpenApi.response(invokeOperation,
-                200, _OpenApi.response(actionReturnTypeFor(objectAction))
-                .description(logicalTypeName + "#" + actionId));
+
     }
 
     void appendDefinitionsForOrphanedReferences() {
@@ -749,10 +755,6 @@ class _OpenApiModelFactory {
         return new ArraySchema().items(stringProperty());
     }
 
-    static ApiResponse newResponse(final Caching caching, final Schema schema) {
-        return _Util.withCachingHeaders(_OpenApi.response(schema), caching);
-    }
-
     String tagForlogicalTypeName(final String logicalTypeName, final String fallback) {
         return tagger.tagForLogicalTypeName(logicalTypeName, fallback);
     }
@@ -782,34 +784,51 @@ class _OpenApiModelFactory {
         return referencesCopy;
     }
 
-    // -- MODEL ELEMENT FACTORIES
+    // -- OPERATION FACTORIES
 
-    private static Operation newOperation(final String ... reprTypes) {
-        Operation operation =
-                _OpenApi.produces(new Operation(), "application/json");
+    private static Operation newOperation(final String reprType,
+            final Caching caching,
+            final Schema<?> responsRef,
+            final Consumer<ApiResponse> responseRefiner) {
+        return newOperation(List.of(reprType), caching, responsRef, responseRefiner);
+    }
 
-        boolean supportsV1 = false;
-
-        if(reprTypes!=null) {
-            for(String reprType: reprTypes) {
-
-                if(reprType.equals("object") || reprType.equals("action-result")) {
-                    supportsV1 = true;
-                }
-
-                operation = _OpenApi.produces(operation,
-                        "application/json;profile=" + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
-            }
-        }
-
-        if(supportsV1) {
-            operation = _OpenApi.produces(operation,
-                    "application/json;profile=" + DQ + "urn:org.apache.causeway/v2" + DQ);
-            operation = _OpenApi.produces(operation,
-                    "application/json;profile=" + DQ + "urn:org.apache.causeway/v2;suppress=all" + DQ);
-        }
-
+    private static Operation newOperation(final List<String> reprTypes,
+            final Caching caching,
+            final Schema<?> responsRef,
+            final Consumer<ApiResponse> responseRefiner) {
+        val operation = _OpenApi.operation(200,
+                responsRef,
+                supportedFormats(reprTypes),
+                response->{
+                    if(caching!=Caching.UNSPECIFIED) {
+                        _Util.withCachingHeaders(response, caching);
+                    }
+                    responseRefiner.accept(response);
+                });
         return operation;
+    }
+
+    private static List<String> supportedFormats(final List<String> reprTypes) {
+        val supportedFormats = _Lists.<String>newArrayList();
+        supportedFormats.add("application/json");
+        val supportsV1 = _Refs.booleanRef(false);
+        reprTypes.forEach(reprType->{
+            if(reprType.equals("object")
+                    || reprType.equals("action-result")) {
+                supportsV1.setValue(true);
+            }
+            supportedFormats.add(
+                    "application/json;profile="
+                    + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
+        });
+        if(supportsV1.isTrue()) {
+            supportedFormats.add("application/json;profile="
+                    + DQ + "urn:org.apache.causeway/v2" + DQ);
+            supportedFormats.add("application/json;profile="
+                    + DQ + "urn:org.apache.causeway/v2;suppress=all" + DQ);
+        }
+        return supportedFormats;
     }
 
 }

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
@@ -29,6 +32,9 @@ import io.swagger.v3.oas.models.parameters.PathParameter;
 import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
+import lombok.NonNull;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -56,7 +62,7 @@ class _OpenApi {
                 .schema(new StringSchema());
     }
 
-    MediaType mediaType(final ObjectSchema schema) {
+    MediaType mediaType(final Schema<?> schema) {
         return new MediaType().schema(schema);
     }
 
@@ -66,19 +72,21 @@ class _OpenApi {
                 .addMediaType(mimeLiteral, mediaType(bodySchema)));
     }
 
-    //TODO[ISIS-3292] honor schema
-    ApiResponse response(final Schema schema) {
-        return new ApiResponse();
-    }
-
-    Operation produces(final Operation operation, final String string) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return operation;
-    }
-
-    Operation response(final Operation operation, final int code, final ApiResponse response) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return operation;
+    Operation operation(
+            final int responseCode,
+            final Schema<?> ref,
+            final @NonNull List<String> supportedFormats,
+            final Consumer<ApiResponse> responseRefiner) {
+        val content = new Content();
+        supportedFormats
+            .forEach(format->
+                content.addMediaType(format, mediaType(ref)));
+        val response = new ApiResponse()
+                .content(content);
+        responseRefiner.accept(response);
+        return new Operation()
+        .responses(new ApiResponses()
+                .addApiResponse("" + responseCode, response));
     }
 
     // -- CUSTOM TYPES
@@ -89,8 +97,7 @@ class _OpenApi {
             super.set$ref(schemaRefLiteral);
         }
     }
-    @SuppressWarnings("rawtypes")
-    Schema refSchema(final String schemaRefLiteral) {
+    Schema<Object> refSchema(final String schemaRefLiteral) {
         return new RefSchema(schemaRefLiteral);
     }
 

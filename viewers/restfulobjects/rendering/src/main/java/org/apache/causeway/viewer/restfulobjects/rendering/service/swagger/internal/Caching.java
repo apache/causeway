@@ -41,6 +41,11 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
  *  under the License.
  */
 enum Caching {
+    UNSPECIFIED {
+        @Override public void withHeaders(final ApiResponse response) {
+
+        }
+    },
     TRANSACTIONAL {
         @Override public void withHeaders(final ApiResponse response) {
 
