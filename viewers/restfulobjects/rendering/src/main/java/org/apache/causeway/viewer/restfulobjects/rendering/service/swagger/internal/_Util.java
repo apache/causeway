@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import io.swagger.v3.oas.models.responses.ApiResponse;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -141,12 +140,6 @@ final class _Util {
 
     String roSpec(final String section) {
         return "RO Spec v1.0, section " + section;
-    }
-
-    ApiResponse withCachingHeaders(final ApiResponse response, final Caching caching) {
-        caching.withHeaders(response);
-
-        return response;
     }
 
     ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {

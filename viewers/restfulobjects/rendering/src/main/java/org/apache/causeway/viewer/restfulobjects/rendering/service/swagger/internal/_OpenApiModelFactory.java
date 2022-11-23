@@ -436,7 +436,7 @@ class _OpenApiModelFactory {
         final String tag = tagForlogicalTypeName(serviceId, "> services");
         final Operation invokeOperation =
                 newOperation(List.of("object", "action-result"),
-                        Caching.UNSPECIFIED,
+                        Caching.TRANSACTIONAL,
                         actionReturnTypeFor(serviceAction),
                         response->
                             response.description(serviceId + "#" + actionId
@@ -491,7 +491,8 @@ class _OpenApiModelFactory {
             }
 
             invokeOperation
-            .requestBody(_OpenApi.requestBody("application/json", bodyParam));
+            .requestBody(_OpenApi.requestBody("application/json", bodyParam))
+            .addExtension("x-codegen-request-body-name", "body");
         }
     }
 
@@ -508,7 +509,7 @@ class _OpenApiModelFactory {
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation collectionOperation =
                 newOperation("object-collection",
-                        Caching.UNSPECIFIED,
+                        Caching.TRANSACTIONAL,
                         modelFor(collection),
                         response->response.description(logicalTypeName + "#" + collectionId
                                 + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"))
@@ -536,7 +537,7 @@ class _OpenApiModelFactory {
 
         final Operation invokeOperation =
                 newOperation("action-result",
-                        Caching.UNSPECIFIED,
+                        Caching.TRANSACTIONAL,
                         actionReturnTypeFor(objectAction),
                         response->response.description(logicalTypeName + "#" + actionId))
                 .addTagsItem(tag)
@@ -593,7 +594,8 @@ class _OpenApiModelFactory {
             }
 
             invokeOperation
-            .requestBody(_OpenApi.requestBody("application/json", bodyParam));
+                .requestBody(_OpenApi.requestBody("application/json", bodyParam))
+                .addExtension("x-codegen-request-body-name", "body");
         }
 
 
@@ -787,9 +789,7 @@ class _OpenApiModelFactory {
                 responsRef,
                 supportedFormats(reprTypes),
                 response->{
-                    if(caching!=Caching.UNSPECIFIED) {
-                        _Util.withCachingHeaders(response, caching);
-                    }
+                    _OpenApi.withCacheControl(response, caching);
                     responseRefiner.accept(response);
                 });
         return operation;

@@ -69,7 +69,8 @@ class _OpenApi {
     RequestBody requestBody(final String mimeLiteral, final ObjectSchema bodySchema) {
         return new RequestBody()
         .content(new Content()
-                .addMediaType(mimeLiteral, mediaType(bodySchema)));
+                .addMediaType(mimeLiteral, mediaType(bodySchema)))
+        .required(false);
     }
 
     Operation operation(
@@ -89,12 +90,18 @@ class _OpenApi {
                 .addApiResponse("" + responseCode, response));
     }
 
+    ApiResponse withCacheControl(final ApiResponse response, final Caching caching) {
+        return caching.header()
+                .map(header->response.addHeaderObject("Cache-Control", header))
+                .orElse(response);
+    }
+
     // -- CUSTOM TYPES
 
     private static class RefSchema extends Schema<Object> {
         public RefSchema(final String schemaRefLiteral) {
             super("ref", null);
-            super.set$ref(schemaRefLiteral);
+            super.set$ref("#/components/schemas/" + schemaRefLiteral);
         }
     }
     Schema<Object> refSchema(final String schemaRefLiteral) {
