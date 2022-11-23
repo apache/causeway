@@ -31,8 +31,8 @@ public class OpenApiModelFactoryTest {
     @Test
     public void testAddReference() throws Exception {
 
-        OpenApiModelFactory context =
-                new OpenApiModelFactory(null, null, null, new TaggerDefault(),
+        _OpenApiModelFactory context =
+                new _OpenApiModelFactory(null, null, null, new TaggerDefault(),
                         new ClassExcluderDefault(), new ValuePropertyFactoryDefault());
 
         context.addSwaggerReference("foo");

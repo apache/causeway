@@ -45,20 +45,17 @@ class _OpenApi {
         return new PathParameter()
                 .schema(new StringSchema());
     }
-//    Parameter pathParameter(final String typeLiteral) {
-//        return new PathParameter()
-//                .schema(schema(typeLiteral));
-//    }
 
     /** defaulting to type: string */
     Parameter queryParameter() {
         return new QueryParameter()
                 .schema(new StringSchema());
     }
-//    Parameter queryParameter(final String typeLiteral) {
-//        return new QueryParameter()
-//                .schema(schema(typeLiteral));
-//    }
+
+    //TODO[ISIS-3292] honor schema
+    ApiResponse response(final Schema schema) {
+        return new ApiResponse();
+    }
 
     Operation produces(final Operation operation, final String string) {
         // TODO[ISIS-3292] Auto-generated method stub
@@ -74,5 +71,25 @@ class _OpenApi {
         // TODO[ISIS-3292] Auto-generated method stub
         return operation;
     }
+
+    // -- CUSTOM PARAM TYPES
+
+    private static class BodyParameter extends Parameter {
+        //TODO[ISIS-3292] implement or replace
+    }
+    Parameter bodyParameter() {
+        return new BodyParameter();
+    }
+
+    private static class RefSchema extends Schema {
+        public RefSchema(final String string) {
+            //TODO[ISIS-3292] implement or replace
+        }
+    }
+    @SuppressWarnings("rawtypes")
+    Schema refSchema(final String string) {
+        return new RefSchema(string);
+    }
+
 
 }

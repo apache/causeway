@@ -58,7 +58,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.val;
 
-class OpenApiModelFactory {
+class _OpenApiModelFactory {
 
     // double quotes
     private static final String DQ = ""; // empty seems the only variant that works
@@ -75,7 +75,7 @@ class OpenApiModelFactory {
     private final Set<String> definitions = _Sets.newLinkedHashSet();
     private OpenAPI swagger;
 
-    public OpenApiModelFactory(
+    public _OpenApiModelFactory(
             final String basePath,
             final Visibility visibility,
             final SpecificationLoader specificationLoader,
@@ -210,7 +210,7 @@ class OpenApiModelFactory {
                     && objectCollections.isEmpty()) {
                 continue;
             }
-            final Schema causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
+            val causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
             updateObjectModel(causewayModel, objectSpec, objectProperties, objectCollections);
 
             for (final OneToManyAssociation objectCollection : objectCollections) {
@@ -298,8 +298,7 @@ class OpenApiModelFactory {
 
     void appendLinkModelDefinition() {
         swagger.getComponents().addSchemas("LinkRepr",
-                new Schema()
-                .type("object")
+                new ObjectSchema()
                 .addProperty("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
                 .addProperty("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
                 .addProperty("title", stringProperty().description("title to render"))
@@ -313,8 +312,7 @@ class OpenApiModelFactory {
                 );
 
         swagger.getComponents().addSchemas("HrefRepr",
-                new Schema()
-                .type("object")
+                new ObjectSchema()
                 .description("Abbreviated version of the Link resource, used primarily to reference non-value objects")
                 .addProperty("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
                 .addRequiredItem("href")
@@ -340,7 +338,7 @@ class OpenApiModelFactory {
                 newResponse(Caching.TRANSACTIONAL, newRefProperty(serviceModelDefinition))
                     .description("OK")));
 
-        final Schema model =
+        val model =
                 newModel(_Util.roSpec("15.1.2") + ": representation of " + serviceId)
                 .addProperty("title", stringProperty())
                 .addProperty("serviceId", stringProperty()._default(serviceId))
@@ -349,7 +347,7 @@ class OpenApiModelFactory {
         addDefinition(serviceModelDefinition, model);
     }
 
-    Schema appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
+    ObjectSchema appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
 
         final String logicalTypeName = objectSpec.getLogicalTypeName();
 
@@ -392,7 +390,7 @@ class OpenApiModelFactory {
                 newResponse(Caching.TRANSACTIONAL, newRefProperty(causewayModelDefinition))
                 .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
 
-        final Schema causewayModel = new Schema();
+        val causewayModel = new ObjectSchema();
         addDefinition(causewayModelDefinition, causewayModel);
 
         // return so can be appended to
@@ -469,15 +467,12 @@ class OpenApiModelFactory {
                 path.post(invokeOperation);
             }
 
-            final Schema bodyParam =
-                    new Schema()
-                    .type("object");
+            val bodyParam = new ObjectSchema();
             for (final ObjectActionParameter parameter : parameters) {
 
-                final Schema valueProperty;
                 // TODO: need to switch on parameter's type and create appropriate impl of valueProperty
                 // if(parameter.getSpecification().isValue()) ...
-                valueProperty = stringProperty();
+                val valueProperty = stringProperty();
 
                 bodyParam
                 .addProperty(parameter.getId(),
@@ -488,14 +483,14 @@ class OpenApiModelFactory {
 
             _OpenApi.consumes(invokeOperation, "application/json")
             .addParametersItem(
-                    new BodyParameter()
+                    _OpenApi.bodyParameter()
                     .name("body")
                     .schema(bodyParam));
 
         }
 
         _OpenApi.response(invokeOperation,
-                200, newResponse(actionReturnTypeFor(serviceAction))
+                200, _OpenApi.response(actionReturnTypeFor(serviceAction))
                 .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
 
@@ -521,7 +516,7 @@ class OpenApiModelFactory {
         path.get(collectionOperation);
         _OpenApi.response(collectionOperation,
                 200,
-                newResponse(modelFor(collection))
+                _OpenApi.response(modelFor(collection))
                 .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
 
@@ -578,13 +573,13 @@ class OpenApiModelFactory {
                 path.post(invokeOperation);
             }
 
-            final Schema bodyParam =
-                    new Schema()
-                    .type("object");
+            val bodyParam = new ObjectSchema();
             for (final ObjectActionParameter parameter : parameters) {
 
                 final ObjectSpecification specification = parameter.getElementType();
-                final Schema valueProperty = specification.isValue() ? modelFor(specification) : refToLinkModel() ;
+                val valueProperty = specification.isValue()
+                        ? modelFor(specification)
+                        : refToLinkModel() ;
                 bodyParam
                 .addProperty(parameter.getId(),
                         new ObjectSchema()
@@ -594,14 +589,14 @@ class OpenApiModelFactory {
 
             _OpenApi.consumes(invokeOperation, "application/json")
             .addParametersItem(
-                    new BodyParameter()
+                    _OpenApi.bodyParameter()
                     .name("body")
                     .schema(bodyParam));
 
         }
 
         _OpenApi.response(invokeOperation,
-                200, newResponse(actionReturnTypeFor(objectAction))
+                200, _OpenApi.response(actionReturnTypeFor(objectAction))
                 .description(logicalTypeName + "#" + actionId));
     }
 
@@ -612,20 +607,21 @@ class OpenApiModelFactory {
         }
     }
 
-    Schema actionReturnTypeFor(final ObjectAction objectAction) {
+    Schema<?> actionReturnTypeFor(final ObjectAction objectAction) {
         return objectAction.getReturnType().isPlural()
                 ? arrayPropertyOf(objectAction.getElementType())
                 : modelFor(objectAction.getReturnType());
     }
 
-    private Schema modelFor(final OneToManyAssociation collection) {
+    private ArraySchema modelFor(final OneToManyAssociation collection) {
         ObjectSpecification collectionSpecification = collection.getElementType();
         return arrayPropertyOf(collectionSpecification);
     }
 
-    private Schema arrayPropertyOf(final ObjectSpecification objectSpecification) {
+    private ArraySchema arrayPropertyOf(final ObjectSpecification objectSpecification) {
         final ArraySchema arrayProperty = new ArraySchema();
-        if(objectSpecification != null && objectSpecification.getCorrespondingClass() != Object.class) {
+        if(objectSpecification != null
+                && objectSpecification.getCorrespondingClass() != Object.class) {
             arrayProperty
             .description("List of " + objectSpecification.getLogicalTypeName())
             .items(modelFor(objectSpecification));
@@ -635,7 +631,7 @@ class OpenApiModelFactory {
         return arrayProperty;
     }
 
-    private Schema modelFor(final ObjectSpecification specification) {
+    private Schema<?> modelFor(final ObjectSpecification specification) {
         if(specification == null) {
             return new ObjectSchema();
         }
@@ -646,7 +642,7 @@ class OpenApiModelFactory {
             return new ObjectSchema();
         }
         // no "simple" representation for values
-        final Schema property = valuePropertyFactory.newProperty(correspondingClass);
+        val property = valuePropertyFactory.newProperty(correspondingClass);
         if(property != null) {
             // was recognized as a value
             return new ObjectSchema();
@@ -668,8 +664,8 @@ class OpenApiModelFactory {
         return newRefProperty(specification.getLogicalTypeName() + "Repr");
     }
 
-    void updateObjectModel(
-            final Schema model,
+    private void updateObjectModel(
+            final ObjectSchema model,
             final ObjectSpecification objectSpecification,
             final List<OneToOneAssociation> objectProperties,
             final List<OneToManyAssociation> objectCollections) {
@@ -678,7 +674,6 @@ class OpenApiModelFactory {
         final String className = objectSpecification.getFullIdentifier();
 
         model
-        .type("object")
         .description(String.format("%s (%s)", logicalTypeName, className));
 
         for (OneToOneAssociation objectProperty : objectProperties) {
@@ -696,8 +691,8 @@ class OpenApiModelFactory {
         }
     }
 
-    Schema propertyFor(final ObjectSpecification objectSpecification) {
-        final Schema property =
+    Schema<?> propertyFor(final ObjectSpecification objectSpecification) {
+        val property =
                 valuePropertyFactory.newProperty(objectSpecification.getCorrespondingClass());
         if (property != null) {
             return property;
@@ -723,10 +718,9 @@ class OpenApiModelFactory {
         }
     }
 
-    static Schema newModel(final String description) {
-        return new Schema()
+    static ObjectSchema newModel(final String description) {
+        return (ObjectSchema) new ObjectSchema()
                 .description(description)
-                .type("object")
                 .addProperty("links", arrayOfLinks())
                 .addProperty("extensions", new MapSchema())
                 .addRequiredItem("links")
@@ -751,25 +745,20 @@ class OpenApiModelFactory {
                 .items(refToLinkModel());
     }
 
-    static RefSchema refToLinkModel() {
-        return new RefSchema("#/definitions/LinkRepr");
+    static Schema refToLinkModel() {
+        return _OpenApi.refSchema("#/definitions/LinkRepr");
     }
 
-    static RefSchema refToHrefModel() {
-        return new RefSchema("#/definitions/HrefRepr");
+    static Schema refToHrefModel() {
+        return _OpenApi.refSchema("#/definitions/HrefRepr");
     }
 
     static ArraySchema arrayOfStrings() {
         return new ArraySchema().items(stringProperty());
     }
 
-    //TODO[ISIS-3292] honor schema
-    static ApiResponse newResponse(final Schema schema) {
-        return new ApiResponse();
-    }
-
     static ApiResponse newResponse(final Caching caching, final Schema schema) {
-        return _Util.withCachingHeaders(newResponse(schema), caching);
+        return _Util.withCachingHeaders(_OpenApi.response(schema), caching);
     }
 
     String tagForlogicalTypeName(final String logicalTypeName, final String fallback) {
@@ -778,7 +767,7 @@ class OpenApiModelFactory {
 
     private Schema newRefProperty(final String model) {
         addSwaggerReference(model);
-        return new RefSchema("#/definitions/" + model);
+        return _OpenApi.refSchema("#/definitions/" + model);
     }
 
     private void addDefinition(final String key, final Schema model) {
