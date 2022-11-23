@@ -81,15 +81,22 @@ class _OpenApi {
         return new BodyParameter();
     }
 
-    private static class RefSchema extends Schema {
-        public RefSchema(final String string) {
-            //TODO[ISIS-3292] implement or replace
+    private static class RefSchema extends Schema<Object> {
+        public RefSchema(final String schemaRefLiteral) {
+            super("ref", null);
+            super.set$ref(schemaRefLiteral);
         }
     }
     @SuppressWarnings("rawtypes")
-    Schema refSchema(final String string) {
-        return new RefSchema(string);
+    Schema refSchema(final String schemaRefLiteral) {
+        return new RefSchema(schemaRefLiteral);
     }
+
+    // -- NOT USED
+
+//  Link link(final String schemaRefLiteral) {
+//  return new Link().$ref(schemaRefLiteral);
+//}
 
 
 }

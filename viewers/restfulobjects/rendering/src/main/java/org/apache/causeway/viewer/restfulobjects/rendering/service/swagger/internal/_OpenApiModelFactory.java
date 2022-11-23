@@ -746,11 +746,11 @@ class _OpenApiModelFactory {
     }
 
     static Schema refToLinkModel() {
-        return _OpenApi.refSchema("#/definitions/LinkRepr");
+        return _OpenApi.refSchema("LinkRepr");
     }
 
     static Schema refToHrefModel() {
-        return _OpenApi.refSchema("#/definitions/HrefRepr");
+        return _OpenApi.refSchema("HrefRepr");
     }
 
     static ArraySchema arrayOfStrings() {
@@ -765,9 +765,9 @@ class _OpenApiModelFactory {
         return tagger.tagForLogicalTypeName(logicalTypeName, fallback);
     }
 
-    private Schema newRefProperty(final String model) {
+    private Schema<?> newRefProperty(final String model) {
         addSwaggerReference(model);
-        return _OpenApi.refSchema("#/definitions/" + model);
+        return _OpenApi.refSchema(model);
     }
 
     private void addDefinition(final String key, final Schema model) {
@@ -779,6 +779,7 @@ class _OpenApiModelFactory {
         references.add(model);
     }
 
+    //TODO rename
     void addSwaggerDefinition(final String model) {
         definitions.add(model);
     }
