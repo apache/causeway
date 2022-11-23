@@ -58,7 +58,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.val;
 
-class Generation {
+class OpenApiModelFactory {
 
     // double quotes
     private static final String DQ = ""; // empty seems the only variant that works
@@ -75,7 +75,7 @@ class Generation {
     private final Set<String> definitions = _Sets.newLinkedHashSet();
     private OpenAPI swagger;
 
-    public Generation(
+    public OpenApiModelFactory(
             final String basePath,
             final Visibility visibility,
             final SpecificationLoader specificationLoader,

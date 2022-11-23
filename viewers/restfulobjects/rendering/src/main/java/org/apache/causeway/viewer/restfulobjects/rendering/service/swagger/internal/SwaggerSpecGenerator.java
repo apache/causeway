@@ -60,7 +60,7 @@ public class SwaggerSpecGenerator {
             final Visibility visibility,
             final Format format) {
 
-        final Generation generation = newGeneration(basePath, visibility);
+        final OpenApiModelFactory generation = newGeneration(basePath, visibility);
         final OpenAPI swagger = generation.generate();
 
         switch (format) {
@@ -77,8 +77,8 @@ public class SwaggerSpecGenerator {
         }
     }
 
-    protected Generation newGeneration(final String basePath, final Visibility visibility) {
-        return new Generation(
+    protected OpenApiModelFactory newGeneration(final String basePath, final Visibility visibility) {
+        return new OpenApiModelFactory(
                 basePath, visibility,
                 specificationLoader,
                 tagger,
