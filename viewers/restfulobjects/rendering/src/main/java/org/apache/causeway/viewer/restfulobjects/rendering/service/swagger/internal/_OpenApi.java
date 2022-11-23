@@ -40,16 +40,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _OpenApi {
 
-    @SuppressWarnings("rawtypes")
-    Schema schema(final String typeLiteral) {
-        switch(typeLiteral) {
-        case "string":
-            return new StringSchema();
-        default:
-            return new Schema().type(typeLiteral);
-        }
-    }
-
     /** defaulting to type: string */
     Parameter pathParameter() {
         return new PathParameter()
@@ -110,8 +100,18 @@ class _OpenApi {
 
     // -- NOT USED
 
-//  Link link(final String schemaRefLiteral) {
-//  return new Link().$ref(schemaRefLiteral);
-//}
+//    @SuppressWarnings("rawtypes")
+//    Schema schema(final String typeLiteral) {
+//        switch(typeLiteral) {
+//        case "string":
+//            return new StringSchema();
+//        default:
+//            return new Schema().type(typeLiteral);
+//        }
+//    }
+
+//    Link link(final String schemaRefLiteral) {
+//        return new Link().$ref(schemaRefLiteral);
+//    }
 
 }

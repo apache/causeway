@@ -59,6 +59,8 @@ import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.val;
 
@@ -112,13 +114,14 @@ class _OpenApiModelFactory {
 
         appendRestfulObjectsSupportingPathsAndDefinitions();
         appendLinkModelDefinition();
-
         appendServicePathsAndDefinitions();
         appendObjectPathsAndDefinitions();
-
         appendDefinitionsForOrphanedReferences();
 
         oa3.setPaths(sorted(oa3.getPaths()));
+
+        // https://stackoverflow.com/questions/45199989/how-do-i-automatically-authorize-all-endpoints-with-swagger-ui
+        oa3.getComponents().addSecuritySchemes("basicAuth", new SecurityScheme().type(Type.HTTP).scheme("basic"));
 
         return oa3;
     }
@@ -239,8 +242,8 @@ class _OpenApiModelFactory {
                                 newRefProperty("RestfulObjectsSupportingHomePageRepr"),
                                 response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("5.1"))));
-        addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(_Util.roSpec("5.2")));
+                            .description(RoSpec.HOMEPAGE_GET.fqSection())));
+        addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(RoSpec.HOMEPAGE_REPR.fqSection()));
 
         oa3.path("/user",
                 new PathItem()
@@ -250,9 +253,9 @@ class _OpenApiModelFactory {
                                 newRefProperty("RestfulObjectsSupportingUserRepr"),
                                 response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("6.1"))));
+                            .description(RoSpec.USER_GET.fqSection())));
         addDefinition("RestfulObjectsSupportingUserRepr",
-                newModel(_Util.roSpec("6.2"))
+                newModel(RoSpec.USER_REPR.fqSection())
                 .addProperty("userName", stringProperty())
                 .addProperty("roles", arrayOfStrings())
                 .addProperty("links", arrayOfLinks())
@@ -267,9 +270,9 @@ class _OpenApiModelFactory {
                                 newRefProperty("RestfulObjectsSupportingServicesRepr"),
                                 response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("7.1"))));
+                            .description(RoSpec.DOMAIN_SERVICES_GET.fqSection())));
         addDefinition("RestfulObjectsSupportingServicesRepr",
-                newModel(_Util.roSpec("7.2"))
+                newModel(RoSpec.DOMAIN_SERVICES_REPR.fqSection())
                 .addProperty("value", arrayOfLinks())
                 .addRequiredItem("userName")
                 .addRequiredItem("roles"));
@@ -282,10 +285,10 @@ class _OpenApiModelFactory {
                                 new ObjectSchema(),
                                 response->response.description("OK"))
                             .addTagsItem(tag)
-                            .description(_Util.roSpec("8.1"))));
+                            .description(RoSpec.VERSION_GET.fqSection())));
 
         oa3.getComponents().addSchemas("RestfulObjectsSupportingServicesRepr",
-                newModel(_Util.roSpec("8.2"))
+                newModel(RoSpec.VERSION_REPR.fqSection())
                 .addProperty("specVersion", stringProperty())
                 .addProperty("implVersion", stringProperty())
                 .addProperty("optionalCapabilities",
@@ -340,10 +343,10 @@ class _OpenApiModelFactory {
                         newRefProperty(serviceModelDefinition),
                         response->response.description("OK"))
                     .addTagsItem(tag)
-                    .description(_Util.roSpec("15.1")));
+                    .description(RoSpec.DOMAIN_SERVICE_GET.fqSection()));
 
         val model =
-                newModel(_Util.roSpec("15.1.2") + ": representation of " + serviceId)
+                newModel(RoSpec.DOMAIN_SERVICE_GET_SUCCESS.fqSection() + ": representation of " + serviceId)
                 .addProperty("title", stringProperty())
                 .addProperty("serviceId", stringProperty()._default(serviceId))
                 .addProperty("members", new ObjectSchema());
@@ -372,7 +375,7 @@ class _OpenApiModelFactory {
         path.get(operation);
         operation
         .addTagsItem(tag)
-        .description(_Util.roSpec("14.1"))
+        .description(RoSpec.DOMAIN_OBJECT_GET.fqSection())
         .addParametersItem(
                 _OpenApi.pathParameter()
                 .name("objectId"));
@@ -443,7 +446,7 @@ class _OpenApiModelFactory {
                                     + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
                 )
                 .addTagsItem(tag)
-                .description(_Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId);
+                .description(RoSpec.ACTION_INVOKE_GET.fqSection() + ": (invoke) resource of " + serviceId + "#" + actionId);
 
         final SemanticsOf semantics = serviceAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -456,7 +459,7 @@ class _OpenApiModelFactory {
                 invokeOperation
                 .addParametersItem(_OpenApi.queryParameter()
                         .name(parameter.getId())
-                        .description(_Util.roSpec("2.9.1")
+                        .description(RoSpec.ARGS_SIMPLE.fqSection()
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
@@ -465,7 +468,7 @@ class _OpenApiModelFactory {
             if(!parameters.isEmpty()) {
                 invokeOperation.addParametersItem(_OpenApi.queryParameter()
                         .name("x-causeway-querystring")
-                        .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
+                        .description(RoSpec.ARGS_PASSING.fqSection() + ": all (formal) arguments as base64 encoded string")
                         .required(false));
             }
 
@@ -514,7 +517,8 @@ class _OpenApiModelFactory {
                         response->response.description(logicalTypeName + "#" + collectionId
                                 + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"))
                 .addTagsItem(tag)
-                .description(_Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
+                .description(RoSpec.COLLECTION_GET.fqSection()
+                        + ": resource of " + logicalTypeName + "#" + collectionId)
                 .addParametersItem(
                         _OpenApi.pathParameter()
                         .name("objectId"));
@@ -541,7 +545,7 @@ class _OpenApiModelFactory {
                         actionReturnTypeFor(objectAction),
                         response->response.description(logicalTypeName + "#" + actionId))
                 .addTagsItem(tag)
-                .description(_Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
+                .description(RoSpec.ACTION_INVOKE_GET.fqSection() + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
                 .addParametersItem(
                         _OpenApi.pathParameter()
                         .name("objectId"));
@@ -558,7 +562,7 @@ class _OpenApiModelFactory {
                 .addParametersItem(
                         _OpenApi.queryParameter()
                         .name(parameter.getId())
-                        .description(_Util.roSpec("2.9.1")
+                        .description(RoSpec.ARGS_SIMPLE.fqSection()
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
@@ -568,7 +572,7 @@ class _OpenApiModelFactory {
                 invokeOperation.addParametersItem(
                         _OpenApi.queryParameter()
                         .name("x-causeway-querystring")
-                        .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
+                        .description(RoSpec.ARGS_PASSING.fqSection() + ": all (formal) arguments as base64 encoded string")
                         .required(false));
             }
 

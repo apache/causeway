@@ -138,10 +138,6 @@ final class _Util {
                 .collect(Collectors.toList());
     }
 
-    String roSpec(final String section) {
-        return "RO Spec v1.0, section " + section;
-    }
-
     ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
         switch (visibility) {
         case PUBLIC:

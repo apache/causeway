@@ -62,7 +62,7 @@ enum Caching {
         @Override
         Optional<Header> header() {
             return Optional.of(new Header()
-                    .description(_Util.roSpec("2.13"))
+                    .description(RoSpec.CACHE_CONTROL.fqSection())
                     .schema(new IntegerSchema()._default(86400)));
         }
     };
