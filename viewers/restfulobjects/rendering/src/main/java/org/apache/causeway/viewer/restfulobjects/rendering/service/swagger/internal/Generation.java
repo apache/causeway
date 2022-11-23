@@ -54,8 +54,6 @@ import io.swagger.v3.oas.models.media.MapSchema;
 import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
-import io.swagger.v3.oas.models.parameters.PathParameter;
-import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.val;
@@ -231,7 +229,7 @@ class Generation {
 
         swagger.path("/",
                 new PathItem()
-                .get(_Util.response(
+                .get(_OpenApi.response(
                         newOperation("home-page")
                             .addTagsItem(tag)
                             .description(_Util.roSpec("5.1")),
@@ -242,7 +240,7 @@ class Generation {
 
         swagger.path("/user",
                 new PathItem()
-                .get(_Util.response(
+                .get(_OpenApi.response(
                         newOperation("user")
                             .addTagsItem(tag)
                             .description(_Util.roSpec("6.1")),
@@ -259,7 +257,7 @@ class Generation {
 
         swagger.path("/services",
                 new PathItem()
-                .get(_Util.response(
+                .get(_OpenApi.response(
                         newOperation("services")
                             .addTagsItem(tag)
                             .description(_Util.roSpec("7.1")),
@@ -274,7 +272,7 @@ class Generation {
 
         swagger.path("/version",
                 new PathItem()
-                .get(_Util.response(
+                .get(_OpenApi.response(
                         newOperation("RestfulObjectsSupportingServicesRepr")
                             .addTagsItem(tag)
                             .description(_Util.roSpec("8.1")),
@@ -334,7 +332,7 @@ class Generation {
         final String serviceModelDefinition = serviceId + "Repr";
 
         final String tag = tagForlogicalTypeName(serviceId, "> services");
-        path.get(_Util.response(
+        path.get(_OpenApi.response(
                 newOperation("object")
                     .addTagsItem(tag)
                     .description(_Util.roSpec("15.1")),
@@ -365,17 +363,15 @@ class Generation {
         .addTagsItem(tag)
         .description(_Util.roSpec("14.1"))
         .addParametersItem(
-                _Util.typed(
-                new PathParameter()
-                .name("objectId"),
-                "string"));
+                _OpenApi.pathParameter()
+                .name("objectId"));
 
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
         // modelled representations per path and response code;
         // in particular cannot associate representation/model with Accept header ('produces(...) method)
         final String restfulObjectsModelDefinition = logicalTypeName + "RestfulObjectsRepr";
         if (false) {
-            _Util.response(operation,
+            _OpenApi.response(operation,
                     200,
                     newResponse(Caching.TRANSACTIONAL, newRefProperty(restfulObjectsModelDefinition))
                     .description("if Accept: application/json;profile=urn:org.restfulobjects:repr-types/object"));
@@ -391,7 +387,7 @@ class Generation {
 
         final String causewayModelDefinition = logicalTypeName + "Repr";
 
-        _Util.response(operation,
+        _OpenApi.response(operation,
                 200,
                 newResponse(Caching.TRANSACTIONAL, newRefProperty(causewayModelDefinition))
                 .description(logicalTypeName + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
@@ -402,6 +398,8 @@ class Generation {
         // return so can be appended to
         return causewayModel;
     }
+
+
 
     // UNUSED
     void appendServiceActionPromptTo(final ObjectSchema serviceMembers, final ObjectAction action) {
@@ -449,21 +447,19 @@ class Generation {
                 val describedAs = parameter.getStaticDescription().orElse(null);
 
                 invokeOperation
-                .addParametersItem(_Util.typed(new QueryParameter()
+                .addParametersItem(_OpenApi.queryParameter()
                         .name(parameter.getId())
                         .description(_Util.roSpec("2.9.1")
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
-                        .required(false),
-                        "string"));
+                        .required(false));
             }
             if(!parameters.isEmpty()) {
-                invokeOperation.addParametersItem(_Util.typed(new QueryParameter()
+                invokeOperation.addParametersItem(_OpenApi.queryParameter()
                         .name("x-causeway-querystring")
                         .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
-                        .required(false),
-                        "string"));
+                        .required(false));
             }
 
         } else {
@@ -490,7 +486,7 @@ class Generation {
                         );
             }
 
-            _Util.consumes(invokeOperation, "application/json")
+            _OpenApi.consumes(invokeOperation, "application/json")
             .addParametersItem(
                     new BodyParameter()
                     .name("body")
@@ -498,7 +494,7 @@ class Generation {
 
         }
 
-        _Util.response(invokeOperation,
+        _OpenApi.response(invokeOperation,
                 200, newResponse(actionReturnTypeFor(serviceAction))
                 .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
     }
@@ -519,11 +515,11 @@ class Generation {
                 .addTagsItem(tag)
                 .description(_Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
                 .addParametersItem(
-                        _Util.typed(new PathParameter(), "string")
+                        _OpenApi.pathParameter()
                         .name("objectId"));
 
         path.get(collectionOperation);
-        _Util.response(collectionOperation,
+        _OpenApi.response(collectionOperation,
                 200,
                 newResponse(modelFor(collection))
                 .description(logicalTypeName + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"));
@@ -546,10 +542,8 @@ class Generation {
                 .addTagsItem(tag)
                 .description(_Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
                 .addParametersItem(
-                        _Util.typed(
-                        new PathParameter()
-                        .name("objectId"),
-                        "string"));
+                        _OpenApi.pathParameter()
+                        .name("objectId"));
 
         final SemanticsOf semantics = objectAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -561,25 +555,20 @@ class Generation {
 
                 invokeOperation
                 .addParametersItem(
-                        _Util.typed(
-                        new QueryParameter()
+                        _OpenApi.queryParameter()
                         .name(parameter.getId())
                         .description(_Util.roSpec("2.9.1")
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
-                        .required(false),
-                        "string")
-                        );
+                        .required(false));
             }
             if(!parameters.isEmpty()) {
                 invokeOperation.addParametersItem(
-                        _Util.typed(
-                        new QueryParameter()
+                        _OpenApi.queryParameter()
                         .name("x-causeway-querystring")
                         .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
-                        .required(false),
-                        "string"));
+                        .required(false));
             }
 
         } else {
@@ -603,7 +592,7 @@ class Generation {
                         );
             }
 
-            _Util.consumes(invokeOperation, "application/json")
+            _OpenApi.consumes(invokeOperation, "application/json")
             .addParametersItem(
                     new BodyParameter()
                     .name("body")
@@ -611,7 +600,7 @@ class Generation {
 
         }
 
-        _Util.response(invokeOperation,
+        _OpenApi.response(invokeOperation,
                 200, newResponse(actionReturnTypeFor(objectAction))
                 .description(logicalTypeName + "#" + actionId));
     }
@@ -811,9 +800,11 @@ class Generation {
         return referencesCopy;
     }
 
+    // -- MODEL ELEMENT FACTORIES
+
     private static Operation newOperation(final String ... reprTypes) {
         Operation operation =
-                _Util.produces(new Operation(), "application/json");
+                _OpenApi.produces(new Operation(), "application/json");
 
         boolean supportsV1 = false;
 
@@ -824,15 +815,15 @@ class Generation {
                     supportsV1 = true;
                 }
 
-                operation = _Util.produces(operation,
+                operation = _OpenApi.produces(operation,
                         "application/json;profile=" + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
             }
         }
 
         if(supportsV1) {
-            operation = _Util.produces(operation,
+            operation = _OpenApi.produces(operation,
                     "application/json;profile=" + DQ + "urn:org.apache.causeway/v2" + DQ);
-            operation = _Util.produces(operation,
+            operation = _OpenApi.produces(operation,
                     "application/json;profile=" + DQ + "urn:org.apache.causeway/v2;suppress=all" + DQ);
         }
 

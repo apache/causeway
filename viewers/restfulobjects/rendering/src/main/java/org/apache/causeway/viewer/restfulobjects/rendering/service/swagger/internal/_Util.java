@@ -37,8 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -162,23 +160,4 @@ final class _Util {
         throw _Exceptions.unmatchedCase(visibility);
     }
 
-    Operation produces(final Operation operation, final String string) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return operation;
-    }
-
-    <T extends Parameter> T typed(final T parameter, final String typeLiteral) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return parameter;
-    }
-
-    Operation response(final Operation operation, final int code, final ApiResponse response) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return operation;
-    }
-
-    Operation consumes(final Operation operation, final String string) {
-        // TODO[ISIS-3292] Auto-generated method stub
-        return operation;
-    }
 }
