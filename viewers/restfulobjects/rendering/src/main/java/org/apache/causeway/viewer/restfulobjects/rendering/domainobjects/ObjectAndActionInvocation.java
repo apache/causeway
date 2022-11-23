@@ -18,9 +18,12 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -121,6 +124,19 @@ public class ObjectAndActionInvocation {
      */
     public ObjectSpecification getReturnTypeSpecification() {
         return getAction().getReturnType();
+    }
+
+    // -- UTILITY
+
+    /**
+     * Returns the action result as either as is (singular/left) or a list (plural/right), based on
+     * whether the action return type has collection semantics.
+     */
+    public Either<ManagedObject, List<ManagedObject>> asEitherSingularOrPlural() {
+        return getReturnTypeSpecification().isPlural()
+                ? Either.right(Facets.collectionStream(getReturnTypeSpecification(), getReturnedAdapter())
+                        .collect(Collectors.toList()))
+                : Either.left(getReturnedAdapter());
     }
 
     // -- HELPER

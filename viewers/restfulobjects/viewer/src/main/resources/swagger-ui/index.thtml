@@ -4,7 +4,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Swagger UI</title>
-    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
     <style>
@@ -37,10 +38,12 @@
 
     <script src="./swagger-ui-bundle.js"> </script>
     <script src="./swagger-ui-standalone-preset.js"> </script>
+    <script src="./swagger-initializer.js" charset="UTF-8"> </script>
     <script>
     window.onload = function() {
-      // Begin Swagger UI call region
+      /* Begin Swagger UI call region */
       const ui = SwaggerUIBundle({
+    	dom_id: '#swagger-ui',
     	urls: [{
     		url: "${restful-base}/swagger/public", name: "public"
     	},{
@@ -48,8 +51,6 @@
     	},{
     		url: "${restful-base}/swagger/private", name: "private"
     	}],
-        dom_id: '#swagger-ui',
-        deepLinking: true,
         presets: [
           SwaggerUIBundle.presets.apis,
           SwaggerUIStandalonePreset
@@ -57,11 +58,17 @@
         plugins: [
           SwaggerUIBundle.plugins.DownloadUrl
         ],
-        layout: "StandaloneLayout"
-      })
-      // End Swagger UI call region
-
-      window.ui = ui
+        layout: "StandaloneLayout",
+        deepLinking: true,
+        filter: true,
+        syntaxHighlight: {
+           activate: true,
+           theme: "nord"
+        },
+        withCredentials: true,
+      });
+      /* End Swagger UI call region */
+      window.ui = ui;
     }
   </script>
   </body>
