@@ -18,8 +18,23 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
 import io.swagger.v3.oas.models.media.Schema;
 
-public interface ValuePropertyFactory {
-    Schema newProperty(Class<?> cls);
+public interface ValueSchemaFactory {
+
+    Optional<Schema<?>> schemaForValue(@Nullable Class<?> cls);
+
+    default Optional<Schema<?>> schemaForValue(
+            final @Nullable ObjectSpecification objectSpecification) {
+        return Optional.ofNullable(objectSpecification)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .flatMap(this::schemaForValue);
+    }
+
 }

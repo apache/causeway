@@ -35,20 +35,20 @@ import io.swagger.v3.core.util.Yaml;
 import io.swagger.v3.oas.models.OpenAPI;
 
 @Component
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".SwaggerSpecGenerator")
-public class SwaggerSpecGenerator {
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".OpenApiSpecGenerator")
+public class OpenApiSpecGenerator {
 
     private final SpecificationLoader specificationLoader;
     private final Tagger tagger;
     private final ClassExcluder classExcluder;
-    private final ValuePropertyFactory valuePropertyFactory;
+    private final ValueSchemaFactory valuePropertyFactory;
 
     @Inject
-    public SwaggerSpecGenerator(
+    public OpenApiSpecGenerator(
             final SpecificationLoader specificationLoader,
             final Tagger tagger,
             final ClassExcluder classExcluder,
-            final ValuePropertyFactory valuePropertyFactory) {
+            final ValueSchemaFactory valuePropertyFactory) {
         this.specificationLoader = specificationLoader;
         this.tagger = tagger;
         this.classExcluder = classExcluder;

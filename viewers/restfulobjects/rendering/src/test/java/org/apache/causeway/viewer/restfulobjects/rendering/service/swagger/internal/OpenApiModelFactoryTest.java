@@ -33,7 +33,7 @@ public class OpenApiModelFactoryTest {
 
         _OpenApiModelFactory context =
                 new _OpenApiModelFactory(null, null, null, new TaggerDefault(),
-                        new ClassExcluderDefault(), new ValuePropertyFactoryDefault());
+                        new ClassExcluderDefault(), new ValueSchemaFactoryDefault());
 
         context.addSwaggerReference("foo");
         context.addSwaggerReference("bar");

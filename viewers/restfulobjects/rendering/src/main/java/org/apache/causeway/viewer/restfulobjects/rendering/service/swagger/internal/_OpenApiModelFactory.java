@@ -23,12 +23,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.swagger.Visibility;
@@ -70,13 +71,13 @@ class _OpenApiModelFactory {
     private final Visibility visibility;
     private final SpecificationLoader specificationLoader;
 
-    private final ValuePropertyFactory valuePropertyFactory;
+    private final ValueSchemaFactory valueSchemaFactory;
     private final Tagger tagger;
     private final ClassExcluder classExcluder;
 
     private final Set<String> references = _Sets.newLinkedHashSet();
     private final Set<String> definitions = _Sets.newLinkedHashSet();
-    private OpenAPI swagger;
+    private OpenAPI oa3;
 
     public _OpenApiModelFactory(
             final String basePath,
@@ -84,30 +85,30 @@ class _OpenApiModelFactory {
             final SpecificationLoader specificationLoader,
             final Tagger tagger,
             final ClassExcluder classExcluder,
-            final ValuePropertyFactory valuePropertyFactory) {
+            final ValueSchemaFactory valuePropertyFactory) {
         this.basePath = basePath;
         this.visibility = visibility;
         this.specificationLoader = specificationLoader;
         this.tagger = tagger;
         this.classExcluder = classExcluder;
-        this.valuePropertyFactory = valuePropertyFactory;
+        this.valueSchemaFactory = valuePropertyFactory;
     }
 
     OpenAPI generate() {
-        this.swagger = new OpenAPI();
+        this.oa3 = new OpenAPI();
 
         final String swaggerVersionInfo =
                 String.format("swagger.io (%s)",
                         OpenAPI.class.getPackage().getImplementationVersion()
                         );
 
-        swagger.addServersItem(new Server()
+        oa3.addServersItem(new Server()
                 .url(basePath));
-        swagger.info(new Info()
+        oa3.info(new Info()
                 .version(swaggerVersionInfo)
                 .title(visibility.name() + " API")
                 );
-        swagger.setComponents(new Components());
+        oa3.setComponents(new Components());
 
         appendRestfulObjectsSupportingPathsAndDefinitions();
         appendLinkModelDefinition();
@@ -117,9 +118,9 @@ class _OpenApiModelFactory {
 
         appendDefinitionsForOrphanedReferences();
 
-        swagger.setPaths(sorted(swagger.getPaths()));
+        oa3.setPaths(sorted(oa3.getPaths()));
 
-        return swagger;
+        return oa3;
     }
 
     private Paths sorted(final Map<String, PathItem> paths) {
@@ -230,7 +231,7 @@ class _OpenApiModelFactory {
 
         final String tag = ". restful objects supporting resources";
 
-        swagger.path("/",
+        oa3.path("/",
                 new PathItem()
                 .get(
                         newOperation("home-page",
@@ -241,7 +242,7 @@ class _OpenApiModelFactory {
                             .description(_Util.roSpec("5.1"))));
         addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(_Util.roSpec("5.2")));
 
-        swagger.path("/user",
+        oa3.path("/user",
                 new PathItem()
                 .get(
                         newOperation("user",
@@ -258,7 +259,7 @@ class _OpenApiModelFactory {
                 .addRequiredItem("userName")
                 .addRequiredItem("roles"));
 
-        swagger.path("/services",
+        oa3.path("/services",
                 new PathItem()
                 .get(
                         newOperation("services",
@@ -273,7 +274,7 @@ class _OpenApiModelFactory {
                 .addRequiredItem("userName")
                 .addRequiredItem("roles"));
 
-        swagger.path("/version",
+        oa3.path("/version",
                 new PathItem()
                 .get(
                         newOperation("RestfulObjectsSupportingServicesRepr",
@@ -283,7 +284,7 @@ class _OpenApiModelFactory {
                             .addTagsItem(tag)
                             .description(_Util.roSpec("8.1"))));
 
-        swagger.getComponents().addSchemas("RestfulObjectsSupportingServicesRepr",
+        oa3.getComponents().addSchemas("RestfulObjectsSupportingServicesRepr",
                 newModel(_Util.roSpec("8.2"))
                 .addProperty("specVersion", stringProperty())
                 .addProperty("implVersion", stringProperty())
@@ -300,7 +301,7 @@ class _OpenApiModelFactory {
     }
 
     void appendLinkModelDefinition() {
-        swagger.getComponents().addSchemas("LinkRepr",
+        oa3.getComponents().addSchemas("LinkRepr",
                 new ObjectSchema()
                 .addProperty("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
                 .addProperty("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
@@ -314,7 +315,7 @@ class _OpenApiModelFactory {
                 .addRequiredItem("method")
                 );
 
-        swagger.getComponents().addSchemas("HrefRepr",
+        oa3.getComponents().addSchemas("HrefRepr",
                 new ObjectSchema()
                 .description("Abbreviated version of the Link resource, used primarily to reference non-value objects")
                 .addProperty("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
@@ -328,7 +329,7 @@ class _OpenApiModelFactory {
         final String serviceId = objectSpec.getLogicalTypeName();
 
         final PathItem path = new PathItem();
-        swagger.path(String.format("/services/%s", serviceId), path);
+        oa3.path(String.format("/services/%s", serviceId), path);
 
         final String serviceModelDefinition = serviceId + "Repr";
 
@@ -359,7 +360,7 @@ class _OpenApiModelFactory {
         addDefinition(causewayModelDefinition, causewayModel);
 
         final PathItem path = new PathItem();
-        swagger.path(String.format("/objects/%s/{objectId}", logicalTypeName), path);
+        oa3.path(String.format("/objects/%s/{objectId}", logicalTypeName), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation operation = newOperation("object",
@@ -430,7 +431,7 @@ class _OpenApiModelFactory {
 
         val parameters = serviceAction.getParameters();
         final PathItem path = new PathItem();
-        swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
+        oa3.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
         final String tag = tagForlogicalTypeName(serviceId, "> services");
         final Operation invokeOperation =
@@ -502,7 +503,7 @@ class _OpenApiModelFactory {
         final String collectionId = collection.getId();
 
         final PathItem path = new PathItem();
-        swagger.path(String.format("/objects/%s/{objectId}/collections/%s", logicalTypeName, collectionId), path);
+        oa3.path(String.format("/objects/%s/{objectId}/collections/%s", logicalTypeName, collectionId), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
         final Operation collectionOperation =
@@ -529,7 +530,7 @@ class _OpenApiModelFactory {
 
         val parameters = objectAction.getParameters();
         final PathItem path = new PathItem();
-        swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", logicalTypeName, actionId), path);
+        oa3.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", logicalTypeName, actionId), path);
 
         final String tag = tagForlogicalTypeName(logicalTypeName, null);
 
@@ -582,7 +583,7 @@ class _OpenApiModelFactory {
 
                 final ObjectSpecification specification = parameter.getElementType();
                 val valueProperty = specification.isValue()
-                        ? modelFor(specification)
+                        ? schemaFor(specification)
                         : refToLinkModel() ;
                 bodyParam
                 .addProperty(parameter.getId(),
@@ -599,16 +600,15 @@ class _OpenApiModelFactory {
     }
 
     void appendDefinitionsForOrphanedReferences() {
-        final Set<String> referencesWithoutDefinition = getReferencesWithoutDefinition();
-        for (String reference : referencesWithoutDefinition) {
-            swagger.getComponents().addSchemas(reference, new Schema());
+        for (String reference : getReferencesWithoutDefinition()) {
+            oa3.getComponents().addSchemas(reference, new Schema<>());
         }
     }
 
     Schema<?> actionReturnTypeFor(final ObjectAction objectAction) {
         return objectAction.getReturnType().isPlural()
                 ? arrayPropertyOf(objectAction.getElementType())
-                : modelFor(objectAction.getReturnType());
+                : schemaFor(objectAction.getReturnType());
     }
 
     private ArraySchema modelFor(final OneToManyAssociation collection) {
@@ -616,48 +616,45 @@ class _OpenApiModelFactory {
         return arrayPropertyOf(collectionSpecification);
     }
 
+    @SuppressWarnings("unchecked")
     private ArraySchema arrayPropertyOf(final ObjectSpecification objectSpecification) {
         final ArraySchema arrayProperty = new ArraySchema();
         if(objectSpecification != null
                 && objectSpecification.getCorrespondingClass() != Object.class) {
             arrayProperty
             .description("List of " + objectSpecification.getLogicalTypeName())
-            .items(modelFor(objectSpecification));
+            .items(schemaFor(objectSpecification));
         } else {
             arrayProperty.items(new ObjectSchema());
         }
         return arrayProperty;
     }
 
-    private Schema<?> modelFor(final ObjectSpecification specification) {
-        if(specification == null) {
+    private Schema<?> schemaFor(final @Nullable ObjectSpecification specification) {
+        val cls = specification!=null
+                ? specification.getCorrespondingClass()
+                : null;
+        if(cls == null
+                || void.class.equals(cls)
+                || Void.class.equals(cls)
+                ) {
             return new ObjectSchema();
         }
-
-        // no "simple" representation for void or values
-        final Class<?> correspondingClass = specification.getCorrespondingClass();
-        if(correspondingClass == void.class || correspondingClass == Void.class) {
+        if(specification.isValue()) {
+            // no "simple" representation for values
             return new ObjectSchema();
         }
-        // no "simple" representation for values
-        val property = valuePropertyFactory.newProperty(correspondingClass);
-        if(property != null) {
-            // was recognized as a value
-            return new ObjectSchema();
-        }
-
         if(specification.isPlural()) {
             val elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return arrayPropertyOf(elementSpec);
             }
         }
-
-        if(specification.getCorrespondingClass() == java.lang.Object.class) {
+        if(java.lang.Object.class.equals(cls)) {
             return new ObjectSchema();
         }
-        if(specification.getCorrespondingClass() == java.lang.Enum.class) {
-            return new StringSchema();
+        if(cls.isEnum()) {
+            return valueSchemaFactory.schemaForValue(specification).orElseThrow();
         }
         return newRefProperty(specification.getLogicalTypeName() + "Repr");
     }
@@ -677,7 +674,9 @@ class _OpenApiModelFactory {
         for (OneToOneAssociation objectProperty : objectProperties) {
             model.addProperty(
                     objectProperty.getId(),
-                    propertyFor(objectProperty.getElementType()));
+                    valueSchemaFactory.schemaForValue(objectProperty.getElementType())
+                        // else assume this is a reference to an entity/view model, meaning we use an href
+                        .orElseGet(()->refToHrefModel()));
         }
 
         for (OneToManyAssociation objectCollection : objectCollections) {
@@ -686,18 +685,6 @@ class _OpenApiModelFactory {
                     objectCollection.getId(),
                     arrayPropertyOf(elementSpec)
                     );
-        }
-    }
-
-    Schema<?> propertyFor(final ObjectSpecification objectSpecification) {
-        val property =
-                valuePropertyFactory.newProperty(objectSpecification.getCorrespondingClass());
-        if (property != null) {
-            return property;
-        }
-        else {
-            // assume this is a reference to an entity/view model, meaning we use an href
-            return refToHrefModel();
         }
     }
 
@@ -743,11 +730,11 @@ class _OpenApiModelFactory {
                 .items(refToLinkModel());
     }
 
-    static Schema refToLinkModel() {
+    static Schema<?> refToLinkModel() {
         return _OpenApi.refSchema("LinkRepr");
     }
 
-    static Schema refToHrefModel() {
+    static Schema<?> refToHrefModel() {
         return _OpenApi.refSchema("HrefRepr");
     }
 
@@ -764,22 +751,21 @@ class _OpenApiModelFactory {
         return _OpenApi.refSchema(model);
     }
 
-    private void addDefinition(final String key, final Schema model) {
+    private void addDefinition(final String key, final Schema<?> model) {
         addSwaggerDefinition(key);
-        swagger.getComponents().addSchemas(key, model);
+        oa3.getComponents().addSchemas(key, model);
     }
 
     void addSwaggerReference(final String model) {
         references.add(model);
     }
 
-    //TODO rename
     void addSwaggerDefinition(final String model) {
         definitions.add(model);
     }
 
     Set<String> getReferencesWithoutDefinition() {
-        LinkedHashSet<String> referencesCopy = _Sets.newLinkedHashSet(references);
+        val referencesCopy = _Sets.<String>newLinkedHashSet(references);
         referencesCopy.removeAll(definitions);
         return referencesCopy;
     }
@@ -808,6 +794,8 @@ class _OpenApiModelFactory {
                 });
         return operation;
     }
+
+    // -- CONTENT NEGOTIATION
 
     private static List<String> supportedFormats(final List<String> reprTypes) {
         val supportedFormats = _Lists.<String>newArrayList();

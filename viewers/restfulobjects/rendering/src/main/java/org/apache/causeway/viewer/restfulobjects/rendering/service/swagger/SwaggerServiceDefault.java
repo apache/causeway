@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator;
 
 import lombok.val;
 
@@ -43,12 +43,12 @@ import lombok.val;
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {
 
-    private final SwaggerSpecGenerator swaggerSpecGenerator;
+    private final OpenApiSpecGenerator swaggerSpecGenerator;
     private final String basePath;
 
     @Inject
     public SwaggerServiceDefault(
-            final SwaggerSpecGenerator swaggerSpecGenerator,
+            final OpenApiSpecGenerator swaggerSpecGenerator,
             final RestEasyConfiguration restEasyConfiguration,
             final WebAppContextPath webAppContextPath) {
 
