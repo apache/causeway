@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import io.swagger.models.Response;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -100,12 +99,7 @@ final class _Util {
     }
 
     Predicate<ObjectAssociation> associationsWith(final Visibility visibility) {
-        return new Predicate<ObjectAssociation>() {
-            @Override
-            public boolean test(final ObjectAssociation objectAssociation) {
-                return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
-            }
-        };
+        return objectAssociation -> !visibility.isPublic() || isVisibleForPublic(objectAssociation);
     }
 
     List<OneToOneAssociation> propertiesOf(
@@ -144,16 +138,6 @@ final class _Util {
                 .collect(Collectors.toList());
     }
 
-    String roSpec(final String section) {
-        return "RO Spec v1.0, section " + section;
-    }
-
-    Response withCachingHeaders(final Response response, final Caching caching) {
-        caching.withHeaders(response);
-
-        return response;
-    }
-
     ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
         switch (visibility) {
         case PUBLIC:
@@ -164,4 +148,5 @@ final class _Util {
         }
         throw _Exceptions.unmatchedCase(visibility);
     }
+
 }

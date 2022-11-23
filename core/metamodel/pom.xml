@@ -80,8 +80,8 @@
         </dependency>
 
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-core</artifactId>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-core</artifactId>
             <exclusions>
             	<!-- metamodel no longer has a dependency on guava -->
             	<exclusion>

@@ -851,8 +851,8 @@
 			</dependency>
 
 			<dependency>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-core</artifactId>
+			    <groupId>io.swagger.core.v3</groupId>
+			    <artifactId>swagger-core</artifactId>
 				<version>${swagger-core.version}</version>
 			</dependency>
 

@@ -133,6 +133,11 @@ public class SwaggerSpecResource {
 
         @Override
         public String call() throws Exception {
+
+//            return format==Format.YAML
+//                    ? _Strings.readFromResource(SwaggerSpecGenerator.class, "openapi-sample.yaml", StandardCharsets.UTF_8)
+//                    : _Strings.readFromResource(SwaggerSpecGenerator.class, "openapi-sample.json", StandardCharsets.UTF_8);
+
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
 

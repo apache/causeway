@@ -26,14 +26,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 
-public class GenerationTest {
+public class OpenApiModelFactoryTest {
 
     @Test
     public void testAddReference() throws Exception {
 
-        Generation context =
-                new Generation(null, null, null, new TaggerDefault(),
-                        new ClassExcluderDefault(), new ValuePropertyFactoryDefault());
+        _OpenApiModelFactory context =
+                new _OpenApiModelFactory(null, null, null, new TaggerDefault(),
+                        new ClassExcluderDefault(), new ValueSchemaFactoryDefault());
 
         context.addSwaggerReference("foo");
         context.addSwaggerReference("bar");
