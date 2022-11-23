@@ -34,7 +34,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -346,7 +345,7 @@ class _OpenApiModelFactory {
                     .description(RoSpec.DOMAIN_SERVICE_GET.fqSection()));
 
         val model =
-                newModel(RoSpec.DOMAIN_SERVICE_GET_SUCCESS.fqSection() + ": representation of " + serviceId)
+                newModel(RoSpec.DOMAIN_SERVICE_GET_SUCCESS.fqSection("representation of " + serviceId))
                 .addProperty("title", stringProperty())
                 .addProperty("serviceId", stringProperty()._default(serviceId))
                 .addProperty("members", new ObjectSchema());
@@ -446,7 +445,7 @@ class _OpenApiModelFactory {
                                     + " , if Accept: application/json;profile=urn:org.apache.causeway/v2")
                 )
                 .addTagsItem(tag)
-                .description(RoSpec.ACTION_INVOKE_GET.fqSection() + ": (invoke) resource of " + serviceId + "#" + actionId);
+                .description(RoSpec.ACTION_INVOKE_GET.fqSection("(invoke) resource of " + serviceId + "#" + actionId));
 
         final SemanticsOf semantics = serviceAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -459,16 +458,13 @@ class _OpenApiModelFactory {
                 invokeOperation
                 .addParametersItem(_OpenApi.queryParameter()
                         .name(parameter.getId())
-                        .description(RoSpec.ARGS_SIMPLE.fqSection()
-                                + (_Strings.isNotEmpty(describedAs)
-                                        ? (": " + describedAs)
-                                        : ""))
+                        .description(RoSpec.ARGS_SIMPLE.fqSection(describedAs))
                         .required(false));
             }
             if(!parameters.isEmpty()) {
                 invokeOperation.addParametersItem(_OpenApi.queryParameter()
                         .name("x-causeway-querystring")
-                        .description(RoSpec.ARGS_PASSING.fqSection() + ": all (formal) arguments as base64 encoded string")
+                        .description(RoSpec.ARGS_PASSING.fqSection("all (formal) arguments as base64 encoded string"))
                         .required(false));
             }
 
@@ -513,12 +509,11 @@ class _OpenApiModelFactory {
         final Operation collectionOperation =
                 newOperation("object-collection",
                         Caching.TRANSACTIONAL,
-                        modelFor(collection),
+                        arrayPropertyOf(collection.getElementType()),
                         response->response.description(logicalTypeName + "#" + collectionId
                                 + " , if Accept: application/json;profile=urn:org.apache.causeway/v2"))
                 .addTagsItem(tag)
-                .description(RoSpec.COLLECTION_GET.fqSection()
-                        + ": resource of " + logicalTypeName + "#" + collectionId)
+                .description(RoSpec.COLLECTION_GET.fqSection("resource of " + logicalTypeName + "#" + collectionId))
                 .addParametersItem(
                         _OpenApi.pathParameter()
                         .name("objectId"));
@@ -545,7 +540,8 @@ class _OpenApiModelFactory {
                         actionReturnTypeFor(objectAction),
                         response->response.description(logicalTypeName + "#" + actionId))
                 .addTagsItem(tag)
-                .description(RoSpec.ACTION_INVOKE_GET.fqSection() + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
+                .description(RoSpec.ACTION_INVOKE_GET.fqSection(
+                        "(invoke) resource of " + logicalTypeName + "#" + actionId))
                 .addParametersItem(
                         _OpenApi.pathParameter()
                         .name("objectId"));
@@ -562,17 +558,14 @@ class _OpenApiModelFactory {
                 .addParametersItem(
                         _OpenApi.queryParameter()
                         .name(parameter.getId())
-                        .description(RoSpec.ARGS_SIMPLE.fqSection()
-                                + (_Strings.isNotEmpty(describedAs)
-                                        ? (": " + describedAs)
-                                        : ""))
+                        .description(RoSpec.ARGS_SIMPLE.fqSection(describedAs))
                         .required(false));
             }
             if(!parameters.isEmpty()) {
                 invokeOperation.addParametersItem(
                         _OpenApi.queryParameter()
                         .name("x-causeway-querystring")
-                        .description(RoSpec.ARGS_PASSING.fqSection() + ": all (formal) arguments as base64 encoded string")
+                        .description(RoSpec.ARGS_PASSING.fqSection("all (formal) arguments as base64 encoded string"))
                         .required(false));
             }
 
@@ -617,11 +610,6 @@ class _OpenApiModelFactory {
                 : schemaFor(objectAction.getReturnType());
     }
 
-    private ArraySchema modelFor(final OneToManyAssociation collection) {
-        ObjectSpecification collectionSpecification = collection.getElementType();
-        return arrayPropertyOf(collectionSpecification);
-    }
-
     @SuppressWarnings("unchecked")
     private ArraySchema arrayPropertyOf(final ObjectSpecification objectSpecification) {
         final ArraySchema arrayProperty = new ArraySchema();
@@ -643,11 +631,7 @@ class _OpenApiModelFactory {
         if(cls == null
                 || void.class.equals(cls)
                 || Void.class.equals(cls)
-                ) {
-            return new ObjectSchema();
-        }
-        if(specification.isValue()) {
-            // no "simple" representation for values
+                || java.lang.Object.class.equals(cls)) {
             return new ObjectSchema();
         }
         if(specification.isPlural()) {
@@ -656,11 +640,14 @@ class _OpenApiModelFactory {
                 return arrayPropertyOf(elementSpec);
             }
         }
-        if(java.lang.Object.class.equals(cls)) {
-            return new ObjectSchema();
-        }
         if(cls.isEnum()) {
             return valueSchemaFactory.schemaForValue(specification).orElseThrow();
+        }
+        if(specification.isValue()) {
+            val valueSchema = valueSchemaFactory.schemaForValue(specification);
+            if(valueSchema.isPresent()) {
+                return valueSchema.get();
+            }
         }
         return newRefProperty(specification.getLogicalTypeName() + "Repr");
     }
@@ -695,19 +682,19 @@ class _OpenApiModelFactory {
     }
 
     // unused
-    static String roSpecForResponseOf(final ObjectAction action) {
-        final SemanticsOf semantics = action.getSemantics();
-        switch (semantics) {
-        case SAFE_AND_REQUEST_CACHEABLE:
-        case SAFE:
-            return "19.2";
-        case IDEMPOTENT:
-        case IDEMPOTENT_ARE_YOU_SURE:
-            return "19.3";
-        default:
-            return "19.4";
-        }
-    }
+//    static String roSpecForResponseOf(final ObjectAction action) {
+//        final SemanticsOf semantics = action.getSemantics();
+//        switch (semantics) {
+//        case SAFE_AND_REQUEST_CACHEABLE:
+//        case SAFE:
+//            return "19.2";
+//        case IDEMPOTENT:
+//        case IDEMPOTENT_ARE_YOU_SURE:
+//            return "19.3";
+//        default:
+//            return "19.4";
+//        }
+//    }
 
     static ObjectSchema newModel(final String description) {
         return (ObjectSchema) new ObjectSchema()

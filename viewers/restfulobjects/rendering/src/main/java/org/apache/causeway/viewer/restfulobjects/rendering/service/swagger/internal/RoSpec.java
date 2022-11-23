@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
+import org.apache.causeway.commons.internal.base._Strings;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -45,15 +47,22 @@ public enum RoSpec {
     private final String section;
     private final String urlRelPath;
 
+    public String onlineUrl() {
+        return RO_SPEC_ROOT_URL + urlRelPath;
+    }
+
     /**
      * Fully qualified section, prefixed with RO version.
      */
     public String fqSection() {
+        //return String.format("RO Spec v1.0, section %s", section); // no link
         return String.format("RO Spec v1.0, section <a href=\"%s\" target=\"_blank\">%s</a>", onlineUrl(), section);
     }
 
-    public String onlineUrl() {
-        return RO_SPEC_ROOT_URL + urlRelPath;
+    public String fqSection(final String suffix) {
+        return fqSection() + (_Strings.isNotEmpty(suffix)
+                ? (": " + suffix)
+                : "");
     }
 
 }
