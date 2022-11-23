@@ -30,25 +30,25 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
-import io.swagger.models.Swagger;
-import io.swagger.util.Json;
-import io.swagger.util.Yaml;
+import io.swagger.v3.core.util.Json;
+import io.swagger.v3.core.util.Yaml;
+import io.swagger.v3.oas.models.OpenAPI;
 
 @Component
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".SwaggerSpecGenerator")
-public class SwaggerSpecGenerator {
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".OpenApiSpecGenerator")
+public class OpenApiSpecGenerator {
 
     private final SpecificationLoader specificationLoader;
     private final Tagger tagger;
     private final ClassExcluder classExcluder;
-    private final ValuePropertyFactory valuePropertyFactory;
+    private final ValueSchemaFactory valuePropertyFactory;
 
     @Inject
-    public SwaggerSpecGenerator(
+    public OpenApiSpecGenerator(
             final SpecificationLoader specificationLoader,
             final Tagger tagger,
             final ClassExcluder classExcluder,
-            final ValuePropertyFactory valuePropertyFactory) {
+            final ValueSchemaFactory valuePropertyFactory) {
         this.specificationLoader = specificationLoader;
         this.tagger = tagger;
         this.classExcluder = classExcluder;
@@ -60,8 +60,8 @@ public class SwaggerSpecGenerator {
             final Visibility visibility,
             final Format format) {
 
-        final Generation generation = newGeneration(basePath, visibility);
-        final Swagger swagger = generation.generate();
+        final _OpenApiModelFactory generation = newGeneration(basePath, visibility);
+        final OpenAPI swagger = generation.generate();
 
         switch (format) {
         case JSON:
@@ -77,8 +77,8 @@ public class SwaggerSpecGenerator {
         }
     }
 
-    protected Generation newGeneration(final String basePath, final Visibility visibility) {
-        return new Generation(
+    protected _OpenApiModelFactory newGeneration(final String basePath, final Visibility visibility) {
+        return new _OpenApiModelFactory(
                 basePath, visibility,
                 specificationLoader,
                 tagger,

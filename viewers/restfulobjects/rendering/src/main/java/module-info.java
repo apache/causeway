@@ -49,6 +49,6 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
-    requires swagger.core;
-    requires swagger.models;
+    requires io.swagger.v3.oas.models;
+    requires io.swagger.v3.core;
 }
