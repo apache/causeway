@@ -68,22 +68,20 @@ extends ViewModelFacetAbstract {
             val publicConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY.getAll(cls);
 
             if(explicitInjectConstructors.getCardinality().isMultiple()) {
-                if(!explicitInjectConstructors.getCardinality().isOne()) {
-                    ValidationFailure.raiseFormatted(holder,
-                            ProgrammingModelConstants.Validation.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
-                                .getMessage(Map.of(
-                                        "type", cls.getName(),
-                                        "found", explicitInjectConstructors.getCardinality().isMultiple()
-                                            ? "{" + explicitInjectConstructors.stream()
-                                                    .map(Constructor::toString)
-                                                    .collect(Collectors.joining(", ")) + "}"
-                                            : "none")));
 
-                    return Optional.empty();
-                }
-            }
+                ValidationFailure.raiseFormatted(holder,
+                        ProgrammingModelConstants.Validation.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
+                            .getMessage(Map.of(
+                                    "type", cls.getName(),
+                                    "found", explicitInjectConstructors.getCardinality().isMultiple()
+                                        ? "{" + explicitInjectConstructors.stream()
+                                                .map(Constructor::toString)
+                                                .collect(Collectors.joining(", ")) + "}"
+                                        : "none")));
 
-            if(explicitInjectConstructors.getCardinality().isZero()) {
+                return Optional.empty();
+
+            } else if(explicitInjectConstructors.getCardinality().isZero()) {
 
                 // in absence of a constructor with inject semantics there must be exactly one public to pick instead
 

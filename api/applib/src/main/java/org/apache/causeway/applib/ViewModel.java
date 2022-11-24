@@ -32,13 +32,14 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
  * <p>
  * Contract:
  * <ul>
- * <li>there is a single public constructor</li>
- * <li>it may have arbitrary many arguments of arbitrary type</li>
+ * <li>there is either exactly one public constructor or if there are more than one,
+ * then only one of these is annotated with any of {@code @Inject} or {@code @Autowired(required=true)}
+ * (meta-annotations are also considered)</li>
+ * <li>the constructor may have arbitrary many arguments of arbitrary type</li>
  * <li>first {@link String} argument found is passed in the view-model's memento</li>
  * <li>any other arguments are resolved via the {@link ServiceRegistry} -
  *      if no <i>Bean</i> can be found a {@link NoSuchElementException} is thrown</li>
- * <li>@Inject or @Autowired annotations are not required on the constructor</li>
- * <li>there is no support for Spring programming model specific annotations on constructor arguments (perhaps future work)</li>
+ * <li>there is no support for <i>Spring</i> programming model specific annotations on constructor arguments (perhaps future work)</li>
  * </ul>
  * Naturally this also allows for the idiom of passing in the {@link ServiceInjector} as an argument
  * and programmatically resolve any field-style injection points via {@link ServiceInjector#injectServicesInto(Object)},
