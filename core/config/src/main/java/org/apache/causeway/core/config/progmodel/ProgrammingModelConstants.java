@@ -64,6 +64,7 @@ import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
@@ -481,9 +482,9 @@ public final class ProgrammingModelConstants {
         VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES(
                 "${type}: has multiple incompatible annotations/interfaces indicating that "
                 + "it is a recreatable object of some sort (${facetA} and ${facetB})"),
-        VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
-                "${type}: ViewModel contract violation: missing single (String) arg constructor "
-                + "(for de-serialization from memento string)."),
+        VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS(
+                "${type}: ViewModel contract violation: there must be exactly one public constructor. "
+                + "See " + org.apache.causeway.applib.ViewModel.class.getName() + " java-doc for details."),
         VIEWMODEL_MISSING_SERIALIZATION_STRATEGY(
                 "${type}: Missing ViewModel serialization strategy encountered; "
                 + "for ViewModels one of those must be true: "
@@ -539,14 +540,15 @@ public final class ProgrammingModelConstants {
     }
 
     public static enum ViewmodelConstructor {
-        SINGLE_STRING_ARG {
+        PUBLIC_ANY_ARGS {
 
             @Override
             public <T> Optional<Constructor<T>> get(final Class<T> cls) {
-                // heap-pollution: only produces stack-traces when cls violates viewmodel contract,
-                // which is covered by mm validation
+                // violation of view-model contract should be covered by meta-model validation
                 return Try.call(()->
-                        cls.getDeclaredConstructor(new Class<?>[]{String.class}))
+                    _ClassCache.getInstance()
+                        .getPublicConstructors(cls)
+                        .getSingleton().orElse(null))
                         .getValue();
             }
 

@@ -51,19 +51,17 @@ public class ApplicationType extends ApplicationFeatureViewModel {
     public static abstract class CollectionDomainEvent<T>
             extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
+    // -- CONSTRUCTION
 
-
-    // -- constructors
-
-    public ApplicationType() { }
-    public ApplicationType(final ApplicationFeatureId featureId) {
-        super(featureId);
-    }
     public ApplicationType(final String memento) {
         super(memento);
     }
-
-
+    public ApplicationType of(final ApplicationFeatureId featureId) {
+        return new ApplicationType(featureId);
+    }
+    private ApplicationType(final ApplicationFeatureId featureId) {
+        super(featureId);
+    }
 
     // -- actions (collection)
 

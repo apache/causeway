@@ -48,14 +48,17 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 
-    // -- CONSTRUCTORS
+    // -- CONSTRUCTION
 
-    public ApplicationNamespace() { }
-    public ApplicationNamespace(final ApplicationFeatureId featureId) {
-        super(featureId);
-    }
     public ApplicationNamespace(final String memento) {
         super(memento);
+    }
+
+    public static ApplicationNamespace of(final ApplicationFeatureId featureId) {
+        return new ApplicationNamespace(featureId);
+    }
+    private ApplicationNamespace(final ApplicationFeatureId featureId) {
+        super(featureId);
     }
 
     // -- CONTENTS (collection, for namespaces only)

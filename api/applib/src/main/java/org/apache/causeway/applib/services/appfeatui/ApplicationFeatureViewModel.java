@@ -90,7 +90,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
         if(featureId.getSort().isNamespace()) {
             _Assert.assertEquals(vmClass, ApplicationNamespace.class);
-            return factoryService.viewModel(new ApplicationNamespace(featureId));
+            return factoryService.viewModel(ApplicationNamespace.of(featureId));
         }
 
         return factoryService.viewModel(vmClass,

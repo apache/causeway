@@ -18,13 +18,18 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
+import java.lang.reflect.Constructor;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,12 +56,11 @@ extends ViewModelFacetAbstract {
             return Optional.empty();
         }
 
-        if(!ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
-            .get(cls)
-            .isPresent()) {
-
+        if(!cls.isInterface()
+                && !ClassExtensions.isAbstract(cls)
+                && !ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY_ARGS.get(cls).isPresent()) {
             ValidationFailure.raiseFormatted(holder,
-                    ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR
+                    ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS
                         .getMessageForType(cls.getName()));
 
             return Optional.empty();
@@ -103,12 +107,31 @@ extends ViewModelFacetAbstract {
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
             @Nullable final String memento) {
-        val constructorTakingMemento = ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
+        val constructorAnyArgs = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY_ARGS
                 .get(viewmodelSpec.getCorrespondingClass())
                 .orElseThrow();
+
+        val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
+
         val viewmodelPojo = _Privileged
-                .newInstance(constructorTakingMemento, memento);
+                .newInstance(constructorAnyArgs, resolvedArgs);
         return viewmodelPojo;
+    }
+
+    private static Object[] resolveArgsForConstructor(
+            final Constructor<?> constructor,
+            final ServiceRegistry serviceRegistry,
+            final String memento) {
+        val params = Can.ofArray(constructor.getParameters());
+        val args = new Object[params.size()];
+        params.forEach(IndexedConsumer.zeroBased((i, param)->{
+            if(param.getType().equals(String.class)) {
+                args[i] = memento; // its ok to do this never, once, or more than once per constructor, see ViewModel java-doc
+                return;
+            }
+            args[i] = serviceRegistry.lookupServiceElseFail(param.getType());
+        }));
+        return args;
     }
 
 }

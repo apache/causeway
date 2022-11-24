@@ -45,15 +45,17 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeCollection, T> {}
 
-    // -- constructors
-    public ApplicationTypeCollection() {}
-    public ApplicationTypeCollection(final ApplicationFeatureId featureId) {
-        super(featureId);
-    }
+    // -- CONSTRUCTION
+
     public ApplicationTypeCollection(final String memento) {
         super(memento);
     }
-
+    public ApplicationTypeCollection of(final ApplicationFeatureId featureId) {
+        return new ApplicationTypeCollection(featureId);
+    }
+    private ApplicationTypeCollection(final ApplicationFeatureId featureId) {
+        super(featureId);
+    }
 
     // -- elementType
 

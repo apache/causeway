@@ -41,22 +41,28 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        // disable by default
-        final boolean enable = getConfiguration().getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().isEnable();
-        if(!enable) {
+        val cls = processClassContext.getCls();
+
+        final boolean implementsViewModel = org.apache.causeway.applib.ViewModel.class.isAssignableFrom(cls);
+        if(!implementsViewModel){
             return;
         }
 
+        if(getConfiguration().getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().isEnable()) {
+            checkViewModelSemantics(processClassContext);
+        }
+    }
+
+    // -- HELPER
+
+    private void checkViewModelSemantics(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
         final DomainObject domainObject = processClassContext.synthesizeOnType(DomainObject.class).orElse(null);
-        final boolean implementsViewModel = org.apache.causeway.applib.ViewModel.class.isAssignableFrom(cls);
-
         final boolean annotatedWithDomainObject = domainObject != null;
 
-        if(implementsViewModel
-                && annotatedWithDomainObject
+        if(annotatedWithDomainObject
                 && (domainObject.nature().isBean()
                         || domainObject.nature().isEntity())) {
             ValidationFailure.raise(
@@ -70,8 +76,6 @@ extends FacetFactoryAbstract {
                         DomainObject.class.getSimpleName())
                     );
         }
-
     }
-
 
 }

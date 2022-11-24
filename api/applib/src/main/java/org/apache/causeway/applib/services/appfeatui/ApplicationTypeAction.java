@@ -47,15 +47,17 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeAction, T> {}
 
-    // -- constructors
-    public ApplicationTypeAction() { }
-    public ApplicationTypeAction(final ApplicationFeatureId featureId) {
-        super(featureId);
-    }
+    // -- CONSTRUCTION
+
     public ApplicationTypeAction(final String memento) {
         super(memento);
     }
-
+    public ApplicationTypeAction of(final ApplicationFeatureId featureId) {
+        return new ApplicationTypeAction(featureId);
+    }
+    private ApplicationTypeAction(final ApplicationFeatureId featureId) {
+        super(featureId);
+    }
 
     // -- returnTypeName (property)
 
