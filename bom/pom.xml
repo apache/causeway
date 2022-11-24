@@ -419,7 +419,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>3.3.2</togglz.version>
 
-        <vaadin.version>23.2.8</vaadin.version>
+        <vaadin.version>23.2.9</vaadin.version>
 
         <wicket.version>9.12.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
