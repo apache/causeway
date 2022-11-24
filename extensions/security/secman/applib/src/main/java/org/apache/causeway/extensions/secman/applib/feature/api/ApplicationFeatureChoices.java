@@ -160,6 +160,7 @@ public class ApplicationFeatureChoices {
 
         // -- VIEWMODEL CONTRACT
 
+        @Inject
         public AppFeat(final String memento) {
             this(ApplicationFeatureId.parseEncoded(memento)); // fail by intention if memento is '<no id>'
         }

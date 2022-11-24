@@ -27,6 +27,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
@@ -80,6 +83,12 @@ public final class _ClassCache implements AutoCloseable {
     public <T> Can<Constructor<T>> getPublicConstructors(final Class<T> type) {
         return Can.ofCollection(_Casts.uncheckedCast(
                 inspectType(type).publicConstructorsByKey.values()));
+    }
+
+    public <T> Can<Constructor<T>> getPublicConstructorsWithInjectSemantics(final Class<T> type) {
+        return getPublicConstructors(type)
+                .filter(con->_Annotations.synthesize(con, Inject.class).isPresent()
+                        || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false));
     }
 
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {

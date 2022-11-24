@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -51,17 +52,20 @@ public class ApplicationType extends ApplicationFeatureViewModel {
     public static abstract class CollectionDomainEvent<T>
             extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
-    // -- CONSTRUCTION
 
+
+    // -- constructors
+
+    public ApplicationType() { }
+    public ApplicationType(final ApplicationFeatureId featureId) {
+        super(featureId);
+    }
+    @Inject
     public ApplicationType(final String memento) {
         super(memento);
     }
-    public ApplicationType of(final ApplicationFeatureId featureId) {
-        return new ApplicationType(featureId);
-    }
-    private ApplicationType(final ApplicationFeatureId featureId) {
-        super(featureId);
-    }
+
+
 
     // -- actions (collection)
 

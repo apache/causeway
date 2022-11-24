@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -48,17 +49,15 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 
-    // -- CONSTRUCTION
+    // -- CONSTRUCTORS
 
+    public ApplicationNamespace() { }
+    public ApplicationNamespace(final ApplicationFeatureId featureId) {
+        super(featureId);
+    }
+    @Inject
     public ApplicationNamespace(final String memento) {
         super(memento);
-    }
-
-    public static ApplicationNamespace of(final ApplicationFeatureId featureId) {
-        return new ApplicationNamespace(featureId);
-    }
-    private ApplicationNamespace(final ApplicationFeatureId featureId) {
-        super(featureId);
     }
 
     // -- CONTENTS (collection, for namespaces only)

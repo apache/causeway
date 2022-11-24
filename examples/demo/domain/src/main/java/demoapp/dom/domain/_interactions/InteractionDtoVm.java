@@ -21,6 +21,7 @@ package demoapp.dom.domain._interactions;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
@@ -73,6 +74,7 @@ public class InteractionDtoVm implements ViewModel {
 
     // -- VIEWMODEL CONTRACT
 
+    @Inject
     public InteractionDtoVm(final String memento) {
         interactionDto = InteractionDtoUtils.fromXml(encodingService.decodeToString(memento));
     }
