@@ -549,27 +549,31 @@ public final class ProgrammingModelConstants {
      */
     public static enum ViewmodelConstructor {
         PUBLIC_WITH_INJECT_SEMANTICS {
-            @Override public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
-                        .getPublicConstructorsWithInjectSemantics(cls))
+                        .streamPublicConstructorsWithInjectSemantics(cls))
                         .getValue()
-                        .orElse(Can.empty());
+                        .orElse(Stream.empty());
             }
         },
         PUBLIC_ANY {
-            @Override public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
-                        .getPublicConstructors(cls))
+                        .streamPublicConstructors(cls))
                         .getValue()
-                        .orElse(Can.empty());
+                        .orElse(Stream.empty());
             }
         };
-        public <T> Optional<Constructor<T>> getFirst(final Class<T> cls) {
-            return getAll(cls).getFirst();
+        public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+            return streamAll(cls).collect(Can.toCan());
         }
-        public abstract <T> Can<Constructor<T>> getAll(Class<T> cls);
+        public <T> Optional<Constructor<T>> getFirst(final Class<T> cls) {
+            return streamAll(cls).findFirst();
+        }
+        public abstract <T> Stream<Constructor<T>> streamAll(Class<T> cls);
+
     }
 
     /**

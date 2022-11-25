@@ -82,14 +82,12 @@ public final class _ClassCache implements AutoCloseable {
         inspectType(type);
     }
 
-    public <T> Can<Constructor<T>> getPublicConstructors(final Class<T> type) {
-        return Can.ofCollection(_Casts.uncheckedCast(
-                inspectType(type).publicConstructorsByKey.values()));
+    public <T> Stream<Constructor<T>> streamPublicConstructors(final Class<T> type) {
+        return _Casts.uncheckedCast(inspectType(type).publicConstructorsByKey.values().stream());
     }
 
-    public <T> Can<Constructor<T>> getPublicConstructorsWithInjectSemantics(final Class<T> type) {
-        return Can.ofCollection(_Casts.uncheckedCast(
-                inspectType(type).constructorsWithInjectSemanticsByKey.values()));
+    public <T> Stream<Constructor<T>> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
+        return _Casts.uncheckedCast(inspectType(type).constructorsWithInjectSemanticsByKey.values().stream());
     }
 
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
