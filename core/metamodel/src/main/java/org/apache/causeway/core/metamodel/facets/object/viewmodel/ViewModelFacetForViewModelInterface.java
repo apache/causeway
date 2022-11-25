@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -52,8 +51,7 @@ extends ViewModelFacetAbstract {
 
     public static <T> Optional<ViewModelFacet> create(
             final Class<T> cls,
-            final FacetHolder holder,
-            final HasPostConstructMethodCache postConstructMethodCache) {
+            final FacetHolder holder) {
 
         if(!ViewModel.class.isAssignableFrom(cls)) {
             return Optional.empty();
@@ -109,16 +107,15 @@ extends ViewModelFacetAbstract {
 
         }
 
-        return Optional.of(new ViewModelFacetForViewModelInterface(holder, pickedConstructor, postConstructMethodCache));
+        return Optional.of(new ViewModelFacetForViewModelInterface(holder, pickedConstructor));
     }
 
     private Constructor<?> constructorAnyArgs;
 
     protected ViewModelFacetForViewModelInterface(
             final FacetHolder holder,
-            final @Nullable Constructor<?> constructorAnyArgs,
-            final HasPostConstructMethodCache postConstructMethodCache) {
-        super(holder, postConstructMethodCache,  Precedence.HIGH);
+            final @Nullable Constructor<?> constructorAnyArgs) {
+        super(holder, Precedence.HIGH);
         this.constructorAnyArgs = constructorAnyArgs;
     }
 

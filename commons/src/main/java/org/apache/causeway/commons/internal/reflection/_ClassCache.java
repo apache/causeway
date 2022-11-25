@@ -21,12 +21,14 @@ package org.apache.causeway.commons.internal.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +95,10 @@ public final class _ClassCache implements AutoCloseable {
 
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
         return Optional.ofNullable(lookupConstructor(false, type, paramTypes));
+    }
+
+    public Stream<Method> streamPostConstructMethods(final Class<?> type) {
+        return inspectType(type).postConstructMethodsByKey.values().stream();
     }
 
     /**
@@ -177,6 +183,7 @@ public final class _ClassCache implements AutoCloseable {
         private final Map<ConstructorKey, Constructor<?>> publicConstructorsByKey = new HashMap<>();
         //private final Map<ConstructorKey, Constructor<?>> nonPublicDeclaredConstructorsByKey = new HashMap<>();
         private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
+        private final Map<MethodKey, Method> postConstructMethodsByKey = new HashMap<>();
         private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
         private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
     }
@@ -231,11 +238,22 @@ public final class _ClassCache implements AutoCloseable {
                     model.publicConstructorsByKey.put(ConstructorKey.of(type, constr), constr);
                 }
 
+                // process all public and non-public
                 for(val method : declaredMethods) {
-                    model.nonPublicDeclaredMethodsByKey.put(MethodKey.of(type, method), method);
+                    if(Modifier.isStatic(method.getModifiers())) continue;
+
+                    val key = MethodKey.of(type, method);
+                    // add all now, remove public ones later
+                    model.nonPublicDeclaredMethodsByKey.put(key, method);
+                    // collect post-construct methods
+                    if(isPostConstruct(method)) {
+                        model.postConstructMethodsByKey.put(key, method);
+                    }
                 }
 
                 for(val method : type.getMethods()) {
+                    if(Modifier.isStatic(method.getModifiers())) continue;
+
                     val key = MethodKey.of(type, method);
                     model.publicMethodsByKey.put(key, method);
                     model.nonPublicDeclaredMethodsByKey.remove(key);
@@ -245,6 +263,18 @@ public final class _ClassCache implements AutoCloseable {
 
             });
         }
+    }
+
+    /**
+     * return-type: void
+     * signature: no args
+     * access: public and non-public
+     */
+    private boolean isPostConstruct(final Method method) {
+        return void.class.equals(method.getReturnType())
+                && method.getParameterCount()==0
+                ? _Annotations.synthesize(method, PostConstruct.class).isPresent()
+                : false;
     }
 
     private Constructor<?> lookupConstructor(
