@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
@@ -74,9 +76,15 @@ implements ViewModelFacet {
                 ? createViewmodel(spec)
                 : createViewmodel(spec, bookmark);
 
-        getServiceInjector().injectServicesInto(viewModel.getPojo());
-        invokePostConstructMethod(viewModel.getPojo());
+        initialize(viewModel.getPojo());
         return viewModel;
+    }
+
+    @Override
+    public final void initialize(final @Nullable Object pojo) {
+        if(pojo==null) return;
+        getServiceInjector().injectServicesInto(pojo);
+        invokePostConstructMethod(pojo);
     }
 
     /**

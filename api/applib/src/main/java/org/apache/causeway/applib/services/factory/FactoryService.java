@@ -154,7 +154,7 @@ public interface FactoryService {
      * with injection points resolved,
      * post-construct called
      * and defaults applied.
-     * @param domainClass - must be a <i>Spring</i> managed type
+     * @param domainClass - must NOT be a <i>Spring</i> managed type
      * @throws IllegalArgumentException if domainClass is a <i>Spring</i> managed type,
      *      or not recognized by the meta-model
      * @apiNote forces the domainClass to be added to the meta-model if not already
