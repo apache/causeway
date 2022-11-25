@@ -88,9 +88,8 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     public <T> Can<Constructor<T>> getPublicConstructorsWithInjectSemantics(final Class<T> type) {
-        return getPublicConstructors(type)
-                .filter(con->_Annotations.synthesize(con, Inject.class).isPresent()
-                        || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false));
+        return Can.ofCollection(_Casts.uncheckedCast(
+                inspectType(type).constructorsWithInjectSemanticsByKey.values()));
     }
 
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
@@ -181,6 +180,7 @@ public final class _ClassCache implements AutoCloseable {
         private final Can<Field> declaredFields;
         private final Can<Method> declaredMethods;
         private final Map<ConstructorKey, Constructor<?>> publicConstructorsByKey = new HashMap<>();
+        private final Map<ConstructorKey, Constructor<?>> constructorsWithInjectSemanticsByKey = new HashMap<>();
         //private final Map<ConstructorKey, Constructor<?>> nonPublicDeclaredConstructorsByKey = new HashMap<>();
         private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
         private final Map<MethodKey, Method> postConstructMethodsByKey = new HashMap<>();
@@ -235,7 +235,13 @@ public final class _ClassCache implements AutoCloseable {
                         declaredMethods);
 
                 for(val constr : publicConstr) {
-                    model.publicConstructorsByKey.put(ConstructorKey.of(type, constr), constr);
+                    val key = ConstructorKey.of(type, constr);
+                    // collect public constructors
+                    model.publicConstructorsByKey.put(key, constr);
+                    // collect public constructors with inject semantics
+                    if(isInjectSemantics(constr)) {
+                        model.constructorsWithInjectSemanticsByKey.put(key, constr);
+                    }
                 }
 
                 // process all public and non-public
@@ -251,6 +257,7 @@ public final class _ClassCache implements AutoCloseable {
                     }
                 }
 
+                // process public only
                 for(val method : type.getMethods()) {
                     if(Modifier.isStatic(method.getModifiers())) continue;
 
@@ -263,6 +270,15 @@ public final class _ClassCache implements AutoCloseable {
 
             });
         }
+    }
+
+    /**
+     * signature: any
+     * access: public and non-public
+     */
+    private boolean isInjectSemantics(final Constructor<?> con) {
+        return _Annotations.synthesize(con, Inject.class).isPresent()
+                || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false);
     }
 
     /**
