@@ -30,5 +30,6 @@ updates:
       interval: "daily"
     # Allow up to 10 open pull requests for maven dependencies
     open-pull-requests-limit: 20
-
-
+    # Use custom labels on pull requests for Spring 6.x branch
+    labels:
+      - "Spring 6.x"
