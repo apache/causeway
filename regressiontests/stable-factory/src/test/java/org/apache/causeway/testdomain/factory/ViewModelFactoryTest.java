@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.testdomain.factory;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -55,10 +56,18 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
     @DomainObject(nature = Nature.VIEW_MODEL)
     public static class SimpleViewModel {
         @Inject private RepositoryService repository;
+        private boolean postConstructCalled;
 
-        public boolean areInjectionPointsResolved() {
-            return repository!=null;
+        public void assertInitialized() {
+            assertNotNull(repository, ()->"repository (field) not injected");
+            assertTrue(postConstructCalled, ()->"@PostConstruct not called");
         }
+
+        @PostConstruct
+        void onPostConstruct() {
+            postConstructCalled = true;
+        }
+
     }
 
     @DomainObject(nature = Nature.VIEW_MODEL)
@@ -67,15 +76,22 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
 
         @Inject private RepositoryService repository;
         @Getter private final String name;
+        private boolean postConstructCalled;
 
         public void assertInitialized() {
             assertNotNull(repository, ()->"repository (field) not injected");
             assertEquals("aName", getName(), ()->"unexpected name (constructor arg)");
+            assertTrue(postConstructCalled, ()->"@PostConstruct not called");
         }
 
         @Override
         public String viewModelMemento() {
             return "aName";
+        }
+
+        @PostConstruct
+        void onPostConstruct() {
+            postConstructCalled = true;
         }
     }
 
@@ -87,17 +103,25 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
         @Inject private RepositoryService repository;
         private final ServiceRegistry registry;
         @Getter private final String name;
+        private boolean postConstructCalled;
 
         public void assertInitialized() {
             assertNotNull(repository, ()->"repository (field) not injected");
             assertNotNull(registry, ()->"registry (constructor arg) not injected");
             assertEquals("aName", getName(), ()->"unexpected name (constructor arg)");
+            assertTrue(postConstructCalled, ()->"@PostConstruct not called");
         }
 
         @Override
         public String viewModelMemento() {
             return "aName";
         }
+
+        @PostConstruct
+        void onPostConstruct() {
+            postConstructCalled = true;
+        }
+
     }
 
     // -- TESTS
@@ -105,7 +129,7 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
     @Test
     void sampleViewModel_shouldHave_injectionPointsResolved() {
         val sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
-        assertTrue(sampleViewModel.areInjectionPointsResolved());
+        sampleViewModel.assertInitialized();
     }
 
     @Test

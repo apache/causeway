@@ -37,7 +37,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -131,7 +130,7 @@ public class FactoryServiceDefault implements FactoryService {
             throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
                     viewModelClass);
         }
-        val viewModelFacet = getViewModelFacet(spec);
+        val viewModelFacet = spec.viewmodelFacetElseFail();
         val viewModel = viewModelFacet.instantiate(spec, Optional.ofNullable(bookmark));
         objectLifecyclePublisher().onPostCreate(viewModel);
         return _Casts.uncheckedCast(viewModel.getPojo());
@@ -152,16 +151,6 @@ public class FactoryServiceDefault implements FactoryService {
 
     private ObjectSpecification loadSpec(final @NonNull Class<?> type) {
         return specificationLoader.specForTypeElseFail(type);
-    }
-
-    private ViewModelFacet getViewModelFacet(final @NonNull ObjectSpecification spec) {
-        val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-        if(viewModelFacet==null) {
-            throw _Exceptions.illegalArgument("Type '%s' must be recogniced as a ViewModel, "
-                    + "that is the type's meta-model "
-                    + "must have an associated ViewModelFacet: ", spec.getCorrespondingClass());
-        }
-        return viewModelFacet;
     }
 
     private Object createObject(final ObjectSpecification spec) {
