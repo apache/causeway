@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 /**
@@ -54,6 +55,7 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
     public ApplicationNamespace(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    @Inject
     public ApplicationNamespace(final String memento) {
         super(memento);
     }

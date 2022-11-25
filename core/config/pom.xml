@@ -64,7 +64,7 @@
                         <path>
                             <!--
                             as per https://github.com/spring-projects/spring-boot/issues/30986, must be before the spring-boot-configuration-processor
-                            https://docs.spring.io/spring-boot/docs/2.7.5/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor
+                            https://docs.spring.io/spring-boot/docs/2.7.6/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor
                             -->
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
@@ -113,7 +113,7 @@
 
         <!--
         as per https://github.com/spring-projects/spring-boot/issues/30986, must be before the spring-boot-configuration-processor
-        https://docs.spring.io/spring-boot/docs/2.7.5/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor
+        https://docs.spring.io/spring-boot/docs/2.7.6/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor
         -->
         <dependency>
             <groupId>org.projectlombok</groupId>

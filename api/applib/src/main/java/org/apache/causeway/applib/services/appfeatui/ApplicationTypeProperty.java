@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.val;
 
@@ -54,6 +55,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     public ApplicationTypeProperty(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    @Inject
     public ApplicationTypeProperty(final String memento) {
         super(memento);
     }

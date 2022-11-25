@@ -27,15 +27,18 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
 
+import jakarta.inject.Inject;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -74,6 +77,17 @@ public final class _ClassCache implements AutoCloseable {
 
     public void add(final Class<?> type) {
         inspectType(type);
+    }
+
+    public <T> Can<Constructor<T>> getPublicConstructors(final Class<T> type) {
+        return Can.ofCollection(_Casts.uncheckedCast(
+                inspectType(type).publicConstructorsByKey.values()));
+    }
+
+    public <T> Can<Constructor<T>> getPublicConstructorsWithInjectSemantics(final Class<T> type) {
+        return getPublicConstructors(type)
+                .filter(con->_Annotations.synthesize(con, Inject.class).isPresent()
+                        || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false));
     }
 
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {

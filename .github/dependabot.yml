@@ -21,6 +21,9 @@ updates:
       interval: "daily"
     # Allow up to 10 open pull requests for maven dependencies
     open-pull-requests-limit: 20
+    # Use custom labels
+    labels:
+      - "dependencies"
     
   # Maintain dependencies for Maven (3.0.0 milestones)
   - package-ecosystem: "maven"
@@ -30,5 +33,7 @@ updates:
       interval: "daily"
     # Allow up to 10 open pull requests for maven dependencies
     open-pull-requests-limit: 20
-
-
+    # Use custom labels
+    labels:
+      - "dependencies"
+      - "Spring 6.x"

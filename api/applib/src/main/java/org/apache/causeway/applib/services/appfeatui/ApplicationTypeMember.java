@@ -47,17 +47,17 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeMember";
 
-    public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
+    public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T>
+    extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
 
+    // -- CONSTRUCTION
 
-    // -- constructors
-    public ApplicationTypeMember(final ApplicationFeatureId featureId) {
-        super(featureId);
-    }
-    public ApplicationTypeMember(final String memento) {
+    protected ApplicationTypeMember(final String memento) {
         super(memento);
     }
-
+    protected ApplicationTypeMember(final ApplicationFeatureId featureId) {
+        super(featureId);
+    }
 
     // -- memberName (properties)
 

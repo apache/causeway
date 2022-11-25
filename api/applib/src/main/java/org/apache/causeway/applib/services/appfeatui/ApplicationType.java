@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 /**
@@ -59,6 +60,7 @@ public class ApplicationType extends ApplicationFeatureViewModel {
     public ApplicationType(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    @Inject
     public ApplicationType(final String memento) {
         super(memento);
     }

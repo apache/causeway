@@ -18,13 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
+import java.lang.reflect.Constructor;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -42,8 +50,8 @@ import lombok.val;
 public class ViewModelFacetForViewModelInterface
 extends ViewModelFacetAbstract {
 
-    public static Optional<ViewModelFacet> create(
-            final Class<?> cls,
+    public static <T> Optional<ViewModelFacet> create(
+            final Class<T> cls,
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
 
@@ -51,24 +59,67 @@ extends ViewModelFacetAbstract {
             return Optional.empty();
         }
 
-        if(!ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
-            .get(cls)
-            .isPresent()) {
+        Constructor<?> pickedConstructor = null; // not used for abstract types
 
-            ValidationFailure.raiseFormatted(holder,
-                    ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR
-                        .getMessageForType(cls.getName()));
+        if(!cls.isInterface()
+                && !ClassExtensions.isAbstract(cls)) {
 
-            return Optional.empty();
+            val explicitInjectConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_WITH_INJECT_SEMANTICS.getAll(cls);
+            val publicConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY.getAll(cls);
+
+            if(explicitInjectConstructors.getCardinality().isMultiple()) {
+
+                ValidationFailure.raiseFormatted(holder,
+                        ProgrammingModelConstants.Validation.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
+                            .getMessage(Map.of(
+                                    "type", cls.getName(),
+                                    "found", explicitInjectConstructors.getCardinality().isMultiple()
+                                        ? "{" + explicitInjectConstructors.stream()
+                                                .map(Constructor::toString)
+                                                .collect(Collectors.joining(", ")) + "}"
+                                        : "none")));
+
+                return Optional.empty();
+
+            } else if(explicitInjectConstructors.getCardinality().isZero()) {
+
+                // in absence of a constructor with inject semantics there must be exactly one public to pick instead
+
+                if(!publicConstructors.getCardinality().isOne()) {
+                    ValidationFailure.raiseFormatted(holder,
+                            ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS
+                                .getMessage(Map.of(
+                                        "type", cls.getName(),
+                                        "found", publicConstructors.getCardinality().isMultiple()
+                                            ? "{" + publicConstructors.stream()
+                                                    .map(Constructor::toString)
+                                                    .collect(Collectors.joining(", ")) + "}"
+                                            : "none")));
+
+                    return Optional.empty();
+                }
+
+            }
+
+            // -- else happy case
+
+            pickedConstructor = explicitInjectConstructors.getCardinality().isOne()
+                    ? explicitInjectConstructors.getSingletonOrFail()
+                    : publicConstructors.getSingletonOrFail();
+
         }
 
-        return Optional.of(new ViewModelFacetForViewModelInterface(holder, postConstructMethodCache));
+        return Optional.of(new ViewModelFacetForViewModelInterface(holder, pickedConstructor, postConstructMethodCache));
     }
+
+    private Constructor<?> constructorAnyArgs;
 
     protected ViewModelFacetForViewModelInterface(
             final FacetHolder holder,
+            final @Nullable Constructor<?> constructorAnyArgs,
             final HasPostConstructMethodCache postConstructMethodCache) {
         super(holder, postConstructMethodCache,  Precedence.HIGH);
+        this.constructorAnyArgs = constructorAnyArgs;
     }
 
     @Override
@@ -103,12 +154,32 @@ extends ViewModelFacetAbstract {
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
             @Nullable final String memento) {
-        val constructorTakingMemento = ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
-                .get(viewmodelSpec.getCorrespondingClass())
-                .orElseThrow();
+
+        _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
+                + "this can only happen, if we try to deserialize an abstract type");
+
+        val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
+
         val viewmodelPojo = _Privileged
-                .newInstance(constructorTakingMemento, memento);
+                .newInstance(constructorAnyArgs, resolvedArgs);
         return viewmodelPojo;
+    }
+
+    private static Object[] resolveArgsForConstructor(
+            final Constructor<?> constructor,
+            final ServiceRegistry serviceRegistry,
+            final String memento) {
+
+        val params = Can.ofArray(constructor.getParameters());
+        val args = new Object[params.size()];
+        params.forEach(IndexedConsumer.zeroBased((i, param)->{
+            if(param.getType().equals(String.class)) {
+                args[i] = memento; // its ok to do this never, once, or more than once per constructor, see ViewModel java-doc
+                return;
+            }
+            args[i] = serviceRegistry.lookupServiceElseFail(param.getType());
+        }));
+        return args;
     }
 
 }
