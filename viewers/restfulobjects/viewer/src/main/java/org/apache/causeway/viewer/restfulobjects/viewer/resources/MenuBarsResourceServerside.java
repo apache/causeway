@@ -20,10 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.Consumer;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -33,10 +31,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
@@ -53,12 +48,8 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
 
     public static final String SERVICE_IDENTIFIER = "1";
 
-    @Inject
-    public MenuBarsResourceServerside(
-            final @Context MetaModelContext metaModelContext,
-            final @Context CausewayConfiguration causewayConfiguration,
-            final @Context InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
+    public MenuBarsResourceServerside() {
+        super();
     }
 
     @Override

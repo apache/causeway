@@ -20,23 +20,18 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.UnaryOperator;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -83,12 +78,8 @@ public class DomainTypeResourceServerside
 extends ResourceAbstract
 implements DomainTypeResource {
 
-    @Inject
-    public DomainTypeResourceServerside(
-            final @Context MetaModelContext metaModelContext,
-            final @Context CausewayConfiguration causewayConfiguration,
-            final @Context InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
+    public DomainTypeResourceServerside() {
+        super();
         log.debug("<init>");
     }
 

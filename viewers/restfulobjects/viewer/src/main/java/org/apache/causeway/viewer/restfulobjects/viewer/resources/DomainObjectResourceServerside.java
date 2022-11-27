@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.io.InputStream;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -32,7 +31,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -45,12 +43,9 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.links.Link;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
@@ -82,12 +77,8 @@ public class DomainObjectResourceServerside
 extends ResourceAbstract
 implements DomainObjectResource {
 
-    @Inject
-    public DomainObjectResourceServerside(
-            final @Context MetaModelContext metaModelContext,
-            final @Context CausewayConfiguration causewayConfiguration,
-            final @Context InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
+    public DomainObjectResourceServerside() {
+        super();
         log.debug("<init>");
     }
 

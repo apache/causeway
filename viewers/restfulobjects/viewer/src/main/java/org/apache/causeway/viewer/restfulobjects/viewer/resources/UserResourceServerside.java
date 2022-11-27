@@ -21,18 +21,13 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
@@ -46,16 +41,15 @@ import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
+@Log4j2
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
-    @Inject
-    public UserResourceServerside(
-            final @Context MetaModelContext metaModelContext,
-            final @Context CausewayConfiguration causewayConfiguration,
-            final @Context InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
+    public UserResourceServerside() {
+        super();
+        log.debug("<init>");
     }
 
     @Override

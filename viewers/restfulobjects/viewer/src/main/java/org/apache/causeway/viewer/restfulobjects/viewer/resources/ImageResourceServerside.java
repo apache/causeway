@@ -21,20 +21,15 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.io.IOException;
 import java.io.InputStream;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -43,12 +38,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ImageResourceServerside extends ResourceAbstract {
 
-    @Inject
-    public ImageResourceServerside(
-            final @Context MetaModelContext metaModelContext,
-            final @Context CausewayConfiguration causewayConfiguration,
-            final @Context InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
+    public ImageResourceServerside() {
+        super();
         log.debug("<init>");
     }
 

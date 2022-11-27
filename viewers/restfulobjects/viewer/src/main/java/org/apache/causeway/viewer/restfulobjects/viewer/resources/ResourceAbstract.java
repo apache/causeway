@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Context;
@@ -32,18 +31,19 @@ import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Providers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -52,14 +52,16 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ResourceAbstract {
+public abstract class ResourceAbstract
+implements HasMetaModelContext {
 
-    protected final MetaModelContext metaModelContext;
-    protected final CausewayConfiguration causewayConfiguration;
-    protected final InteractionLayerTracker iInteractionLayerTracker;
+    @Getter(onMethod_={@Override})
+    @Autowired protected MetaModelContext metaModelContext;
+    @Autowired protected WebAppContextPath webAppContextPath;
 
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
@@ -69,17 +71,8 @@ public abstract class ResourceAbstract {
     @Context SecurityContext securityContext;
     @Context Providers providers;
 
-    @Inject WebAppContextPath webAppContextPath;
-
-    @Inject
-    protected ResourceAbstract(
-            final MetaModelContext metaModelContext,
-            final CausewayConfiguration causewayConfiguration,
-            final InteractionLayerTracker iInteractionLayerTracker) {
-
-        this.metaModelContext = metaModelContext;
-        this.causewayConfiguration = causewayConfiguration;
-        this.iInteractionLayerTracker = iInteractionLayerTracker;
+    protected ResourceAbstract() {
+        System.err.printf("before inject %s%n", this.getClass());
     }
 
     // -- FACTORIES
@@ -109,12 +102,14 @@ public abstract class ResourceAbstract {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
 
-        if (!iInteractionLayerTracker.isInInteraction()) {
+        _Assert.assertNotNull(metaModelContext, ()->"injection points not resolved for " + this.getClass());
+
+        if (!metaModelContext.getInteractionService().isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
         // eg. http://localhost:8080/ctx/restful/
-        final String restfulAbsoluteBase = causewayConfiguration.getViewer().getRestfulobjects().getBaseUri()
+        final String restfulAbsoluteBase = getConfiguration().getViewer().getRestfulobjects().getBaseUri()
                                     .orElseGet(()->uriInfo.getBaseUri().toString());
 
         // eg. /ctx/restful/
@@ -163,10 +158,6 @@ public abstract class ResourceAbstract {
                         .createWithMessage(HttpStatusCode.NOT_FOUND,
                                 "Could not determine adapter for bookmark: '%s'",
                                 bookmark)));
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return metaModelContext.getSpecificationLoader();
     }
 
     // -- HELPER
