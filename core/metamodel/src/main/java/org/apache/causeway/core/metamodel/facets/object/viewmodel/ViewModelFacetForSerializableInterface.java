@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -46,18 +45,16 @@ extends ViewModelFacetAbstract {
 
     public static Optional<ViewModelFacet> create(
             final Class<?> cls,
-            final FacetHolder holder,
-            final HasPostConstructMethodCache postConstructMethodCache) {
+            final FacetHolder holder) {
 
         return Serializable.class.isAssignableFrom(cls)
-                ? Optional.of(new ViewModelFacetForSerializableInterface(holder, postConstructMethodCache))
+                ? Optional.of(new ViewModelFacetForSerializableInterface(holder))
                 : Optional.empty();
     }
 
     protected ViewModelFacetForSerializableInterface(
-            final FacetHolder holder,
-            final HasPostConstructMethodCache postConstructMethodCache) {
-        super(holder, postConstructMethodCache, Precedence.HIGH);
+            final FacetHolder holder) {
+        super(holder, Precedence.HIGH);
     }
 
     @SneakyThrows

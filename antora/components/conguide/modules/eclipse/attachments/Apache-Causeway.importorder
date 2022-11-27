@@ -18,14 +18,15 @@
 #
 
 #Organize Import Order
-#Tue Oct 25 09:39:01 CEST 2022
 0=java
 1=\#java
 2=javax
 3=\#javax
-4=com
-5=\#com
-6=org
-7=\#org
-8=org.apache.causeway
-9=\#org.apache.causeway
+4=jakarta
+5=\#jakarta
+6=com
+7=\#com
+8=org
+9=\#org
+10=org.apache.causeway
+11=\#org.apache.causeway

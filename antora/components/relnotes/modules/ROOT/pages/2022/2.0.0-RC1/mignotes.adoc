@@ -65,3 +65,25 @@ The following changed:
 <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
 ----
 |===
+
+== Programming Model
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| `ViewModel` implementations were required to have at least a _public_ single argument constructor, 
+taking a `String` argument for the `ViewModel's` memento.
+| `ViewModel` implementations now allow *any* _public_ constructor signature, 
+where arguments are auto-resolved by the `ServiceRegistry`.
+
+`String` arguments still get the `ViewModel's` memento passed in.
+
+If the `ViewModel` has multiple _public_ constructors, it picks (the) one, 
+that has an `@Inject` or `@Autowired` annotation.  
+
+|===

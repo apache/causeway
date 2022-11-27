@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -53,5 +55,10 @@ public interface ViewModelFacet extends Facet {
      * by {@link #instantiate(ObjectSpecification, Optional)} subsequently.
      */
     Bookmark serializeToBookmark(ManagedObject managedObject);
+
+    /**
+     * For given view-model pojo resolves injection points, then calls post-construct method(s) if any.
+     */
+    void initialize(@Nullable Object pojo);
 
 }

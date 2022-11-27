@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
-import org.apache.causeway.core.metamodel.methods.MethodByClassMap;
 
 class RecreatableObjectFacetFactoryTest
 extends AbstractFacetFactoryTest {
@@ -39,7 +38,7 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ViewModelFacetFactory(metaModelContext, new MethodByClassMap());
+        facetFactory = new ViewModelFacetFactory(metaModelContext);
     }
 
     @Override

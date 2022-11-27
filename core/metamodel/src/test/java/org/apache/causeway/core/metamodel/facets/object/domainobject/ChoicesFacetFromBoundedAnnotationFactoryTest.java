@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.causeway.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
 
@@ -41,7 +40,7 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
+        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
