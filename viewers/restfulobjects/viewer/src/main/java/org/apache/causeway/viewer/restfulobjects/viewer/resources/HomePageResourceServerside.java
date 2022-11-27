@@ -22,6 +22,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -53,9 +54,9 @@ implements HomePageResource {
 
     @Inject
     public HomePageResourceServerside(
-            final MetaModelContext metaModelContext,
-            final CausewayConfiguration causewayConfiguration,
-            final InteractionLayerTracker iInteractionLayerTracker) {
+            final @Context MetaModelContext metaModelContext,
+            final @Context CausewayConfiguration causewayConfiguration,
+            final @Context InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
         log.debug("<init>");
     }

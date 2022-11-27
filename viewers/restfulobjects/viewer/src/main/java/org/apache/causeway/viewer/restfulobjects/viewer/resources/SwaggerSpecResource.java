@@ -55,8 +55,8 @@ public class SwaggerSpecResource {
 
     @Inject
     public SwaggerSpecResource(
-            final SwaggerService swaggerService,
-            final InteractionService interactionService) {
+            final @Context SwaggerService swaggerService,
+            final @Context InteractionService interactionService) {
         this.swaggerService = swaggerService;
         this.interactionService = interactionService;
         log.debug("<init>");

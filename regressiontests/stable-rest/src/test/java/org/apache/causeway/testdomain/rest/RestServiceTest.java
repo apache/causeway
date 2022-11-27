@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.testdomain.rest;
 
+import jakarta.inject.Inject;
+import jakarta.xml.bind.JAXBException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,16 +34,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.conf.Configuration_usingSpring6;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
-import jakarta.inject.Inject;
-import jakarta.xml.bind.JAXBException;
 import lombok.val;
 
 @SpringBootTest(
@@ -48,11 +48,9 @@ import lombok.val;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
+    Configuration_usingSpring6.class,
     Configuration_usingJdo.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
-
-    FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
-    ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
 })
 class RestServiceTest {
 
