@@ -80,15 +80,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<repositories>
-        <!-- temporary till Nov 24, 2022 -->
-        <repository>
-            <id>spring.snapshots</id>
-            <name>Spring Milestones Repository</name>
-            <url>https://repo.spring.io/milestone/</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-    </repositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

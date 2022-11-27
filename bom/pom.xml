@@ -445,68 +445,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <artifactId>maven-plugin-annotations</artifactId>
                 <version>${maven.plugin.tools.version}</version>
             </dependency>
-            <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-aop</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-beans</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-core</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			   <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-context</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-expression</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-jcl</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-test</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
-		    <dependency>
-			  <!-- temporary till Nov 24, 2022 -->
-		      <groupId>org.springframework</groupId>
-		      <artifactId>spring-tx</artifactId>
-		      <version>6.0.0</version>
-		    </dependency>
         </dependencies>
     </dependencyManagement>
     <repositories>
         <!-- APACHE CAUSEWAY customisation 7/21: start -->
         <repository>
-			<!-- temporary till Nov 24, 2022 -->
-            <id>spring.snapshots</id>
-            <name>Spring Milestones Repository</name>
-            <url>https://repo.spring.io/milestone/</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <repository>
-			<!-- temporary till release of shiro 2.0.0 -->
-            <id>shiro.snapshots</id>
+			<!-- temporary till release of shiro 2.0.0 and cxf 4.0.0 -->
+            <id>apache.snapshots</id>
             <name>Shiro Snapshot Repository</name>
             <url>https://repository.apache.org/content/groups/snapshots/</url>
             <snapshots><enabled>true</enabled></snapshots>
