@@ -334,7 +334,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <cucumber.version>7.9.0</cucumber.version>
 
-        <cxf-rt-rs-client.version>3.5.4</cxf-rt-rs-client.version>
+        <cxf-rt-rs-client.version>4.0.0-SNAPSHOT</cxf-rt-rs-client.version>
 
         <danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
         <danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
