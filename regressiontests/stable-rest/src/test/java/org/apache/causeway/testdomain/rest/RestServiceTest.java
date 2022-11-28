@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
-import org.apache.causeway.testdomain.conf.Configuration_usingSpring6;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -48,7 +47,6 @@ import lombok.val;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
-    Configuration_usingSpring6.class,
     Configuration_usingJdo.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
 })

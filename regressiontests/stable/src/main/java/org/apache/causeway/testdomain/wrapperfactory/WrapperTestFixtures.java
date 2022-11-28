@@ -24,12 +24,17 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
 @Configuration
 @Import({
+    // Auto Configuration
+    FixtureScriptsSpecificationProviderAutoConfiguration.class,
+    ExecutionParametersServiceAutoConfiguration.class,
 })
 @ComponentScan
 public class WrapperTestFixtures implements ModuleWithFixtures {
@@ -41,7 +46,7 @@ public class WrapperTestFixtures implements ModuleWithFixtures {
     public FixtureScript getTeardownFixture() {
         return new TeardownFixtureJdoAbstract() {
             @Override
-            protected void execute(ExecutionContext executionContext) {
+            protected void execute(final ExecutionContext executionContext) {
                 deleteFrom(Counter.class);
             }
         };

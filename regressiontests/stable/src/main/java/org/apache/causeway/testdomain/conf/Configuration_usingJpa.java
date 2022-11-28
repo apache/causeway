@@ -32,6 +32,8 @@ import org.apache.causeway.testdomain.jpa.JpaTestDomainModule;
 import org.apache.causeway.testdomain.model.stereotypes.MyService;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
@@ -43,7 +45,11 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
     CausewayModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 
-    JpaTestDomainModule.class
+    JpaTestDomainModule.class,
+
+    // Auto Configuration
+    FixtureScriptsSpecificationProviderAutoConfiguration.class,
+    ExecutionParametersServiceAutoConfiguration.class,
 })
 @PropertySources({
     @PropertySource(CausewayPresets.NoTranslations),

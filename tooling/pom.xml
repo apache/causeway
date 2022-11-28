@@ -44,6 +44,9 @@
 		<picocli.version>4.7.0</picocli.version>
 		<structurizr.version>1.16.1</structurizr.version>
 		<structurizr-plantuml.version>1.6.3</structurizr-plantuml.version>
+		
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
 
 	</properties>
 

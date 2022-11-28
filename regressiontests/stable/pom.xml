@@ -68,6 +68,7 @@
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-fixtures-applib</artifactId>
 			<optional>true</optional>
+			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
