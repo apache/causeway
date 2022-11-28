@@ -40,7 +40,7 @@
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.graceful</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/graceful</git-plugin.propertiesDir>
     </properties>
-
+<!--
     <build>
         <plugins>
             <plugin>
@@ -75,9 +75,10 @@
             </plugin>
         </plugins>
     </build>
+-->
 
     <dependencies>
-
+<!--
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
@@ -102,6 +103,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        -->
 
 		<!-- TESTING -->
 

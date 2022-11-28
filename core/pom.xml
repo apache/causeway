@@ -1015,30 +1015,30 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers</groupId>
 				<artifactId>wicket</artifactId>
 				<version>${wicket.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-devutils</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-core-tester</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1051,7 +1051,7 @@
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1063,31 +1063,18 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-datetime</artifactId>
-				<version>${wicket.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.wicket</groupId>
+				<groupId>com.github.apache-causeway-committers.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>

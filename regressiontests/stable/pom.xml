@@ -106,11 +106,6 @@
 			<type>pom</type>
 			<optional>true</optional>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-core-tester</artifactId>
-		</dependency>
 
 		<!-- <dependency> -->
 		<!-- <groupId>org.glassfish.jersey.ext</groupId> -->

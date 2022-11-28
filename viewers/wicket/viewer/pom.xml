@@ -34,8 +34,7 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.viewer</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/viewer</git-plugin.propertiesDir>
-        
-        <!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
 		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
     </properties>
 
@@ -65,7 +64,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.wicket</groupId>
+            <groupId>com.github.apache-causeway-committers.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
             <exclusions>
             	<exclusion>
@@ -88,7 +87,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.wicket</groupId>
+            <groupId>com.github.apache-causeway-committers.wicket</groupId>
             <artifactId>wicket-auth-roles</artifactId>
             <exclusions>
                 <exclusion>

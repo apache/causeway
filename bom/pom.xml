@@ -428,7 +428,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <vaadin.version>23.2.9</vaadin.version>
 
-        <wicket.version>10.0.0-M1-SNAPSHOT</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
+        <wicket.version>-f5513ee9d6-1</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
+        
         <wicket-bootstrap.version>6.0.0-M8</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.6</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.6.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
@@ -455,6 +456,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <url>https://repository.apache.org/content/groups/snapshots/</url>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
+		<repository>
+			<!-- used for wicket 10.0.0-M1-SNAPSHOT fork at 
+				https://jitpack.io/#apache-causeway-committers/wicket
+				temporary till release of wicket 10.0.0 -->
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
         <repository>
 			<!-- temporary till release of wicket-stuff 10.0.0 -->
 			<id>wicketstuff-core-snapshots</id>
