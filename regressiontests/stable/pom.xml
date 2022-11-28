@@ -68,7 +68,6 @@
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-fixtures-applib</artifactId>
 			<optional>true</optional>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -106,6 +105,11 @@
 			<artifactId>causeway-mavendeps-webapp</artifactId>
 			<type>pom</type>
 			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core-tester</artifactId>
 		</dependency>
 
 		<!-- <dependency> -->

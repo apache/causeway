@@ -1030,6 +1030,11 @@
 				<artifactId>wicket-devutils</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-core-tester</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
@@ -1310,12 +1315,6 @@
 				<groupId>org.webjars.npm</groupId>
 				<artifactId>summernote</artifactId>
 				<version>${summernote.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-gmap3</artifactId>
-				<version>${wicketstuff-gmap3.version}</version>
 			</dependency>
 
 			<dependency>
