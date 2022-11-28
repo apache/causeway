@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,8 +39,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -74,14 +71,7 @@ implements HasMetaModelContext {
     @Context SecurityContext securityContext;
     @Context Providers providers;
 
-    //TODO[ISIS-3275] remove eventually
-    private static final Set<Class<?>> initialized = _Sets.newHashSet();
-
     protected ResourceAbstract() {
-        if(!initialized.add(this.getClass())) {
-            throw _Exceptions.illegalState("framework bug: %s already instantiated, "
-                    + "check resteasy-spring-boot configuration", this.getClass().getName());
-        }
     }
 
     // -- FACTORIES

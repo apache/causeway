@@ -68,6 +68,13 @@
             <artifactId>causeway-extensions-cors-impl</artifactId>
 			<scope>test</scope>
         </dependency>
+        
+		<dependency>
+		    <groupId>org.eclipse.parsson</groupId>
+		    <artifactId>parsson</artifactId>
+		    <version>1.1.1</version>
+		    <scope>test</scope>
+		</dependency>
 
 	</dependencies>
 </project>

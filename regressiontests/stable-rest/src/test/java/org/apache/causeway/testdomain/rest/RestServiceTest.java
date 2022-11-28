@@ -78,6 +78,10 @@ class RestServiceTest {
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
 
+        //uses jakarta.json.JsonException
+
+        jakarta.json.JsonException x;
+
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
