@@ -33,7 +33,6 @@ import lombok.extern.log4j.Log4j2;
 @Deprecated(forRemoval = true)
 @Configuration
 @Import({
-    org.jboss.resteasy.springboot.ResteasyAutoConfiguration.class, //FIXME[ISIS-3275] move up the hierarchy?
     FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
     ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
 })
