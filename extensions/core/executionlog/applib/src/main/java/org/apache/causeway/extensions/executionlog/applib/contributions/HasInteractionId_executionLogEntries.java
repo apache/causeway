@@ -32,6 +32,16 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryR
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Contributes a <code>executionLogEntries</code> collection to any object implementing {@link HasInteractionId},
+ * in other words the executions that occurred relating to an
+ * {@link org.apache.causeway.applib.services.iactn.Interaction}.
+ *
+ * <p>
+ *     For example, the <code>CommandLogEntry</code> (in the <i>command log</i> extension) or the
+ *     <code>AuditTrailEntry</code> entity (in the <i>audit trail</i> extension) both implement
+ *     {@link HasInteractionId}.
+ * </p>
+ *
  * @since 2.x {@index}
  */
 @Collection(

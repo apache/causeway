@@ -26,6 +26,8 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 
 /**
+ *
+ * Provides a set of utilities
  * @since 2.0 {@index}
  */
 public interface ExcelService {
@@ -51,24 +53,24 @@ public interface ExcelService {
     <T> Blob toExcel(List<T> domainObjects, Class<T> cls, String sheetName, String fileName, InputStream in)
             throws ExcelServiceDefault.Exception;
 
-    <T> Blob toExcel(WorksheetContent worksheetContent, String fileName) throws ExcelServiceDefault.Exception;
+    <T> Blob toExcel(WorksheetContent worksheetContent, String fileName) throws ExcelService.Exception;
 
     <T> Blob toExcel(WorksheetContent worksheetContent, String fileName, InputStream in)
             throws ExcelServiceDefault.Exception;
 
-    Blob toExcel(List<WorksheetContent> worksheetContents, String fileName) throws ExcelServiceDefault.Exception;
+    Blob toExcel(List<WorksheetContent> worksheetContents, String fileName) throws ExcelService.Exception;
 
     Blob toExcel(List<WorksheetContent> worksheetContents, String fileName, InputStream in)
             throws ExcelServiceDefault.Exception;
 
-    <T> Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String fileName) throws ExcelServiceDefault.Exception;
+    <T> Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String fileName) throws ExcelService.Exception;
 
     <T> Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String sheetName, String fileName)
             throws ExcelServiceDefault.Exception;
 
-    <T> Blob toExcelPivot(WorksheetContent worksheetContent, String fileName) throws ExcelServiceDefault.Exception;
+    <T> Blob toExcelPivot(WorksheetContent worksheetContent, String fileName) throws ExcelService.Exception;
 
-    Blob toExcelPivot(List<WorksheetContent> worksheetContents, String fileName) throws ExcelServiceDefault.Exception;
+    Blob toExcelPivot(List<WorksheetContent> worksheetContents, String fileName) throws ExcelService.Exception;
 
     /**
      * Returns a list of objects for each line in the spreadsheet, of the specified type.
@@ -78,21 +80,21 @@ public interface ExcelService {
      *     view model memento); otherwise the objects will be simple transient objects.
      * </p>
      */
-    <T> List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName) throws ExcelServiceDefault.Exception;
+    <T> List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName) throws ExcelService.Exception;
 
     <T> List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName, Mode mode)
             throws ExcelServiceDefault.Exception;
 
-    <T> List<T> fromExcel(Blob excelBlob, WorksheetSpec worksheetSpec) throws ExcelServiceDefault.Exception;
+    <T> List<T> fromExcel(Blob excelBlob, WorksheetSpec worksheetSpec) throws ExcelService.Exception;
 
-    List<List<?>> fromExcel(Blob excelBlob, List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception;
+    List<List<?>> fromExcel(Blob excelBlob, List<WorksheetSpec> worksheetSpecs) throws ExcelService.Exception;
 
-    List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher) throws ExcelServiceDefault.Exception;
+    List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher) throws ExcelService.Exception;
 
     List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher, WorksheetSpec.Sequencer sequencer)
             throws ExcelServiceDefault.Exception;
 
-    public static class Exception extends RecoverableException {
+    class Exception extends RecoverableException {
 
         private static final long serialVersionUID = 1L;
 

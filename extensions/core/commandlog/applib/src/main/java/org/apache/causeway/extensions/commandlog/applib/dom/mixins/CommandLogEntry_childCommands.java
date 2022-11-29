@@ -31,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 
 
 /**
+ * Contributes the <code>childCommands</code> collection to {@link CommandLogEntry} entity.
+ *
  * @since 2.x {@index}
  */
 @Collection(

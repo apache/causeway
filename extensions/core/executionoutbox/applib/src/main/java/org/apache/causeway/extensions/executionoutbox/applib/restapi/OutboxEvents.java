@@ -44,7 +44,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Wrapper around a collection of {@link ExecutionOutboxEntry outbox entries}.
+ *
+ * <p>
+ *     This class is used as the return value of {@link OutboxRestApi#pending()}.  The <i>outbox client</i> calls this
+ *     with an HTTP <code>Accept</code> header set to {@link org.apache.causeway.schema.ixn.v2.InteractionsDto} so that
+ *     it is serialized into a list of {@link org.apache.causeway.applib.services.iactn.Interaction}s for processing.
+  * </p>
+ *
  * @since 2.0 {@index}
+ *
+ * @see OutboxRestApi#pending()
  */
 @XmlRootElement
 @XmlType(

@@ -40,6 +40,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Provides a server-side REST API for the <i>outbox rest client</i> to call, to first obtain {@link #pending() pending}
+ * {@link ExecutionOutboxEntry outbox entries} to be processed, and then later to request them to be
+ * {@link #deleteMany(String) deleted}.
+ *
  * @since 2.0 {@index}
  */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)

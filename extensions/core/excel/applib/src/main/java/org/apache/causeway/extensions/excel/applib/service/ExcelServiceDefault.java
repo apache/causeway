@@ -40,6 +40,11 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.collections._Lists;
 
 
+/**
+ * Implementation of {@link ExcelService}.
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(ExcelServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
@@ -50,13 +55,13 @@ public class ExcelServiceDefault implements ExcelService {
 
     private _ExcelServiceHelper helper;
 
+    @Inject private ServiceInjector serviceInjector;
+
     @PostConstruct
     public void init() {
         helper = new _ExcelServiceHelper();
         serviceInjector.injectServicesInto(helper);
     }
-
-    // //////////////////////////////////////
 
     @Override
     public <T> Blob toExcel(
@@ -207,6 +212,5 @@ public class ExcelServiceDefault implements ExcelService {
         return fromExcel(excelBlob, worksheetSpecs);
     }
 
-    @Inject private ServiceInjector serviceInjector;
 
 }
