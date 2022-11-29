@@ -18,21 +18,19 @@ specific language governing permissions and limitations
 under the License.
 -->
 <!--
-This pom is the top-level parent, responsible for deploying to ASF using the apache-release, and as defined in org.apache:apache global parent.
+This pom is the top-level parent, responsible for deploying to 
+ASF using the apache-release, and as defined in org.apache:apache 
+global parent.
 At the same time, we want it to inherit from org.springframework.boot:spring-boot-starter-parent.
-It is therefore a copy of org.apache:apache, with customisations clearly identified (though some plugins versions have been bumped to more recent versions).
+It is therefore a copy of org.apache:apache, with customisations clearly identified 
+(though some plugins versions have been bumped to more recent versions).
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
+    <!-- based on org.apache:apache:27 
+    	for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
 
-    <!-- APACHE CAUSEWAY customisation 1/21: : start -->
-    <!--
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>27</version>
-    -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -42,257 +40,19 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-bom</artifactId>
     <version>3.0.0-SNAPSHOT</version>
-    <!-- APACHE CAUSEWAY customisation 1/21: end -->
 
     <packaging>pom</packaging>
 
-    <!-- APACHE CAUSEWAY customisation 2/21: start -->
-    <!--
-    <name>The Apache Software Foundation</name>
-    <description> The Apache Software Foundation provides support for the Apache community of open-source software projects. The Apache projects are characterized by a collaborative, consensus based development process, an open and pragmatic software license, and a desire to create high quality software that leads the way in its field. We consider ourselves not simply a group of projects sharing a server, but rather a community of developers and users. </description>
-    <url>https://www.apache.org/</url>
-    -->
     <name>Apache Causeway</name>
     <description>
         Apache Causeway Bill of Material (BOM).
         Also the parent POM for the core framework and extensions.
     </description>
-    <url>https://causeway.apache.org</url>
-    <!-- APACHE CAUSEWAY customisation 2/21: end -->
-
-    <organization>
-        <name>The Apache Software Foundation</name>
-        <url>https://www.apache.org/</url>
-    </organization>
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <!-- APACHE CAUSEWAY customisation 3/21: start -->
-    <!--
-    <mailingLists>
-        <mailingList>
-            <name>Apache Announce List</name>
-            <subscribe>announce-subscribe@apache.org</subscribe>
-            <unsubscribe>announce-unsubscribe@apache.org</unsubscribe>
-            <post>announce@apache.org</post>
-            <archive>https://mail-archives.apache.org/mod_mbox/www-announce/</archive>
-        </mailingList>
-    </mailingLists>
-    <scm>
-        <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</connection>
-        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</developerConnection>
-        <url>https://github.com/apache/maven-apache-parent/tree/${project.scm.tag}</url>
-        <tag>apache-27</tag>
-    </scm>
-    -->
-    <mailingLists>
-        <mailingList>
-            <name>developers</name>
-            <archive>http://mail-archives.apache.org/mod_mbox/causeway-dev/</archive>
-            <post>dev@causeway.apache.org</post>
-            <subscribe>dev-subscribe@causeway.apache.org</subscribe>
-            <unsubscribe>dev-unsubscribe@causeway.apache.org</unsubscribe>
-        </mailingList>
-        <mailingList>
-            <name>users</name>
-            <archive>http://mail-archives.apache.org/mod_mbox/causeway-users/</archive>
-            <post>users@causeway.apache.org</post>
-            <subscribe>users-subscribe@causeway.apache.org</subscribe>
-            <unsubscribe>users-unsubscribe@causeway.apache.org</unsubscribe>
-        </mailingList>
-    </mailingLists>
-    <scm>
-        <connection>scm:git:http://github.com/apache/causeway.git</connection>
-        <developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
-        <url>http://github.com/apache/causeway</url>
-        <tag>HEAD</tag>
-    </scm>
-    <!-- APACHE CAUSEWAY customisation 3/21: end -->
-    <distributionManagement>
-        <repository>
-            <id>apache.releases.https</id>
-            <name>Apache Release Distribution Repository</name>
-            <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
-        </repository>
-        <snapshotRepository>
-            <id>apache.snapshots.https</id>
-            <name>${distMgmtSnapshotsName}</name>
-            <url>${distMgmtSnapshotsUrl}</url>
-        </snapshotRepository>
-    </distributionManagement>
-    <!-- APACHE CAUSEWAY customisation 4/21: start -->
-    <inceptionYear>2010</inceptionYear>
-    <issueManagement>
-        <system>Jira</system>
-        <url>https://issues.apache.org/jira/browse/CAUSEWAY</url>
-    </issueManagement>
-    <ciManagement>
-        <system>CI</system>
-        <url>https://github.com/apache-causeway-committers/causeway-nightly</url>
-    </ciManagement>
-    <developers>
-        <developer>
-            <id>ahuber</id>
-            <name>Andi Huber</name>
-            <email>ahuber@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>bibryam</id>
-            <name>Bilgin Ibryam</name>
-            <email>bibryam@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+0</timezone>
-        </developer>
-        <developer>
-            <id>danhaywood</id>
-            <name>Dan Haywood</name>
-            <email>danhaywood@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+0</timezone>
-        </developer>
-        <developer>
-            <id>dslaughter</id>
-            <name>Dave Slaughter</name>
-            <email>dslaughter@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <id>jcvanderwal</id>
-            <name>Jeroen van der Wal</name>
-            <email>jcvanderwal@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>jdoornenbal</id>
-            <name>Johan Doornenbal</name>
-            <email>jdoornenbal@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>joergrade</id>
-            <name>Joerg Rade</name>
-            <email>joergrade@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>kevin</id>
-            <name>Kevin Meyer</name>
-            <email>kevin@apache.org</email>
-            <roles>
-                <role>pmc chair</role>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+2</timezone>
-        </developer>
-        <developer>
-            <id>madytyoo</id>
-            <name>Maurizio Taverna</name>
-            <email>madytyoo@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>mgrigorov</id>
-            <name>Martin Grigorov</name>
-            <email>mgrigorov@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+2</timezone>
-        </developer>
-        <developer>
-            <id>mnour</id>
-            <name>Mohammad Nour El-Din</name>
-            <email>mnour@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>mentor while incubating</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>oscarbou</id>
-            <name>Oscar Bou</name>
-            <email>oscarbou@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>rmatthews</id>
-            <name>Robert Matthews</name>
-            <email>rmatthews@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+0</timezone>
-        </developer>
-        <developer>
-            <id>struberg</id>
-            <name>Mark Struberg</name>
-            <email>struberg@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>mentor while incubating</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>themalkolm</id>
-            <name>Alexander Krasnuhkin</name>
-            <email>themalkolm@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+3</timezone>
-        </developer>
-    </developers>
-    <!-- APACHE CAUSEWAY customisation 4/21: end -->
+    
     <properties>
-        <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
-        <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
-        <organization.logo>https://www.apache.org/images/asf_logo_wide_2016.png</organization.logo>
+		
+		<!-- BUILD SPECIFICA -->
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
@@ -300,25 +60,25 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <minimalMavenBuildVersion>3.2.5</minimalMavenBuildVersion>
         <minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
 
-        <!-- APACHE CAUSEWAY customisation 5/21: start -->
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <surefire.version>3.0.0-M7</surefire.version>
-        <!-- APACHE CAUSEWAY customisation 5/21: end -->
 
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.7.0</maven.plugin.tools.version>
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
+        <causeway.skipTests>false</causeway.skipTests>
+		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
+        
         <project.build.outputTimestamp>2022-10-14T12:04:02Z</project.build.outputTimestamp>
-
-        <!-- APACHE CAUSEWAY customisation 6/21: start -->
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
         <!-- LIBRARY DEPENDENCIES -->
+        
         <archunit.version>1.0.1</archunit.version>
         <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <asm.version>9.4</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
@@ -388,7 +148,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
 
-        <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-release-plugin.version>3.0.0-M7</maven-release-plugin.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
@@ -435,7 +194,36 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <wicketstuff.version>9.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
-        <!-- APACHE CAUSEWAY customisation 6/21: end -->
+		<!-- OTHER -->
+		
+		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+        <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
+        <organization.logo>https://www.apache.org/images/asf_logo_wide_2016.png</organization.logo>
+		<license.additional-notes>In addition, Apache Causeway uses some
+			JavaScript libraries:
+
+			* Twitter Bootstrap, licensed under MIT [1]
+			*
+			Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
+			*
+			LiveQuery (JQuery plugin), licensed under MIT license [3]
+			* Wicket
+			Bootstrap, licenced under ASL 2 [4]
+			* Bootstrap Datetimepicker,
+			licensed under MIT licence [5]
+			* Moment.js, licenced under MIT licence
+			[6]
+
+			[1] https://github.com/twbs/bootstrap/blob/master/LICENSE
+			[2]
+			https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
+			[3]
+			https://github.com/brandonaaron/livequery#license
+			[4]
+			https://github.com/l0rdn1kk0n/wicket-bootstrap
+			[5]
+			https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -447,7 +235,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         </dependencies>
     </dependencyManagement>
     <repositories>
-        <!-- APACHE CAUSEWAY customisation 7/21: start -->
         <repository>
 			<!-- temporary till release of cxf 4.0.0, shiro 2.0.0 and wicket 10.0.0 -->
             <id>apache.snapshots</id>
@@ -480,10 +267,38 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </releases>
         </repository>
         -->
-        <!-- APACHE CAUSEWAY customisation 7/21: end -->
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>Apache Repository</id>
+			<url>https://repository.apache.org/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<!-- required for RestEasy -->
+			<id>JBoss Public Release</id>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
     </repositories>
     <pluginRepositories>
-        <!-- APACHE CAUSEWAY customisation 8/21: start -->
         <!-- breaks dependabot run: timeout due to repo not accessible
         <pluginRepository>
             <id>apache.snapshots</id>
@@ -494,7 +309,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </releases>
         </pluginRepository>
         -->
-        <!-- APACHE CAUSEWAY customisation 8/21: end -->
+		<pluginRepository>
+			<id>DataNucleus_2</id>
+			<url>https://www.datanucleus.org/downloads/maven2/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
     </pluginRepositories>
     <build>
         <pluginManagement>
@@ -666,7 +487,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire.version}</version>
-                    <!-- APACHE CAUSEWAY customisation 9/21: start -->
                     <configuration>
                         <!-- override defaults and include everything unless explicitly excluded -->
                         <includes>
@@ -687,7 +507,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <isRunningWithSurefire>true</isRunningWithSurefire>
                         </systemPropertyVariables>
                     </configuration>
-                    <!-- APACHE CAUSEWAY customisation 9/21: end -->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -703,7 +522,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>0.15</version>
-                    <!-- APACHE CAUSEWAY customisation 10/21: start -->
                     <configuration>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                         <excludeSubProjects>true</excludeSubProjects>
@@ -876,9 +694,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             </licenseFamily>
                         </licenseFamilies>
                     </configuration>
-                    <!-- APACHE CAUSEWAY customisation 10/21: end -->
                 </plugin>
-                <!-- APACHE CAUSEWAY customisation 11/21: start -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-docck-plugin</artifactId>
@@ -889,7 +705,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <artifactId>clirr-maven-plugin</artifactId>
                     <version>2.8</version>
                 </plugin>
-                <!-- APACHE CAUSEWAY customisation 11/21: end -->
             </plugins>
         </pluginManagement>
         <plugins>
@@ -907,7 +722,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <resourceBundles>
                                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
                             </resourceBundles>
-                            <!-- APACHE CAUSEWAY customisation 12/21: start -->
 
                             <!-- Reference the supplemental-model artifact from module supplemental-model -->
                             <supplementalModelArtifacts>
@@ -938,7 +752,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <!-- APACHE CAUSEWAY customisation 13/21: start -->
                 <configuration>
                     <rules>
                         <requireMavenVersion>
@@ -953,9 +766,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <DependencyConvergence />
                     </rules>
                 </configuration>
-                <!-- APACHE CAUSEWAY customisation 13/21: end -->
                 <executions>
-                    <!-- APACHE CAUSEWAY customisation 14/21: start -->
                     <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
                     <execution>
                         <id>validate-enforce</id>
@@ -964,7 +775,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <goal>enforce</goal>
                         </goals>
                     </execution>
-                    <!-- APACHE CAUSEWAY customisation 14/21: end -->
                     <execution>
                         <id>enforce-maven-version</id>
                         <goals>
@@ -1006,7 +816,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </executions>
             </plugin>
         </plugins>
-        <!-- APACHE CAUSEWAY customisation 15/21: start -->
         <extensions>
             <!-- scp and sftp support for deployments. -->
             <extension>
@@ -1021,13 +830,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <version>3.5.2</version>
             </extension>
         </extensions>
-        <!-- APACHE CAUSEWAY customisation 15/21: end -->
     </build>
     <profiles>
         <!--  START SNIPPET: release-profile  -->
         <profile>
             <id>apache-release</id>
-            <!-- APACHE CAUSEWAY customisation 16/21: start -->
             <activation>
                 <property>
                     <name>apache-release</name>
@@ -1036,10 +843,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <properties>
                 <skipTests>true</skipTests>
             </properties>
-            <!-- APACHE CAUSEWAY customisation 16/21: end -->
             <build>
                 <plugins>
-                    <!-- APACHE CAUSEWAY customisation 17/21: start -->
                     <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
@@ -1058,8 +863,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- APACHE CAUSEWAY customisation 17/21: end -->
-
                     <!--  Create a source-release artifact that contains the fully buildable
                                    project directory source structure. This is the artifact which is
                                    the official subject of any release vote.  -->
@@ -1081,9 +884,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     <goal>single</goal>
                                 </goals>
                                 <configuration>
-                                    <!-- APACHE CAUSEWAY customisation 18/21: start -->
                                     <archiveBaseDirectory>..</archiveBaseDirectory>
-                                    <!-- APACHE CAUSEWAY customisation 18/21: end -->
                                     <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                                     <descriptorRefs>
                                         <descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
@@ -1123,7 +924,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <!-- APACHE CAUSEWAY customisation 19/21: start -->
                                 <configuration>
                                     <notimestamp>true</notimestamp>
                                     <sourcepath>${delombok.output}</sourcepath>
@@ -1144,7 +944,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     <linksource>true</linksource>
                                     <detectOfflineLinks>false</detectOfflineLinks>
                                 </configuration>
-                                <!-- APACHE CAUSEWAY customisation 19/21: end -->
                             </execution>
                         </executions>
                     </plugin>
@@ -1197,7 +996,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     </plugin>
                 </plugins>
             </build>
-            <!-- APACHE CAUSEWAY customisation 20/21: start -->
             <modules>
                 <module>../core</module>
                 <module>../extensions</module>
@@ -1206,7 +1004,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <module>../testing</module>
                 <module>../valuetypes</module>
             </modules>
-            <!-- APACHE CAUSEWAY customisation 20/21: end -->
         </profile>
         <!--  END SNIPPET: release-profile  -->
         <profile>
@@ -1250,7 +1047,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </pluginManagement>
             </build>
         </profile>
-        <!-- APACHE CAUSEWAY customisation 21/21: start -->
         <profile>
             <id>enforce-output-timestamp-property</id>
             <activation>
@@ -1409,6 +1205,217 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </plugins>
             </build>
         </profile>
-        <!-- APACHE CAUSEWAY customisation 21/21: end -->
     </profiles>
+    
+    <!-- META DATA -->
+    
+    <url>https://causeway.apache.org</url>
+    <organization>
+        <name>The Apache Software Foundation</name>
+        <url>https://www.apache.org/</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <mailingLists>
+        <mailingList>
+            <name>developers</name>
+            <archive>http://mail-archives.apache.org/mod_mbox/causeway-dev/</archive>
+            <post>dev@causeway.apache.org</post>
+            <subscribe>dev-subscribe@causeway.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@causeway.apache.org</unsubscribe>
+        </mailingList>
+        <mailingList>
+            <name>users</name>
+            <archive>http://mail-archives.apache.org/mod_mbox/causeway-users/</archive>
+            <post>users@causeway.apache.org</post>
+            <subscribe>users-subscribe@causeway.apache.org</subscribe>
+            <unsubscribe>users-unsubscribe@causeway.apache.org</unsubscribe>
+        </mailingList>
+    </mailingLists>
+    <scm>
+        <connection>scm:git:http://github.com/apache/causeway.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
+        <url>http://github.com/apache/causeway</url>
+        <tag>HEAD</tag>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <id>apache.releases.https</id>
+            <name>Apache Release Distribution Repository</name>
+            <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>apache.snapshots.https</id>
+            <name>${distMgmtSnapshotsName}</name>
+            <url>${distMgmtSnapshotsUrl}</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <inceptionYear>2010</inceptionYear>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://issues.apache.org/jira/browse/CAUSEWAY</url>
+    </issueManagement>
+    <ciManagement>
+        <system>CI</system>
+        <url>https://github.com/apache-causeway-committers/causeway-nightly</url>
+    </ciManagement>
+    <developers>
+        <developer>
+            <id>ahuber</id>
+            <name>Andi Huber</name>
+            <email>ahuber@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>bibryam</id>
+            <name>Bilgin Ibryam</name>
+            <email>bibryam@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+        <developer>
+            <id>danhaywood</id>
+            <name>Dan Haywood</name>
+            <email>danhaywood@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+        <developer>
+            <id>dslaughter</id>
+            <name>Dave Slaughter</name>
+            <email>dslaughter@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>jcvanderwal</id>
+            <name>Jeroen van der Wal</name>
+            <email>jcvanderwal@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>jdoornenbal</id>
+            <name>Johan Doornenbal</name>
+            <email>jdoornenbal@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>joergrade</id>
+            <name>Joerg Rade</name>
+            <email>joergrade@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>kevin</id>
+            <name>Kevin Meyer</name>
+            <email>kevin@apache.org</email>
+            <roles>
+                <role>pmc chair</role>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>madytyoo</id>
+            <name>Maurizio Taverna</name>
+            <email>madytyoo@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>mgrigorov</id>
+            <name>Martin Grigorov</name>
+            <email>mgrigorov@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>mnour</id>
+            <name>Mohammad Nour El-Din</name>
+            <email>mnour@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>oscarbou</id>
+            <name>Oscar Bou</name>
+            <email>oscarbou@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>rmatthews</id>
+            <name>Robert Matthews</name>
+            <email>rmatthews@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+        <developer>
+            <id>struberg</id>
+            <name>Mark Struberg</name>
+            <email>struberg@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>themalkolm</id>
+            <name>Alexander Krasnuhkin</name>
+            <email>themalkolm@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
+    
 </project>
