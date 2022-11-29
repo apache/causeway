@@ -110,7 +110,7 @@
 				</exclusion>
 				<exclusion>
 					<!-- using eclipse-link instead -->
-					<groupId>org.hibernate</groupId>
+					<groupId>org.hibernate.orm</groupId>
 					<artifactId>hibernate-core</artifactId>
 				</exclusion>
 				<exclusion>

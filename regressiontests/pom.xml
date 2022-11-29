@@ -34,6 +34,8 @@
 	<properties>
 		<skip.regressionTests>false</skip.regressionTests>
 		<skipTests>${skip.regressionTests}</skipTests>
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
 	</properties>
 
 	<build>
