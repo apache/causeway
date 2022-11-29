@@ -23,6 +23,7 @@ package org.apache.causeway.regressiontests.layouts.integtest.model;
 import java.util.Comparator;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -68,7 +69,8 @@ import lombok.val;
         )
 })
 //@jakarta.persistence.EntityListeners(CausewayEntityListener.class)
-@DomainObject(logicalTypeName = "simple.SimpleObject", entityChangePublishing = Publishing.ENABLED)
+@DomainObject(entityChangePublishing = Publishing.ENABLED)
+@Named("simple.SimpleObject")
 @DomainObjectLayout()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
@@ -88,7 +90,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @Getter @Setter
     private long version;
 
-    public static SimpleObject withName(String name) {
+    public static SimpleObject withName(final String name) {
         val simpleObject = new SimpleObject();
         simpleObject.setName(name);
         return simpleObject;
@@ -125,7 +127,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public String default0UpdateName() {
         return getName();
     }
-    public String validate0UpdateName(String newName) {
+    public String validate0UpdateName(final String newName) {
         for (char prohibitedCharacter : "&%$!".toCharArray()) {
             if( newName.contains(""+prohibitedCharacter)) {
                 return "Character '" + prohibitedCharacter + "' is not allowed.";

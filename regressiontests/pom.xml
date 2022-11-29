@@ -134,6 +134,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.causeway.commons</groupId>
+			<artifactId>causeway-commons</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
 		</dependency>
@@ -151,28 +156,28 @@
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 			<dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
