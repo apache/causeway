@@ -63,6 +63,32 @@
 				</excludes>
 			</resource>
 		</resources>
+		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+				<!-- goal:jar binds to phase:package -->
+				<!-- goal:test-jar supposedly binds to phase:package, but seems to need
+					this explicit binding. -->
+				<executions>
+					<execution>
+						<id>package-test-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+            </plugin>
+		</plugins>
 	</build>
 
 	<dependencyManagement>

@@ -239,75 +239,6 @@
 
 				</plugin>
 
-
-				<!-- Packaging: jar -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>${maven-jar-plugin.version}</version>
-					<!-- goal:jar binds to phase:package -->
-					<!-- goal:test-jar supposedly binds to phase:package, but seems to need
-						this explicit binding. -->
-					<executions>
-						<execution>
-							<id>package-test-jar</id>
-							<phase>package</phase>
-							<goals>
-								<goal>test-jar</goal>
-							</goals>
-							<configuration>
-								<archive>
-									<manifest>
-										<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-										<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-									</manifest>
-								</archive>
-							</configuration>
-						</execution>
-					</executions>
-					<configuration>
-						<archive>
-							<manifest>
-								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							</manifest>
-							<manifestEntries>
-								<Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
-								<Implementation-Vendor-Id>org.apache.causeway</Implementation-Vendor-Id>
-								<Implementation-Vendor>Apache Causeway™ Project</Implementation-Vendor>
-								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
-								<SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
-								<!-- required for DN plugin.xml loading -->
-								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
-								<!-- no requirement as of yet. <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>3.0.0-SNAPSHOT</Bundle-Version>
-									<Bundle-Vendor>Apache Causeway™ Project</Bundle-Vendor> -->
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
-
-
-				<!-- Packaging: WAR -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>${maven-war-plugin.version}</version>
-					<configuration>
-						<warSourceExcludes>
-							WEB-INF/lib/*.jar
-						</warSourceExcludes>
-						<archive>
-							<manifest>
-								<addClasspath>true</addClasspath>
-								<classpathPrefix>lib/</classpathPrefix>
-							</manifest>
-						</archive>
-					</configuration>
-					<!-- goal:war binds to phase:package -->
-				</plugin>
-
-
 				<!-- release (is also configured in descendant modules) -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -386,24 +317,11 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<!-- overrides the default ('clean verify') -->
 					<preparationGoals>clean install</preparationGoals>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>false</skip>
 				</configuration>
 			</plugin>
 		</plugins>

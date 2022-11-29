@@ -32,8 +32,8 @@ under the License.
     <name>Apache Causeway Ext - Excel (Integ Tests)</name>
 
 	<properties>
-    	<jar-plugin.automaticModuleName>org.apache.causeway.extensions.excel.integtests</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/extensions/excel/integtests</git-plugin.propertiesDir>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <build>

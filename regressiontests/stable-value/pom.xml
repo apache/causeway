@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-stable-value</artifactId>
-
 	<name>Apache Causeway - Regression Tests (stable) - Value Types</name>
+	
+	<properties>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
 	<dependencies>
 		<dependency>

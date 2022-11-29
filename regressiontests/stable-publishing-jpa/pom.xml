@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-stable-publishing-jpa</artifactId>
-
 	<name>Apache Causeway - Regression Tests (stable) - Publishing (JPA)</name>
+	
+	<properties>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
 	<dependencies>
 

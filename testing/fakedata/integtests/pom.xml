@@ -31,12 +31,11 @@ under the License.
     <name>Apache Causeway Tst - FakeData (integ tests)</name>
     
     <properties>
-
         <!-- TODO: to reinstate -->
         <skipTests>true</skipTests>
 
-        <jar-plugin.automaticModuleName>org.apache.causeway.testing.fakedata.integtests</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/testing/fakedata/integtests</git-plugin.propertiesDir>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <build>
