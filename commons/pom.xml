@@ -68,12 +68,6 @@
 			<artifactId>causeway-core-privileged</artifactId>
 		</dependency>
 		
-		<!-- provides @Nullable that's required by Spring 5.x (as Spring is on the module path) -->
-<!--		<dependency>-->
-<!--			<groupId>com.google.code.findbugs</groupId>-->
-<!--			<artifactId>jsr305</artifactId>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

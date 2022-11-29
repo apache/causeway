@@ -95,63 +95,8 @@
 
 				</plugin>
 
-				<!-- release (is also configured in descendant modules) -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>${maven-release-plugin.version}</version>
-					<configuration>
-						<!-- overriddes the default ('clean verify') as workaround -->
-						<preparationGoals>clean install</preparationGoals>
-						<autoVersionSubmodules>true</autoVersionSubmodules>
-						<localCheckout>true</localCheckout>
-						<pushChanges>false</pushChanges>
-						<waitBeforeTagging>1</waitBeforeTagging>
-					</configuration>
-					<!-- goal:clean (for aggregator modules) has no bindings; cleans up
-						release.properties and any backup POM files -->
-					<!-- goal:prepare (for aggregator modules) has no bindings; prepares
-						for release in SCM (modifying x.x-SNAPSHOT to x.x) -->
-					<!-- goal:update-versions (for aggregator modules) has no bindings;
-						updates versions eg to SNAPSHOT -->
-					<!-- etc; none of the goals has a binding. -->
-				</plugin>
-
-				<plugin>
-					<groupId>net.alchim31.maven</groupId>
-					<artifactId>yuicompressor-maven-plugin</artifactId>
-					<version>1.5.1</version>
-					<configuration>
-						<statistics>true</statistics>
-						<jswarn>false</jswarn>
-						<suffix>.min</suffix>
-						<excludes>
-							<!-- -->
-							<exclude>**/*.nocompress.js</exclude>
-							<!-- select 2 -->
-							<exclude>**/i18n/*.js</exclude>
-							<exclude>**/select2*.js</exclude>
-							<!-- datetime picker -->
-							<exclude>**/moment-with-locales.js</exclude>
-							<exclude>**/moment-with-locales.min.js</exclude>
-							<exclude>**/tempusdominus-bootstrap-4.js</exclude>
-							<exclude>**/tempusdominus-bootstrap-4.min.js</exclude>
-							<!-- boostrap growl -->
-							<exclude>**/bootstrap-growl.js</exclude>
-							<exclude>**/bootstrap-growl.min.js</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>compress</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
-
 
 		<!-- build plugins; apply to all inheriting modules. Note that some plugins
 			also come from the "super-POM" for the default bindings. For example, in
@@ -159,21 +104,16 @@
 			and deploy plugins are automatically included because they provide the default
 			bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
 		<plugins>
-
 			<!-- run using: mvn org.apache.rat:apache-rat-plugin:check -->
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
+				<inherited>true</inherited>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<!-- overrides the default ('clean verify') -->
-					<preparationGoals>clean install</preparationGoals>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
+				<inherited>true</inherited>
 			</plugin>
 		</plugins>
 	</build>
