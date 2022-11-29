@@ -35,101 +35,26 @@
     </description>
 
 	<properties>
-
-		<causeway.skipTests>false</causeway.skipTests>
-		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
-
+	
 		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
-
-		<jar-plugin.automaticModuleName>org.apache.causeway.core</jar-plugin.automaticModuleName>
+		
 		<git-plugin.propertiesDir>org/apache/causeway/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
 		<dependency.locations.enabled>false</dependency.locations.enabled>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
 		<checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
 		<pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
 
-		<license.additional-notes>In addition, Apache Causeway uses some
-			JavaScript libraries:
-
-			* Twitter Bootstrap, licensed under MIT [1]
-			*
-			Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
-			*
-			LiveQuery (JQuery plugin), licensed under MIT license [3]
-			* Wicket
-			Bootstrap, licenced under ASL 2 [4]
-			* Bootstrap Datetimepicker,
-			licensed under MIT licence [5]
-			* Moment.js, licenced under MIT licence
-			[6]
-
-			[1] https://github.com/twbs/bootstrap/blob/master/LICENSE
-			[2]
-			https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
-			[3]
-			https://github.com/brandonaaron/livequery#license
-			[4]
-			https://github.com/l0rdn1kk0n/wicket-bootstrap
-			[5]
-			https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
-			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
-
 	</properties>
 
 	<pluginRepositories>
-		<pluginRepository>
-			<id>DataNucleus_2</id>
-			<url>https://www.datanucleus.org/downloads/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
 	</pluginRepositories>
 
 	<repositories>
-		<repository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>https://repo.maven.apache.org/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Apache Repository</id>
-			<url>https://repository.apache.org/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<!-- <repository> <id>Spring Milestones</id> <url>https://repo.spring.io/milestone/</url>
-			<snapshots> <enabled>false</enabled> </snapshots> </repository> -->
-
-		<!-- required for RestEasy -->
-		<repository>
-			<id>JBoss Public Release</id>
-			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>sonatype-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
 	</repositories>
-
 
 	<build>
 		<outputDirectory>${project.build.directory}/classes</outputDirectory>
@@ -137,20 +62,6 @@
 
 		<pluginManagement>
 			<plugins>
-
-				<!-- IDE support for Eclipse (if not using m2e). (NetBeans 6.7+ and IDEA
-					7.0+ also have built-in support -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-eclipse-plugin</artifactId>
-					<version>${maven-eclipse-plugin.version}</version>
-					<configuration>
-						<downloadSources>true</downloadSources>
-						<downloadJavadocs>true</downloadJavadocs>
-						<projectNameTemplate>[groupId].[artifactId]</projectNameTemplate>
-					</configuration>
-					<!-- use mvn eclipse:eclipse (no goals bound to phases) -->
-				</plugin>
 
 				<!-- Compile -->
 				<plugin>
