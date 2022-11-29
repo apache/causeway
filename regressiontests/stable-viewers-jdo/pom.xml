@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-stable-viewers-jdo</artifactId>
-
 	<name>Apache Causeway - Regression Tests (stable) - Viewers JDO</name>
+	
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.viewers.jdo</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable/viewers/jdo</git-plugin.propertiesDir>
+	</properties>
 
 	<dependencies>
 

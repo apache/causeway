@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-stable</artifactId>
-
 	<name>Apache Causeway - Regression Tests (stable)</name>
+	
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable</git-plugin.propertiesDir>
+	</properties>
 
 	<dependencies>
 

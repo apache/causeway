@@ -70,7 +70,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
-		<!-- PLUGIN DEPENDENCIES -->
+		<!-- PLUGINS -->
+
+		<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
+		<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
+		<datanucleus-maven-plugin.verbose>false</datanucleus-maven-plugin.verbose>
+		<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
 		
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
@@ -106,7 +111,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
         <datanucleus-rdbms.version>6.0.2</datanucleus-rdbms.version>
 
         <datatables.version>1.13.1</datatables.version> <!-- keep in sync with DatatablesDotNet -->
@@ -718,7 +722,53 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <artifactId>clirr-maven-plugin</artifactId>
                     <version>2.8</version>
                 </plugin>
-            </plugins>
+				<plugin>
+					<groupId>org.datanucleus</groupId>
+					<artifactId>datanucleus-maven-plugin</artifactId>
+					<version>${datanucleus-maven-plugin.version}</version>
+					<configuration>
+						<fork>${datanucleus-maven-plugin.fork}</fork>
+						<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
+						<verbose>${datanucleus-maven-plugin.verbose}</verbose>
+					</configuration>
+					<executions>
+						<execution>
+							<id>process-classes</id>
+							<phase>process-classes</phase>
+							<goals>
+								<goal>enhance</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>process-test-classes</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>test-enhance</goal>
+							</goals>
+							<configuration>
+								<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>org.datanucleus</groupId>
+							<artifactId>datanucleus-core</artifactId>
+							<version>${datanucleus-core.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.datanucleus</groupId>
+							<artifactId>datanucleus-api-jdo</artifactId>
+							<version>${datanucleus-api-jdo.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.datanucleus</groupId>
+							<artifactId>datanucleus-jodatime</artifactId>
+							<version>${datanucleus-jodatime.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
         </pluginManagement>
         <plugins>
             <!--  We want to package up license resources in the JARs produced  -->
@@ -1020,6 +1070,23 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </modules>
         </profile>
         <!--  END SNIPPET: release-profile  -->
+		<profile>
+			<id>causeway-app-starter-datanucleusenhance</id>
+			<activation>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-maven-plugin</artifactId>
+						<inherited>true</inherited>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
         <profile>
             <id>only-eclipse</id>
             <activation>
