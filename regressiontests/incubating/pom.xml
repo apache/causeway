@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-incubating</artifactId>
-
 	<name>Apache Causeway - Regression Tests (incubating)</name>
+	
+	<properties>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
 	<dependencies>
 		<!-- causeway-regressiontests-stable has the domain to test against -->

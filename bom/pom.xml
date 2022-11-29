@@ -57,17 +57,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.2.5</minimalMavenBuildVersion>
-        <minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
-
-        <java.version>17</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
-        <surefire.version>3.0.0-M7</surefire.version>
-
-        <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.7.0</maven.plugin.tools.version>
+        <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
+        <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
+        <maven.compiler.release>17</maven.compiler.release>
+        
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <causeway.skipTests>false</causeway.skipTests>
@@ -76,6 +69,20 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.build.outputTimestamp>2022-10-14T12:04:02Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
+
+
+		<!-- PLUGINS -->
+
+		<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
+		<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
+		<datanucleus-maven-plugin.verbose>false</datanucleus-maven-plugin.verbose>
+		<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
+		
+		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+		<maven-surefire-report-plugin.version>3.0.0-M7</maven-surefire-report-plugin.version>
+        <!--  for surefire, failsafe and surefire-report  -->
+        <maven.plugin.tools.version>3.7.0</maven.plugin.tools.version>
 
         <!-- LIBRARY DEPENDENCIES -->
         
@@ -105,7 +112,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
         <datanucleus-rdbms.version>6.0.2</datanucleus-rdbms.version>
 
         <datatables.version>1.13.1</datatables.version> <!-- keep in sync with DatatablesDotNet -->
@@ -339,8 +345,31 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.10.1</version>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+								<version>${lombok.version}</version>
+							</path>
+						</annotationProcessorPaths>
+					</configuration>
+					<!-- goal:compile binds to phase:compile -->
+					<!-- goal:testCompile binds to phase:test-compile -->
                 </plugin>
+				<plugin>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<version>0.15.1</version>
+					<configuration>
+						<removeOldOutput>true</removeOldOutput>
+						<episode>true</episode>
+					</configuration>
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
@@ -441,7 +470,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         </pluginManagementExcludes>
                     </configuration>
                 </plugin>
-                <!--  START SNIPPET: release-plugin-configuration  -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -452,7 +480,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <releaseProfiles>apache-release</releaseProfiles>
                     </configuration>
                 </plugin>
-                <!--  END SNIPPET: release-plugin-configuration  -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
@@ -479,14 +506,31 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <version>3.12.1</version>    <!--bumped-->
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.2.1</version>
-                </plugin>
+					<!-- Packaging: source jars of main and test code -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
+					<configuration>
+						<includePom>true</includePom>
+					</configuration>
+					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
+					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
+						but doesn't seem to so bound explicitly -->
+					<executions>
+						<execution>
+							<id>package-jars</id>
+							<phase>package</phase>
+							<goals>
+								<goal>jar</goal>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire.version}</version>
+                    <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <!-- override defaults and include everything unless explicitly excluded -->
                         <includes>
@@ -509,10 +553,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>${surefire.version}</version>
-                </plugin>
+					<!-- Test Reporting -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>${maven-surefire-report-plugin.version}</version>
+					<!-- goal:report is a report so is configured in the reporting section;
+						invokes phase:test before running itself -->
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
@@ -705,7 +752,53 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <artifactId>clirr-maven-plugin</artifactId>
                     <version>2.8</version>
                 </plugin>
-            </plugins>
+				<plugin>
+					<groupId>org.datanucleus</groupId>
+					<artifactId>datanucleus-maven-plugin</artifactId>
+					<version>${datanucleus-maven-plugin.version}</version>
+					<configuration>
+						<fork>${datanucleus-maven-plugin.fork}</fork>
+						<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
+						<verbose>${datanucleus-maven-plugin.verbose}</verbose>
+					</configuration>
+					<executions>
+						<execution>
+							<id>process-classes</id>
+							<phase>process-classes</phase>
+							<goals>
+								<goal>enhance</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>process-test-classes</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>test-enhance</goal>
+							</goals>
+							<configuration>
+								<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>org.datanucleus</groupId>
+							<artifactId>datanucleus-core</artifactId>
+							<version>${datanucleus-core.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.datanucleus</groupId>
+							<artifactId>datanucleus-api-jdo</artifactId>
+							<version>${datanucleus-api-jdo.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.datanucleus</groupId>
+							<artifactId>datanucleus-jodatime</artifactId>
+							<version>${datanucleus-jodatime.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
         </pluginManagement>
         <plugins>
             <!--  We want to package up license resources in the JARs produced  -->
@@ -1007,6 +1100,23 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             </modules>
         </profile>
         <!--  END SNIPPET: release-profile  -->
+		<profile>
+			<id>causeway-app-starter-datanucleusenhance</id>
+			<activation>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.datanucleus</groupId>
+						<artifactId>datanucleus-maven-plugin</artifactId>
+						<inherited>true</inherited>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
         <profile>
             <id>only-eclipse</id>
             <activation>

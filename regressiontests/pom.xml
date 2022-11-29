@@ -15,10 +15,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.app</groupId>
-		<artifactId>causeway-app-starter-parent</artifactId>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-bom</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../starters/pom.xml</relativePath>
+		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.regressiontests</groupId>
@@ -27,18 +27,13 @@
 	<name>Apache Causeway - Regression Tests</name>
 	<description>
         Collection of JUnit tests covering core functionalities of the framework.
-        (Targeted for JVM 17+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-
-		<maven.compiler.release>17</maven.compiler.release>
-
 		<skip.regressionTests>false</skip.regressionTests>
 		<skipTests>${skip.regressionTests}</skipTests>
-
 	</properties>
 
 	<build>
@@ -59,11 +54,9 @@
 			</resource>
 		</resources>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-				<version>0.15</version>
 
 				<!-- APACHE CAUSEWAY customisation 4/7: start -->
 				<configuration>
@@ -148,13 +141,41 @@
 		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
+			
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.testing</groupId>
+				<artifactId>causeway-testing</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.valuetypes</groupId>
+				<artifactId>causeway-valuetypes</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+                <groupId>org.apache.causeway.viewer</groupId>
+                <artifactId>causeway-viewer-wicket</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
 
 			<dependency>
 				<groupId>org.apache.causeway.regressiontests</groupId>

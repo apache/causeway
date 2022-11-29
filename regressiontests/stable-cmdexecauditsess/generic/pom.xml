@@ -22,6 +22,11 @@
     <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
     <name>Apache Causeway - Regression Tests (stable) - Cmd/Exec/Audit/Session - Generic</name>
 
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.cmdexecauditsess.generic</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/cmdexecauditsess/generic</git-plugin.propertiesDir>
+	</properties>
+	
     <dependencies>
 
         <dependency>

@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-stable-viewers-jpa</artifactId>
-
 	<name>Apache Causeway - Regression Tests (stable) - Viewers JPA</name>
+	
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.viewers.jpa</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable/viewers/jpa</git-plugin.propertiesDir>
+	</properties>
 
 	<dependencies>
 
