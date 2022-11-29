@@ -61,19 +61,6 @@
 		<plugins>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<forkCount>1C</forkCount>
-					<reuseForks>true</reuseForks>
-					<systemPropertyVariables>
-						<!-- allows regression tests to reduce verbosity when run with surefire -->
-						<isRunningWithSurefire>true</isRunningWithSurefire>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
 				<version>0.15</version>

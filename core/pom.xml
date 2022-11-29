@@ -63,16 +63,6 @@
 		<pluginManagement>
 			<plugins>
 
-				<!-- Test Reporting -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-report-plugin</artifactId>
-					<version>${maven-surefire-plugin.version}</version>
-					<!-- goal:report is a report so is configured in the reporting section;
-						invokes phase:test before running itself -->
-				</plugin>
-
-
 				<!-- Packaging: source jars of main and test code -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

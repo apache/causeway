@@ -57,17 +57,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.2.5</minimalMavenBuildVersion>
-        <minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
-
-        <java.version>11</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
+        <minimalJavaBuildVersion>11</minimalJavaBuildVersion>
         <maven.compiler.release>11</maven.compiler.release>
-        <surefire.version>3.0.0-M7</surefire.version>
-
-        <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.7.0</maven.plugin.tools.version>
+        
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <causeway.skipTests>false</causeway.skipTests>
@@ -76,6 +69,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.build.outputTimestamp>2022-10-14T12:04:02Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
+
+		<!-- PLUGIN DEPENDENCIES -->
+		
+		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+		<maven-surefire-report-plugin.version>3.0.0-M7</maven-surefire-report-plugin.version>
+        <!--  for surefire, failsafe and surefire-report  -->
+        <maven.plugin.tools.version>3.7.0</maven.plugin.tools.version>
 
         <!-- LIBRARY DEPENDENCIES -->
         
@@ -480,7 +480,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire.version}</version>
+                    <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <!-- override defaults and include everything unless explicitly excluded -->
                         <includes>
@@ -503,10 +503,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>${surefire.version}</version>
-                </plugin>
+					<!-- Test Reporting -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>${maven-surefire-report-plugin.version}</version>
+					<!-- goal:report is a report so is configured in the reporting section;
+						invokes phase:test before running itself -->
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
