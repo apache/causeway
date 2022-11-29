@@ -31,9 +31,6 @@ under the License.
     <name>Apache Causeway Tst - FakeData (integ tests)</name>
     
     <properties>
-        <!-- TODO: to reinstate -->
-        <skipTests>true</skipTests>
-
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
