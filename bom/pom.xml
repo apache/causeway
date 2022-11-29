@@ -323,6 +323,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</snapshots>
 		</pluginRepository>
     </pluginRepositories>
+    <distributionManagement>
+        <repository>
+            <id>apache.releases.https</id>
+            <name>Apache Release Distribution Repository</name>
+            <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>apache.snapshots.https</id>
+            <name>${distMgmtSnapshotsName}</name>
+            <url>${distMgmtSnapshotsUrl}</url>
+        </snapshotRepository>
+    </distributionManagement>
     <build>
         <pluginManagement>
             <plugins>
@@ -478,7 +490,20 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <useReleaseProfile>false</useReleaseProfile>
                         <goals>deploy</goals>
                         <releaseProfiles>apache-release</releaseProfiles>
-                    </configuration>
+						<!-- overrides the default ('clean verify') -->
+						<preparationGoals>clean install</preparationGoals>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<localCheckout>true</localCheckout>
+						<pushChanges>false</pushChanges>
+						<waitBeforeTagging>1</waitBeforeTagging>
+						<!-- goal:clean (for aggregator modules) has no bindings; cleans up
+							release.properties and any backup POM files -->
+						<!-- goal:prepare (for aggregator modules) has no bindings; prepares
+							for release in SCM (modifying x.x-SNAPSHOT to x.x) -->
+						<!-- goal:update-versions (for aggregator modules) has no bindings;
+							updates versions eg to SNAPSHOT -->
+						<!-- etc; none of the goals has a binding. -->
+					</configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -742,6 +767,38 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         </licenseFamilies>
                     </configuration>
                 </plugin>
+				<plugin>
+					<groupId>net.alchim31.maven</groupId>
+					<artifactId>yuicompressor-maven-plugin</artifactId>
+					<version>1.5.1</version>
+					<configuration>
+						<statistics>true</statistics>
+						<jswarn>false</jswarn>
+						<suffix>.min</suffix>
+						<excludes>
+							<!-- -->
+							<exclude>**/*.nocompress.js</exclude>
+							<!-- select 2 -->
+							<exclude>**/i18n/*.js</exclude>
+							<exclude>**/select2*.js</exclude>
+							<!-- datetime picker -->
+							<exclude>**/moment-with-locales.js</exclude>
+							<exclude>**/moment-with-locales.min.js</exclude>
+							<exclude>**/tempusdominus-bootstrap-4.js</exclude>
+							<exclude>**/tempusdominus-bootstrap-4.min.js</exclude>
+							<!-- boostrap growl -->
+							<exclude>**/bootstrap-growl.js</exclude>
+							<exclude>**/bootstrap-growl.min.js</exclude>
+						</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compress</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-docck-plugin</artifactId>
@@ -1354,18 +1411,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <url>http://github.com/apache/causeway</url>
         <tag>HEAD</tag>
     </scm>
-    <distributionManagement>
-        <repository>
-            <id>apache.releases.https</id>
-            <name>Apache Release Distribution Repository</name>
-            <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
-        </repository>
-        <snapshotRepository>
-            <id>apache.snapshots.https</id>
-            <name>${distMgmtSnapshotsName}</name>
-            <url>${distMgmtSnapshotsUrl}</url>
-        </snapshotRepository>
-    </distributionManagement>
     <inceptionYear>2010</inceptionYear>
     <issueManagement>
         <system>Jira</system>
