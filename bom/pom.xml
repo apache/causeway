@@ -1005,24 +1005,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugins>
                     <!-- APACHE CAUSEWAY customisation 17/21: start -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-release-artifacts</id>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
                         <version>1.18.20.0</version>
@@ -1168,9 +1150,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
+
                 </plugins>
             </build>
             <!-- APACHE CAUSEWAY customisation 20/21: start -->
