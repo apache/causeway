@@ -63,37 +63,6 @@
 		<pluginManagement>
 			<plugins>
 
-				<!-- Compile -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${maven-compiler-plugin.version}</version>
-					<configuration>
-						<showDeprecation>false</showDeprecation>
-						<showWarnings>false</showWarnings>
-						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
-						<annotationProcessorPaths>
-							<path>
-								<groupId>org.projectlombok</groupId>
-								<artifactId>lombok</artifactId>
-								<version>${lombok.version}</version>
-							</path>
-						</annotationProcessorPaths>
-					</configuration>
-					<!-- goal:compile binds to phase:compile -->
-					<!-- goal:testCompile binds to phase:test-compile -->
-				</plugin>
-
-				<!-- Test Reporting -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-report-plugin</artifactId>
-					<version>${maven-surefire-plugin.version}</version>
-					<!-- goal:report is a report so is configured in the reporting section;
-						invokes phase:test before running itself -->
-				</plugin>
-
-
 				<!-- Packaging: source jars of main and test code -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -219,11 +188,6 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
 			</plugin>
 
 			<plugin>
