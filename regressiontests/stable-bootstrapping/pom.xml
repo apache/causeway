@@ -22,8 +22,12 @@
 	</parent>
 
 	<artifactId>causeway-regressiontests-stable-bootstrapping</artifactId>
-
 	<name>Apache Causeway - Regression Tests (stable) - Bootstrapping</name>
+	
+	<properties>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
 	<dependencies>
 		<dependency>

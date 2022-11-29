@@ -390,7 +390,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-release-plugin.version>3.0.0-M7</maven-release-plugin.version>
-        <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
         <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
@@ -547,13 +546,26 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.2.2</version>
                     <configuration>
+						<skipIfEmpty>true</skipIfEmpty>
                         <archive>
                             <manifest>
                                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
-                        </archive>
-                    </configuration>
+							<manifestEntries>
+								<Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
+								<Implementation-Vendor-Id>org.apache.causeway</Implementation-Vendor-Id>
+								<Implementation-Vendor>Apache Causeway™ Project</Implementation-Vendor>
+								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
+								<SCM-Revision>${git.commit.id.abbrev}</SCM-Revision>
+								<!-- required for DN plugin.xml loading -->
+								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
+								<!-- no requirement as of yet. <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>2.0.0-SNAPSHOT</Bundle-Version>
+									<Bundle-Vendor>Apache Causeway™ Project</Bundle-Vendor> -->
+							</manifestEntries>
+						</archive>
+					</configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -652,11 +664,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>${surefire.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>3.3.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
