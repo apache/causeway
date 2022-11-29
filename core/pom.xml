@@ -63,30 +63,6 @@
 		<pluginManagement>
 			<plugins>
 
-				<!-- Packaging: source jars of main and test code -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>${maven-source-plugin.version}</version>
-					<configuration>
-						<includePom>true</includePom>
-					</configuration>
-					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
-					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
-						but doesn't seem to so bound explicitly -->
-					<executions>
-						<execution>
-							<id>package-jars</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar</goal>
-								<goal>test-jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-
-
 				<plugin>
 					<groupId>pl.project13.maven</groupId>
 					<artifactId>git-commit-id-plugin</artifactId>

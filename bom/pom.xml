@@ -72,6 +72,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
 		<!-- PLUGIN DEPENDENCIES -->
 		
+		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 		<maven-surefire-report-plugin.version>3.0.0-M7</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
@@ -435,7 +436,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         </pluginManagementExcludes>
                     </configuration>
                 </plugin>
-                <!--  START SNIPPET: release-plugin-configuration  -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -446,7 +446,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <releaseProfiles>apache-release</releaseProfiles>
                     </configuration>
                 </plugin>
-                <!--  END SNIPPET: release-plugin-configuration  -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
@@ -473,10 +472,27 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <version>3.12.1</version>    <!--bumped-->
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.2.1</version>
-                </plugin>
+					<!-- Packaging: source jars of main and test code -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
+					<configuration>
+						<includePom>true</includePom>
+					</configuration>
+					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
+					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
+						but doesn't seem to so bound explicitly -->
+					<executions>
+						<execution>
+							<id>package-jars</id>
+							<phase>package</phase>
+							<goals>
+								<goal>jar</goal>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
