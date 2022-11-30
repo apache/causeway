@@ -136,11 +136,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.commons</groupId>
-			<artifactId>causeway-commons</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
 		</dependency>
