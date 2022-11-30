@@ -33,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Contributes a <code>siblingExecutions</code> collection to {@link ExecutionLogEntry}.
+ *
  * @since 2.0 {@index}
  */
 @Collection(

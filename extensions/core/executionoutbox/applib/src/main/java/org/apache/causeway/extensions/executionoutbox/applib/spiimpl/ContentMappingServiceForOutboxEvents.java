@@ -35,6 +35,7 @@ import org.apache.causeway.schema.ixn.v2.InteractionsDto;
 import lombok.val;
 
 /**
+ * Implementation of {@link ContentMappingService} that is responsible for serializing a list of
  * @since 2.0 {@index}
  */
 @Service

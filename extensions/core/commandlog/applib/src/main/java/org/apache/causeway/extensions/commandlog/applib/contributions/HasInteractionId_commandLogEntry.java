@@ -36,6 +36,17 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Contributes a <code>commandLogEntry</code> property to any object implementing {@link HasInteractionId}, in other
+ * words the command giving rise or related to the implementing object.
+ *
+ * <p>
+ *     For example, the <code>AuditTrailEntry</code> entity (in the <i>audit trail</i> extension), or the
+ *     <code>ExecutionLogEntry</code> entity (in the <i>execution log</i> extension) both implement
+ *     {@link HasInteractionId}.
+ * </p>
+ *
+ *
+ *
  * @since 2.x {@index}
  */
 @Property(
