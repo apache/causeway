@@ -22,6 +22,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
+
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -31,7 +36,6 @@ import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.schema.common.v2.OidDto;
 
-import jakarta.inject.Named;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -45,6 +49,7 @@ import lombok.val;
  */
 @Named(Bookmark.LOGICAL_TYPE_NAME)
 @org.apache.causeway.applib.annotation.Value
+@XmlJavaTypeAdapter(Bookmark.JaxbToStringAdapter.class) // for JAXB view model support
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 
@@ -220,6 +225,20 @@ public final class Bookmark implements Oid {
      */
     public boolean isEmpty() {
         return identifier==null;
+    }
+
+    // -- UTILITY
+
+    public static class JaxbToStringAdapter extends XmlAdapter<String, Bookmark> {
+        @Override
+        public Bookmark unmarshal(final String literal) {
+            return Bookmark.parse(literal).orElse(null);
+        }
+
+        @Override
+        public String marshal(final Bookmark bookmark) {
+            return bookmark != null ? bookmark.stringify() : null;
+        }
     }
 
     // -- HELPER

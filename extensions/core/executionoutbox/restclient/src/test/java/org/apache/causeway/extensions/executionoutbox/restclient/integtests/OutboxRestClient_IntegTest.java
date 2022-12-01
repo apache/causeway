@@ -26,7 +26,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -142,8 +141,6 @@ public class OutboxRestClient_IntegTest  {
     }
 
     @Test
-    //TODO[ISIS-3275] fails with CXF exception - Problem with reading the data, class org.apache.causeway.schema.ixn.v2.InteractionsDto
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     void pending_when_many() {
 
         // given
@@ -164,8 +161,6 @@ public class OutboxRestClient_IntegTest  {
     }
 
     @Test
-    //TODO[ISIS-3275] fails with CXF exception - Problem with reading the data, class org.apache.causeway.schema.ixn.v2.InteractionsDto
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     void scenario() {
 
         // given
