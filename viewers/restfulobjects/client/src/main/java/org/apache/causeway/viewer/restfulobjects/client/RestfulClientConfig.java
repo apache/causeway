@@ -29,14 +29,19 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @since 2.0 {@index}
  */
 @XmlRootElement(name="restful-client-config")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
+@Data @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RestfulClientConfig {
 
     @XmlElement(name="restfulBase")
@@ -55,6 +60,7 @@ public class RestfulClientConfig {
     private boolean useRequestDebugLogging;
 
     @XmlTransient
-    private List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
+    @Builder.Default
+    private final List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
 
 }

@@ -51,14 +51,15 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  * <blockquote><pre>
-RestfulClientConfig clientConfig = new RestfulClientConfig();
-clientConfig.setRestfulBase("http://localhost:8080/helloworld/restful/");
+RestfulClientConfig clientConfig = RestfulClientConfig.builder();
+.restfulBase("http://localhost:8080/helloworld/restful/")
 // setup basic-auth
-clientConfig.setUseBasicAuth(true); // default = false
-clientConfig.setRestfulAuthUser("sven");
-clientConfig.setRestfulAuthPassword("pass");
+.useBasicAuth(true) // default = false
+.restfulAuthUser("sven")
+.restfulAuthPassword("pass")
 // setup request/response debug logging
-clientConfig.setUseRequestDebugLogging(true); // default = false
+.useRequestDebugLogging(true) // default = false
+.build();
 
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
  * </pre></blockquote>

@@ -88,22 +88,19 @@ public class RestEndpointService {
 
         log.debug("new restful client created for {}", restRootPath);
 
-        val clientConfig = new RestfulClientConfig();
-        clientConfig.setRestfulBase(restRootPath);
-        // setup basic-auth
-        clientConfig.setUseBasicAuth(true); // default = false
-        clientConfig.setRestfulAuthUser(LdapConstants.SVEN_PRINCIPAL);
-        clientConfig.setRestfulAuthPassword("pass");
-        // setup request/response debug logging
-        clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
-        // register additional filter if any
-        additionalFilters.forEach(clientConfig.getClientConversationFilters()::add);
-
-        //debug
-        //clientConfig.setUseRequestDebugLogging(true);
+        val clientConfig = RestfulClientConfig.builder()
+                .restfulBase(restRootPath)
+                // setup basic-auth
+                .useBasicAuth(true)
+                .restfulAuthUser(LdapConstants.SVEN_PRINCIPAL)
+                .restfulAuthPassword("pass")
+                // setup request/response debug logging
+                .useRequestDebugLogging(useRequestDebugLogging)
+                // register additional filter if any
+                .clientConversationFilters(additionalFilters.toList())
+                .build();
 
         val client = RestfulClient.ofConfig(clientConfig);
-
         return client;
     }
 

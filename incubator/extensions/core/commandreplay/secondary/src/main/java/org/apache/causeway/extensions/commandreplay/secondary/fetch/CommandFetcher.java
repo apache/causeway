@@ -131,14 +131,15 @@ public class CommandFetcher {
             final SecondaryConfig secondaryConfig,
             final boolean useRequestDebugLogging) {
 
-        val clientConfig = new RestfulClientConfig();
-        clientConfig.setRestfulBase(secondaryConfig.getPrimaryBaseUrlRestful());
+        val clientConfig = RestfulClientConfig.builder()
+        .restfulBase(secondaryConfig.getPrimaryBaseUrlRestful())
         // setup basic-auth
-        clientConfig.setUseBasicAuth(true);
-        clientConfig.setRestfulAuthUser(secondaryConfig.getPrimaryUser());
-        clientConfig.setRestfulAuthPassword(secondaryConfig.getPrimaryPassword());
+        .useBasicAuth(true)
+        .restfulAuthUser(secondaryConfig.getPrimaryUser())
+        .restfulAuthPassword(secondaryConfig.getPrimaryPassword())
         // setup request/response debug logging
-        clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
+        .useRequestDebugLogging(useRequestDebugLogging)
+        .build();
 
         val client = RestfulClient.ofConfig(clientConfig);
         return client;
