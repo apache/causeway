@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.inject.Named;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
@@ -46,6 +48,7 @@ import lombok.val;
  */
 @Named(Bookmark.LOGICAL_TYPE_NAME)
 @org.apache.causeway.applib.annotation.Value
+@XmlJavaTypeAdapter(Bookmark.JaxbToStringAdapter.class) // for JAXB view model support
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 
@@ -221,6 +224,20 @@ public final class Bookmark implements Oid {
      */
     public boolean isEmpty() {
         return identifier==null;
+    }
+
+    // -- UTILITY
+
+    public static class JaxbToStringAdapter extends XmlAdapter<String, Bookmark> {
+        @Override
+        public Bookmark unmarshal(final String literal) {
+            return Bookmark.parse(literal).orElse(null);
+        }
+
+        @Override
+        public String marshal(final Bookmark bookmark) {
+            return bookmark != null ? bookmark.stringify() : null;
+        }
     }
 
     // -- HELPER
