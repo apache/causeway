@@ -20,39 +20,17 @@
 
 package org.apache.causeway.extensions.executionoutbox.restclient.api.delete;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import org.apache.causeway.extensions.executionoutbox.restclient.api.Jsonable;
-
 import lombok.Getter;
 
-public class DeleteMessage implements Jsonable {
+@lombok.Value
+public class DeleteMessage {
 
-    private static final ObjectWriter writer;
-
-    static {
-        final ObjectMapper mapper = new ObjectMapper();
-        writer = mapper.writer().withDefaultPrettyPrinter();
-    }
-
-    @Getter
-    private final StringValue interactionId;
-    @Getter
-    private final IntValue sequence;
+    @Getter private final StringValue interactionId;
+    @Getter private final IntValue sequence;
 
     public DeleteMessage(final String interactionId, final int sequence) {
         this.interactionId = new StringValue(interactionId);
         this.sequence = new IntValue(sequence);
-    }
-
-    public String asJson() {
-        try {
-            return writer.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

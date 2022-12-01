@@ -20,13 +20,12 @@
 
 package org.apache.causeway.extensions.executionoutbox.restclient.api.delete;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class StringValue {
 
     public final String value;
-
-    public StringValue(final String value) {
-        this.value = value;
-    }
 
     @Override
     public String toString() {

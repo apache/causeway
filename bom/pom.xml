@@ -241,10 +241,17 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         </dependencies>
     </dependencyManagement>
     <repositories>
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
         <repository>
 			<!-- temporary till release of cxf 4.0.0, shiro 2.0.0 and wicket 10.0.0 -->
             <id>apache.snapshots</id>
-            <name>Shiro Snapshot Repository</name>
             <url>https://repository.apache.org/content/groups/snapshots/</url>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
@@ -257,36 +264,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		</repository>
         <repository>
 			<!-- temporary till release of wicket-stuff 10.0.0 -->
-			<id>wicketstuff-core-snapshots</id>
+			<id>sonatype-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>		
-		</repository>
-        <!-- breaks dependabot run: timeout due to repo not accessible
-        <repository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>https://repository.apache.org/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        -->
-		<repository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>https://repo.maven.apache.org/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Apache Repository</id>
-			<url>https://repository.apache.org/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 		</repository>
 		<repository>
 			<!-- required for RestEasy -->
@@ -296,25 +278,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>sonatype-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
     </repositories>
     <pluginRepositories>
-        <!-- breaks dependabot run: timeout due to repo not accessible
-        <pluginRepository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>https://repository.apache.org/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-        -->
 		<pluginRepository>
 			<id>DataNucleus_2</id>
 			<url>https://www.datanucleus.org/downloads/maven2/</url>

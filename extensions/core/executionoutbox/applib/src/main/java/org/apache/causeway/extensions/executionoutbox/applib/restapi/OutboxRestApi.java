@@ -62,8 +62,6 @@ public class OutboxRestApi  {
      * <p>
      *     The {@link ContentMappingServiceForOutboxEvents} will then serialize the resultant {@link OutboxEvents} view model into XML.
      * </p>
-     *
-     * @return
      */
     @Action(
             semantics = SemanticsOf.SAFE,

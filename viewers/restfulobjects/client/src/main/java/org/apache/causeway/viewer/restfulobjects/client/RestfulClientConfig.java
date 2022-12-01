@@ -20,7 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import jakarta.ws.rs.ProcessingException;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -29,14 +32,19 @@ import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @since 2.0 {@index}
  */
 @XmlRootElement(name="restful-client-config")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
+@Data @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RestfulClientConfig {
 
     @XmlElement(name="restfulBase")
@@ -51,10 +59,41 @@ public class RestfulClientConfig {
     @XmlElement(name="restfulAuthPassword")
     private String restfulAuthPassword;
 
+    /**
+     * If enabled, logs conversation (request/response) details.
+     */
     @XmlElement(name="useRequestDebugLogging")
     private boolean useRequestDebugLogging;
 
+    /**
+     * Set the connect timeout.
+     * <p>
+     * Value {@code 0} represents infinity. Negative values are not allowed.
+     * <p>
+     * The default value is infinity (0).
+     * @see javax.ws.rs.client.ClientBuilder#connectTimeout(long, TimeUnit)
+     */
+    @XmlElement(name="connectTimeoutInMillis")
+    @Builder.Default
+    private long connectTimeoutInMillis = 0L;
+
+    /**
+     * Set the read timeout.
+     * <p>
+     * The value is the timeout to read a response. If the server doesn't respond within the defined timeframe,
+     * {@link ProcessingException} is thrown with {@link TimeoutException} as a cause.
+     * <p>
+     * Value {@code 0} represents infinity. Negative values are not allowed.
+     * <p>
+     * The default value is infinity (0).
+     * @see javax.ws.rs.client.ClientBuilder#readTimeout(long, TimeUnit)
+     */
+    @XmlElement(name="readTimeoutInMillis")
+    @Builder.Default
+    private long readTimeoutInMillis = 0L;
+
     @XmlTransient
-    private List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
+    @Builder.Default
+    private final List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
 
 }

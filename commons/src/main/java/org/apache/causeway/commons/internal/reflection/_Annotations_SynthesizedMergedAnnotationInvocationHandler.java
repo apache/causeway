@@ -236,7 +236,8 @@ implements InvocationHandler {
                         additional.get(), null, annotationType);
 
         val classLoader = annotationType.getClassLoader();
-        //TODO[ISIS-3275]
+        /* removal of SynthesizedAnnotation in Spring 6
+         * https://github.com/spring-projects/spring-framework/commit/69f23095b810615862336d35d878dda63f7b4fca */
         val interfaces = //isVisible(classLoader, SynthesizedAnnotation.class)
                 //? new Class<?>[] {annotationType, SynthesizedAnnotation.class}
                 //:
@@ -245,14 +246,14 @@ implements InvocationHandler {
         return Optional.of(proxy);
     }
 
-    private static boolean isVisible(final ClassLoader classLoader, final Class<?> interfaceClass) {
-        try {
-            return Class.forName(interfaceClass.getName(), false, classLoader) == interfaceClass;
-        }
-        catch (ClassNotFoundException ex) {
-            return false;
-        }
-    }
+//    private static boolean isVisible(final ClassLoader classLoader, final Class<?> interfaceClass) {
+//        try {
+//            return Class.forName(interfaceClass.getName(), false, classLoader) == interfaceClass;
+//        }
+//        catch (ClassNotFoundException ex) {
+//            return false;
+//        }
+//    }
 
     /**
      * If annotations from a getter method are competing with annotations from its corresponding field,

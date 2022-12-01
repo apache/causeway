@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.client;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,18 +28,11 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status.Family;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 
 import lombok.NonNull;
 import lombok.val;
@@ -158,9 +149,9 @@ class ResponseDigest<T> {
 
         // see if we can extract the returned representation type (repr-type) from the header
         val contentTypeHeaderString = response.getHeaderString("Content-Type");
-        val reprType = RepresentationTypeSimplifiedV2.parseContentTypeHeaderString(contentTypeHeaderString)
-                .orElse(null);
-        if(reprType==null) {
+
+        val digester = ResponseDigester.forContentTypeHeaderString(contentTypeHeaderString).orElse(null);
+        if(digester==null) {
             entities = Can.empty();
             failureCause = _Exceptions.unrecoverable(String.format(
                     "Invalid REST response, cannot parse header's Content-Type '%s' for the repr-type to use",
@@ -172,13 +163,15 @@ class ResponseDigest<T> {
 
             if(genericType==null) {
                 // when response is a singleton
-                val singleton = readSingle(reprType);
+                log.debug("readSingle({})", digester);
+                val singleton = digester.readSingle(entityType, response);
                 entities = singleton==null
                         ? Can.empty()
                         : Can.ofSingleton(singleton);
             } else {
                 // when response is a list
-                entities = Can.ofCollection(readList(reprType));
+                log.debug("readList({})", digester);
+                entities = Can.ofCollection(digester.readList(entityType, genericType, response));
             }
 
         } catch (Exception e) {
@@ -187,46 +180,6 @@ class ResponseDigest<T> {
         }
 
         return this;
-    }
-
-    private T readSingle(final RepresentationTypeSimplifiedV2 reprType)
-            throws JsonParseException, JsonMappingException, IOException {
-
-        log.debug("readSingle({})", reprType);
-
-        if(reprType.isValue()
-                || reprType.isValues()) {
-            val mapper = new ObjectMapper();
-            val jsonInput = response.readEntity(String.class);
-            val scalarValueDto = mapper.readValue(jsonInput, ScalarValueDtoV2.class);
-            return extractValue(scalarValueDto);
-        }
-        return response.<T>readEntity(entityType);
-    }
-
-    private List<T> readList(final RepresentationTypeSimplifiedV2 reprType)
-            throws JsonParseException, JsonMappingException, IOException {
-
-        log.debug("readList({})", reprType);
-
-        if(reprType.isValues()
-                || reprType.isValue()) {
-            val mapper = new ObjectMapper();
-            val jsonInput = response.readEntity(String.class);
-            final List<ScalarValueDtoV2> scalarValueDtoList =
-                    mapper.readValue(
-                            jsonInput,
-                            mapper.getTypeFactory().constructCollectionType(List.class, ScalarValueDtoV2.class));
-
-            final List<T> resultList = new ArrayList<>(scalarValueDtoList.size());
-            for(val valueBody : scalarValueDtoList) {
-                // explicit loop, for simpler exception propagation
-                resultList.add(extractValue(valueBody));
-            }
-            return resultList;
-
-        }
-        return response.readEntity(genericType);
     }
 
     private String defaultFailureMessage(final Response response) {
@@ -247,12 +200,7 @@ class ResponseDigest<T> {
         return failureMessage;
     }
 
-    // -- VALUE TYPE HANDLING
 
-    private T extractValue(final ScalarValueDtoV2 scalarValueDto)
-            throws JsonParseException, JsonMappingException, IOException {
-        return _Casts.uncheckedCast(scalarValueDto.getValue());
-    }
 
 
 }
