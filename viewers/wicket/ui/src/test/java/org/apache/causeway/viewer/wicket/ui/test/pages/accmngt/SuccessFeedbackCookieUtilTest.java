@@ -18,18 +18,35 @@
  */
 package org.apache.causeway.viewer.wicket.ui.test.pages.accmngt;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.mock.MockWebResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.IExceptionMapper;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import jakarta.servlet.http.HttpServletRequest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
+
+import lombok.val;
 
 class SuccessFeedbackCookieUtilTest {
 
     private ServletWebRequest servletWebRequest;
     private MockWebResponse mockWebResponse;
     private HttpServletRequest mockHttpServletRequest;
-
-    /* TODO[ISIS-3275] no jakarta API support
 
     @BeforeEach
     void setUp() throws Exception {
@@ -67,7 +84,5 @@ class SuccessFeedbackCookieUtilTest {
 
         assertEquals(message, resultRef.get());
     }
-
-    */
 
 }

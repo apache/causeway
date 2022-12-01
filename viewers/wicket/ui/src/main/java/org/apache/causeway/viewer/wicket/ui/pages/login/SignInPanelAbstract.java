@@ -239,13 +239,10 @@ implements HasMetaModelContext {
     }
 
     private String recoverTimezone() {
-        /* TODO[ISIS-3275] no support for jakarta API
-
         val cookie = new CookieUtils().getCookie(timezoneCookieName());
         return cookie!=null
                 ? cookie.getValue()
-                : null;*/
-        return null;
+                : null;
     }
 
     private String timezoneCookieName() {

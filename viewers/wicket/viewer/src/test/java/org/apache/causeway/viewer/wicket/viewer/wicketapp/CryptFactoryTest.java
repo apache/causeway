@@ -18,12 +18,40 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.apache.wicket.ThreadContext;
+import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
+import org.apache.wicket.mock.MockWebResponse;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.IExceptionMapper;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.apache.wicket.util.crypt.ICrypt;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+
+import lombok.val;
+
 /**
  * Requires resource {@code javax/servlet/http/LocalStrings.properties} for Cookie testing.
  */
 class CryptFactoryTest {
-
-    /* TODO[ISIS-3275] no jakarta API support
 
     private ServletWebRequest servletWebRequest;
     private MockWebResponse mockWebResponse;
@@ -130,5 +158,5 @@ class CryptFactoryTest {
         return Arguments.of(
                 displayName, cryptFactory);
     }
-*/
+
 }
