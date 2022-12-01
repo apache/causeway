@@ -138,6 +138,14 @@ public final class Clob implements NamedWithMimeType {
         });
     }
 
+    /**
+     * Shortcut for {@link #tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)}
+     * using {@link StandardCharsets#UTF_8}.
+     */
+    public static Try<Clob> tryReadUtf8(final String name, final CommonMimeType mimeType, final File file) {
+        return tryRead(name, mimeType, file, StandardCharsets.UTF_8);
+    }
+
     // --
 
     public Clob(final String name, final String primaryType, final String subType, final char[] chars) {
@@ -194,8 +202,19 @@ public final class Clob implements NamedWithMimeType {
 
     // -- UTILITIES
 
+    /**
+     * Converts to a {@link Blob}, using given {@link Charset}
+     * for the underlying String to byte[] conversion.
+     */
     public Blob toBlob(final @NonNull Charset charset) {
         return new Blob(getName(), getMimeType(), _Strings.toBytes(getChars().toString(), charset));
+    }
+
+    /**
+     * Shortcut for {@link #toBlob(Charset)} using {@link StandardCharsets#UTF_8}.
+     */
+    public Blob toBlobUtf8() {
+        return toBlob(StandardCharsets.UTF_8);
     }
 
     public void writeCharsTo(final Writer wr) throws IOException {
@@ -223,8 +242,15 @@ public final class Clob implements NamedWithMimeType {
             return; // just ignore
         }
         try(val os = new FileOutputStream(file)){
-            writeCharsTo(new OutputStreamWriter(os, StandardCharsets.UTF_8));
+            writeCharsTo(new OutputStreamWriter(os, charset));
         }
+    }
+
+    /**
+     * Shortcut for {@link #writeTo(File, Charset)} using {@link StandardCharsets#UTF_8}.
+     */
+    public void writeToUtf8(final @Nullable File file) {
+        writeTo(file, StandardCharsets.UTF_8);
     }
 
     @SneakyThrows

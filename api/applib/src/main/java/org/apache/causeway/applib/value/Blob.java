@@ -189,6 +189,10 @@ public final class Blob implements NamedWithMimeType {
 
     // -- UTILITIES
 
+    /**
+     * Converts to a {@link Clob}, using given {@link Charset}
+     * for the underlying byte[] to String conversion.
+     */
     public Clob toClob(final @NonNull Charset charset) {
         return new Clob(getName(), getMimeType(), _Strings.ofBytes(getBytes(), charset));
     }
