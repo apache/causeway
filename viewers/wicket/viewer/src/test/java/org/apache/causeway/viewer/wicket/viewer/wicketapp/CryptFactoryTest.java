@@ -49,7 +49,7 @@ import static org.mockito.Mockito.mock;
 import lombok.val;
 
 /**
- * Requires resource {@code javax/servlet/http/LocalStrings.properties} for Cookie testing.
+ * Requires resource {@code jakarta/servlet/http/LocalStrings.properties} for Cookie testing.
  */
 class CryptFactoryTest {
 
