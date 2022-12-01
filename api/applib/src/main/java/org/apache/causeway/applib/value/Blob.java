@@ -20,6 +20,9 @@ package org.apache.causeway.applib.value;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,21 +33,25 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
-import org.apache.causeway.applib.util.ZipReader;
-import org.apache.causeway.applib.util.ZipWriter;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.image._Images;
-
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.applib.annotation.Value;
+import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
+import org.apache.causeway.applib.util.ZipReader;
+import org.apache.causeway.applib.util.ZipWriter;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.image._Images;
+
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -112,6 +119,28 @@ public final class Blob implements NamedWithMimeType {
         return new Blob(fileName, mimeType.getMimeType(), content);
     }
 
+    /**
+     * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and content from {@code file},
+     * wrapped with a {@link Try}.
+     * <p>
+     * {@code name} may or may not include the desired filename extension, it
+     * is guaranteed, that the resulting {@link Blob} has the appropriate extension
+     * as constraint by the given {@code mimeType}.
+     * <p>
+     * For more fine-grained control use one of the {@link Blob} constructors directly.
+     * @param name - may or may not include the desired filename extension
+     * @param mimeType
+     * @param file - the file to be opened for reading
+     * @return new {@link Blob}
+     */
+    public static Try<Blob> tryRead(final String name, final CommonMimeType mimeType, final File file) {
+        return Try.call(()->{
+            try(val fis = new FileInputStream(file)){
+                return Blob.of(name, mimeType, _Bytes.ofKeepOpen(fis));
+            }
+        });
+    }
+
      // --
 
     private final MimeType mimeType;
@@ -160,16 +189,19 @@ public final class Blob implements NamedWithMimeType {
 
     // -- UTILITIES
 
+    /**
+     * Converts to a {@link Clob}, using given {@link Charset}
+     * for the underlying byte[] to String conversion.
+     */
     public Clob toClob(final @NonNull Charset charset) {
         return new Clob(getName(), getMimeType(), _Strings.ofBytes(getBytes(), charset));
     }
 
     /**
      * Does not close the OutputStream.
-     * @param os
-     * @throws IOException
      */
-    public void writeBytesTo(final OutputStream os) throws IOException {
+    @SneakyThrows
+    public void writeBytesTo(final @Nullable OutputStream os) {
         if(os==null) {
             return;
         }
@@ -179,11 +211,32 @@ public final class Blob implements NamedWithMimeType {
     }
 
     /**
+     * Writes this {@link Blob} to the file represented by
+     * the specified <code>File</code> object.
+     * <p>
+     * If the file exists but is a directory rather than a regular file, does
+     * not exist but cannot be created, or cannot be opened for any other
+     * reason then a <code>FileNotFoundException</code> is thrown.
+     *
+     * @param      file the file to be opened for writing; if <code>null</code> this method does nothing
+     * @see        java.io.FileOutputStream
+     */
+    @SneakyThrows
+    public void writeTo(final @Nullable File file) {
+        if(file==null) {
+            return; // just ignore
+        }
+        try(val os = new FileOutputStream(file)){
+            writeBytesTo(os);
+        }
+    }
+
+    /**
      * The {@link InputStream} involved is closed after consumption.
      * @param consumer
      * @throws IOException
      */
-    public void consume(final Consumer<InputStream> consumer) throws IOException {
+    public void consume(final @NonNull Consumer<InputStream> consumer) throws IOException {
      // null to empty
         val bytes = Optional.ofNullable(getBytes())
                 .orElse(new byte[0]);

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -45,7 +44,6 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -83,17 +81,15 @@ class MetaModelRegressionTest {
         // disable if rename, as the .zip file needs to be updated.
         // Assumptions.assumeThat(getClass().getName()).contains("causeway");
 
-        Blob metaModelZip = factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class,
-                metaModelServiceMenu).act("metamodel.xml", namespaces(), true);
-        val xml = asXml(metaModelZip);
+        final Blob metaModelZip = factoryService
+                .mixin(MetaModelServiceMenu.downloadMetaModelXml.class, metaModelServiceMenu)
+                .act("metamodel.xml", namespaces(), true);
+        final String xml = metaModelZip
+                .unZip(CommonMimeType.XML)
+                .toClob(StandardCharsets.UTF_8)
+                .asString();
 
         Approvals.verify(xml, options());
-
-    }
-
-    private static String asXml(final Blob zip) throws IOException {
-        val clob = zip.unZip(CommonMimeType.XML).toClob(StandardCharsets.UTF_8);
-        return clob.asString();
     }
 
     private Options options() {
