@@ -31,9 +31,12 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
 import javax.sql.DataSource;
 
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionManager;
+import jakarta.transaction.UserTransaction;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.ConnectionHandle;
 import org.springframework.jdbc.datasource.ConnectionHolder;
@@ -67,13 +70,8 @@ import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePe
 import org.apache.causeway.persistence.jdo.spring.support.SpringPersistenceManagerProxyBean;
 import org.apache.causeway.persistence.jdo.spring.support.StandardPersistenceManagerProxyBean;
 
-import jakarta.transaction.Status;
-import jakarta.transaction.TransactionManager;
-import jakarta.transaction.UserTransaction;
 import lombok.val;
 
-//TODO[ISIS-3275] all failing with Mockito cannot mock this class: interface javax.jdo.Transaction.
-@Disabled
 class JdoTransactionManagerTests {
 
     private MetaModelContext mmc;
