@@ -18,22 +18,20 @@
  */
 package org.apache.causeway.viewer.restfulobjects.client;
 
-import java.util.EnumSet;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
-import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter;
@@ -90,9 +88,7 @@ if(digest.isSuccess()) {
  * @since 2.0 {@index}
  */
 @Log4j2
-public class RestfulClient {
-
-    private static final String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=\"urn:org.apache.causeway/v2\"";
+public class RestfulClient implements AutoCloseable {
 
     private RestfulClientConfig clientConfig;
     private Client client;
@@ -129,17 +125,24 @@ public class RestfulClient {
         return client;
     }
 
-    // -- REQUEST BUILDER
-
-    public Builder request(final String path, final SuppressionType ... suppressionTypes) {
-        return request(path, SuppressionType.setOf(suppressionTypes));
+    @Override
+    public void close() {
+        if (client == null) {
+            return;
+        }
+        try {
+            client.close();
+        } catch (Throwable ex) {
+            // just ignore
+        }
     }
 
-    public Builder request(final String path, final EnumSet<SuppressionType> suppressionTypes) {
-        final String responseContentType = DEFAULT_RESPONSE_CONTENT_TYPE
-                + toSuppressionLiteral(suppressionTypes);
+    // -- REQUEST BUILDER
 
-        return client.target(relativePathToUri(path)).request(responseContentType);
+    public Builder request(final String path) {
+        return client
+                .target(relativePathToUri(path))
+                .request();
     }
 
     // -- ARGUMENT BUILDER
@@ -166,7 +169,17 @@ public class RestfulClient {
         return Try.failure(listDigest.getFailureCause());
     }
 
-    // -- FILTER
+    // -- UTILITY
+
+    /**
+     * Returns an {@link URI} constructed from this client's base path plus given relative {@code path}.
+     * @param path relative to this client's base
+     */
+    public URI uri(final String path) {
+        return relativePathToUri(path).build();
+    }
+
+    // -- HELPER FILTER
 
     private void registerDefaultJsonProvider() {
         try {
@@ -197,27 +210,14 @@ public class RestfulClient {
         .forEach(client::register);
     }
 
-    // -- HELPER
+    // -- HELPER OTHER
 
-    private String relativePathToUri(String path) {
+    private UriBuilder relativePathToUri(String path) {
         final String baseUri = _Strings.suffix(clientConfig.getRestfulBase(), "/");
         while(path.startsWith("/")) {
             path = path.substring(1);
         }
-        return baseUri + path;
+        return UriBuilder.fromUri(baseUri + path);
     }
-
-    private String toSuppressionLiteral(final EnumSet<SuppressionType> suppressionTypes) {
-        final String suppressionSetLiteral = _NullSafe.stream(suppressionTypes)
-                .map(SuppressionType::name)
-                .collect(Collectors.joining(","));
-
-        if(_Strings.isNotEmpty(suppressionSetLiteral)) {
-            return ";suppress=" + suppressionSetLiteral;
-        }
-
-        return "";
-    }
-
 
 }

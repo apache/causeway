@@ -41,6 +41,7 @@ import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
 import lombok.NonNull;
@@ -107,7 +108,8 @@ public class RestEndpointService {
     // -- NEW REQUEST BUILDER
 
     public Invocation.Builder newInvocationBuilder(final RestfulClient client, final String endpointPath) {
-        return client.request(endpointPath, SuppressionType.ALL);
+        return client.request(endpointPath)
+                .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(Object.class, SuppressionType.all()));
     }
 
     // -- ENDPOINTS
