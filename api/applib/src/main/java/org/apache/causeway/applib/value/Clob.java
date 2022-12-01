@@ -18,7 +18,11 @@
  */
 package org.apache.causeway.applib.value;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -31,9 +35,12 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
@@ -107,6 +114,30 @@ public final class Clob implements NamedWithMimeType {
         return new Clob(fileName, mimeType.getMimeType(), content);
     }
 
+    /**
+     * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and content from {@code file},
+     * wrapped with a {@link Try}.
+     * <p>
+     * {@code name} may or may not include the desired filename extension, it
+     * is guaranteed, that the resulting {@link Clob} has the appropriate extension
+     * as constraint by the given {@code mimeType}.
+     * <p>
+     * For more fine-grained control use one of the {@link Clob} constructors directly.
+     * @param name - may or may not include the desired filename extension
+     * @param mimeType
+     * @param file - the file to be opened for reading
+     * @param charset - {@link Charset} to use for reading given file
+     * @return new {@link Clob}
+     */
+    public static Try<Clob> tryRead(final String name, final CommonMimeType mimeType, final File file,
+            final @NonNull Charset charset) {
+        return Try.call(()->{
+            try(val fis = new FileInputStream(file)){
+                return Clob.of(name, mimeType, _Strings.read(fis, charset));
+            }
+        });
+    }
+
     // --
 
     public Clob(final String name, final String primaryType, final String subType, final char[] chars) {
@@ -170,6 +201,29 @@ public final class Clob implements NamedWithMimeType {
     public void writeCharsTo(final Writer wr) throws IOException {
         if(wr!=null && chars!=null){
             wr.append(chars);
+        }
+    }
+
+    /**
+     * Writes this {@link Clob} to the file represented by
+     * the specified <code>File</code> object.
+     * <p>
+     * If the file exists but is a directory rather than a regular file, does
+     * not exist but cannot be created, or cannot be opened for any other
+     * reason then a <code>FileNotFoundException</code> is thrown.
+     *
+     * @param      file the file to be opened for writing; if <code>null</code> this method does nothing
+     * @param charset - {@link Charset} to use for writing to given file
+     * @see        java.io.FileOutputStream
+     * @see        java.io.OutputStreamWriter
+     */
+    @SneakyThrows
+    public void writeTo(final @Nullable File file, final @NonNull Charset charset) {
+        if(file==null) {
+            return; // just ignore
+        }
+        try(val os = new FileOutputStream(file)){
+            writeCharsTo(new OutputStreamWriter(os, StandardCharsets.UTF_8));
         }
     }
 
