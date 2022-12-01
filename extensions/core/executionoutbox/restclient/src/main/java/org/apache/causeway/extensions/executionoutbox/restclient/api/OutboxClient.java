@@ -31,6 +31,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
+import org.apache.causeway.commons.internal.resources._Json;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.delete.DeleteMessage;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.deleteMany.DeleteManyMessage;
 import org.apache.causeway.schema.common.v2.InteractionType;
@@ -73,7 +75,7 @@ public class OutboxClient {
      * for debugging
      * @param connectTimeoutInSecs
      */
-    public OutboxClient withConnectTimeoutInSecs(int connectTimeoutInSecs) {
+    public OutboxClient withConnectTimeoutInSecs(final int connectTimeoutInSecs) {
         clientBuilder.connectTimeout(connectTimeoutInSecs, TimeUnit.SECONDS);
         return this;
     }
@@ -82,7 +84,7 @@ public class OutboxClient {
      * for debugging
      * @param readTimeoutInSecs
      */
-    public OutboxClient withReadTimeoutInSecs(int readTimeoutInSecs) {
+    public OutboxClient withReadTimeoutInSecs(final int readTimeoutInSecs) {
         clientBuilder.readTimeout(readTimeoutInSecs, TimeUnit.SECONDS);
         return this;
     }
@@ -158,46 +160,46 @@ public class OutboxClient {
 
 
     public void delete(final String interactionId, final int sequence) {
-        val jsonable = new DeleteMessage(interactionId, sequence);
-        invoke(jsonable, deleteUriBuilder);
+        val entity = new DeleteMessage(interactionId, sequence);
+        invoke(entity, deleteUriBuilder);
     }
 
     public void deleteMany(final List<InteractionDto> interactionDtos) {
 
-        InteractionsDto interactionsDto = new InteractionsDto();
+        val interactionsDto = new InteractionsDto();
         interactionDtos.forEach(interactionDto -> {
             addTo(interactionsDto, interactionDto);
         });
 
-        val jsonable = new DeleteManyMessage(_Jaxb.toXml(interactionsDto));
-        invoke(jsonable, deleteManyUriBuilder);
+        val entity = new DeleteManyMessage(InteractionsDtoUtils.toXml(interactionsDto));
+        invoke(entity, deleteManyUriBuilder);
     }
 
-    private void addTo(InteractionsDto interactionsDto, InteractionDto orig) {
-        InteractionDto copy = new InteractionDto();
+    private void addTo(final InteractionsDto interactionsDto, final InteractionDto orig) {
+        val copy = new InteractionDto();
         copy.setInteractionId(orig.getInteractionId());
         setMemberExecution(copy, orig);
         interactionsDto.getInteractionDto().add(copy);
     }
 
-    private void setMemberExecution(InteractionDto copy, InteractionDto orig) {
+    private void setMemberExecution(final InteractionDto copy, final InteractionDto orig) {
         val memberExecutionDto = newMemberExecutionDto(orig);
         memberExecutionDto.setSequence(orig.getExecution().getSequence());
         copy.setExecution(memberExecutionDto);
     }
 
-    private MemberExecutionDto newMemberExecutionDto(InteractionDto orig) {
+    private MemberExecutionDto newMemberExecutionDto(final InteractionDto orig) {
         val execution = orig.getExecution();
         return execution.getInteractionType() == InteractionType.ACTION_INVOCATION
                 ? new ActionInvocationDto()
                 : new PropertyEditDto();
     }
 
-    private void invoke(Jsonable entity, UriBuilder uriBuilder) {
+    private void invoke(final Object entity, final UriBuilder uriBuilder) {
 
         ensureInitialized();
 
-        val json = entity.asJson();
+        val json =  _Json.toString(entity);
 
         Client client = null;
         try {
