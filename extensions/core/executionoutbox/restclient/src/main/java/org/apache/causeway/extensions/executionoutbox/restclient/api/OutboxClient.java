@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.Try;
@@ -89,9 +88,6 @@ public class OutboxClient {
         return this;
     }
 
-    private UriBuilder deleteUriBuilder;
-    private UriBuilder deleteManyUriBuilder;
-
     @Setter private String base;
     @Setter private String username;
     @Setter private String password;
@@ -102,9 +98,6 @@ public class OutboxClient {
      * Should be called once all properties have been injected.
      */
     public void init() {
-        this.deleteUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/delete/invoke");
-        this.deleteManyUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke");
-
         restfulClientConfig.setRestfulBase(base);
         restfulClientConfig.setUseBasicAuth(true);
         restfulClientConfig.setRestfulAuthUser(username);
@@ -145,8 +138,8 @@ public class OutboxClient {
     }
 
     public void delete(final String interactionId, final int sequence) {
-        val entity = new DeleteMessage(interactionId, sequence);
-        invoke(entity, DELETE_URI);
+        invoke(DELETE_URI,
+                new DeleteMessage(interactionId, sequence));
     }
 
     public void deleteMany(final List<InteractionDto> interactionDtos) {
@@ -154,9 +147,8 @@ public class OutboxClient {
         interactionDtos.forEach(interactionDto -> {
             addTo(interactionsDto, interactionDto);
         });
-
-        val entity = new DeleteManyMessage(InteractionsDtoUtils.toXml(interactionsDto));
-        invoke(entity, DELETE_MANY_URI);
+        invoke(DELETE_MANY_URI,
+                new DeleteManyMessage(InteractionsDtoUtils.toXml(interactionsDto)));
     }
 
     // -- HELPER
@@ -185,25 +177,23 @@ public class OutboxClient {
                 : new PropertyEditDto();
     }
 
-    private void invoke(final Object entity, final String path) {
+    private void invoke(final String path, final Object dto) {
 
         ensureInitialized();
-
-        val json =  _Json.toString(entity);
 
         try(val client = RestfulClient.ofConfig(restfulClientConfig)) {
 
             var invocationBuilder = client.request(path);
 
             val invocation = invocationBuilder.buildPut(
-                    Entity.entity(json, MediaType.APPLICATION_JSON_TYPE));
+                    Entity.entity(_Json.toString(dto), MediaType.APPLICATION_JSON_TYPE));
 
             val response = invocation.invoke();
 
             val responseStatus = response.getStatus();
             if (responseStatus != 200) {
                 // if failed to log message via REST service, then fallback by logging to slf4j
-                log.warn(entity.toString());
+                log.warn(dto.toString());
             }
         }
 

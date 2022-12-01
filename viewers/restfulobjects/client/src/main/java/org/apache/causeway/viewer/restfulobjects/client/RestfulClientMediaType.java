@@ -20,51 +20,71 @@ package org.apache.causeway.viewer.restfulobjects.client;
 
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Maps;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+@RequiredArgsConstructor
 public enum RestfulClientMediaType {
-    RO_XML{
-        @Override
-        public MediaType mediaTypeFor(final Class<?> dtoClass, final EnumSet<SuppressionType> suppressionTypes) {
-            return new MediaType("application", "xml",
-                    Map.<String, String>of(
-                            "profile", "urn:org.restfulobjects:repr-types/action-result"
-                                    + toSuppressionLiteral(suppressionTypes),
-                            "x-ro-domain-type", dtoClass.getName()));
-        }
-    },
-    SIMPLE_JSON {
-        @Override
-        public MediaType mediaTypeFor(final Class<?> dtoClass, final EnumSet<SuppressionType> suppressionTypes) {
-            return new MediaType("application", "json",
-                    Map.<String, String>of(
-                            "profile", "urn:org.apache.causeway/v2"
-                                    + toSuppressionLiteral(suppressionTypes),
-                            "x-ro-domain-type", dtoClass.getName()));
-        }
-    }
+    RO_XML("application", "xml", "org.restfulobjects:repr-types/action-result"),
+    SIMPLE_JSON("application", "json", "org.apache.causeway/v2");
     ;
 
-    public final MediaType mediaTypeFor(final Class<?> dtoClass) {
+    private final String type;
+    private final String subType;
+    private final String urn;
+
+    public final MediaType mediaTypeFor() {
+        return mediaTypeFor(null, EnumSet.noneOf(SuppressionType.class));
+    }
+
+    public final MediaType mediaTypeFor(
+            final @Nullable Class<?> dtoClass) {
         return mediaTypeFor(dtoClass, EnumSet.noneOf(SuppressionType.class));
     }
 
-    public abstract MediaType mediaTypeFor(final Class<?> dtoClass, EnumSet<SuppressionType> suppressionTypes);
+    public final MediaType mediaTypeFor(
+            final @Nullable Class<?> dtoClass,
+            final @Nullable EnumSet<SuppressionType> suppressionTypes) {
+        return new MediaType(type, subType, headerMap(urn, dtoClass, suppressionTypes));
+    }
 
-    private static String toSuppressionLiteral(final EnumSet<SuppressionType> suppressionTypes) {
+    // -- HELPER
+
+    private static Map<String, String> headerMap(
+            final String urn,
+            final Class<?> dtoClass,
+            final EnumSet<SuppressionType> suppressionTypes) {
+        val headerMap = _Maps.<String, String>newHashMap();
+
+        headerMap.put("profile", "urn:" + urn);
+
+        toSuppressionLiteral(suppressionTypes)
+        .ifPresent(suppress->headerMap.put("suppress", suppress));
+
+        Optional.ofNullable(dtoClass)
+        .map(Class::getName)
+        .ifPresent(typeLiteral->headerMap.put("x-ro-domain-type", typeLiteral));
+
+        return headerMap;
+    }
+
+    private static Optional<String> toSuppressionLiteral(final EnumSet<SuppressionType> suppressionTypes) {
         final String suppressionSetLiteral = _NullSafe.stream(suppressionTypes)
                 .map(SuppressionType::name)
                 .collect(Collectors.joining(","));
-        if(_Strings.isNotEmpty(suppressionSetLiteral)) {
-            return ";suppress=" + suppressionSetLiteral;
-        }
-        return "";
+        return _Strings.nonEmpty(suppressionSetLiteral);
     }
 
 }
