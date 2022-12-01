@@ -55,6 +55,11 @@ public enum RestfulClientMediaType {
     }
 
     public final MediaType mediaTypeFor(
+            final @Nullable EnumSet<SuppressionType> suppressionTypes) {
+        return new MediaType(type, subType, headerMap(urn, null, suppressionTypes));
+    }
+
+    public final MediaType mediaTypeFor(
             final @Nullable Class<?> dtoClass,
             final @Nullable EnumSet<SuppressionType> suppressionTypes) {
         return new MediaType(type, subType, headerMap(urn, dtoClass, suppressionTypes));

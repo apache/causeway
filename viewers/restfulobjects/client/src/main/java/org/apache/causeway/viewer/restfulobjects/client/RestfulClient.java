@@ -65,9 +65,8 @@ RestfulClient client = RestfulClient.ofConfig(clientConfig);
  * Make a Request and then digest the Response:
  * <blockquote><pre>{@code
 
-Builder request = client.request(
-                "services/myService/actions/lookupMyObjectById/invoke",
-                SuppressionType.RO);
+Builder request = client.request("services/myService/actions/lookupMyObjectById/invoke")
+    .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(MyObject.class, EnumSet.of(SuppressionType.RO)));
 
 Entity<String> args = client.arguments()
         .addActionParameter("id", "12345")
