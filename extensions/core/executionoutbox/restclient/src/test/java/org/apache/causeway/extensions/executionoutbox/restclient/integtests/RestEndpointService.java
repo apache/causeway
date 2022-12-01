@@ -30,10 +30,9 @@ import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClien
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
-@Log4j2
+//@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class RestEndpointService {
 

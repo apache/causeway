@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.client;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
@@ -32,15 +33,14 @@ import javax.ws.rs.core.Response;
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter.Credentials;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import lombok.val;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -87,15 +87,6 @@ if(digest.isSuccess()) {
 }
  * </pre></blockquote>
  *
- * Maven Setup:
- * <blockquote><pre>{@code
-<dependency>
-    <groupId>org.glassfish.jersey.ext</groupId>
-    <artifactId>jersey-spring5</artifactId>
-    <version>2.35</version>
-</dependency>
- * }</pre></blockquote>
- *
  * @since 2.0 {@index}
  */
 @Log4j2
@@ -106,15 +97,24 @@ public class RestfulClient {
     private RestfulClientConfig clientConfig;
     private Client client;
 
-    public static RestfulClient ofConfig(final RestfulClientConfig clientConfig) {
-        RestfulClient restClient = new RestfulClient();
-        restClient.init(clientConfig);
-        return restClient;
+    public static RestfulClient ofConfig(
+            final RestfulClientConfig clientConfig) {
+        return new RestfulClient(clientConfig, UnaryOperator.identity());
     }
 
-    public void init(final RestfulClientConfig clientConfig) {
+    public static RestfulClient ofConfig(
+            final RestfulClientConfig clientConfig,
+            final UnaryOperator<ClientBuilder> configRefiner) {
+        return new RestfulClient(clientConfig, configRefiner);
+    }
+
+    private RestfulClient(
+            final @NonNull RestfulClientConfig clientConfig,
+            final @NonNull UnaryOperator<ClientBuilder> configRefiner) {
         this.clientConfig = clientConfig;
-        client = ClientBuilder.newClient();
+
+        final ClientBuilder clientBuilder = configRefiner.apply(ClientBuilder.newBuilder());
+        this.client = clientBuilder.build();
 
         registerDefaultJsonProvider();
         registerBasicAuthFilter();
@@ -151,7 +151,7 @@ public class RestfulClient {
     // -- RESPONSE PROCESSING
 
     public <T> Try<T> digest(final Response response, final Class<T> entityType) {
-        val digest = ResponseDigest.wrap(response, entityType);
+        final var digest = ResponseDigest.wrap(response, entityType);
         if(digest.isSuccess()) {
             return Try.success(digest.getEntity().orElse(null));
         }
@@ -159,7 +159,7 @@ public class RestfulClient {
     }
 
     public <T> Try<Can<T>> digestList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
-        val listDigest = ResponseDigest.wrapList(response, entityType, genericType);
+        final var listDigest = ResponseDigest.wrapList(response, entityType, genericType);
         if(listDigest.isSuccess()) {
             return Try.success(listDigest.getEntities());
         }
@@ -208,7 +208,7 @@ public class RestfulClient {
     }
 
     private String toSuppressionLiteral(final EnumSet<SuppressionType> suppressionTypes) {
-        final String suppressionSetLiteral = stream(suppressionTypes)
+        final String suppressionSetLiteral = _NullSafe.stream(suppressionTypes)
                 .map(SuppressionType::name)
                 .collect(Collectors.joining(","));
 

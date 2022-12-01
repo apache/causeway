@@ -23,10 +23,8 @@ package org.apache.causeway.extensions.executionoutbox.restclient.api;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -41,21 +39,23 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.InteractionsDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 
 import lombok.Setter;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.x {@index}
  */
-@Slf4j
+@Log4j2
 public class OutboxClient {
 
-    private final ClientBuilder clientBuilder;
+    private final RestfulClientConfig restfulClientConfig;
 
     public OutboxClient() {
-        clientBuilder = ClientBuilder.newBuilder();
+        this.restfulClientConfig = new RestfulClientConfig();
     }
 
     /**
@@ -76,7 +76,7 @@ public class OutboxClient {
      * @param connectTimeoutInSecs
      */
     public OutboxClient withConnectTimeoutInSecs(final int connectTimeoutInSecs) {
-        clientBuilder.connectTimeout(connectTimeoutInSecs, TimeUnit.SECONDS);
+        setConnectTimeoutInSecs(connectTimeoutInSecs);
         return this;
     }
 
@@ -85,7 +85,7 @@ public class OutboxClient {
      * @param readTimeoutInSecs
      */
     public OutboxClient withReadTimeoutInSecs(final int readTimeoutInSecs) {
-        clientBuilder.readTimeout(readTimeoutInSecs, TimeUnit.SECONDS);
+        setReadTimeoutInSecs(readTimeoutInSecs);
         return this;
     }
 
@@ -96,7 +96,8 @@ public class OutboxClient {
     @Setter private String base;
     @Setter private String username;
     @Setter private String password;
-
+    @Setter private int connectTimeoutInSecs;
+    @Setter private int readTimeoutInSecs;
 
     /**
      * Should be called once all properties have been injected.
@@ -105,6 +106,13 @@ public class OutboxClient {
         this.pendingUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/pending/invoke");
         this.deleteUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/delete/invoke");
         this.deleteManyUriBuilder = UriBuilder.fromUri(base + "services/causeway.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke");
+
+        restfulClientConfig.setRestfulBase(base);
+        restfulClientConfig.setUseBasicAuth(true);
+        restfulClientConfig.setRestfulAuthUser(username);
+        restfulClientConfig.setRestfulAuthPassword(password);
+        restfulClientConfig.setConnectTimeoutInMillis(1000L * connectTimeoutInSecs);
+        restfulClientConfig.setReadTimeoutInMillis(1000L * connectTimeoutInSecs);
     }
 
     private void ensureInitialized() {
@@ -112,7 +120,6 @@ public class OutboxClient {
             throw new IllegalStateException("Must initialize 'username', 'password' and 'base' properties");
         }
     }
-
 
     public List<InteractionDto> pending() {
 
@@ -122,7 +129,7 @@ public class OutboxClient {
 
         Client client = null;
         try {
-            client = clientBuilder.build();
+            client = RestfulClient.ofConfig(restfulClientConfig).getJaxRsClient();
 
             val webTarget = client.target(uri);
 
@@ -149,6 +156,8 @@ public class OutboxClient {
         }
         return Collections.emptyList();
     }
+
+    // -- HELPER
 
     private static MediaType mediaTypeFor(final Class<?> dtoClass) {
 
@@ -203,7 +212,7 @@ public class OutboxClient {
 
         Client client = null;
         try {
-            client = clientBuilder.build();
+            client = RestfulClient.ofConfig(restfulClientConfig).getJaxRsClient();
 
             val webTarget = client.target(uriBuilder.build());
 
