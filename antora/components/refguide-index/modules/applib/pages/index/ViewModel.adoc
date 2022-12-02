@@ -1,7 +1,19 @@
 = ViewModel
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
+Indicates that an object belongs to the UI/application layer and is intended to be used as a view-model.Naturally this also allows for the idiom of passing in the xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector] as an argument and programmatically resolve any field-style injection points via _ServiceInjector#injectServicesInto(Object)_ , that is, if already required during _construction_ .
+
+Instances of xref:refguide:applib:index/ViewModel.adoc[ViewModel] must include (exactly) one public constructor.
+
+Contract:
+
+* there is either exactly one public constructor or if there are more than one, then only one of these is annotated with any of _@Inject_ or _@Autowired(required=true)_ (meta-annotations are also considered)
+* the constructor may have arbitrary many arguments of arbitrary type
+* first _String_ argument found is passed in the view-model's memento
+* any other arguments are resolved via the xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry] - if no _Bean_ can be found a _NoSuchElementException_ is thrown
+* there is no support for _Spring_ programming model specific annotations on constructor arguments (perhaps future work)
+
+After a view-model got new-ed up by the framework (or programmatically via the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] ), _ServiceInjector#injectServicesInto(Object)_ is called on the viewmodel instance, regardless of what happened during _construction_ .
 
 == API
 
@@ -16,7 +28,7 @@ interface ViewModel {
 <.> xref:#viewModelMemento_[viewModelMemento()]
 +
 --
-Obtain a memento of the view model.
+Obtain a memento of the view-model. (Optional)
 --
 
 == Members
@@ -24,6 +36,6 @@ Obtain a memento of the view model.
 [#viewModelMemento_]
 === viewModelMemento()
 
-Obtain a memento of the view model.
+Obtain a memento of the view-model. (Optional)
 
-Instances of xref:refguide:applib:index/ViewModel.adoc[ViewModel] must include a public single _String_ argument constructor, that recreates an instance from a memento string. This constructor is not required to resolve injection points or fire domain events, instead this responsibility is encapsulated with the framework.
+Captures the state of this view-model as _String_ , which can be passed in to this view-model's constructor for later re-construction.

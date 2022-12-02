@@ -22,11 +22,16 @@ class Clob {
   Clob(String name, String mimeTypeBase, CharSequence chars)
   Clob(String name, MimeType mimeType, CharSequence chars)
   Clob of(String name, CommonMimeType mimeType, CharSequence content)     // <.>
+  Try<Clob> tryRead(String name, CommonMimeType mimeType, File file, Charset charset)     // <.>
+  Try<Clob> tryReadUtf8(String name, CommonMimeType mimeType, File file)     // <.>
   String getName()
   MimeType getMimeType()
   CharSequence getChars()
-  Blob toBlob(Charset charset)
+  Blob toBlob(Charset charset)     // <.>
+  Blob toBlobUtf8()     // <.>
   void writeCharsTo(Writer wr)
+  void writeTo(File file, Charset charset)     // <.>
+  void writeToUtf8(File file)     // <.>
   String asString()
   boolean equals(Object o)
   int hashCode()
@@ -39,6 +44,36 @@ class Clob {
 --
 Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 --
+<.> xref:#tryRead_String_CommonMimeType_File_Charset[tryRead(String, CommonMimeType, File, Charset)]
++
+--
+Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+--
+<.> xref:#tryReadUtf8_String_CommonMimeType_File[tryReadUtf8(String, CommonMimeType, File)]
++
+--
+Shortcut for _#tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)_ using _StandardCharsets#UTF_8_ .
+--
+<.> xref:#toBlob_Charset[toBlob(Charset)]
++
+--
+Converts to a xref:refguide:applib:index/value/Blob.adoc[Blob] , using given _Charset_ for the underlying String to byte[] conversion.
+--
+<.> xref:#toBlobUtf8_[toBlobUtf8()]
++
+--
+Shortcut for _#toBlob(Charset)_ using _StandardCharsets#UTF_8_ .
+--
+<.> xref:#writeTo_File_Charset[writeTo(File, Charset)]
++
+--
+Writes this xref:refguide:applib:index/value/Clob.adoc[Clob] to the file represented by the specified `File` object.
+--
+<.> xref:#writeToUtf8_File[writeToUtf8(File)]
++
+--
+Shortcut for _#writeTo(File, Charset)_ using _StandardCharsets#UTF_8_ .
+--
 
 == Members
 
@@ -50,5 +85,41 @@ Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ ,
 _name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
 
 For more fine-grained control use one of the xref:refguide:applib:index/value/Clob.adoc[Clob] constructors directly.
+
+[#tryRead_String_CommonMimeType_File_Charset]
+=== tryRead(String, CommonMimeType, File, Charset)
+
+Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
+
+For more fine-grained control use one of the xref:refguide:applib:index/value/Clob.adoc[Clob] constructors directly.
+
+[#tryReadUtf8_String_CommonMimeType_File]
+=== tryReadUtf8(String, CommonMimeType, File)
+
+Shortcut for _#tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)_ using _StandardCharsets#UTF_8_ .
+
+[#toBlob_Charset]
+=== toBlob(Charset)
+
+Converts to a xref:refguide:applib:index/value/Blob.adoc[Blob] , using given _Charset_ for the underlying String to byte[] conversion.
+
+[#toBlobUtf8_]
+=== toBlobUtf8()
+
+Shortcut for _#toBlob(Charset)_ using _StandardCharsets#UTF_8_ .
+
+[#writeTo_File_Charset]
+=== writeTo(File, Charset)
+
+Writes this xref:refguide:applib:index/value/Clob.adoc[Clob] to the file represented by the specified `File` object.
+
+If the file exists but is a directory rather than a regular file, does not exist but cannot be created, or cannot be opened for any other reason then a `FileNotFoundException` is thrown.
+
+[#writeToUtf8_File]
+=== writeToUtf8(File)
+
+Shortcut for _#writeTo(File, Charset)_ using _StandardCharsets#UTF_8_ .
 
 include::hooks/Clob_usage-notes.adoc[]

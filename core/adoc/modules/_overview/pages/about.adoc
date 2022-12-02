@@ -23,7 +23,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "App\n[Software System]" {
   rectangle "==Apache Causeway Starter Parent\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -67,18 +67,18 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Mavendeps\n[Software System]" {
   rectangle "==Apache Causeway Maven Deps\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Causeway Maven Deps - Webapp\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
 }
-2 .[#707070].> 3 : ""
+2 .[#707070,thickness=2].> 3 : ""
 @enduml
 ----
 .Projects/Modules (Mavendeps)
@@ -116,7 +116,7 @@ org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.core:causeway-core-security:jar:<managed> +
 org.apache.causeway.core:causeway-schema:jar:<managed> +
 org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy4:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 org.springframework.boot:spring-boot-starter-tomcat:jar:<managed> +
 org.springframework.boot:spring-boot-starter-web:jar:<managed> +
@@ -143,97 +143,97 @@ left to right direction
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<14>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<15>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<16>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<17>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<18>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<19>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<20>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Testing\n[Software System]" {
   rectangle "==Apache Causeway Testing\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -256,24 +256,24 @@ package "Testing\n[Software System]" {
   rectangle "==Apache Causeway Tst - Unit Test Support (applib)\n<size:10>[Container: packaging: jar]</size>" <<20>> as 20
   rectangle "==Apache Causeway Tst - Unit Test Support (parent)\n<size:10>[Container: packaging: pom]</size>" <<19>> as 19
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 9 : ""
-2 .[#707070].> 11 : ""
-2 .[#707070].> 13 : ""
-2 .[#707070].> 15 : ""
-2 .[#707070].> 17 : ""
-2 .[#707070].> 19 : ""
-3 .[#707070].> 4 : ""
-5 .[#707070].> 6 : ""
-5 .[#707070].> 7 : ""
-5 .[#707070].> 8 : ""
-9 .[#707070].> 10 : ""
-11 .[#707070].> 12 : ""
-13 .[#707070].> 14 : ""
-15 .[#707070].> 16 : ""
-17 .[#707070].> 18 : ""
-19 .[#707070].> 20 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 9 : ""
+2 .[#707070,thickness=2].> 11 : ""
+2 .[#707070,thickness=2].> 13 : ""
+2 .[#707070,thickness=2].> 15 : ""
+2 .[#707070,thickness=2].> 17 : ""
+2 .[#707070,thickness=2].> 19 : ""
+3 .[#707070,thickness=2].> 4 : ""
+5 .[#707070,thickness=2].> 6 : ""
+5 .[#707070,thickness=2].> 7 : ""
+5 .[#707070,thickness=2].> 8 : ""
+9 .[#707070,thickness=2].> 10 : ""
+11 .[#707070,thickness=2].> 12 : ""
+13 .[#707070,thickness=2].> 14 : ""
+15 .[#707070,thickness=2].> 16 : ""
+17 .[#707070,thickness=2].> 18 : ""
+19 .[#707070,thickness=2].> 20 : ""
 @enduml
 ----
 .Projects/Modules (Testing)
@@ -640,47 +640,47 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Examples\n[Software System]" {
   rectangle "==Demo - Domain\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
@@ -693,14 +693,14 @@ package "Examples\n[Software System]" {
   rectangle "==Demo - Wicket/JPA\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
   rectangle "==Demo - Wicket/JPA (with GraphQL)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 8 : ""
-2 .[#707070].> 9 : ""
-2 .[#707070].> 10 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 8 : ""
+2 .[#707070,thickness=2].> 9 : ""
+2 .[#707070,thickness=2].> 10 : ""
 @enduml
 ----
 .Projects/Modules (Examples)
@@ -729,7 +729,247 @@ Artifact: demo-domain
 Type: jar
 Directory: /examples/demo/domain
 ----
-|.Dependencies
+|.Components
+****
+demoapp.dom.AppConfiguration +
+demoapp.dom._infra.LibraryPreloadingService +
+demoapp.dom._infra.resources.AsciiDocConverterService +
+demoapp.dom._infra.resources.AsciiDocReaderService +
+demoapp.dom._infra.resources.AsciiDocValueSemanticsWithPreprocessing +
+demoapp.dom._infra.resources.MarkdownReaderService +
+demoapp.dom._infra.resources.MarkupReaderService +
+demoapp.dom._infra.resources.MarkupVariableResolverService +
+demoapp.dom._infra.resources.ResourceReaderService +
+demoapp.dom._infra.samples.EnumSamples +
+demoapp.dom._infra.samples.NameSamples +
+demoapp.dom._infra.samples.asciidoc.CausewayAsciiDocSamples +
+demoapp.dom._infra.samples.markdown.CausewayMarkdownSamples +
+demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
+demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
+demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault +
+demoapp.dom.domain._interactions.ExecutionListenerToCaptureInteractionsInMemory +
+demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingSeeding +
+demoapp.dom.domain.actions.Action.commandPublishing.jdo.ActionCommandPublishingJdoEntities +
+demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpaEntities +
+demoapp.dom.domain.actions.Action.domainEvent.subscribers.ActionDomainEventControlService +
+demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingSeeding +
+demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdoEntities +
+demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpaEntities +
+demoapp.dom.domain.collections.Collection.domainEvent.subscribers.CollectionDomainEventControlService +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo.DomainObjectEntityChangePublishingEnabledJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpaEntities +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefSeeding +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo.JaxbRefJdoEntities +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpaEntities +
+demoapp.dom.domain.objects.other.embedded.jdo.ComplexNumberJdoValueSemantics +
+demoapp.dom.domain.objects.other.embedded.jdo.NumberConstantJdoRepository +
+demoapp.dom.domain.objects.other.embedded.jpa.ComplexNumberJpaValueSemantics +
+demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpaRepository +
+demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantSeeding +
+demoapp.dom.domain.objects.other.embedded.samples.ComplexNumberSamples +
+demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingSeeding +
+demoapp.dom.domain.properties.Property.commandPublishing.jdo.PropertyCommandPublishingJdoEntities +
+demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpaEntities +
+demoapp.dom.domain.properties.Property.domainEvent.subscribers.PropertyDomainEventControlService +
+demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingSeeding +
+demoapp.dom.domain.properties.Property.executionPublishing.jdo.PropertyExecutionPublishingJdoEntities +
+demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpaEntities +
+demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities +
+demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpaEntities +
+demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildSeeding +
+demoapp.dom.domain.properties.PropertyLayout.navigable.FileTreeNodeService +
+demoapp.dom.domain.properties.PropertyLayout.repainting.PdfJsViewerAdvisorFallback +
+demoapp.dom.featured.customui.geocoding.GeoapifyClient +
+demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoImplementation +
+demoapp.dom.services.core.eventbusservice.EventLogEntryJdoRepository +
+demoapp.dom.services.core.eventbusservice.EventLogEntryJpaRepository +
+demoapp.dom.services.core.eventbusservice.EventSubscriberDemoImplementation +
+demoapp.dom.services.core.wrapperFactory.WrapperFactorySeeding +
+demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdoEntities +
+demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpaEntities +
+demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo +
+demoapp.dom.services.extensions.secman.apptenancy.jdo.TenantedJdoEntities +
+demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpaEntities +
+demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedSeeding +
+demoapp.dom.services.extensions.secman.appuser.seed.AppUserSeeding +
+demoapp.dom.types.causeway.blobs.jdo.CausewayBlobJdoEntities +
+demoapp.dom.types.causeway.blobs.jpa.CausewayBlobJpaEntities +
+demoapp.dom.types.causeway.blobs.persistence.CausewayBlobSeeding +
+demoapp.dom.types.causeway.blobs.samples.CausewayBlobsSamples +
+demoapp.dom.types.causeway.clobs.jdo.CausewayClobJdoEntities +
+demoapp.dom.types.causeway.clobs.jpa.CausewayClobJpaEntities +
+demoapp.dom.types.causeway.clobs.persistence.CausewayClobSeeding +
+demoapp.dom.types.causeway.clobs.samples.CausewayClobsSamples +
+demoapp.dom.types.causeway.localresourcepaths.jdo.CausewayLocalResourcePathJdoEntities +
+demoapp.dom.types.causeway.localresourcepaths.jpa.CausewayLocalResourcePathJpaEntities +
+demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathSeeding +
+demoapp.dom.types.causeway.localresourcepaths.samples.CausewayLocalResourcePathsSamples +
+demoapp.dom.types.causeway.markups.jdo.CausewayMarkupJdoEntities +
+demoapp.dom.types.causeway.markups.jpa.CausewayMarkupJpaEntities +
+demoapp.dom.types.causeway.markups.persistence.CausewayMarkupSeeding +
+demoapp.dom.types.causeway.markups.samples.CausewayMarkupSamples +
+demoapp.dom.types.causeway.passwords.jdo.CausewayPasswordJdoEntities +
+demoapp.dom.types.causeway.passwords.jpa.CausewayPasswordJpaEntities +
+demoapp.dom.types.causeway.passwords.persistence.CausewayPasswordSeeding +
+demoapp.dom.types.causeway.passwords.samples.CausewayPasswordsSamples +
+demoapp.dom.types.causewayext.cal.jdo.CausewayCalendarEventEntities +
+demoapp.dom.types.causewayext.cal.jpa.CausewayCalendarEventEntities +
+demoapp.dom.types.causewayext.cal.persistence.CausewayCalendarEventSeeding +
+demoapp.dom.types.causewayext.cal.samples.CausewayCalendarEventSamples +
+demoapp.dom.types.causewayval.asciidocs.jdo.CausewayAsciiDocJdoEntities +
+demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpaEntities +
+demoapp.dom.types.causewayval.asciidocs.persistence.CausewayAsciiDocSeeding +
+demoapp.dom.types.causewayval.markdowns.jdo.CausewayMarkdownJdoEntities +
+demoapp.dom.types.causewayval.markdowns.jpa.CausewayMarkdownJpaEntities +
+demoapp.dom.types.causewayval.markdowns.persistence.CausewayMarkdownSeeding +
+demoapp.dom.types.causewayval.vegas.jdo.CausewayVegaJdoEntities +
+demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpaEntities +
+demoapp.dom.types.causewayval.vegas.persistence.CausewayVegaSeeding +
+demoapp.dom.types.causewayval.vegas.samples.CausewayVegaSamples +
+demoapp.dom.types.javaawt.images.jdo.JavaAwtBufferedImageJdoEntities +
+demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpaEntities +
+demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageSeeding +
+demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImageService +
+demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImagesSamples +
+demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities +
+demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpaEntities +
+demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanSeeding +
+demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples +
+demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities +
+demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpaEntities +
+demoapp.dom.types.javalang.bytes.persistence.WrapperByteSeeding +
+demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples +
+demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities +
+demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpaEntities +
+demoapp.dom.types.javalang.characters.persistence.WrapperCharacterSeeding +
+demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples +
+demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities +
+demoapp.dom.types.javalang.doubles.jpa.WrapperDoubleJpaEntities +
+demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleSeeding +
+demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples +
+demoapp.dom.types.javalang.enums.jdo.JavaLangEnumJdoEntities +
+demoapp.dom.types.javalang.enums.jpa.JavaLangEnumJpaEntities +
+demoapp.dom.types.javalang.enums.persistence.JavaLangEnumSeeding +
+demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities +
+demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpaEntities +
+demoapp.dom.types.javalang.floats.persistence.WrapperFloatSeeding +
+demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples +
+demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities +
+demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpaEntities +
+demoapp.dom.types.javalang.integers.persistence.WrapperIntegerSeeding +
+demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples +
+demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities +
+demoapp.dom.types.javalang.longs.jpa.WrapperLongJpaEntities +
+demoapp.dom.types.javalang.longs.persistence.WrapperLongSeeding +
+demoapp.dom.types.javalang.longs.samples.WrapperLongSamples +
+demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities +
+demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpaEntities +
+demoapp.dom.types.javalang.shorts.persistence.WrapperShortSeeding +
+demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples +
+demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities +
+demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpaEntities +
+demoapp.dom.types.javalang.strings.persistence.JavaLangStringSeeding +
+demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities +
+demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpaEntities +
+demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalSeeding +
+demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples +
+demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities +
+demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpaEntities +
+demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerSeeding +
+demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples +
+demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities +
+demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpaEntities +
+demoapp.dom.types.javanet.urls.persistence.JavaNetUrlSeeding +
+demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples +
+demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities +
+demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpaEntities +
+demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateSeeding +
+demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples +
+demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities +
+demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpaEntities +
+demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampSeeding +
+demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples +
+demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDateSeeding +
+demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples +
+demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples +
+demoapp.dom.types.javatime.javatimelocaltime.jdo.JavaTimeLocalTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaltime.samples.JavaTimeLocalTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.persistence.JavaTimeOffsetTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples +
+demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZonedDateTimeSeeding +
+demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples +
+demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities +
+demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpaEntities +
+demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateSeeding +
+demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples +
+demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities +
+demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpaEntities +
+demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidSeeding +
+demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples +
+demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeJdoSeeding +
+demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples +
+demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldate.persistence.JodaLocalDateJdoSeeding +
+demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples +
+demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldatetime.persistence.JodaLocalDateTimeSeeding +
+demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples +
+demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeSeeding +
+demoapp.dom.types.jodatime.jodalocaltime.samples.JodaLocalTimeSamples +
+demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities +
+demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpaEntities +
+demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanSeeding +
+demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities +
+demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpaEntities +
+demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteSeeding +
+demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities +
+demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpaEntities +
+demoapp.dom.types.primitive.chars.persistence.PrimitiveCharSeeding +
+demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities +
+demoapp.dom.types.primitive.doubles.jpa.PrimitiveDoubleJpaEntities +
+demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleSeeding +
+demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities +
+demoapp.dom.types.primitive.floats.jpa.PrimitiveFloatJpaEntities +
+demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatSeeding +
+demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities +
+demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpaEntities +
+demoapp.dom.types.primitive.ints.persistence.PrimitiveIntSeeding +
+demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities +
+demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpaEntities +
+demoapp.dom.types.primitive.longs.persistence.PrimitiveLongSeeding +
+demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities +
+demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpaEntities +
+demoapp.dom.types.primitive.shorts.persistence.PrimitiveShortSeeding +
+****
+
+.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-persistence-jdo:jar:<managed> +
@@ -801,7 +1041,7 @@ Directory: /examples/demo/vaadin
 ----
 |.Dependencies
 ****
-org.apache.causeway.examples.apps:demo-web:jar:${project.version} +
+org.apache.causeway.examples.apps:demo-web:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sse-wicket:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-vaadin-viewer:jar:${project.version} +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-ui-vaa:jar:<managed> +
@@ -924,22 +1164,22 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Root\n[Software System]" {
   rectangle "==Apache Causeway\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
@@ -947,8 +1187,8 @@ package "Root\n[Software System]" {
   rectangle "==Apache Causeway - Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
   rectangle "==Apache Causeway Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
 }
-2 .[#707070].> 4 : ""
-2 .[#707070].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 3 : ""
 @enduml
 ----
 .Projects/Modules (Root)
@@ -1024,7 +1264,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Commons\n[Software System]" {
   rectangle "==Apache Causeway Commons\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -1050,7 +1290,6 @@ Directory: /commons
 ****
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
-com.google.code.findbugs:jsr305:jar:<managed> +
 org.apache.causeway.core:causeway-core-privileged:jar:<managed> +
 org.apache.causeway.core:causeway-jdk-supplemental:pom:<managed> +
 org.hamcrest:hamcrest-library:jar:<managed> +
@@ -1093,116 +1332,109 @@ left to right direction
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<14>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<15>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<16>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<17>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Core\n[Software System]" {
-  rectangle "==Apache Causeway - JDK Supplemental\n<size:10>[Container: packaging: pom]</size>" <<16>> as 16
+  rectangle "==Apache Causeway - JDK Supplemental\n<size:10>[Container: packaging: pom]</size>" <<15>> as 15
   rectangle "==Apache Causeway Api - AppLib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
-  rectangle "==Apache Causeway Api - Schemas\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
+  rectangle "==Apache Causeway Api - Schemas\n<size:10>[Container: packaging: jar]</size>" <<16>> as 16
   rectangle "==Apache Causeway Core\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Causeway Core - Code Gen (ByteBuddy)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Causeway Core - Configuration\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
   rectangle "==Apache Causeway Core - Interaction\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Causeway Core - Internal Test Support\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
-  rectangle "==Apache Causeway Core - Internal Test Support (Vintage)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
-  rectangle "==Apache Causeway Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
-  rectangle "==Apache Causeway Core - Privileged\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
-  rectangle "==Apache Causeway Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
-  rectangle "==Apache Causeway Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
-  rectangle "==Apache Causeway Core - Security\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
-  rectangle "==Apache Causeway Core - Transaction\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
-  rectangle "==Apache Causeway Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Causeway Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Causeway Core - Privileged\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Causeway Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Causeway Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Causeway Core - Security\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Causeway Core - Transaction\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Causeway Core - WebApp\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
 }
-2 .[#707070].> 16 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 17 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 8 : ""
-2 .[#707070].> 9 : ""
-2 .[#707070].> 10 : ""
-2 .[#707070].> 11 : ""
-2 .[#707070].> 12 : ""
-2 .[#707070].> 13 : ""
-2 .[#707070].> 14 : ""
-2 .[#707070].> 15 : ""
+2 .[#707070,thickness=2].> 15 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 16 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 8 : ""
+2 .[#707070,thickness=2].> 9 : ""
+2 .[#707070,thickness=2].> 10 : ""
+2 .[#707070,thickness=2].> 11 : ""
+2 .[#707070,thickness=2].> 12 : ""
+2 .[#707070,thickness=2].> 13 : ""
+2 .[#707070,thickness=2].> 14 : ""
 @enduml
 ----
 .Projects/Modules (Core)
@@ -1222,7 +1454,6 @@ Directory: /core
 
 .Dependencies
 ****
-de.agilecoders.wicket:wicket-bootstrap-extensions:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 ****
 
@@ -1268,7 +1499,7 @@ org.apache.causeway.core:causeway-schema:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:applib:index/CausewayModuleApplib.adoc[CausewayModuleApplib], xref:refguide:applib:index/CausewayModuleApplibChangeAndExecutionLoggers.adoc[CausewayModuleApplibChangeAndExecutionLoggers], xref:refguide:applib:index/CausewayModuleApplibMixins.adoc[CausewayModuleApplibMixins], xref:refguide:applib:index/Identifier.adoc[Identifier], xref:refguide:applib:index/ViewModel.adoc[ViewModel], xref:refguide:applib:index/annotation/Action.adoc[Action], xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], xref:refguide:applib:index/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:refguide:applib:index/annotation/Bounding.adoc[Bounding], xref:refguide:applib:index/annotation/Collection.adoc[Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout], xref:refguide:applib:index/annotation/DependentDefaultsPolicy.adoc[DependentDefaultsPolicy], xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:refguide:applib:index/annotation/DomainService.adoc[DomainService], xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:refguide:applib:index/annotation/DomainServiceLayout_MenuBar.adoc[DomainServiceLayout.MenuBar], xref:refguide:applib:index/annotation/Domain_Exclude.adoc[Domain.Exclude], xref:refguide:applib:index/annotation/Domain_Include.adoc[Domain.Include], xref:refguide:applib:index/annotation/Editing.adoc[Editing], xref:refguide:applib:index/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:refguide:applib:index/annotation/HomePage.adoc[HomePage], xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope], xref:refguide:applib:index/annotation/Introspection.adoc[Introspection], xref:refguide:applib:index/annotation/LabelPosition.adoc[LabelPosition], xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport], xref:refguide:applib:index/annotation/MinLength.adoc[MinLength], xref:refguide:applib:index/annotation/Module.adoc[Module], xref:refguide:applib:index/annotation/Nature.adoc[Nature], xref:refguide:applib:index/annotation/NatureOfService.adoc[NatureOfService], xref:refguide:applib:index/annotation/Navigable.adoc[Navigable], xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle], xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport], xref:refguide:applib:index/annotation/Optionality.adoc[Optionality], xref:refguide:applib:index/annotation/Parameter.adoc[Parameter], xref:refguide:applib:index/annotation/ParameterLayout.adoc[ParameterLayout], xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence], xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic], xref:refguide:applib:index/annotation/Projecting.adoc[Projecting], xref:refguide:applib:index/annotation/PromptStyle.adoc[PromptStyle], xref:refguide:applib:index/annotation/Property.adoc[Property], xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout], xref:refguide:applib:index/annotation/Publishing.adoc[Publishing], xref:refguide:applib:index/annotation/Redirect.adoc[Redirect], xref:refguide:applib:index/annotation/Repainting.adoc[Repainting], xref:refguide:applib:index/annotation/RestrictTo.adoc[RestrictTo], xref:refguide:applib:index/annotation/SemanticsOf.adoc[SemanticsOf], xref:refguide:applib:index/annotation/Snapshot.adoc[Snapshot], xref:refguide:applib:index/annotation/TableDecoration.adoc[TableDecoration], xref:refguide:applib:index/annotation/TimePrecision.adoc[TimePrecision], xref:refguide:applib:index/annotation/TimeZoneTranslation.adoc[TimeZoneTranslation], xref:refguide:applib:index/annotation/Title.adoc[Title], xref:refguide:applib:index/annotation/Value.adoc[Value], xref:refguide:applib:index/annotation/ValueSemantics.adoc[ValueSemantics], xref:refguide:applib:index/annotation/Where.adoc[Where], xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2], xref:refguide:applib:index/client/SuppressionType.adoc[SuppressionType], xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock], xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList], xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase], xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:refguide:applib:index/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent], xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException], xref:refguide:applib:index/exceptions/TranslatableException.adoc[TranslatableException], xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException], xref:refguide:applib:index/exceptions/unrecoverable/DomainModelException.adoc[DomainModelException], xref:refguide:applib:index/exceptions/unrecoverable/MetaModelException.adoc[MetaModelException], xref:refguide:applib:index/exceptions/unrecoverable/NoAuthenticatorException.adoc[NoAuthenticatorException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectNotFoundException.adoc[ObjectNotFoundException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectPersistenceException.adoc[ObjectPersistenceException], xref:refguide:applib:index/exceptions/unrecoverable/PersistFailedException.adoc[PersistFailedException], xref:refguide:applib:index/exceptions/unrecoverable/ReflectiveActionException.adoc[ReflectiveActionException], xref:refguide:applib:index/exceptions/unrecoverable/RepositoryException.adoc[RepositoryException], xref:refguide:applib:index/exceptions/unrecoverable/UnexpectedCallException.adoc[UnexpectedCallException], xref:refguide:applib:index/exceptions/unrecoverable/UnknownTypeException.adoc[UnknownTypeException], xref:refguide:applib:index/graph/Edge.adoc[Edge], xref:refguide:applib:index/graph/SimpleEdge.adoc[SimpleEdge], xref:refguide:applib:index/graph/Vertex.adoc[Vertex], xref:refguide:applib:index/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode], xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath], xref:refguide:applib:index/graph/tree/TreeState.adoc[TreeState], xref:refguide:applib:index/id/HasLogicalType.adoc[HasLogicalType], xref:refguide:applib:index/id/LogicalType.adoc[LogicalType], xref:refguide:applib:index/jaxb/DataTypeFactory.adoc[DataTypeFactory], xref:refguide:applib:index/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:refguide:applib:index/jaxb/JavaSqlXMLGregorianCalendarMarshalling.adoc[JavaSqlXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JavaTimeXMLGregorianCalendarMarshalling.adoc[JavaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:refguide:applib:index/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:refguide:applib:index/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:refguide:applib:index/jaxb/PrimitiveJaxbAdapters.adoc[PrimitiveJaxbAdapters], xref:refguide:applib:index/layout/LayoutConstants.adoc[LayoutConstants], xref:refguide:applib:index/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:refguide:applib:index/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner], xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData], xref:refguide:applib:index/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner], xref:refguide:applib:index/layout/component/CssClassFaPosition.adoc[CssClassFaPosition], xref:refguide:applib:index/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData], xref:refguide:applib:index/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner], xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet], xref:refguide:applib:index/layout/component/FieldSetOwner.adoc[FieldSetOwner], xref:refguide:applib:index/layout/component/HasBookmarking.adoc[HasBookmarking], xref:refguide:applib:index/layout/component/HasCssClass.adoc[HasCssClass], xref:refguide:applib:index/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:refguide:applib:index/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:refguide:applib:index/layout/component/HasHidden.adoc[HasHidden], xref:refguide:applib:index/layout/component/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion], xref:refguide:applib:index/layout/component/MemberRegionOwner.adoc[MemberRegionOwner], xref:refguide:applib:index/layout/component/Owned.adoc[Owned], xref:refguide:applib:index/layout/component/Owner.adoc[Owner], xref:refguide:applib:index/layout/component/PropertyLayoutData.adoc[PropertyLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutData.adoc[ServiceActionLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner], xref:refguide:applib:index/layout/component/TableDecoration.adoc[TableDecoration], xref:refguide:applib:index/layout/grid/Grid.adoc[Grid], xref:refguide:applib:index/layout/grid/GridAbstract.adoc[GridAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFix.adoc[BSClearFix], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixHidden.adoc[BSClearFixHidden], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixVisible.adoc[BSClearFixVisible], xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol], xref:refguide:applib:index/layout/grid/bootstrap/BSElement.adoc[BSElement], xref:refguide:applib:index/layout/grid/bootstrap/BSElementAbstract.adoc[BSElementAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid], xref:refguide:applib:index/layout/grid/bootstrap/BSRow.adoc[BSRow], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContent.adoc[BSRowContent], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContentOwner.adoc[BSRowContentOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSRowOwner.adoc[BSRowOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTab.adoc[BSTab], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroup.adoc[BSTabGroup], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroupOwner.adoc[BSTabGroupOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTabOwner.adoc[BSTabOwner], xref:refguide:applib:index/layout/grid/bootstrap/HasCssId.adoc[HasCssId], xref:refguide:applib:index/layout/grid/bootstrap/Size.adoc[Size], xref:refguide:applib:index/layout/grid/bootstrap/SizeSpan.adoc[SizeSpan], xref:refguide:applib:index/layout/grid/bootstrap/WithinGrid.adoc[WithinGrid], xref:refguide:applib:index/layout/links/Link.adoc[Link], xref:refguide:applib:index/layout/menubars/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu], xref:refguide:applib:index/layout/menubars/MenuBar.adoc[MenuBar], xref:refguide:applib:index/layout/menubars/MenuBars.adoc[MenuBars], xref:refguide:applib:index/layout/menubars/MenuBarsAbstract.adoc[MenuBarsAbstract], xref:refguide:applib:index/layout/menubars/MenuSection.adoc[MenuSection], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenu.adoc[BSMenu], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBar.adoc[BSMenuBar], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBars.adoc[BSMenuBars], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuSection.adoc[BSMenuSection], xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale], xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto], xref:refguide:applib:index/mixins/dto/DtoMixinConstants.adoc[DtoMixinConstants], xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml], xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd], xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml], xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml], xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName], xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier], xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel], xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi], xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername], xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord], xref:refguide:applib:index/mixins/system/DomainChangeRecord_ChangeType.adoc[DomainChangeRecord.ChangeType], xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId], xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence], xref:refguide:applib:index/mixins/system/HasTarget_openTargetObject.adoc[HasTarget_openTargetObject], xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt], xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy], xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt], xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery], xref:refguide:applib:index/query/Query.adoc[Query], xref:refguide:applib:index/query/QueryRange.adoc[QueryRange], xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature], xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId], xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:refguide:applib:index/services/appfeat/ApplicationFeatureSort.adoc[ApplicationFeatureSort], xref:refguide:applib:index/services/appfeat/ApplicationMemberSort.adoc[ApplicationMemberSort], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureViewModel.adoc[ApplicationFeatureViewModel], xref:refguide:applib:index/services/appfeatui/ApplicationNamespace.adoc[ApplicationNamespace], xref:refguide:applib:index/services/appfeatui/ApplicationType.adoc[ApplicationType], xref:refguide:applib:index/services/appfeatui/ApplicationTypeAction.adoc[ApplicationTypeAction], xref:refguide:applib:index/services/appfeatui/ApplicationTypeCollection.adoc[ApplicationTypeCollection], xref:refguide:applib:index/services/appfeatui/ApplicationTypeMember.adoc[ApplicationTypeMember], xref:refguide:applib:index/services/appfeatui/ApplicationTypeProperty.adoc[ApplicationTypeProperty], xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark], xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup], xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object], xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService], xref:refguide:applib:index/services/bookmark/HasTarget.adoc[HasTarget], xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier], xref:refguide:applib:index/services/bookmark/Oid.adoc[Oid], xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], xref:refguide:applib:index/services/command/Command.adoc[Command], xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:refguide:applib:index/services/command/CommandExecutorService_InteractionContextPolicy.adoc[CommandExecutorService.InteractionContextPolicy], xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:refguide:applib:index/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForActionAbstract.adoc[CommandDtoProcessorForActionAbstract], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForPropertyAbstract.adoc[CommandDtoProcessorForPropertyAbstract], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu], xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:refguide:applib:index/services/confview/ConfigurationViewmodel.adoc[ConfigurationViewmodel], xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails], xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket], xref:refguide:applib:index/services/error/Ticket.adoc[Ticket], xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], xref:refguide:applib:index/services/exceprecog/Category.adoc[Category], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerAbstract.adoc[ExceptionRecognizerAbstract], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[ExceptionRecognizerForType], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition], xref:refguide:applib:index/services/exceprecog/RootCauseFinder.adoc[RootCauseFinder], xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService], xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], xref:refguide:applib:index/services/grid/GridService.adoc[GridService], xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], xref:refguide:applib:index/services/health/Health.adoc[Health], xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService], xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider], xref:refguide:applib:index/services/hint/HintStore.adoc[HintStore], xref:refguide:applib:index/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:refguide:applib:index/services/i18n/HasTranslationContext.adoc[HasTranslationContext], xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider], xref:refguide:applib:index/services/i18n/Mode.adoc[Mode], xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString], xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext], xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService], xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:refguide:applib:index/services/iactn/ActionInvocation.adoc[ActionInvocation], xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider], xref:refguide:applib:index/services/iactn/PropertyEdit.adoc[PropertyEdit], xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector], xref:refguide:applib:index/services/jaxb/CausewaySchemas.adoc[CausewaySchemas], xref:refguide:applib:index/services/jaxb/JaxbService.adoc[JaxbService], xref:refguide:applib:index/services/keyvaluestore/KeyValueSessionStore.adoc[KeyValueSessionStore], xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle], xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService], xref:refguide:applib:index/services/locale/LocaleChoiceProvider.adoc[LocaleChoiceProvider], xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService], xref:refguide:applib:index/services/message/MessageService.adoc[MessageService], xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort], xref:refguide:applib:index/services/metamodel/Config.adoc[Config], xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember], xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel], xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService], xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService], xref:refguide:applib:index/services/placeholder/PlaceholderRenderService.adoc[PlaceholderRenderService], xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:refguide:applib:index/services/queryresultscache/MethodReferences.adoc[MethodReferences], xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl], xref:refguide:applib:index/services/registry/InstanceByPriorityComparator.adoc[InstanceByPriorityComparator], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState], xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:refguide:applib:index/services/session/SessionLogger.adoc[SessionLogger], xref:refguide:applib:index/services/session/SessionSubscriber.adoc[SessionSubscriber], xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService], xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu], xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService], xref:refguide:applib:index/services/swagger/Format.adoc[Format], xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService], xref:refguide:applib:index/services/swagger/Visibility.adoc[Visibility], xref:refguide:applib:index/services/tablecol/TableColumnOrderForCollectionTypeAbstract.adoc[TableColumnOrderForCollectionTypeAbstract], xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService], xref:refguide:applib:index/services/title/TitleService.adoc[TitleService], xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu], xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor], xref:refguide:applib:index/services/user/ImpersonateStopMenu.adoc[ImpersonateStopMenu], xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder], xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento], xref:refguide:applib:index/services/user/UserCurrentSessionTimeZoneHolder.adoc[UserCurrentSessionTimeZoneHolder], xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento], xref:refguide:applib:index/services/user/UserService.adoc[UserService], xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:refguide:applib:index/services/userreg/UserDetails.adoc[UserDetails], xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:refguide:applib:index/services/userreg/events/EmailEventAbstract.adoc[EmailEventAbstract], xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu], xref:refguide:applib:index/services/wrapper/DisabledException.adoc[DisabledException], xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException], xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException], xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:refguide:applib:index/services/wrapper/WrappingObject.adoc[WrappingObject], xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable], xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:refguide:applib:index/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:refguide:applib:index/services/wrapper/control/ExceptionHandlerAbstract.adoc[ExceptionHandlerAbstract], xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl], xref:refguide:applib:index/services/wrapper/events/AccessEvent.adoc[AccessEvent], xref:refguide:applib:index/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:refguide:applib:index/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:refguide:applib:index/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:refguide:applib:index/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionVisibilityEvent.adoc[CollectionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:refguide:applib:index/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:refguide:applib:index/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:refguide:applib:index/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:refguide:applib:index/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId], xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService], xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState], xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor], xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot.adoc[XmlSnapshotService.Snapshot], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot_Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:refguide:applib:index/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:refguide:applib:index/spec/AbstractSpecification.adoc[AbstractSpecification], xref:refguide:applib:index/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:refguide:applib:index/spec/Specification.adoc[Specification], xref:refguide:applib:index/spec/Specification2.adoc[Specification2], xref:refguide:applib:index/spec/SpecificationAnd.adoc[SpecificationAnd], xref:refguide:applib:index/spec/SpecificationNot.adoc[SpecificationNot], xref:refguide:applib:index/spec/SpecificationOr.adoc[SpecificationOr], xref:refguide:applib:index/types/DescriptionType.adoc[DescriptionType], xref:refguide:applib:index/types/MemberIdentifierType.adoc[MemberIdentifierType], xref:refguide:applib:index/types/TargetActionType.adoc[TargetActionType], xref:refguide:applib:index/types/TargetClassType.adoc[TargetClassType], xref:refguide:applib:index/util/Enums.adoc[Enums], xref:refguide:applib:index/util/Equality.adoc[Equality], xref:refguide:applib:index/util/Hashing.adoc[Hashing], xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil], xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts], xref:refguide:applib:index/util/ReasonBuffer.adoc[ReasonBuffer], xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2], xref:refguide:applib:index/util/Reasons.adoc[Reasons], xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer], xref:refguide:applib:index/util/TitleBufferException.adoc[TitleBufferException], xref:refguide:applib:index/util/ToString.adoc[ToString], xref:refguide:applib:index/util/ZipReader.adoc[ZipReader], xref:refguide:applib:index/util/ZipWriter.adoc[ZipWriter], xref:refguide:applib:index/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:refguide:applib:index/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:refguide:applib:index/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:refguide:applib:index/util/schema/InteractionDtoUtils.adoc[InteractionDtoUtils], xref:refguide:applib:index/util/schema/InteractionsDtoUtils.adoc[InteractionsDtoUtils], xref:refguide:applib:index/util/schema/MemberExecutionDtoUtils.adoc[MemberExecutionDtoUtils], xref:refguide:applib:index/value/Blob.adoc[Blob], xref:refguide:applib:index/value/Clob.adoc[Clob], xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath], xref:refguide:applib:index/value/Markup.adoc[Markup], xref:refguide:applib:index/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy], xref:refguide:applib:index/value/Password.adoc[Password], xref:refguide:applib:index/value/semantics/Converter.adoc[Converter], xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider], xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation], xref:refguide:applib:index/value/semantics/Parser.adoc[Parser], xref:refguide:applib:index/value/semantics/ParsingException.adoc[ParsingException], xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer], xref:refguide:applib:index/value/semantics/ValueSemanticsAbstract.adoc[ValueSemanticsAbstract], xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:refguide:applib:index/value/semantics/ValueSemanticsResolver.adoc[ValueSemanticsResolver]
+xref:refguide:applib:index/CausewayModuleApplib.adoc[CausewayModuleApplib], xref:refguide:applib:index/CausewayModuleApplibChangeAndExecutionLoggers.adoc[CausewayModuleApplibChangeAndExecutionLoggers], xref:refguide:applib:index/CausewayModuleApplibMixins.adoc[CausewayModuleApplibMixins], xref:refguide:applib:index/Identifier.adoc[Identifier], xref:refguide:applib:index/ViewModel.adoc[ViewModel], xref:refguide:applib:index/annotation/Action.adoc[Action], xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], xref:refguide:applib:index/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:refguide:applib:index/annotation/Bounding.adoc[Bounding], xref:refguide:applib:index/annotation/Collection.adoc[Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout], xref:refguide:applib:index/annotation/DependentDefaultsPolicy.adoc[DependentDefaultsPolicy], xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:refguide:applib:index/annotation/DomainService.adoc[DomainService], xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:refguide:applib:index/annotation/DomainServiceLayout_MenuBar.adoc[DomainServiceLayout.MenuBar], xref:refguide:applib:index/annotation/Domain_Exclude.adoc[Domain.Exclude], xref:refguide:applib:index/annotation/Domain_Include.adoc[Domain.Include], xref:refguide:applib:index/annotation/Editing.adoc[Editing], xref:refguide:applib:index/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:refguide:applib:index/annotation/HomePage.adoc[HomePage], xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope], xref:refguide:applib:index/annotation/Introspection.adoc[Introspection], xref:refguide:applib:index/annotation/LabelPosition.adoc[LabelPosition], xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport], xref:refguide:applib:index/annotation/MinLength.adoc[MinLength], xref:refguide:applib:index/annotation/Module.adoc[Module], xref:refguide:applib:index/annotation/Nature.adoc[Nature], xref:refguide:applib:index/annotation/NatureOfService.adoc[NatureOfService], xref:refguide:applib:index/annotation/Navigable.adoc[Navigable], xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle], xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport], xref:refguide:applib:index/annotation/Optionality.adoc[Optionality], xref:refguide:applib:index/annotation/Parameter.adoc[Parameter], xref:refguide:applib:index/annotation/ParameterLayout.adoc[ParameterLayout], xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence], xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic], xref:refguide:applib:index/annotation/Projecting.adoc[Projecting], xref:refguide:applib:index/annotation/PromptStyle.adoc[PromptStyle], xref:refguide:applib:index/annotation/Property.adoc[Property], xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout], xref:refguide:applib:index/annotation/Publishing.adoc[Publishing], xref:refguide:applib:index/annotation/Redirect.adoc[Redirect], xref:refguide:applib:index/annotation/Repainting.adoc[Repainting], xref:refguide:applib:index/annotation/RestrictTo.adoc[RestrictTo], xref:refguide:applib:index/annotation/SemanticsOf.adoc[SemanticsOf], xref:refguide:applib:index/annotation/Snapshot.adoc[Snapshot], xref:refguide:applib:index/annotation/TableDecoration.adoc[TableDecoration], xref:refguide:applib:index/annotation/TimePrecision.adoc[TimePrecision], xref:refguide:applib:index/annotation/TimeZoneTranslation.adoc[TimeZoneTranslation], xref:refguide:applib:index/annotation/Title.adoc[Title], xref:refguide:applib:index/annotation/Value.adoc[Value], xref:refguide:applib:index/annotation/ValueSemantics.adoc[ValueSemantics], xref:refguide:applib:index/annotation/Where.adoc[Where], xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2], xref:refguide:applib:index/client/SuppressionType.adoc[SuppressionType], xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock], xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList], xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase], xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:refguide:applib:index/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent], xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException], xref:refguide:applib:index/exceptions/TranslatableException.adoc[TranslatableException], xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException], xref:refguide:applib:index/exceptions/unrecoverable/DomainModelException.adoc[DomainModelException], xref:refguide:applib:index/exceptions/unrecoverable/MetaModelException.adoc[MetaModelException], xref:refguide:applib:index/exceptions/unrecoverable/NoAuthenticatorException.adoc[NoAuthenticatorException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectNotFoundException.adoc[ObjectNotFoundException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectPersistenceException.adoc[ObjectPersistenceException], xref:refguide:applib:index/exceptions/unrecoverable/PersistFailedException.adoc[PersistFailedException], xref:refguide:applib:index/exceptions/unrecoverable/ReflectiveActionException.adoc[ReflectiveActionException], xref:refguide:applib:index/exceptions/unrecoverable/RepositoryException.adoc[RepositoryException], xref:refguide:applib:index/exceptions/unrecoverable/UnexpectedCallException.adoc[UnexpectedCallException], xref:refguide:applib:index/exceptions/unrecoverable/UnknownTypeException.adoc[UnknownTypeException], xref:refguide:applib:index/graph/Edge.adoc[Edge], xref:refguide:applib:index/graph/SimpleEdge.adoc[SimpleEdge], xref:refguide:applib:index/graph/Vertex.adoc[Vertex], xref:refguide:applib:index/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode], xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath], xref:refguide:applib:index/graph/tree/TreeState.adoc[TreeState], xref:refguide:applib:index/id/HasLogicalType.adoc[HasLogicalType], xref:refguide:applib:index/id/LogicalType.adoc[LogicalType], xref:refguide:applib:index/jaxb/DataTypeFactory.adoc[DataTypeFactory], xref:refguide:applib:index/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:refguide:applib:index/jaxb/JavaSqlXMLGregorianCalendarMarshalling.adoc[JavaSqlXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JavaTimeXMLGregorianCalendarMarshalling.adoc[JavaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:refguide:applib:index/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:refguide:applib:index/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:refguide:applib:index/jaxb/PrimitiveJaxbAdapters.adoc[PrimitiveJaxbAdapters], xref:refguide:applib:index/layout/LayoutConstants.adoc[LayoutConstants], xref:refguide:applib:index/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:refguide:applib:index/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner], xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData], xref:refguide:applib:index/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner], xref:refguide:applib:index/layout/component/CssClassFaPosition.adoc[CssClassFaPosition], xref:refguide:applib:index/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData], xref:refguide:applib:index/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner], xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet], xref:refguide:applib:index/layout/component/FieldSetOwner.adoc[FieldSetOwner], xref:refguide:applib:index/layout/component/HasBookmarking.adoc[HasBookmarking], xref:refguide:applib:index/layout/component/HasCssClass.adoc[HasCssClass], xref:refguide:applib:index/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:refguide:applib:index/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:refguide:applib:index/layout/component/HasHidden.adoc[HasHidden], xref:refguide:applib:index/layout/component/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion], xref:refguide:applib:index/layout/component/MemberRegionOwner.adoc[MemberRegionOwner], xref:refguide:applib:index/layout/component/Owned.adoc[Owned], xref:refguide:applib:index/layout/component/Owner.adoc[Owner], xref:refguide:applib:index/layout/component/PropertyLayoutData.adoc[PropertyLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutData.adoc[ServiceActionLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner], xref:refguide:applib:index/layout/component/TableDecoration.adoc[TableDecoration], xref:refguide:applib:index/layout/grid/Grid.adoc[Grid], xref:refguide:applib:index/layout/grid/GridAbstract.adoc[GridAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFix.adoc[BSClearFix], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixHidden.adoc[BSClearFixHidden], xref:refguide:applib:index/layout/grid/bootstrap/BSClearFixVisible.adoc[BSClearFixVisible], xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol], xref:refguide:applib:index/layout/grid/bootstrap/BSElement.adoc[BSElement], xref:refguide:applib:index/layout/grid/bootstrap/BSElementAbstract.adoc[BSElementAbstract], xref:refguide:applib:index/layout/grid/bootstrap/BSGrid.adoc[BSGrid], xref:refguide:applib:index/layout/grid/bootstrap/BSRow.adoc[BSRow], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContent.adoc[BSRowContent], xref:refguide:applib:index/layout/grid/bootstrap/BSRowContentOwner.adoc[BSRowContentOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSRowOwner.adoc[BSRowOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTab.adoc[BSTab], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroup.adoc[BSTabGroup], xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroupOwner.adoc[BSTabGroupOwner], xref:refguide:applib:index/layout/grid/bootstrap/BSTabOwner.adoc[BSTabOwner], xref:refguide:applib:index/layout/grid/bootstrap/HasCssId.adoc[HasCssId], xref:refguide:applib:index/layout/grid/bootstrap/Size.adoc[Size], xref:refguide:applib:index/layout/grid/bootstrap/SizeSpan.adoc[SizeSpan], xref:refguide:applib:index/layout/grid/bootstrap/WithinGrid.adoc[WithinGrid], xref:refguide:applib:index/layout/links/Link.adoc[Link], xref:refguide:applib:index/layout/menubars/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu], xref:refguide:applib:index/layout/menubars/MenuBar.adoc[MenuBar], xref:refguide:applib:index/layout/menubars/MenuBars.adoc[MenuBars], xref:refguide:applib:index/layout/menubars/MenuBarsAbstract.adoc[MenuBarsAbstract], xref:refguide:applib:index/layout/menubars/MenuSection.adoc[MenuSection], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenu.adoc[BSMenu], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBar.adoc[BSMenuBar], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuBars.adoc[BSMenuBars], xref:refguide:applib:index/layout/menubars/bootstrap/BSMenuSection.adoc[BSMenuSection], xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale], xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto], xref:refguide:applib:index/mixins/dto/DtoMixinConstants.adoc[DtoMixinConstants], xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml], xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd], xref:refguide:applib:index/mixins/layout/Object_downloadLayout.adoc[Object_downloadLayout], xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml], xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName], xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier], xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel], xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi], xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername], xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord], xref:refguide:applib:index/mixins/system/DomainChangeRecord_ChangeType.adoc[DomainChangeRecord.ChangeType], xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId], xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence], xref:refguide:applib:index/mixins/system/HasTarget_openTargetObject.adoc[HasTarget_openTargetObject], xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt], xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy], xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt], xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery], xref:refguide:applib:index/query/Query.adoc[Query], xref:refguide:applib:index/query/QueryRange.adoc[QueryRange], xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature], xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId], xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:refguide:applib:index/services/appfeat/ApplicationFeatureSort.adoc[ApplicationFeatureSort], xref:refguide:applib:index/services/appfeat/ApplicationMemberSort.adoc[ApplicationMemberSort], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureViewModel.adoc[ApplicationFeatureViewModel], xref:refguide:applib:index/services/appfeatui/ApplicationNamespace.adoc[ApplicationNamespace], xref:refguide:applib:index/services/appfeatui/ApplicationType.adoc[ApplicationType], xref:refguide:applib:index/services/appfeatui/ApplicationTypeAction.adoc[ApplicationTypeAction], xref:refguide:applib:index/services/appfeatui/ApplicationTypeCollection.adoc[ApplicationTypeCollection], xref:refguide:applib:index/services/appfeatui/ApplicationTypeMember.adoc[ApplicationTypeMember], xref:refguide:applib:index/services/appfeatui/ApplicationTypeProperty.adoc[ApplicationTypeProperty], xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark], xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup], xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object], xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService], xref:refguide:applib:index/services/bookmark/HasTarget.adoc[HasTarget], xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier], xref:refguide:applib:index/services/bookmark/Oid.adoc[Oid], xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], xref:refguide:applib:index/services/command/Command.adoc[Command], xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:refguide:applib:index/services/command/CommandExecutorService_InteractionContextPolicy.adoc[CommandExecutorService.InteractionContextPolicy], xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:refguide:applib:index/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForActionAbstract.adoc[CommandDtoProcessorForActionAbstract], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForPropertyAbstract.adoc[CommandDtoProcessorForPropertyAbstract], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu], xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:refguide:applib:index/services/confview/ConfigurationViewmodel.adoc[ConfigurationViewmodel], xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails], xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket], xref:refguide:applib:index/services/error/Ticket.adoc[Ticket], xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], xref:refguide:applib:index/services/exceprecog/Category.adoc[Category], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerAbstract.adoc[ExceptionRecognizerAbstract], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[ExceptionRecognizerForType], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition], xref:refguide:applib:index/services/exceprecog/RootCauseFinder.adoc[RootCauseFinder], xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService], xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], xref:refguide:applib:index/services/grid/GridMarshallerService.adoc[GridMarshallerService], xref:refguide:applib:index/services/grid/GridService.adoc[GridService], xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], xref:refguide:applib:index/services/health/Health.adoc[Health], xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService], xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider], xref:refguide:applib:index/services/hint/HintStore.adoc[HintStore], xref:refguide:applib:index/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:refguide:applib:index/services/i18n/HasTranslationContext.adoc[HasTranslationContext], xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider], xref:refguide:applib:index/services/i18n/Mode.adoc[Mode], xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString], xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext], xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService], xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:refguide:applib:index/services/iactn/ActionInvocation.adoc[ActionInvocation], xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider], xref:refguide:applib:index/services/iactn/PropertyEdit.adoc[PropertyEdit], xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector], xref:refguide:applib:index/services/jaxb/CausewaySchemas.adoc[CausewaySchemas], xref:refguide:applib:index/services/jaxb/JaxbService.adoc[JaxbService], xref:refguide:applib:index/services/keyvaluestore/KeyValueSessionStore.adoc[KeyValueSessionStore], xref:refguide:applib:index/services/layout/LayoutExportStyle.adoc[LayoutExportStyle], xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService], xref:refguide:applib:index/services/locale/LocaleChoiceProvider.adoc[LocaleChoiceProvider], xref:refguide:applib:index/services/marshal/MarshallerService.adoc[MarshallerService], xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:refguide:applib:index/services/menu/MenuBarsMarshallerService.adoc[MenuBarsMarshallerService], xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService], xref:refguide:applib:index/services/message/MessageService.adoc[MessageService], xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort], xref:refguide:applib:index/services/metamodel/Config.adoc[Config], xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember], xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel], xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService], xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService], xref:refguide:applib:index/services/placeholder/PlaceholderRenderService.adoc[PlaceholderRenderService], xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:refguide:applib:index/services/queryresultscache/MethodReferences.adoc[MethodReferences], xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl], xref:refguide:applib:index/services/registry/InstanceByPriorityComparator.adoc[InstanceByPriorityComparator], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState], xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:refguide:applib:index/services/session/SessionLogger.adoc[SessionLogger], xref:refguide:applib:index/services/session/SessionSubscriber.adoc[SessionSubscriber], xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService], xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu], xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService], xref:refguide:applib:index/services/swagger/Format.adoc[Format], xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService], xref:refguide:applib:index/services/swagger/Visibility.adoc[Visibility], xref:refguide:applib:index/services/tablecol/TableColumnOrderForCollectionTypeAbstract.adoc[TableColumnOrderForCollectionTypeAbstract], xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService], xref:refguide:applib:index/services/title/TitleService.adoc[TitleService], xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu], xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor], xref:refguide:applib:index/services/user/ImpersonateStopMenu.adoc[ImpersonateStopMenu], xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder], xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento], xref:refguide:applib:index/services/user/UserCurrentSessionTimeZoneHolder.adoc[UserCurrentSessionTimeZoneHolder], xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento], xref:refguide:applib:index/services/user/UserService.adoc[UserService], xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:refguide:applib:index/services/userreg/UserDetails.adoc[UserDetails], xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:refguide:applib:index/services/userreg/events/EmailEventAbstract.adoc[EmailEventAbstract], xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu], xref:refguide:applib:index/services/wrapper/DisabledException.adoc[DisabledException], xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException], xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException], xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:refguide:applib:index/services/wrapper/WrappingObject.adoc[WrappingObject], xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[AsyncCallable], xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:refguide:applib:index/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:refguide:applib:index/services/wrapper/control/ExceptionHandlerAbstract.adoc[ExceptionHandlerAbstract], xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl], xref:refguide:applib:index/services/wrapper/events/AccessEvent.adoc[AccessEvent], xref:refguide:applib:index/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:refguide:applib:index/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:refguide:applib:index/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:refguide:applib:index/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionVisibilityEvent.adoc[CollectionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:refguide:applib:index/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:refguide:applib:index/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:refguide:applib:index/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:refguide:applib:index/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId], xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService], xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState], xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor], xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot.adoc[XmlSnapshotService.Snapshot], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot_Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:refguide:applib:index/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:refguide:applib:index/spec/AbstractSpecification.adoc[AbstractSpecification], xref:refguide:applib:index/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:refguide:applib:index/spec/Specification.adoc[Specification], xref:refguide:applib:index/spec/Specification2.adoc[Specification2], xref:refguide:applib:index/spec/SpecificationAnd.adoc[SpecificationAnd], xref:refguide:applib:index/spec/SpecificationNot.adoc[SpecificationNot], xref:refguide:applib:index/spec/SpecificationOr.adoc[SpecificationOr], xref:refguide:applib:index/types/DescriptionType.adoc[DescriptionType], xref:refguide:applib:index/types/MemberIdentifierType.adoc[MemberIdentifierType], xref:refguide:applib:index/types/TargetActionType.adoc[TargetActionType], xref:refguide:applib:index/types/TargetClassType.adoc[TargetClassType], xref:refguide:applib:index/util/Enums.adoc[Enums], xref:refguide:applib:index/util/Equality.adoc[Equality], xref:refguide:applib:index/util/Hashing.adoc[Hashing], xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil], xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts], xref:refguide:applib:index/util/ReasonBuffer.adoc[ReasonBuffer], xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2], xref:refguide:applib:index/util/Reasons.adoc[Reasons], xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer], xref:refguide:applib:index/util/TitleBufferException.adoc[TitleBufferException], xref:refguide:applib:index/util/ToString.adoc[ToString], xref:refguide:applib:index/util/ZipReader.adoc[ZipReader], xref:refguide:applib:index/util/ZipWriter.adoc[ZipWriter], xref:refguide:applib:index/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:refguide:applib:index/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:refguide:applib:index/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:refguide:applib:index/util/schema/InteractionDtoUtils.adoc[InteractionDtoUtils], xref:refguide:applib:index/util/schema/InteractionsDtoUtils.adoc[InteractionsDtoUtils], xref:refguide:applib:index/util/schema/MemberExecutionDtoUtils.adoc[MemberExecutionDtoUtils], xref:refguide:applib:index/value/Blob.adoc[Blob], xref:refguide:applib:index/value/Clob.adoc[Clob], xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath], xref:refguide:applib:index/value/Markup.adoc[Markup], xref:refguide:applib:index/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy], xref:refguide:applib:index/value/Password.adoc[Password], xref:refguide:applib:index/value/semantics/Converter.adoc[Converter], xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider], xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation], xref:refguide:applib:index/value/semantics/Parser.adoc[Parser], xref:refguide:applib:index/value/semantics/ParsingException.adoc[ParsingException], xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer], xref:refguide:applib:index/value/semantics/ValueSemanticsAbstract.adoc[ValueSemanticsAbstract], xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:refguide:applib:index/value/semantics/ValueSemanticsResolver.adoc[ValueSemanticsResolver]
 ****
 
 |Apache Causeway Core - Code Gen (ByteBuddy)
@@ -1323,6 +1554,7 @@ org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.hibernate:hibernate-validator:jar:<managed> +
+org.projectlombok:lombok:jar:<managed> +
 org.springframework.boot:spring-boot-configuration-processor:jar:<managed> +
 ****
 
@@ -1379,26 +1611,6 @@ org.slf4j:slf4j-api:jar:<managed> +
 org.springframework.boot:spring-boot-starter-test:jar:<managed> +
 ****
 
-|Apache Causeway Core - Internal Test Support (Vintage)
-[source,yaml]
-----
-Group: org.apache.causeway.core
-Artifact: causeway-core-internaltestvintage
-Type: jar
-Directory: /core/internaltestvintage
-----
-|Legacy support for writing unit tests in JUnit 4 with JMocj and AssertJ. DEPRECATED!
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.assertj:assertj-core:jar:<managed> +
-org.jmock:jmock:jar:<managed> +
-org.jmock:jmock-junit4:jar:<managed> +
-org.junit.vintage:junit-vintage-engine:jar:<managed> +
-org.picocontainer:picocontainer:jar:<managed> +
-****
-
 |Apache Causeway Core - MetaModel
 [source,yaml]
 ----
@@ -1420,8 +1632,8 @@ o.a.i.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry +
 o.a.i.core.metamodel.services.events.MetamodelEventService +
 o.a.i.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException +
 o.a.i.core.metamodel.services.grid.GridLoaderServiceDefault +
-o.a.i.core.metamodel.services.grid.GridReaderUsingJaxb +
 o.a.i.core.metamodel.services.grid.GridServiceDefault +
+o.a.i.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap +
 o.a.i.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap +
 o.a.i.core.metamodel.services.idstringifier.IdStringifierLookupService +
 o.a.i.core.metamodel.services.layout.LayoutServiceDefault +
@@ -1475,7 +1687,7 @@ o.a.i.core.metamodel.valuetypes.ValueSemanticsResolverDefault +
 
 .Dependencies
 ****
-io.swagger:swagger-core:jar:<managed> +
+io.swagger.core.v3:swagger-core:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -1552,7 +1764,8 @@ o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault +
 o.a.i.core.runtimeservices.locale.LanguageProviderDefault +
 o.a.i.core.runtimeservices.locale.LocaleChoiceProviderDefault +
 o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault +
-o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS +
+o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap +
+o.a.i.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap +
 o.a.i.core.runtimeservices.message.MessageServiceDefault +
 o.a.i.core.runtimeservices.placeholder.PlaceholderRenderServiceDefault +
 o.a.i.core.runtimeservices.publish.CommandPublisherDefault +
@@ -1760,7 +1973,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Persistence\n[Software System]" {
   rectangle "==Apache Causeway Persistence - Commons\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -1822,37 +2035,37 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "JDO\n[Software System]" {
   rectangle "==Apache Causeway Persistence - JDO\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -1863,12 +2076,12 @@ package "JDO\n[Software System]" {
   rectangle "==Apache Causeway Persistence - JDO (provider)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Causeway Persistence - JDO Provider (DataNucleus)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
 }
-2 .[#707070].> 8 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 4 : ""
+2 .[#707070,thickness=2].> 8 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 4 : ""
 @enduml
 ----
 .Projects/Modules (JDO)
@@ -2001,7 +2214,7 @@ o.a.i.persistence.jdo.metamodel.JdoProgrammingModel +
 
 .Dependencies
 ****
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-provider:jar:<managed> +
@@ -2021,6 +2234,7 @@ Directory: /persistence/jdo/provider
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
+org.datanucleus:datanucleus-rdbms:jar:<managed> +
 ****
 
 |Apache Causeway Persistence - JDO (Spring)
@@ -2075,27 +2289,27 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "JPA\n[Software System]" {
   rectangle "==Apache Causeway Persistence - JPA\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -2104,10 +2318,10 @@ package "JPA\n[Software System]" {
   rectangle "==Apache Causeway Persistence - JPA (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Causeway Persistence - JPA EclipseLink\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 4 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 4 : ""
 @enduml
 ----
 .Projects/Modules (JPA)
@@ -2246,7 +2460,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Bypass\n[Software System]" {
   rectangle "==Apache Causeway Security - Bypass\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -2303,7 +2517,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Keycloak\n[Software System]" {
   rectangle "==Apache Causeway Security - Keycloak\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -2369,7 +2583,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Shiro\n[Software System]" {
   rectangle "==Apache Causeway Security - Shiro\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -2400,7 +2614,7 @@ o.a.i.security.shiro.webmodule.WebModuleShiro +
 
 .Dependencies
 ****
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
@@ -2434,7 +2648,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Spring\n[Software System]" {
   rectangle "==Apache Causeway Security - Spring\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -2501,27 +2715,27 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Common\n[Software System]" {
   rectangle "==Apache Causeway Commons - Prism\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
@@ -2530,10 +2744,10 @@ package "Common\n[Software System]" {
   rectangle "==Apache Causeway Viewer - Commons Model\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Causeway Viewer - Commons Services\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
 }
-2 .[#707070].> 5 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 6 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 6 : ""
 @enduml
 ----
 .Projects/Modules (Common)
@@ -2596,7 +2810,7 @@ Directory: /viewers/commons/prism
 
 .Dependencies
 ****
-org.webjars.bowergithub.prismjs:prism:jar:1.28.0 +
+org.webjars.bowergithub.prismjs:prism:jar:1.29.0 +
 ****
 
 |Apache Causeway Viewer - Commons Services
@@ -2642,53 +2856,53 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Restful Objects\n[Software System]" {
   rectangle "==Apache Causeway Viewer - RO\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Causeway Viewer - RO (AppLib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Causeway Viewer - RO (Client)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Causeway Viewer - RO (JAX-RS Resteasy v4)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Causeway Viewer - RO (JAX-RS Resteasy)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
   rectangle "==Apache Causeway Viewer - RO (Rendering)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Causeway Viewer - RO (Testing)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Causeway Viewer - RO (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 8 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 8 : ""
 @enduml
 ----
 .Projects/Modules (Restful Objects)
@@ -2719,7 +2933,7 @@ Directory: /viewers/restfulobjects/applib
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -2747,20 +2961,20 @@ org.springframework:spring-context:jar:<managed> +
 xref:refguide:viewer:index/restfulobjects/client/ActionParameterListBuilder.adoc[ActionParameterListBuilder], xref:refguide:viewer:index/restfulobjects/client/RestfulClient.adoc[RestfulClient], xref:refguide:viewer:index/restfulobjects/client/RestfulClientConfig.adoc[RestfulClientConfig], xref:refguide:viewer:index/restfulobjects/client/auth/BasicAuthFilter.adoc[BasicAuthFilter], xref:refguide:viewer:index/restfulobjects/client/log/ClientConversationFilter.adoc[ClientConversationFilter], xref:refguide:viewer:index/restfulobjects/client/log/ClientConversationLogger.adoc[ClientConversationLogger]
 ****
 
-|Apache Causeway Viewer - RO (JAX-RS Resteasy v4)
+|Apache Causeway Viewer - RO (JAX-RS Resteasy)
 [source,yaml]
 ----
 Group: org.apache.causeway.viewer
-Artifact: causeway-viewer-restfulobjects-jaxrsresteasy4
+Artifact: causeway-viewer-restfulobjects-jaxrsresteasy
 Type: jar
-Directory: /viewers/restfulobjects/jaxrs-resteasy-4
+Directory: /viewers/restfulobjects/jaxrs-resteasy
 ----
 |JAX-RS plugin using jboss resteasy.
 
 .Components
 ****
-o.a.i.viewer.restfulobjects.jaxrsresteasy4.conneg.RestfulObjectsJaxbWriterForXml +
-o.a.i.viewer.restfulobjects.jaxrsresteasy4.webmodule.WebModuleJaxrsResteasy4 +
+o.a.i.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml +
+o.a.i.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy +
 ****
 
 .Dependencies
@@ -2775,7 +2989,7 @@ org.jboss.resteasy:resteasy-spring-boot-starter:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/restfulobjects/jaxrsresteasy4/CausewayModuleViewerRestfulObjectsJaxrsResteasy4.adoc[CausewayModuleViewerRestfulObjectsJaxrsResteasy4], xref:refguide:viewer:index/restfulobjects/jaxrsresteasy4/conneg/RestfulObjectsJaxbWriterForXml.adoc[RestfulObjectsJaxbWriterForXml], xref:refguide:viewer:index/restfulobjects/jaxrsresteasy4/webmodule/WebModuleJaxrsResteasy4.adoc[WebModuleJaxrsResteasy4]
+xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/CausewayModuleViewerRestfulObjectsJaxrsResteasy.adoc[CausewayModuleViewerRestfulObjectsJaxrsResteasy], xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/conneg/RestfulObjectsJaxbWriterForXml.adoc[RestfulObjectsJaxbWriterForXml], xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/webmodule/WebModuleJaxrsResteasy.adoc[WebModuleJaxrsResteasy]
 ****
 
 |Apache Causeway Viewer - RO (Rendering)
@@ -2798,15 +3012,15 @@ o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOr
 o.a.i.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType +
 o.a.i.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault +
 o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator +
 o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault +
-o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault +
+o.a.i.viewer.restfulobjects.rendering.service.swagger.internal.ValueSchemaFactoryDefault +
 o.a.i.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault +
 ****
 
 .Dependencies
 ****
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-applib:jar:<managed> +
 ****
@@ -2826,7 +3040,7 @@ Directory: /viewers/restfulobjects/testing
 ----
 |.Dependencies
 ****
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
 ****
@@ -2858,7 +3072,7 @@ o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
 .Dependencies
 ****
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-services:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed> +
@@ -2890,32 +3104,32 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Wicket\n[Software System]" {
   rectangle "==Apache Causeway Viewer - Wicket\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -2925,11 +3139,11 @@ package "Wicket\n[Software System]" {
   rectangle "==Apache Causeway Viewer - Wicket (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Causeway Viewer - Wicket (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
 @enduml
 ----
 .Projects/Modules (Wicket)
@@ -2945,7 +3159,10 @@ Artifact: causeway-viewer-wicket
 Type: pom
 Directory: /viewers/wicket
 ----
-|
+|.Dependencies
+****
+de.agilecoders.wicket:wicket-bootstrap-extensions:jar:<managed> +
+****
 
 |Apache Causeway Viewer - Wicket (Applib)
 [source,yaml]
@@ -3043,7 +3260,7 @@ org.webjars:jquery:jar:<managed> +
 org.webjars:jquery-ui:jar:<managed> +
 org.webjars:momentjs:jar:<managed> +
 org.webjars:select2:jar:<managed> +
-org.webjars.bower:summernote:jar:<managed> +
+org.webjars.npm:summernote:jar:<managed> +
 org.wicketstuff:wicketstuff-select2:jar:<managed> +
 ****
 
@@ -3079,7 +3296,7 @@ o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 ****
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
 org.apache.wicket:wicket-auth-roles:jar:<managed> +
 org.apache.wicket:wicket-spring:jar:<managed> +
@@ -3112,57 +3329,57 @@ left to right direction
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Valuetypes\n[Software System]" {
   rectangle "==Apache Causeway Val - Joda Time (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -3177,16 +3394,16 @@ package "Valuetypes\n[Software System]" {
   rectangle "==Apache Causeway Val - Vega (ui)\n<size:10>[Container: packaging: pom]</size>" <<11>> as 11
   rectangle "==Apache Causeway Value types\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
-3 .[#707070].> 4 : ""
-3 .[#707070].> 5 : ""
-6 .[#707070].> 8 : ""
-6 .[#707070].> 9 : ""
-6 .[#707070].> 7 : ""
-6 .[#707070].> 10 : ""
-6 .[#707070].> 11 : ""
-11 .[#707070].> 12 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 6 : ""
+3 .[#707070,thickness=2].> 4 : ""
+3 .[#707070,thickness=2].> 5 : ""
+6 .[#707070,thickness=2].> 8 : ""
+6 .[#707070,thickness=2].> 9 : ""
+6 .[#707070,thickness=2].> 7 : ""
+6 .[#707070,thickness=2].> 10 : ""
+6 .[#707070,thickness=2].> 11 : ""
+11 .[#707070,thickness=2].> 12 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 6 : ""
 @enduml
 ----
 .Projects/Modules (Valuetypes)
@@ -3420,42 +3637,42 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Asciidoc\n[Software System]" {
   rectangle "==Apache Causeway Val - Asciidoctor (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -3467,12 +3684,12 @@ package "Asciidoc\n[Software System]" {
   rectangle "==Apache Causeway Val - Asciidoctor (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
   rectangle "==Apache Causeway Val - Asciidoctor (ui)\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
 }
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
-7 .[#707070].> 9 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
+7 .[#707070,thickness=2].> 9 : ""
 @enduml
 ----
 .Projects/Modules (Asciidoc)
@@ -3586,10 +3803,10 @@ Directory: /valuetypes/asciidoc/ui
 ----
 |.Dependencies
 ****
-com.github.jnr:jnr-constants:jar:0.10.3 +
-com.github.jnr:jnr-enxio:jar:0.32.13 +
-com.github.jnr:jnr-ffi:jar:2.2.12 +
-com.github.jnr:jnr-posix:jar:3.1.15 +
+com.github.jnr:jnr-constants:jar:0.10.4 +
+com.github.jnr:jnr-enxio:jar:0.32.14 +
+com.github.jnr:jnr-ffi:jar:2.2.13 +
+com.github.jnr:jnr-posix:jar:3.1.16 +
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
 org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
@@ -3659,37 +3876,37 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Markdown\n[Software System]" {
   rectangle "==Apache Causeway Val - Markdown (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -3700,12 +3917,12 @@ package "Markdown\n[Software System]" {
   rectangle "==Apache Causeway Val - Markdown (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Causeway Val - Markdown (ui)\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
 }
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 7 : ""
-7 .[#707070].> 8 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 7 : ""
+7 .[#707070,thickness=2].> 8 : ""
 @enduml
 ----
 .Projects/Modules (Markdown)
@@ -3870,257 +4087,257 @@ left to right direction
 skinparam rectangle<<44>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<45>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<46>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<47>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<48>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<49>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<50>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<51>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<52>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<14>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<15>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<16>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<17>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<18>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<19>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<20>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<25>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<26>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<27>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<28>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<29>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<30>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<31>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<32>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<33>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<34>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<35>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<36>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<37>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<38>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<39>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<40>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<41>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<42>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<43>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Extensions\n[Software System]" {
   rectangle "==Apache Causeway Ext - Audit Trail\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
@@ -4175,56 +4392,56 @@ package "Extensions\n[Software System]" {
   rectangle "==Apache Causeway Ext - pdf.js Wicket\n<size:10>[Container: packaging: pom]</size>" <<30>> as 30
   rectangle "==Apache Causeway Extensions\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
-3 .[#707070].> 4 : ""
-3 .[#707070].> 5 : ""
-3 .[#707070].> 6 : ""
-7 .[#707070].> 8 : ""
-9 .[#707070].> 10 : ""
-9 .[#707070].> 11 : ""
-9 .[#707070].> 12 : ""
-13 .[#707070].> 14 : ""
-13 .[#707070].> 15 : ""
-13 .[#707070].> 16 : ""
-13 .[#707070].> 17 : ""
-18 .[#707070].> 19 : ""
-20 .[#707070].> 21 : ""
-22 .[#707070].> 23 : ""
-22 .[#707070].> 24 : ""
-24 .[#707070].> 25 : ""
-24 .[#707070].> 26 : ""
-33 .[#707070].> 34 : ""
-33 .[#707070].> 35 : ""
-33 .[#707070].> 36 : ""
-33 .[#707070].> 38 : ""
-33 .[#707070].> 37 : ""
-33 .[#707070].> 39 : ""
-33 .[#707070].> 40 : ""
-33 .[#707070].> 41 : ""
-46 .[#707070].> 47 : ""
-49 .[#707070].> 50 : ""
-49 .[#707070].> 52 : ""
-49 .[#707070].> 51 : ""
-42 .[#707070].> 43 : ""
-42 .[#707070].> 44 : ""
-42 .[#707070].> 45 : ""
-27 .[#707070].> 28 : ""
-27 .[#707070].> 29 : ""
-27 .[#707070].> 30 : ""
-30 .[#707070].> 31 : ""
-30 .[#707070].> 32 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 9 : ""
-2 .[#707070].> 13 : ""
-2 .[#707070].> 18 : ""
-2 .[#707070].> 20 : ""
-2 .[#707070].> 22 : ""
-2 .[#707070].> 33 : ""
-2 .[#707070].> 46 : ""
-2 .[#707070].> 48 : ""
-2 .[#707070].> 49 : ""
-2 .[#707070].> 42 : ""
-2 .[#707070].> 27 : ""
+3 .[#707070,thickness=2].> 4 : ""
+3 .[#707070,thickness=2].> 5 : ""
+3 .[#707070,thickness=2].> 6 : ""
+7 .[#707070,thickness=2].> 8 : ""
+9 .[#707070,thickness=2].> 10 : ""
+9 .[#707070,thickness=2].> 11 : ""
+9 .[#707070,thickness=2].> 12 : ""
+13 .[#707070,thickness=2].> 14 : ""
+13 .[#707070,thickness=2].> 15 : ""
+13 .[#707070,thickness=2].> 16 : ""
+13 .[#707070,thickness=2].> 17 : ""
+18 .[#707070,thickness=2].> 19 : ""
+20 .[#707070,thickness=2].> 21 : ""
+22 .[#707070,thickness=2].> 23 : ""
+22 .[#707070,thickness=2].> 24 : ""
+24 .[#707070,thickness=2].> 25 : ""
+24 .[#707070,thickness=2].> 26 : ""
+33 .[#707070,thickness=2].> 34 : ""
+33 .[#707070,thickness=2].> 35 : ""
+33 .[#707070,thickness=2].> 36 : ""
+33 .[#707070,thickness=2].> 38 : ""
+33 .[#707070,thickness=2].> 37 : ""
+33 .[#707070,thickness=2].> 39 : ""
+33 .[#707070,thickness=2].> 40 : ""
+33 .[#707070,thickness=2].> 41 : ""
+46 .[#707070,thickness=2].> 47 : ""
+49 .[#707070,thickness=2].> 50 : ""
+49 .[#707070,thickness=2].> 52 : ""
+49 .[#707070,thickness=2].> 51 : ""
+42 .[#707070,thickness=2].> 43 : ""
+42 .[#707070,thickness=2].> 44 : ""
+42 .[#707070,thickness=2].> 45 : ""
+27 .[#707070,thickness=2].> 28 : ""
+27 .[#707070,thickness=2].> 29 : ""
+27 .[#707070,thickness=2].> 30 : ""
+30 .[#707070,thickness=2].> 31 : ""
+30 .[#707070,thickness=2].> 32 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 9 : ""
+2 .[#707070,thickness=2].> 13 : ""
+2 .[#707070,thickness=2].> 18 : ""
+2 .[#707070,thickness=2].> 20 : ""
+2 .[#707070,thickness=2].> 22 : ""
+2 .[#707070,thickness=2].> 33 : ""
+2 .[#707070,thickness=2].> 46 : ""
+2 .[#707070,thickness=2].> 48 : ""
+2 .[#707070,thickness=2].> 49 : ""
+2 .[#707070,thickness=2].> 42 : ""
+2 .[#707070,thickness=2].> 27 : ""
 @enduml
 ----
 .Projects/Modules (Extensions)
@@ -4558,28 +4775,16 @@ Directory: /extensions/core/executionoutbox/restclient
 ----
 |.Dependencies
 ****
-com.approvaltests:approvaltests:jar:<managed> +
-com.fasterxml.jackson.core:jackson-core:jar:<managed> +
-com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.h2database:h2:jar:<managed> +
-jakarta.ws.rs:jakarta.ws.rs-api:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.commons:causeway-commons:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-schema:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:test-jar:<managed> +
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
-org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy4:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
-org.apache.cxf:cxf-rt-rs-client:jar:<managed> +
-org.assertj:assertj-core:jar:<managed> +
-org.mockito:mockito-core:jar:<managed> +
-org.slf4j:slf4j-api:jar:<managed> +
-org.springframework.boot:spring-boot-starter-test:jar:<managed> +
-org.springframework.boot:spring-boot-starter-web:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:2.0.0-SNAPSHOT +
 ****
 
 .Document Index Entries
@@ -5318,37 +5523,37 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Applib: Excel\n[Software System]" {
   rectangle "==Apache Causeway Ext - Excel (Fixtures)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
@@ -5359,11 +5564,11 @@ package "Applib: Excel\n[Software System]" {
   rectangle "==Apache Causeway Ext - Wicket Viewer - Excel Download (ui)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Causeway Sub - Excel (testing support)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
 }
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 6 : ""
-7 .[#707070].> 8 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 6 : ""
+7 .[#707070,thickness=2].> 8 : ""
 @enduml
 ----
 .Projects/Modules (Applib: Excel)
@@ -5399,7 +5604,7 @@ o.a.i.extensions.excel.applib.service.ExcelServiceDefault +
 .Dependencies
 ****
 org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestvintage:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
 org.apache.poi:poi-ooxml:jar:<managed> +
@@ -5408,7 +5613,7 @@ org.apache.poi:poi-ooxml-lite:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/excel/applib/AggregationType.adoc[AggregationType], xref:refguide:extensions:index/excel/applib/CausewayModuleExtExcelApplib.adoc[CausewayModuleExtExcelApplib], xref:refguide:extensions:index/excel/applib/ExcelMetaDataEnabled.adoc[ExcelMetaDataEnabled], xref:refguide:extensions:index/excel/applib/ExcelService.adoc[ExcelService], xref:refguide:extensions:index/excel/applib/Mode.adoc[Mode], xref:refguide:extensions:index/excel/applib/RowHandler.adoc[RowHandler], xref:refguide:extensions:index/excel/applib/WorksheetContent.adoc[WorksheetContent], xref:refguide:extensions:index/excel/applib/WorksheetSpec.adoc[WorksheetSpec], xref:refguide:extensions:index/excel/applib/annotation/HyperLink.adoc[HyperLink], xref:refguide:extensions:index/excel/applib/annotation/PivotColumn.adoc[PivotColumn], xref:refguide:extensions:index/excel/applib/annotation/PivotDecoration.adoc[PivotDecoration], xref:refguide:extensions:index/excel/applib/annotation/PivotRow.adoc[PivotRow], xref:refguide:extensions:index/excel/applib/annotation/PivotValue.adoc[PivotValue], xref:refguide:extensions:index/excel/applib/util/AnnotationList.adoc[AnnotationList], xref:refguide:extensions:index/excel/applib/util/AnnotationTriplet.adoc[AnnotationTriplet], xref:refguide:extensions:index/excel/applib/util/ExcelFileBlobConverter.adoc[ExcelFileBlobConverter], xref:refguide:extensions:index/excel/applib/util/PivotUtils.adoc[PivotUtils], xref:refguide:extensions:index/excel/applib/util/SheetPivoter.adoc[SheetPivoter]
+xref:refguide:extensions:index/excel/applib/AggregationType.adoc[AggregationType], xref:refguide:extensions:index/excel/applib/CausewayModuleExtExcelApplib.adoc[CausewayModuleExtExcelApplib], xref:refguide:extensions:index/excel/applib/ExcelMetaDataEnabled.adoc[ExcelMetaDataEnabled], xref:refguide:extensions:index/excel/applib/ExcelService.adoc[ExcelService], xref:refguide:extensions:index/excel/applib/Mode.adoc[Mode], xref:refguide:extensions:index/excel/applib/RowHandler.adoc[RowHandler], xref:refguide:extensions:index/excel/applib/WorksheetContent.adoc[WorksheetContent], xref:refguide:extensions:index/excel/applib/WorksheetSpec.adoc[WorksheetSpec], xref:refguide:extensions:index/excel/applib/annotation/HyperLink.adoc[HyperLink], xref:refguide:extensions:index/excel/applib/annotation/PivotColumn.adoc[PivotColumn], xref:refguide:extensions:index/excel/applib/annotation/PivotDecoration.adoc[PivotDecoration], xref:refguide:extensions:index/excel/applib/annotation/PivotRow.adoc[PivotRow], xref:refguide:extensions:index/excel/applib/annotation/PivotValue.adoc[PivotValue], xref:refguide:extensions:index/excel/applib/service/ExcelServiceDefault.adoc[ExcelServiceDefault], xref:refguide:extensions:index/excel/applib/util/AnnotationList.adoc[AnnotationList], xref:refguide:extensions:index/excel/applib/util/AnnotationTriplet.adoc[AnnotationTriplet], xref:refguide:extensions:index/excel/applib/util/ExcelFileBlobConverter.adoc[ExcelFileBlobConverter], xref:refguide:extensions:index/excel/applib/util/PivotUtils.adoc[PivotUtils], xref:refguide:extensions:index/excel/applib/util/SheetPivoter.adoc[SheetPivoter]
 ****
 
 |Apache Causeway Ext - Excel (Fixtures)
@@ -5426,7 +5631,6 @@ org.apache.causeway.extensions:causeway-extensions-excel-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-excel-testing:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-org.projectlombok:lombok:jar:<managed> +
 ****
 
 |Apache Causeway Ext - Excel (Integ Tests)
@@ -5524,22 +5728,22 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Core: Command Log\n[Software System]" {
   rectangle "==Apache Causeway Ext - Command Log\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -5547,9 +5751,9 @@ package "Core: Command Log\n[Software System]" {
   rectangle "==Apache Causeway Ext - Command Log Implementation (JDO)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Causeway Ext - Command Log Implementation (JPA)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
 @enduml
 ----
 .Projects/Modules (Core: Command Log)
@@ -5597,7 +5801,7 @@ org.quartz-scheduler:quartz:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/commandlog/applib/app/CommandLogMenu.adoc[CommandLogMenu], xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteractionId_commandLogEntry], xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser], xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[CommandLogEntryRepository], xref:refguide:extensions:index/commandlog/applib/dom/ExecuteIn.adoc[ExecuteIn], xref:refguide:extensions:index/commandlog/applib/dom/ReplayState.adoc[ReplayState], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_childCommands.adoc[CommandLogEntry_childCommands], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_openResultObject.adoc[CommandLogEntry_openResultObject], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_siblingCommands.adoc[CommandLogEntry_siblingCommands], xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[RunBackgroundCommandsJob], xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[CommandSubscriberForCommandLog]
+xref:refguide:extensions:index/commandlog/applib/app/CommandLogMenu.adoc[CommandLogMenu], xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteractionId_commandLogEntry], xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser], xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands], xref:refguide:extensions:index/commandlog/applib/contributions/T_recentBackgroundCommands.adoc[T_recentBackgroundCommands], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService], xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry], xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc[CommandLogEntryRepository], xref:refguide:extensions:index/commandlog/applib/dom/ExecuteIn.adoc[ExecuteIn], xref:refguide:extensions:index/commandlog/applib/dom/ReplayState.adoc[ReplayState], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_childCommands.adoc[CommandLogEntry_childCommands], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_openResultObject.adoc[CommandLogEntry_openResultObject], xref:refguide:extensions:index/commandlog/applib/dom/mixins/CommandLogEntry_siblingCommands.adoc[CommandLogEntry_siblingCommands], xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[RunBackgroundCommandsJob], xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[CommandSubscriberForCommandLog]
 ****
 
 |Apache Causeway Ext - Command Log Implementation (JDO)
@@ -5693,42 +5897,42 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Tooling\n[Software System]" {
   rectangle "==Apache Causeway - Tooling\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -5740,13 +5944,13 @@ package "Tooling\n[Software System]" {
   rectangle "==Apache Causeway - Tooling - Model for AsciiDoc\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Causeway - Tooling - Project Model (Code mining)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 6 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 8 : ""
-2 .[#707070].> 9 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 8 : ""
+2 .[#707070,thickness=2].> 9 : ""
 @enduml
 ----
 .Projects/Modules (Tooling)
@@ -5769,7 +5973,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.27.0 +
+org.checkerframework:checker-qual:jar:3.28.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.3.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -5931,117 +6135,117 @@ left to right direction
 skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<12>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
+}
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
 }
 skinparam rectangle<<14>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<15>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<16>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<17>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<18>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<19>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<9>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<20>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Regression Tests\n[Software System]" {
   rectangle "==Apache Causeway - Regression Tests\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -6068,28 +6272,28 @@ package "Regression Tests\n[Software System]" {
   rectangle "==Apache Causeway - Regression Tests (stable) - Viewers JDO\n<size:10>[Container: packaging: jar]</size>" <<23>> as 23
   rectangle "==Apache Causeway - Regression Tests (stable) - Viewers JPA\n<size:10>[Container: packaging: jar]</size>" <<24>> as 24
 }
-3 .[#707070].> 4 : ""
-3 .[#707070].> 5 : ""
-3 .[#707070].> 6 : ""
-2 .[#707070].> 8 : ""
-2 .[#707070].> 9 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 10 : ""
-2 .[#707070].> 7 : ""
-2 .[#707070].> 11 : ""
-2 .[#707070].> 12 : ""
-2 .[#707070].> 13 : ""
-2 .[#707070].> 14 : ""
-2 .[#707070].> 15 : ""
-2 .[#707070].> 16 : ""
-2 .[#707070].> 17 : ""
-2 .[#707070].> 18 : ""
-2 .[#707070].> 19 : ""
-2 .[#707070].> 20 : ""
-2 .[#707070].> 21 : ""
-2 .[#707070].> 22 : ""
-2 .[#707070].> 23 : ""
-2 .[#707070].> 24 : ""
+3 .[#707070,thickness=2].> 4 : ""
+3 .[#707070,thickness=2].> 5 : ""
+3 .[#707070,thickness=2].> 6 : ""
+2 .[#707070,thickness=2].> 8 : ""
+2 .[#707070,thickness=2].> 9 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 10 : ""
+2 .[#707070,thickness=2].> 7 : ""
+2 .[#707070,thickness=2].> 11 : ""
+2 .[#707070,thickness=2].> 12 : ""
+2 .[#707070,thickness=2].> 13 : ""
+2 .[#707070,thickness=2].> 14 : ""
+2 .[#707070,thickness=2].> 15 : ""
+2 .[#707070,thickness=2].> 16 : ""
+2 .[#707070,thickness=2].> 17 : ""
+2 .[#707070,thickness=2].> 18 : ""
+2 .[#707070,thickness=2].> 19 : ""
+2 .[#707070,thickness=2].> 20 : ""
+2 .[#707070,thickness=2].> 21 : ""
+2 .[#707070,thickness=2].> 22 : ""
+2 .[#707070,thickness=2].> 23 : ""
+2 .[#707070,thickness=2].> 24 : ""
 @enduml
 ----
 .Projects/Modules (Regression Tests)
@@ -6106,11 +6310,10 @@ Type: pom
 Directory: /regressiontests
 ----
 |Collection of JUnit tests covering core functionalities of the framework.
-(Targeted for JVM 11+)
 
 .Dependencies
 ****
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:${project.version} +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 ****
@@ -6359,6 +6562,7 @@ Directory: /regressiontests/stable-layouts
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-stable:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-applib:jar:<managed> +
 ****
@@ -6506,7 +6710,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Incubator\n[Software System]" {
   rectangle "==Apache Causeway Incubator\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -6549,7 +6753,7 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Kroviz Client\n[Software System]" {
   rectangle "==Apache Causeway Incubator - Client kroViz\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
@@ -6592,27 +6796,27 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "GraphQL Viewer\n[Software System]" {
   rectangle "==Apache Causeway Inc - Viewer GraphQL\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -6621,10 +6825,10 @@ package "GraphQL Viewer\n[Software System]" {
   rectangle "==Apache Causeway Inc - Viewer GraphQL (Test)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
   rectangle "==Apache Causeway Inc - Viewer GraphQL (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 6 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
+2 .[#707070,thickness=2].> 6 : ""
 @enduml
 ----
 .Projects/Modules (GraphQL Viewer)
@@ -6738,22 +6942,22 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Vaadin Viewer\n[Software System]" {
   rectangle "==Apache Causeway Inc - Viewer Vaadin\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -6761,9 +6965,9 @@ package "Vaadin Viewer\n[Software System]" {
   rectangle "==Apache Causeway Inc - Viewer Vaadin (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Causeway Inc - Viewer Vaadin (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
 @enduml
 ----
 .Projects/Modules (Vaadin Viewer)
@@ -6793,12 +6997,12 @@ Directory: /incubator/viewers/vaadin/model
 ****
 com.github.fge:jackson-coreutils:jar:1.8 +
 com.vaadin:vaadin:jar:<managed> +
-io.swagger:swagger-compat-spec-parser:jar:1.0.51 +
-io.swagger:swagger-parser:jar:1.0.51 +
-io.swagger.core.v3:swagger-core:jar:2.1.12 +
-io.swagger.core.v3:swagger-models:jar:2.1.12 +
-io.swagger.parser.v3:swagger-parser-core:jar:2.0.20 +
-io.swagger.parser.v3:swagger-parser-v3:jar:2.0.20 +
+io.swagger:swagger-compat-spec-parser:jar:1.0.64 +
+io.swagger:swagger-parser:jar:1.0.64 +
+io.swagger.core.v3:swagger-core:jar:2.2.7 +
+io.swagger.core.v3:swagger-models:jar:2.2.7 +
+io.swagger.parser.v3:swagger-parser-core:jar:2.1.9 +
+io.swagger.parser.v3:swagger-parser-v3:jar:2.1.9 +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
@@ -6877,22 +7081,22 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "JavaFX Viewer\n[Software System]" {
   rectangle "==Apache Causeway Inc - Viewer JavaFX\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
@@ -6900,9 +7104,9 @@ package "JavaFX Viewer\n[Software System]" {
   rectangle "==Apache Causeway Inc - Viewer JavaFX (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Causeway Inc - Viewer JavaFX (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-2 .[#707070].> 5 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
+2 .[#707070,thickness=2].> 5 : ""
 @enduml
 ----
 .Projects/Modules (JavaFX Viewer)
@@ -7010,25 +7214,25 @@ left to right direction
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
-  BorderColor #2E6295
+  BorderColor #2e6295
 }
 package "Other\n[Software System]" {
   rectangle "==Apache Causeway Ext - Command Replay\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Causeway Ext - Command Replay for Primary\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Causeway Ext - Command Replay for Secondary\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
 }
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
+2 .[#707070,thickness=2].> 3 : ""
+2 .[#707070,thickness=2].> 4 : ""
 @enduml
 ----
 .Projects/Modules (Other)
@@ -7094,6 +7298,7 @@ o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
 o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
 o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
 o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
 ****
 
 .Dependencies
@@ -7105,12 +7310,13 @@ org.apache.causeway.core:causeway-schema:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy4:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
+org.springframework.boot:spring-boot-starter-quartz:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/commandreplay/secondary/CausewayModuleExtCommandReplaySecondary.adoc[CausewayModuleExtCommandReplaySecondary], xref:refguide:extensions:index/commandreplay/secondary/analyser/CommandReplayAnalyser.adoc[CommandReplayAnalyser], xref:refguide:extensions:index/commandreplay/secondary/analyser/CommandReplayAnalyserException.adoc[CommandReplayAnalyserException], xref:refguide:extensions:index/commandreplay/secondary/analyser/CommandReplayAnalyserResult.adoc[CommandReplayAnalyserResult], xref:refguide:extensions:index/commandreplay/secondary/analysis/CommandReplayAnalysisService.adoc[CommandReplayAnalysisService], xref:refguide:extensions:index/commandreplay/secondary/config/SecondaryConfig.adoc[SecondaryConfig], xref:refguide:extensions:index/commandreplay/secondary/fetch/CommandFetcher.adoc[CommandFetcher], xref:refguide:extensions:index/commandreplay/secondary/job/ReplicateAndReplayJob.adoc[ReplicateAndReplayJob], xref:refguide:extensions:index/commandreplay/secondary/job/SecondaryStatusData.adoc[SecondaryStatusData], xref:refguide:extensions:index/commandreplay/secondary/jobcallables/ReplicateAndRunCommands.adoc[ReplicateAndRunCommands], xref:refguide:extensions:index/commandreplay/secondary/mixins/CommandLogEntry_exclude.adoc[CommandLogEntry_exclude], xref:refguide:extensions:index/commandreplay/secondary/mixins/CommandLogEntry_replayQueue.adoc[CommandLogEntry_replayQueue], xref:refguide:extensions:index/commandreplay/secondary/mixins/Object_openOnPrimary.adoc[Object_openOnPrimary], xref:refguide:extensions:index/commandreplay/secondary/spi/ReplayCommandExecutionController.adoc[ReplayCommandExecutionController], xref:refguide:extensions:index/commandreplay/secondary/status/SecondaryStatus.adoc[SecondaryStatus], xref:refguide:extensions:index/commandreplay/secondary/ui/CommandReplayOnSecondaryService.adoc[CommandReplayOnSecondaryService]
+xref:refguide:extensions:index/commandreplay/secondary/CausewayModuleExtCommandReplaySecondary.adoc[CausewayModuleExtCommandReplaySecondary], xref:refguide:extensions:index/commandreplay/secondary/analyser/CommandReplayAnalyser.adoc[CommandReplayAnalyser], xref:refguide:extensions:index/commandreplay/secondary/analyser/CommandReplayAnalyserException.adoc[CommandReplayAnalyserException], xref:refguide:extensions:index/commandreplay/secondary/analyser/CommandReplayAnalyserResult.adoc[CommandReplayAnalyserResult], xref:refguide:extensions:index/commandreplay/secondary/analysis/CommandReplayAnalysisService.adoc[CommandReplayAnalysisService], xref:refguide:extensions:index/commandreplay/secondary/config/SecondaryConfig.adoc[SecondaryConfig], xref:refguide:extensions:index/commandreplay/secondary/fetch/CommandFetcher.adoc[CommandFetcher], xref:refguide:extensions:index/commandreplay/secondary/job/JobExecutionData.adoc[JobExecutionData], xref:refguide:extensions:index/commandreplay/secondary/job/ReplicateAndReplayJob.adoc[ReplicateAndReplayJob], xref:refguide:extensions:index/commandreplay/secondary/job/SecondaryStatusData.adoc[SecondaryStatusData], xref:refguide:extensions:index/commandreplay/secondary/jobcallables/ReplicateAndRunCommands.adoc[ReplicateAndRunCommands], xref:refguide:extensions:index/commandreplay/secondary/mixins/CommandLogEntry_exclude.adoc[CommandLogEntry_exclude], xref:refguide:extensions:index/commandreplay/secondary/mixins/CommandLogEntry_replayQueue.adoc[CommandLogEntry_replayQueue], xref:refguide:extensions:index/commandreplay/secondary/mixins/Object_openOnPrimary.adoc[Object_openOnPrimary], xref:refguide:extensions:index/commandreplay/secondary/spi/ReplayCommandExecutionController.adoc[ReplayCommandExecutionController], xref:refguide:extensions:index/commandreplay/secondary/status/SecondaryStatus.adoc[SecondaryStatus], xref:refguide:extensions:index/commandreplay/secondary/ui/CommandReplayOnSecondaryService.adoc[CommandReplayOnSecondaryService]
 ****
 |===

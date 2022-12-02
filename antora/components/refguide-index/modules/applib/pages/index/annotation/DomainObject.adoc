@@ -3,6 +3,8 @@
 
 Domain semantics for domain objects (entities and view models; for services see xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] ).
 
+If - for the currently logged on user - none of the domain object's members are effectively visible, (or if there are no members to begin with), the object instance is considered hidden. Hence a NOT-AUTHORIZED page will be displayed instead.
+
 == API
 
 [source,java]

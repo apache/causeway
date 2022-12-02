@@ -7,8 +7,6 @@
 .ApplicationTypeMember.java
 ----
 class ApplicationTypeMember {
-  ApplicationTypeMember(ApplicationFeatureId featureId)
-  ApplicationTypeMember(String memento)
   String getMemberName()
 }
 ----
