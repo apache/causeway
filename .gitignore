@@ -33,6 +33,9 @@ gradlew.*
 #Asciidoctor Plugins
 .asciidoctorconfig.adoc
 
+# eclipse plugin https://nodj.github.io/AutoDeriv/
+.derived
+
 #Draw.io
 .$*
 
