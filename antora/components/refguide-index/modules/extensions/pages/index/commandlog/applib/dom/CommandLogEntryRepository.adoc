@@ -25,6 +25,7 @@ class CommandLogEntryRepository<C> {
   List<C> findRecentByTargetOrResult(Bookmark targetOrResult)
   List<C> findSince(UUID interactionId, Integer batchSize)     // <.>
   List<C> findBackgroundAndNotYetStarted()     // <.>
+  List<C> findRecentBackgroundByTarget(Bookmark target)
   Optional<C> findMostRecentReplayed()     // <.>
   Optional<C> findMostRecentCompleted()     // <.>
   List<C> findNotYetReplayed()

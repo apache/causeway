@@ -18,6 +18,7 @@ interface GridService {
   Grid normalize(Grid grid)     // <.>
   Grid complete(Grid grid)     // <.>
   Grid minimal(Grid grid)     // <.>
+  GridMarshallerService<? extends Grid> marshaller()
   Grid toGridForExport(Class<?> domainClass, LayoutExportStyle style)
 }
 ----

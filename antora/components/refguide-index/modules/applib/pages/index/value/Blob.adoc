@@ -19,11 +19,13 @@ class Blob {
   Blob(String name, String mimeTypeBase, byte[] bytes)
   Blob(String name, MimeType mimeType, byte[] bytes)
   Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
+  Try<Blob> tryRead(String name, CommonMimeType mimeType, File file)     // <.>
   String getName()
   MimeType getMimeType()
   byte[] getBytes()
-  Clob toClob(Charset charset)
+  Clob toClob(Charset charset)     // <.>
   void writeBytesTo(OutputStream os)     // <.>
+  void writeTo(File file)     // <.>
   void consume(Consumer<InputStream> consumer)     // <.>
   R digest(Function<InputStream, R> digester)     // <.>
   Blob zip()
@@ -40,10 +42,25 @@ class Blob {
 --
 Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 --
+<.> xref:#tryRead_String_CommonMimeType_File[tryRead(String, CommonMimeType, File)]
++
+--
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+--
+<.> xref:#toClob_Charset[toClob(Charset)]
++
+--
+Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using given _Charset_ for the underlying byte[] to String conversion.
+--
 <.> xref:#writeBytesTo_OutputStream[writeBytesTo(OutputStream)]
 +
 --
 Does not close the OutputStream.
+--
+<.> xref:#writeTo_File[writeTo(File)]
++
+--
+Writes this xref:refguide:applib:index/value/Blob.adoc[Blob] to the file represented by the specified `File` object.
 --
 <.> xref:#consume_Consumer[consume(Consumer)]
 +
@@ -68,10 +85,31 @@ _name_ may or may not include the desired filename extension, it is guaranteed, 
 
 For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] constructors directly.
 
+[#tryRead_String_CommonMimeType_File]
+=== tryRead(String, CommonMimeType, File)
+
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
+
+For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] constructors directly.
+
+[#toClob_Charset]
+=== toClob(Charset)
+
+Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using given _Charset_ for the underlying byte[] to String conversion.
+
 [#writeBytesTo_OutputStream]
 === writeBytesTo(OutputStream)
 
 Does not close the OutputStream.
+
+[#writeTo_File]
+=== writeTo(File)
+
+Writes this xref:refguide:applib:index/value/Blob.adoc[Blob] to the file represented by the specified `File` object.
+
+If the file exists but is a directory rather than a regular file, does not exist but cannot be created, or cannot be opened for any other reason then a `FileNotFoundException` is thrown.
 
 [#consume_Consumer]
 === consume(Consumer)

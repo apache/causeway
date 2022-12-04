@@ -1,7 +1,7 @@
 = LayoutService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Provides the ability to obtain the XML layout for a single domain object or for all domain objects.
+Provides the ability to obtain the serialized layout (eg. XML) for a single domain object or for all domain objects, as well as the serialized layout for the application's menu-bars.
 
 == API
 
@@ -9,44 +9,66 @@ Provides the ability to obtain the XML layout for a single domain object or for 
 .LayoutService.java
 ----
 interface LayoutService {
-  String toXml(Class<?> domainClass, LayoutExportStyle style)     // <.>
-  byte[] toZip(LayoutExportStyle style)     // <.>
-  String toMenuBarsXml(MenuBarsService.Type type)     // <.>
+  EnumSet<CommonMimeType> supportedObjectLayoutFormats()     // <.>
+  String objectLayout(Class<?> domainClass, LayoutExportStyle style, CommonMimeType format)     // <.>
+  byte[] toZip(LayoutExportStyle style, CommonMimeType format)     // <.>
+  EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats()     // <.>
+  String menuBarsLayout(MenuBarsService.Type type, CommonMimeType format)     // <.>
 }
 ----
 
-<.> xref:#toXml_Class_LayoutExportStyle[toXml(Class, LayoutExportStyle)]
+<.> xref:#supportedObjectLayoutFormats_[supportedObjectLayoutFormats()]
 +
 --
-Obtains the serialized XML form of the layout (grid) for the specified domain class.
+Supported format(s) for _#objectLayout(Class, LayoutExportStyle, CommonMimeType)_ and _#toZip(LayoutExportStyle, CommonMimeType)_ .
 --
-<.> xref:#toZip_LayoutExportStyle[toZip(LayoutExportStyle)]
+<.> xref:#objectLayout_Class_LayoutExportStyle_CommonMimeType[objectLayout(Class, LayoutExportStyle, CommonMimeType)]
 +
 --
-Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
+Obtains the serialized form of the object layout (grid) for the specified domain class.
 --
-<.> xref:#toMenuBarsXml_MenuBarsService_Type[toMenuBarsXml(MenuBarsService_Type)]
+<.> xref:#toZip_LayoutExportStyle_CommonMimeType[toZip(LayoutExportStyle, CommonMimeType)]
 +
 --
-Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
+Obtains a zip file of the serialized layouts (grids) of all domain entities and view models.
+--
+<.> xref:#supportedMenuBarsLayoutFormats_[supportedMenuBarsLayoutFormats()]
++
+--
+Supported format(s) for _#menuBarsLayout(org.apache.causeway.applib.services.menu.MenuBarsService.Type, CommonMimeType)_ .
+--
+<.> xref:#menuBarsLayout_MenuBarsService_Type_CommonMimeType[menuBarsLayout(MenuBarsService_Type, CommonMimeType)]
++
+--
+Obtains the serialized form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 --
 
 == Members
 
-[#toXml_Class_LayoutExportStyle]
-=== toXml(Class, LayoutExportStyle)
+[#supportedObjectLayoutFormats_]
+=== supportedObjectLayoutFormats()
 
-Obtains the serialized XML form of the layout (grid) for the specified domain class.
+Supported format(s) for _#objectLayout(Class, LayoutExportStyle, CommonMimeType)_ and _#toZip(LayoutExportStyle, CommonMimeType)_ .
 
-[#toZip_LayoutExportStyle]
-=== toZip(LayoutExportStyle)
+[#objectLayout_Class_LayoutExportStyle_CommonMimeType]
+=== objectLayout(Class, LayoutExportStyle, CommonMimeType)
 
-Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
+Obtains the serialized form of the object layout (grid) for the specified domain class.
 
-[#toMenuBarsXml_MenuBarsService_Type]
-=== toMenuBarsXml(MenuBarsService_Type)
+[#toZip_LayoutExportStyle_CommonMimeType]
+=== toZip(LayoutExportStyle, CommonMimeType)
 
-Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
+Obtains a zip file of the serialized layouts (grids) of all domain entities and view models.
+
+[#supportedMenuBarsLayoutFormats_]
+=== supportedMenuBarsLayoutFormats()
+
+Supported format(s) for _#menuBarsLayout(org.apache.causeway.applib.services.menu.MenuBarsService.Type, CommonMimeType)_ .
+
+[#menuBarsLayout_MenuBarsService_Type_CommonMimeType]
+=== menuBarsLayout(MenuBarsService_Type, CommonMimeType)
+
+Obtains the serialized form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 
 include::hooks/LayoutService_010-implementation.adoc[]
 
