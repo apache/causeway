@@ -153,7 +153,7 @@ public class MetaModelServiceMenu {
         public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModel> { }
 
         @MemberSupport public NamedWithMimeType act(
-                @ParameterLayout(named = ".xml file name")
+                @ParameterLayout(named = "file name (does not require an extension)")
                 final String fileName,
 
                 @ParameterLayout(named = "Namespaces",
