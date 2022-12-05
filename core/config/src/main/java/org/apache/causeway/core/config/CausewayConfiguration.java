@@ -40,6 +40,18 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import jakarta.activation.DataSource;
+import jakarta.inject.Named;
+import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -62,6 +74,8 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -72,17 +86,6 @@ import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesIni
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
 
-import jakarta.activation.DataSource;
-import jakarta.inject.Named;
-import jakarta.validation.Constraint;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.Payload;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,7 +102,7 @@ import lombok.val;
  */
 @ConfigurationProperties(CausewayConfiguration.ROOT_PREFIX)
 @Data
-//@Validated //TODO[ISIS-3275] re-enable validation
+@Validated
 public class CausewayConfiguration {
 
     public static final String ROOT_PREFIX = "causeway";
