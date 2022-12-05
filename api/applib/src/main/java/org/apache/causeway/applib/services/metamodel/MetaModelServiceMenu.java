@@ -47,10 +47,8 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.resources._Json;
 import org.apache.causeway.commons.internal.resources._Xml;
 import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
-import org.apache.causeway.commons.internal.resources._Yaml;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
 import lombok.val;
@@ -86,12 +84,13 @@ public class MetaModelServiceMenu {
                 return Clob.of(fileName, CommonMimeType.CSV, content);
             }
         },
-        JSON{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _Json.toString(dto);
-                return Clob.of(fileName, CommonMimeType.JSON, content);
-            }
-        },
+        //XXX infinite recursion
+//        JSON{
+//            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+//                val content = _Json.toString(dto);
+//                return Clob.of(fileName, CommonMimeType.JSON, content);
+//            }
+//        },
         XML{
             @Override public Clob apply(final String fileName, final MetamodelDto dto) {
                 val content = _Xml.writeXml(dto, WriteOptions.builder().formattedOutput(true).build())
@@ -101,12 +100,13 @@ public class MetaModelServiceMenu {
                 return Clob.of(fileName, CommonMimeType.XML, content);
             }
         },
-        YAML{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
-                return Clob.of(fileName, CommonMimeType.YAML, content);
-            }
-        },
+        //XXX empty
+//        YAML{
+//            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+//                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
+//                return Clob.of(fileName, CommonMimeType.YAML, content);
+//            }
+//        },
     }
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
