@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Validation;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -130,11 +130,12 @@ extends MetaModelVisitingValidatorAbstract {
                     .collect(Collectors.joining("; "));
 
             ValidationFailure.raiseFormatted(spec,
-                    Validation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
-                    .getMessageForTypeAndMemberId(
-                            spec.getFeatureIdentifier().getClassName(),
-                            _Reflect.methodToShortString(notPickedUpMethod)
-                            )
+                    Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+                        .builder()
+                        .addVariable("type", spec.getFeatureIdentifier().getClassName())
+                        .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod))
+                        .buildMessage()
+
                     + " Unmet constraint(s): %s",
                     unmetContraints);
         });

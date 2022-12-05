@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.specloader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -606,13 +605,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(isMetamodelFullyIntrospected()
                 && causewayConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val warningMessage = ProgrammingModelConstants.Validation.TYPE_NOT_EAGERLY_DISCOVERED
-                .getMessage(Map.of(
-                        "type", cls.getName(),
-                        "beanSort", causewayBeanTypeClassifier
+            val warningMessage = ProgrammingModelConstants.Violation.TYPE_NOT_EAGERLY_DISCOVERED
+                    .builder()
+                    .addVariable("type", cls.getName())
+                    .addVariable("beanSort", causewayBeanTypeClassifier
                             .classify(cls)
                             .getBeanSort()
-                            .name()));
+                            .name())
+                    .buildMessage();
 
             log.warn(warningMessage);
         }

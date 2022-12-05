@@ -24,6 +24,7 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -59,10 +60,13 @@ extends MetaModelVisitingValidatorAbstract {
 
                 ValidationFailure.raiseFormatted(
                         spec,
-                        "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
-                        spec.getCorrespondingClass().getName(),
-                        numActions,
-                        actionIds);
+                        ProgrammingModelConstants.Violation.UNKNONW_SORT_WITH_ACTION
+                            .builder()
+                            .addVariable("type", spec.getCorrespondingClass().getName())
+                            .addVariable("actions", actionIds)
+                            .addVariable("actionCount", numActions)
+                            .buildMessage());
+
             }
 
         }

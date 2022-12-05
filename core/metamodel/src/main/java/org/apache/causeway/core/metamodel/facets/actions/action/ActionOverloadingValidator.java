@@ -23,6 +23,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -68,10 +69,11 @@ extends MetaModelVisitingValidatorAbstract {
 
                 ValidationFailure.raiseFormatted(
                         spec,
-                        "Action method overloading is not allowed, "
-                        + "yet %s has action(s) that have a the same member name: %s",
-                        spec.getCorrespondingClass().getName(),
-                        overloadedNames);
+                        ProgrammingModelConstants.Violation.ACTION_METHOD_OVERLOADING_NOT_ALLOWED
+                            .builder()
+                            .addVariable("type", spec.getCorrespondingClass().getName())
+                            .addVariable("overloadedNames", overloadedNames.toString())
+                            .buildMessage());
             }
 
         }

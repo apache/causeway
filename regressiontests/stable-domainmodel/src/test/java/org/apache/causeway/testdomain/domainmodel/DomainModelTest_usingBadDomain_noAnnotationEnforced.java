@@ -78,7 +78,7 @@ class DomainModelTest_usingBadDomain_noAnnotationEnforced {
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupportNoAnnotationEnforced.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideOrphaned()");
+                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideOrphaned()");
     }
 
 }

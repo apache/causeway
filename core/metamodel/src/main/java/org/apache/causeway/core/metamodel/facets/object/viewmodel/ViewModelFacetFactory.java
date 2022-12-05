@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
-import java.util.Map;
-
 import jakarta.inject.Inject;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
@@ -88,8 +86,10 @@ implements
                     && objectSpec.getBeanSort().isViewModel()
                     && !objectSpec.viewmodelFacet().isPresent()) {
                 ValidationFailure.raiseFormatted(objectSpec,
-                        ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
-                            .getMessageForType(objectSpec.getCorrespondingClass().getName()));
+                        ProgrammingModelConstants.Violation.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
+                            .builder()
+                            .addVariable("type", objectSpec.getCorrespondingClass().getName())
+                            .buildMessage());
             }
 
             objectSpec.viewmodelFacet()
@@ -98,11 +98,12 @@ implements
                 facetRanking
                 .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
                     ValidationFailure.raiseFormatted(objectSpec,
-                            ProgrammingModelConstants.Validation.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
-                                .getMessage(Map.of(
-                                        "type", objectSpec.getFullIdentifier(),
-                                        "facetA", a.getClass().getSimpleName(),
-                                        "facetB", b.getClass().getSimpleName())));
+                            ProgrammingModelConstants.Violation.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
+                                .builder()
+                                .addVariable("type", objectSpec.getFullIdentifier())
+                                .addVariable("facetA", a.getClass().getSimpleName())
+                                .addVariable("facetB", b.getClass().getSimpleName())
+                                .buildMessage());
                 });
             });
         });

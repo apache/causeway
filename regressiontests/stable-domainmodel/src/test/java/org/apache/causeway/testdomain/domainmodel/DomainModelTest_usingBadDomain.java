@@ -51,7 +51,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Validation;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.AmbiguousMixinAnnotations;
@@ -129,7 +129,7 @@ class DomainModelTest_usingBadDomain {
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
+                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideMe()");
     }
 
 
@@ -144,7 +144,7 @@ class DomainModelTest_usingBadDomain {
         val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
+                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
@@ -158,7 +158,7 @@ class DomainModelTest_usingBadDomain {
         val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
+                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
@@ -387,8 +387,11 @@ class DomainModelTest_usingBadDomain {
     private String validationMessage(
             final String className,
             final String memberName) {
-        return Validation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
-                .getMessageForTypeAndMemberId(className, memberName);
+        return Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+                .builder()
+                .addVariable("type", className)
+                .addVariable("member", memberName)
+                .buildMessage();
     }
 
 }

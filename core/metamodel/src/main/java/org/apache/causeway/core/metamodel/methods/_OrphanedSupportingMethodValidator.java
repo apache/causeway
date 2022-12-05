@@ -64,8 +64,10 @@ class _OrphanedSupportingMethodValidator {
 
             ValidationFailure.raise(
                     spec,
-                    ProgrammingModelConstants.Validation.ORPHANED_METHOD
-                    .getMessage(methodIdentifier));
+                    ProgrammingModelConstants.Violation.ORPHANED_METHOD
+                        .builder()
+                        .addVariablesFor(methodIdentifier)
+                        .buildMessage());
         });
 
         potentialOrphans.clear(); // no longer needed

@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -606,11 +605,11 @@ implements
                             val csv = asCsv(collidingSpecs);
                             collidingSpecs.forEach(spec->{
                                 ValidationFailure.raiseFormatted(spec,
-                                        ProgrammingModelConstants.Validation
-                                        .NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
-                                        .getMessage(Map.of(
-                                                "logicalTypeName", spec.getLogicalTypeName(),
-                                                "csv", csv)));
+                                        ProgrammingModelConstants.Violation.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
+                                            .builder()
+                                            .addVariable("logicalTypeName", spec.getLogicalTypeName())
+                                            .addVariable("csv", csv)
+                                            .buildMessage());
                             });
                         }
                     });

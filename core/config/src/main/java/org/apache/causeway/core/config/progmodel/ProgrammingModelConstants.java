@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -469,7 +470,7 @@ public final class ProgrammingModelConstants {
 
     //maybe gradually consolidate all MM validation raisers here
     @RequiredArgsConstructor
-    public static enum Validation {
+    public static enum Violation {
         CONFLICTING_TITLE_STRATEGIES(
                 "${type} has title() method with @Title annotation, which is not allowed; "
                 + "consider either removing the @Title annotation or renaming the method"),
@@ -522,25 +523,36 @@ public final class ProgrammingModelConstants {
         NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to multiple non-abstract classes:\n"
                 + "${csv}"),
+        UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
+        ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
+                + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),
         ;
 
         private final String template;
-        public String getMessage(final Identifier featureIdentifier) {
-            return getMessageForTypeAndMemberId(
-                    featureIdentifier.getLogicalType().getClassName(),
-                    featureIdentifier.getMemberLogicalName());
+
+        public ViolationBuilder builder() {
+            return new ViolationBuilder(this);
         }
-        public String getMessageForType(final String type) {
-            return getMessage(Map.of(
-                    "type", type));
-        }
-        public String getMessageForTypeAndMemberId(final String type, final String memberId) {
-            return getMessage(Map.of(
-                    "type", type,
-                    "member", memberId));
-        }
-        public String getMessage(final Map<String, String> templateVars) {
-            return processMessageTemplate(template, templateVars);
+        @RequiredArgsConstructor
+        public static class ViolationBuilder {
+            private final Violation violaton;
+            private final Map<String, String> vars = new HashMap<>();
+            public ViolationBuilder addVariable(final String name, final String value) {
+                vars.put(name, value);
+                return this;
+            }
+            public ViolationBuilder addVariable(final String name, final Number value) {
+                vars.put(name, ""+value);
+                return this;
+            }
+            public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
+                addVariable("type", featureIdentifier.getLogicalType().getClassName());
+                addVariable("member", featureIdentifier.getMemberLogicalName());
+                return this;
+            }
+            public String buildMessage() {
+                return processMessageTemplate(violaton.template, vars);
+            }
         }
     }
 
