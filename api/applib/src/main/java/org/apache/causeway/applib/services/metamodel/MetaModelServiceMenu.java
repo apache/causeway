@@ -167,6 +167,8 @@ public class MetaModelServiceMenu {
                 final ExportFormat exportFormat,
 
                 @Parameter
+                @ParameterLayout(
+                    describedAs="Whether to zip the exported file.")
                 final boolean zip
         ) {
 

@@ -78,10 +78,10 @@ class MetaModelRegressionTest {
         // disable if rename, as the .zip file needs to be updated.
         // Assumptions.assumeThat(getClass().getName()).contains("causeway");
 
-        final Clob metaModelZip = (Clob) factoryService
+        final Clob metaModelClob = (Clob) factoryService
                 .mixin(MetaModelServiceMenu.downloadMetaModel.class, metaModelServiceMenu)
                 .act("metamodel", namespaces(), true, ExportFormat.XML, false);
-        final String xml = metaModelZip
+        final String xml = metaModelClob
                 .asString();
 
         Approvals.verify(xml, options());
