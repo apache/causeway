@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -78,9 +79,10 @@ class MetaModelRegressionTest {
         // disable if rename, as the .zip file needs to be updated.
         // Assumptions.assumeThat(getClass().getName()).contains("causeway");
 
-        final Clob metaModelClob = (Clob) factoryService
+        final Clob metaModelClob = factoryService
                 .mixin(MetaModelServiceMenu.downloadMetaModel.class, metaModelServiceMenu)
-                .act("metamodel", namespaces(), true, ExportFormat.XML, false);
+                .act("metamodel", namespaces(), true, ExportFormat.XML, false)
+                .toClob(StandardCharsets.UTF_8);
         final String xml = metaModelClob
                 .asString();
 

@@ -45,7 +45,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.resources._Json;
@@ -74,7 +73,104 @@ public class MetaModelServiceMenu {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
+    public static enum ExportFormat implements BiFunction<String, MetamodelDto, Clob>  {
+        ASCII{
+            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+                val content = _AsciiExport.toAscii(dto).toString();
+                return Clob.of(fileName, CommonMimeType.TXT, content);
+            }
+        },
+        CSV{
+            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+                val content = _CsvExport2.toCsv(dto);
+                return Clob.of(fileName, CommonMimeType.CSV, content);
+            }
+        },
+        JSON{
+            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+                val content = _Json.toString(dto);
+                return Clob.of(fileName, CommonMimeType.JSON, content);
+            }
+        },
+        XML{
+            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+                val content = _Xml.writeXml(dto, WriteOptions.builder().formattedOutput(true).build())
+                        .ifFailureFail()
+                        .getValue()
+                        .orElse("");
+                return Clob.of(fileName, CommonMimeType.XML, content);
+            }
+        },
+        YAML{
+            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
+                return Clob.of(fileName, CommonMimeType.YAML, content);
+            }
+        },
+    }
+
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
+
+    @Action(
+            domainEvent = downloadMetaModel.ActionDomainEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
+            restrictTo = RestrictTo.PROTOTYPING
+            )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Download Meta Model",
+            sequence="500.500.2")
+    public class downloadMetaModel {
+
+        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModel> { }
+
+        @MemberSupport public Blob act(
+                @ParameterLayout(named = "file name (does not require an extension)")
+                final String fileName,
+
+                @ParameterLayout(named = "Namespaces",
+                        describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
+                final List<String> namespaces,
+
+                @Parameter
+                final boolean includeInterfaces,
+
+                @Parameter
+                final ExportFormat exportFormat,
+
+                @Parameter
+                @ParameterLayout(
+                    describedAs="Whether to zip the exported file.")
+                final boolean zip
+        ) {
+
+            val config = defaultConfig(includeInterfaces, namespaces);
+
+            final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
+
+            val blob = exportFormat.apply(fileName, metamodelDto)
+                    .toBlob(UTF_8);
+            return zip
+                    ? blob.zip()
+                    : blob;
+        }
+
+        @MemberSupport public String validateAct(
+                final String fileName, final List<String> namespacePrefixes, final boolean includeInterfaces,
+                final ExportFormat exportFormat, final boolean zip) {
+            if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
+                return "At least one package must be selected";
+            }
+            return null;
+        }
+
+        @MemberSupport public String defaultFileName() { return "metamodel"; }
+        @MemberSupport public List<String> choicesNamespaces() { return namespaceChoices(); }
+        @MemberSupport public boolean defaultIncludeInterfaces() { return false; }
+        @MemberSupport public ExportFormat defaultExportFormat() { return ExportFormat.XML; }
+        @MemberSupport public boolean defaultZip() { return true; }
+
+    }
 
 
     @Action(
@@ -105,99 +201,6 @@ public class MetaModelServiceMenu {
         @MemberSupport public String default0Act() {
             return "metamodel.csv";
         }
-
-    }
-
-    public static enum ExportFormat implements BiFunction<String, MetamodelDto, Clob>  {
-        JSON{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _Json.toString(dto);
-                return Clob.of(fileName, CommonMimeType.JSON, content);
-            }
-        },
-        XML{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _Xml.writeXml(dto, WriteOptions.builder().formattedOutput(true).build())
-                        .ifFailureFail()
-                        .getValue()
-                        .orElse("");
-                return Clob.of(fileName, CommonMimeType.XML, content);
-            }
-        },
-        YAML{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
-                return Clob.of(fileName, CommonMimeType.YAML, content);
-            }
-        },
-        ASCII{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _AsciiExport.toAscii(dto).toString();
-                return Clob.of(fileName, CommonMimeType.TXT, content);
-            }
-        },
-    }
-
-
-    @Action(
-            domainEvent = downloadMetaModel.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            cssClassFa = "fa-download",
-            named = "Download Meta Model",
-            sequence="500.500.2")
-    public class downloadMetaModel {
-
-        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModel> { }
-
-        @MemberSupport public NamedWithMimeType act(
-                @ParameterLayout(named = "file name (does not require an extension)")
-                final String fileName,
-
-                @ParameterLayout(named = "Namespaces",
-                        describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
-                final List<String> namespaces,
-
-                @Parameter
-                final boolean includeInterfaces,
-
-                @Parameter
-                final ExportFormat exportFormat,
-
-                @Parameter
-                @ParameterLayout(
-                    describedAs="Whether to zip the exported file.")
-                final boolean zip
-        ) {
-
-            val config = defaultConfig(includeInterfaces, namespaces);
-
-            final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
-
-            val clob = exportFormat.apply(fileName, metamodelDto);
-            return zip
-                    ? clob
-                            .toBlob(UTF_8)
-                            .zip()
-                    : clob;
-        }
-
-        @MemberSupport public String validateAct(
-                final String fileName, final List<String> namespacePrefixes, final boolean includeInterfaces,
-                final ExportFormat exportFormat, final boolean zip) {
-            if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
-                return "At least one package must be selected";
-            }
-            return null;
-        }
-
-        @MemberSupport public String defaultFileName() { return "metamodel.xml"; }
-        @MemberSupport public List<String> choicesNamespaces() { return namespaceChoices(); }
-        @MemberSupport public boolean defaultIncludeInterfaces() { return false; }
-        @MemberSupport public ExportFormat defaultExportFormat() { return ExportFormat.XML; }
-        @MemberSupport public boolean defaultZip() { return true; }
 
     }
 
