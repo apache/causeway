@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.navparent.method;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -56,13 +55,15 @@ extends NavigableParentFacetAbstract {
                 Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder)),
             // failure
             deficiency->{
-                val validationResponse =
-                        ProgrammingModelConstants.Validation.DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT;
+
                 ValidationFailure.raiseFormatted(facetHolder,
-                        validationResponse.getMessage(Map.of(
-                                "type", processedClass.getName(),
-                                "parentType", method.getReturnType().getName(),
-                                "parentTypeDeficiency", deficiency)));
+                        ProgrammingModelConstants.Violation.DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT
+                            .builder()
+                            .addVariable("type", processedClass.getName())
+                            .addVariable("parentType", method.getReturnType().getName())
+                            .addVariable("parentTypeDeficiency", deficiency)
+                            .buildMessage());
+
                 return Optional.empty();
             });
     }

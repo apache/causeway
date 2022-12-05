@@ -20,7 +20,6 @@ package org.apache.causeway.testdomain.util.interaction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -202,7 +201,7 @@ public class DomainObjectTesterFactory {
         }
 
         public void assertValidationFailureOnMember(
-                final ProgrammingModelConstants.Validation validationEnum,
+                final ProgrammingModelConstants.Violation violation,
                 final String memberName) {
 
             val validateDomainModel =
@@ -211,10 +210,11 @@ public class DomainObjectTesterFactory {
             assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
             validateDomainModel.assertAnyFailuresContaining(
                     Identifier.classIdentifier(LogicalType.fqcn(getDomainObjectType())),
-                    validationEnum
-                    .getMessage(Map.of(
-                            "type", getDomainObjectType().getName(),
-                            "member", memberName)));
+                    violation
+                        .builder()
+                        .addVariable("type", getDomainObjectType().getName())
+                        .addVariable("member", memberName)
+                        .buildMessage());
         }
 
     }

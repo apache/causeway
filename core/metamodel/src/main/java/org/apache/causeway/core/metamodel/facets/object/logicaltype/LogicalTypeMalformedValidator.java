@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.logicaltype;
 
-import java.util.Map;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -60,13 +58,14 @@ implements MetaModelRefiner {
                         .anyMatch(String::isEmpty)) {
 
                 val validationResponse = spec.isInjectable()
-                        ? ProgrammingModelConstants.Validation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
-                        : ProgrammingModelConstants.Validation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
+                        ? ProgrammingModelConstants.Violation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
+                        : ProgrammingModelConstants.Violation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 
                 ValidationFailure.raiseFormatted(spec,
-                        validationResponse.getMessage(Map.of(
-                                "type", spec.getFullIdentifier(),
-                                "logicalTypeName", logicalTypeName)));
+                        validationResponse.builder()
+                            .addVariable("type", spec.getFullIdentifier())
+                            .addVariable("logicalTypeName", logicalTypeName)
+                            .buildMessage());
             }
 
         });

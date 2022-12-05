@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.lang.reflect.Constructor;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -65,37 +64,29 @@ extends ViewModelFacetAbstract {
             val explicitInjectConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_WITH_INJECT_SEMANTICS.getAll(cls);
             val publicConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY.getAll(cls);
 
-            if(explicitInjectConstructors.getCardinality().isMultiple()) {
+
+            val violation = explicitInjectConstructors.getCardinality().isMultiple()
+                    ? ProgrammingModelConstants.Violation.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
+                    : explicitInjectConstructors.getCardinality().isZero()
+                        && !publicConstructors.getCardinality().isOne()
+                            // in absence of a constructor with inject semantics there must be exactly one public to pick instead
+                            ? ProgrammingModelConstants.Violation.VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS
+                            : null;
+
+            if(violation!=null) {
 
                 ValidationFailure.raiseFormatted(holder,
-                        ProgrammingModelConstants.Validation.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
-                            .getMessage(Map.of(
-                                    "type", cls.getName(),
-                                    "found", explicitInjectConstructors.getCardinality().isMultiple()
-                                        ? "{" + explicitInjectConstructors.stream()
-                                                .map(Constructor::toString)
-                                                .collect(Collectors.joining(", ")) + "}"
-                                        : "none")));
+                        violation
+                            .builder()
+                            .addVariable("type", cls.getName())
+                            .addVariable("found", explicitInjectConstructors.getCardinality().isMultiple()
+                                    ? "{" + explicitInjectConstructors.stream()
+                                            .map(Constructor::toString)
+                                            .collect(Collectors.joining(", ")) + "}"
+                                    : "none")
+                            .buildMessage());
 
                 return Optional.empty();
-
-            } else if(explicitInjectConstructors.getCardinality().isZero()) {
-
-                // in absence of a constructor with inject semantics there must be exactly one public to pick instead
-
-                if(!publicConstructors.getCardinality().isOne()) {
-                    ValidationFailure.raiseFormatted(holder,
-                            ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS
-                                .getMessage(Map.of(
-                                        "type", cls.getName(),
-                                        "found", publicConstructors.getCardinality().isMultiple()
-                                            ? "{" + publicConstructors.stream()
-                                                    .map(Constructor::toString)
-                                                    .collect(Collectors.joining(", ")) + "}"
-                                            : "none")));
-
-                    return Optional.empty();
-                }
 
             }
 
