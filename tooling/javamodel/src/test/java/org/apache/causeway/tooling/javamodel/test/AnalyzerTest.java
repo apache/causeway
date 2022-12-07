@@ -23,8 +23,8 @@ import static guru.nidi.codeassert.config.Language.JAVA;
 import java.io.File;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Files;
@@ -54,7 +54,8 @@ class AnalyzerTest {
         ProjectSamples.assertHasApacheCausewayRuntimeSourceFiles(sources);
     }
 
-    @Test @Disabled("work in progress, as of yet a proof of concept")
+    @Test //work in progress, as of yet a proof of concept
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     void testJavaDocMining() {
 
         val projDir = ProjectSamples.self();
@@ -67,27 +68,28 @@ class AnalyzerTest {
         .map(CompilationUnits::parse)
         .flatMap(CompilationUnits::streamTypeDeclarations)
         .peek(td->{
-            
+
             td.getJavadoc().ifPresent(javadoc->{
-            
+
                 javadoc.getBlockTags().stream()
                 .filter(tag->tag.getTagName().equals("since"))
                 .forEach(tag->System.out.println("--- SINCE " + tag.getContent().toText()));
-                
+
             });
-            
+
         })
         .map(AnyTypeDeclaration::getPublicMethodDeclarations)
         .flatMap(Can::stream)
         .forEach(md->{
-            
+
             System.out.println("javadoc: " + md.getJavadocComment());
             System.out.println("non private method: " + md.getDeclarationAsString());
 
         });
     }
 
-    @Test @Disabled("fails when run with the CI pipeline")
+    @Test //fails when run with the CI pipeline
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     void testAnnotationGathering() {
 
         val projDir = ProjectSamples.apacheCausewayRuntime();
