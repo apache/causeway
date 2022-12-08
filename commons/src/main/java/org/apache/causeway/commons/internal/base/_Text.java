@@ -109,8 +109,12 @@ public final class _Text {
         try(Scanner scanner = new Scanner(input, charset.name())){
             scanner.useDelimiter("\\n");
             while(scanner.hasNext()) {
-                val line = scanner.next();
-                lines.add(line.replace("\r", ""));
+                var line = scanner.next()
+                        .replace("\r", "");
+                if(lines.size()==0) {
+                    line = stripBom(line); // special handling of first line
+                }
+                lines.add(line);
             }
         }
         return Can.ofCollection(lines);
@@ -418,4 +422,16 @@ public final class _Text {
         return constraintLines.stream();
     }
 
+    /**
+     * If line has a BOM 65279 (0xFEFF) leading character, strip it.
+     * <p>
+     * Some UTF-8 formatted files may have a BOM signature at their start.
+     */
+    private static String stripBom(final String line) {
+        if(line.length()>0
+                && line.charAt(0)==65279) {
+            return line.substring(1);
+        }
+        return line;
+    }
 }

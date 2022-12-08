@@ -32,62 +32,41 @@ class ProjectSamples {
         final File projRootFolder = new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
         return projRootFolder;
     }
-    
+
     static File apacheCausewayApplib() {
         return new File(apacheCausewayRoot(), "api/applib");
     }
-    
+
     static File apacheCausewayRuntime() {
         return new File(apacheCausewayRoot(), "core/runtime");
     }
-    
+
     static File self() {
         return new File("./").getAbsoluteFile();
     }
-    
-    static void assertHasApacheCausewayRuntimeClasses(Stream<String> classNames) {
-        
+
+    static void assertHasApacheCausewayRuntimeClasses(final Stream<String> classNames) {
+
         val components = classNames
-        .map(s->s.replace("org.apache.causeway.", "o.a.i."))
+        .map(s->s.replace("org.apache.causeway.", "~."))
         //.peek(System.out::println) //debug
         .collect(Collectors.toSet());
-        
-        assertTrue(components.contains("o.a.i.core.runtime.persistence.transaction.AuditerDispatchService"));
-        assertTrue(components.contains("o.a.i.core.runtime.persistence.transaction.ChangedObjectsService"));
-        assertTrue(components.contains("o.a.i.core.runtime.events.persistence.TimestampService"));
-        assertTrue(components.contains("o.a.i.core.runtime.events.RuntimeEventService"));
+
+        assertTrue(components.contains("~.core.runtime.events.MetamodelEventService"));
+        assertTrue(components.contains("~.core.runtime.events.TransactionEventEmitter"));
     }
-    
-    static void assertHasApacheCausewayRuntimeSourceFiles(Stream<String> sourcePaths) {
-        
+
+    static void assertHasApacheCausewayRuntimeSourceFiles(final Stream<String> sourcePaths) {
+
         val sources = sourcePaths
         .map(s->s.replace("\\", "/"))
-        .map(s->s.replace("/src/main/java/org/apache/causeway/", "o.a.i/"))
+        .map(s->s.replace("/src/main/java/org/apache/causeway/", "~/"))
         //.peek(System.out::println) //debug
         .collect(Collectors.toSet());
-        
-        assertTrue(sources.contains("o.a.i/core/runtime/context/MetaModelContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/CausewayContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMemento.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoCollection.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoForEmpty.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/memento/ObjectMementoService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/RuntimeContext.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/context/RuntimeContextBase.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/app/AppLifecycleEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/iactn/CausewayInteractionLifecycleEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/PostStoreEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/PreStoreEvent.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/TimestampService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/events/RuntimeEventService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/CausewayInteraction.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionService.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionTracker.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/CausewayInteractionScope.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/CausewayInteractionScopeBeanFactoryPostProcessor.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/CausewayInteractionScopeCloseListener.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/CausewayModuleCoreRuntime.java"));
-        
+
+        assertTrue(sources.contains("~/core/runtime/CausewayModuleCoreRuntime.java"));
+        assertTrue(sources.contains("~/core/runtime/events/MetamodelEventService.java"));
+        assertTrue(sources.contains("~/core/runtime/events/TransactionEventEmitter.java"));
     }
-    
+
 }
