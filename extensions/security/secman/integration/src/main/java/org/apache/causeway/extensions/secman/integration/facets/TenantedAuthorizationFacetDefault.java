@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.integration.facets;
 
+import lombok.val;
+
 import java.util.List;
 
 import javax.inject.Provider;
@@ -27,11 +29,13 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.springframework.lang.Nullable;
 
 public class TenantedAuthorizationFacetDefault
 extends FacetAbstract
@@ -61,24 +65,33 @@ implements TenantedAuthorizationFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
+        return evaluate(ApplicationTenancyEvaluator::hides, ic.getHead());
+    }
 
+    @Override
+    public String disables(final UsabilityContext ic) {
+        return evaluate(ApplicationTenancyEvaluator::disables, ic.getHead());
+    }
+
+    @Nullable
+    private String evaluate(EvaluationDispatcher evaluationDispatcher, InteractionHead head) {
         if(evaluators == null
                 || evaluators.isEmpty()
-                || userService.isCurrentUserWithSystemPrivileges()) {
+                || userService.isCurrentUserWithSudoAccessAllRole()) {
             return null;
         }
 
-        final Object domainObject = ic.getHead().getOwner().getPojo();
-        final String userName = userService.currentUserNameElseNobody();
+        val domainObject = head.getOwner().getPojo();
+        val userName = userService.currentUserNameElseNobody();
 
-        final ApplicationUser applicationUser = findApplicationUser(userName);
+        val applicationUser = findApplicationUser(userName);
         if (applicationUser == null) {
             // not expected, but best to be safe...
             return "Could not locate application user for " + userName;
         }
 
-        for (ApplicationTenancyEvaluator evaluator : evaluators) {
-            final String reason = evaluator.hides(domainObject, applicationUser);
+        for (val evaluator : evaluators) {
+            final String reason = evaluationDispatcher.dispatch(evaluator, domainObject, applicationUser);
             if(reason != null) {
                 return reason;
             }
@@ -86,32 +99,8 @@ implements TenantedAuthorizationFacet {
         return null;
     }
 
-
-    @Override
-    public String disables(final UsabilityContext ic) {
-
-        if(evaluators == null
-                || evaluators.isEmpty()
-                || userService.isCurrentUserWithSystemPrivileges()) {
-            return null;
-        }
-
-        final Object domainObject = ic.getHead().getOwner().getPojo();
-        final String userName = userService.currentUserNameElseNobody();
-
-        final ApplicationUser applicationUser = findApplicationUser(userName);
-        if (applicationUser == null) {
-            // not expected, but best to be safe...
-            return "Could not locate application user for " + userName;
-        }
-
-        for (ApplicationTenancyEvaluator evaluator : evaluators) {
-            final String reason = evaluator.disables(domainObject, applicationUser);
-            if(reason != null) {
-                return reason;
-            }
-        }
-        return null;
+    interface EvaluationDispatcher {
+        String dispatch(ApplicationTenancyEvaluator evaluator, Object domainObject, ApplicationUser applicationUser);
     }
 
 
@@ -131,5 +120,7 @@ implements TenantedAuthorizationFacet {
     protected ApplicationUser findApplicationUserNoCache(final String userName) {
         return applicationUserRepository.findByUsername(userName).orElse(null);
     }
+
+
 
 }

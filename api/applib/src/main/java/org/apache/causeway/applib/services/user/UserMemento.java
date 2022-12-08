@@ -24,11 +24,11 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.inject.Named;
 
+import org.apache.causeway.applib.services.sudo.SudoService;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
@@ -304,11 +304,12 @@ implements Serializable {
     }
 
     /**
-     * Whether this {@link UserMemento} represent the <i>system user</i>.
+     * Whether this {@link UserMemento}'s {@link UserMemento#getRoles() roles} contains the {@link SudoService}'s
+     * {@link SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE} role (meaning that security checks are disabled).
      */
     @Programmatic
-    public boolean isSystem() {
-        return Objects.equals(SYSTEM_USER, this);
+    public boolean hasSudoAccessAllRole() {
+        return roles.contains(SudoService.ACCESS_ALL_ROLE);
     }
 
     // -- UTILITY
