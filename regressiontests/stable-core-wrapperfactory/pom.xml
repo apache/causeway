@@ -25,7 +25,10 @@
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.core.wrapperfactory</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-core-wrapperfactory</git-plugin.propertiesDir>
+	</properties>
 
     <dependencies>
 
@@ -40,7 +43,7 @@
 			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-fixtures-applib</artifactId>

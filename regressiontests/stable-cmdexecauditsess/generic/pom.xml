@@ -25,6 +25,9 @@
     <properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+
+        <jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.cmdexecauditsess.generic</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-cmdexecauditsess/generic</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

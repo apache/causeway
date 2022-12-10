@@ -23,10 +23,13 @@
 
 	<artifactId>causeway-regressiontests-stable-domainmodel</artifactId>
 	<name>Apache Causeway - Regression Tests (stable) - Domain Model</name>
-	
+
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.domainmodel</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-domainmodel</git-plugin.propertiesDir>
     </properties>
 
 	<build>

@@ -34,7 +34,14 @@
 	<properties>
 		<skip.regressionTests>false</skip.regressionTests>
 		<skipTests>${skip.regressionTests}</skipTests>
+
+		<maven.install.skip>true</maven.install.skip>
+		<maven.deploy.skip>true</maven.deploy.skip>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests</git-plugin.propertiesDir>
 	</properties>
+
 
 	<build>
 		<resources>
@@ -147,7 +154,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-			
+
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions</artifactId>
