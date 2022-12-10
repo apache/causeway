@@ -106,9 +106,9 @@ public class UserService {
      * Whether the current user is the <i>system user</i> (as obtained from the
      * {@link InteractionContext} of the current thread).
      */
-    public boolean isCurrentUserWithSystemPrivileges() {
+    public boolean isCurrentUserWithSudoAccessAllRole() {
         return currentUser()
-                .map(UserMemento::isSystem)
+                .map(UserMemento::hasSudoAccessAllRole)
                 .orElse(false);
     }
 

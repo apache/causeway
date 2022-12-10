@@ -23,11 +23,14 @@
 
 	<artifactId>causeway-regressiontests-stable-bootstrapping</artifactId>
 	<name>Apache Causeway - Regression Tests (stable) - Bootstrapping</name>
-	
+
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.bootstrapping</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-bootstrapping</git-plugin.propertiesDir>
+	</properties>
 
 	<dependencies>
 		<dependency>
