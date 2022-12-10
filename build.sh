@@ -24,7 +24,7 @@
 #
 # example usage:
 #
-#     sh build.sh -ptOv -- -Dmodule-all-except-incubator
+#     sh build.sh -ptOvI
 #
 
 #
@@ -59,6 +59,11 @@ usage() {
  echo "  -w whatif - don't run the command but do print it out.  Implies -v (verbose)"                 >&2
  echo "  -v verbose"                                                                                   >&2
  echo "  -e edit log file at end.  Cannot combine with '-v'"                                           >&2
+ echo ""                                                                                               >&2
+ echo ""                                                                                               >&2
+ echo "example usage:"                                                                                 >&2
+ echo ""                                                                                               >&2
+ echo "sh build.sh -pctOvI        # pull, clean, no offline, verbose, no incubator"                    >&2
  echo ""                                                                                               >&2
 }
 
@@ -125,7 +130,7 @@ if [ "$VERBOSE" = "true" ]; then
   echo "-O SKIP_OFFLINE             : $SKIP_OFFLINE"
   echo "-a ALL                      : $ALL"
   echo "-I ALL_EXCEPT_INCUBATOR     : $ALL_EXCEPT_INCUBATOR"
-  echo "-K ALL_EXCEPT_KROVIZ        : $ALL_EXCEPT_ALL_EXCEPT_KROVIZ"
+  echo "-K ALL_EXCEPT_KROVIZ        : $ALL_EXCEPT_KROVIZ"
   echo "-F SKIP_SEARCH_FOR_FAILURES : $SKIP_SEARCH_FOR_FAILURES"
   echo "-S SKIP_SUMMARY             : $SKIP_SUMMARY"
   echo "-w WHATIF                   : $WHATIF"
