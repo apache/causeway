@@ -28,7 +28,7 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.bootstrapping</jar-plugin.automaticModuleName>
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.bootstrapping</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-bootstrapping</git-plugin.propertiesDir>
 	</properties>
 

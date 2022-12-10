@@ -19,14 +19,14 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>causeway-regressiontests-core-wrapperfactory</artifactId>
+    <artifactId>causeway-regressiontests-stable-core-wrapperfactory</artifactId>
     <name>Apache Causeway - Regression Tests (stable) - Core WrapperFactory</name>
 
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.core.wrapperfactory</jar-plugin.automaticModuleName>
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.core.wrapperfactory</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-core-wrapperfactory</git-plugin.propertiesDir>
 	</properties>
 
