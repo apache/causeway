@@ -50,11 +50,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.With;
-import lombok.val;
+import lombok.*;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
@@ -171,30 +167,50 @@ implements Serializable {
     @NonNull
     String name;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "1")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     String realName;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     URL avatarUrl;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "regional", sequence = "1")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     Locale languageLocale;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "regional", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     Locale numberFormatLocale;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "regional", sequence = "3")
     @Getter @With(onMethod_ = {@Programmatic})
