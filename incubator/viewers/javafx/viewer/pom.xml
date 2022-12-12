@@ -36,6 +36,10 @@
 			<artifactId>causeway-viewer-javafx-ui</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-commons-services</artifactId>
+		</dependency>
 	</dependencies>
 
 

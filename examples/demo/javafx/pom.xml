@@ -28,7 +28,6 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<maven.compiler.release>11</maven.compiler.release>
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.skip>true</sonar.skip>
 	</properties>
