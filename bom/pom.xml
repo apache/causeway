@@ -183,8 +183,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>
 			-Xmx384m 
-			--add-modules com.sun.tools.xjc 
-			--add-reads org.eclipse.persistence.moxy=com.sun.tools.xjc
 		</surefire-plugin.argLine>
         <swagger-core.version>2.2.7</swagger-core.version>
 
@@ -1307,8 +1305,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <surefire-plugin.argLine>
 					@{argLine}
 					-Xmx384m
-					--add-modules com.sun.tools.xjc 
-					--add-reads org.eclipse.persistence.moxy=com.sun.tools.xjc 
 				</surefire-plugin.argLine>
             </properties>
             <build>
