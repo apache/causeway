@@ -62,25 +62,6 @@
 				<artifactId>stax2-api</artifactId>
 				<version>4.2.1</version>
 			</dependency>
-<!--			<dependency>-->
-<!--				<groupId>org.eclipse.persistence</groupId>-->
-<!--				<artifactId>org.eclipse.persistence.moxy</artifactId>-->
-<!--				<version>4.0.0</version>-->
-<!--				<exclusions>-->
-<!--					<exclusion>-->
-<!--						<groupId>org.ow2.asm</groupId>-->
-<!--						<artifactId>asm</artifactId>-->
-<!--					</exclusion>-->
-<!--					<exclusion>-->
-<!--						<groupId>org.ow2.asm</groupId>-->
-<!--						<artifactId>asm-tree</artifactId>-->
-<!--					</exclusion>-->
-<!--					<exclusion>-->
-<!--						<groupId>org.ow2.asm</groupId>-->
-<!--						<artifactId>asm-analysis</artifactId>-->
-<!--					</exclusion>-->
-<!--				</exclusions>-->
-<!--			</dependency>-->
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
@@ -178,10 +159,6 @@
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>stax2-api</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.eclipse.persistence</groupId>-->
-<!--			<artifactId>org.eclipse.persistence.moxy</artifactId>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.sdo</artifactId>
