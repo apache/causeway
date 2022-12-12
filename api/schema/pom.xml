@@ -71,17 +71,13 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<schemaDirectory>src/main/resources/org/apache/causeway/schema</schemaDirectory>
+									<schemaDirectory>src/main/resources/schema</schemaDirectory>
 									<schemaIncludes>
-										<schemaInclude>common/common-2.0.xsd</schemaInclude>
-										<schemaInclude>cmd/cmd-2.0.xsd</schemaInclude>
-										<schemaInclude>ixn/ixn-2.0.xsd</schemaInclude>
-										<schemaInclude>chg/chg-2.0.xsd</schemaInclude>
-										<schemaInclude>metamodel/metamodel-2.0.xsd</schemaInclude>
+										<schemaInclude>**/*.xsd</schemaInclude>
 									</schemaIncludes>
-									<bindingDirectory>src/main/resources/org/apache/causeway/schema</bindingDirectory>
+									<bindingDirectory>src/main/resources/schema</bindingDirectory>
 									<bindingIncludes>
-										<bindingInclude>bindings.xml</bindingInclude>
+										<bindingInclude>**/bindings.xml</bindingInclude>
 									</bindingIncludes>
 									<args>
 										<arg>-extension</arg>
