@@ -74,6 +74,7 @@ module org.apache.causeway.commons {
     requires transitive jakarta.xml.bind;
     requires transitive jakarta.inject;
     requires jakarta.annotation;
+    requires spring.oxm;
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;

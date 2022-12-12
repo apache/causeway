@@ -29,7 +29,6 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -61,8 +60,7 @@ import lombok.SneakyThrows;
     CausewayPresets.SilenceProgrammingModel
 })
 //uncomment if intended only for manual verification.
-//TODO[ISIS-3275] - MM export looks rather different compared to v2
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class MetaModelRegressionTest {
 
     @Inject MetaModelServiceMenu metaModelServiceMenu;

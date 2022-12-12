@@ -45,7 +45,7 @@ module org.apache.causeway.core.config {
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.logging.log4j;
-    requires org.eclipse.persistence.core;
+    //requires org.eclipse.persistence.core;
     requires org.hibernate.validator;
     requires spring.aop;
     requires spring.beans;
