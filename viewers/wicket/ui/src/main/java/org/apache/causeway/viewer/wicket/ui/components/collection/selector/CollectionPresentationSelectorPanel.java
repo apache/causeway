@@ -31,7 +31,6 @@ import org.apache.wicket.model.Model;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
@@ -40,7 +39,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
-import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -61,7 +59,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     private static final String ID_VIEW_ITEM_TITLE = "viewItemTitle";
     private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
 
-    private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
+//    private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
     private final CollectionPresentationSelectorHelper selectorHelper;
@@ -110,15 +108,16 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
         final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
 
-        WktTooltips.addTooltip(UiPlacementDirection.TOP,
-                views, translate("Click to change view or see export options."));
+        //XXX UI glitch, tooltip has tendency to not disappear
+//        WktTooltips.addTooltip(UiPlacementDirection.TOP,
+//                views, translate("Click to change view or see export options."));
 
         views.addOrReplace(container);
         views.setOutputMarkupId(true);
 
         this.setOutputMarkupId(true);
 
-        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, translate("Hidden"));
+//        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, translate("Hidden"));
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
         Wkt.listViewAdd(container, ID_VIEW_ITEM, componentFactories, item->{
@@ -162,10 +161,10 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             // hide the selected item
             val isSelected = componentFactory == CollectionPresentationSelectorPanel.this.selectedComponentFactory;
             if (isSelected) {
-                viewButtonTitle.setDefaultModel(nameFor(componentFactory));
+                //viewButtonTitle.setDefaultModel(nameFor(componentFactory));
                 final IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
                 Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
-                link.setVisible(false);
+                Wkt.cssAppend(link, "active");
             }
 
         });

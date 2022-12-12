@@ -66,12 +66,12 @@ implements CollectionContentsAsFactory {
 
     @Override
     public IModel<String> getTitleLabel() {
-        return Model.of("Excel");
+        return Model.of("Excel Download");
     }
 
     @Override
     public IModel<String> getCssClass() {
-        return Model.of("fa fa-file-excel");
+        return Model.of("fa-solid fa-file-excel");
     }
 
     // -- HELPER
