@@ -27,7 +27,7 @@ module org.apache.causeway.schema {
     requires java.xml;
     requires jakarta.xml.bind;
     requires spring.context;
-    requires java.inject;
+    requires jakarta.inject;
 
     opens org.apache.causeway.schema.metamodel.v2;
     opens org.apache.causeway.schema.common.v2;

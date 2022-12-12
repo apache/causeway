@@ -17,10 +17,12 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<jaxb:bindings version="3.0" xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
-    xmlns:xjc="https://jakarta.ee/xml/ns/jaxb/xjc"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    jaxb:extensionBindingPrefixes="xjc">
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               jaxb:version="2.0"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+               xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+>
     
     <jaxb:bindings schemaLocation="chg/chg-2.0.xsd">
         <jaxb:schemaBindings>

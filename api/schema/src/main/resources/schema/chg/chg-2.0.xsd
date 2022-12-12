@@ -34,7 +34,7 @@
             <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below).  The changes (create/update/delete) to one or more domain objects within a transaction.  (nb: only published objects are included in these lists).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.chg.v2.ChangesDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.chg.v2.ChangesDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
@@ -84,7 +84,7 @@
         <xs:annotation>
             <xs:documentation>A set of changes to domain objects.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.chg.v2.ObjectsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.chg.v2.ObjectsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
