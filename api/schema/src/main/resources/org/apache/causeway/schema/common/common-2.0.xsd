@@ -25,7 +25,7 @@
            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
            xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
            xmlns:annox="http://annox.dev.java.net"
-           jaxb:extensionBindingPrefixes="annox">
+           jaxb:extensionBindingPrefixes="xjc annox">
            
 	<xs:annotation>
 	   <xs:appinfo>
