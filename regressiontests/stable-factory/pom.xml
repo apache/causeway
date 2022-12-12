@@ -23,10 +23,13 @@
 
 	<artifactId>causeway-regressiontests-stable-factory</artifactId>
 	<name>Apache Causeway - Regression Tests (stable) - Factory</name>
-	
+
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.factory</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-factory</git-plugin.propertiesDir>
     </properties>
 
 	<dependencies>

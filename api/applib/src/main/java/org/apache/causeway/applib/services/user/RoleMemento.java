@@ -20,6 +20,8 @@ package org.apache.causeway.applib.services.user;
 
 import java.io.Serializable;
 
+import jakarta.inject.Named;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
@@ -30,7 +32,6 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
@@ -41,6 +42,7 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)
@@ -60,17 +62,18 @@ public class RoleMemento implements Serializable {
      * Creates a new role with the specified name. Description is left blank.
      */
     public RoleMemento(final String name) {
-        this(name, "");
+        this(name, null);
     }
 
     /**
      * Creates a new role with the specified name and description.
      */
+    @Builder
     public RoleMemento(
             final @NonNull String name,
-            final @NonNull String description) {
+            final String description) {
         this.name = name;
-        this.description = description;
+        this.description = description == null ? "" : description;
     }
 
     public static class UiSubscriber {
@@ -87,6 +90,10 @@ public class RoleMemento implements Serializable {
     @Getter
     String name;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @PropertyLayout(fieldSetId = "details", sequence = "1")
     @Getter
     String description;

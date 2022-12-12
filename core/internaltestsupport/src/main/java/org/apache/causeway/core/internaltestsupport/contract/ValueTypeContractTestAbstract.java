@@ -23,12 +23,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 /**
  * Contract test for value types ({@link #equals(Object) equals} and
@@ -48,17 +44,17 @@ public abstract class ValueTypeContractTestAbstract<T> {
     }
 
     private void assertSizeAtLeast(final List<T> objects, final int i) {
-        assertThat(objects, is(notNullValue()));
-        assertThat(objects.size(), is(greaterThan(i - 1)));
+        assertThat(objects).isNotNull();
+        assertThat(objects).hasSizeGreaterThan(i - 1);
     }
 
     @Test
     public void notEqualToNull() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
-            assertThat(o1==null, is(false));
+            assertThat(o1).isNotNull();
         }
         for (final T o1 : getObjectsWithDifferentValue()) {
-            assertThat(o1==null, is(false));
+            assertThat(o1).isNotNull();
         }
     }
 
@@ -66,9 +62,9 @@ public abstract class ValueTypeContractTestAbstract<T> {
     public void reflexiveAndSymmetric() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
             for (final T o2 : getObjectsWithSameValue()) {
-                assertThat(o1.equals(o2), is(true));
-                assertThat(o2.equals(o1), is(true));
-                assertThat(o1.hashCode(), is(equalTo(o2.hashCode())));
+                assertThat(o1).isEqualTo(o2);
+                assertThat(o2).isEqualTo(o1);
+                assertThat(o1.hashCode()).isEqualTo(o2.hashCode());
             }
         }
     }
@@ -77,8 +73,8 @@ public abstract class ValueTypeContractTestAbstract<T> {
     public void notEqual() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
             for (final T o2 : getObjectsWithDifferentValue()) {
-                assertThat(o1.equals(o2), is(false));
-                assertThat(o2.equals(o1), is(false));
+                assertThat(o1).isNotEqualTo(o2);
+                assertThat(o2).isNotEqualTo(o1);
             }
         }
     }
@@ -88,9 +84,9 @@ public abstract class ValueTypeContractTestAbstract<T> {
         for (final T o1 : getObjectsWithSameValue()) {
             for (final T o2 : getObjectsWithSameValue()) {
                 for (final Object o3 : getObjectsWithSameValue()) {
-                    assertThat(o1.equals(o2), is(true));
-                    assertThat(o2.equals(o3), is(true));
-                    assertThat(o1.equals(o3), is(true));
+                    assertThat(o1).isEqualTo(o2);
+                    assertThat(o2).isEqualTo(o3);
+                    assertThat(o3).isEqualTo(o1);
                 }
             }
         }
@@ -107,8 +103,8 @@ public abstract class ValueTypeContractTestAbstract<T> {
                 if(! (o2 instanceof Comparable)) continue;
                 Comparable c2 = (Comparable)o2;
 
-                assertThat(c1.compareTo(c2), is(0));
-                assertThat(c2.compareTo(c1), is(0));
+                assertThat(c1).isEqualByComparingTo(c2);
+                assertThat(c2).isEqualByComparingTo(c1);
             }
 
             for (final T o2 : getObjectsWithDifferentValue()) {
@@ -117,9 +113,9 @@ public abstract class ValueTypeContractTestAbstract<T> {
 
                 final int x = c1.compareTo(c2);
                 final int y = c2.compareTo(c1);
-                assertThat(x, is(not(0)));
+                assertThat(x).isNotZero();
 
-                assertThat(x, is(-y));
+                assertThat(x).isEqualTo(-y);
             }
         }
     }

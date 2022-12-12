@@ -24,8 +24,9 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Stream;
+
+import jakarta.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -48,7 +49,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import jakarta.inject.Named;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -170,30 +170,50 @@ implements Serializable {
     @NonNull
     String name;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "1")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     String realName;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     URL avatarUrl;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "regional", sequence = "1")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     Locale languageLocale;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "regional", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     Locale numberFormatLocale;
 
+    /**
+     * Excluded from {@link #equals(Object) equality} checks.
+     */
+    @EqualsAndHashCode.Exclude
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "regional", sequence = "3")
     @Getter @With(onMethod_ = {@Programmatic})
@@ -303,11 +323,12 @@ implements Serializable {
     }
 
     /**
-     * Whether this {@link UserMemento} represent the <i>system user</i>.
+     * Whether this {@link UserMemento}'s {@link UserMemento#getRoles() roles} contains the {@link SudoService}'s
+     * {@link SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE} role (meaning that security checks are disabled).
      */
     @Programmatic
-    public boolean isSystem() {
-        return Objects.equals(SYSTEM_USER, this);
+    public boolean hasSudoAccessAllRole() {
+        return roles.contains(SudoService.ACCESS_ALL_ROLE);
     }
 
     // -- UTILITY

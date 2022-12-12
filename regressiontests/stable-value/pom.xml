@@ -23,10 +23,13 @@
 
 	<artifactId>causeway-regressiontests-stable-value</artifactId>
 	<name>Apache Causeway - Regression Tests (stable) - Value Types</name>
-	
+
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+
+		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.value</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-value</git-plugin.propertiesDir>
     </properties>
 
 	<dependencies>
