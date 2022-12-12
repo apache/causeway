@@ -32,6 +32,9 @@
             -->
             <jaxb:package name="org.apache.causeway.schema.chg.v2"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="chg" />
+        </jaxb:bindings>
     </jaxb:bindings>
 
     <jaxb:bindings schemaLocation="ixn/ixn-2.0.xsd">
@@ -42,6 +45,9 @@
             -->
             <jaxb:package name="org.apache.causeway.schema.ixn.v2"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="ixn" />
+        </jaxb:bindings>
     </jaxb:bindings>
     <!-- since ixn-1.3.xsd does an xs:import of common-1.2.xsd, we need to specify common's package bindings -->
     <jaxb:bindings schemaLocation="common/common-2.0.xsd">
@@ -52,6 +58,9 @@
             -->
             <jaxb:package name="org.apache.causeway.schema.common.v2"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="com" />
+        </jaxb:bindings>
     </jaxb:bindings>
     <!-- since ixn-1.3.xsd does an xs:import of cmd-1.4.xsd, we need to specify common's package bindings -->
     <jaxb:bindings schemaLocation="cmd/cmd-2.0.xsd">
@@ -62,6 +71,9 @@
             -->
             <jaxb:package name="org.apache.causeway.schema.cmd.v2"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="cmd" />
+        </jaxb:bindings>
     </jaxb:bindings>
 
     <jaxb:bindings schemaLocation="metamodel/metamodel-2.0.xsd">
@@ -72,5 +84,8 @@
             -->
             <jaxb:package name="org.apache.causeway.schema.metamodel.v2"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="mml" />
+        </jaxb:bindings>
     </jaxb:bindings>
 </jaxb:bindings>
