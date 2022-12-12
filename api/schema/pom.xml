@@ -115,7 +115,16 @@
 									<args>
 										<arg>-extension</arg>
 										<arg>-Xnamespace-prefix</arg>
+										<arg>-Xannotate</arg>
 									</args>
+									<extension>true</extension>
+									<plugins>
+										<plugin>
+											<groupId>org.jvnet.jaxb2_commons</groupId>
+											<artifactId>jaxb2-basics-annotate</artifactId>
+											<version>1.1.0</version>
+										</plugin>
+									</plugins>
 								</configuration>
 							</execution>
 						</executions>

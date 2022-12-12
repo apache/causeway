@@ -21,13 +21,20 @@
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns="http://causeway.apache.org/schema/cmd"
-           xmlns:com="http://causeway.apache.org/schema/common">
+           xmlns:com="http://causeway.apache.org/schema/common"
+           
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
+           xmlns:annox="http://annox.dev.java.net"
+           jaxb:extensionBindingPrefixes="annox">
 
     <xs:import namespace="http://causeway.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
 
     <xs:element name="commandsDto">
         <xs:annotation>
             <xs:documentation>Collection of commandDto's</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.CommandsDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -55,6 +62,9 @@
             <xs:documentation>Represents the intention to invoke an action or to edit a property, usually on one target object but possibly on multiple targets (all of the same type).
                 Commands can also be deferred, which is to say that they can be scheduled to be invoked in the background.  In such cases the originating command/action which schedules the background commands is called the _parent_ of the background commands.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.CommandDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -121,6 +131,9 @@
         <xs:annotation>
             <xs:documentation>Represents the information required to be able to invoke an action or modify a property on the target(s).  Specifically, is the identifier of the action/property, along with the parameter arguments.  Is subclassed by 'actionDto' and 'propertyDto'.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.MemberDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="logicalMemberIdentifier" type="xs:string">
@@ -142,6 +155,9 @@
         <xs:annotation>
             <xs:documentation>Captures the information required to be able to invoke an action on the target(s).
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.ActionDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="memberDto">
@@ -161,6 +177,9 @@
         <xs:annotation>
             <xs:documentation>Captures the information required to be able to modify a property on the target(s).
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.PropertyDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="memberDto">
@@ -175,6 +194,9 @@
         <xs:annotation>
             <xs:documentation>A list of of parameter/argument values.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.ParamsDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="parameter" type="paramDto"/>
@@ -185,6 +207,9 @@
         <xs:annotation>
             <xs:documentation>Defines an action parameter: its name, type and value (ie provided argument).
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.ParamDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="com:namedValueWithTypeDto">
@@ -193,6 +218,13 @@
     </xs:complexType>
 
     <xs:complexType name="mapDto">
+        <xs:annotation>
+            <xs:documentation>Key value mapping.
+            </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.MapDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
