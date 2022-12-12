@@ -51,11 +51,11 @@
             <groupId>org.apache.causeway.viewer</groupId>
             <artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
         </dependency>
-
+        
         <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-        </dependency>
+		    <groupId>com.fasterxml.jackson.module</groupId>
+		    <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+		</dependency>
 
         <!-- TESTING -->
         
