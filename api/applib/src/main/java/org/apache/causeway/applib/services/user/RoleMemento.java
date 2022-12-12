@@ -32,6 +32,8 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
@@ -42,7 +44,6 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)

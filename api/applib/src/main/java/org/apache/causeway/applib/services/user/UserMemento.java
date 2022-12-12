@@ -46,10 +46,12 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.With;
