@@ -341,7 +341,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
                 viewModelClassFor(parentId, featureRepository);
         return factory.viewModel(cls,
                 Bookmark.forLogicalTypeNameAndIdentifier(
-                        parentId.getLogicalTypeName(),
+                        ApplicationFeatureViewModel.LOGICAL_TYPE_NAME,
                         parentId.asEncodedString()));
     }
 
