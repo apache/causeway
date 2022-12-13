@@ -52,7 +52,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
@@ -118,7 +117,7 @@ public class JsonRepresentation {
         val repr = JsonRepresentation.newMap();
         if(_Strings.isNotEmpty(keyValuePairsAsJson)) {
             final Map<Object, Object> keyValuePairs = _Casts.uncheckedCast(
-                    JsonUtils.tryRead(Map.class, DataSource.ofStringUtf8(keyValuePairsAsJson))
+                    JsonUtils.tryRead(Map.class, keyValuePairsAsJson)
                         .ifFailureFail()
                         .getValue().orElseThrow());
 

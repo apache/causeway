@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.jaxb.VegaJaxbAdapter;
@@ -74,7 +73,7 @@ public final class Vega implements Serializable {
          * parses the json input for schema specification
          */
         @NonNull static Schema valueOfJson(final @Nullable String json) {
-            return JsonUtils.tryRead(Map.class, DataSource.ofStringUtf8(json))
+            return JsonUtils.tryRead(Map.class, json)
                     .getValue()
             .map(map->map.get(key()))
             .map(schemaValue->{

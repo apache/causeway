@@ -27,7 +27,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
 
@@ -49,7 +52,7 @@ public interface DataSource {
     static DataSource none() {
         return new DataSource() {
             @Override public <T> Try<T> readAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
-                return Try.success(null);
+                return Try.empty();
             }
         };
     }
@@ -76,11 +79,13 @@ public interface DataSource {
         return fromInputStreamSupplier(()->Try.call(()->new FileInputStream(file)).ifFailureFail().getValue().orElseThrow());
     }
 
-    static DataSource ofString(final @NonNull String string, final Charset charset) {
-        return fromInputStreamSupplier(()->new ByteArrayInputStream(string.getBytes(charset)));
+    static DataSource ofString(final @Nullable String string, final Charset charset) {
+        return _Strings.isNullOrEmpty(string)
+                ? none()
+                : fromInputStreamSupplier(()->new ByteArrayInputStream(string.getBytes(charset)));
     }
 
-    static DataSource ofStringUtf8(final @NonNull String string) {
+    static DataSource ofStringUtf8(final @Nullable String string) {
         return ofString(string, StandardCharsets.UTF_8);
     }
 

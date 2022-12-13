@@ -50,15 +50,26 @@ public class JsonUtils {
     // -- READING
 
     /**
-     * Tries to deserialize JSON content from given {@link DataSource} into an instance of
-     * given {@code requiredType}.
+     * Tries to deserialize JSON content from given UTF8 encoded {@link String}
+     * into an instance of given {@code mappedType}.
      */
     public <T> Try<T> tryRead(
-            final @NonNull Class<T> requiredType,
+            final @NonNull Class<T> mappedType,
+            final @Nullable String stringUtf8,
+            final JsonUtils.JsonCustomizer ... customizers) {
+        return tryRead(mappedType, DataSource.ofStringUtf8(stringUtf8), customizers);
+    }
+
+    /**
+     * Tries to deserialize JSON content from given {@link DataSource} into an instance of
+     * given {@code mappedType}.
+     */
+    public <T> Try<T> tryRead(
+            final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
             final JsonUtils.JsonCustomizer ... customizers) {
         return source.readAll((final InputStream is)->{
-            return Try.call(()->createMapper(customizers).readValue(is, requiredType));
+            return Try.call(()->createMapper(customizers).readValue(is, mappedType));
         });
     }
 
@@ -81,15 +92,22 @@ public class JsonUtils {
 
     // -- WRITING
 
+    /**
+     * Writes given {@code pojo} to given {@link DataSink}.
+     */
     public void write(
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
             final JsonUtils.JsonCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            Try.run(()->createMapper(customizers).writeValue(os, sink)));
+            Try.run(()->createMapper(customizers).writeValue(os, pojo)));
     }
 
+    /**
+     * Converts given {@code pojo} to an UTF8 encoded {@link String}.
+     * @return <code>null</code> if pojo is <code>null</code>
+     */
     @SneakyThrows
     @Nullable
     public static String toStringUtf8(
@@ -127,7 +145,5 @@ public class JsonUtils {
         }
         return mapper;
     }
-
-
 
 }

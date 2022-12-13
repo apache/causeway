@@ -44,7 +44,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
@@ -162,21 +161,21 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case ENUM: {
-            final EnumDto enumDto = JsonUtils.tryRead(EnumDto.class, DataSource.ofStringUtf8(json))
+            final EnumDto enumDto = JsonUtils.tryRead(EnumDto.class, json)
                     .ifFailureFail()
                     .getValue().orElseThrow();
             valueDto.setEnum(enumDto);
             return valueDto;
         }
         case BLOB: {
-            final BlobDto blobDto = JsonUtils.tryRead(BlobDto.class, DataSource.ofStringUtf8(json))
+            final BlobDto blobDto = JsonUtils.tryRead(BlobDto.class, json)
                     .ifFailureFail()
                     .getValue().orElseThrow();
             valueDto.setBlob(blobDto);
             return valueDto;
         }
         case CLOB: {
-            final ClobDto clobDto = JsonUtils.tryRead(ClobDto.class, DataSource.ofStringUtf8(json))
+            final ClobDto clobDto = JsonUtils.tryRead(ClobDto.class, json)
                     .ifFailureFail()
                     .getValue().orElseThrow();
             valueDto.setClob(clobDto);
@@ -273,7 +272,7 @@ public final class CommonDtoUtils {
     @Nullable
     public TypedTupleDto getCompositeValueFromJson(final @Nullable String json) {
         return _Strings.isNotEmpty(json)
-                ? JsonUtils.tryRead(TypedTupleDto.class, DataSource.ofStringUtf8(json), JsonUtils::jaxbAnnotationSupport)
+                ? JsonUtils.tryRead(TypedTupleDto.class, json, JsonUtils::jaxbAnnotationSupport)
                         .ifFailureFail()
                         .getValue().orElseThrow()
                 : null;
