@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.JsonUtils;
+import org.apache.causeway.commons.io.YamlUtils;
 
 import lombok.Data;
 import lombok.val;
@@ -64,8 +65,10 @@ class JsonYamlReaderTest {
 
     @Test
     void loadCustomerFromYaml() {
-        val customer = _Yaml.readYaml(Customer.class, this.getClass().getResourceAsStream("customer.yml"))
-                .getValue().orElse(null);
+        val customer = YamlUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.yml"))
+                .ifFailureFail()
+                .getValue()
+                .orElse(null);
         assertCustomerIsJohnDoe(customer);
     }
 
