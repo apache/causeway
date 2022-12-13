@@ -31,7 +31,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.resources._Xml;
+import org.apache.causeway.commons.io.JaxbUtils;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -141,7 +141,7 @@ public interface JaxbService {
             try {
                 return internalFromXml(jaxbContext, xml, unmarshallerProperties);
             } catch (Exception e) {
-                throw _Xml.verboseException("unmarshalling XML", null, e);
+                throw JaxbUtils.verboseException("unmarshalling XML", null, e);
             }
         }
 
@@ -157,7 +157,7 @@ public interface JaxbService {
                 val jaxbContext = jaxbContextForClass(domainClass);
                 return _Casts.uncheckedCast(internalFromXml(jaxbContext, xml, unmarshallerProperties));
             } catch (Exception e) {
-                throw _Xml.verboseException("unmarshalling XML", domainClass, e);
+                throw JaxbUtils.verboseException("unmarshalling XML", domainClass, e);
             }
         }
 
@@ -186,7 +186,7 @@ public interface JaxbService {
                 return xml;
 
             } catch (Exception e) {
-                throw _Xml.verboseException("marshalling domain object to XML", domainClass, e);
+                throw JaxbUtils.verboseException("marshalling domain object to XML", domainClass, e);
             }
         }
 
@@ -195,7 +195,7 @@ public interface JaxbService {
          */
         protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
             val useCache = true;
-            return _Xml.jaxbContextFor(domainObject.getClass(), useCache);
+            return JaxbUtils.jaxbContextFor(domainObject.getClass(), useCache);
         }
 
         /**
@@ -203,7 +203,7 @@ public interface JaxbService {
          */
         protected JAXBContext jaxbContextForClass(final @NonNull Class<?> domainObjectClass) {
             val useCache = true;
-            return _Xml.jaxbContextFor(domainObjectClass, useCache);
+            return JaxbUtils.jaxbContextFor(domainObjectClass, useCache);
         }
 
         /**

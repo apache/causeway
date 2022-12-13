@@ -18,9 +18,13 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -66,6 +70,37 @@ public interface DataSink {
 
     static DataSink ofFile(final @NonNull File file) {
         return ofOutputStreamSupplier(()->Try.call(()->new FileOutputStream(file)).ifFailureFail().getValue().orElseThrow());
+    }
+
+    static DataSink ofByteArrayConsumer(final @NonNull Consumer<byte[]> byteArrayConsumer) {
+        return outputConsumer ->
+            Try.call(()->{
+                try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                    var innerTry = outputConsumer.apply(bos);
+                    byteArrayConsumer.accept(bos.toByteArray());
+                    return innerTry;
+                }
+            })
+            .ifFailureFail() // throw if any Exception outside the call to 'outputConsumer.apply(os)'
+            // unwrap the inner Try<Void>
+            .getValue().orElseThrow()
+            .ifFailureFail(); // throw if any Exception within the call to 'outputConsumer.apply(os)'
+    }
+
+    static DataSink ofStringConsumer(final @NonNull Consumer<String> stringConsumer, final @NonNull Charset charset) {
+        return ofByteArrayConsumer(bytes->stringConsumer.accept(new String(bytes, charset)));
+    }
+
+    static DataSink ofStringUtf8Consumer(final @NonNull Consumer<String> stringUtf8Consumer) {
+        return ofStringConsumer(stringUtf8Consumer, StandardCharsets.UTF_8);
+    }
+
+    static DataSink ofStringConsumer(final @NonNull StringBuilder stringConsumer, final @NonNull Charset charset) {
+        return ofByteArrayConsumer(bytes->stringConsumer.append(new String(bytes, charset)));
+    }
+
+    static DataSink ofStringUtf8Consumer(final @NonNull StringBuilder stringUtf8Consumer) {
+        return ofStringConsumer(stringUtf8Consumer, StandardCharsets.UTF_8);
     }
 
 }

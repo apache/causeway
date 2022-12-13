@@ -43,12 +43,12 @@ extends XmlValueSemanticsAbstract<CommandDto> {
 
     @Override
     public final String toXml(final CommandDto commandDto) {
-        return CommandDtoUtils.toXml(commandDto);
+        return CommandDtoUtils.dtoMapper().toString(commandDto);
     }
 
     @Override
     public final CommandDto fromXml(final String xml) {
-        return CommandDtoUtils.fromXml(xml);
+        return CommandDtoUtils.dtoMapper().read(xml);
     }
 
     // -- EXAMPLES

@@ -33,16 +33,12 @@ implements AttributeConverter<CommandDto, String> {
 
     @Override
     public String convertToDatabaseColumn(final CommandDto memberValue) {
-        return memberValue != null
-                ? CommandDtoUtils.toXml(memberValue)
-                        : null;
+        return CommandDtoUtils.dtoMapper().toString(memberValue);
     }
 
     @Override
     public CommandDto convertToEntityAttribute(final String datastoreValue) {
-        return datastoreValue != null
-                ? CommandDtoUtils.fromXml(datastoreValue)
-                        : null;
+        return CommandDtoUtils.dtoMapper().read(datastoreValue);
     }
 
 }

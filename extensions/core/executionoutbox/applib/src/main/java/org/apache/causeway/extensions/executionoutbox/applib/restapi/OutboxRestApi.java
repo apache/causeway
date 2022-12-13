@@ -90,7 +90,7 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public void deleteMany(final String interactionsDtoXml) {
-        val interactionsDto = InteractionsDtoUtils.fromXml(interactionsDtoXml);
+        val interactionsDto = InteractionsDtoUtils.dtoMapper().read(interactionsDtoXml);
         interactionsDto.getInteractionDto().
                 forEach(interactionType -> {
                     val interactionId = interactionType.getInteractionId();

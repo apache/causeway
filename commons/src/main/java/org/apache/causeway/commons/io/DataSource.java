@@ -57,7 +57,7 @@ public interface DataSource {
         };
     }
 
-    static DataSource fromInputStreamSupplier(final @NonNull Supplier<InputStream> inputStreamSupplier) {
+    static DataSource ofInputStreamSupplier(final @NonNull Supplier<InputStream> inputStreamSupplier) {
         return new DataSource() {
             @Override public <T> Try<T> readAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return Try.call(()->{
@@ -72,21 +72,25 @@ public interface DataSource {
     }
 
     static DataSource ofResource(final @NonNull Class<?> cls, final @NonNull String resourcePath) {
-        return fromInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
+        return ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
     }
 
     static DataSource ofFile(final @NonNull File file) {
-        return fromInputStreamSupplier(()->Try.call(()->new FileInputStream(file)).ifFailureFail().getValue().orElseThrow());
+        return ofInputStreamSupplier(()->Try.call(()->new FileInputStream(file)).ifFailureFail().getValue().orElseThrow());
     }
 
     static DataSource ofString(final @Nullable String string, final Charset charset) {
         return _Strings.isNullOrEmpty(string)
                 ? none()
-                : fromInputStreamSupplier(()->new ByteArrayInputStream(string.getBytes(charset)));
+                : ofInputStreamSupplier(()->new ByteArrayInputStream(string.getBytes(charset)));
     }
 
     static DataSource ofStringUtf8(final @Nullable String string) {
         return ofString(string, StandardCharsets.UTF_8);
+    }
+
+    static DataSource ofBytes(final @NonNull byte[] bytes) {
+        return ofInputStreamSupplier(()->new ByteArrayInputStream(bytes));
     }
 
 }

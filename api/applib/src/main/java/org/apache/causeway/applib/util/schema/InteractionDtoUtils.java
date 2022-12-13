@@ -18,29 +18,18 @@
  */
 package org.apache.causeway.applib.util.schema;
 
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.util.JaxbUtil;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.io.DtoMapper;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
@@ -53,62 +42,24 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @since 1.x {@index}
  */
+@UtilityClass
 public final class InteractionDtoUtils {
 
-    public static void init() {
-        getJaxbContext();
+    public void init() {
+        dtoMapper.get();
     }
 
-    // -- marshalling
-    static JAXBContext jaxbContext;
-    static JAXBContext getJaxbContext() {
-        if(jaxbContext == null) {
-            jaxbContext = JaxbUtil.jaxbContextFor(InteractionDto.class);
-        }
-        return jaxbContext;
+    private _Lazy<DtoMapper<InteractionDto>> dtoMapper = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(InteractionDto.class));
+
+    public DtoMapper<InteractionDto> dtoMapper() {
+        return dtoMapper.get();
     }
-
-    public static InteractionDto fromXml(final Reader reader) {
-        try {
-            final Unmarshaller un = getJaxbContext().createUnmarshaller();
-            return (InteractionDto) un.unmarshal(reader);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static InteractionDto fromXml(final String xml) {
-        return fromXml(new StringReader(xml));
-    }
-
-    public static InteractionDto fromXml(
-            final Class<?> contextClass,
-            final String resourceName,
-            final Charset charset) throws IOException {
-
-        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
-        return fromXml(new StringReader(s));
-    }
-
-    public static String toXml(final InteractionDto interactionDto) {
-        final CharArrayWriter caw = new CharArrayWriter();
-        toXml(interactionDto, caw);
-        return caw.toString();
-    }
-
-    public static void toXml(final InteractionDto interactionDto, final Writer writer) {
-        try {
-            final Marshaller m = getJaxbContext().createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            m.marshal(interactionDto, writer);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     // -- newInteractionDto
 
@@ -148,7 +99,7 @@ public final class InteractionDtoUtils {
             }
 
             private MemberExecutionDto clone(final MemberExecutionDto memberExecutionDto) {
-                return MemberExecutionDtoUtils.clone(memberExecutionDto);
+                return MemberExecutionDtoUtils.dtoMapper().clone(memberExecutionDto);
             }
         };
 
@@ -157,7 +108,7 @@ public final class InteractionDtoUtils {
 
     }
 
-    private static MemberExecutionDto.ChildExecutions childExecutionsOf(final MemberExecutionDto dto) {
+    private MemberExecutionDto.ChildExecutions childExecutionsOf(final MemberExecutionDto dto) {
         MemberExecutionDto.ChildExecutions childExecutions = dto.getChildExecutions();
         if(childExecutions == null) {
             childExecutions = new MemberExecutionDto.ChildExecutions();
@@ -171,7 +122,7 @@ public final class InteractionDtoUtils {
      * {@link Execution}
      * (the applib object).
      */
-    public static InteractionDto newInteractionDto(final Execution<?, ?> execution) {
+    public InteractionDto newInteractionDto(final Execution<?, ?> execution) {
         return newInteractionDto(execution, Strategy.FLAT);
     }
 
@@ -180,7 +131,7 @@ public final class InteractionDtoUtils {
      * {@link Execution}
      * (the applib object).
      */
-    public static InteractionDto newInteractionDto(
+    public InteractionDto newInteractionDto(
             final Execution<?, ?> execution,
             final Strategy strategy) {
 
@@ -188,7 +139,7 @@ public final class InteractionDtoUtils {
         return newInteractionDto(execution, memberExecutionDto);
     }
 
-    private static InteractionDto newInteractionDto(
+    private InteractionDto newInteractionDto(
             final Execution<?, ?> execution,
             final MemberExecutionDto executionDto) {
         final Interaction interaction = execution.getInteraction();
@@ -197,7 +148,7 @@ public final class InteractionDtoUtils {
         return InteractionDtoUtils.newInteractionDto(interactionId, executionDto);
     }
 
-    private static InteractionDto newInteractionDto(
+    private InteractionDto newInteractionDto(
             final String interactionId,
             final MemberExecutionDto executionDto) {
         final InteractionDto interactionDto = new InteractionDto();
@@ -218,7 +169,7 @@ public final class InteractionDtoUtils {
 
     // -- newActionInvocation, newPropertyModification
 
-    public static ActionInvocationDto newActionInvocation(
+    public ActionInvocationDto newActionInvocation(
             final int sequence,
             final Bookmark targetBookmark,
             final String actionIdentifier,
@@ -232,7 +183,7 @@ public final class InteractionDtoUtils {
                 user);
     }
 
-    public static PropertyEditDto newPropertyEdit(
+    public PropertyEditDto newPropertyEdit(
             final int sequence,
             final Bookmark targetBookmark,
             final String propertyIdentifier,
@@ -245,7 +196,7 @@ public final class InteractionDtoUtils {
                 user);
     }
 
-    private static MemberExecutionDto newMemberExecutionDto(
+    private MemberExecutionDto newMemberExecutionDto(
             final InteractionType type,
             final int sequence,
             final Bookmark targetBookmark,
@@ -293,7 +244,7 @@ public final class InteractionDtoUtils {
 
     // -- invocationFor, actionFor, timingsFor
 
-    private static ParamsDto parametersFor(final ActionInvocationDto invocationDto) {
+    private ParamsDto parametersFor(final ActionInvocationDto invocationDto) {
         ParamsDto parameters = invocationDto.getParameters();
         if(parameters == null) {
             parameters = new ParamsDto();
@@ -302,13 +253,13 @@ public final class InteractionDtoUtils {
         return parameters;
     }
 
-    private static List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
+    private List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
         return parametersFor(invocationDto).getParameter();
     }
 
 
     // -- getParameters, getParameterNames, getParameterTypes
-    public static List<ParamDto> getParameters(final ActionInvocationDto ai) {
+    public List<ParamDto> getParameters(final ActionInvocationDto ai) {
         final List<ParamDto> params = parameterListFor(ai);
         final int parameterNumber = getNumberOfParameters(ai);
         final List<ParamDto> paramDtos = _Lists.newArrayList();
@@ -319,19 +270,19 @@ public final class InteractionDtoUtils {
         return Collections.unmodifiableList(paramDtos);
     }
 
-    private static int getNumberOfParameters(final ActionInvocationDto ai) {
+    private int getNumberOfParameters(final ActionInvocationDto ai) {
         final List<ParamDto> params = parameterListFor(ai);
         return params != null ? params.size() : 0;
     }
 
-    public static List<String> getParameterNames(final ActionInvocationDto ai) {
+    public List<String> getParameterNames(final ActionInvocationDto ai) {
         return Collections.unmodifiableList(
                 _NullSafe.stream(getParameters(ai))
                 .map(ParamDto::getName)
                 .collect(Collectors.toList())
                 );
     }
-    public static List<ValueType> getParameterTypes(final ActionInvocationDto ai) {
+    public List<ValueType> getParameterTypes(final ActionInvocationDto ai) {
         return Collections.unmodifiableList(
                 _NullSafe.stream(getParameters(ai))
                 .map(ParamDto::getType)
@@ -341,7 +292,7 @@ public final class InteractionDtoUtils {
 
     // -- getParameter, getParameterName, getParameterType, getParameterArgument
 
-    public static ParamDto getParameter(final ActionInvocationDto ai, final int paramNum) {
+    public ParamDto getParameter(final ActionInvocationDto ai, final int paramNum) {
         final int parameterNumber = getNumberOfParameters(ai);
         if(paramNum > parameterNumber) {
             throw new IllegalArgumentException(String.format("No such parameter %d (the memento has %d parameters)", paramNum, parameterNumber));
@@ -350,30 +301,23 @@ public final class InteractionDtoUtils {
         return parameters.get(paramNum);
     }
 
-    public static ValueDto getParameterArgument(final ActionInvocationDto ai, final int paramNum) {
+    public ValueDto getParameterArgument(final ActionInvocationDto ai, final int paramNum) {
         return getParameter(ai, paramNum);
     }
 
-    public static String getParameterName(final ActionInvocationDto ai, final int paramNum) {
+    public String getParameterName(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.getName();
     }
 
-    public static ValueType getParameterType(final ActionInvocationDto ai, final int paramNum) {
+    public ValueType getParameterType(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.getType();
     }
 
-    public static boolean isNull(final ActionInvocationDto ai, final int paramNum) {
+    public boolean isNull(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.isNull();
     }
-
-    // -- DEBUGGING (DUMP)
-
-    public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {
-        out.println(toXml(ixnDto));
-    }
-
 
 }

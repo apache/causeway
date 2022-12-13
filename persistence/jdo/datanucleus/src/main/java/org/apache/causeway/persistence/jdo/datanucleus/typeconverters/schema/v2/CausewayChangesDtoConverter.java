@@ -32,16 +32,12 @@ public class CausewayChangesDtoConverter implements TypeConverter<ChangesDto, St
 
     @Override
     public String toDatastoreType(final ChangesDto memberValue) {
-        return memberValue != null
-                ? ChangesDtoUtils.toXml(memberValue)
-                        : null;
+        return ChangesDtoUtils.dtoMapper().toString(memberValue);
     }
 
     @Override
     public ChangesDto toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? ChangesDtoUtils.fromXml(datastoreValue)
-                        : null;
+        return ChangesDtoUtils.dtoMapper().read(datastoreValue);
     }
 
 }

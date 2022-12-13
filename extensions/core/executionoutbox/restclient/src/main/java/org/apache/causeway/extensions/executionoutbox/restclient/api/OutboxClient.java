@@ -148,7 +148,7 @@ public class OutboxClient {
             addTo(interactionsDto, interactionDto);
         });
         invoke(DELETE_MANY_URI,
-                new DeleteManyMessage(InteractionsDtoUtils.toXml(interactionsDto)));
+                new DeleteManyMessage(InteractionsDtoUtils.dtoMapper().toString(interactionsDto)));
     }
 
     // -- HELPER

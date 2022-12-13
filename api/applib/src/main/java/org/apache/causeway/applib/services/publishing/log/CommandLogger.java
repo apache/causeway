@@ -54,10 +54,10 @@ public class CommandLogger implements CommandSubscriber {
     }
 
     @Override
-    public void onCompleted(Command command) {
+    public void onCompleted(final Command command) {
 
         val commandDto = command.getCommandDto();
-        val xml = CommandDtoUtils.toXml(commandDto);
+        val xml = CommandDtoUtils.dtoMapper().toString(commandDto);
 
         log.debug("completed: {}, systemStateChanged {} \n{}",
                 command.getLogicalMemberIdentifier(),

@@ -75,7 +75,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     private final Class<C> commandLogEntryClass;
 
 
-    protected CommandLogEntryRepository(Class<C> commandLogEntryClass) {
+    protected CommandLogEntryRepository(final Class<C> commandLogEntryClass) {
         this.commandLogEntryClass = commandLogEntryClass;
     }
 
@@ -281,7 +281,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
                 Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED));
     }
 
-    public List<C> findRecentBackgroundByTarget(Bookmark target) {
+    public List<C> findRecentBackgroundByTarget(final Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BACKGROUND_BY_TARGET)
                         .withParameter("target", target)
@@ -335,7 +335,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
             if (userData == null ) {
                 throw new IllegalStateException(String.format(
                         "Can only persist action DTOs with additional userData; got: \n%s",
-                        CommandDtoUtils.toXml(dto)));
+                        CommandDtoUtils.dtoMapper().toString(dto)));
             }
         }
 

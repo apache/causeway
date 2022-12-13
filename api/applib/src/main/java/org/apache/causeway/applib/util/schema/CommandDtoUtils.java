@@ -18,22 +18,11 @@
  */
 package org.apache.causeway.applib.util.schema;
 
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.util.JaxbUtil;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.io.DtoMapper;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
@@ -41,69 +30,26 @@ import org.apache.causeway.schema.cmd.v2.ParamsDto;
 import org.apache.causeway.schema.common.v2.OidsDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @since 1.x {@index}
  */
+@UtilityClass
 public final class CommandDtoUtils {
 
-    public static void init() {
-        getJaxbContext();
+    public void init() {
+        dtoMapper.get();
     }
 
-    // -- marshalling
-    static JAXBContext jaxbContext;
-    static JAXBContext getJaxbContext() {
-        if(jaxbContext == null) {
-            jaxbContext = JaxbUtil.jaxbContextFor(CommandDto.class);
-        }
-        return jaxbContext;
+    private _Lazy<DtoMapper<CommandDto>> dtoMapper = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(CommandDto.class));
+
+    public DtoMapper<CommandDto> dtoMapper() {
+        return dtoMapper.get();
     }
 
-    public static CommandDto fromXml(final Reader reader) {
-        try {
-            final Unmarshaller un = getJaxbContext().createUnmarshaller();
-            return (CommandDto) un.unmarshal(reader);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static CommandDto clone(final CommandDto commandDto) {
-        return fromXml(toXml(commandDto));
-    }
-
-    public static CommandDto fromXml(final String xml) {
-        return fromXml(new StringReader(xml));
-    }
-
-    public static CommandDto fromXml(
-            final Class<?> contextClass,
-            final String resourceName,
-            final Charset charset) throws IOException {
-
-        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
-        return fromXml(new StringReader(s));
-    }
-
-    public static String toXml(final CommandDto commandDto) {
-        final CharArrayWriter caw = new CharArrayWriter();
-        toXml(commandDto, caw);
-        return caw.toString();
-    }
-
-    public static void toXml(final CommandDto commandDto, final Writer writer) {
-        try {
-            final Marshaller m = getJaxbContext().createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            m.marshal(commandDto, writer);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-    public static OidsDto targetsFor(final CommandDto dto) {
+    public OidsDto targetsFor(final CommandDto dto) {
         OidsDto targets = dto.getTargets();
         if(targets == null) {
             targets = new OidsDto();
@@ -112,7 +58,7 @@ public final class CommandDtoUtils {
         return targets;
     }
 
-    public static ParamsDto parametersFor(final ActionDto actionDto) {
+    public ParamsDto parametersFor(final ActionDto actionDto) {
         ParamsDto parameters = actionDto.getParameters();
         if(parameters == null) {
             parameters = new ParamsDto();
@@ -121,7 +67,7 @@ public final class CommandDtoUtils {
         return parameters;
     }
 
-    public static PeriodDto timingsFor(final CommandDto commandDto) {
+    public PeriodDto timingsFor(final CommandDto commandDto) {
         PeriodDto timings = commandDto.getTimings();
         if(timings == null) {
             timings = new PeriodDto();
@@ -130,14 +76,14 @@ public final class CommandDtoUtils {
         return timings;
     }
 
-    public static String getUserData(final CommandDto dto, final String key) {
+    public String getUserData(final CommandDto dto, final String key) {
         if(dto == null || key == null) {
             return null;
         }
         return CommonDtoUtils.getMapValue(dto.getUserData(), key);
     }
 
-    public static void setUserData(
+    public void setUserData(
             final CommandDto dto, final String key, final String value) {
         if(dto == null || key == null || _Strings.isNullOrEmpty(value)) {
             return;
@@ -146,7 +92,7 @@ public final class CommandDtoUtils {
         CommonDtoUtils.putMapKeyValue(userData, key, value);
     }
 
-    public static void setUserData(
+    public void setUserData(
             final CommandDto dto, final String key, final Bookmark bookmark) {
         if(dto == null || key == null || bookmark == null) {
             return;
@@ -154,7 +100,7 @@ public final class CommandDtoUtils {
         setUserData(dto, key, bookmark.toString());
     }
 
-    public static void clearUserData(
+    public void clearUserData(
             final CommandDto dto, final String key) {
         if(dto == null || key == null) {
             return;
@@ -162,7 +108,7 @@ public final class CommandDtoUtils {
         userDataFor(dto).getEntry().removeIf(x -> x.getKey().equals(key));
     }
 
-    private static MapDto userDataFor(final CommandDto commandDto) {
+    private MapDto userDataFor(final CommandDto commandDto) {
         MapDto userData = commandDto.getUserData();
         if(userData == null) {
             userData = new MapDto();

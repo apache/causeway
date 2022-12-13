@@ -34,11 +34,11 @@ import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.resources._Xml;
-import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
@@ -148,9 +148,11 @@ public class ValueSemanticsTester<T> {
 
     // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
     public static String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
-        val xmlResult = _Xml.writeXml(valueWithTypeDto,
-                WriteOptions.builder().allowMissingRootElement(true).useContextCache(true).build());
-        val rawXml = xmlResult.getValue().orElseThrow();
+        val rawXml = Try.call(()->JaxbUtils.toStringUtf8(valueWithTypeDto, opts->opts
+                .useContextCache(true)
+                .formattedOutput(true)))
+        .getValue().orElseThrow();
+
         val xmlRef = _Refs.stringRef(rawXml);
         xmlRef.cutAtIndexOf("<ValueWithTypeDto");
         return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")

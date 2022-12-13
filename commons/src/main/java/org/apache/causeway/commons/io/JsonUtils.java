@@ -20,6 +20,7 @@ package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -141,7 +142,8 @@ public class JsonUtils {
             final JsonUtils.JsonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
         for(JsonUtils.JsonCustomizer customizer : customizers) {
-            mapper = customizer.apply(mapper);
+            mapper = Optional.ofNullable(customizer.apply(mapper))
+                    .orElse(mapper);
         }
         return mapper;
     }
