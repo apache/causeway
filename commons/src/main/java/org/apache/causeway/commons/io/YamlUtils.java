@@ -98,9 +98,16 @@ public class YamlUtils {
                 : null;
     }
 
-
     // -- CUSTOMIZERS
 
+    /**
+     * Include read-only JavaBean properties (the ones without setters) in the YAML document.
+     * <p>
+     * By default these properties are not included to be able to parse later the same JavaBean. */
+    public DumperOptions allowReadOnlyProperties(final DumperOptions opts) {
+        opts.setAllowReadOnlyProperties(true);
+        return opts;
+    }
 
     // -- MAPPER FACTORY
 
