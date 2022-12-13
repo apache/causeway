@@ -24,6 +24,7 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.handler;
     exports org.apache.causeway.commons.having;
     exports org.apache.causeway.commons.resource;
+    exports org.apache.causeway.commons.io;
     exports org.apache.causeway.commons.internal;
     exports org.apache.causeway.commons.internal.assertions;
     exports org.apache.causeway.commons.internal.base;

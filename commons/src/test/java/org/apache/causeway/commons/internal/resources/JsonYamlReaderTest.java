@@ -30,6 +30,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.JsonUtils;
+
 import lombok.Data;
 import lombok.val;
 
@@ -52,8 +55,10 @@ class JsonYamlReaderTest {
 
     @Test
     void loadCustomerFromJson() throws JsonParseException, JsonMappingException, IOException {
-        val customer = _Json.readJson(Customer.class, this.getClass().getResourceAsStream("customer.json"))
-                .getValue().orElse(null);
+        val customer = JsonUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.json"))
+                .ifFailureFail()
+                .getValue()
+                .orElse(null);
         assertCustomerIsJohnDoe(customer);
     }
 
@@ -63,10 +68,10 @@ class JsonYamlReaderTest {
                 .getValue().orElse(null);
         assertCustomerIsJohnDoe(customer);
     }
-    
+
     // -- HELPER
 
-    private void assertCustomerIsJohnDoe(Customer customer) {
+    private void assertCustomerIsJohnDoe(final Customer customer) {
         assertNotNull(customer);
         assertEquals("John", customer.getFirstName());
         assertEquals("Doe", customer.getLastName());

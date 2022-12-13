@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.causeway.commons.internal.resources._Json;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 
 public enum SerializationStrategy {
@@ -36,19 +36,19 @@ public enum SerializationStrategy {
 
     JSON {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
-            return _Json.toString(
+            return JsonUtils.toStringUtf8(
                     jaxbAnnotatedObject,
-                    _Json::jaxbAnnotationSupport);
+                    JsonUtils::jaxbAnnotationSupport);
         }
 
     },
 
     JSON_INDENTED {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
-            return _Json.toString(
+            return JsonUtils.toStringUtf8(
                     jaxbAnnotatedObject,
-                    _Json::jaxbAnnotationSupport,
-                    _Json::indentedOutput);
+                    JsonUtils::jaxbAnnotationSupport,
+                    JsonUtils::indentedOutput);
         }
 
     },

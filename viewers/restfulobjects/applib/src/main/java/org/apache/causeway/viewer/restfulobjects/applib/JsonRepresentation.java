@@ -52,7 +52,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.resources._Json;
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
@@ -88,37 +89,25 @@ public class JsonRepresentation {
 
     private static Map<Class<?>, Function<JsonNode, ?>> REPRESENTATION_INSTANTIATORS = _Maps.newHashMap();
     static {
-        REPRESENTATION_INSTANTIATORS.put(String.class, new Function<JsonNode, String>() {
-            @Override
-            public String apply(final JsonNode input) {
-                if (!input.isTextual()) {
-                    throw new IllegalStateException("found node that is not a string " + input.toString());
-                }
-                return input.textValue();
+        REPRESENTATION_INSTANTIATORS.put(String.class, input -> {
+            if (!input.isTextual()) {
+                throw new IllegalStateException("found node that is not a string " + input.toString());
             }
+            return input.textValue();
         });
-        REPRESENTATION_INSTANTIATORS.put(JsonNode.class, new Function<JsonNode, JsonNode>() {
-            @Override
-            public JsonNode apply(final JsonNode input) {
-                return input;
-            }
-        });
+        REPRESENTATION_INSTANTIATORS.put(JsonNode.class, input -> input);
     }
 
     private static <T> Function<JsonNode, ?> representationInstantiatorFor(final Class<T> representationType) {
         Function<JsonNode, ?> transformer = REPRESENTATION_INSTANTIATORS.get(representationType);
         if (transformer == null) {
-            transformer = new Function<JsonNode, T>() {
-                @Override
-                public T apply(final JsonNode input) {
-                    try {
-                        final Constructor<T> constructor = representationType.getConstructor(JsonNode.class);
-                        return constructor.newInstance(input);
-                    } catch (final Exception e) {
-                        throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
-                    }
+            transformer = input -> {
+                try {
+                    final Constructor<T> constructor = representationType.getConstructor(JsonNode.class);
+                    return constructor.newInstance(input);
+                } catch (final Exception e) {
+                    throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
                 }
-
             };
             REPRESENTATION_INSTANTIATORS.put(representationType, transformer);
         }
@@ -129,7 +118,9 @@ public class JsonRepresentation {
         val repr = JsonRepresentation.newMap();
         if(_Strings.isNotEmpty(keyValuePairsAsJson)) {
             final Map<Object, Object> keyValuePairs = _Casts.uncheckedCast(
-                    _Json.readJson(Map.class, keyValuePairsAsJson).getValue().orElseThrow());
+                    JsonUtils.tryRead(Map.class, DataSource.ofStringUtf8(keyValuePairsAsJson))
+                        .ifFailureFail()
+                        .getValue().orElseThrow());
 
             keyValuePairs.forEach((key, value)->{
                 repr.mapPutString(""+key, ""+value);
@@ -1635,28 +1626,22 @@ public class JsonRepresentation {
         }
     }
 
-    private static final Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>> MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION = new Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>>() {
+    private static final Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>> MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION = input -> new Map.Entry<String, JsonRepresentation>() {
 
         @Override
-        public Entry<String, JsonRepresentation> apply(final Entry<String, JsonNode> input) {
-            return new Map.Entry<String, JsonRepresentation>() {
+        public String getKey() {
+            return input.getKey();
+        }
 
-                @Override
-                public String getKey() {
-                    return input.getKey();
-                }
+        @Override
+        public JsonRepresentation getValue() {
+            return new JsonRepresentation(input.getValue());
+        }
 
-                @Override
-                public JsonRepresentation getValue() {
-                    return new JsonRepresentation(input.getValue());
-                }
-
-                @Override
-                public JsonRepresentation setValue(final JsonRepresentation value) {
-                    final JsonNode setValue = input.setValue(value.asJsonNode());
-                    return new JsonRepresentation(setValue);
-                }
-            };
+        @Override
+        public JsonRepresentation setValue(final JsonRepresentation value) {
+            final JsonNode setValue = input.setValue(value.asJsonNode());
+            return new JsonRepresentation(setValue);
         }
     };
 
