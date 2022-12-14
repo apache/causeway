@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.viewer;
 
+
+import jakarta.inject.Inject;
+
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;
 import com.vaadin.flow.spring.VaadinConfigurationProperties;
 import com.vaadin.flow.spring.VaadinServletContextInitializer;
@@ -34,8 +37,6 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.incubator.viewer.vaadin.ui.CausewayModuleIncViewerVaadinUi;
-
-import jakarta.inject.Inject;
 
 /**
  *
@@ -88,8 +89,9 @@ public class CausewayModuleIncViewerVaadinViewer {
         val isRootMapping = RootMappedCondition.isRootMapping(urlMapping);
         if (isRootMapping) {
             urlMapping = "/vaadinServlet/*";
-            initParameters.put(InitParameters.SERVLET_PARAMETER_PUSH_URL,
-                    makeContextRelative(urlMapping.replace("*", "")));
+            //XXX push URL config support was removed in https://github.com/vaadin/flow/pull/15188
+//            initParameters.put(InitParameters.SERVLET_PARAMETER_PUSH_URL,
+//                    makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(
                 new CausewayServletForVaadin(interactionService, context, isRootMapping),

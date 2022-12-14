@@ -66,7 +66,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs,
             final ManagedObject proposedArgument) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
                 ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, pendingArgs)
                 : MmInvokeUtil.invoke(method, owningAdapter, proposedArgument);

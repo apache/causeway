@@ -317,7 +317,7 @@ public enum ActionResultResponseType {
             final int cardinality = unpacked.size();
             switch (cardinality) {
             case 1:
-                val firstElement = unpacked.getFirstOrFail();
+                val firstElement = unpacked.getFirstElseFail();
                 // recursively unwrap
                 return determineFor(firstElement, targetIfAny);
             default:

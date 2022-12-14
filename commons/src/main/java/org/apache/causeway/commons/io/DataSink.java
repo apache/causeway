@@ -44,7 +44,7 @@ public interface DataSink {
      * Re-throws any {@link Exception} from the mapped {@link Try},
      * when the Try is a failure case.
      */
-    void writeAll(@NonNull Function<OutputStream, Try<Void>> consumingMapper);
+    void writeAll(@NonNull Function<OutputStream, Try<Void>> producingMapper);
 
     // -- FACTORIES
 

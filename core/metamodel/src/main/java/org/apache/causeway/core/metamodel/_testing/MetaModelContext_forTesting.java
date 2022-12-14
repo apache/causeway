@@ -436,7 +436,7 @@ implements MetaModelContext {
         return getSingletonProviders().stream()
                 .filter(provider->provider.isCandidateFor(MenuBarsService.class))
                 .findFirst()
-                .map(provider->(MenuBarsService)provider.getInstance().getFirstOrFail())
+                .map(provider->(MenuBarsService)provider.getInstance().getFirstElseFail())
                 .orElseGet(MenuBarsService::forTesting);
     }
 

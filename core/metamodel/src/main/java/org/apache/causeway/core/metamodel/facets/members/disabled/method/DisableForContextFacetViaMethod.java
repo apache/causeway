@@ -63,7 +63,7 @@ implements ImperativeFacet {
         if (target == null) {
             return null;
         }
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object returnValue = MmInvokeUtil.invokeAutofit(method, target);
         if(returnValue instanceof String) {
             return (String) returnValue;

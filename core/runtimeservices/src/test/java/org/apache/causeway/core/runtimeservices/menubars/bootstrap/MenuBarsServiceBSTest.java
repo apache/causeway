@@ -159,7 +159,7 @@ extends RuntimeServicesTestAbstract {
 
         // verify winning facet is the same object as the last one added from latest menubars.xml reload,
         // to make sure we are not feed the winner from an outdated cache
-        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastOrFail());
+        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastElseFail());
 
     }
 

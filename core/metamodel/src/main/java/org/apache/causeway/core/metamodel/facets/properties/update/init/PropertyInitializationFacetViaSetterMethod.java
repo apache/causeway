@@ -51,7 +51,7 @@ implements ImperativeFacet {
 
     @Override
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         MmInvokeUtil.invoke(method, owningAdapter, initialAdapter);
     }
 

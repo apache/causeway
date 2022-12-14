@@ -118,7 +118,7 @@ public interface _IocContainer {
         if (candidates.getCardinality() == Cardinality.ZERO) {
             throw _Exceptions.noSuchElement("Cannot resolve singleton '%s'", type);
         }
-        return candidates.getFirstOrFail();
+        return candidates.getFirstElseFail();
     }
 
     // -- FACTORIES

@@ -140,7 +140,7 @@ public class LayoutServiceDefault implements LayoutService {
         final String fqn = objectSpec.getFullIdentifier();
         return fqn.replace(".", File.separator)
                 + ".layout."
-                + format.getProposedFileExtensions().getFirstOrFail();
+                + format.getProposedFileExtensions().getFirstElseFail();
     }
 
 }

@@ -107,7 +107,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * Shortcut for {@code getFirst().orElseThrow(_Exceptions::noSuchElement)}
      * @throws NoSuchElementException if result is empty
      */
-    default T getFirstOrFail() {
+    default T getFirstElseFail() {
         return getFirst().orElseThrow(_Exceptions::noSuchElement);
     }
 
@@ -120,7 +120,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * Shortcut for {@code getLast().orElseThrow(_Exceptions::noSuchElement)}
      * @throws NoSuchElementException if result is empty
      */
-    default T getLastOrFail() {
+    default T getLastElseFail() {
         return getLast().orElseThrow(_Exceptions::noSuchElement);
     }
 

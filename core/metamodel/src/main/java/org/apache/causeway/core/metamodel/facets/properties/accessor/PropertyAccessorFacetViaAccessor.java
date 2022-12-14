@@ -60,7 +60,7 @@ implements ImperativeFacet {
     public Object getProperty(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object referencedObject = MmInvokeUtil.invoke(method, owningAdapter);
 
         if(referencedObject == null) {

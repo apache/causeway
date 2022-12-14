@@ -286,7 +286,7 @@ final class Can_Singleton<T> implements Can<T> {
         }
         final int firstElementComparison = _Objects.compareNonNull(
                 this.element,
-                other.getFirstOrFail());
+                other.getFirstElseFail());
         if(firstElementComparison!=0
                 || other.isCardinalityOne()) {
             return firstElementComparison; // when both Cans are singletons, just compare by their contained values

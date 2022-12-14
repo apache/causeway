@@ -65,7 +65,7 @@ public class MetaModelValidatorForConflictingOptionality {
                 facetRanking.getTopPrecedence().orElse(null));
 
         val topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
-        val firstOfTopRanking = topRankingFacets.getFirstOrFail();
+        val firstOfTopRanking = topRankingFacets.getFirstElseFail();
 
         // the top ranking mandatory facets should semantically agree
 

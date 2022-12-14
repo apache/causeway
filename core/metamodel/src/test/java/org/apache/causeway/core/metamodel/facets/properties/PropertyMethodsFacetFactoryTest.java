@@ -87,7 +87,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
         final PropertyAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
-        assertEquals(propertyAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
+        assertEquals(propertyAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAccessorMethod));
     }
@@ -115,7 +115,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
         final PropertySetterFacetViaSetterMethod propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
-        assertEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstOrFail());
+        assertEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
     }
@@ -143,7 +143,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyInitializationFacet);
         final PropertyInitializationFacetViaSetterMethod propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
-        assertEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstOrFail());
+        assertEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
     }
@@ -193,7 +193,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
         final PropertyClearFacetViaSetterMethod propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
-        assertEquals(propertySetterMethod, propertyClearFacet.getMethods().getFirstOrFail());
+        assertEquals(propertySetterMethod, propertyClearFacet.getMethods().getFirstElseFail());
     }
 
     public void testChoicesFacetFoundAndMethodRemoved() {
@@ -220,7 +220,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
         final PropertyChoicesFacetViaMethod propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
-        assertEquals(propertyChoicesMethod, propertyChoicesFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyChoicesMethod, propertyChoicesFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyChoicesMethod));
     }
@@ -250,7 +250,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
         final PropertyAutoCompleteFacetMethod propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
-        assertEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAutoCompleteMethod));
     }
@@ -279,7 +279,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
         final PropertyDefaultFacetViaMethod propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
-        assertEquals(propertyDefaultMethod, propertyDefaultFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyDefaultMethod, propertyDefaultFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDefaultMethod));
     }
@@ -308,7 +308,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyValidateFacetViaMethod);
         final PropertyValidateFacetViaMethod propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
-        assertEquals(propertyValidateMethod, propertyValidateFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyValidateMethod, propertyValidateFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyValidateMethod));
     }
@@ -337,7 +337,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
-        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
     }
@@ -367,7 +367,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
-        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
     }
@@ -396,7 +396,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof HideForContextFacetViaMethod);
         final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
     }
@@ -425,7 +425,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof HideForContextFacetViaMethod);
         final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
     }
@@ -452,7 +452,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
         final PropertyAccessorFacetViaAccessor accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
-        assertEquals(propertyAccessorMethod, accessorFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyAccessorMethod, accessorFacet.getMethods().getFirstElseFail());
     }
 
     public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
@@ -494,13 +494,13 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof HideForContextFacetViaMethod);
         final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail());
 
         final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
-        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstOrFail());
+        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail());
     }
 
 
