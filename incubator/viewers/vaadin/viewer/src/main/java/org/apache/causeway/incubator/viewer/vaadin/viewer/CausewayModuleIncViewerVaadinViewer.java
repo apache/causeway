@@ -22,7 +22,6 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import com.vaadin.flow.server.InitParameters;
 import com.vaadin.flow.spring.RootMappedCondition;
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;
 import com.vaadin.flow.spring.SpringServlet;
@@ -96,8 +95,9 @@ public class CausewayModuleIncViewerVaadinViewer {
         val isRootMapping = RootMappedCondition.isRootMapping(urlMapping);
         if (isRootMapping) {
             urlMapping = "/vaadinServlet/*";
-            initParameters.put(InitParameters.SERVLET_PARAMETER_PUSH_URL,
-                    makeContextRelative(urlMapping.replace("*", "")));
+            //XXX push URL config support was removed in https://github.com/vaadin/flow/pull/15188
+//            initParameters.put(InitParameters.SERVLET_PARAMETER_PUSH_URL,
+//                    makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(
                 new CausewayServletForVaadin(interactionService, context, isRootMapping),
