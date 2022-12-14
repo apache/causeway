@@ -17,7 +17,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.applib.util.JaxbUtil;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -79,7 +79,8 @@ public class RunBackgroundCommandsJob implements Job {
                         commandLogEntryIfAny.ifPresent(commandLogEntry ->
                                 commandExecutorService.executeCommand(
                                         CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto, commandLogEntry.outcomeHandler()));
-                    }).ifFailure(throwable -> log.error("Failed to execute command: " + JaxbUtil.toXml(commandDto), throwable));
+                    }).ifFailure(throwable -> log.error("Failed to execute command: " +
+                            CommandDtoUtils.dtoMapper().toString(commandDto), throwable));
                 }
             });
         }

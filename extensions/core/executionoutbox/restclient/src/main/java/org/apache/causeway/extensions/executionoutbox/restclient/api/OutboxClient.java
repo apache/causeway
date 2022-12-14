@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.resources._Json;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.delete.DeleteMessage;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.deleteMany.DeleteManyMessage;
 import org.apache.causeway.schema.common.v2.InteractionType;
@@ -148,7 +148,7 @@ public class OutboxClient {
             addTo(interactionsDto, interactionDto);
         });
         invoke(DELETE_MANY_URI,
-                new DeleteManyMessage(InteractionsDtoUtils.toXml(interactionsDto)));
+                new DeleteManyMessage(InteractionsDtoUtils.dtoMapper().toString(interactionsDto)));
     }
 
     // -- HELPER
@@ -186,7 +186,7 @@ public class OutboxClient {
             var invocationBuilder = client.request(path);
 
             val invocation = invocationBuilder.buildPut(
-                    Entity.entity(_Json.toString(dto), MediaType.APPLICATION_JSON_TYPE));
+                    Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_TYPE));
 
             val response = invocation.invoke();
 

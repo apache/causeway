@@ -50,6 +50,11 @@ public interface Try<T> {
 
     // -- FACTORIES
 
+    /** success case with no value */
+    public static <T> Try<T> empty() {
+        return success(null);
+    }
+
     public static <T> Try<T> call(final @NonNull Callable<T> callable) {
         try {
             return success(callable.call());

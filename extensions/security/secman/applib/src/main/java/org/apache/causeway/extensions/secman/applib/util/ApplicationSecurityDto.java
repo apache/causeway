@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.causeway.commons.internal.resources._Yaml;
+import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
@@ -117,7 +117,7 @@ public class ApplicationSecurityDto {
     private List<UserDto> users = new ArrayList<>();
 
     public String toYaml() {
-        return _Yaml.toString(this).getValue().orElseThrow();
+        return YamlUtils.toStringUtf8(this);
     }
 
 }

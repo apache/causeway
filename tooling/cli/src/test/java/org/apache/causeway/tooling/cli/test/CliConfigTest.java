@@ -26,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.commons.internal.resources._Yaml;
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.tooling.cli.CliConfig;
 
 import lombok.val;
@@ -43,15 +44,16 @@ class CliConfigTest {
 
     @Test
     void loadConfigFromYaml() {
-        val config = _Yaml.readYaml(CliConfig.class, this.getClass().getResourceAsStream("causeway-tooling.yml"))
+        val config = YamlUtils.tryRead(CliConfig.class, DataSource.ofResource(this.getClass(), "causeway-tooling.yml"))
                 .ifFailure(System.err::println)
-                .getValue().orElse(null);
+                .getValue()
+                .orElse(null);
         assertConfigIsPopulated(config);
     }
 
     // -- HELPER
 
-    private void assertConfigIsPopulated(CliConfig config) {
+    private void assertConfigIsPopulated(final CliConfig config) {
         assertNotNull(config);
         assertNotNull(config.getGlobal());
         assertNotNull(config.getCommands().getOverview());

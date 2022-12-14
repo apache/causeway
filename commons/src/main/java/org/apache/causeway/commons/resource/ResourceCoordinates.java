@@ -34,8 +34,9 @@ import lombok.Value;
 import lombok.val;
 
 /**
- * @since 2.0 {@index}
+ * @deprecated move to tooling
  */
+@Deprecated
 @Value @Builder
 public class ResourceCoordinates
 implements Comparable<ResourceCoordinates> {

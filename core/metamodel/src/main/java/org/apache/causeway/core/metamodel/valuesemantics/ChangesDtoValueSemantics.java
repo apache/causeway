@@ -43,12 +43,12 @@ extends XmlValueSemanticsAbstract<ChangesDto> {
 
     @Override
     public final String toXml(final ChangesDto changesDto) {
-        return ChangesDtoUtils.toXml(changesDto);
+        return ChangesDtoUtils.dtoMapper().toString(changesDto);
     }
 
     @Override
     public final ChangesDto fromXml(final String xml) {
-        return ChangesDtoUtils.fromXml(xml);
+        return ChangesDtoUtils.dtoMapper().read(xml);
     }
 
     // -- EXAMPLES

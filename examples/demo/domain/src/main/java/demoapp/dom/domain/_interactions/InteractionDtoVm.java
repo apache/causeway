@@ -76,12 +76,12 @@ public class InteractionDtoVm implements ViewModel {
 
     @Inject
     public InteractionDtoVm(final String memento) {
-        interactionDto = InteractionDtoUtils.fromXml(encodingService.decodeToString(memento));
+        interactionDto = InteractionDtoUtils.dtoMapper().read(encodingService.decodeToString(memento));
     }
 
     @Override
     public String viewModelMemento() {
-        return encodingService.encodeString(InteractionDtoUtils.toXml(interactionDto));
+        return encodingService.encodeString(InteractionDtoUtils.dtoMapper().toString(interactionDto));
     }
 
 }

@@ -48,7 +48,7 @@ implements EntityChangesSubscriber {
     }
 
     @Override
-    public void onChanging(EntityChanges publishedObjects) {
+    public void onChanging(final EntityChanges publishedObjects) {
 
         @SuppressWarnings("unchecked")
         val publishedEntries =
@@ -57,44 +57,44 @@ implements EntityChangesSubscriber {
         publishedEntries.add(publishedObjects);
 
         kvStore.put(this, "publishedObjects", publishedEntries);
-        log.debug("publish objects {}", ()->ChangesDtoUtils.toXml(publishedObjects.getDto()));
+        log.debug("publish objects {}", ()->ChangesDtoUtils.dtoMapper().toString(publishedObjects.getDto()));
 
     }
 
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<EntityChanges> getPublishedObjects(KVStoreForTesting kvStore) {
+    public static Can<EntityChanges> getPublishedObjects(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<EntityChanges>) kvStore.get(EntityChangesSubscriberForTesting.class, "publishedObjects")
                 .orElse(null));
     }
 
-    public static void clearPublishedEntries(KVStoreForTesting kvStore) {
+    public static void clearPublishedEntries(final KVStoreForTesting kvStore) {
         kvStore.clear(EntityChangesSubscriberForTesting.class);
     }
 
-    public static int getCreated(KVStoreForTesting kvStore) {
+    public static int getCreated(final KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberCreated).sum();
     }
 
-    public static int getDeleted(KVStoreForTesting kvStore) {
+    public static int getDeleted(final KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberDeleted).sum();
     }
 
-    public static int getLoaded(KVStoreForTesting kvStore) {
+    public static int getLoaded(final KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberLoaded).sum();
     }
 
-    public static int getUpdated(KVStoreForTesting kvStore) {
+    public static int getUpdated(final KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberUpdated).sum();
     }
 
-    public static int getModified(KVStoreForTesting kvStore) {
+    public static int getModified(final KVStoreForTesting kvStore) {
         val publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberPropertiesModified).sum();
     }

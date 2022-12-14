@@ -22,9 +22,9 @@ import jakarta.ws.rs.core.Response;
 
 import org.apache.logging.log4j.Logger;
 
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Collections;
-import org.apache.causeway.commons.internal.resources._Xml;
-import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 import lombok.val;
@@ -189,8 +189,9 @@ class _EndpointLogging {
         } else if(_Collections.isAnyCollectionOrArrayType(dto.getClass())){
             log.debug("non-scalar content of type {}", dto.getClass());
         } else {
-            val xmlResult = _Xml.writeXml(dto, WriteOptions.builder().allowMissingRootElement(true).build());
-            xmlResult
+            Try.call(()->JaxbUtils.toStringUtf8(dto, opts->opts
+                    .useContextCache(true)
+                    .formattedOutput(true)))
             .ifSuccess(xml->log.debug(xml))
             .ifFailure(toXmlConversionError->
                 log

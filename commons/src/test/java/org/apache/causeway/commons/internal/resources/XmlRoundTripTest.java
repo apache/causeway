@@ -18,16 +18,19 @@
  */
 package org.apache.causeway.commons.internal.resources;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.apache.causeway.commons.io.JaxbUtils;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -41,7 +44,9 @@ class XmlRoundTripTest {
         assertNotNull(JAXBContext.newInstance(SampleDto.class));
 
         val dto = getSample();
-        assertEquals(dto, _Xml.clone(dto).getValue().orElseThrow());
+        val mapper = JaxbUtils
+                .mapperFor(SampleDto.class, opts->opts.allowMissingRootElement(true));
+        assertEquals(dto, mapper.clone(dto));
     }
 
     // -- HELPER

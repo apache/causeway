@@ -44,7 +44,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.resources._Json;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.common.v2.BlobDto;
@@ -161,17 +161,23 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case ENUM: {
-            final EnumDto enumDto = _Json.readJson(EnumDto.class, json).getValue().orElseThrow();
+            final EnumDto enumDto = JsonUtils.tryRead(EnumDto.class, json)
+                    .ifFailureFail()
+                    .getValue().orElseThrow();
             valueDto.setEnum(enumDto);
             return valueDto;
         }
         case BLOB: {
-            final BlobDto blobDto = _Json.readJson(BlobDto.class, json).getValue().orElseThrow();
+            final BlobDto blobDto = JsonUtils.tryRead(BlobDto.class, json)
+                    .ifFailureFail()
+                    .getValue().orElseThrow();
             valueDto.setBlob(blobDto);
             return valueDto;
         }
         case CLOB: {
-            final ClobDto clobDto = _Json.readJson(ClobDto.class, json).getValue().orElseThrow();
+            final ClobDto clobDto = JsonUtils.tryRead(ClobDto.class, json)
+                    .ifFailureFail()
+                    .getValue().orElseThrow();
             valueDto.setClob(clobDto);
             return valueDto;
         }
@@ -256,25 +262,24 @@ public final class CommonDtoUtils {
 
     @Nullable
     public String getCompositeValueAsJson(final @Nullable TypedTupleDto composite) {
-        return composite!=null
-            ? _Json.toString(
+        return JsonUtils.toStringUtf8(
                 composite,
-                _Json::jaxbAnnotationSupport,
-                _Json::onlyIncludeNonNull)
-            : null;
+                JsonUtils::jaxbAnnotationSupport,
+                JsonUtils::onlyIncludeNonNull);
     }
 
     @SneakyThrows
     @Nullable
     public TypedTupleDto getCompositeValueFromJson(final @Nullable String json) {
         return _Strings.isNotEmpty(json)
-                ? _Json.readJson(TypedTupleDto.class, json, _Json::jaxbAnnotationSupport)
+                ? JsonUtils.tryRead(TypedTupleDto.class, json, JsonUtils::jaxbAnnotationSupport)
+                        .ifFailureFail()
                         .getValue().orElseThrow()
                 : null;
     }
 
     private String dtoToJson(final @Nullable Object dto) {
-        return _Json.toString(dto);
+        return JsonUtils.toStringUtf8(dto);
     }
 
     // -- VALUE RECORD

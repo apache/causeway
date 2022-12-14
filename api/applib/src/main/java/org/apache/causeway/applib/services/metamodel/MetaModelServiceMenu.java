@@ -43,9 +43,9 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.internal.resources._Xml;
-import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
 import jakarta.inject.Inject;
@@ -92,11 +92,11 @@ public class MetaModelServiceMenu {
 //        },
         XML{
             @Override public Clob apply(final String fileName, final MetamodelDto dto) {
-                val content = _Xml.writeXml(dto, WriteOptions.builder().formattedOutput(true).build())
-                        .ifFailureFail()
-                        .getValue()
-                        .orElse("");
-                return Clob.of(fileName, CommonMimeType.XML, content);
+                val content = JaxbUtils.mapperFor(MetamodelDto.class, opts->opts
+                        .useContextCache(true)
+                        .formattedOutput(true))
+                .toString(dto);
+                return Clob.of(fileName, CommonMimeType.XML, _Strings.nullToEmpty(content));
             }
         },
         //XXX empty

@@ -68,7 +68,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject CausewayConfiguration causewayConfiguration;
 
-    protected ExecutionOutboxEntryRepository(Class<E> executionOutboxEntryClass) {
+    protected ExecutionOutboxEntryRepository(final Class<E> executionOutboxEntryClass) {
         this.executionOutboxEntryClass = executionOutboxEntryClass;
     }
 
@@ -80,7 +80,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
     /**
      * for testing only.
      */
-    protected ExecutionOutboxEntryRepository(Class<E> executionOutboxEntryClass, Provider<RepositoryService> repositoryServiceProvider, FactoryService factoryService) {
+    protected ExecutionOutboxEntryRepository(final Class<E> executionOutboxEntryClass, final Provider<RepositoryService> repositoryServiceProvider, final FactoryService factoryService) {
         this.executionOutboxEntryClass = executionOutboxEntryClass;
         this.repositoryServiceProvider = repositoryServiceProvider;
         this.factoryService = factoryService;
@@ -116,7 +116,8 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
             final Bookmark target,
             final String logicalMemberIdentifier,
             final String xml) {
-        return upsert(interactionId, sequence, executionType, startedAt, username, target, logicalMemberIdentifier, InteractionDtoUtils.fromXml(xml));
+        return upsert(interactionId, sequence, executionType, startedAt, username, target, logicalMemberIdentifier,
+                InteractionDtoUtils.dtoMapper().read(xml));
     }
 
     public ExecutionOutboxEntry upsert(

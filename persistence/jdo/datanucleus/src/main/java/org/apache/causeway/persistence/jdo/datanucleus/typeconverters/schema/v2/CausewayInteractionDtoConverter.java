@@ -32,16 +32,12 @@ public class CausewayInteractionDtoConverter implements TypeConverter<Interactio
 
     @Override
     public String toDatastoreType(final InteractionDto memberValue) {
-        return memberValue != null
-                ? InteractionDtoUtils.toXml(memberValue)
-                        : null;
+        return InteractionDtoUtils.dtoMapper().toString(memberValue);
     }
 
     @Override
     public InteractionDto toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? InteractionDtoUtils.fromXml(datastoreValue)
-                        : null;
+        return InteractionDtoUtils.dtoMapper().read(datastoreValue);
     }
 
 }

@@ -32,16 +32,12 @@ public class CausewayCommandDtoConverter implements TypeConverter<CommandDto, St
 
     @Override
     public String toDatastoreType(final CommandDto memberValue) {
-        return memberValue != null
-                ? CommandDtoUtils.toXml(memberValue)
-                        : null;
+        return CommandDtoUtils.dtoMapper().toString(memberValue);
     }
 
     @Override
     public CommandDto toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? CommandDtoUtils.fromXml(datastoreValue)
-                        : null;
+        return CommandDtoUtils.dtoMapper().read(datastoreValue);
     }
 
 }

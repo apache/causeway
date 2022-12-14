@@ -18,87 +18,28 @@
  */
 package org.apache.causeway.applib.util.schema;
 
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-
-import org.apache.causeway.applib.util.JaxbUtil;
-import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.io.DtoMapper;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
+import lombok.experimental.UtilityClass;
 
 /**
  * @since 1.x {@index}
  */
+@UtilityClass
 public final class ChangesDtoUtils {
 
-    public static void init() {
-        getJaxbContext();
+    public void init() {
+        dtoMapper.get();
     }
 
-    // -- marshalling
-    static JAXBContext jaxbContext;
-    static JAXBContext getJaxbContext() {
-        if(jaxbContext == null) {
-            jaxbContext = JaxbUtil.jaxbContextFor(ChangesDto.class);
-        }
-        return jaxbContext;
+    private _Lazy<DtoMapper<ChangesDto>> dtoMapper = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(ChangesDto.class));
+
+    public DtoMapper<ChangesDto> dtoMapper() {
+        return dtoMapper.get();
     }
-
-    public static ChangesDto fromXml(final Reader reader) {
-        try {
-            final Unmarshaller un = getJaxbContext().createUnmarshaller();
-            return (ChangesDto) un.unmarshal(reader);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static ChangesDto fromXml(final String xml) {
-        return fromXml(new StringReader(xml));
-    }
-
-    public static ChangesDto fromXml(
-            final Class<?> contextClass,
-            final String resourceName,
-            final Charset charset) throws IOException {
-
-        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
-        return fromXml(new StringReader(s));
-    }
-
-    public static String toXml(final ChangesDto changesDto) {
-        final CharArrayWriter caw = new CharArrayWriter();
-        toXml(changesDto, caw);
-        return caw.toString();
-    }
-
-    public static void toXml(final ChangesDto changesDto, final Writer writer) {
-        try {
-            final Marshaller m = getJaxbContext().createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            m.marshal(changesDto, writer);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-
-    // -- debugging (dump)
-    public static void dump(final ChangesDto changesDto, final PrintStream out) throws JAXBException {
-        out.println(toXml(changesDto));
-    }
-
-
 
 }

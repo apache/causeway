@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.springframework.util.Assert;
 
-import org.apache.causeway.commons.internal.resources._Json;
+import org.apache.causeway.commons.io.JsonUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -81,7 +81,7 @@ public class PdfJsConfig implements Serializable {
     }
 
     public String toJsonString() {
-        return _Json.toString(this);
+        return JsonUtils.toStringUtf8(this);
     }
 
 }
