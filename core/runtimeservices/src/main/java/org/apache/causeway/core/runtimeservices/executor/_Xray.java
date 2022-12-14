@@ -96,8 +96,8 @@ final class _Xray {
 
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
 
-                val callee1 = handle.getCallees().getFirstOrFail();
-                val callee2 = handle.getCallees().getLastOrFail();
+                val callee1 = handle.getCallees().getFirstElseFail();
+                val callee2 = handle.getCallees().getLastElseFail();
 
                 sequenceData.enter(handle.getCaller(), callee1);
                 sequenceData.activate(callee1);
@@ -119,8 +119,8 @@ final class _Xray {
 
         handle.submit(sequenceData->{
 
-            val callee1 = handle.getCallees().getFirstOrFail();
-            val callee2 = handle.getCallees().getLastOrFail();
+            val callee1 = handle.getCallees().getFirstElseFail();
+            val callee2 = handle.getCallees().getLastElseFail();
 
             sequenceData.exit(callee2, callee1);
             sequenceData.deactivate(callee2);

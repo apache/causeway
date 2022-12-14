@@ -81,7 +81,7 @@ implements ImperativeFacet {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object collectionOrArray = patConstructor.isPresent()
                 ? MmInvokeUtil.invokeWithPAT(
                         patConstructor.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))

@@ -57,7 +57,7 @@ public class ImperativeAspect {
     }
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object returnValue = MmInvokeUtil.invoke(method, domainObject);
         return returnValue;
     }

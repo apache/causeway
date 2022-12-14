@@ -63,7 +63,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetFromToStringMethod);
         final TitleFacetFromToStringMethod titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
-        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
+        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }

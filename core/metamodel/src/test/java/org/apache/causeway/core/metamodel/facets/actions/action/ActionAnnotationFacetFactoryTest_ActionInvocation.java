@@ -84,7 +84,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof ActionInvocationFacetForDomainEventAbstract);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstOrFail());
+        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
     }
@@ -221,18 +221,18 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
-        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().getFirstOrFail());
+        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().getFirstElseFail());
 
         final Facet facet2 = facetHolderWithParms.getParameters().getElseFail(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
-        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().getFirstOrFail());
+        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().getFirstElseFail());
 
         final Facet facet3 = facetHolderWithParms.getFacet(DisableForContextFacet.class);
         assertNotNull(facet3);
         assertTrue(facet3 instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableFacetViaMethod = (DisableForContextFacetViaMethod) facet3;
-        assertEquals(disableMethod, disableFacetViaMethod.getMethods().getFirstOrFail());
+        assertEquals(disableMethod, disableFacetViaMethod.getMethods().getFirstElseFail());
     }
 }

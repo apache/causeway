@@ -62,7 +62,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -87,7 +87,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -110,7 +110,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -133,7 +133,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -159,7 +159,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -189,7 +189,7 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().getFirstOrFail());
+        assertEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().getFirstElseFail());
     }
 
     static class Order {

@@ -69,7 +69,7 @@ implements ImperativeFacet {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object collectionOrArray = MmInvokeUtil.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;

@@ -54,7 +54,7 @@ implements ImperativeFacet {
         if (target == null) {
             return null;
         }
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Boolean isHidden = (Boolean) MmInvokeUtil.invokeAutofit(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }

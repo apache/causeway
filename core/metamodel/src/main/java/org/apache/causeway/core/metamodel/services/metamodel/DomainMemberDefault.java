@@ -273,7 +273,7 @@ public class DomainMemberDefault implements DomainMember {
         }
         if (facet instanceof ImperativeFacet) {
             ImperativeFacet imperativeFacet = (ImperativeFacet) facet;
-            return imperativeFacet.getMethods().getFirstOrFail().getName();
+            return imperativeFacet.getMethods().getFirstElseFail().getName();
         }
         final String name = facet.getClass().getSimpleName();
         if (ignore(name)) {

@@ -62,7 +62,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
         val optionPojos = MmInvokeUtil.invoke(method, owningAdapter);
         val visibleChoices = ManagedObjects

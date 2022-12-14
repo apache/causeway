@@ -19,7 +19,7 @@
 package org.apache.causeway.commons.io;
 
 import java.io.PrintStream;
-import java.util.function.Consumer;
+import java.util.ArrayList;
 
 import org.springframework.lang.Nullable;
 
@@ -42,13 +42,9 @@ public interface DtoMapper<T> {
     @Nullable
     default String toString(final @Nullable T dto) {
         if(dto==null) return null;
-        class StringHolder implements Consumer<String> {
-            String s;
-            @Override public void accept(final String s) { this.s = s; }
-        }
-        val sh = new StringHolder();
-        write(dto, DataSink.ofStringUtf8Consumer(sh));
-        return sh.s;
+        val stringHolder = new ArrayList<String>(1);
+        write(dto, DataSink.ofStringUtf8Consumer(stringHolder::add));
+        return stringHolder.get(0);
     }
 
     // -- CLONE
@@ -59,13 +55,9 @@ public interface DtoMapper<T> {
 
     default T clone(final @Nullable T dto) {
         if(dto==null) return dto;
-        class BytesHolder implements Consumer<byte[]> {
-            byte[] b;
-            @Override public void accept(final byte[] b) { this.b = b; }
-        }
-        val bh = new BytesHolder();
-        write(dto, DataSink.ofByteArrayConsumer(bh));
-        return read(DataSource.ofBytes(bh.b));
+        val bytesHolder = new ArrayList<byte[]>(1);
+        write(dto, DataSink.ofByteArrayConsumer(bytesHolder::add));
+        return read(DataSource.ofBytes(bytesHolder.get(0)));
     }
 
     // -- DEBUG
