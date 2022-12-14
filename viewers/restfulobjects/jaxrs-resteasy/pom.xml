@@ -133,7 +133,7 @@
 		<dependency>
 		    <groupId>org.jboss.resteasy</groupId>
 		    <artifactId>resteasy-servlet-initializer</artifactId>
-		    <version>6.2.1.Final</version>
+		    <version>6.2.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
