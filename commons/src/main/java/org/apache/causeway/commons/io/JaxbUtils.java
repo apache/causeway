@@ -47,6 +47,7 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.Singular;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -64,10 +65,13 @@ public class JaxbUtils {
         private final @Builder.Default boolean useContextCache = true;
         private final @Builder.Default boolean allowMissingRootElement = false;
         private final @Builder.Default boolean formattedOutput = false;
+        private final @Singular Map<String, Object> properties;
         public static JaxbOptions defaults() {
             return JaxbOptions.builder().build();
         }
+
         // -- HELPER
+
         private boolean shouldMissingXmlRootElementBeHandledOn(final Class<?> mappedType) {
             return isAllowMissingRootElement()
                     && !_Annotations.isPresent(mappedType, XmlRootElement.class); //TODO ask _ClassCache
@@ -79,6 +83,11 @@ public class JaxbUtils {
         @SneakyThrows
         private Marshaller marshaller(final JAXBContext jaxbContext, final Class<?> mappedType) {
             val marshaller = jaxbContext.createMarshaller();
+            if(properties!=null) {
+                for(val entry : properties.entrySet()) {
+                    marshaller.setProperty(entry.getKey(), entry.getValue());
+                }
+            }
             if(isFormattedOutput()) {
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             }
@@ -87,6 +96,11 @@ public class JaxbUtils {
         @SneakyThrows
         private Unmarshaller unmarshaller(final JAXBContext jaxbContext, final Class<?> mappedType) {
             val unmarshaller = jaxbContext.createUnmarshaller();
+            if(properties!=null) {
+                for(val entry : properties.entrySet()) {
+                    unmarshaller.setProperty(entry.getKey(), entry.getValue());
+                }
+            }
             return unmarshaller;
         }
         @SneakyThrows
