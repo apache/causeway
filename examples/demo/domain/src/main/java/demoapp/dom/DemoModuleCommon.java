@@ -29,8 +29,6 @@ import org.apache.causeway.applib.CausewayModuleApplibMixins;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @Configuration
 @Import({
@@ -38,9 +36,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
     CausewayModuleApplibMixins.class,
     CausewayModuleCoreRuntimeServices.class,
     CausewayModuleTestingFixturesApplib.class,
-    // Auto Configuration
-    FixtureScriptsSpecificationProviderAutoConfiguration.class,
-    ExecutionParametersServiceAutoConfiguration.class,
 })
 @PropertySources({
     @PropertySource(CausewayPresets.NoTranslations),

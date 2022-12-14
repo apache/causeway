@@ -34,8 +34,6 @@ import org.apache.causeway.extensions.executionlog.applib.integtest.model.Execut
 import org.apache.causeway.extensions.executionlog.jdo.CausewayModuleExtExecutionLogPersistenceJdo;
 import org.apache.causeway.extensions.executionlog.jdo.integtests.model.Counter;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = ExecutionLog_IntegTest.AppManifest.class
@@ -49,9 +47,6 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionLogPersistenceJdo.class,
-            // Auto Configuration
-            FixtureScriptsSpecificationProviderAutoConfiguration.class,
-            ExecutionParametersServiceAutoConfiguration.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)

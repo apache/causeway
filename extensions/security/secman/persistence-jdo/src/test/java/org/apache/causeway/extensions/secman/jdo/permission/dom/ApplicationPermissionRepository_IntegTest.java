@@ -32,8 +32,6 @@ import org.apache.causeway.extensions.secman.applib.ApplicationPermissionReposit
 import org.apache.causeway.extensions.secman.applib.mmm.MmmModule;
 import org.apache.causeway.extensions.secman.jdo.CausewayModuleExtSecmanPersistenceJdo;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = ApplicationPermissionRepository_IntegTest.AppManifest.class
@@ -49,10 +47,6 @@ class ApplicationPermissionRepository_IntegTest extends ApplicationPermissionRep
             CausewayModuleExtSecmanPersistenceJdo.class,
 
             MmmModule.class,
-
-            // Auto Configuration
-            FixtureScriptsSpecificationProviderAutoConfiguration.class,
-            ExecutionParametersServiceAutoConfiguration.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test),

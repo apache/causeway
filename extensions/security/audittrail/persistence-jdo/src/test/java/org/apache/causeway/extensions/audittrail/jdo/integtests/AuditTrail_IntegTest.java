@@ -35,8 +35,6 @@ import org.apache.causeway.extensions.audittrail.jdo.CausewayModuleExtAuditTrail
 import org.apache.causeway.extensions.audittrail.jdo.integtests.model.Counter;
 import org.apache.causeway.extensions.audittrail.jdo.integtests.model.CounterRepository;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = AuditTrail_IntegTest.AppManifest.class
@@ -51,9 +49,6 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtAuditTrailPersistenceJdo.class,
-            // Auto Configuration
-            FixtureScriptsSpecificationProviderAutoConfiguration.class,
-            ExecutionParametersServiceAutoConfiguration.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test),

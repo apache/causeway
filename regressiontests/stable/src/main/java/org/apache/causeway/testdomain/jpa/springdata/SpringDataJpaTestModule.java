@@ -20,18 +20,11 @@ package org.apache.causeway.testdomain.jpa.springdata;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @Configuration
-@Import({
-    FixtureScriptsSpecificationProviderAutoConfiguration.class, // because @DataJpaTest disables autoconfiguration
-    ExecutionParametersServiceAutoConfiguration.class           // because @DataJpaTest disables autoconfiguration
-})
 @EnableJpaRepositories(basePackageClasses = EmployeeRepository.class)
 @EntityScan(basePackageClasses = Employee.class)
 public class SpringDataJpaTestModule {

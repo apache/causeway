@@ -39,8 +39,6 @@ import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.Cm
 import org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.CmdExecAuditSessTestDomainModel;
 import org.apache.causeway.regressiontests.cmdexecauditsess.jpa.integtests.model.Counter;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = CmdExecAuditSessLog_IntegTest.AppManifest.class
@@ -59,9 +57,6 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
             CausewayModuleExtAuditTrailPersistenceJpa.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
-            // Auto Configuration
-            FixtureScriptsSpecificationProviderAutoConfiguration.class,
-            ExecutionParametersServiceAutoConfiguration.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)

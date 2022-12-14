@@ -59,8 +59,6 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
 @SpringBootTest(
@@ -84,9 +82,6 @@ public class OutboxRestClient_IntegTest  {
             // mixins
             Counter_bumpUsingMixin.class,
             Counter_bumpUsingMixinWithExecutionPublishingDisabled.class,
-
-            FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
-            ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)

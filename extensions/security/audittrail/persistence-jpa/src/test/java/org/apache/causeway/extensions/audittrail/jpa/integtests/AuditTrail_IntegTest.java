@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.audittrail.jpa.integtests;
 
+import jakarta.inject.Inject;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -37,10 +39,6 @@ import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrail
 import org.apache.causeway.extensions.audittrail.jpa.integtests.model.Counter;
 import org.apache.causeway.extensions.audittrail.jpa.integtests.model.CounterRepository;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
-
-import jakarta.inject.Inject;
 
 @SpringBootTest(
         classes = AuditTrail_IntegTest.AppManifest.class,
@@ -58,9 +56,6 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtAuditTrailPersistenceJpa.class,
-
-            FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
-            ExecutionParametersServiceAutoConfiguration.class,          // because something? disables autoconfiguration
 
             // entities, eager meta-model introspection
             Counter.class,

@@ -32,8 +32,6 @@ import org.apache.causeway.extensions.commandlog.applib.integtest.model.CommandL
 import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
 import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
@@ -42,8 +40,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
         CausewayModuleSecurityBypass.class,
         CausewayModuleExtCommandLogPersistenceJpa.class,
 
-        FixtureScriptsSpecificationProviderAutoConfiguration.class, // because something? disables autoconfiguration
-        ExecutionParametersServiceAutoConfiguration.class           // because something? disables autoconfiguration
 })
 @PropertySources({
         @PropertySource(CausewayPresets.UseLog4j2Test)

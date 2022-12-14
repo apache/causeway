@@ -31,6 +31,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -81,6 +83,10 @@ import lombok.val;
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@Import({
+    // Auto Configuration
+    FixtureScriptsSpecificationProviderAutoConfiguration.class,
+    ExecutionParametersServiceAutoConfiguration.class})
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class FixtureScripts {
 
