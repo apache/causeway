@@ -111,7 +111,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
-        <datanucleus-rdbms.version>6.0.2</datanucleus-rdbms.version>
+        <datanucleus-rdbms.version>6.0.3</datanucleus-rdbms.version>
 
         <datatables.version>1.13.1</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
