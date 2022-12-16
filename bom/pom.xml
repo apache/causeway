@@ -130,7 +130,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <javassist.version>3.29.2-GA</javassist.version>
         <javax-servlet.version>4.0.1</javax-servlet.version>
         <jaxb-impl.version>2.3.3</jaxb-impl.version> <!-- don't upgrade to 3.x  before Spring 6-->
-        <jaxws-ri.version>2.3.3</jaxws-ri.version> <!-- don't upgrade to 3.x  before Spring 6-->
+        <jaxws-ri.version>4.0.0</jaxws-ri.version> <!-- don't upgrade to 3.x  before Spring 6-->
 
         <jbcrypt.version>0.4</jbcrypt.version>
         <jboss-jaxrs-api_2.1_spec.version>2.0.2.Final</jboss-jaxrs-api_2.1_spec.version>
