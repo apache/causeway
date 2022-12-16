@@ -20,7 +20,6 @@ module org.apache.causeway.viewer.wicket.applib {
     exports org.apache.causeway.viewer.wicket.applib;
     exports org.apache.causeway.viewer.wicket.applib.mixins;
 
-    requires java.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires spring.beans;

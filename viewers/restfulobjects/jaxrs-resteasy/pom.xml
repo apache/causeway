@@ -87,7 +87,7 @@
 					<groupId>org.jboss.logging</groupId>
 					<artifactId>jboss-logging</artifactId>
 				</exclusion>
-				<!-- transitively provided by causeway-jdk-supplemental -->
+				<!-- transitively provided by causeway-commons -->
 				<exclusion>
 					<groupId>org.ow2.asm</groupId>
 					<artifactId>asm</artifactId>
