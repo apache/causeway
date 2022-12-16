@@ -31,11 +31,13 @@ import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModu
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.context._Context;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Utilities to convert from and to JSON format.
@@ -43,13 +45,21 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @UtilityClass
+@Log4j2
 public class JsonUtils {
 
     /**
      * Consumers of the framework may choose to use a different provider.
      */
-    public Class<?> getPlatformDefaultJsonProviderForJaxb() {
-        return org.eclipse.persistence.jaxb.rs.MOXyJsonProvider.class;
+    public Optional<Class<?>> getPlatformDefaultJsonProviderForJaxb() {
+        return Try.call(()->_Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider"))
+                .ifFailure(cause->
+                      log.warn("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
+                          + " on the class-path."
+                          + " Are you missing a maven dependency?")
+                )
+                .getValue()
+                .map(x->x);
     }
 
     @FunctionalInterface

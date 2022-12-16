@@ -53,6 +53,29 @@
 		    <artifactId>parsson</artifactId>
 		    <version>1.1.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.moxy</artifactId>
+			<exclusions>
+				<exclusion>
+    				<groupId>org.eclipse.angus</groupId>
+    				<artifactId>angus-activation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm-tree</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm-analysis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
         <!-- TEST DEPENDENCIES -->
 

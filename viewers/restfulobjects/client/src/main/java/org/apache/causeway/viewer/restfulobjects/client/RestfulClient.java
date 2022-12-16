@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter.Cre
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -183,14 +182,16 @@ public class RestfulClient implements AutoCloseable {
     // -- HELPER FILTER
 
     private void registerDefaultJsonProviderForJaxb(final Optional<Class<?>> jsonProviderForJaxbOverride) {
+        jsonProviderForJaxbOverride
+            .or(JsonUtils::getPlatformDefaultJsonProviderForJaxb)
+            .ifPresent(jsonProviderForJaxb->{
 
-        val jsonProviderForJaxb = jsonProviderForJaxbOverride
-                .orElseGet(JsonUtils::getPlatformDefaultJsonProviderForJaxb);
+                Try.run(()->client.register(jsonProviderForJaxb))
+                .ifFailure(cause->
+                    log.error("Failed to register the JsonProviderForJaxb {} for the Restful Client to use."
+                            + " Are you missing a Maven dependency?", jsonProviderForJaxb.getName(), cause));
 
-        Try.run(()->client.register(jsonProviderForJaxb))
-        .ifFailure(cause->
-            log.error("Failed to register the JsonProviderForJaxb for the Restful Client to use."
-                    + " Are you missing a Maven dependency?", cause));
+            });
     }
 
     private void registerBasicAuthFilter() {
