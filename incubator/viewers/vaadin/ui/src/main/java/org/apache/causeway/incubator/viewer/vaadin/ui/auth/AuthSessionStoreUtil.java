@@ -20,13 +20,14 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.auth;
 
 import java.util.Optional;
 
-//import com.vaadin.flow.server.VaadinSession; TODO[ISIS-3275] no support for jakarta API
+import jakarta.servlet.http.HttpSession;
+
+import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
@@ -56,23 +57,20 @@ public class AuthSessionStoreUtil {
     /** when within a VaadinSession */
     public static void put(
             final @Nullable InteractionContext auth) {
-        /* TODO[ISIS-3275] no support for jakarta API
+
         Optional.ofNullable(VaadinSession.getCurrent())
         .map(VaadinSession::getSession)
         .ifPresent(sessionVaa->{
             sessionVaa.setAttribute(InteractionContext.class.getName(), auth);
         });
-        */
+
     }
 
     /** when within a VaadinSession */
     public static Optional<InteractionContext> get() {
-        /* TODO[ISIS-3275] no support for jakarta API
         return Optional.ofNullable(
                 (InteractionContext)VaadinSession.getCurrent().getSession()
                 .getAttribute(InteractionContext.class.getName()));
-                */
-        return Optional.empty();
     }
 
     /** when within a VaadinSession */

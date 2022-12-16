@@ -18,24 +18,22 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.viewer;
 
+import java.io.IOException;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import com.vaadin.flow.spring.SpringServlet;
 
-//import java.io.IOException;
-
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-
-//import com.vaadin.flow.spring.SpringServlet;
-
-//import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContext;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
-//import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-//import org.apache.causeway.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
-//import lombok.NonNull;
-//import lombok.val;
+import lombok.NonNull;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -44,12 +42,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class CausewayServletForVaadin {
-
-/* TODO[ISIS-3275] no support for jakarta API
-
-
-extends SpringServlet {
+public class CausewayServletForVaadin extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,8 +58,8 @@ extends SpringServlet {
 
 
     @Override
-    protected void service(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void service(final HttpServletRequest request,
+            final HttpServletResponse response) throws ServletException, IOException {
 
         val authentication = AuthSessionStoreUtil.get(request.getSession(true))
                 .orElse(null);
@@ -91,8 +84,5 @@ extends SpringServlet {
         }
 
     }
-
-*/
-
 
 }
