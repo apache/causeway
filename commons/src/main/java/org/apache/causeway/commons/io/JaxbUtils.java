@@ -61,6 +61,27 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JaxbUtils {
 
+    /** uses given context factory as the new platform default */
+    public void setDefaultJAXBContextFactory(final Class<?> jaxbContextFactoryClass, final boolean force) {
+        if(force
+                || System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)==null) {
+            if(jaxbContextFactoryClass!=null) {
+                System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, jaxbContextFactoryClass.getName());
+            } else {
+                System.clearProperty(JAXBContext.JAXB_CONTEXT_FACTORY);
+            }
+        }
+    }
+
+    /** uses MOXy */
+    public void useMoxy() {
+        //setDefaultJAXBContextFactory(org.eclipse.persistence.jaxb.JAXBContextFactory.class, true);
+    }
+
+    public static void usePlatformDefault() {
+        setDefaultJAXBContextFactory(null, true);
+    }
+
     @Data @Builder
     public static class JaxbOptions {
         private final @Builder.Default boolean useContextCache = true;
@@ -309,7 +330,6 @@ public class JaxbUtils {
         return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName());
         /*sonar-ignore-off*/
     }
-
 
 
 }

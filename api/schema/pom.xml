@@ -36,16 +36,18 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-jdk-supplemental</artifactId>
-			<type>pom</type>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.inject</groupId>
+			<artifactId>jakarta.inject-api</artifactId>
+		</dependency>
 	</dependencies>
-
 	<profiles>
 
 		<profile>
@@ -229,6 +231,4 @@
 			</build>
 		</profile>
 	</profiles>
-
-
 </project>

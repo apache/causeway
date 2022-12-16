@@ -71,6 +71,11 @@
     </build>
 
     <dependencies>
+		
+		<dependency>
+		    <groupId>jakarta.mail</groupId>
+		    <artifactId>jakarta.mail-api</artifactId>
+		</dependency>
 	
         <dependency>
             <groupId>org.apache.causeway.core</groupId>

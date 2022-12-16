@@ -24,7 +24,6 @@ module org.apache.causeway.schema {
     exports org.apache.causeway.schema.ixn.v2;
     exports org.apache.causeway.schema.chg.v2;
 
-    requires java.xml;
     requires jakarta.xml.bind;
     requires spring.context;
     requires jakarta.inject;

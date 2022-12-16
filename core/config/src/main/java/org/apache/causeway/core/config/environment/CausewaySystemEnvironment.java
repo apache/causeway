@@ -90,13 +90,13 @@ public class CausewaySystemEnvironment {
     }
 
     @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshed(ContextRefreshedEvent event) {
+    public void onContextRefreshed(final ContextRefreshedEvent event) {
         // happens after all @PostConstruct
         log.info("onContextRefreshed");
     }
 
     @EventListener(ContextClosedEvent.class)
-    public void onContextAboutToClose(ContextClosedEvent event) {
+    public void onContextAboutToClose(final ContextClosedEvent event) {
         // happens before any @PostConstruct
         // as a consequence, no managed bean should touch the _Context during its post-construct phase
         // as it has already been cleared here
@@ -106,7 +106,7 @@ public class CausewaySystemEnvironment {
     }
 
     @EventListener(ApplicationFailedEvent.class)
-    public void onContextRefreshed(ApplicationFailedEvent event) {
+    public void onContextRefreshed(final ApplicationFailedEvent event) {
         // happens eg. when DN finds non enhanced entity classes
         log.error("Application failed to start", event.getException());
     }
@@ -126,7 +126,7 @@ public class CausewaySystemEnvironment {
      * Must be set prior to configuration bootstrapping.
      * @param isUnitTesting
      */
-    public void setUnitTesting(boolean isUnitTesting) {
+    public void setUnitTesting(final boolean isUnitTesting) {
         System.setProperty("UNITTESTING", ""+isUnitTesting);
     }
 
@@ -135,7 +135,7 @@ public class CausewaySystemEnvironment {
      * Must be set prior to configuration bootstrapping.
      * @param isPrototyping
      */
-    public void setPrototyping(boolean isPrototyping) {
+    public void setPrototyping(final boolean isPrototyping) {
         System.setProperty("PROTOTYPING", ""+isPrototyping);
     }
 
@@ -192,23 +192,23 @@ public class CausewaySystemEnvironment {
 
     }
 
-    private static String getEnv(String envVar) {
+    private static String getEnv(final String envVar) {
         return trim(System.getenv(envVar));
     }
 
-    private static String getProperty(String key) {
+    private static String getProperty(final String key) {
         return trim(System.getProperty(key));
     }
 
-    private static String trim(String value) {
+    private static String trim(final String value) {
         return _Strings.isNullOrEmpty(value) ? null : value.trim();
     }
 
-    private static boolean isSet(String value) {
+    private static boolean isSet(final String value) {
         return "true".equalsIgnoreCase(value);
     }
 
-    private static boolean isNotSet(String value) {
+    private static boolean isNotSet(final String value) {
         return "false".equalsIgnoreCase(value);
     }
 

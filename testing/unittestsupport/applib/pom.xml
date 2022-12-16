@@ -28,11 +28,10 @@
 
     <dependencies>
 
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-jdk-supplemental</artifactId>
-			<type>pom</type>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.commons</groupId>
+            <artifactId>causeway-commons</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
@@ -144,6 +143,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+        
+		<dependency>
+		    <groupId>jakarta.xml.ws</groupId>
+		    <artifactId>jakarta.xml.ws-api</artifactId>
+		</dependency>
 
     </dependencies>
 
