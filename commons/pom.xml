@@ -55,76 +55,6 @@
 
 	<dependencies>
 
-		<!-- JDK11+ SUPPORT AND JEE API -->
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-ri</artifactId>
-			<version>${jaxws-ri.version}</version>
-			<type>pom</type>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.xml.bind.external</groupId>
-					<artifactId>rngom</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.bind.external</groupId>
-					<artifactId>relaxng-datatype</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- version clash with spring, we pull it in elsewhere -->
-					<groupId>jakarta.annotation</groupId>
-					<artifactId>jakarta.annotation-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- version clash jakarta.jws:jakarta.jws-api: 1.1.1 vs 2.1.0 -->
-					<groupId>jakarta.jws</groupId>
-					<artifactId>jakarta.jws-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.ws</groupId>
-					<artifactId>jaxws-rt</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- version clash org.eclipse.persistence:org.eclipse.persistence.core: 
-						2.7.6 vs 2.7.7 -->
-					<groupId>org.eclipse.persistence</groupId>
-					<artifactId>org.eclipse.persistence.moxy</artifactId>
-				</exclusion>
-				<exclusion>
-					<!-- version clash org.eclipse.persistence:org.eclipse.persistence.core: 
-						2.7.6 vs 2.7.7 -->
-					<groupId>org.eclipse.persistence</groupId>
-					<artifactId>org.eclipse.persistence.sdo</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
-			<version>${jaxws-ri.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.woodstox</groupId>
-					<artifactId>woodstox-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.woodstox</groupId>
-					<artifactId>stax2-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.bind.external</groupId>
-					<artifactId>rngom</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jakarta.annotation</groupId>
-					<artifactId>jakarta.annotation-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jvnet.staxex</groupId>
-					<artifactId>stax-ex</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.woodstox</groupId>
 			<artifactId>woodstox-core</artifactId>
@@ -140,22 +70,6 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.sdo</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.sun.xml.bind.external</groupId>
-			<artifactId>rngom</artifactId>
-			<version>2.3.6</version> 
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.bind.external</groupId>
-			<artifactId>relaxng-datatype</artifactId>
-			<version>2.3.6</version> 
 		</dependency>
 		
 		<dependency>
@@ -198,6 +112,11 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-privileged</artifactId>
 		</dependency>
+		
+		<dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
 		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
