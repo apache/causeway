@@ -256,7 +256,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
 	            <artifactId>jaxb-impl</artifactId>
-	            <version>2.3.3</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+	            <version>4.0.1</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
 	        </dependency>
 			
 			<dependency>
