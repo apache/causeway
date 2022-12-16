@@ -23,7 +23,6 @@ import jakarta.xml.bind.JAXBException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -175,13 +174,7 @@ class RestServiceTest {
 
     }
 
-    //TODO[ISIS-3275] throws (seems jakarta annotations are not properly recognized)
-    /*
-     * Caused by: com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "bookNameForTab1" (class org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm), not marked as ignorable (10 known properties: "productsForTab1", "productsForTab2", "favoriteBook", "books", "name", "inventory", "bookForTab2", "booksForTab1", "bookForTab1", "booksForTab2"])
- at [Source: (org.jboss.resteasy.specimpl.AbstractBuiltResponse$InputStreamWrapper); line: 1, column: 21] (through reference chain: org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm["bookNameForTab1"])
-    at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
-     */
-    @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @Test
     void inventoryAsJaxbVm_viaRestEndpoint() {
 
         assertTrue(restService.getPort()>0);

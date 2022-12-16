@@ -60,6 +60,12 @@ public class RestfulClientConfig {
     private String restfulAuthPassword;
 
     /**
+     * If left empty, the platform default is used.
+     */
+    @XmlElement(name="jsonProviderForJaxb")
+    private Class<?> jsonProviderForJaxb;
+
+    /**
      * If enabled, logs conversation (request/response) details.
      */
     @XmlElement(name="useRequestDebugLogging")

@@ -88,27 +88,6 @@
 			<scope>provided</scope>
         </dependency>
 
-        <!-- TODO JPA API (providing compile dependency) -->
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.moxy</artifactId>
-			<version>4.0.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.ow2.asm</groupId>
-					<artifactId>asm</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.ow2.asm</groupId>
-					<artifactId>asm-tree</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.ow2.asm</groupId>
-					<artifactId>asm-analysis</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 	</dependencies>
 
 

@@ -45,6 +45,13 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JsonUtils {
 
+    /**
+     * Consumers of the framework may choose to use a different provider.
+     */
+    public Class<?> getPlatformDefaultJsonProviderForJaxb() {
+        return org.eclipse.persistence.jaxb.rs.MOXyJsonProvider.class;
+    }
+
     @FunctionalInterface
     public interface JsonCustomizer extends UnaryOperator<ObjectMapper> {}
 
@@ -147,5 +154,7 @@ public class JsonUtils {
         }
         return mapper;
     }
+
+
 
 }

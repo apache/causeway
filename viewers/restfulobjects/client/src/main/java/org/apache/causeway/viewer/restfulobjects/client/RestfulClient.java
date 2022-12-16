@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.client;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import jakarta.ws.rs.client.Client;
@@ -33,12 +34,13 @@ import jakarta.ws.rs.core.UriBuilder;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter.Credentials;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
 import lombok.NonNull;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -111,7 +113,7 @@ public class RestfulClient implements AutoCloseable {
         final ClientBuilder clientBuilder = configRefiner.apply(ClientBuilder.newBuilder());
         this.client = clientBuilder.build();
 
-        registerDefaultJsonProvider();
+        registerDefaultJsonProviderForJaxb(Optional.ofNullable(clientConfig.getJsonProviderForJaxb()));
         registerBasicAuthFilter();
         registerConversationFilters();
     }
@@ -180,15 +182,15 @@ public class RestfulClient implements AutoCloseable {
 
     // -- HELPER FILTER
 
-    private void registerDefaultJsonProvider() {
-        try {
-            Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
-            client.register(MOXyJsonProvider);
-        } catch (Exception e) {
-            log.warn("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
-                    + " on the class-path."
-                    + " Are you missing a maven dependency?");
-        }
+    private void registerDefaultJsonProviderForJaxb(final Optional<Class<?>> jsonProviderForJaxbOverride) {
+
+        val jsonProviderForJaxb = jsonProviderForJaxbOverride
+                .orElseGet(JsonUtils::getPlatformDefaultJsonProviderForJaxb);
+
+        Try.run(()->client.register(jsonProviderForJaxb))
+        .ifFailure(cause->
+            log.error("Failed to register the JsonProviderForJaxb for the Restful Client to use."
+                    + " Are you missing a Maven dependency?", cause));
     }
 
     private void registerBasicAuthFilter() {
