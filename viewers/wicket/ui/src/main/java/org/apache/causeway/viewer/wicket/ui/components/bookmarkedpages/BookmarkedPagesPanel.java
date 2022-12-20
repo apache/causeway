@@ -94,7 +94,8 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             }
         };
         // allow to be updated by AjaxLink
-        container.setOutputMarkupId(true);
+        Wkt.ajaxEnable(this);
+        Wkt.ajaxEnable(container);
         add(container);
 
         val clearAllBookmarksLink = Wkt.linkAdd(this, CLEAR_BOOKMARKS, target->{
