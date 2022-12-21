@@ -281,7 +281,7 @@ public final class ManagedObjects {
 
     // -- PREDEFINED COMPARATOR
 
-    private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
+    static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
         @SuppressWarnings({"rawtypes" })
         @Override
         public int compare(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {

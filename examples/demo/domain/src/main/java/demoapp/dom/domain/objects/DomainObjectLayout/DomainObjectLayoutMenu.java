@@ -20,13 +20,24 @@ package demoapp.dom.domain.objects.DomainObjectLayout;
 
 import jakarta.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
+
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.plural.DomainObjectLayoutPluralVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventVm;
 
 @Named("demo.DomainObjectLayoutMenu")
 @DomainService(
@@ -36,92 +47,62 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 //@Log4j2
 public class DomainObjectLayoutMenu {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Add link to object once visited as a bookmark")
-    public void bookmarking(){
-    }
-    @MemberSupport public String disableBookmarking(){
-        return "Add link to object once visited as a bookmark" +
-                 " (not yet implemented in demo)";
-    }
-
-
+    @Autowired private FactoryService factoryService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing the domain object"
-    )
-    public void cssClass(){
+    @ActionLayout(cssClassFa="fa-bookmark",
+        describedAs = "Add link to object once visited as a bookmark")
+    public DomainObjectLayoutBookmarkingVm bookmarking(){
+        return factoryService.viewModel(new DomainObjectLayoutBookmarkingVm());
     }
-    @MemberSupport public String disableCssClass(){
-        return "CSS class to wrap the UI component representing the domain object" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-font-awesome-flag", describedAs = "Font awesome icon to represent domain object")
-    public void cssClassFa(){
+    @ActionLayout(cssClassFa="fa-pen-nib",
+        describedAs = "CSS class to wrap the UI component representing the domain object")
+    public DomainObjectLayoutCssClassVm cssClass(){
+        return factoryService.viewModel(new DomainObjectLayoutCssClassVm());
     }
-    @MemberSupport public String disableCssClassFa(){
-        return "Font awesome icon to represent domain object" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
-    public void describedAs(){
+    @ActionLayout(cssClassFa="fa-font-awesome-flag",
+        describedAs = "Font awesome icon to represent domain object")
+    public DomainObjectLayoutCssClassFaVm cssClassFa(){
+        return factoryService.viewModel(new DomainObjectLayoutCssClassFaVm());
     }
-    @MemberSupport public String disableDescribedAs(){
-        return "Description of the property, shown as a tooltip" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the domain object's type wherever labelled")
-    public void named(){
+    @ActionLayout(cssClassFa="fa-comment",
+        describedAs = "Description of the property, shown as a tooltip")
+    public DomainObjectLayoutDescribedAsVm describedAs(){
+        return factoryService.viewModel(new DomainObjectLayoutDescribedAsVm());
     }
-    @MemberSupport public String disableNamed(){
-        return "Custom text for the domain object's type wherever labelled" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-fast-forward", describedAs = "Number of domain objects per page in collections")
-    public void paged(){
+    @ActionLayout(cssClassFa="fa-signature",
+        describedAs = "Custom text for the domain object's type wherever labelled")
+    public DomainObjectLayoutNamedVm named(){
+        return factoryService.viewModel(new DomainObjectLayoutNamedVm());
     }
-    @MemberSupport public String disablePaged(){
-        return "Number of domain objects per page in collections" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature", describedAs = "Overrides plural form for the domain object's type, eg for irregular plurals")
-    public void plural(){
+    @ActionLayout(cssClassFa="fa-fast-forward",
+        describedAs = "Number of domain objects per page in collections")
+    public DomainObjectLayoutPagedVm paged(){
+        return factoryService.viewModel(new DomainObjectLayoutPagedVm());
     }
-    @MemberSupport public String disablePlural(){
-        return "Overrides plural form for the domain object's type, eg for irregular plurals" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-desktop", describedAs = "Class of the UI events emitted to allow subscribers to specify title, icon etc")
-    public void xxxUiEvent(){
-    }
-    @MemberSupport public String disableXxxUiEvent(){
-        return "Class of the UI events emitted to allow subscribers to specify title, icon etc" +
-                " (not yet implemented in demo)";
+    @ActionLayout(cssClassFa="fa-signature",
+        describedAs = "Overrides plural form for the domain object's type, eg for irregular plurals")
+    public DomainObjectLayoutPluralVm plural(){
+        return factoryService.viewModel(new DomainObjectLayoutPluralVm());
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-desktop",
+        describedAs = "Class of the UI events emitted to allow subscribers to specify title, icon etc")
+    public DomainObjectLayoutXxxUiEventVm xxxUiEvent(){
+        return factoryService.viewModel(new DomainObjectLayoutXxxUiEventVm());
+    }
 
 }
