@@ -31,7 +31,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 
 import org.springframework.lang.Nullable;
@@ -43,7 +42,7 @@ import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.Builder;
 import lombok.Data;
@@ -100,7 +99,8 @@ public class JaxbUtils {
 
         private boolean shouldMissingXmlRootElementBeHandledOn(final Class<?> mappedType) {
             return isAllowMissingRootElement()
-                    && !_Annotations.isPresent(mappedType, XmlRootElement.class); //TODO ask _ClassCache
+                    // looking for presence of XmlRootElement annotation
+                    && !_ClassCache.getInstance().hasJaxbRootElementSemantics(mappedType);
         }
         @SneakyThrows
         private JAXBContext jaxbContext(final Class<?> mappedType) {
