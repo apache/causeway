@@ -18,18 +18,16 @@
  */
 package org.apache.causeway.applib.services.jaxb;
 
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.applib.domain.DomainObjectList;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.io.JaxbUtils;
 
@@ -49,32 +47,6 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 public interface JaxbService {
-
-    /**
-     * unmarshalls the XML into an instance of the class, using
-     * the provided {@link JAXBContext}.
-     *
-     * @param jaxbContext  - configured for the expected target class
-     * @param xml
-     */
-    default Object fromXml(
-            final JAXBContext jaxbContext,
-            final String xml) {
-        return fromXml(jaxbContext, xml, null);
-    }
-
-    /**
-     * unmarshalls the XML into an instance of the class, using the
-     * provided {@link JAXBContext} and the additional properties.
-     *
-     * @param jaxbContext - configured for the expected target class
-     * @param xml
-     * @param unmarshallerProperties
-     */
-    Object fromXml(
-            JAXBContext jaxbContext,
-            String xml,
-            @Nullable Map<String,Object> unmarshallerProperties);
 
     /**
      * Unmarshalls the XML to the specified domain class.
@@ -129,21 +101,8 @@ public interface JaxbService {
             CausewaySchemas causewaySchemas);
 
 
+    // no injection point resolving
     class Simple implements JaxbService {
-
-        @Override
-        @SneakyThrows
-        @Nullable
-        public final Object fromXml(
-                final @NonNull JAXBContext jaxbContext,
-                final @Nullable String xml,
-                final @Nullable Map<String, Object> unmarshallerProperties) {
-            try {
-                return internalFromXml(jaxbContext, xml, unmarshallerProperties);
-            } catch (Exception e) {
-                throw JaxbUtils.verboseException("unmarshalling XML", null, e);
-            }
-        }
 
         @Override
         @SneakyThrows
@@ -153,12 +112,21 @@ public interface JaxbService {
                 final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) {
 
-            try {
-                val jaxbContext = jaxbContextForClass(domainClass);
-                return _Casts.uncheckedCast(internalFromXml(jaxbContext, xml, unmarshallerProperties));
-            } catch (Exception e) {
-                throw JaxbUtils.verboseException("unmarshalling XML", domainClass, e);
+            if (xml == null) {
+                return null;
             }
+
+            return JaxbUtils.tryRead(domainClass, xml, opts->{
+                for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
+                    opts.property(entry.getKey(), entry.getValue());
+                }
+                opts.unmarshallerConfigurer(this::configure);
+                return opts;
+            })
+            .mapFailure(cause->JaxbUtils.verboseException("unmarshalling XML", domainClass, cause))
+            .ifFailureFail()
+            .getValue().orElse(null);
+
         }
 
         @Override
@@ -167,43 +135,31 @@ public interface JaxbService {
                 final @NonNull Object domainObject,
                 final @Nullable Map<String, Object> marshallerProperties) {
 
-            val domainClass = domainObject.getClass();
-            val jaxbContext = jaxbContextForObject(domainObject);
-            try {
-                val marshaller = jaxbContext.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            val jaxbContext = Try.call(()->domainObject instanceof DomainObjectList
+                    ? jaxbContextForList((DomainObjectList)domainObject)
+                    : JaxbUtils.jaxbContextFor(domainObject.getClass(), true))
+                .mapFailure(cause->JaxbUtils.verboseException("creating JAXB context for domain object", domainObject.getClass(), cause))
+                .ifFailureFail()
+                .getValue().orElseThrow();
 
+            return Try.call(()->JaxbUtils.toStringUtf8(domainObject, opts->{
                 for (val entry : _NullSafe.entrySet(marshallerProperties)) {
-                    marshaller.setProperty(entry.getKey(), entry.getValue());
+                    opts.property(entry.getKey(), entry.getValue());
                 }
-
-                configure(marshaller);
-
-                val writer = new StringWriter();
-                marshaller.marshal(domainObject, writer);
-                val xml = writer.toString();
-
-                return xml;
-
-            } catch (Exception e) {
-                throw JaxbUtils.verboseException("marshalling domain object to XML", domainClass, e);
-            }
+                opts.marshallerConfigurer(this::configure);
+                opts.jaxbContextOverride(jaxbContext);
+                return opts;
+            }))
+            .mapFailure(cause->JaxbUtils.verboseException("marshalling domain object to XML", domainObject.getClass(), cause))
+            .ifFailureFail()
+            .getValue().orElse(null);
         }
 
         /**
          * Optional hook
          */
-        protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
-            val useCache = true;
-            return JaxbUtils.jaxbContextFor(domainObject.getClass(), useCache);
-        }
-
-        /**
-         * Optional hook
-         */
-        protected JAXBContext jaxbContextForClass(final @NonNull Class<?> domainObjectClass) {
-            val useCache = true;
-            return JaxbUtils.jaxbContextFor(domainObjectClass, useCache);
+        protected JAXBContext jaxbContextForList(final @NonNull DomainObjectList list) {
+            return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
         }
 
         /**
@@ -218,27 +174,6 @@ public interface JaxbService {
         protected void configure(final Marshaller marshaller) {
         }
 
-        @Nullable
-        protected Object internalFromXml(
-                final @NonNull JAXBContext jaxbContext,
-                final @Nullable String xml,
-                final @Nullable Map<String, Object> unmarshallerProperties) throws JAXBException {
-
-            if (xml == null) {
-                return null;
-            }
-
-            val unmarshaller = jaxbContext.createUnmarshaller();
-
-            for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
-                unmarshaller.setProperty(entry.getKey(), entry.getValue());
-            }
-
-            configure(unmarshaller);
-
-            val pojo = unmarshaller.unmarshal(new StringReader(xml));
-            return pojo;
-        }
 
         @Override
         @SneakyThrows
@@ -246,7 +181,7 @@ public interface JaxbService {
                 final @NonNull Object domainObject,
                 final @NonNull CausewaySchemas causewaySchemas) {
 
-            val jaxbContext = jaxbContextForObject(domainObject);
+            val jaxbContext = JaxbUtils.jaxbContextFor(domainObject.getClass(), true);
 
             val outputResolver = new CatalogingSchemaOutputResolver(causewaySchemas);
             jaxbContext.generateSchema(outputResolver);
