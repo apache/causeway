@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -82,6 +83,14 @@ public final class _ClassCache implements AutoCloseable {
         inspectType(type);
     }
 
+    // -- TYPE SPECIFIC SEMANTICS
+
+    public boolean hasJaxbRootElementSemantics(final Class<?> type) {
+        return inspectType(type).hasJaxbRootElementSemantics;
+    }
+
+    // -- CONSTRUCTOR SEMANTICS
+
     public <T> Stream<Constructor<T>> streamPublicConstructors(final Class<T> type) {
         return _Casts.uncheckedCast(inspectType(type).publicConstructorsByKey.values().stream());
     }
@@ -94,9 +103,13 @@ public final class _ClassCache implements AutoCloseable {
         return Optional.ofNullable(lookupConstructor(false, type, paramTypes));
     }
 
+    // -- POST CONSTRUCT SEMANTICS
+
     public Stream<Method> streamPostConstructMethods(final Class<?> type) {
         return inspectType(type).postConstructMethodsByKey.values().stream();
     }
+
+    // -- METHOD SEMANTICS
 
     /**
      * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up
@@ -129,6 +142,8 @@ public final class _ClassCache implements AutoCloseable {
     public Stream<Method> streamDeclaredMethods(final Class<?> type) {
         return inspectType(type).declaredMethods.stream();
     }
+
+    // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
         return inspectType(type).declaredFields.stream();
@@ -184,6 +199,7 @@ public final class _ClassCache implements AutoCloseable {
         private final Map<MethodKey, Method> postConstructMethodsByKey = new HashMap<>();
         private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
         private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
+        private final boolean hasJaxbRootElementSemantics;
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
@@ -230,7 +246,8 @@ public final class _ClassCache implements AutoCloseable {
 
                 val model = new ClassModel(
                         Can.ofArray(declaredFields),
-                        declaredMethods);
+                        declaredMethods,
+                        _Annotations.isPresent(type, XmlRootElement.class));
 
                 for(val constr : publicConstr) {
                     val key = ConstructorKey.of(type, constr);
@@ -361,5 +378,7 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
+
+
 
 }

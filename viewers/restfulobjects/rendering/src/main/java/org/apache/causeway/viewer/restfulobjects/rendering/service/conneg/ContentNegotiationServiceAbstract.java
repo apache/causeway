@@ -23,11 +23,11 @@ import java.util.Objects;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
@@ -103,7 +103,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     protected void ensureJaxbAnnotated(final Class<?> domainType) {
-        if(domainType.getAnnotation(XmlRootElement.class) == null) {
+        if(!_ClassCache.getInstance().hasJaxbRootElementSemantics(domainType)) {
             throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Requested domain Type '" + domainType.getName() + "' is not annotated with JAXB @XmlRootElement annotation");
         }
     }

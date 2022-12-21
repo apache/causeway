@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.util.Optional;
 
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
@@ -39,12 +37,12 @@ public class ViewModelFacetForXmlRootElementAnnotation
 extends ViewModelFacetAbstract {
 
     public static Optional<ViewModelFacet> create(
-            final Optional<XmlRootElement> xmlRootElementIfAny,
+            final boolean hasRootElementAnnotation,
             final FacetHolder facetHolder) {
 
-        return xmlRootElementIfAny.map(xmlRootElement->
-            new ViewModelFacetForXmlRootElementAnnotation(
-                    facetHolder));
+        return hasRootElementAnnotation
+                ? Optional.of(new ViewModelFacetForXmlRootElementAnnotation(facetHolder))
+                : Optional.empty();
     }
 
     private ViewModelFacetForXmlRootElementAnnotation(

@@ -33,7 +33,6 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.lang.Nullable;
 
@@ -43,7 +42,8 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.functions._Functions;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.Builder;
 import lombok.Data;
@@ -78,6 +78,7 @@ public class JaxbUtils {
         //setDefaultJAXBContextFactory(org.eclipse.persistence.jaxb.JAXBContextFactory.class, true);
     }
 
+    /** clears the system property override */
     public static void usePlatformDefault() {
         setDefaultJAXBContextFactory(null, true);
     }
@@ -88,6 +89,9 @@ public class JaxbUtils {
         private final @Builder.Default boolean allowMissingRootElement = false;
         private final @Builder.Default boolean formattedOutput = false;
         private final @Singular Map<String, Object> properties;
+        private final @Builder.Default @NonNull Consumer<Marshaller> marshallerConfigurer = _Functions.noopConsumer();
+        private final @Builder.Default @NonNull Consumer<Unmarshaller> unmarshallerConfigurer = _Functions.noopConsumer();
+        private final @Nullable JAXBContext jaxbContextOverride;
         public static JaxbOptions defaults() {
             return JaxbOptions.builder().build();
         }
@@ -96,11 +100,14 @@ public class JaxbUtils {
 
         private boolean shouldMissingXmlRootElementBeHandledOn(final Class<?> mappedType) {
             return isAllowMissingRootElement()
-                    && !_Annotations.isPresent(mappedType, XmlRootElement.class); //TODO ask _ClassCache
+                    // looking for presence of XmlRootElement annotation
+                    && !_ClassCache.getInstance().hasJaxbRootElementSemantics(mappedType);
         }
         @SneakyThrows
         private JAXBContext jaxbContext(final Class<?> mappedType) {
-            return jaxbContextFor(mappedType, useContextCache);
+            return jaxbContextOverride!=null
+                    ? jaxbContextOverride
+                    : jaxbContextFor(mappedType, useContextCache);
         }
         @SneakyThrows
         private Marshaller marshaller(final JAXBContext jaxbContext, final Class<?> mappedType) {
@@ -127,15 +134,21 @@ public class JaxbUtils {
         }
         @SneakyThrows
         private <T> T unmarshal(final Unmarshaller unmarshaller, final Class<T> mappedType, final InputStream is) {
-            if(shouldMissingXmlRootElementBeHandledOn(mappedType)) {
-                val xsr = _DocumentFactories.xmlInputFactory().createXMLStreamReader(is);
-                final JAXBElement<T> userElement = unmarshaller.unmarshal(xsr, mappedType);
-                return userElement.getValue();
-            }
-            return _Casts.uncheckedCast(unmarshaller.unmarshal(is));
+            unmarshallerConfigurer.accept(unmarshaller);
+            return shouldMissingXmlRootElementBeHandledOn(mappedType)
+                    ? unmarshalTypesafe(unmarshaller, mappedType, is)
+                    : _Casts.castTo(mappedType, unmarshaller.unmarshal(is))
+                        .orElseGet(()->unmarshalTypesafe(unmarshaller, mappedType, is));
+        }
+        @SneakyThrows
+        private <T> T unmarshalTypesafe(final Unmarshaller unmarshaller, final Class<T> mappedType, final InputStream is) {
+            val xsr = _DocumentFactories.xmlInputFactory().createXMLStreamReader(is);
+            final JAXBElement<T> userElement = unmarshaller.unmarshal(xsr, mappedType);
+            return userElement.getValue();
         }
         @SneakyThrows
         private <T> void marshal(final Marshaller marshaller, final T pojo, final OutputStream os) {
+            marshallerConfigurer.accept(marshaller);
             @SuppressWarnings("unchecked")
             val mappedType = (Class<T>)pojo.getClass();
             if(shouldMissingXmlRootElementBeHandledOn(mappedType)) {
@@ -273,7 +286,7 @@ public class JaxbUtils {
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
 
-    public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass, final boolean useCache)  {
+    public static JAXBContext jaxbContextFor(final Class<?> dtoClass, final boolean useCache)  {
         return useCache
                 ? jaxbContextByClass.computeIfAbsent(dtoClass, JaxbUtils::contextOf)
                 : contextOf(dtoClass);
@@ -290,21 +303,21 @@ public class JaxbUtils {
 
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
 
-    public static Exception verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Exception e) {
+    public static Exception verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Throwable cause) {
 
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
 
-        if(isIllegalAnnotationsException(e)) {
+        if(isIllegalAnnotationsException(cause)) {
             // report a better error if possible
             // this is done reflectively because on JDK 8 this exception type is only provided by Oracle JDK
             try {
 
                 val errors = _Casts.<List<? extends Exception>>uncheckedCast(
-                        e.getClass().getMethod("getErrors").invoke(e));
+                        cause.getClass().getMethod("getErrors").invoke(cause));
 
                 if(_NullSafe.size(errors)>0) {
 
-                    return _Exceptions.unrecoverable(e,
+                    return _Exceptions.unrecoverable(cause,
                             "Error %s, "
                             + "due to illegal annotations on object class '%s'; "
                             + "%d error(s) reported: %s",
@@ -321,13 +334,13 @@ public class JaxbUtils {
             }
         }
 
-        return _Exceptions.unrecoverable(e,
+        return _Exceptions.unrecoverable(cause,
                 "Error %s; object class is '%s'", doingWhat, dtoClassName);
     }
 
-    private static boolean isIllegalAnnotationsException(final Exception e) {
+    private static boolean isIllegalAnnotationsException(final Throwable cause) {
         /*sonar-ignore-on*/
-        return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName());
+        return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(cause.getClass().getName());
         /*sonar-ignore-off*/
     }
 

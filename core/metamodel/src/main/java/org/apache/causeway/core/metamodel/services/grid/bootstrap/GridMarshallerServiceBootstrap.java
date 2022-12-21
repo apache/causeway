@@ -24,7 +24,6 @@ import java.util.Objects;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,15 +35,13 @@ import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 /**
@@ -54,13 +51,19 @@ import lombok.experimental.Accessors;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class GridMarshallerServiceBootstrap
 implements GridMarshallerService<BSGrid> {
 
     private final JaxbService jaxbService;
-//    private final ServiceRegistry serviceRegistry;
+
+    @Inject
+    public GridMarshallerServiceBootstrap(final JaxbService jaxbService) {
+        super();
+        this.jaxbService = jaxbService;
+        // eagerly create a JAXBContext for this grid type (and cache it)
+        JaxbUtils.jaxbContextFor(BSGrid.class, true);
+    }
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
     private final EnumSet<CommonMimeType> supportedFormats =
@@ -92,7 +95,7 @@ implements GridMarshallerService<BSGrid> {
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
-            return Try.call(()->(BSGrid)jaxbService.fromXml(jaxbContext.get(), content));
+            return Try.call(()->jaxbService.fromXml(BSGrid.class, content));
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
@@ -105,21 +108,6 @@ implements GridMarshallerService<BSGrid> {
         if(!supportedFormats().contains(format)) {
             throw _Exceptions.unsupportedOperation("object layout file format %s not supported", format.name());
         }
-    }
-
-    /** registers all discovered grid types */
-    private final _Lazy<JAXBContext> jaxbContext = _Lazy.threadSafe(this::createJaxbContext);
-    @SneakyThrows
-    private JAXBContext createJaxbContext() {
-//        final Class<?>[] supportedGridTypes =
-//                serviceRegistry.select(GridSystemService.class)
-//                .stream()
-//                .map(GridSystemService::gridImplementation)
-//                .collect(Can.toCan())
-//                .distinct()
-//                .stream()
-//                .collect(_Arrays.toArray(Class.class));
-        return JAXBContext.newInstance(BSGrid.class);
     }
 
 }

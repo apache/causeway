@@ -18,13 +18,10 @@
  */
 package org.apache.causeway.core.runtimeservices.jaxb;
 
-import java.util.Map;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -59,45 +56,23 @@ public class JaxbServiceDefault extends Simple {
     private final ServiceInjector serviceInjector;
     private final SpecificationLoader specLoader;
 
-    @Override @SneakyThrows
-    protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
-        if(domainObject instanceof DomainObjectList) {
-            val domainClass = domainObject.getClass();
-            val domainObjectList = (DomainObjectList) domainObject;
-            try {
-                val elementType = specLoader
-                        .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
-                        .map(ObjectSpecification::getCorrespondingClass)
-                        .orElse(null);
-                if (elementType!=null
-                        && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
-
-                    return JAXBContext.newInstance(domainClass, elementType);
-                } else {
-                    return JAXBContext.newInstance(domainClass);
-                }
-            } catch (Exception e) {
-                throw JaxbUtils.verboseException("obtaining JAXBContext for a DomainObjectList", domainClass, e);
-            }
-        }
-        return super.jaxbContextForObject(domainObject);
-    }
-
+    @SneakyThrows
     @Override
-    protected Object internalFromXml(
-            final @NonNull JAXBContext jaxbContext,
-            final String xml,
-            final Map<String, Object> unmarshallerProperties) throws JAXBException {
-
-        val pojo = super.internalFromXml(jaxbContext, xml, unmarshallerProperties);
-        if(pojo instanceof DomainObjectList) {
-
-            // go around the loop again, so can properly deserialize the contents
-            val domainObjectList = (DomainObjectList) pojo;
-            val jaxbContextForList = jaxbContextForObject(domainObjectList);
-            return super.internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
+    protected JAXBContext jaxbContextForList(@NonNull final DomainObjectList domainObjectList) {
+        try {
+            val elementType = specLoader
+                    .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
+                    .map(ObjectSpecification::getCorrespondingClass)
+                    .orElse(null);
+            if (elementType!=null
+                    && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
+                return JAXBContext.newInstance(DomainObjectList.class, elementType);
+            } else {
+                return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
+            }
+        } catch (Exception e) {
+            throw JaxbUtils.verboseException("obtaining JAXBContext for a DomainObjectList", DomainObjectList.class, e);
         }
-        return pojo;
     }
 
     @Override

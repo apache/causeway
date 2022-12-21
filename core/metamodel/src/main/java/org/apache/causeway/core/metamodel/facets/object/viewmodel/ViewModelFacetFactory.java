@@ -19,8 +19,8 @@
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import jakarta.inject.Inject;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -56,11 +56,11 @@ implements
         val type = processClassContext.getCls();
 
         // XmlRootElement annotation (with default precedence)
-        val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
+        val hasXmlRootElementAnnotation = _ClassCache.getInstance().hasJaxbRootElementSemantics(type);
         FacetUtil
         .addFacetIfPresent(
                 ViewModelFacetForXmlRootElementAnnotation
-                .create(xmlRootElementIfAny, facetHolder));
+                .create(hasXmlRootElementAnnotation, facetHolder));
 
         // (with high precedence)
         FacetUtil

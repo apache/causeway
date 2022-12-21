@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
 import jakarta.persistence.Entity;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -35,6 +34,7 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
@@ -160,8 +160,7 @@ implements CausewayBeanTypeClassifier {
             }
         }
 
-        val jaxbAnnotation = _Annotations.synthesize(type, XmlRootElement.class).orElse(null);
-        if(jaxbAnnotation!=null) {
+        if(_ClassCache.getInstance().hasJaxbRootElementSemantics(type)) {
             return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, type);
         }
 
