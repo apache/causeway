@@ -77,5 +77,6 @@ module org.apache.causeway.commons {
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;
+    opens org.apache.causeway.commons.io to jakarta.xml.bind;
 
 }

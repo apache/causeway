@@ -59,19 +59,15 @@ public class JaxbServiceDefault extends Simple {
     @SneakyThrows
     @Override
     protected JAXBContext jaxbContextForList(@NonNull final DomainObjectList domainObjectList) {
-        try {
-            val elementType = specLoader
-                    .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
-                    .map(ObjectSpecification::getCorrespondingClass)
-                    .orElse(null);
-            if (elementType!=null
-                    && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
-                return JAXBContext.newInstance(DomainObjectList.class, elementType);
-            } else {
-                return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
-            }
-        } catch (Exception e) {
-            throw JaxbUtils.verboseException("obtaining JAXBContext for a DomainObjectList", DomainObjectList.class, e);
+        val elementType = specLoader
+                .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
+                .map(ObjectSpecification::getCorrespondingClass)
+                .orElse(null);
+        if (elementType!=null
+                && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
+            return JaxbUtils.jaxbContextFor(DomainObjectList.class, elementType);
+        } else {
+            return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
         }
     }
 
