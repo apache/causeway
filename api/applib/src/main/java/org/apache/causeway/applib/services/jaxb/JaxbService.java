@@ -105,7 +105,6 @@ public interface JaxbService {
     class Simple implements JaxbService {
 
         @Override
-        @SneakyThrows
         @Nullable
         public final <T> T fromXml(
                 final @NonNull Class<T> domainClass,
@@ -115,7 +114,6 @@ public interface JaxbService {
             if (xml == null) {
                 return null;
             }
-
             return JaxbUtils.tryRead(domainClass, xml, opts->{
                 for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
                     opts.property(entry.getKey(), entry.getValue());
@@ -123,24 +121,18 @@ public interface JaxbService {
                 opts.unmarshallerConfigurer(this::configure);
                 return opts;
             })
-            .mapFailure(cause->JaxbUtils.verboseException("unmarshalling XML", domainClass, cause))
             .ifFailureFail()
             .getValue().orElse(null);
-
         }
 
         @Override
-        @SneakyThrows
         public final String toXml(
                 final @NonNull Object domainObject,
                 final @Nullable Map<String, Object> marshallerProperties) {
 
-            val jaxbContext = Try.call(()->domainObject instanceof DomainObjectList
+            val jaxbContext = domainObject instanceof DomainObjectList
                     ? jaxbContextForList((DomainObjectList)domainObject)
-                    : JaxbUtils.jaxbContextFor(domainObject.getClass(), true))
-                .mapFailure(cause->JaxbUtils.verboseException("creating JAXB context for domain object", domainObject.getClass(), cause))
-                .ifFailureFail()
-                .getValue().orElseThrow();
+                    : JaxbUtils.jaxbContextFor(domainObject.getClass(), true);
 
             return Try.call(()->JaxbUtils.toStringUtf8(domainObject, opts->{
                 for (val entry : _NullSafe.entrySet(marshallerProperties)) {
@@ -150,7 +142,6 @@ public interface JaxbService {
                 opts.jaxbContextOverride(jaxbContext);
                 return opts;
             }))
-            .mapFailure(cause->JaxbUtils.verboseException("marshalling domain object to XML", domainObject.getClass(), cause))
             .ifFailureFail()
             .getValue().orElse(null);
         }

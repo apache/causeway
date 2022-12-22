@@ -39,6 +39,8 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
@@ -230,7 +232,8 @@ public class JaxbUtils {
             final JaxbUtils.JaxbCustomizer ... customizers) {
         return source.readAll((final InputStream is)->{
             val opts = createOptions(customizers);
-            return Try.call(()->opts.unmarshal(mappedType, is));
+            return Try.call(()->opts.unmarshal(mappedType, is))
+                    .mapFailure(cause->verboseException("unmarshalling XML", mappedType, cause));
         });
     }
 
@@ -245,26 +248,25 @@ public class JaxbUtils {
             final JaxbUtils.JaxbCustomizer ... customizers) {
         if(pojo==null) return;
         val opts = createOptions(customizers);
-        sink.writeAll(os->Try.run(()->opts.marshal(pojo, os)));
+        try {
+            sink.writeAll(os->Try.run(()->opts.marshal(pojo, os)));
+        } catch (Exception cause) {
+            throw verboseException("marshalling domain object to XML", pojo.getClass(), cause);
+        }
     }
 
     /**
      * Converts given {@code pojo} to an UTF8 encoded {@link String}.
      * @return <code>null</code> if pojo is <code>null</code>
      */
-    @SneakyThrows
     @Nullable
     public <T> String toStringUtf8(
             final @Nullable T pojo,
             final JaxbUtils.JaxbCustomizer ... customizers) {
         if(pojo==null) return null;
-        class StringHolder implements Consumer<String> {
-            String s;
-            @Override public void accept(String s) { this.s = s; }
-        }
-        val sh = new StringHolder();
-        write(pojo, DataSink.ofStringUtf8Consumer(sh), customizers);
-        return sh.s;
+        val sh = _Lists.<String>newArrayList(1);
+        write(pojo, DataSink.ofStringUtf8Consumer(sh::add), customizers);
+        return sh.stream().findFirst().orElse(null);
     }
 
     // -- CUSTOMIZERS
@@ -281,7 +283,12 @@ public class JaxbUtils {
         return opts.build();
     }
 
-    // -- JAXB CONTEXT CACHE
+    // -- JAXB CONTEXT FACTORIES AND CACHING
+
+    /** not cached */
+    public static JAXBContext jaxbContextFor(final @NonNull Class<?> primaryClass, final Class<?> ... additionalClassesToBeBound) {
+        return contextOf(_Arrays.combine(primaryClass, additionalClassesToBeBound));
+    }
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = _Maps.newConcurrentHashMap();
 
@@ -292,17 +299,20 @@ public class JaxbUtils {
     }
 
     @SneakyThrows
-    private static <T> JAXBContext contextOf(final Class<T> dtoClass) {
+    private static <T> JAXBContext contextOf(final Class<?> ... classesToBeBound) {
         try {
-            return JAXBContext.newInstance(dtoClass);
+            return JAXBContext.newInstance(classesToBeBound);
         } catch (Exception e) {
-            throw verboseException("obtaining JAXBContext for class", dtoClass, e);
+            val msg = String.format("obtaining JAXBContext for classes (to be bound) {%s}", _NullSafe.stream(classesToBeBound)
+                    .map(Class::getName)
+                    .collect(Collectors.joining(", ")));
+            throw verboseException(msg, classesToBeBound[0], e); // assuming we have at least one argument
         }
     }
 
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
 
-    public static Exception verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Throwable cause) {
+    private static RuntimeException verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Throwable cause) {
 
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
 
@@ -342,6 +352,8 @@ public class JaxbUtils {
         return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(cause.getClass().getName());
         /*sonar-ignore-off*/
     }
+
+
 
 
 }
