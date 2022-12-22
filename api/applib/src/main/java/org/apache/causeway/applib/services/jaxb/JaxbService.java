@@ -101,7 +101,7 @@ public interface JaxbService {
             CausewaySchemas causewaySchemas);
 
 
-    // no injection point resolving
+    /** 'Simple' because no injection point resolving or advanced {@link DomainObjectList} handling. */
     class Simple implements JaxbService {
 
         @Override

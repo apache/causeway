@@ -78,5 +78,6 @@ module org.apache.causeway.commons {
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to java.xml.bind;
+    opens org.apache.causeway.commons.io to java.xml.bind;
 
 }
