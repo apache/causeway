@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.io;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -39,7 +40,7 @@ class JaxbUtilsTest {
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
     @EqualsAndHashCode
-    public static class A {
+    static class A {
 
         @XmlElement(required = false)
         @Getter @Setter private B nested;
@@ -49,14 +50,19 @@ class JaxbUtilsTest {
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
     @EqualsAndHashCode
-    public static class B {
+    static class B {
 
         @XmlElement(required = false)
         @Getter @Setter private String string;
     }
 
-    /** Works for arbitrary {@link XmlRootElement#name()} combinations,
-     * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}. */
+    /**
+     * Works for arbitrary {@link XmlRootElement#name()} combinations,
+     * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
+     * <p>
+     * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
+     * We are testing whether type-safe recovery especially for type {@link A} works as desired.
+     */
     @Test
     void typesafeUnmarshallingFromAmbiguousContext() {
 
@@ -66,13 +72,14 @@ class JaxbUtilsTest {
         val a = new A();
         a.setNested(b);
 
-        // when
+        // when ... doing a round trip
         val aXml = JaxbUtils.toStringUtf8(a);
         val bXml = JaxbUtils.toStringUtf8(b);
 
         val aRecovered = JaxbUtils.tryRead(A.class, aXml).ifFailureFail().ifAbsentFail().getValue().get();
         val bRecovered = JaxbUtils.tryRead(B.class, bXml).ifFailureFail().ifAbsentFail().getValue().get();
 
+        // then
         assertEquals(a, aRecovered);
         assertEquals(b, bRecovered);
 
