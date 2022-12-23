@@ -79,7 +79,7 @@ public class DomainObjectLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-signature",
-        describedAs = "Custom text for the domain object's type wherever labelled")
+        describedAs = "Custom text for the domain object's type wherever labeled")
     public DomainObjectLayoutNamedVm named(){
         return factoryService.viewModel(new DomainObjectLayoutNamedVm());
     }

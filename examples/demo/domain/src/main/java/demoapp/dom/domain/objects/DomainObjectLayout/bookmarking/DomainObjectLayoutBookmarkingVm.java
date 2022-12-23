@@ -25,7 +25,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -42,17 +44,20 @@ import lombok.Setter;
 @Named("demo.DomainObjectLayoutBookmarkingVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(
+        bookmarking = BookmarkPolicy.AS_ROOT    // <.>
+        )
 public class DomainObjectLayoutBookmarkingVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "DomainObjectLayout#bookmarking";
     }
 
-    //TODO
+    //TODO[ISIS-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
-    private String dummy;
+    private DomainObjectLayoutBookmarkingNestedVm nestedObjectLevel1 = new DomainObjectLayoutBookmarkingNestedVm();
 
 }
 //end::class[]

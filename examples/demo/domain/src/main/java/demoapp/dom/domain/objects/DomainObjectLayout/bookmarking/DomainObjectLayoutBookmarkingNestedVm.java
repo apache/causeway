@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent;
+package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,7 +25,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -36,23 +38,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 //tag::class[]
-@XmlRootElement(name = "root")
+@XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutXxxUiEventVm")
+@Named("demo.DomainObjectLayoutBookmarkingVmNested")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
-public class DomainObjectLayoutXxxUiEventVm implements HasAsciiDocDescription {
+@DomainObjectLayout(
+        bookmarking = BookmarkPolicy.AS_CHILD    // <.>
+        )
+public class DomainObjectLayoutBookmarkingNestedVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#xxxUiEvent";
+        return "DomainObjectLayoutBookmarkingVmNested";
     }
 
     //TODO[ISIS-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
-    private String dummy;
+    private BookmarkPolicy dummy;
 
 }
 //end::class[]

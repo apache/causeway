@@ -48,7 +48,7 @@ public class DomainObjectLayoutPluralVm implements HasAsciiDocDescription {
         return "DomainObjectLayout#plural";
     }
 
-    //TODO
+    //TODO[ISIS-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
