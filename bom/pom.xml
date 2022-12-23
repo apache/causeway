@@ -1652,7 +1652,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ftp</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.3</version>
             </extension>
         </extensions>
     </build>
