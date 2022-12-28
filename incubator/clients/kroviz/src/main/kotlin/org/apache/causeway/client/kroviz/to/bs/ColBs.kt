@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-class Col(node: Node) : XmlLayout() {
-    val rowList = mutableListOf<Row>()
-    var domainObject: DomainObject? = null
-    var actionList = mutableListOf<Action>()
-    val tabGroupList = mutableListOf<TabGroup>()
-    var fieldSetList = mutableListOf<FieldSet>()
-    var collectionList = mutableListOf<Collection>()
+class ColBs(node: Node) : XmlLayout() {
+    val rowList = mutableListOf<RowBs>()
+    var domainObject: DomainObjectBs? = null
+    var actionList = mutableListOf<ActionBs>()
+    val tabGroupList = mutableListOf<TabGroupBs>()
+    var fieldSetList = mutableListOf<FieldSetBs>()
+    var collectionList = mutableListOf<CollectionBs>()
     var span: Int = 0
 
     init {
@@ -38,42 +38,42 @@ class Col(node: Node) : XmlLayout() {
 
         val rl = nl.filter { it.nodeName == "$nsBs:row" }
         for (n: Node in rl) {
-            val row = Row(n)
+            val row = RowBs(n)
             rowList.add(row)
         }
 
         val doNodes = nl.filter { it.nodeName == "$nsCpt:domainObject" }
         if (doNodes.isNotEmpty()) {
-            domainObject = DomainObject(doNodes.first())
+            domainObject = DomainObjectBs(doNodes.first())
         }
 
         val actNodes = nl.filter { it.nodeName == "$nsCpt:action" }
         for (n: Node in actNodes) {
-            val act = Action(n)
+            val act = ActionBs(n)
             actionList.add(act)
         }
 
         val tgNodes = nl.filter { it.nodeName == "$nsBs:tabGroup" }
         for (n: Node in tgNodes) {
-            val tg = TabGroup(n)
+            val tg = TabGroupBs(n)
             tabGroupList.add(tg)
         }
 
         val fsNodes = nl.filter { it.nodeName == "$nsCpt:fieldSet" }
         for (n: Node in fsNodes) {
-            val fs = FieldSet(n)
+            val fs = FieldSetBs(n)
             fieldSetList.add(fs)
         }
 
         val collNodes = nl.filter { it.nodeName == "$nsCpt:collection" }
         for (n: Node in collNodes) {
-            val c = Collection(n)
+            val c = CollectionBs(n)
             collectionList.add(c)
         }
     }
 
-    fun getPropertyList(): List<Property> {
-        val list = mutableListOf<Property>()
+    fun getPropertyList(): List<PropertyBs> {
+        val list = mutableListOf<PropertyBs>()
         rowList.forEach { r ->
             list.addAll(r.getPropertyList())
         }

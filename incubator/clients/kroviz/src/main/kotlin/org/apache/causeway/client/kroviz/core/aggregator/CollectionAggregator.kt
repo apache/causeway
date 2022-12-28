@@ -23,9 +23,10 @@ import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
+import org.apache.causeway.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -54,7 +55,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 is TObject -> handleObject(obj, referrer)
                 is DomainType -> handleDomainType(obj, referrer)
                 is Layout -> handleLayout(obj, dpm as CollectionDM, referrer)
-                is Grid -> handleGrid(obj, dpm as CollectionDM, referrer)
+                is GridBs -> handleGrid(obj, dpm as DisplayModelWithLayout, referrer)
                 is Property -> handleProperty(obj, referrer)
                 is Collection -> handleCollection(obj, referrer)
                 is Icon -> handleIcon(obj)
@@ -107,15 +108,12 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleProperty(p: Property, referrer: String) {
-        console.log("[CA.handleProperty]")
         val dm = dpm as CollectionDM
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            val pdl = p.getDescriptionLink()
-            console.log(pdl)
-            if (pdl == null) return
+            val pdl = p.getDescriptionLink() ?: return
             invoke(pdl, this, referrer = referrer)
         }
     }

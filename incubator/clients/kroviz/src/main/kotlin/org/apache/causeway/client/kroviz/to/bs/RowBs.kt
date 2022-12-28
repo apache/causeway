@@ -16,30 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.apache.causeway.client.kroviz.utils.XmlHelper
 import org.w3c.dom.Node
 
-class DomainObject(node: Node) {
-    var named = ""
-    var plural = ""
-    lateinit var describedAs: String
-    lateinit var metadataError: String
-    lateinit var link:org.apache.causeway.client.kroviz.to.Link
-    lateinit var cssClass: String
-    lateinit var cssClassFa: String
+class RowBs(node: Node) : XmlLayout() {
+    val colList = mutableListOf<ColBs>()
+    var id: String = ""
 
     init {
-        val nn = XmlHelper.firstChildMatching(node, "named")
-        if (nn?.textContent != null) {
-            named = nn.textContent!!.trim()
+        val dyNode = node.asDynamic()
+        if (dyNode.hasOwnProperty("id") as Boolean) {
+            id = dyNode.getAttribute("id") as String
         }
 
-        val pn = XmlHelper.firstChildMatching(node, "plural")
-        if (pn?.textContent != null) {
-            plural = pn.textContent!!.trim()
+        val nodeList = XmlHelper.nonTextChildren(node)
+        val cl = nodeList.filter { it.nodeName == "$nsBs:col" }
+        for (n: Node in cl) {
+            val col = ColBs(n)
+            colList.add(col)
         }
+    }
+
+    fun getPropertyList(): List<PropertyBs> {
+        val list = mutableListOf<PropertyBs>()
+        colList.forEach { c ->
+            list.addAll(c.getPropertyList())
+        }
+        return list
     }
 
 }

@@ -67,10 +67,10 @@ class CollectionAggregatorTest : IntegrationTest() {
 
             // then
             val dl = obs.dpm as CollectionDM
-            val propertyLabels = dl.properties.propertyDescriptionList
+            val propertyLabels = dl.collectionProperties.propertyDescriptionList
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
-            val lbl = dl.properties.find(property.id)!!.friendlyName
+            val lbl = dl.collectionProperties.find(property.id)!!.friendlyName
             val expected = "ResultListResult class"
             assertEquals(expected, lbl)  // 6
         }

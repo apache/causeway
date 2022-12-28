@@ -16,32 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
+import org.apache.causeway.client.kroviz.utils.XmlHelper
 import org.w3c.dom.Node
-import org.w3c.dom.asList
 
-class TabGroup(node: Node) : XmlLayout() {
-    var tabList = mutableListOf<Tab>()
+class DomainObjectBs(node: Node) {
+    var named = ""
+    var plural = ""
+    lateinit var describedAs: String
     lateinit var metadataError: String
+    lateinit var link:org.apache.causeway.client.kroviz.to.Link
     lateinit var cssClass: String
+    lateinit var cssClassFa: String
 
     init {
-        val nodeList = node.childNodes.asList()
-
-        val tnList = nodeList.filter { it.nodeName == "$nsBs:tab" }
-        for (n: Node in tnList) {
-            val tab = Tab(n)
-            tabList.add(tab)
+        val nn = XmlHelper.firstChildMatching(node, "named")
+        if (nn?.textContent != null) {
+            named = nn.textContent!!.trim()
         }
-    }
 
-    fun getPropertyList(): List<Property> {
-        val list = mutableListOf<Property>()
-        tabList.forEach { t ->
-            list.addAll(t.getPropertyList())
+        val pn = XmlHelper.firstChildMatching(node, "plural")
+        if (pn?.textContent != null) {
+            plural = pn.textContent!!.trim()
         }
-        return list
     }
 
 }

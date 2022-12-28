@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-class Action(node: Node) : XmlLayout() {
+class ActionBs(node: Node) : XmlLayout() {
     var bookmarking: String //BookmarkPolicy? = null use ENUM
     var cssClass: String
     var cssClassFa: String
@@ -31,7 +31,7 @@ class Action(node: Node) : XmlLayout() {
     var position: String //USE ENUM Position? = null
     var named = ""
     var describedAs = ""
-    var linkList = mutableListOf<Link>()
+    var linkList = mutableListOf<LinkBs>()
 
     init {
         val dyNode = node.asDynamic()
@@ -58,7 +58,7 @@ class Action(node: Node) : XmlLayout() {
         }
         val lList = nodeList.filter { it.nodeName == "$nsCpt:link" }
         for (n: Node in lList) {
-            val link = Link(n)
+            val link = LinkBs(n)
             linkList.add(link)
         }
     }

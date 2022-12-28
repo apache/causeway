@@ -27,6 +27,8 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     private var rawData = observableListOf<TransferObject>()
 
     override fun addData(obj: TransferObject) {
+ //       console.log("[CDM.addData]")
+ //       console.log(obj)
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)

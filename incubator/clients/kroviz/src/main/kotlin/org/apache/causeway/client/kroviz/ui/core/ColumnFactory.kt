@@ -103,7 +103,7 @@ class ColumnFactory {
         displayCollection: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        val propertyLabels = displayCollection.properties.list
+        val propertyLabels = displayCollection.collectionProperties.list
         for (pl in propertyLabels) {
             if (!pl.hidden) {
                 val id = pl.key

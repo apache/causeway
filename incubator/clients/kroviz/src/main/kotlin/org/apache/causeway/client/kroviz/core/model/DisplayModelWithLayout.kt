@@ -23,24 +23,21 @@ import org.apache.causeway.client.kroviz.layout.RowLt
 import org.apache.causeway.client.kroviz.to.Icon
 import org.apache.causeway.client.kroviz.to.Property
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs3.Grid
-import org.apache.causeway.client.kroviz.to.bs3.Row
+import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.bs.RowBs
 
 abstract class DisplayModelWithLayout : BaseDisplayModel() {
 
     var layout: Layout? = null
-    var grid: Grid? = null
-    val properties = CollectionProperties()
+    var grid: GridBs? = null
+    val collectionProperties = CollectionProperties()
     var icon: Icon? = null
 
     override fun canBeDisplayed(): Boolean {
-//        console.log("[DMWL.canBeDisplayed]")
-//        console.log(this)
         return when {
             isRendered -> false
-            layout != null -> true
-            grid != null -> true
-            else -> properties.readyForDisplay()
+            layout == null && grid == null -> false
+            else -> collectionProperties.readyForDisplay()
         }
     }
 
@@ -49,9 +46,7 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
         initPropertyLayoutList(layout)
     }
 
-    fun addGrid(grid: Grid) {
-        console.log("[DMWL.initGrid]")
-        console.log(grid)
+    fun addGrid(grid: GridBs) {
         this.grid = grid
         initPropertyGridList(grid)
     }
@@ -66,7 +61,7 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
         }
     }
 
-    private fun initPropertyGridList(grid: Grid) {
+    private fun initPropertyGridList(grid: GridBs) {
         grid.rows.forEach { r ->
             initGrid4Row(r)
         }
@@ -76,7 +71,7 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
         r.cols.forEach { cs ->
             val c = cs.getCol()
             c.fieldSet.forEach { fs ->
-                properties.addAllPropertyLayout(fs.property)
+                collectionProperties.addAllPropertyLayout(fs.property)
             }
             c.tabGroup.forEach { tg ->
                 tg.tab.forEach { t ->
@@ -88,10 +83,10 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
         }
     }
 
-    private fun initGrid4Row(r: Row) {
+    private fun initGrid4Row(r: RowBs) {
         r.colList.forEach { c ->
             c.fieldSetList.forEach { fs ->
-                //FIXME         properties.addAllPropertiesFromGrid(fs.propertyList)
+                collectionProperties.addAllPropertyGrid(fs.propertyList)
             }
             c.tabGroupList.forEach { tg ->
                 tg.tabList.forEach { t ->
@@ -104,11 +99,11 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
     }
 
     fun addPropertyDescription(p: Property) {
-        properties.addPropertyDescription(p)
+        collectionProperties.addPropertyDescription(p)
     }
 
     fun addProperty(property: Property) {
-        properties.addProperty(property)
+        collectionProperties.addProperty(property)
     }
 
 }

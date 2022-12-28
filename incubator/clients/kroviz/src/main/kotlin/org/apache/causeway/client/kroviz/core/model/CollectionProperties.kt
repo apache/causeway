@@ -19,25 +19,57 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.layout.PropertyLt
-import org.apache.causeway.client.kroviz.to.Property
 import org.apache.causeway.client.kroviz.to.Extensions
+import org.apache.causeway.client.kroviz.to.Property
+import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 class CollectionProperties() {
     val list = mutableListOf<ColumnProperties>()
     var propertyDescriptionList = mutableListOf<Property>()
     var propertyLayoutList = mutableListOf<PropertyLt>()
+    var propertyGridList = mutableListOf<PropertyBs>()
     var propertyList = mutableListOf<Property>()
+    var descriptionsComplete = false
+
+    fun debug(): String {
+        var answer = "descriptionsComplete: $descriptionsComplete"
+
+        answer = answer + "\nlist: ${list.size}"
+        console.log("[CP.debug] List of ColumnProperties")
+        console.log(list)
+
+        answer = answer + "\npropertyDescriptionList: ${propertyDescriptionList.size}"
+        console.log("[CP.debug] List of Property (Description)")
+        console.log(propertyDescriptionList)
+
+        answer = answer + "\npropertyLayoutList: ${propertyLayoutList.size}"
+        console.log("[CP.debug] List of PropertyLt")
+        console.log(propertyLayoutList)
+
+        answer = answer + "\npropertyGridList: ${propertyGridList.size}"
+        console.log("[CP.debug] List of PropertyBs")
+        console.log(propertyGridList)
+
+        answer = answer + "\npropertyList: ${propertyList.size}"
+        console.log("[CP.debug] List of Property")
+        console.log(propertyList)
+
+        return answer
+    }
 
     fun readyForDisplay(): Boolean {
         val ps = propertyList.size
         val pls = propertyLayoutList.size
         val pds = propertyDescriptionList.size
-        val descriptionsComplete = (pds >= pls) && (ps >= pls)
+        descriptionsComplete = (pds >= pls) && (ps >= pls)
         return descriptionsComplete
     }
 
     fun addProperty(property: Property) {
+        console.log("[CollectionProperties.addProperty]")
+        console.log(property)
         propertyList.add(property)
+        console.log(propertyList)
         val id = property.id
         val cp = findOrCreate(id)
         cp.property = property
@@ -51,6 +83,19 @@ class CollectionProperties() {
             cp.initLayout(layout)
         }
         layoutList.forEach { addPropertyLayout(it) }
+    }
+
+    fun addAllPropertyGrid(gridList: List<PropertyBs>) {
+//        console.log("[DMWL.addAllPropertyGrid]")
+        propertyGridList.addAll(gridList)
+        fun addPropertyGrid(grid: PropertyBs) {
+//            console.log("[DMWL.addPropertyGrid] -> grid")
+//            console.log(grid)
+            val id = grid.id
+            val cp = findOrCreate(id)
+            cp.initGrid(grid)
+        }
+        gridList.forEach { addPropertyGrid(it) }
     }
 
     fun addPropertyDescription(description: Property) {
@@ -72,43 +117,6 @@ class CollectionProperties() {
 
     fun find(id: String): ColumnProperties? {
         return list.find { it.key == id }
-    }
-
-}
-
-/**
- * Properties have three aspects:
- *
- * - Member of a DomainObject
- * - Description (friendlyName, etc.)
- * - Layout (hidden, labelPosition, etc.)
- *
- * All three are required in order to display correctly in a table.
- */
-class ColumnProperties(val key: String) {
-    var property: Property? = null
-    var friendlyName: String = ""
-    var layout: PropertyLt? = null
-    var hidden: Boolean = true
-
-    fun initLayout(layout: PropertyLt) {
-        this.layout = layout
-        hidden = (layout.hidden != null)
-        // properties without labelPosition will be hidden - is that correct?
-        // example: Demo -> Strings -> Description
-        if (!hidden && layout.labelPosition == null) {
-            hidden = true
-        }
-    }
-
-    fun initGrid(property: Property) {
-        //  this.layout = layout
-//FIXME        hidden = (property.hidden != null)
-        // properties without labelPosition will be hidden - is that correct?
-        // example: Demo -> Strings -> Description
-        //  if (!hidden && property.labelPosition == null) {
-        //     hidden = true
-        // }
     }
 
 }

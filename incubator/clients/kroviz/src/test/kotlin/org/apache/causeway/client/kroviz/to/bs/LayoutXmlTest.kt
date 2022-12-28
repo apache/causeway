@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.apache.causeway.client.kroviz.handler.LayoutXmlHandler
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.STRINGS_LAYOUT_XML
@@ -35,7 +35,7 @@ class LayoutXmlTest {
         //given
         val xmlStr = STRINGS_LAYOUT_XML.str
         //when
-        val grid = LayoutXmlHandler().parse(xmlStr) as Grid
+        val grid = LayoutXmlHandler().parse(xmlStr) as GridBs
         // then
         assertEquals(2, grid.rows.size, message = "grid.rows.size")    //1
 
@@ -101,7 +101,7 @@ class LayoutXmlTest {
         //given
         val xmlStr = TAB_LAYOUT_XML.str
         //when
-        val grid = LayoutXmlHandler().parse(xmlStr) as Grid
+        val grid = LayoutXmlHandler().parse(xmlStr) as GridBs
         // then
         console.log("[LXT.testDemoTabGrid] ${grid.toString()}")
         console.log("rows: ", grid.rows.size)
@@ -113,7 +113,7 @@ class LayoutXmlTest {
         //given
         val xmlStr = SO_LAYOUT_XML.str
         //when
-        val grid = LayoutXmlHandler().parse(xmlStr) as Grid
+        val grid = LayoutXmlHandler().parse(xmlStr) as GridBs
         // then
         assertEquals(2, grid.rows.size)    //1
 

@@ -16,35 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
-import org.apache.causeway.client.kroviz.utils.XmlHelper
 import org.w3c.dom.Node
+import org.w3c.dom.asList
 
-class Row(node: Node) : XmlLayout() {
-    val colList = mutableListOf<Col>()
+class FieldSetBs(node: Node) : XmlLayout() {
+    var actionList = mutableListOf<ActionBs>()
+    var propertyList = mutableListOf<PropertyBs>()
+    var name: String = ""
     var id: String = ""
 
     init {
         val dyNode = node.asDynamic()
+        if (dyNode.hasOwnProperty("name") as Boolean) {
+            name = dyNode.getAttribute("name") as String
+        }
         if (dyNode.hasOwnProperty("id") as Boolean) {
             id = dyNode.getAttribute("id") as String
         }
-
-        val nodeList = XmlHelper.nonTextChildren(node)
-        val cl = nodeList.filter { it.nodeName == "$nsBs:col" }
-        for (n: Node in cl) {
-            val col = Col(n)
-            colList.add(col)
+        val nl = node.childNodes.asList()
+        val actList = nl.filter { it.nodeName == "$nsCpt:action" }
+        for (n: Node in actList) {
+            val act = ActionBs(n)
+            actionList.add(act)
         }
-    }
 
-    fun getPropertyList(): List<Property> {
-        val list = mutableListOf<Property>()
-        colList.forEach { c ->
-            list.addAll(c.getPropertyList())
+        val pNl = nl.filter { it.nodeName == "$nsCpt:property" }
+        for (n: Node in pNl) {
+            val p = PropertyBs(n)
+            if (p.hidden != "") {
+                propertyList.add(p)
+            }
         }
-        return list
     }
 
 }

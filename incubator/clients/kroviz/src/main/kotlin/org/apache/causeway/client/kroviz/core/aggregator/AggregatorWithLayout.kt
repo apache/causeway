@@ -21,10 +21,9 @@ package org.apache.causeway.client.kroviz.core.aggregator
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.DisplayModelWithLayout
-import org.apache.causeway.client.kroviz.core.model.ObjectDM
 import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.diagram.Tree
 
@@ -43,7 +42,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         console.log(layout)
         if (dm.layout == null) {
             dm.addLayout(layout)
-            dm.properties.propertyLayoutList.forEach { p ->
+            dm.collectionProperties.propertyLayoutList.forEach { p ->
                 val l = p.link
                 if (l == null) {
                     console.log(p.id + " link empty")  // ISIS-2846
@@ -59,8 +58,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         }
     }
 
-    protected fun handleGrid(grid: Grid, dm: DisplayModelWithLayout, referrer: String) {
-        (dpm as ObjectDM).grid = grid
+    protected fun handleGrid(grid: GridBs, dm: DisplayModelWithLayout, referrer: String) {
         grid.getPropertyList().forEach {
             val link = it.link!!
             ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
@@ -68,7 +66,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         //FIXME
         if (dm.grid == null) {
             dm.addGrid(grid)
-            dm.properties.propertyLayoutList.forEach { p ->
+            dm.collectionProperties.propertyLayoutList.forEach { p ->
                 val l = p.link
                 if (l == null) {
                     console.log(p.id + " link empty")  // ISIS-2846
@@ -99,7 +97,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     }
 
     protected fun Property.getDescriptionLink(): Link? {
-        return this.links.firstOrNull() {
+        return this.links.firstOrNull {
             it.rel == Relation.DESCRIBED_BY.type
         }
     }

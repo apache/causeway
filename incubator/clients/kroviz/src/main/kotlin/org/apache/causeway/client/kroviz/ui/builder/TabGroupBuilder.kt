@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.client.kroviz.ui.builder
 
-import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs3.TabGroup
 import io.kvision.core.Component
 import io.kvision.panel.TabPanel
+import org.apache.causeway.client.kroviz.to.TObject
+import org.apache.causeway.client.kroviz.to.bs.TabGroupBs
 
 class TabGroupBuilder : UiBuilder() {
 
-    fun create(tabGroupLayout: TabGroup, tObject: TObject, dsp: RoDisplay): Component {
+    fun create(tabGroupLayout: TabGroupBs, tObject: TObject, dsp: RoDisplay): Component {
         val panel = TabPanel()
         style(panel)
 

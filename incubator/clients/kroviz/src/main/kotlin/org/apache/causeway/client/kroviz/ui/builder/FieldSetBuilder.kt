@@ -21,16 +21,16 @@ package org.apache.causeway.client.kroviz.ui.builder
 import io.kvision.form.FormPanel
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TypeMapper
-import org.apache.causeway.client.kroviz.to.bs3.FieldSet
+import org.apache.causeway.client.kroviz.to.bs.FieldSetBs
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.FormPanelFactory
 
 class FieldSetBuilder {
 
     fun create(
-            fieldSetLayout: FieldSet,
-            tObject: TObject,
-            tab: RoDisplay
+        fieldSetLayout: FieldSetBs,
+        tObject: TObject,
+        tab: RoDisplay
     ): FormPanel<String>? {
 
         val members = tObject.getProperties()
@@ -43,13 +43,14 @@ class FieldSetBuilder {
                 val memberType = TypeMapper().forType(member.type!!)
                 val size = maxOf(1, p.multiLine)
                 val fi = FormItem(
-                        label = p.named,
-                        type = memberType,
-                        content = member.value?.content,
-                        size = size,
-                        description = p.describedAs,
-                        member = member,
-                        dspl = tab)
+                    label = p.named,
+                    type = memberType,
+                    content = member.value?.content,
+                    size = size,
+                    description = p.describedAs,
+                    member = member,
+                    dspl = tab
+                )
                 items.add(fi)
             }
         }

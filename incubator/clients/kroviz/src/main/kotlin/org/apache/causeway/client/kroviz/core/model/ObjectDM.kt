@@ -25,7 +25,7 @@ import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     var data: Exposer? = null
-    val collections = mutableMapOf<String, CollectionDM>()
+    val collectionMap = mutableMapOf<String, CollectionDM>()
     private var dirty: Boolean = false
 
     fun setDirty(value: Boolean) {
@@ -33,12 +33,10 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun addCollection(key: String, value: CollectionDM) {
-        collections[key] = value
+        collectionMap[key] = value
     }
 
     override fun addData(obj: TransferObject) {
-        console.log("[ODM.addData]")
-//        console.log(obj)
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer

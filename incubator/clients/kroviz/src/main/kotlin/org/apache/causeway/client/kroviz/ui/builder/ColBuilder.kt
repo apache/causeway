@@ -24,7 +24,7 @@ import io.kvision.panel.FlexPanel
 import io.kvision.panel.HPanel
 import io.kvision.panel.SimplePanel
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs3.Col
+import org.apache.causeway.client.kroviz.to.bs.ColBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.RoTable
 import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
@@ -33,7 +33,7 @@ import kotlin.math.round
 
 class ColBuilder : UiBuilder() {
 
-    fun create(col: Col, tObject: TObject, dsp: RoDisplay): FlexPanel {
+    fun create(col: ColBs, tObject: TObject, dsp: RoDisplay): FlexPanel {
         val panel = buildPanel()
 
         if ((col.actionList.size > 0) && (col.domainObject != null)) {
@@ -68,7 +68,7 @@ class ColBuilder : UiBuilder() {
         for (c in col.collectionList) {
             val key = c.id  // entities
             val objectDM = dsp.displayModel
-            val collectionDM = objectDM.collections[key]
+            val collectionDM = objectDM.collectionMap[key]
             if (collectionDM != null) {
                 val tblCpt = RoTable(collectionDM)
                 val fsPanel = FieldsetPanel(legend = StringUtils.capitalize(key)).add(tblCpt)
@@ -101,7 +101,7 @@ class ColBuilder : UiBuilder() {
         return panel
     }
 
-    private fun assignWidth(panel: SimplePanel, col: Col) {
+    private fun assignWidth(panel: SimplePanel, col: ColBs) {
         val proportion = col.span.toDouble().div(12)
         val percent = proportion * 100
         val rounded = round(percent)

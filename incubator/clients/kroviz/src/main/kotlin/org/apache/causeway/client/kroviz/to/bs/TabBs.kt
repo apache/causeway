@@ -16,39 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-class FieldSet(node: Node) : XmlLayout() {
-    var actionList = mutableListOf<Action>()
-    var propertyList = mutableListOf<Property>()
-    var name: String = ""
-    var id: String = ""
+class TabBs(node: Node) : XmlLayout() {
+    val rowList = mutableListOf<RowBs>()
+    var name: String
 
     init {
         val dyNode = node.asDynamic()
-        if (dyNode.hasOwnProperty("name") as Boolean) {
-            name = dyNode.getAttribute("name") as String
-        }
-        if (dyNode.hasOwnProperty("id") as Boolean) {
-            id = dyNode.getAttribute("id") as String
-        }
-        val nl = node.childNodes.asList()
-        val actList = nl.filter { it.nodeName == "$nsCpt:action" }
-        for (n: Node in actList) {
-            val act = Action(n)
-            actionList.add(act)
-        }
+        name = dyNode.getAttribute("name") as String
 
-        val pNl = nl.filter { it.nodeName == "$nsCpt:property" }
-        for (n: Node in pNl) {
-            val p = Property(n)
-            if (p.hidden != "") {
-                propertyList.add(p)
-            }
+        val nl = node.childNodes.asList()
+
+        val rNodes = nl.filter { it.nodeName == "$nsBs:row" }
+        for (n: Node in rNodes) {
+            val row = RowBs(n)
+            rowList.add(row)
         }
+    }
+
+    fun getPropertyList(): List<PropertyBs> {
+        val list = mutableListOf<PropertyBs>()
+        rowList.forEach { r ->
+            list.addAll(r.getPropertyList())
+        }
+        return list
     }
 
 }

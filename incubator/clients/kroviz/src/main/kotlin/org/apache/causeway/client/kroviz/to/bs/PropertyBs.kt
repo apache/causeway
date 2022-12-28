@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.apache.causeway.client.kroviz.to.Link
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
 //IMPROVE class differs in many aspects from org.ro.to.Property - to be refactored?
-class Property(node: Node) : XmlLayout() {
+class PropertyBs(node: Node) : XmlLayout() {
     var id: String
     var named = ""
     var link: Link? = null
@@ -31,7 +31,7 @@ class Property(node: Node) : XmlLayout() {
     var typicalLength: Int = 0
     var multiLine: Int = 1
     var describedAs: String? = null
-    lateinit var action: Action
+    lateinit var action: ActionBs
 
     init {
         val dn = node.asDynamic()
@@ -51,13 +51,13 @@ class Property(node: Node) : XmlLayout() {
         val actList = nodeList.filter { it.nodeName == "$nsCpt:action" }
         if (actList.isNotEmpty()) {
             val n = actList.first()
-            action = Action(n)
+            action = ActionBs(n)
         }
 
         val linkList = nodeList.filter { it.nodeName == "$nsCpt:link" }
         if (linkList.isNotEmpty()) {
             val n = linkList.first()
-            val bs3l = Link(n)
+            val bs3l = LinkBs(n)
             link = Link(bs3l.rel, bs3l.method, bs3l.href, bs3l.type)
         }
     }

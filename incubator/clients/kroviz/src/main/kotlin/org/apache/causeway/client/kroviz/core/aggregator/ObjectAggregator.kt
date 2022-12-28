@@ -21,10 +21,11 @@ package org.apache.causeway.client.kroviz.core.aggregator
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
+import org.apache.causeway.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
 import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
 
@@ -52,7 +53,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
                 is ResultValue -> handleResultValue(obj)
                 is Property -> handleProperty(obj, referrer)
                 is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
-                is Grid -> handleGrid(obj, dpm as ObjectDM, referrer)
+                is GridBs -> handleGrid(obj, dpm as DisplayModelWithLayout, referrer)
                 is HttpError -> ErrorDialog(logEntry).open()
                 else -> log(logEntry)
             }
@@ -62,6 +63,10 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             collectionMap.forEach {
                 (dpm as ObjectDM).addCollection(it.key, it.value.dpm as CollectionDM)
             }
+            console.log("[OA.canBeDisplayed]")
+            console.log(this)
+            console.log((dpm as DisplayModelWithLayout).collectionProperties.debug())
+
             ViewManager.openObjectView(this)
         }
     }

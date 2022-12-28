@@ -31,10 +31,10 @@ package "to" {
     TransferObject <|-- TObject
     TransferObject <|-- Icon
 
-    package "bs3" {
-        class Grid{}
+    package "bs" {
+        class GridBs{}
     }
-    TransferObject <|- Grid
+    TransferObject <|- GridBs
 }
 
 package "aggregator" {
@@ -98,8 +98,8 @@ package "model" {
 
     abstract class DisplayModelWithLayout {
         layout: Layout
-        grid: Grid
-        properties: CollectionProperties
+        grid: GridBs
+        collectionProperties: CollectionProperties
         icon: Icon
         + canBeDisplayed()
     }

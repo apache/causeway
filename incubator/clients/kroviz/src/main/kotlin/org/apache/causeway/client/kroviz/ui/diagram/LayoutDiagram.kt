@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.ui.diagram
 
-import org.apache.causeway.client.kroviz.to.bs3.Col
-import org.apache.causeway.client.kroviz.to.bs3.Grid
-import org.apache.causeway.client.kroviz.to.bs3.Row
+import org.apache.causeway.client.kroviz.to.bs.ColBs
+import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.bs.RowBs
 
 object LayoutDiagram {
 
-    fun build(grid: Grid): String {
+    fun build(grid: GridBs): String {
         var pumlCode = "@startsalt\n{#\n"
         grid.rows.forEachIndexed() { index, it ->
             val rLabel = "r" + index.toString()
@@ -35,7 +35,7 @@ object LayoutDiagram {
 
     private val blue = "<color:Blue>"
     private val red = "<color:Red>"
-    private fun buildRow(row: Row, rLabel: String): String {
+    private fun buildRow(row: RowBs, rLabel: String): String {
         var s = ""
         row.colList.forEachIndexed() { index, it ->
             val cLabel = rLabel + ".c" + index.toString()
@@ -49,7 +49,7 @@ object LayoutDiagram {
         return s + "\n"
     }
 
-    private fun buildCol(col: Col, colorCode: String, label: String): String {
+    private fun buildCol(col: ColBs, colorCode: String, label: String): String {
         var s = ""
         val span: Int = col.span
         repeat(span) {

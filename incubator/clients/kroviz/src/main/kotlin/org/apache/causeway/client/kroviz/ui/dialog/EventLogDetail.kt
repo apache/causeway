@@ -21,7 +21,7 @@ package org.apache.causeway.client.kroviz.ui.dialog
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.ValueType
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.RoDialog
@@ -93,12 +93,15 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
             action == LOG -> {
                 console.log(logEntry)
             }
+
             action == LNK -> {
                 linkTreeDiagram()
             }
+
             action == DPM -> {
                 displayModelDiagram()
             }
+
             else -> {
                 console.log(logEntry)
                 console.log("Action not defined yet: $action")
@@ -131,14 +134,16 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
         var label = "Diagram"
         val pumlCode = when {
             str.startsWith("<") -> {
-                val grid = logEntry.obj as Grid
+                val grid = logEntry.obj as GridBs
                 label = "Layout Diagram"
                 LayoutDiagram.build(grid)
             }
+
             str.startsWith("{") -> {
                 label = "JSON / XML Diagram"
                 JsonDiagram.build(str)
             }
+
             else -> "{}"
         }
         DiagramDialog(label, pumlCode).open()

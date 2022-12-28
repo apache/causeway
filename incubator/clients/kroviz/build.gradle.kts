@@ -108,7 +108,7 @@ kotlin {
         implementation(npm("xterm", "4.15.0", false))
         implementation(npm("pdfjs", "2.4.7", false))
         implementation(npm("vega", "5.22.1", false))
-        implementation(npm("vega-lite", "5.4.0", true))
+//        implementation(npm("vega-lite", "5.6.0", true))
         implementation(npm("element-resize-event", "3.0.6", false))
     }
     sourceSets["test"].dependencies {

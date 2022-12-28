@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs3
+package org.apache.causeway.client.kroviz.to.bs
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-class Link(node: Node) : XmlLayout() {
+class LinkBs(node: Node) : XmlLayout() {
     lateinit var rel: String
     lateinit var method: String
     lateinit var href: String
