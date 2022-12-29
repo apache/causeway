@@ -62,7 +62,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
                 ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, argumentAdapters)
                 : MmInvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);

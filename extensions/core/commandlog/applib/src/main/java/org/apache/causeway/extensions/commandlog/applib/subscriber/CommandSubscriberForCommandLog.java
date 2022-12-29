@@ -21,23 +21,27 @@ package org.apache.causeway.extensions.commandlog.applib.subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
-import org.apache.causeway.applib.util.JaxbUtil;
+import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Implementation of {@link CommandSubscriber} responsible for persisting the {@link Command} as a
+ * {@link CommandLogEntry}.
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -69,9 +73,9 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                     if(log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
-                        val existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto)
+                        val existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
                                 .getValue().orElse("Dto to Xml failure");
-                        val commandDtoXml = JaxbUtil.toXml(command.getCommandDto())
+                        val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
                                 .getValue().orElse("Dto to Xml failure");
 
                         log.warn("existing: \n{}", existingCommandDtoXml);

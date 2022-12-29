@@ -33,6 +33,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Contributes an action to open the domain object that was the result of invoking the command (represented in
+ * persistent form by the {@link CommandLogEntry}).
+ *
  * @since 2.x {@index}
  */
 @Action(

@@ -9,10 +9,10 @@ Provides a mechanism to execute a xref:refguide:applib:index/services/command/Co
 .CommandExecutorService.java
 ----
 interface CommandExecutorService {
-  Bookmark executeCommand(InteractionContextPolicy interactionContextPolicy, Command command)     // <.>
-  Bookmark executeCommand(InteractionContextPolicy interactionContextPolicy, CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
-  Bookmark executeCommand(Command command)     // <.>
-  Bookmark executeCommand(CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
+  Try<Bookmark> executeCommand(InteractionContextPolicy interactionContextPolicy, Command command)     // <.>
+  Try<Bookmark> executeCommand(InteractionContextPolicy interactionContextPolicy, CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
+  Try<Bookmark> executeCommand(Command command)     // <.>
+  Try<Bookmark> executeCommand(CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
 }
 ----
 

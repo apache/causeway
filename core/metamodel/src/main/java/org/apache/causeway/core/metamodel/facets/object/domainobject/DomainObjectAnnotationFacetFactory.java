@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,7 +54,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
@@ -76,7 +74,6 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.introspecti
 import org.apache.causeway.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.methods.MethodByClassMap;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
@@ -85,8 +82,6 @@ import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -95,7 +90,6 @@ public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements
     MetaModelRefiner,
-    HasPostConstructMethodCache,
     ObjectTypeFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
@@ -103,10 +97,8 @@ implements
 
     @Inject
     public DomainObjectAnnotationFacetFactory(
-            final MetaModelContext mmc,
-            final MethodByClassMap postConstructMethodsCache) {
+            final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
-        this.postConstructMethodsCache = postConstructMethodsCache;
     }
 
     @Override
@@ -343,15 +335,12 @@ implements
             return;
         }
 
-        val postConstructMethodCache = this;
-
         // handle with least priority
         if(addFacetIfPresent(
                 ViewModelFacetForDomainObjectAnnotation
                 .create(
                         domainObjectIfAny,
-                        facetHolder,
-                        postConstructMethodCache))
+                        facetHolder))
                 .isPresent()) {
             return;
         }
@@ -616,11 +605,11 @@ implements
                             val csv = asCsv(collidingSpecs);
                             collidingSpecs.forEach(spec->{
                                 ValidationFailure.raiseFormatted(spec,
-                                        ProgrammingModelConstants.Validation
-                                        .NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
-                                        .getMessage(Map.of(
-                                                "logicalTypeName", spec.getLogicalTypeName(),
-                                                "csv", csv)));
+                                        ProgrammingModelConstants.Violation.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
+                                            .builder()
+                                            .addVariable("logicalTypeName", spec.getLogicalTypeName())
+                                            .addVariable("csv", csv)
+                                            .buildMessage());
                             });
                         }
                     });
@@ -642,11 +631,5 @@ implements
 
             });
     }
-
-
-    // //////////////////////////////////////
-
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull MethodByClassMap postConstructMethodsCache;
 
 }

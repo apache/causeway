@@ -24,7 +24,8 @@ import java.util.Optional;
 
 import org.yaml.snakeyaml.constructor.ConstructorException;
 
-import org.apache.causeway.commons.internal.resources._Yaml;
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatter;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatterCompact;
 import org.apache.causeway.tooling.j2adoc.format.UnitFormatterWithSourceAndCallouts;
@@ -130,7 +131,7 @@ public class CliConfig {
     // -- LOADING
 
     public static CliConfig read(final @NonNull File file) {
-        return _Yaml.readYaml(CliConfig.class, file)
+        return YamlUtils.tryRead(CliConfig.class, DataSource.ofFile(file))
         .ifFailure(e->{
             if(e instanceof ConstructorException) {
                 final ConstructorException ce = (ConstructorException) e;

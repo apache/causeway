@@ -24,12 +24,12 @@ interface FactoryService {
 <.> xref:#getOrCreate_Class[getOrCreate(Class)]
 +
 --
-Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any life-cycle callback processed.
+Gets or creates an instance of _requiredType_ , with injection points resolved and any life-cycle callback processed.
 --
 <.> xref:#get_Class[get(Class)]
 +
 --
-Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
+Gets a _Spring_ managed bean of _requiredType_ .
 --
 <.> xref:#detachedEntity_Class[detachedEntity(Class)]
 +
@@ -49,22 +49,22 @@ Creates a new Mixin instance, with injection points resolved.
 <.> xref:#viewModel_Class_Bookmark[viewModel(Class, Bookmark)]
 +
 --
-Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _bookmark_
+Creates a new ViewModel instance, initialized with given _bookmark_ (if any) then resolves any injection points and calls post-construct (if any).
 --
 <.> xref:#viewModel_Class[viewModel(Class)]
 +
 --
-Creates a new ViewModel instance, with injection points resolved and defaults applied.
+Creates a new ViewModel instance, with injection points resolved, post-construct called and defaults applied.
 --
 <.> xref:#viewModel_T[viewModel(T)]
 +
 --
-Resolves injection points for given ViewModel instance.
+Resolves injection points for and calls post-construct on given view-model instance.
 --
 <.> xref:#create_Class[create(Class)]
 +
 --
-Creates a new instance of the specified class, with injection points resolved and defaults applied.
+Creates a new instance of the specified class, with injection points resolved, post-construct called and defaults applied.
 --
 
 == Members
@@ -72,24 +72,28 @@ Creates a new instance of the specified class, with injection points resolved an
 [#getOrCreate_Class]
 === getOrCreate(Class)
 
-Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any life-cycle callback processed.
+Gets or creates an instance of _requiredType_ , with injection points resolved and any life-cycle callback processed.
+
+Maps onto one of the specialized factory methods _#get(Class)_ or _#create(Class)_ based on the type's meta-data.
 
 [#get_Class]
 === get(Class)
 
-Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
+Gets a _Spring_ managed bean of _requiredType_ .
 
 [#detachedEntity_Class]
 === detachedEntity(Class)
 
 Creates a new detached entity instance, with injection points resolved and defaults applied.
 
-The entity will be detacted, in other words not yet persisted.
+The entity will not yet be persisted, in other words: its not yet known to the persistence layer.
 
 [#detachedEntity_T]
 === detachedEntity(T)
 
 Creates a new detached entity instance, with injection points resolved.
+
+The entity will not yet be persisted, in other words: its not yet known to the persistence layer.
 
 [#mixin_Class_Object]
 === mixin(Class, Object)
@@ -99,22 +103,22 @@ Creates a new Mixin instance, with injection points resolved.
 [#viewModel_Class_Bookmark]
 === viewModel(Class, Bookmark)
 
-Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _bookmark_
+Creates a new ViewModel instance, initialized with given _bookmark_ (if any) then resolves any injection points and calls post-construct (if any).
 
 [#viewModel_Class]
 === viewModel(Class)
 
-Creates a new ViewModel instance, with injection points resolved and defaults applied.
+Creates a new ViewModel instance, with injection points resolved, post-construct called and defaults applied.
 
 [#viewModel_T]
 === viewModel(T)
 
-Resolves injection points for given ViewModel instance.
+Resolves injection points for and calls post-construct on given view-model instance.
 
 [#create_Class]
 === create(Class)
 
-Creates a new instance of the specified class, with injection points resolved and defaults applied.
+Creates a new instance of the specified class, with injection points resolved, post-construct called and defaults applied.
 
 include::hooks/FactoryService_010-implementation.adoc[]
 

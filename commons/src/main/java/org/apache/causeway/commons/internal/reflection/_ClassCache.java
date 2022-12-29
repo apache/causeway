@@ -21,17 +21,24 @@ package org.apache.causeway.commons.internal.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
@@ -76,9 +83,33 @@ public final class _ClassCache implements AutoCloseable {
         inspectType(type);
     }
 
+    // -- TYPE SPECIFIC SEMANTICS
+
+    public boolean hasJaxbRootElementSemantics(final Class<?> type) {
+        return inspectType(type).hasJaxbRootElementSemantics;
+    }
+
+    // -- CONSTRUCTOR SEMANTICS
+
+    public <T> Stream<Constructor<T>> streamPublicConstructors(final Class<T> type) {
+        return _Casts.uncheckedCast(inspectType(type).publicConstructorsByKey.values().stream());
+    }
+
+    public <T> Stream<Constructor<T>> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
+        return _Casts.uncheckedCast(inspectType(type).constructorsWithInjectSemanticsByKey.values().stream());
+    }
+
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
         return Optional.ofNullable(lookupConstructor(false, type, paramTypes));
     }
+
+    // -- POST CONSTRUCT SEMANTICS
+
+    public Stream<Method> streamPostConstructMethods(final Class<?> type) {
+        return inspectType(type).postConstructMethodsByKey.values().stream();
+    }
+
+    // -- METHOD SEMANTICS
 
     /**
      * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up
@@ -111,6 +142,8 @@ public final class _ClassCache implements AutoCloseable {
     public Stream<Method> streamDeclaredMethods(final Class<?> type) {
         return inspectType(type).declaredMethods.stream();
     }
+
+    // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
         return inspectType(type).declaredFields.stream();
@@ -160,10 +193,13 @@ public final class _ClassCache implements AutoCloseable {
         private final Can<Field> declaredFields;
         private final Can<Method> declaredMethods;
         private final Map<ConstructorKey, Constructor<?>> publicConstructorsByKey = new HashMap<>();
+        private final Map<ConstructorKey, Constructor<?>> constructorsWithInjectSemanticsByKey = new HashMap<>();
         //private final Map<ConstructorKey, Constructor<?>> nonPublicDeclaredConstructorsByKey = new HashMap<>();
         private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
+        private final Map<MethodKey, Method> postConstructMethodsByKey = new HashMap<>();
         private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
         private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
+        private final boolean hasJaxbRootElementSemantics;
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
@@ -210,17 +246,36 @@ public final class _ClassCache implements AutoCloseable {
 
                 val model = new ClassModel(
                         Can.ofArray(declaredFields),
-                        declaredMethods);
+                        declaredMethods,
+                        _Annotations.isPresent(type, XmlRootElement.class));
 
                 for(val constr : publicConstr) {
-                    model.publicConstructorsByKey.put(ConstructorKey.of(type, constr), constr);
+                    val key = ConstructorKey.of(type, constr);
+                    // collect public constructors
+                    model.publicConstructorsByKey.put(key, constr);
+                    // collect public constructors with inject semantics
+                    if(isInjectSemantics(constr)) {
+                        model.constructorsWithInjectSemanticsByKey.put(key, constr);
+                    }
                 }
 
+                // process all public and non-public
                 for(val method : declaredMethods) {
-                    model.nonPublicDeclaredMethodsByKey.put(MethodKey.of(type, method), method);
+                    if(Modifier.isStatic(method.getModifiers())) continue;
+
+                    val key = MethodKey.of(type, method);
+                    // add all now, remove public ones later
+                    model.nonPublicDeclaredMethodsByKey.put(key, method);
+                    // collect post-construct methods
+                    if(isPostConstruct(method)) {
+                        model.postConstructMethodsByKey.put(key, method);
+                    }
                 }
 
+                // process public only
                 for(val method : type.getMethods()) {
+                    if(Modifier.isStatic(method.getModifiers())) continue;
+
                     val key = MethodKey.of(type, method);
                     model.publicMethodsByKey.put(key, method);
                     model.nonPublicDeclaredMethodsByKey.remove(key);
@@ -230,6 +285,27 @@ public final class _ClassCache implements AutoCloseable {
 
             });
         }
+    }
+
+    /**
+     * signature: any
+     * access: public and non-public
+     */
+    private boolean isInjectSemantics(final Constructor<?> con) {
+        return _Annotations.synthesize(con, Inject.class).isPresent()
+                || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false);
+    }
+
+    /**
+     * return-type: void
+     * signature: no args
+     * access: public and non-public
+     */
+    private boolean isPostConstruct(final Method method) {
+        return void.class.equals(method.getReturnType())
+                && method.getParameterCount()==0
+                ? _Annotations.synthesize(method, PostConstruct.class).isPresent()
+                : false;
     }
 
     private Constructor<?> lookupConstructor(
@@ -302,5 +378,7 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
+
+
 
 }

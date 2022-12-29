@@ -27,6 +27,10 @@ language governing permissions and limitations under the License.
         <emptyLine />
         <package name="javax" withSubpackages="true" static="true" />
         <emptyLine />
+        <package name="jakarta" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="jakarta" withSubpackages="true" static="true" />
+        <emptyLine />
         <package name="com" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="com" withSubpackages="true" static="true" />
@@ -35,17 +39,9 @@ language governing permissions and limitations under the License.
         <emptyLine />
         <package name="org" withSubpackages="true" static="true" />
         <emptyLine />
-        <package name="org.apache.isis" withSubpackages="true" static="false" />
+        <package name="org.apache.causeway" withSubpackages="true" static="false" />
         <emptyLine />
-        <package name="org.apache.isis" withSubpackages="true" static="true" />
-        <emptyLine />
-        <package name="org.isisaddons" withSubpackages="true" static="false" />
-        <emptyLine />
-        <package name="org.isisaddons" withSubpackages="true" static="true" />
-        <emptyLine />
-        <package name="org.incode" withSubpackages="true" static="false" />
-        <emptyLine />
-        <package name="org.incode" withSubpackages="true" static="true" />
+        <package name="org.apache.causeway" withSubpackages="true" static="true" />
         <emptyLine />
         <package name="lombok" withSubpackages="true" static="false" />
         <package name="lombok.experimental" withSubpackages="true" static="false" />

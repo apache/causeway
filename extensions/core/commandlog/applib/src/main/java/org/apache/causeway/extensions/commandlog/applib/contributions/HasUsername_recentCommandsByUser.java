@@ -35,6 +35,12 @@ import lombok.val;
 
 
 /**
+ * Contributes the <code>recentCommandsByUser</code> collection to any domain object implementing {@link HasUsername}.
+ *
+ * <p>
+ *     For example the <i>secman</i> extension's <code>ApplicationUser</code> entity implements this interface.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Collection(

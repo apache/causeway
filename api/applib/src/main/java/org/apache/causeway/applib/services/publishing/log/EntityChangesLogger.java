@@ -58,7 +58,7 @@ public class EntityChangesLogger implements EntityChangesSubscriber {
 
         final ChangesDto changesDto = changingEntities.getDto();
 
-        log.debug(ChangesDtoUtils.toXml(changesDto));
+        log.debug(ChangesDtoUtils.dtoMapper().toString(changesDto));
     }
 
 }

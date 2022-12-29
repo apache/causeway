@@ -41,6 +41,7 @@ import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
 import lombok.NonNull;
@@ -88,29 +89,27 @@ public class RestEndpointService {
 
         log.debug("new restful client created for {}", restRootPath);
 
-        val clientConfig = new RestfulClientConfig();
-        clientConfig.setRestfulBase(restRootPath);
-        // setup basic-auth
-        clientConfig.setUseBasicAuth(true); // default = false
-        clientConfig.setRestfulAuthUser(LdapConstants.SVEN_PRINCIPAL);
-        clientConfig.setRestfulAuthPassword("pass");
-        // setup request/response debug logging
-        clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
-        // register additional filter if any
-        additionalFilters.forEach(clientConfig.getClientConversationFilters()::add);
-
-        //debug
-        //clientConfig.setUseRequestDebugLogging(true);
+        val clientConfig = RestfulClientConfig.builder()
+                .restfulBase(restRootPath)
+                // setup basic-auth
+                .useBasicAuth(true)
+                .restfulAuthUser(LdapConstants.SVEN_PRINCIPAL)
+                .restfulAuthPassword("pass")
+                // setup request/response debug logging
+                .useRequestDebugLogging(useRequestDebugLogging)
+                // register additional filter if any
+                .clientConversationFilters(additionalFilters.toList())
+                .build();
 
         val client = RestfulClient.ofConfig(clientConfig);
-
         return client;
     }
 
     // -- NEW REQUEST BUILDER
 
     public Invocation.Builder newInvocationBuilder(final RestfulClient client, final String endpointPath) {
-        return client.request(endpointPath, SuppressionType.ALL);
+        return client.request(endpointPath)
+                .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(Object.class, SuppressionType.all()));
     }
 
     // -- ENDPOINTS

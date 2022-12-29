@@ -18,38 +18,29 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
-import java.util.Map;
-
 import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
-import org.apache.causeway.core.metamodel.methods.MethodByClassMap;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
 
 public class ViewModelFacetFactory
 extends FacetFactoryAbstract
 implements
-    MetaModelRefiner,
-    HasPostConstructMethodCache {
+    MetaModelRefiner {
 
     @Inject
     public ViewModelFacetFactory(
-            final MetaModelContext mmc,
-            final MethodByClassMap postConstructMethodsCache) {
+            final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
-        this.postConstructMethodsCache = postConstructMethodsCache;
     }
 
     /**
@@ -63,22 +54,21 @@ implements
 
         val facetHolder = processClassContext.getFacetHolder();
         val type = processClassContext.getCls();
-        val postConstructMethodCache = this;
 
         // XmlRootElement annotation (with default precedence)
-        val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
+        val hasXmlRootElementAnnotation = _ClassCache.getInstance().hasJaxbRootElementSemantics(type);
         FacetUtil
         .addFacetIfPresent(
                 ViewModelFacetForXmlRootElementAnnotation
-                .create(xmlRootElementIfAny, facetHolder, postConstructMethodCache));
+                .create(hasXmlRootElementAnnotation, facetHolder));
 
         // (with high precedence)
         FacetUtil
         .addFacetIfPresent(
             // either ViewModel interface (highest precedence)
-            ViewModelFacetForViewModelInterface.create(type, facetHolder, postConstructMethodCache)
+            ViewModelFacetForViewModelInterface.create(type, facetHolder)
             // or Serializable interface (if any)
-            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder, postConstructMethodCache)));
+            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder)));
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }
@@ -96,8 +86,10 @@ implements
                     && objectSpec.getBeanSort().isViewModel()
                     && !objectSpec.viewmodelFacet().isPresent()) {
                 ValidationFailure.raiseFormatted(objectSpec,
-                        ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
-                            .getMessageForType(objectSpec.getCorrespondingClass().getName()));
+                        ProgrammingModelConstants.Violation.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
+                            .builder()
+                            .addVariable("type", objectSpec.getCorrespondingClass().getName())
+                            .buildMessage());
             }
 
             objectSpec.viewmodelFacet()
@@ -106,19 +98,15 @@ implements
                 facetRanking
                 .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
                     ValidationFailure.raiseFormatted(objectSpec,
-                            ProgrammingModelConstants.Validation.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
-                                .getMessage(Map.of(
-                                        "type", objectSpec.getFullIdentifier(),
-                                        "facetA", a.getClass().getSimpleName(),
-                                        "facetB", b.getClass().getSimpleName())));
+                            ProgrammingModelConstants.Violation.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
+                                .builder()
+                                .addVariable("type", objectSpec.getFullIdentifier())
+                                .addVariable("facetA", a.getClass().getSimpleName())
+                                .addVariable("facetB", b.getClass().getSimpleName())
+                                .buildMessage());
                 });
             });
         });
     }
-
-    // //////////////////////////////////////
-
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull MethodByClassMap postConstructMethodsCache;
 
 }

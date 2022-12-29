@@ -18,31 +18,35 @@
  */
 package org.apache.causeway.applib.util.schema;
 
-import java.io.Writer;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.causeway.commons.internal.resources._Xml;
-import org.apache.causeway.commons.internal.resources._Xml.WriteOptions;
+import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.io.DtoMapper;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.common.v2.DifferenceDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
 
-import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 /**
  * @since 1.x {@index}
  */
+@UtilityClass
 public final class MemberExecutionDtoUtils {
 
-    public static <T extends MemberExecutionDto> T clone(final T dto) {
-        return _Xml.clone(dto)
-                .getValue().orElseThrow();
+    public void init() {
+        dtoMapper.get();
     }
 
-    public static MetricsDto metricsFor(final MemberExecutionDto executionDto) {
+    private _Lazy<DtoMapper<MemberExecutionDto>> dtoMapper = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(MemberExecutionDto.class, opts->opts.allowMissingRootElement(true)));
+
+    public DtoMapper<MemberExecutionDto> dtoMapper() {
+        return dtoMapper.get();
+    }
+
+    public MetricsDto metricsFor(final MemberExecutionDto executionDto) {
         MetricsDto metrics = executionDto.getMetrics();
         if(metrics == null) {
             metrics = new MetricsDto();
@@ -51,7 +55,7 @@ public final class MemberExecutionDtoUtils {
         return metrics;
     }
 
-    public static PeriodDto timingsFor(final MetricsDto metricsDto) {
+    public PeriodDto timingsFor(final MetricsDto metricsDto) {
         PeriodDto timings = metricsDto.getTimings();
         if(timings == null) {
             timings = new PeriodDto();
@@ -60,7 +64,7 @@ public final class MemberExecutionDtoUtils {
         return timings;
     }
 
-    public static ObjectCountsDto objectCountsFor(final MetricsDto metricsDto) {
+    public ObjectCountsDto objectCountsFor(final MetricsDto metricsDto) {
         ObjectCountsDto objectCounts = metricsDto.getObjectCounts();
         if(objectCounts == null) {
             objectCounts = new ObjectCountsDto();
@@ -69,7 +73,7 @@ public final class MemberExecutionDtoUtils {
         return objectCounts;
     }
 
-    public static DifferenceDto numberObjectsLoadedFor(final ObjectCountsDto objectCountsDto) {
+    public DifferenceDto numberObjectsLoadedFor(final ObjectCountsDto objectCountsDto) {
         DifferenceDto differenceDto = objectCountsDto.getLoaded();
         if(differenceDto == null) {
             differenceDto = new DifferenceDto();
@@ -77,7 +81,7 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
-    public static DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto) {
+    public DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto) {
         DifferenceDto differenceDto = objectCountsDto.getDirtied();
         if(differenceDto == null) {
             differenceDto = new DifferenceDto();
@@ -85,27 +89,5 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
-
-    public static <T extends MemberExecutionDto> String toXml(final @NonNull T dto) {
-        return _Xml.writeXml(dto, writeOptions())
-                .getValue().orElseThrow();
-    }
-
-    public static <T extends MemberExecutionDto> void toXml(
-            final @NonNull T dto,
-            final @NonNull Writer writer) throws JAXBException {
-        _Xml.writeXml(dto, writer, writeOptions());
-    }
-
-    // -- HELPER
-
-    private static WriteOptions writeOptions() {
-        return WriteOptions.builder()
-                .useContextCache(true)
-                .formattedOutput(true)
-                .allowMissingRootElement(true)
-                .build();
-    }
-
 
 }

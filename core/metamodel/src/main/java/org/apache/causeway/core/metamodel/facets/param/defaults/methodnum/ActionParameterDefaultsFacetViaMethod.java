@@ -71,7 +71,7 @@ implements ImperativeFacet {
     @Override
     public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         val managedParam = pendingArgs.getParamModels().getElseFail(paramNum);
 
         // call with args: defaultNAct(X x, Y y, ...)

@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
+		<version>2.7.7</version>
 		<relativePath />
 	</parent>
 
@@ -41,7 +41,7 @@
 
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<spring-boot.version>2.7.5</spring-boot.version>
+		<spring-boot.version>2.7.7</spring-boot.version>
 		<approvaltests.version>18.5.0</approvaltests.version>
 
 		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy-spring-boot-starter -->
@@ -83,8 +83,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.causeway.core</groupId>
-				<artifactId>causeway-core</artifactId>
+				<groupId>org.apache.causeway</groupId>
+				<artifactId>causeway-bom</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
@@ -146,70 +146,17 @@
 		<profile>
 			<id>causeway-app-starter-datanucleusenhance</id>
 			<activation>
-				<file>
-					<exists>${basedir}/logging-dn-enhance.properties</exists>
-				</file>
+				<property>
+					<name>causeway-app-starter-datanucleusenhance</name>
+					<value>true</value>
+				</property>
 			</activation>
-			<properties>
-
-				<!-- keep in sync with versions used in Apache Causeway -->
-				<datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
-				<datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-				<datanucleus-core.version>6.0.2</datanucleus-core.version>
-				<datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
-				<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
-
-				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
-				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
-				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
-			</properties>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-maven-plugin</artifactId>
-						<version>${datanucleus-maven-plugin.version}</version>
-						<configuration>
-							<fork>${datanucleus-maven-plugin.fork}</fork>
-							<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
-							<verbose>${datanucleus-maven-plugin.verbose}</verbose>
-						</configuration>
-						<executions>
-							<execution>
-								<id>process-classes</id>
-								<phase>process-classes</phase>
-								<goals>
-									<goal>enhance</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>process-test-classes</id>
-								<phase>process-test-classes</phase>
-								<goals>
-									<goal>test-enhance</goal>
-								</goals>
-								<configuration>
-									<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-core</artifactId>
-								<version>${datanucleus-core.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-api-jdo</artifactId>
-								<version>${datanucleus-api-jdo.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-jodatime</artifactId>
-								<version>${datanucleus-jodatime.version}</version>
-							</dependency>
-						</dependencies>
+						<inherited>true</inherited>
 					</plugin>
 				</plugins>
 			</build>
@@ -316,7 +263,7 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-surefire-report-plugin</artifactId>
-							<version>${maven-surefire-plugin.version}</version>
+							<version>${maven-surefire-report-plugin.version}</version>
 							<configuration>
 								<showSuccess>false</showSuccess>
 							</configuration>

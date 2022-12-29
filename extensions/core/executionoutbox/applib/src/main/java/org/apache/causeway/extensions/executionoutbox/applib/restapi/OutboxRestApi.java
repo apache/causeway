@@ -40,6 +40,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Provides a server-side REST API for the <i>outbox rest client</i> to call, to first obtain {@link #pending() pending}
+ * {@link ExecutionOutboxEntry outbox entries} to be processed, and then later to request them to be
+ * {@link #deleteMany(String) deleted}.
+ *
  * @since 2.0 {@index}
  */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)
@@ -58,8 +62,6 @@ public class OutboxRestApi  {
      * <p>
      *     The {@link ContentMappingServiceForOutboxEvents} will then serialize the resultant {@link OutboxEvents} view model into XML.
      * </p>
-     *
-     * @return
      */
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -88,7 +90,7 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public void deleteMany(final String interactionsDtoXml) {
-        val interactionsDto = InteractionsDtoUtils.fromXml(interactionsDtoXml);
+        val interactionsDto = InteractionsDtoUtils.dtoMapper().read(interactionsDtoXml);
         interactionsDto.getInteractionDto().
                 forEach(interactionType -> {
                     val interactionId = interactionType.getInteractionId();

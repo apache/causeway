@@ -55,7 +55,7 @@ implements ImperativeFacet {
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         MmInvokeUtil.invoke(method, targetAdapter);
         return targetAdapter;
     }

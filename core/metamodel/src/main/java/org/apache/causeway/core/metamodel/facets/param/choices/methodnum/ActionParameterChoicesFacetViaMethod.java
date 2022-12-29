@@ -72,7 +72,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object collectionOrArray = patConstructor.isPresent()
                 ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, head.getTarget(), pendingArgs)
                 : MmInvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);

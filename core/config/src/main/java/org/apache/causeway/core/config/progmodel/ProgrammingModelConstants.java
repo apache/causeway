@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -64,6 +65,7 @@ import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
@@ -468,7 +470,7 @@ public final class ProgrammingModelConstants {
 
     //maybe gradually consolidate all MM validation raisers here
     @RequiredArgsConstructor
-    public static enum Validation {
+    public static enum Violation {
         CONFLICTING_TITLE_STRATEGIES(
                 "${type} has title() method with @Title annotation, which is not allowed; "
                 + "consider either removing the @Title annotation or renaming the method"),
@@ -481,9 +483,14 @@ public final class ProgrammingModelConstants {
         VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES(
                 "${type}: has multiple incompatible annotations/interfaces indicating that "
                 + "it is a recreatable object of some sort (${facetA} and ${facetB})"),
-        VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
-                "${type}: ViewModel contract violation: missing single (String) arg constructor "
-                + "(for de-serialization from memento string)."),
+        VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS(
+                "${type}: ViewModel contract violation: there must be at most one public constructor that has inject semantics, "
+                + "but found ${found}. "
+                + "See " + org.apache.causeway.applib.ViewModel.class.getName() + " java-doc for details."),
+        VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS(
+                "${type}: ViewModel contract violation: in absence of inject semantics there must be exactly one public constructor, "
+                + "but found ${found}. "
+                + "See " + org.apache.causeway.applib.ViewModel.class.getName() + " java-doc for details."),
         VIEWMODEL_MISSING_SERIALIZATION_STRATEGY(
                 "${type}: Missing ViewModel serialization strategy encountered; "
                 + "for ViewModels one of those must be true: "
@@ -516,42 +523,68 @@ public final class ProgrammingModelConstants {
         NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to multiple non-abstract classes:\n"
                 + "${csv}"),
+        UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
+        ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
+                + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),
         ;
 
         private final String template;
-        public String getMessage(final Identifier featureIdentifier) {
-            return getMessageForTypeAndMemberId(
-                    featureIdentifier.getLogicalType().getClassName(),
-                    featureIdentifier.getMemberLogicalName());
+
+        public ViolationBuilder builder() {
+            return new ViolationBuilder(this);
         }
-        public String getMessageForType(final String type) {
-            return getMessage(Map.of(
-                    "type", type));
-        }
-        public String getMessageForTypeAndMemberId(final String type, final String memberId) {
-            return getMessage(Map.of(
-                    "type", type,
-                    "member", memberId));
-        }
-        public String getMessage(final Map<String, String> templateVars) {
-            return processMessageTemplate(template, templateVars);
+        @RequiredArgsConstructor
+        public static class ViolationBuilder {
+            private final Violation violaton;
+            private final Map<String, String> vars = new HashMap<>();
+            public ViolationBuilder addVariable(final String name, final String value) {
+                vars.put(name, value);
+                return this;
+            }
+            public ViolationBuilder addVariable(final String name, final Number value) {
+                vars.put(name, ""+value);
+                return this;
+            }
+            public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
+                addVariable("type", featureIdentifier.getLogicalType().getClassName());
+                addVariable("member", featureIdentifier.getMemberLogicalName());
+                return this;
+            }
+            public String buildMessage() {
+                return processMessageTemplate(violaton.template, vars);
+            }
         }
     }
 
+    /**
+     * violation of view-model contract should be covered by meta-model validation
+     */
     public static enum ViewmodelConstructor {
-        SINGLE_STRING_ARG {
-
-            @Override
-            public <T> Optional<Constructor<T>> get(final Class<T> cls) {
-                // heap-pollution: only produces stack-traces when cls violates viewmodel contract,
-                // which is covered by mm validation
+        PUBLIC_WITH_INJECT_SEMANTICS {
+            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
                 return Try.call(()->
-                        cls.getDeclaredConstructor(new Class<?>[]{String.class}))
-                        .getValue();
+                    _ClassCache.getInstance()
+                        .streamPublicConstructorsWithInjectSemantics(cls))
+                        .getValue()
+                        .orElse(Stream.empty());
             }
-
+        },
+        PUBLIC_ANY {
+            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+                return Try.call(()->
+                    _ClassCache.getInstance()
+                        .streamPublicConstructors(cls))
+                        .getValue()
+                        .orElse(Stream.empty());
+            }
         };
-        public abstract <T> Optional<Constructor<T>> get(Class<T> correspondingClass);
+        public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+            return streamAll(cls).collect(Can.toCan());
+        }
+        public <T> Optional<Constructor<T>> getFirst(final Class<T> cls) {
+            return streamAll(cls).findFirst();
+        }
+        public abstract <T> Stream<Constructor<T>> streamAll(Class<T> cls);
 
     }
 

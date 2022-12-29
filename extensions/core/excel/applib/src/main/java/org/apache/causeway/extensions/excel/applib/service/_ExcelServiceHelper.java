@@ -174,8 +174,6 @@ class _ExcelServiceHelper {
     }
 
 
-    // //////////////////////////////////////
-
 
     /**
      * Returns a list of objects for each line in the spreadsheet, of the specified type.  The objects are read

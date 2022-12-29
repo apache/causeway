@@ -477,7 +477,7 @@ class DomainModelTest_usingGoodDomain {
         val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenChoicesFrom.class);
 
         val action = spec.getActionElseFail("appendACharacterToCandidates");
-        val param0 = action.getParameters().getFirstOrFail();
+        val param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetFromChoicesFromFacet.class,
@@ -498,7 +498,7 @@ class DomainModelTest_usingGoodDomain {
         val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.class);
 
         val action = spec.getActionElseFail("remove");
-        val param0 = action.getParameters().getFirstOrFail();
+        val param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetViaMethod.class,
@@ -514,7 +514,7 @@ class DomainModelTest_usingGoodDomain {
                 .specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference.class);
 
         val action = spec.getActionElseFail("remove");
-        val param0 = action.getParameters().getFirstOrFail();
+        val param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetViaMethod.class,

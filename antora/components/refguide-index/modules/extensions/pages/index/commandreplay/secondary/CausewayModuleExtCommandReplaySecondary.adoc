@@ -12,9 +12,6 @@ class CausewayModuleExtCommandReplaySecondary {
   public static final String NAMESPACE;
   JobDetailFactoryBean replicateAndReplayJobDetailFactory()
   SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(JobDetail job)
-  SpringBeanJobFactory springBeanJobFactory()
-  SchedulerFactoryBean scheduler(Trigger trigger, JobDetail jobDetail, SpringBeanJobFactory sbjf)
-  Scheduler scheduler(Trigger trigger, JobDetail job, SchedulerFactoryBean factory)
 }
 ----
 

@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -38,10 +37,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -70,12 +66,8 @@ implements DomainServiceResource {
         return DomainServiceFacet.isContributing(input.getSpecification());
     };
 
-    @Inject
-    public DomainServiceResourceServerside(
-            final MetaModelContext metaModelContext,
-            final CausewayConfiguration causewayConfiguration,
-            final InteractionLayerTracker iInteractionLayerTracker) {
-        super(metaModelContext, causewayConfiguration, iInteractionLayerTracker);
+    public DomainServiceResourceServerside() {
+        super();
         log.debug("<init>");
     }
 

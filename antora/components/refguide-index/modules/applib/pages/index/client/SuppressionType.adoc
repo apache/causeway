@@ -13,6 +13,7 @@ enum SuppressionType {
   DOMAIN_TYPE     // <.>
   TITLE     // <.>
   ALL     // <.>
+  EnumSet<SuppressionType> all()
   EnumSet<SuppressionType> setOf(SuppressionType... types)
 }
 ----

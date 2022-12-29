@@ -15,20 +15,27 @@
 
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
-        <artifactId>causeway-regressiontests-cmdexecauditsess</artifactId>
+        <artifactId>causeway-regressiontests-stable-cmdexecauditsess</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>causeway-regressiontests-cmdexecauditsess-persistence-jpa</artifactId>
+    <artifactId>causeway-regressiontests-stable-cmdexecauditsess-persistence-jpa</artifactId>
     <name>Apache Causeway - Regression Tests (stable) - Cmd/Exec/Audit/Session - JPA</name>
+
+	<properties>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+
+        <jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.stable.cmdexecauditsess.persistence.jpa</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/regressiontests/stable-cmdexecauditsess/persistence-jpa</git-plugin.propertiesDir>
+    </properties>
 
     <dependencies>
 
         <dependency>
             <groupId>org.apache.causeway.regressiontests</groupId>
-            <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
+            <artifactId>causeway-regressiontests-stable-cmdexecauditsess-generic</artifactId>
             <scope>test</scope>
-
         </dependency>
 
         <dependency>

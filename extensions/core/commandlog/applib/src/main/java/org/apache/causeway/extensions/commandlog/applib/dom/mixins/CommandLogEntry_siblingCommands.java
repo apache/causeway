@@ -31,6 +31,9 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Contributes a <code>siblingCommands</code> collection to the {@link CommandLogEntry}), in other words those
+ * commands to be run in the background that have the same originating (parent) command.
+ *
  * @since 2.x {@index}
  */
 @Collection(

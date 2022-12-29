@@ -19,6 +19,10 @@
 package org.apache.causeway.extensions.executionoutbox.applib.dom;
 
 /**
+ * Whether an {@link ExecutionOutboxEntry} persists an
+ * {@link ExecutionOutboxEntryType#ACTION_INVOCATION action invocation} or a
+ * {@link ExecutionOutboxEntryType#PROPERTY_EDIT property edit}.
+ *
  * @since 2.0 {@index}
  */
 public enum ExecutionOutboxEntryType {

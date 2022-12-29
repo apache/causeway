@@ -68,7 +68,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
         Optional<T> match = streamBeans()
                 .filter(beanAdapter->type.isAssignableFrom(beanAdapter.getBeanClass()))
-                .map(beanAdapter->beanAdapter.getInstance().getFirstOrFail())
+                .map(beanAdapter->beanAdapter.getInstance().getFirstElseFail())
                 .map(_Casts::<T>uncheckedCast)
                 .findFirst();
 

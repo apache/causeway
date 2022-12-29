@@ -19,6 +19,9 @@
 package org.apache.causeway.extensions.executionlog.applib.dom;
 
 /**
+ * Whether an {@link ExecutionLogEntry} persists an {@link ExecutionLogEntryType#ACTION_INVOCATION action invocation}
+ * or a {@link ExecutionLogEntryType#PROPERTY_EDIT property edit}.
+ *
  * @since 2.0 {@index}
  */
 public enum ExecutionLogEntryType {

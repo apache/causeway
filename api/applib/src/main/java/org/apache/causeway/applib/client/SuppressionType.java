@@ -62,7 +62,9 @@ public enum SuppressionType {
 
     ;
 
-    public static EnumSet<SuppressionType> setOf(SuppressionType ... types){
+    public static EnumSet<SuppressionType> all() { return EnumSet.of(ALL); };
+
+    public static EnumSet<SuppressionType> setOf(final SuppressionType ... types){
         final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
         stream(types).forEach(set::add);
         return set;
@@ -70,7 +72,7 @@ public enum SuppressionType {
 
     public static class ParseUtil {
 
-        public static EnumSet<SuppressionType> parse(List<String> parameterList) {
+        public static EnumSet<SuppressionType> parse(final List<String> parameterList) {
             final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
             parameterList.stream()
             .map(SuppressionType.ParseUtil::parseOrElseNull)
@@ -82,7 +84,7 @@ public enum SuppressionType {
             return set;
         }
 
-        private static SuppressionType parseOrElseNull(String literal) {
+        private static SuppressionType parseOrElseNull(final String literal) {
 
             // honor pre v2 behavior
             if("true".equalsIgnoreCase(literal)) {

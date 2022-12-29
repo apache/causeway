@@ -32,9 +32,9 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.Conten
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ClassExcluderDefault;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.ValueSchemaFactoryDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
 /**
@@ -48,9 +48,9 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 
         // @Component's
         ClassExcluderDefault.class,
-        SwaggerSpecGenerator.class,
+        OpenApiSpecGenerator.class,
         TaggerDefault.class,
-        ValuePropertyFactoryDefault.class,
+        ValueSchemaFactoryDefault.class,
 
 
         // @Service's

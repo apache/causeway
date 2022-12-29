@@ -29,13 +29,14 @@
 
     <artifactId>causeway-viewer-wicket-graceful</artifactId>
     <name>Apache Causeway Viewer - Wicket (Graceful)</name>
-
 	<description>
 		Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository
 		with mangled variants, that do not include module-info.class entries.
 		This artifact - in its realeased form - is empty.
 	</description>
 
+	<packaging>jar</packaging>
+	
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.graceful</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/graceful</git-plugin.propertiesDir>
@@ -46,7 +47,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>patch-wicket</id>

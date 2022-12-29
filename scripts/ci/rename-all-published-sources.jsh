@@ -314,10 +314,11 @@ class RenameProject {
 
 }
 
-var rootPath = "" + System.getenv("PROJECT_LEGACY_ROOT_PATH");
+var rootPath = "" + System.getenv("ROOT_PATH_LEGACY");
 if(rootPath.isBlank() 
         || ! new File(rootPath).exists()) {
-    throw new IllegalArgumentException("env PROJECT_LEGACY_ROOT_PATH must point to an existing directory");
+    System.err.println("env ROOT_PATH_LEGACY must point to an existing directory");
+    /exit 1
 }
 
 var root = new File(rootPath);

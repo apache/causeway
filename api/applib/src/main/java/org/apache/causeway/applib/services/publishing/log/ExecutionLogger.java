@@ -59,7 +59,7 @@ public class ExecutionLogger implements ExecutionSubscriber {
         final InteractionDto interactionDto =
                 InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);
 
-        log.debug(InteractionDtoUtils.toXml(interactionDto));
+        log.debug(InteractionDtoUtils.dtoMapper().toString(interactionDto));
 
     }
 

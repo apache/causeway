@@ -57,7 +57,7 @@ implements ExecutionSubscriber {
         publishedEntries.add(execution);
 
         kvStore.put(this, "publishedExecutions", publishedEntries);
-        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
+        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.dtoMapper().toString(execution.getDto()));
     }
 
     // -- UTILITIES

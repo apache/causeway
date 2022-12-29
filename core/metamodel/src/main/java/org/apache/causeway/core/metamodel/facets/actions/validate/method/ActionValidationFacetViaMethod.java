@@ -63,7 +63,7 @@ implements ImperativeFacet {
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
                 ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, proposedArgumentAdapters)
                 : MmInvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);

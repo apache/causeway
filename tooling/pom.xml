@@ -42,7 +42,7 @@
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.8.6</maven-model-builder.version>
 		<picocli.version>4.7.0</picocli.version>
-		<structurizr.version>1.16.1</structurizr.version>
+		<structurizr.version>1.16.2</structurizr.version>
 		<structurizr-plantuml.version>1.6.3</structurizr-plantuml.version>
 
 	</properties>
@@ -272,7 +272,7 @@
         <dependency>
 		    <groupId>org.checkerframework</groupId>
 		    <artifactId>checker-qual</artifactId>
-		    <version>3.27.0</version>
+		    <version>3.28.0</version>
 		</dependency>
 
 		<!-- LOGGING -->

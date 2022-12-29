@@ -37,7 +37,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -62,7 +61,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
-        val spec = loadSpec(requiredType);
+        val spec = loadSpecElseFail(requiredType);
         if(spec.isInjectable()) {
             return get(requiredType);
         }
@@ -78,19 +77,19 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T detachedEntity(final @NonNull Class<T> domainClass) {
-        val entitySpec = loadSpec(domainClass);
+        val entitySpec = loadSpecElseFail(domainClass);
         if(!entitySpec.isEntity()) {
             throw _Exceptions.illegalArgument("Class '%s' is not an entity", domainClass.getName());
         }
-        return _Casts.uncheckedCast(createObject(entitySpec));
+        return createObject(domainClass, entitySpec);
     }
 
     @Override
     public <T> T detachedEntity(final @NonNull T entityPojo) {
         val entityClass = entityPojo.getClass();
-        val spec = loadSpec(entityClass);
+        val spec = loadSpecElseFail(entityClass);
         if(!spec.isEntity()) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recogniced as an entity type by the framework.",
+            throw _Exceptions.illegalArgument("Type '%s' is not recognized as an entity type by the framework.",
                     entityClass);
         }        objectLifecyclePublisher().onPostCreate(ManagedObject.entity(spec, entityPojo, Optional.empty()));
         return entityPojo;
@@ -98,7 +97,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixee) {
-        val mixinSpec = loadSpec(mixinClass);
+        val mixinSpec = loadSpecElseFail(mixinClass);
         val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             throw _Exceptions.illegalArgument("Class '%s' is not a mixin",
@@ -115,59 +114,67 @@ public class FactoryServiceDefault implements FactoryService {
     @Override
     public <T> T viewModel(final @NonNull T viewModelPojo) {
         val viewModelClass = viewModelPojo.getClass();
-        val spec = loadSpec(viewModelClass);
+        val spec = loadSpecElseFail(viewModelClass);
         if(!spec.isViewModel()) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
+            throw _Exceptions.illegalArgument("Type '%s' is not recognized as a ViewModel by the framework.",
                     viewModelClass);
         }
+        spec.viewmodelFacetElseFail().initialize(viewModelPojo);
         objectLifecyclePublisher().onPostCreate(ManagedObject.viewmodel(spec, viewModelPojo, Optional.empty()));
         return viewModelPojo;
     }
 
     @Override
     public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
-        val spec = loadSpec(viewModelClass);
-        if(!spec.isViewModel()) {
-            throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
-                    viewModelClass);
-        }
-        val viewModelFacet = getViewModelFacet(spec);
-        val viewModel = viewModelFacet.instantiate(spec, Optional.ofNullable(bookmark));
-        objectLifecyclePublisher().onPostCreate(viewModel);
-        return _Casts.uncheckedCast(viewModel.getPojo());
+        val spec = loadSpecElseFail(viewModelClass);
+        return createViewModelElseFail(viewModelClass, spec, Optional.ofNullable(bookmark));
     }
 
     @Override
     public <T> T create(final @NonNull Class<T> domainClass) {
-        val spec = loadSpec(domainClass);
-
+        val spec = loadSpecElseFail(domainClass);
         if(spec.isInjectable()) {
             throw _Exceptions.illegalArgument(
-                    "Class '%s' is managed by IoC container, use get() instead", domainClass.getName());
+                    "Class '%s' is managed by Spring, use get() instead", domainClass.getName());
         }
-        return _Casts.uncheckedCast(createObject(spec));
+        if(spec.isViewModel()) {
+            return createViewModelElseFail(domainClass, spec, Optional.empty());
+        }
+        if(spec.isEntity()) {
+            return detachedEntity(domainClass);
+        }
+        // fallback to generic object creation
+        return createObject(domainClass, spec);
     }
 
     // -- HELPER
 
-    private ObjectSpecification loadSpec(final @NonNull Class<?> type) {
+    private ObjectSpecification loadSpecElseFail(final @NonNull Class<?> type) {
         return specificationLoader.specForTypeElseFail(type);
     }
 
-    private ViewModelFacet getViewModelFacet(final @NonNull ObjectSpecification spec) {
-        val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-        if(viewModelFacet==null) {
-            throw _Exceptions.illegalArgument("Type '%s' must be recogniced as a ViewModel, "
-                    + "that is the type's meta-model "
-                    + "must have an associated ViewModelFacet: ", spec.getCorrespondingClass());
-        }
-        return viewModelFacet;
+    /** handles injection, post-construct and publishing */
+    private <T> T createViewModelElseFail(
+            final @NonNull Class<T> viewModelClass,
+            final @NonNull ObjectSpecification objectSpecification,
+            final @NonNull Optional<Bookmark> bookmarkIfAny) {
+        return Optional.of(objectSpecification)
+        .filter(ObjectSpecification::isViewModel)
+        .<T>map(spec->{
+            val viewModel = spec.viewmodelFacetElseFail().instantiate(spec, bookmarkIfAny);
+            objectLifecyclePublisher().onPostCreate(viewModel);
+            return _Casts.uncheckedCast(viewModel.getPojo());
+        })
+        .orElseThrow(()->_Exceptions.illegalArgument("Type '%s' is not recognized as a ViewModel by the framework.",
+                viewModelClass));
     }
 
-    private Object createObject(final ObjectSpecification spec) {
-        // already handles injection and publishing
+    /** handles injection and publishing, but probably not post-construct */
+    private <T> T createObject(
+            final @NonNull Class<?> type,
+            final @NonNull ObjectSpecification spec) {
         val domainObject = spec.createObject();
-        return domainObject.getPojo();
+        return _Casts.uncheckedCast(domainObject.getPojo());
     }
 
 }

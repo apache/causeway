@@ -144,12 +144,12 @@ module org.apache.causeway.applib {
     requires spring.tx;
 
     // JAXB viewmodels
+    opens org.apache.causeway.applib.annotation;
     opens org.apache.causeway.applib.layout.component;
     opens org.apache.causeway.applib.layout.grid.bootstrap;
     opens org.apache.causeway.applib.layout.grid;
     opens org.apache.causeway.applib.layout.links;
     opens org.apache.causeway.applib.layout.menubars.bootstrap;
     opens org.apache.causeway.applib.layout.menubars;
-
 
 }

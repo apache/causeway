@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -52,6 +53,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
     public ApplicationTypeAction(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    @Inject
     public ApplicationTypeAction(final String memento) {
         super(memento);
     }

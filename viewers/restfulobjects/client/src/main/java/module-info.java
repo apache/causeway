@@ -27,9 +27,9 @@ module org.apache.causeway.viewer.restfulobjects.client {
     requires java.ws.rs;
     requires java.xml.bind;
     requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.viewer.restfulobjects.applib;
+    requires transitive org.apache.causeway.applib;
+    requires transitive org.apache.causeway.commons;
+    requires transitive org.apache.causeway.viewer.restfulobjects.applib;
     requires org.apache.logging.log4j;
     requires spring.core;
 }

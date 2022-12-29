@@ -20,15 +20,12 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
 import java.util.Optional;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -40,20 +37,18 @@ public class ViewModelFacetForXmlRootElementAnnotation
 extends ViewModelFacetAbstract {
 
     public static Optional<ViewModelFacet> create(
-            final Optional<XmlRootElement> xmlRootElementIfAny,
-            final FacetHolder facetHolder,
-            final HasPostConstructMethodCache postConstructMethodCache) {
+            final boolean hasRootElementAnnotation,
+            final FacetHolder facetHolder) {
 
-        return xmlRootElementIfAny.map(xmlRootElement->
-            new ViewModelFacetForXmlRootElementAnnotation(
-                    facetHolder, postConstructMethodCache));
+        return hasRootElementAnnotation
+                ? Optional.of(new ViewModelFacetForXmlRootElementAnnotation(facetHolder))
+                : Optional.empty();
     }
 
     private ViewModelFacetForXmlRootElementAnnotation(
-            final FacetHolder facetHolder,
-            final HasPostConstructMethodCache postConstructMethodCache) {
+            final FacetHolder facetHolder) {
         // overruled by other non fallback ViewModelFacet types
-        super(facetHolder, postConstructMethodCache, Precedence.DEFAULT);
+        super(facetHolder, Precedence.DEFAULT);
     }
 
     @Override

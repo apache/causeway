@@ -50,6 +50,7 @@
 			<plugin>
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<inherited>true</inherited>
 			</plugin>
 		</plugins>
 	</build>

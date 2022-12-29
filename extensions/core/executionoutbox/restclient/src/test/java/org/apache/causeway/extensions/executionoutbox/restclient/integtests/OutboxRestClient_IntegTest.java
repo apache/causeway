@@ -237,7 +237,7 @@ public class OutboxRestClient_IntegTest  {
 
     }
 
-    private void bump(org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter counter, int numberOfTimes) {
+    private void bump(final org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter counter, final int numberOfTimes) {
         IntStream.range(0, numberOfTimes).forEach(x -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter).act();
         });

@@ -126,7 +126,7 @@ implements ImperativeFacet {
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
 
         val resultAdapter = getMemberExecutor()
                 .invokeAction(
@@ -145,7 +145,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
-        val method = methods.getFirstOrFail();
+        val method = methods.getFirstElseFail();
 
         final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
         final Object targetPojo = MmUnwrapUtil.single(head.getTarget());

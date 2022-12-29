@@ -77,7 +77,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstOrFail();
+                val callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -120,7 +120,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstOrFail();
+                val callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -163,7 +163,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstOrFail();
+                val callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -206,7 +206,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstOrFail();
+                val callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -226,7 +226,7 @@ final class _Xray {
         }
 
         handle.submit(sequenceData->{
-            val callee = handle.getCallees().getFirstOrFail();
+            val callee = handle.getCallees().getFirstElseFail();
             sequenceData.exit(callee, handle.getCaller());
             sequenceData.deactivate(callee);
 

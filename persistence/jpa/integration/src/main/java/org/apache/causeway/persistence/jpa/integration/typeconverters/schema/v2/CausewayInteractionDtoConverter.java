@@ -33,16 +33,12 @@ implements AttributeConverter<InteractionDto, String> {
 
     @Override
     public String convertToDatabaseColumn(final InteractionDto memberValue) {
-        return memberValue != null
-                ? InteractionDtoUtils.toXml(memberValue)
-                        : null;
+        return InteractionDtoUtils.dtoMapper().toString(memberValue);
     }
 
     @Override
     public InteractionDto convertToEntityAttribute(final String datastoreValue) {
-        return datastoreValue != null
-                ? InteractionDtoUtils.fromXml(datastoreValue)
-                        : null;
+        return InteractionDtoUtils.dtoMapper().read(datastoreValue);
     }
 
 }

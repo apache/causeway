@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.causeway.commons.internal.resources._Xml;
+import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.SneakyThrows;
@@ -62,7 +62,10 @@ class JaxbServiceTest {
         assertNotNull(JAXBContext.newInstance(ActionInvocationDto.class));
 
         val dto = getSample();
-        assertDtoEquals(dto, _Xml.clone(dto).getValue().orElseThrow());
+        assertDtoEquals(dto, JaxbUtils.mapperFor(ActionInvocationDto.class, opts->opts.allowMissingRootElement(true))
+                .tryClone(dto)
+                .ifFailureFail()
+                .getValue().orElseThrow());
     }
 
     // -- HELPER

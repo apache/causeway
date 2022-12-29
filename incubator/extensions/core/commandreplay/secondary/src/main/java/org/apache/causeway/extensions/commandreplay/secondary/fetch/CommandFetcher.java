@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary.fetch;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +41,7 @@ import org.apache.causeway.extensions.commandreplay.secondary.status.StatusExcep
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -107,9 +109,8 @@ public class CommandFetcher {
     Can<CommandDto> callPrimary(final @Nullable UUID interactionId) throws StatusException {
 
         val client = newClient(secondaryConfig, useRequestDebugLogging);
-        val request = client.request(
-                URL_SUFFIX,
-                SuppressionType.RO);
+        val request = client.request(URL_SUFFIX)
+                .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(CommandDto.class, EnumSet.of(SuppressionType.RO)));
 
         val args = client.arguments()
                 .addActionParameter("interactionId", interactionId!=null ? interactionId.toString() : null)
@@ -131,14 +132,15 @@ public class CommandFetcher {
             final SecondaryConfig secondaryConfig,
             final boolean useRequestDebugLogging) {
 
-        val clientConfig = new RestfulClientConfig();
-        clientConfig.setRestfulBase(secondaryConfig.getPrimaryBaseUrlRestful());
+        val clientConfig = RestfulClientConfig.builder()
+        .restfulBase(secondaryConfig.getPrimaryBaseUrlRestful())
         // setup basic-auth
-        clientConfig.setUseBasicAuth(true);
-        clientConfig.setRestfulAuthUser(secondaryConfig.getPrimaryUser());
-        clientConfig.setRestfulAuthPassword(secondaryConfig.getPrimaryPassword());
+        .useBasicAuth(true)
+        .restfulAuthUser(secondaryConfig.getPrimaryUser())
+        .restfulAuthPassword(secondaryConfig.getPrimaryPassword())
         // setup request/response debug logging
-        clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
+        .useRequestDebugLogging(useRequestDebugLogging)
+        .build();
 
         val client = RestfulClient.ofConfig(clientConfig);
         return client;

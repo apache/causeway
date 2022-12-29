@@ -273,7 +273,7 @@ public final class FacetRanking {
 
         if(topRankingFacets.isCardinalityMultiple()) {
 
-            val firstOfTopRanking = topRankingFacets.getFirstOrFail();
+            val firstOfTopRanking = topRankingFacets.getFirstElseFail();
 
             topRankingFacets
             .stream()
