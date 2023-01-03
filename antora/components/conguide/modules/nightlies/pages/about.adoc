@@ -1,0 +1,430 @@
+[[nightlies]]
+= Nightlies
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This page describes how we deploy the xref:docs:starters:simpleapp.adoc[], xref:docs:starters:helloworld.adoc[HelloWorld App] and the xref:docs:demo:about.adoc[] each night.
+
+WARNING: work in progress
+
+The intention is to use link:https://learn.microsoft.com/en-gb/azure/container-apps/[Azure Container Apps].
+
+== Azure Container Apps
+
+Following link:https://learn.microsoft.com/en-gb/azure/container-apps/get-started?ocid=AID3042118&tabs=bash[azure docs] for ACA
+
+=== Prereqs
+
+* link:https://learn.microsoft.com/en-us/cli/azure/install-azure-cli[install Azure CLI]
+
+=== Authenticate
+
+Authenticate and prepare working environment
+
+* login
++
+[source,bash]
+----
+az login
+----
++
+Confirm using web browser.
+
+* add ACA extension
++
+[source,bash]
+----
+az extension add --name containerapp --upgrade
+----
++
+This takes a minute or two.
+
+* register the `Microsoft.OperationalInsights` provider for the Azure Monitor Log Analytics workspace
++
+[source,bash]
+----
+az provider register --namespace Microsoft.OperationalInsights
+----
++
+(as have not used it before).
+
+
+
+=== Setup
+
+Create a resource group to organize the services related to the container apps.
+
+* set the environment variables:
++
+[source,bash]
+----
+RESOURCE_GROUP="causeway-nightlies-rg"
+LOCATION="uksouth"
+----
+
+* create the resource group
++
+[source,bash]
+----
+az group create \
+  --name $RESOURCE_GROUP \
+  --location $LOCATION
+----
++
+resulting in:
++
+[source,bash]
+----
+{
+  "id": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg",
+  "location": "ukwest",
+  "managedBy": null,
+  "name": "causeway-nightlies-rg",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": null,
+  "type": "Microsoft.Resources/resourceGroups"
+}
+----
+
+=== Create an environment
+
+An environment in Azure Container Apps creates a secure boundary around a group of container apps.
+Container Apps deployed to the same environment are deployed in the same virtual network and write logs to the same Log Analytics workspace.
+
+* set a further environment variable:
++
+[source,bash]
+----
+CONTAINERAPPS_ENVIRONMENT="causeway-nightlies-aca-env"
+----
+
+* xxx
++
+[source,bash]
+----
+az containerapp env create \
+  --name $CONTAINERAPPS_ENVIRONMENT \
+  --resource-group $RESOURCE_GROUP \
+  --location $LOCATION
+----
++
+resulting in:
++
+[source,bash]
+----
+No Log Analytics workspace provided.
+Generating a Log Analytics workspace with name "workspace-causewaynightliesrgT0WN"
+
+Container Apps environment created. To deploy a container app, use: az containerapp create --help
+
+{
+  "id": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/managedEnvironments/causeway-nightlies-aca-env",
+  "location": "uksouth",
+  "name": "causeway-nightlies-aca-env",
+  "properties": {
+    "appLogsConfiguration": {
+      "destination": "log-analytics",
+      "logAnalyticsConfiguration": {
+        "customerId": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+      }
+    },
+    "customDomainConfiguration": {
+      "customDomainVerificationId": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    },
+    "defaultDomain": "graytree-90c75749.uksouth.azurecontainerapps.io",
+    "provisioningState": "Succeeded",
+    "staticIp": "20.108.221.167",
+    "zoneRedundant": false
+  },
+  "resourceGroup": "causeway-nightlies-rg",
+  "sku": {
+    "name": "Consumption"
+  },
+  "systemData": {
+    "createdAt": "2023-01-02T06:54:25.6911574",
+    "createdBy": "dan@haywood-associates.co.uk",
+    "createdByType": "User",
+    "lastModifiedAt": "2023-01-02T06:54:25.6911574",
+    "lastModifiedBy": "dan@haywood-associates.co.uk",
+    "lastModifiedByType": "User"
+  },
+  "type": "Microsoft.App/managedEnvironments"
+}
+----
+
+=== Create container apps
+
+For link:https://hub.docker.com/repository/docker/apacheisis/demo-wicket-jpa[apacheisis/demo-wicket-jpa]
+
+* set a further environment variables:
++
+[source,bash]
+----
+APP_NAME="demo-wicket-jpa"
+IMAGE_NAME="apacheisis/demo-wicket-jpa"
+IMAGE_VERSION="2.0.0-M9.20221224-0226-7c658a3c"
+----
+
+* create the app
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
++
+resulting in:
++
+[source,bash]
+----
+Container app created. Access your app at https://demo-wicket-jpa.graytree-90c75749.uksouth.azurecontainerapps.io/
+----
+
+=== Update the app
+
+* update the environment variables:
++
+[source,bash]
+----
+IMAGE_VERSION="2.0.0-M9.20221229-0233-"
+----
++
+NOTE: looks like there's an issue with our generation of the image version, missing the sha Id suffix.
+
+* Update the image
++
+[source,bash]
+----
+az containerapp update \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --image $IMAGE_NAME:$IMAGE_VERSION
+----
++
+resulting in:
++
+[source,bash]
+----
+{
+  "id": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/containerapps/demo-wicket-jpa",
+  "identity": {
+    "type": "None"
+  },
+  "location": "UK South",
+  "name": "demo-wicket-jpa",
+  "properties": {
+    "configuration": {
+      "activeRevisionsMode": "Single",
+      "dapr": null,
+      "ingress": {
+        "allowInsecure": false,
+        "customDomains": null,
+        "exposedPort": 0,
+        "external": true,
+        "fqdn": "demo-wicket-jpa.graytree-90c75749.uksouth.azurecontainerapps.io",
+        "ipSecurityRestrictions": null,
+        "targetPort": 8080,
+        "traffic": [
+          {
+            "latestRevision": true,
+            "weight": 100
+          }
+        ],
+        "transport": "Auto"
+      },
+      "maxInactiveRevisions": null,
+      "registries": null,
+      "secrets": null
+    },
+    "customDomainVerificationId": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "environmentId": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/managedEnvironments/causeway-nightlies-aca-env",
+    "eventStreamEndpoint": "https://uksouth.azurecontainerapps.dev/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/containerApps/demo-wicket-jpa/eventstream",
+    "latestRevisionFqdn": "demo-wicket-jpa--hg9md16.graytree-90c75749.uksouth.azurecontainerapps.io",
+    "latestRevisionName": "demo-wicket-jpa--hg9md16",
+    "managedEnvironmentId": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/managedEnvironments/causeway-nightlies-aca-env",
+    "outboundIpAddresses": [
+      "20.108.221.63"
+    ],
+    "provisioningState": "Succeeded",
+    "template": {
+      "containers": [
+        {
+          "image": "apacheisis/demo-wicket-jpa:2.0.0-M9.20221224-0226-7c658a3c",
+          "name": "demo-wicket-jpa",
+          "resources": {
+            "cpu": 0.5,
+            "ephemeralStorage": "1Gi",
+            "memory": "1Gi"
+          }
+        }
+      ],
+      "initContainers": null,
+      "revisionSuffix": "",
+      "scale": {
+        "maxReplicas": 10,
+        "minReplicas": null,
+        "rules": null
+      },
+      "volumes": null
+    },
+    "workloadProfileType": null
+  },
+  "resourceGroup": "causeway-nightlies-rg",
+  "systemData": {
+    "createdAt": "2023-01-02T07:06:17.4141558",
+    "createdBy": "dan@haywood-associates.co.uk",
+    "createdByType": "User",
+    "lastModifiedAt": "2023-01-02T07:12:31.4804896",
+    "lastModifiedBy": "dan@haywood-associates.co.uk",
+    "lastModifiedByType": "User"
+  },
+  "type": "Microsoft.App/containerApps"
+}
+----
+
+== Custom domain
+
+=== Create self-signed certificate
+
+* create `
++
+[source,bash]
+----
+openssl req -new -newkey RSA:2048 -nodes -keyout ssl.key -out ssl.csr
+----
++
+resulting in:
++
+[source,bash]
+----
+Generating a RSA private key
+...............................+++++
+.+++++
+writing new private key to 'ssl.key'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:UK
+State or Province Name (full name) [Some-State]:Worcestershire
+Locality Name (eg, city) []:Malvern
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Haywood Associates Ltd.
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:*.isis.incode.work
+Email Address []:dan@haywood-associates.co.uk
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:Haywood Associates Ltd.
+----
++
+which results in two files:
+
+** `ssl.csr`
+** `ssl.key`
+
+* create the `.crt` self-signed certificate:
++
+[source,bash]
+----
+openssl x509 -req -days 365 -in ssl.csr -signkey ssl.key -out ssl.crt
+----
++
+resulting in:
++
+[source,bash]
+----
+Signature ok
+subject=C = UK, ST = Worcestershire, L = Malvern, O = Haywood Associates Ltd., CN = *.isis.incode.work, emailAddress = dan@haywood-associates.co.uk
+Getting Private key
+----
++
+and the additional file:
+
+** `ssl.crt`
+
+
+* convert to a PKCS12 (`.pfx`) file
++
+[source,bash]
+----
+openssl pkcs12 -inkey ssl.key -in ssl.crt -export -out ssl.pfx
+----
++
+resulting in:
++
+[source,bash]
+----
+Enter Export Password:
+Verifying - Enter Export Password:
+----
++
+and the additional file:
+
+** `ssl.pfx`
+
+
+
+=== Add Custom domain and bind to cert
+
+As per MS docs on https://learn.microsoft.com/en-us/azure/container-apps/custom-domains-certificates[adding custom domain & certificates]
+
+in Azure Portal:
+
+* locate IP:
++
+image::image-2023-01-02-11-10-57-742.png[width=800px]
+
+* add custom domain:
++
+image::image-2023-01-02-11-15-22-937.png[width=400]
+
+in DNS nameserver (eg held by registrar)
+
+* add DNS records:
++
+image::image-2023-01-02-11-37-15-599.png[width=800]
+
+in Azure Portal:
+
+* validate:
++
+image::image-2023-01-02-11-39-16-947.png[width=400]
+
+* next:
++
+image::image-2023-01-02-11-41-34-824.png[width=400]
+
+* use `create new` link
++
+upload the .pfx file created earlier, and validate:
++
+image::image-2023-01-02-18-54-07-844.png[width=400]
+
+* confirm
++
+image::image-2023-01-02-18-55-22-599.png[width=400]
+
+* listed:
++
+image::image-2023-01-02-18-57-10-836.png[width=800]
+
+
+* Change scaling from default (1-10) to just a single instance.
++
+image::image-2023-01-03-08-31-58-018.png[width=600]
+
