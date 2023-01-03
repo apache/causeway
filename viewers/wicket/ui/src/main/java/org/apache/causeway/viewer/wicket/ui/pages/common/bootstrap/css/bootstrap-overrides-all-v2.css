@@ -117,10 +117,9 @@ td .badge span,
     margin-bottom: 0px;
 }
 
-.nav-link, a, .btn-link {
+a, .btn-link {
 	color: var(--link-color);
 }
-.nav-link:focus, .nav-link:hover,
 a:focus, a:hover,
 .btn-link:focus, .btn-link:hover {
     color: var(--link-color-hover);
