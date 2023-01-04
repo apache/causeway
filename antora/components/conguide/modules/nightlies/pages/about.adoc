@@ -8,7 +8,7 @@ This page describes how we deploy the xref:docs:starters:simpleapp.adoc[], xref:
 
 WARNING: work in progress
 
-The intention is to use link:https://learn.microsoft.com/en-gb/azure/container-apps/[Azure Container Apps].
+The intention is to use link:https://learn.microsoft.com/en-gb/azure/container-apps/[Azure Container Apps] (hereafter ACA).
 
 == Azure Container Apps
 
@@ -51,16 +51,24 @@ az provider register --namespace Microsoft.OperationalInsights
 
 
 
-=== Setup
+=== Setup the resource group and ACA environment
+
+In Azure, all resources live in resource groups.
+We will use a single resource group.
+
+One of the resources to be set up is an ACA environment, which creates a secure boundary around a group of container apps.
+Container Apps deployed to the same environment are deployed in the same virtual network and write logs to the same Log Analytics workspace.
+We will use a single ACA environment.
 
 Create a resource group to organize the services related to the container apps.
 
-* set the environment variables:
+* set these environment variables:
 +
 [source,bash]
 ----
 RESOURCE_GROUP="causeway-nightlies-rg"
 LOCATION="uksouth"
+CONTAINERAPPS_ENVIRONMENT="causeway-nightlies-aca-env"
 ----
 
 * create the resource group
@@ -89,19 +97,7 @@ resulting in:
 }
 ----
 
-=== Create an environment
-
-An environment in Azure Container Apps creates a secure boundary around a group of container apps.
-Container Apps deployed to the same environment are deployed in the same virtual network and write logs to the same Log Analytics workspace.
-
-* set a further environment variable:
-+
-[source,bash]
-----
-CONTAINERAPPS_ENVIRONMENT="causeway-nightlies-aca-env"
-----
-
-* xxx
+* next, create the ACA environment:
 +
 [source,bash]
 ----
@@ -155,11 +151,15 @@ Container Apps environment created. To deploy a container app, use: az container
 }
 ----
 
+
 === Create container apps
 
-For link:https://hub.docker.com/repository/docker/apacheisis/demo-wicket-jpa[apacheisis/demo-wicket-jpa]
+We will create a container app manually.
+In the <<#automation,automation (below)>>, we will simply update the container (replacing the image with a new one).
 
-* set a further environment variables:
+We'll start with the link:https://hub.docker.com/repository/docker/apacheisis/demo-wicket-jpa[apacheisis/demo-wicket-jpa] Docker image:
+
+* set further environment variables:
 +
 [source,bash]
 ----
@@ -189,7 +189,96 @@ resulting in:
 Container app created. Access your app at https://demo-wicket-jpa.graytree-90c75749.uksouth.azurecontainerapps.io/
 ----
 
-=== Update the app
+* Change scaling from default (1-10) to just a single instance.
++
+image::image-2023-01-03-08-31-58-018.png[width=600]
+
+
+== Lets Encrypt
+
+as per: link:https://dev.to/shibayan/how-to-quickly-setup-a-lets-encrypt-certificate-in-azure-container-apps-3nd7[this blog post] blog, the link:https://github.com/shibayan/containerapps-acmebot[shibayan/containerapps-acmebot] repo provides an Azure deployment that handles the LetsEncrypt certificates.
+
+Following its link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started[Getting-Started] README:
+
+=== DNS management
+
+Created DNS zone for `incode.work`, and then a child zone `apps.incode.work`.
+
+NOTE: the intention is to change this to a more suitable domain.
+
+
+=== Deploy the Services
+
+* from the link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started#1-deploy-acmebot[README]:
++
+image::image-2023-01-03-17-58-33-718.png[width=600]
+
+* add params:
++
+image::image-2023-01-03-18-07-57-499.png[width=800]
++
+results in:
++
+image::image-2023-01-03-18-10-33-567.png[width=800]
+
+
+== Enable App Service Authentication & Access control (IAM)
+
+Continuing with the link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started#3-enable-app-service-authentication[README]:
+
+* add an identity provider to the function app:
++
+image::image-2023-01-03-18-16-01-614.png[width=800]
+
+* add contributor role assignment:
++
+image::image-2023-01-03-18-22-59-542.png[width=1000]
+
+
+== Access function app
+
+Continuing further with the link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started#5-access-to-function-app[README]:
+
+* locate the name of the function app (`func-acmbeot-y3a6` above)
+
+* navigate to link:https://func-acmbeot-y3a6.azurewebsites.net/add-certificate[], and grant permissions to access the site:
++
+image::image-2023-01-03-18-27-32-832.png[width=300]
+
+
+* complete dialog:
++
+image::image-2023-01-04-06-23-41-099.png[width=600]
++
+and `Submit`.
+
+* The docs say "after a few tens of seconds, the certificate will be issued".
+Indeed so:
++
+image::image-2023-01-04-06-26-42-960.png[width=400]
++
+In the DNS zone, it creates this `TXT` record:
++
+image::image-2023-01-04-06-29-02-083.png[width=600]
+
+* Also create a `CNAME` for the app:
++
+image::image-2023-01-04-06-25-56-926.png[width=400]
+
+* Confirm that the app can be accessed:
++
+image::image-2023-01-04-06-31-36-293.png[width=800]
+
+
+== Automation
+
+The nightly automation simply needs to update the apps with new images; there is no need to create ACA environments etc from scratch.
+
+=== Manual update first
+
+To see what this mean, let's first just update the app manually.
+
+Working with the `demo-wicket-jpa` app:
 
 * update the environment variables:
 +
@@ -198,9 +287,10 @@ Container app created. Access your app at https://demo-wicket-jpa.graytree-90c75
 IMAGE_VERSION="2.0.0-M9.20221229-0233-"
 ----
 +
-NOTE: looks like there's an issue with our generation of the image version, missing the sha Id suffix.
+NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
+But this image _does_ exist.
 
-* Update the image
+* Update the image using `az containerapp update`:
 +
 [source,bash]
 ----
@@ -291,140 +381,9 @@ resulting in:
 }
 ----
 
-== Custom domain
+This results in a new revision being provisioned.
+Traffic is automatically migrated over to the new revision, and then the previous revision is removed.
 
-=== Create self-signed certificate
+=== Automation
 
-* create `
-+
-[source,bash]
-----
-openssl req -new -newkey RSA:2048 -nodes -keyout ssl.key -out ssl.csr
-----
-+
-resulting in:
-+
-[source,bash]
-----
-Generating a RSA private key
-...............................+++++
-.+++++
-writing new private key to 'ssl.key'
------
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [AU]:UK
-State or Province Name (full name) [Some-State]:Worcestershire
-Locality Name (eg, city) []:Malvern
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:Haywood Associates Ltd.
-Organizational Unit Name (eg, section) []:
-Common Name (e.g. server FQDN or YOUR name) []:*.isis.incode.work
-Email Address []:dan@haywood-associates.co.uk
-
-Please enter the following 'extra' attributes
-to be sent with your certificate request
-A challenge password []:
-An optional company name []:Haywood Associates Ltd.
-----
-+
-which results in two files:
-
-** `ssl.csr`
-** `ssl.key`
-
-* create the `.crt` self-signed certificate:
-+
-[source,bash]
-----
-openssl x509 -req -days 365 -in ssl.csr -signkey ssl.key -out ssl.crt
-----
-+
-resulting in:
-+
-[source,bash]
-----
-Signature ok
-subject=C = UK, ST = Worcestershire, L = Malvern, O = Haywood Associates Ltd., CN = *.isis.incode.work, emailAddress = dan@haywood-associates.co.uk
-Getting Private key
-----
-+
-and the additional file:
-
-** `ssl.crt`
-
-
-* convert to a PKCS12 (`.pfx`) file
-+
-[source,bash]
-----
-openssl pkcs12 -inkey ssl.key -in ssl.crt -export -out ssl.pfx
-----
-+
-resulting in:
-+
-[source,bash]
-----
-Enter Export Password:
-Verifying - Enter Export Password:
-----
-+
-and the additional file:
-
-** `ssl.pfx`
-
-
-
-=== Add Custom domain and bind to cert
-
-As per MS docs on https://learn.microsoft.com/en-us/azure/container-apps/custom-domains-certificates[adding custom domain & certificates]
-
-in Azure Portal:
-
-* locate IP:
-+
-image::image-2023-01-02-11-10-57-742.png[width=800px]
-
-* add custom domain:
-+
-image::image-2023-01-02-11-15-22-937.png[width=400]
-
-in DNS nameserver (eg held by registrar)
-
-* add DNS records:
-+
-image::image-2023-01-02-11-37-15-599.png[width=800]
-
-in Azure Portal:
-
-* validate:
-+
-image::image-2023-01-02-11-39-16-947.png[width=400]
-
-* next:
-+
-image::image-2023-01-02-11-41-34-824.png[width=400]
-
-* use `create new` link
-+
-upload the .pfx file created earlier, and validate:
-+
-image::image-2023-01-02-18-54-07-844.png[width=400]
-
-* confirm
-+
-image::image-2023-01-02-18-55-22-599.png[width=400]
-
-* listed:
-+
-image::image-2023-01-02-18-57-10-836.png[width=800]
-
-
-* Change scaling from default (1-10) to just a single instance.
-+
-image::image-2023-01-03-08-31-58-018.png[width=600]
-
+WARNING: todo.
