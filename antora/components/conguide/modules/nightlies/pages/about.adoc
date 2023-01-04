@@ -152,10 +152,10 @@ Container Apps environment created. To deploy a container app, use: az container
 ----
 
 
-=== Create container apps
+== Create Container App
 
 We will create a container app manually.
-In the <<#automation,automation (below)>>, we will simply update the container (replacing the image with a new one).
+Later, in the <<#automation,automation>> section, we will simply update the container (replacing the image with a new one).
 
 We'll start with the link:https://hub.docker.com/repository/docker/apacheisis/demo-wicket-jpa[apacheisis/demo-wicket-jpa] Docker image:
 
@@ -165,7 +165,7 @@ We'll start with the link:https://hub.docker.com/repository/docker/apacheisis/de
 ----
 APP_NAME="demo-wicket-jpa"
 IMAGE_NAME="apacheisis/demo-wicket-jpa"
-IMAGE_VERSION="2.0.0-M9.20221224-0226-7c658a3c"
+IMAGE_VERSION="2.0.0-M9.20221018-1911-d3980668"
 ----
 
 * create the app
@@ -194,7 +194,7 @@ Container app created. Access your app at https://demo-wicket-jpa.graytree-90c75
 image::image-2023-01-03-08-31-58-018.png[width=600]
 
 
-== Lets Encrypt
+== Use Lets Encrypt for SSL Certs
 
 as per: link:https://dev.to/shibayan/how-to-quickly-setup-a-lets-encrypt-certificate-in-azure-container-apps-3nd7[this blog post] blog, the link:https://github.com/shibayan/containerapps-acmebot[shibayan/containerapps-acmebot] repo provides an Azure deployment that handles the LetsEncrypt certificates.
 
@@ -222,7 +222,7 @@ results in:
 image::image-2023-01-03-18-10-33-567.png[width=800]
 
 
-== Enable App Service Authentication & Access control (IAM)
+=== Enable App Service Authentication & Access control (IAM)
 
 Continuing with the link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started#3-enable-app-service-authentication[README]:
 
@@ -235,13 +235,13 @@ image::image-2023-01-03-18-16-01-614.png[width=800]
 image::image-2023-01-03-18-22-59-542.png[width=1000]
 
 
-== Access function app
+=== Access function app
 
 Continuing further with the link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started#5-access-to-function-app[README]:
 
-* locate the name of the function app (`func-acmbeot-y3a6` above)
+* locate the name of the function app (`func-acmebot-y3a6` above)
 
-* navigate to link:https://func-acmbeot-y3a6.azurewebsites.net/add-certificate[], and grant permissions to access the site:
+* navigate to link:https://func-acmebot-y3a6.azurewebsites.net/add-certificate[], and grant permissions to access the site:
 +
 image::image-2023-01-03-18-27-32-832.png[width=300]
 
@@ -270,6 +270,431 @@ image::image-2023-01-04-06-25-56-926.png[width=400]
 image::image-2023-01-04-06-31-36-293.png[width=800]
 
 
+== Deploy Remaining Apps
+
+For each app, the steps are:
+
+* Set common environment variables
++
+[source,bash]
+----
+RESOURCE_GROUP="causeway-nightlies-rg"
+CONTAINERAPPS_ENVIRONMENT="causeway-nightlies-aca-env"
+----
+
+* Set app-specific environment variables
+
+* Create the container app
+* Manually configure scaling
+* Manually setup `CNAME` record in `apps.incode.work` DNS zone
+* Using the acmebot function app, link:https://func-acmebot-y3a6.azurewebsites.net/add-certificate[Add the certicate] for the container app
+
+
+=== demo-wicket-jpa
+
+Done previously
+
+=== demo-wicket-jpa-snapshot
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="demo-wicket-jpa-snapshot"
+IMAGE_NAME="apacheisis/demo-wicket-jpa"
+IMAGE_VERSION="2.0.0-M9.20221229-0233-"
+----
++
+NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
+But this image _does_ exist.
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `demo-wicket-jpa.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+
+
+
+=== demo-wicket-jdo
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="demo-wicket-jdo"
+IMAGE_NAME="apacheisis/demo-wicket-jdo"
+IMAGE_VERSION="2.0.0-M9.20221018-1911-d3980668"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `demo-wicket-jdo.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+
+=== demo-wicket-jdo-snapshot
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="demo-wicket-jdo-snapshot"
+IMAGE_NAME="apacheisis/demo-wicket-jdo"
+IMAGE_VERSION="2.0.0-M9.20221229-0233-"
+----
++
+NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
+But this image _does_ exist.
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `demo-wicket-jdo.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+
+=== simpleapp (jpa)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="simpleapp-jpa"
+IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_VERSION="jpa"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `simpleapp-jpa.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+=== simpleapp (jpa-SNAPSHOT)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="simpleapp-jpa-snapshot"
+IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_VERSION="jpa-SNAPSHOT"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `simpleapp-jpa-SNAPSHOT.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+
+=== simpleapp (jdo)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="simpleapp-jdo"
+IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_VERSION="jdo"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `simpleapp-jdo.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+=== simpleapp (jdo-SNAPSHOT)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="simpleapp-jdo-snapshot"
+IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_VERSION="jdo-SNAPSHOT"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `simpleapp-jdo-SNAPSHOT.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+=== helloworld (jpa)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="helloworld-jpa"
+IMAGE_NAME="apacheisis/helloworld"
+IMAGE_VERSION="jpa"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `helloworld-jpa.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+=== helloworld (jpa-SNAPSHOT)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="helloworld-jpa-snapshot"
+IMAGE_NAME="apacheisis/helloworld"
+IMAGE_VERSION="jpa-SNAPSHOT"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `helloworld-jpa-SNAPSHOT.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+
+=== helloworld (jdo)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="helloworld-jdo"
+IMAGE_NAME="apacheisis/helloworld"
+IMAGE_VERSION="jdo"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `helloworld-jdo.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+=== helloworld (jdo-SNAPSHOT)
+
+Steps:
+
+* Environment variables
++
+[source,bash]
+----
+APP_NAME="helloworld-jdo-snapshot"
+IMAGE_NAME="apacheisis/helloworld"
+IMAGE_VERSION="jdo-SNAPSHOT"
+----
+
+* Deploy
++
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
+
+* Manually Configure Scaling
+
+* Manually setup DNS
++
+to `helloworld-jdo-SNAPSHOT.apps.incode.work`
+
+* Register with LetsEncrypt Function App
+
+
+
+
 == Automation
 
 The nightly automation simply needs to update the apps with new images; there is no need to create ACA environments etc from scratch.
@@ -278,17 +703,16 @@ The nightly automation simply needs to update the apps with new images; there is
 
 To see what this mean, let's first just update the app manually.
 
-Working with the `demo-wicket-jpa` app:
+Working with the `demo-wicket-jpa-latest` app:
 
 * update the environment variables:
 +
 [source,bash]
 ----
-IMAGE_VERSION="2.0.0-M9.20221229-0233-"
+IMAGE_VERSION="2.0.0-M9.20221224-0226-7c658a3c"
 ----
 +
-NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
-But this image _does_ exist.
+(just selecting an earlier version).
 
 * Update the image using `az containerapp update`:
 +
