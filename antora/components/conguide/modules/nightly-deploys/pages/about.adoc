@@ -1,14 +1,12 @@
 [[nightlies]]
-= Nightlies
+= Nightly Deploys
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-This page describes how we deploy the xref:docs:starters:simpleapp.adoc[], xref:docs:starters:helloworld.adoc[HelloWorld App] and the xref:docs:demo:about.adoc[] each night.
+This page describes how we deploy the xref:docs:starters:simpleapp.adoc[], xref:docs:starters:helloworld.adoc[HelloWorld App] and the xref:docs:demo:about.adoc[] each night, to a Azure App Container Apps (a PaaS based on top of k8s).
 
-WARNING: work in progress
-
-The intention is to use link:https://learn.microsoft.com/en-gb/azure/container-apps/[Azure Container Apps] (hereafter ACA).
+The actual CI jobs can be found in the link:https://github.com/apache-causeway-committers/causeway-nightly-deploys[apache-causeway-committers/causeway-nightly-deploys] repo.
 
 == Azure Container Apps
 
@@ -296,9 +294,6 @@ APP_NAME="demo-wicket-jpa-snapshot"
 IMAGE_NAME="apacheisis/demo-wicket-jpa"
 IMAGE_VERSION="latest"
 ----
-+
-NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
-But this image _does_ exist.
 
 * Deploy
 +
@@ -353,9 +348,6 @@ APP_NAME="demo-wicket-jdo-snapshot"
 IMAGE_NAME="apacheisis/demo-wicket-jdo"
 IMAGE_VERSION="latest"
 ----
-+
-NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
-But this image _does_ exist.
 
 * Deploy
 +
@@ -577,8 +569,8 @@ to `helloworld-jdo-snapshot.apps.causeway.dev`
 
 == Automation
 
-The nightly automation simply needs to update the apps with new images, using `az container revision copy`.
-There is no need to create ACA environments etc from scratch.
+With all of the applications created above, the nightly automation simply needs to update the apps with new images, using `az container revision copy`.
+There is *_no need_* to create ACA environments etc from scratch.
 
 === Prereqs
 
@@ -622,12 +614,15 @@ The output includes credentials that you must protect. Be sure that you do not i
 
 === CI Jobs
 
-The CI jobs can be found in link:https://github.com/apache-causeway-committers/causeway-nightly-deploys[apache-causeway-committers/causeway-nightly-deploys].
+The actual CI jobs can be found in the link:https://github.com/apache-causeway-committers/causeway-nightly-deploys[apache-causeway-committers/causeway-nightly-deploys] repo.
 
 The main script consists of these commands:
 
 [source,bash]
 ----
+# ... derive $APPNAME
+# ... derive $IMAGE
+
 TIMESTAMP=$(date "+%Y%m%d-%H%M%S")
 REVISION_SUFFIX="r${TIMESTAMP}"
 
