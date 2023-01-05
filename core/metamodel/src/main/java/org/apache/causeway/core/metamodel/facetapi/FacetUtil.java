@@ -101,8 +101,8 @@ public final class FacetUtil {
 
     /**
      * Removes any facet from its FacetHolder, that matches the facet's java class
-     * and has no lower precedence than any existing one,
-     * then adds given facet to its facetHolder.
+     * and has no higher precedence than the given one,
+     * then adds given facet to its facetHolder, honoring precedence.
      */
     public static void updateFacet(final @Nullable Facet facet) {
         if(facet==null) {

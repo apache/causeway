@@ -190,6 +190,7 @@ implements GridSystemService<G> {
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
+
                 val actionLayoutDataOwner = actionLayoutData.getOwner();
                 val objectAction = objectActionById.get(actionLayoutData.getId());
                 if(objectAction == null) {
@@ -203,7 +204,8 @@ implements GridSystemService<G> {
                     for (val propertyLayoutData : fieldSet.getProperties()) {
                         // any will do; choose the first one that we know is valid
                         if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
-                            groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData)
+                            groupIdAndName = GroupIdAndName
+                                    .forPropertyLayoutData(propertyLayoutData)
                                     .orElse(null);
                             break;
                         }
