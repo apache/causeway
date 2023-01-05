@@ -170,17 +170,7 @@ IMAGE_VERSION="2.0.0-M9.20221018-1911-d3980668"
 
 * create the app
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 +
 resulting in:
 +
@@ -202,7 +192,7 @@ Following its link:https://github.com/shibayan/containerapps-acmebot/wiki/Gettin
 
 === DNS management
 
-Created DNS zone for `incode.work`, and then a child zone `apps.incode.work`.
+Created DNS zone for `causeway.dev`, and then a child zone `apps.causeway.dev`.
 
 NOTE: the intention is to change this to a more suitable domain.
 
@@ -286,8 +276,8 @@ CONTAINERAPPS_ENVIRONMENT="causeway-nightlies-aca-env"
 
 * Create the container app
 * Manually configure scaling
-* Manually setup `CNAME` record in `apps.incode.work` DNS zone
-* Using the acmebot function app, link:https://func-acmebot-y3a6.azurewebsites.net/add-certificate[Add the certicate] for the container app
+* Manually setup `CNAME` record in `apps.causeway.dev` DNS zone
+* Using the acmebot function app, link:https://func-acmebot-y3a6.azurewebsites.net/add-certificate[add the certificate] for the container app
 
 
 === demo-wicket-jpa
@@ -304,7 +294,7 @@ Steps:
 ----
 APP_NAME="demo-wicket-jpa-snapshot"
 IMAGE_NAME="apacheisis/demo-wicket-jpa"
-IMAGE_VERSION="2.0.0-M9.20221229-0233-"
+IMAGE_VERSION="latest"
 ----
 +
 NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
@@ -312,23 +302,13 @@ But this image _does_ exist.
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `demo-wicket-jpa.apps.incode.work`
+to `demo-wicket-jpa-snapshot.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -350,23 +330,13 @@ IMAGE_VERSION="2.0.0-M9.20221018-1911-d3980668"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `demo-wicket-jdo.apps.incode.work`
+to `demo-wicket-jdo.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -381,7 +351,7 @@ Steps:
 ----
 APP_NAME="demo-wicket-jdo-snapshot"
 IMAGE_NAME="apacheisis/demo-wicket-jdo"
-IMAGE_VERSION="2.0.0-M9.20221229-0233-"
+IMAGE_VERSION="latest"
 ----
 +
 NOTE: Hmm, looks like there's an issue with our generation of the image version, missing the sha Id suffix.
@@ -389,23 +359,13 @@ But this image _does_ exist.
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `demo-wicket-jdo.apps.incode.work`
+to `demo-wicket-jdo-snapshot.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -425,23 +385,13 @@ IMAGE_VERSION="jpa"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `simpleapp-jpa.apps.incode.work`
+to `simpleapp-jpa.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -460,23 +410,13 @@ IMAGE_VERSION="jpa-SNAPSHOT"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `simpleapp-jpa-SNAPSHOT.apps.incode.work`
+to `simpleapp-jpa-snapshot.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -496,23 +436,13 @@ IMAGE_VERSION="jdo"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `simpleapp-jdo.apps.incode.work`
+to `simpleapp-jdo.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -531,23 +461,13 @@ IMAGE_VERSION="jdo-SNAPSHOT"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `simpleapp-jdo-SNAPSHOT.apps.incode.work`
+to `simpleapp-jdo.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -566,23 +486,13 @@ IMAGE_VERSION="jpa"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `helloworld-jpa.apps.incode.work`
+to `helloworld-jpa.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -601,23 +511,13 @@ IMAGE_VERSION="jpa-SNAPSHOT"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `helloworld-jpa-SNAPSHOT.apps.incode.work`
+to `helloworld-jpa-snapshot.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -637,23 +537,13 @@ IMAGE_VERSION="jdo"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `helloworld-jdo.apps.incode.work`
+to `helloworld-jdo.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -672,23 +562,13 @@ IMAGE_VERSION="jdo-SNAPSHOT"
 
 * Deploy
 +
-[source,bash]
-----
-az containerapp create \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --environment $CONTAINERAPPS_ENVIRONMENT \
-  --image $IMAGE_NAME:$IMAGE_VERSION \
-  --target-port 8080 \
-  --ingress 'external' \
-  --query properties.configuration.ingress.fqdn
-----
+include::partial$az-containerapp-create.adoc[]
 
 * Manually Configure Scaling
 
 * Manually setup DNS
 +
-to `helloworld-jdo-SNAPSHOT.apps.incode.work`
+to `helloworld-jdo-snapshot.apps.causeway.dev`
 
 * Register with LetsEncrypt Function App
 
@@ -697,117 +577,70 @@ to `helloworld-jdo-SNAPSHOT.apps.incode.work`
 
 == Automation
 
-The nightly automation simply needs to update the apps with new images; there is no need to create ACA environments etc from scratch.
+The nightly automation simply needs to update the apps with new images, using `az container revision copy`.
+There is no need to create ACA environments etc from scratch.
 
-=== Manual update first
+=== Prereqs
 
-To see what this mean, let's first just update the app manually.
+We require an Azure Service Principal for the CI/CD job to use.
 
-Working with the `demo-wicket-jpa-latest` app:
+Following https://dev.to/erudinsky/how-to-deploy-to-azure-with-gitlab-authentication-credentials-store-runner-config-yaml-pipeline-example-37bp[this blog post] and also https://learn.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#password-based-authentication[MS docs]:
 
-* update the environment variables:
+* https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal[register an application]
 +
-[source,bash]
-----
-IMAGE_VERSION="2.0.0-M9.20221224-0226-7c658a3c"
-----
+My guess is that this is a 'deploy' application rather than the application being deployed.
 +
-(just selecting an earlier version).
+image::image-2023-01-05-11-44-09-855.png[width=800]
 
-* Update the image using `az containerapp update`:
+// * https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#assign-a-role-to-the-application[assign a role to the application]
+
+* lookup your subscriptionId
+
+* as per the MS doc:
 +
-[source,bash]
+[source,powershell]
 ----
-az containerapp update \
-  --name $APP_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --image $IMAGE_NAME:$IMAGE_VERSION
+az ad sp create-for-rbac --name CausewayNightliesDeployPrincipal --role Owner --scopes "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 ----
 +
-resulting in:
+WARNING: must use powershell here.
 +
-[source,bash]
+should result in:
++
+[source]
 ----
+Found an existing application instance: (id) XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX. We will patch it.
+Creating 'Owner' role assignment under scope '/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli
 {
-  "id": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/containerapps/demo-wicket-jpa",
-  "identity": {
-    "type": "None"
-  },
-  "location": "UK South",
-  "name": "demo-wicket-jpa",
-  "properties": {
-    "configuration": {
-      "activeRevisionsMode": "Single",
-      "dapr": null,
-      "ingress": {
-        "allowInsecure": false,
-        "customDomains": null,
-        "exposedPort": 0,
-        "external": true,
-        "fqdn": "demo-wicket-jpa.graytree-90c75749.uksouth.azurecontainerapps.io",
-        "ipSecurityRestrictions": null,
-        "targetPort": 8080,
-        "traffic": [
-          {
-            "latestRevision": true,
-            "weight": 100
-          }
-        ],
-        "transport": "Auto"
-      },
-      "maxInactiveRevisions": null,
-      "registries": null,
-      "secrets": null
-    },
-    "customDomainVerificationId": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "environmentId": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/managedEnvironments/causeway-nightlies-aca-env",
-    "eventStreamEndpoint": "https://uksouth.azurecontainerapps.dev/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/containerApps/demo-wicket-jpa/eventstream",
-    "latestRevisionFqdn": "demo-wicket-jpa--hg9md16.graytree-90c75749.uksouth.azurecontainerapps.io",
-    "latestRevisionName": "demo-wicket-jpa--hg9md16",
-    "managedEnvironmentId": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/causeway-nightlies-rg/providers/Microsoft.App/managedEnvironments/causeway-nightlies-aca-env",
-    "outboundIpAddresses": [
-      "20.108.221.63"
-    ],
-    "provisioningState": "Succeeded",
-    "template": {
-      "containers": [
-        {
-          "image": "apacheisis/demo-wicket-jpa:2.0.0-M9.20221224-0226-7c658a3c",
-          "name": "demo-wicket-jpa",
-          "resources": {
-            "cpu": 0.5,
-            "ephemeralStorage": "1Gi",
-            "memory": "1Gi"
-          }
-        }
-      ],
-      "initContainers": null,
-      "revisionSuffix": "",
-      "scale": {
-        "maxReplicas": 10,
-        "minReplicas": null,
-        "rules": null
-      },
-      "volumes": null
-    },
-    "workloadProfileType": null
-  },
-  "resourceGroup": "causeway-nightlies-rg",
-  "systemData": {
-    "createdAt": "2023-01-02T07:06:17.4141558",
-    "createdBy": "dan@haywood-associates.co.uk",
-    "createdByType": "User",
-    "lastModifiedAt": "2023-01-02T07:12:31.4804896",
-    "lastModifiedBy": "dan@haywood-associates.co.uk",
-    "lastModifiedByType": "User"
-  },
-  "type": "Microsoft.App/containerApps"
+  "appId": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+  "displayName": "CausewayNightliesDeployPrincipal",
+  "password": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "tenant": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 }
 ----
 
-This results in a new revision being provisioned.
-Traffic is automatically migrated over to the new revision, and then the previous revision is removed.
+=== CI Jobs
 
-=== Automation
+The CI jobs can be found in link:https://github.com/apache-causeway-committers/causeway-nightly-deploys[apache-causeway-committers/causeway-nightly-deploys].
 
-WARNING: todo.
+The main script consists of these commands:
+
+[source,bash]
+----
+TIMESTAMP=$(date "+%Y%m%d-%H%M%S")
+REVISION_SUFFIX="r${TIMESTAMP}"
+
+az login --service-principal \
+  --username "$AZ_APP_ID" \
+  --password "$AZ_PASSWORD" \
+  --tenant "$AZ_TENANT_ID"
+
+az containerapp revision copy \
+  --name "$APPNAME" \
+  --resource-group "$RESOURCE_GROUP" \
+  --image "$IMAGE" \
+  --cpu "$CPU" \
+  --memory "$MEMORY" \
+  --revision-suffix "$REVISION_SUFFIX"
+----
