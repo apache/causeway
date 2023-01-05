@@ -30,7 +30,7 @@ extends LayoutOrderFacetAbstract {
         return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, holder, precedence);
     }
 
-    public LayoutOrderFacetForLayoutXml(
+    private LayoutOrderFacetForLayoutXml(
             final String sequence, final FacetHolder holder, final Precedence precedence) {
         super(sequence, holder, precedence);
     }

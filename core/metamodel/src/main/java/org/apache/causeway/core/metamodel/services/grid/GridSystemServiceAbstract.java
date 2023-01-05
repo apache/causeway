@@ -82,6 +82,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -137,7 +138,7 @@ implements GridSystemService<G> {
     /**
      * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
      *
-     * @implNote This code uses {@link FacetUtil#updateFacet(Class, java.util.function.Predicate, java.util.Optional, org.apache.causeway.core.metamodel.facetapi.FacetHolder)}
+     * @implNote This code uses {@link FacetUtil#updateFacet(Facet)}
      * because the layout might be reloaded from XML if reloading is supported.
      */
     private void overwriteFacets(
@@ -150,10 +151,10 @@ implements GridSystemService<G> {
         val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
         val objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
-        // governs, whether annotations win over XML grid, based on whether XML grid is 'explicit' or a fallback
+        // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
         val precedence = fcGrid.isFallback()
-                ? Facet.Precedence.LOW // in the fallback case, XML layout is overruled by layout from annotations
-                : Facet.Precedence.HIGH; // in the non-fallback case, XML layout overrules layout from annotations
+                ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
+                : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
         fcGrid.visit(new Grid.VisitorAdapter() {
@@ -167,42 +168,24 @@ implements GridSystemService<G> {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
-                updateFacet(
-                        BookmarkPolicyFacetForDomainObjectLayoutXml.type(),
-                        BookmarkPolicyFacetForDomainObjectLayoutXml.class::isInstance,
+                updateFacetIfPresent(
                         BookmarkPolicyFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence),
-                        objectSpec);
-                updateFacet(
-                        CssClassFacetForDomainObjectLayoutXml.type(),
-                        CssClassFacetForDomainObjectLayoutXml.class::isInstance,
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
                         CssClassFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence),
-                        objectSpec);
-                updateFacet(
-                        CssClassFaFacetForDomainObjectLayoutXml.type(),
-                        CssClassFaFacetForDomainObjectLayoutXml.class::isInstance,
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
                         CssClassFaFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence),
-                        objectSpec);
-                updateFacet(
-                        ObjectDescribedFacetForDomainObjectLayoutXml.type(),
-                        ObjectDescribedFacetForDomainObjectLayoutXml.class::isInstance,
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
                         ObjectDescribedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence),
-                        objectSpec);
-                updateFacet(
-                        ObjectNamedFacetForDomainObjectLayoutXml.type(),
-                        ObjectNamedFacetForDomainObjectLayoutXml.class::isInstance,
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
                         ObjectNamedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence),
-                        objectSpec);
-                updateFacet(
-                        DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml.type(),
-                        DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml.class::isInstance,
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
                         DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence),
-                        objectSpec);
+                            .create(domainObjectLayoutData, objectSpec, precedence));
             }
 
             @Override
@@ -244,11 +227,8 @@ implements GridSystemService<G> {
                 updateFacet(
                         LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
-                updateFacet(
-                        LayoutGroupFacetForLayoutXml.type(),
-                        LayoutGroupFacetForLayoutXml.class::isInstance,
-                        LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedence));
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
@@ -268,59 +248,32 @@ implements GridSystemService<G> {
                     actionLayoutData.setPosition(null);
                 }
 
-                updateFacet(
-                        ActionPositionFacetForActionLayoutXml.type(),
-                        ActionPositionFacetForActionLayoutXml.class::isInstance,
-                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        BookmarkPolicyFacetForActionLayoutXml.type(),
-                        BookmarkPolicyFacetForActionLayoutXml.class::isInstance,
-                        BookmarkPolicyFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        BookmarkPolicyFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        CssClassFacetForActionLayoutXml.type(),
-                        CssClassFacetForActionLayoutXml.class::isInstance,
-                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        CssClassFaFacetForActionLayoutXml.type(),
-                        CssClassFaFacetForActionLayoutXml.class::isInstance,
-                        CssClassFaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        CssClassFaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        MemberDescribedFacetForActionLayoutXml.type(),
-                        MemberDescribedFacetForActionLayoutXml.class::isInstance,
-                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        HiddenFacetForActionLayoutXml.type(),
-                        HiddenFacetForActionLayoutXml.class::isInstance,
-                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        MemberNamedFacetForActionLayoutXml.type(),
-                        MemberNamedFacetForActionLayoutXml.class::isInstance,
-                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        PromptStyleFacetForActionLayoutXml.type(),
-                        PromptStyleFacetForActionLayoutXml.class::isInstance,
-                        PromptStyleFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        PromptStyleFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
-                updateFacet(
-                        RedirectFacetFromActionLayoutXml.type(),
-                        RedirectFacetFromActionLayoutXml.class::isInstance,
-                        RedirectFacetFromActionLayoutXml.create(actionLayoutData, objectAction, precedence),
-                        objectAction);
+                updateFacetIfPresent(
+                        RedirectFacetFromActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
             }
 
@@ -331,65 +284,35 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                updateFacet(
-                        CssClassFacetForPropertyLayoutXml.type(),
-                        CssClassFacetForPropertyLayoutXml.class::isInstance,
-                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        MemberDescribedFacetForPropertyLayoutXml.type(),
-                        MemberDescribedFacetForPropertyLayoutXml.class::isInstance,
-                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        HiddenFacetForPropertyLayoutXml.type(),
-                        HiddenFacetForPropertyLayoutXml.class::isInstance,
-                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        LabelAtFacetForPropertyLayoutXml.type(),
-                        LabelAtFacetForPropertyLayoutXml.class::isInstance,
-                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        MultiLineFacetForPropertyLayoutXml.type(),
-                        MultiLineFacetForPropertyLayoutXml.class::isInstance,
-                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        MemberNamedFacetForPropertyLayoutXml.type(),
-                        MemberNamedFacetForPropertyLayoutXml.class::isInstance,
-                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        PromptStyleFacetForPropertyLayoutXml.type(),
-                        PromptStyleFacetForPropertyLayoutXml.class::isInstance,
-                        PromptStyleFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        PromptStyleFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        RenderedAdjustedFacetForPropertyLayoutXml.type(),
-                        RenderedAdjustedFacetForPropertyLayoutXml.class::isInstance,
-                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        UnchangingFacetForPropertyLayoutXml.type(),
-                        UnchangingFacetForPropertyLayoutXml.class::isInstance,
-                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
-                updateFacet(
-                        TypicalLengthFacetForPropertyLayoutXml.type(),
-                        TypicalLengthFacetForPropertyLayoutXml.class::isInstance,
-                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
@@ -398,11 +321,8 @@ implements GridSystemService<G> {
 
                 updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence));
 
-                updateFacet(
-                        LayoutGroupFacetForLayoutXml.type(),
-                        LayoutGroupFacetForLayoutXml.class::isInstance,
-                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence),
-                        oneToOneAssociation);
+                updateFacetIfPresent(
+                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence));
             }
 
             @Override
@@ -412,55 +332,40 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                updateFacet(
-                        CssClassFacetForCollectionLayoutXml.type(),
-                        CssClassFacetForCollectionLayoutXml.class::isInstance,
-                        CssClassFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        CssClassFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        DefaultViewFacetForCollectionLayoutXml.type(),
-                        DefaultViewFacetForCollectionLayoutXml.class::isInstance,
-                        DefaultViewFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        DefaultViewFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml.type(),
-                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml.class::isInstance,
-                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        MemberDescribedFacetForCollectionLayoutXml.type(),
-                        MemberDescribedFacetForCollectionLayoutXml.class::isInstance,
-                        MemberDescribedFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        MemberDescribedFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        HiddenFacetForCollectionLayoutXml.type(),
-                        HiddenFacetForCollectionLayoutXml.class::isInstance,
-                        HiddenFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        HiddenFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        MemberNamedFacetForCollectionLayoutXml.type(),
-                        MemberNamedFacetForCollectionLayoutXml.class::isInstance,
-                        MemberNamedFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        MemberNamedFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        PagedFacetForCollectionLayoutXml.type(),
-                        PagedFacetForCollectionLayoutXml.class::isInstance,
-                        PagedFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        PagedFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(
-                        SortedByFacetForCollectionLayoutXml.type(),
-                        SortedByFacetForCollectionLayoutXml.class::isInstance,
-                        SortedByFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation, precedence),
-                        oneToManyAssociation);
+                updateFacetIfPresent(
+                        SortedByFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
 
-                updateFacet(LayoutOrderFacetForLayoutXml.create(collectionSequence++, oneToManyAssociation, precedence));
+                updateFacet(LayoutOrderFacetForLayoutXml
+                        .create(collectionSequence++, oneToManyAssociation, precedence));
             }
         });
     }

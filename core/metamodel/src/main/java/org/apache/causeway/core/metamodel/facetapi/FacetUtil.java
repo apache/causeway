@@ -100,34 +100,42 @@ public final class FacetUtil {
     // -- DYNAMIC UPDATE SUPPORT
 
     /**
-     * Removes any facet that matches the facet's java class from its FacetHolder,
-     * then adds the facet to the facetHolder.
+     * Removes any facet from its FacetHolder, that matches the facet's java class
+     * and has no lower precedence than any existing one,
+     * then adds given facet to its facetHolder.
      */
-    public static <F extends Facet> void updateFacet(
-            final @NonNull F facet) {
+    public static void updateFacet(final @Nullable Facet facet) {
+        if(facet==null) {
+            return;
+        }
+        final boolean skip = facet.getFacetHolder().lookupFacet(facet.facetType())
+                .map(Facet::getPrecedence)
+                .map(Facet.Precedence::ordinal)
+                .map(ordinal -> ordinal>facet.getPrecedence().ordinal())
+                .orElse(false);
+        if(skip) {
+            return;
+        }
 
         purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
         addFacet(facet);
     }
 
     /**
-     * Removes any facet of facet-type from facetHolder if it passes the given filter,
-     * then if present adds facetIfAny to the facetHolder.
+     * If facetIfAny is present,
+     * calls {@link #updateFacet(Facet)}, that is,
+     * adds it to its facetHolder, replacing any pre-existing, honoring precedence.
+     * Otherwise acts as a no-op.
      */
-    public static <F extends Facet> void updateFacet(
-            final @NonNull Class<F> facetType,
-            final @NonNull Predicate<? super F> filter,
-            final @NonNull Optional<? extends F> facetIfAny,
-            final @NonNull FacetHolder facetHolder) {
-
-        purgeIf(facetType, filter, facetHolder);
-        addFacetIfPresent(facetIfAny);
+    public static <F extends Facet> void updateFacetIfPresent(
+            final @NonNull Optional<? extends F> facetIfAny) {
+        updateFacet(facetIfAny.orElse(null));
     }
 
     /**
      * Removes any facet of facet-type from facetHolder if it passes the given filter.
      */
-    public static <F extends Facet> void purgeIf(
+    private static <F extends Facet> void purgeIf(
             final Class<F> facetType,
             final Predicate<? super F> filter,
             final FacetHolder facetHolder) {
