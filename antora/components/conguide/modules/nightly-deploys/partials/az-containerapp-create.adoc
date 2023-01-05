@@ -1,0 +1,12 @@
+[source,bash]
+----
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $CONTAINERAPPS_ENVIRONMENT \
+  --environment-variables PROTOTYPING=true \
+  --image $IMAGE_NAME:$IMAGE_VERSION \
+  --target-port 8080 \
+  --ingress 'external' \
+  --query properties.configuration.ingress.fqdn
+----
