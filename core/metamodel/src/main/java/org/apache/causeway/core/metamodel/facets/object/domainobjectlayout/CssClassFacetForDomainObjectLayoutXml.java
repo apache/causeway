@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
@@ -31,18 +32,22 @@ extends CssClassFacetSimple {
 
     public static Optional<CssClassFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
         if(domainObjectLayout == null) {
             return Optional.empty();
         }
         final String cssClass = _Strings.emptyToNull(domainObjectLayout.getCssClass());
         return cssClass != null
-                ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder))
+                ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder, precedence))
                 : Optional.empty();
     }
 
-    private CssClassFacetForDomainObjectLayoutXml(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private CssClassFacetForDomainObjectLayoutXml(
+            final String value,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(value, holder, precedence);
     }
 
     @Override

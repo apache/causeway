@@ -23,11 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.val;
 
@@ -36,8 +33,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     private static final long serialVersionUID = 1L;
 
     private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
-
-    private transient PageParameters current;
 
     public BookmarkedPagesModel(final MetaModelContext commonContext) {
         super(commonContext);
@@ -48,8 +43,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         // hack: remove any garbage that might've got stored in 'rootNodes'
         cleanUpGarbage(rootNodes);
 
-        final PageParameters candidatePP = bookmarkableModel.getPageParametersWithoutUiHints();
-        val bookmark = PageParameterUtils.toBookmark(candidatePP).orElse(null);
+        val bookmark = bookmarkableModel.toBookmark().orElse(null);
         if(bookmark == null) {
             // ignore
             return;
@@ -61,16 +55,15 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
                 rootNode = treeNode;
             }
         }
+
         // MRU/LRU algorithm
         if(rootNode != null) {
             rootNodes.remove(rootNode);
             rootNodes.add(0, rootNode);
-            current = candidatePP;
         } else {
             if (bookmarkableModel.getBookmarkPolicy().isRoot()) {
                 rootNode = BookmarkTreeNode.newRoot(bookmark, bookmarkableModel);
                 rootNodes.add(0, rootNode);
-                current = candidatePP;
             }
         }
 
@@ -99,10 +92,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         return depthFirstGraph;
     }
 
-    public boolean isCurrent(final PageParameters pageParameters) {
-        return Objects.equals(current, pageParameters);
-    }
-
     private static void cleanUpGarbage(final List<BookmarkTreeNode> rootNodes) {
         final Iterator<BookmarkTreeNode> iter = rootNodes.iterator();
         while(iter.hasNext()) {
@@ -116,7 +105,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void clear() {
         rootNodes.clear();
-        current = null;
     }
 
     public boolean isEmpty() {

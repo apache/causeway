@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
@@ -32,22 +33,25 @@ extends CssClassFaStaticFacetAbstract {
 
     public static Optional<CssClassFaFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
         if(domainObjectLayout == null) {
             return Optional.empty();
         }
         final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = domainObjectLayout.getCssClassFaPosition();
         return cssClassFa != null
-                ? Optional.of(new CssClassFaFacetForDomainObjectLayoutXml(cssClassFa, cssClassFaPosition, holder))
+                ? Optional.of(new CssClassFaFacetForDomainObjectLayoutXml(
+                        cssClassFa, cssClassFaPosition, holder, precedence))
                 : Optional.empty();
     }
 
     private CssClassFaFacetForDomainObjectLayoutXml(
             final String value,
             final CssClassFaPosition position,
-            final FacetHolder holder) {
-        super(value, position, holder);
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(value, position, holder, precedence);
     }
 
     @Override

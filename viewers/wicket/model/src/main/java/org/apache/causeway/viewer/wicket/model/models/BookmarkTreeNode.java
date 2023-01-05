@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -34,8 +33,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -54,11 +51,15 @@ implements
 
     @Getter private String title;
 
+    // -- FACTORIES
+
     public static BookmarkTreeNode newRoot(
             final @NonNull Bookmark bookmark,
             final @NonNull BookmarkableModel bookmarkableModel) {
         return new BookmarkTreeNode(bookmark, bookmarkableModel, 0);
     }
+
+    // -- CONSTRUCTION
 
     private BookmarkTreeNode(
             final @NonNull Bookmark bookmark,
@@ -68,18 +69,31 @@ implements
         this.pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         this.bookmark = bookmark;
 
-        // replace oid with the noVer equivalent.
-        PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
-        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
+//        // replace oid with the noVer equivalent.
+//        PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
+//        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
 
         this.title = bookmarkableModel.getTitle();
         this.depth = depth;
     }
 
-    private Optional<BookmarkTreeNode> addChild(final BookmarkableModel childModel) {
-        return PageParameterUtils.toBookmark(childModel.getPageParametersWithoutUiHints())
-                .map(bookmark->new BookmarkTreeNode(bookmark, childModel, depth+1))
-                .map(_Functions.peek(children::add));
+    // -- COMPARATOR
+
+    @Override
+    public int compareTo(final BookmarkTreeNode o2) {
+
+        val o1 = this;
+
+        // sort by entity type
+        val typeName1 = o1.getBookmark().getLogicalTypeName();
+        val typeName2 = o2.getBookmark().getLogicalTypeName();
+
+        final int typeNameComparison = typeName1.compareTo(typeName2);
+        if(typeNameComparison != 0) {
+            return typeNameComparison;
+        }
+
+        return o1.getTitle().compareTo(o2.getTitle());
     }
 
     /**
@@ -103,6 +117,21 @@ implements
         return false;
     }
 
+    public void appendGraphTo(final List<BookmarkTreeNode> list) {
+        list.add(this);
+        for (BookmarkTreeNode childNode : children) {
+            childNode.appendGraphTo(list);
+        }
+    }
+
+    // -- HELPER
+
+    private Optional<BookmarkTreeNode> addChild(final BookmarkableModel childModel) {
+        return childModel.toBookmark()
+                .map(bookmark->new BookmarkTreeNode(bookmark, childModel, depth+1))
+                .map(_Functions.peek(children::add));
+    }
+
     /**
      * Whether or not the provided {@link UiObjectWkt} matches that contained
      * within this node, or any of its children.
@@ -115,7 +144,7 @@ implements
      */
     private boolean matchAndUpdateTitleFor(final UiObjectWkt candidateEntityModel) {
         val candidateBookmark = candidateEntityModel.toBookmark().orElse(null);
-        boolean inGraph = Objects.equals(getBookmark(), candidateBookmark);
+        boolean inGraph = getBookmark().equals(candidateBookmark);
         if(inGraph) {
             this.title = candidateEntityModel.getTitle();
         }
@@ -133,36 +162,36 @@ implements
         return inGraph;
     }
 
-    /**
-     * Whether or not the provided {@link ActionModelImpl} matches that contained
-     * within this node (taking into account the action's arguments).
-     *
-     * If it does match, then the matched node's title is updated to that of the provided
-     * {@link ActionModelImpl}.
-     * <p>
-     *
-     * @return - whether the provided candidate is found or was added to this node's tree.
-     */
-    private boolean matchFor(final ActionModelImpl candidateActionModel) {
-
-        val candidateBookmark = candidateActionModel.toBookmark().orElse(null);
-
-        // check if target object of the action is the same
-        if(!Objects.equals(getBookmark(), candidateBookmark)) {
-            return false;
-        }
-
-        // check if args same
-        List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-        PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
-        List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
-        if(!Objects.equals(thisArgs, candidateArgs)) {
-            return false;
-        }
-
-        // ok, a match
-        return true;
-    }
+//    /**
+//     * Whether or not the provided {@link ActionModelImpl} matches that contained
+//     * within this node (taking into account the action's arguments).
+//     *
+//     * If it does match, then the matched node's title is updated to that of the provided
+//     * {@link ActionModelImpl}.
+//     * <p>
+//     *
+//     * @return - whether the provided candidate is found or was added to this node's tree.
+//     */
+//    private boolean matchFor(final ActionModelImpl candidateActionModel) {
+//
+//        val candidateBookmark = candidateActionModel.toBookmark().orElse(null);
+//
+//        // check if target object of the action is the same
+//        if(!Objects.equals(getBookmark(), candidateBookmark)) {
+//            return false;
+//        }
+//
+//        // check if args same
+//        List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
+//        PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
+//        List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
+//        if(!Objects.equals(thisArgs, candidateArgs)) {
+//            return false;
+//        }
+//
+//        // ok, a match
+//        return true;
+//    }
 
     private boolean addToGraphIfParented(final BookmarkableModel candidateBookmarkableModel) {
 
@@ -185,7 +214,7 @@ implements
             .map(parentAdapter->ManagedObjects.bookmark(parentAdapter).orElse(null))
             .filter(_NullSafe::isPresent)
             .forEach(parentBookmark->{
-                if(Objects.equals(getBookmark(), parentBookmark)) {
+                if(getBookmark().equals(parentBookmark)) {
                     whetherAdded.setValue(this.addChild(candidateBookmarkableModel).isPresent());
                 }
             });
@@ -193,30 +222,5 @@ implements
         return whetherAdded.isTrue();
     }
 
-    public void appendGraphTo(final List<BookmarkTreeNode> list) {
-        list.add(this);
-        for (BookmarkTreeNode childNode : children) {
-            childNode.appendGraphTo(list);
-        }
-    }
-
-    // -- COMPARATOR
-
-    @Override
-    public int compareTo(final BookmarkTreeNode o2) {
-
-        val o1 = this;
-
-        // sort by entity type
-        val typeName1 = o1.getBookmark().getLogicalTypeName();
-        val typeName2 = o2.getBookmark().getLogicalTypeName();
-
-        final int typeNameComparison = typeName1.compareTo(typeName2);
-        if(typeNameComparison != 0) {
-            return typeNameComparison;
-        }
-
-        return o1.getTitle().compareTo(o2.getTitle());
-    }
 
 }

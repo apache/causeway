@@ -31,18 +31,22 @@ extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(actionLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new MemberDescribedFacetForActionLayoutXml(describedAs, holder))
+                ? Optional.of(new MemberDescribedFacetForActionLayoutXml(describedAs, holder, precedence))
                 : Optional.empty();
     }
 
-    private MemberDescribedFacetForActionLayoutXml(final String described, final FacetHolder holder) {
-        super(described, holder, Precedence.HIGH); // XML layout overrules layout from annotations
+    private MemberDescribedFacetForActionLayoutXml(
+            final String described,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(described, holder, precedence);
     }
 
     @Override

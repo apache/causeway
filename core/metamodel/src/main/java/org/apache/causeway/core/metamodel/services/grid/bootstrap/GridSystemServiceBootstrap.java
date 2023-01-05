@@ -61,6 +61,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -136,19 +137,20 @@ extends GridSystemServiceAbstract<BSGrid> {
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
                     .map(bsGrid -> withDomainClass(bsGrid, domainClass))
-                    .orElseGet(() -> fallback(domainClass))
-                    ;
+                    .map(_Functions.peek(bsGrid -> bsGrid.setFallback(true)))
+                    .orElseGet(() -> fallback(domainClass));
         } catch (final Exception e) {
             return fallback(domainClass);
         }
     }
 
     //
-    // only ever called if fail to load DefaultGrid.layout.xml,
+    // only ever called if fail to load GridFallbackLayout.xml,
     // which *really* shouldn't happen
     //
     private BSGrid fallback(final Class<?> domainClass) {
         final BSGrid bsGrid = withDomainClass(new BSGrid(), domainClass);
+        bsGrid.setFallback(true);
 
         final BSRow headerRow = new BSRow();
         bsGrid.getRows().add(headerRow);

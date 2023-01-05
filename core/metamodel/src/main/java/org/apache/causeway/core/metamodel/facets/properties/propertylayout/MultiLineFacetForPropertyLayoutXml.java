@@ -30,18 +30,20 @@ extends MultiLineFacetAbstract {
 
     public static Optional<MultiLineFacet> create(
             final PropertyLayoutData propertyLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(propertyLayout == null) {
             return Optional.empty();
         }
         final Integer multiLine = propertyLayout.getMultiLine();
         return multiLine != null && multiLine > 1
-                ? Optional.of(new MultiLineFacetForPropertyLayoutXml(multiLine, holder))
+                ? Optional.of(new MultiLineFacetForPropertyLayoutXml(multiLine, holder, precedence))
                 : Optional.empty();
     }
 
-    private MultiLineFacetForPropertyLayoutXml(final int numberOfLines, final FacetHolder holder) {
-        super(numberOfLines, holder);
+    private MultiLineFacetForPropertyLayoutXml(
+            final int numberOfLines, final FacetHolder holder, final Precedence precedence) {
+        super(numberOfLines, holder, precedence);
     }
 
     @Override

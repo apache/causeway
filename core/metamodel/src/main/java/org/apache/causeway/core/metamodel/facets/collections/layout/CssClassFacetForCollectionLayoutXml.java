@@ -31,18 +31,20 @@ extends CssClassFacetSimple {
 
     public static Optional<CssClassFacet> create(
             final CollectionLayoutData collectionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(collectionLayout == null) {
             return Optional.empty();
         }
         final String cssClass = _Strings.emptyToNull(collectionLayout.getCssClass());
         return cssClass != null
-                ? Optional.of(new CssClassFacetForCollectionLayoutXml(cssClass, holder))
+                ? Optional.of(new CssClassFacetForCollectionLayoutXml(cssClass, holder, precedence))
                 : Optional.empty();
     }
 
-    private CssClassFacetForCollectionLayoutXml(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private CssClassFacetForCollectionLayoutXml(
+            final String value, final FacetHolder holder, final Precedence precedence) {
+        super(value, holder, precedence);
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
@@ -31,21 +32,24 @@ extends BookmarkPolicyFacetAbstract {
 
     public static Optional<BookmarkPolicyFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if (domainObjectLayout == null) {
             return Optional.empty();
         }
         final BookmarkPolicy bookmarkPolicy = domainObjectLayout.getBookmarking();
         return bookmarkPolicy != null
                 && bookmarkPolicy != BookmarkPolicy.NEVER
-                        ? Optional.of(new BookmarkPolicyFacetForDomainObjectLayoutXml(bookmarkPolicy, holder))
+                        ? Optional.of(new BookmarkPolicyFacetForDomainObjectLayoutXml(
+                                bookmarkPolicy, holder, precedence))
                         : Optional.empty();
     }
 
     private BookmarkPolicyFacetForDomainObjectLayoutXml(
             final BookmarkPolicy bookmarkPolicy,
-            final FacetHolder holder) {
-        super(bookmarkPolicy, holder);
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(bookmarkPolicy, holder, precedence);
     }
 
     @Override

@@ -34,7 +34,8 @@ extends SortedByFacetAbstract {
 
     public static Optional<SortedByFacet> create(
             final CollectionLayoutData collectionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(collectionLayout == null) {
             return Optional.empty();
         }
@@ -48,12 +49,13 @@ extends SortedByFacetAbstract {
         }
 
         return sortedByClass != null
-                ? Optional.of(new SortedByFacetForCollectionLayoutXml(uncheckedCast(sortedByClass), holder))
+                ? Optional.of(new SortedByFacetForCollectionLayoutXml(uncheckedCast(sortedByClass), holder, precedence))
                 : Optional.empty();
     }
 
-    private SortedByFacetForCollectionLayoutXml(final Class<? extends Comparator<?>> sortedBy, final FacetHolder holder) {
-        super(sortedBy, holder);
+    private SortedByFacetForCollectionLayoutXml(
+            final Class<? extends Comparator<?>> sortedBy, final FacetHolder holder, final Precedence precedence) {
+        super(sortedBy, holder, precedence);
     }
 
     @Override

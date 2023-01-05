@@ -33,6 +33,12 @@ implements CollectionLayoutTableDecorationFacet {
     }
 
     protected CollectionLayoutTableDecorationFacetAbstract(
+            final CollectionLayoutConfigOptions.TableDecoration value, final FacetHolder holder,
+            final Precedence precedence) {
+        super(type(), value, holder, precedence);
+    }
+
+    protected CollectionLayoutTableDecorationFacetAbstract(
             final CollectionLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
         super(type(), value, holder);
     }

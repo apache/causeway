@@ -36,6 +36,11 @@ implements DateRenderAdjustFacet {
 
     private final int dateRenderAdjustDays;
 
+    protected DateRenderAdjustFacetAbstract(final int adjustByDays, final FacetHolder holder, final Precedence precedence) {
+        super(type(), holder, precedence);
+        this.dateRenderAdjustDays = adjustByDays;
+    }
+
     protected DateRenderAdjustFacetAbstract(final int adjustByDays, final FacetHolder holder) {
         super(type(), holder);
         this.dateRenderAdjustDays = adjustByDays;
