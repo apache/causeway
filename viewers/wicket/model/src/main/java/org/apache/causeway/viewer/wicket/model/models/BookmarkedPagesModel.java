@@ -27,6 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.val;
 
@@ -48,16 +49,16 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         cleanUpGarbage(rootNodes);
 
         final PageParameters candidatePP = bookmarkableModel.getPageParametersWithoutUiHints();
-        val oid = BookmarkTreeNode.bookmarkFrom(candidatePP);
-        if(oid == null) {
+        val bookmark = PageParameterUtils.toBookmark(candidatePP).orElse(null);
+        if(bookmark == null) {
             // ignore
             return;
         }
 
         BookmarkTreeNode rootNode = null;
-        for (BookmarkTreeNode eachNode : rootNodes) {
-            if(eachNode.matches(bookmarkableModel)) {
-                rootNode = eachNode;
+        for (BookmarkTreeNode treeNode : rootNodes) {
+            if(treeNode.matches(bookmarkableModel)) {
+                rootNode = treeNode;
             }
         }
         // MRU/LRU algorithm
@@ -67,7 +68,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
             current = candidatePP;
         } else {
             if (bookmarkableModel.getBookmarkPolicy().isRoot()) {
-                rootNode = BookmarkTreeNode.newRoot(bookmarkableModel);
+                rootNode = BookmarkTreeNode.newRoot(bookmark, bookmarkableModel);
                 rootNodes.add(0, rootNode);
                 current = candidatePP;
             }
@@ -90,7 +91,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         List<BookmarkTreeNode> depthFirstGraph = _Lists.newArrayList();
 
         List<BookmarkTreeNode> sortedNodes = _Lists.newArrayList(rootNodes);
-        Collections.sort(sortedNodes, new BookmarkTreeNodeComparator(getSpecificationLoader()));
+        Collections.sort(sortedNodes);
 
         for (BookmarkTreeNode rootNode : sortedNodes) {
             rootNode.appendGraphTo(depthFirstGraph);
@@ -107,7 +108,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         while(iter.hasNext()) {
             BookmarkTreeNode node = iter.next();
             // think this is redundant...
-            if(node.getOidNoVer() == null) {
+            if(node.getBookmark() == null) {
                 iter.remove();
             }
         }
@@ -128,7 +129,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void remove(final UiObjectWkt entityModel) {
         val bookmark = entityModel.getOwnerBookmark();
-        rootNodes.removeIf(node->node.getOidNoVer().equals(bookmark));
+        rootNodes.removeIf(node->Objects.equals(node.getBookmark(), bookmark));
     }
 
 

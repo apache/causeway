@@ -21,76 +21,65 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
-public class BookmarkTreeNode implements Serializable {
+public class BookmarkTreeNode
+implements
+    Comparable<BookmarkTreeNode>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<BookmarkTreeNode> children = _Lists.newArrayList();
-    @Getter private final int depth;
+    @Getter private final List<BookmarkTreeNode> children = _Lists.newArrayList();
+    @Getter private final int depth; // starting at root with depth = 0
+    @Getter private final @NonNull Bookmark bookmark;
+    @Getter private final @NonNull PageParameters pageParameters;
 
-    @Getter private final Bookmark oidNoVer; //TODO rename field, versions have been removed
-    @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
-
-    private String title;
-
-    @Getter private PageParameters pageParameters;
+    @Getter private String title;
 
     public static BookmarkTreeNode newRoot(
-            final BookmarkableModel bookmarkableModel) {
-        return new BookmarkTreeNode(bookmarkableModel, 0);
+            final @NonNull Bookmark bookmark,
+            final @NonNull BookmarkableModel bookmarkableModel) {
+        return new BookmarkTreeNode(bookmark, bookmarkableModel, 0);
     }
 
     private BookmarkTreeNode(
-            final BookmarkableModel bookmarkableModel,
+            final @NonNull Bookmark bookmark,
+            final @NonNull BookmarkableModel bookmarkableModel,
             final int depth) {
 
-        pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
-
-        oidNoVer = bookmarkFrom(pageParameters);
-        oidNoVerStr = oidNoVer!=null
-                ? oidNoVer.stringify()
-                : null;
+        this.pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
+        this.bookmark = bookmark;
 
         // replace oid with the noVer equivalent.
         PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
-        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, getOidNoVerStr());
+        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
 
         this.title = bookmarkableModel.getTitle();
         this.depth = depth;
-
     }
 
-    public String getTitle() {
-        return title;
-    }
-    private void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public List<BookmarkTreeNode> getChildren() {
-        return children;
-    }
-    public BookmarkTreeNode addChild(final BookmarkableModel childModel) {
-        final BookmarkTreeNode childNode = new BookmarkTreeNode(childModel, depth+1);
-        children.add(childNode);
-        return childNode;
+    private Optional<BookmarkTreeNode> addChild(final BookmarkableModel childModel) {
+        return PageParameterUtils.toBookmark(childModel.getPageParametersWithoutUiHints())
+                .map(bookmark->new BookmarkTreeNode(bookmark, childModel, depth+1))
+                .map(_Functions.peek(children::add));
     }
 
     /**
@@ -125,12 +114,10 @@ public class BookmarkTreeNode implements Serializable {
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
     private boolean matchAndUpdateTitleFor(final UiObjectWkt candidateEntityModel) {
-
-        // match only on the oid string
-        final String candidateOidStr = oidStrFrom(candidateEntityModel);
-        boolean inGraph = Objects.equals(this.oidNoVerStr, candidateOidStr);
+        val candidateBookmark = candidateEntityModel.toBookmark().orElse(null);
+        boolean inGraph = Objects.equals(getBookmark(), candidateBookmark);
         if(inGraph) {
-            this.setTitle(candidateEntityModel.getTitle());
+            this.title = candidateEntityModel.getTitle();
         }
 
         // and also match recursively down to all children and grand-children.
@@ -158,9 +145,10 @@ public class BookmarkTreeNode implements Serializable {
      */
     private boolean matchFor(final ActionModelImpl candidateActionModel) {
 
-        // check if target object of the action is the same (the oid str)
-        final String candidateOidStr = oidStrFrom(candidateActionModel);
-        if(!Objects.equals(this.oidNoVerStr, candidateOidStr)) {
+        val candidateBookmark = candidateActionModel.toBookmark().orElse(null);
+
+        // check if target object of the action is the same
+        if(!Objects.equals(getBookmark(), candidateBookmark)) {
             return false;
         }
 
@@ -194,19 +182,11 @@ public class BookmarkTreeNode implements Serializable {
                 return parentAdapter;
             })
             .filter(_NullSafe::isPresent)
-            .map(parentAdapter->{
-                final Bookmark parentOid = ManagedObjects.bookmark(parentAdapter).orElse(null);
-                return parentOid;
-            })
+            .map(parentAdapter->ManagedObjects.bookmark(parentAdapter).orElse(null))
             .filter(_NullSafe::isPresent)
-            .map(parentOid->{
-                final String parentOidStr = parentOid.stringify();
-                return parentOidStr;
-            })
-            .forEach(parentOidStr->{
-                if(Objects.equals(this.oidNoVerStr, parentOidStr)) {
-                    this.addChild(candidateBookmarkableModel);
-                    whetherAdded.setValue(true);
+            .forEach(parentBookmark->{
+                if(Objects.equals(getBookmark(), parentBookmark)) {
+                    whetherAdded.setValue(this.addChild(candidateBookmarkableModel).isPresent());
                 }
             });
         }
@@ -220,22 +200,23 @@ public class BookmarkTreeNode implements Serializable {
         }
     }
 
-    // //////////////////////////////////////
+    // -- COMPARATOR
 
-    public static @Nullable Bookmark bookmarkFrom(final PageParameters pageParameters) {
-        val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        try {
-            return Bookmark.parse(oidStr).orElse(null);
-        } catch(Exception ex) {
-            return null;
+    @Override
+    public int compareTo(final BookmarkTreeNode o2) {
+
+        val o1 = this;
+
+        // sort by entity type
+        val typeName1 = o1.getBookmark().getLogicalTypeName();
+        val typeName2 = o2.getBookmark().getLogicalTypeName();
+
+        final int typeNameComparison = typeName1.compareTo(typeName2);
+        if(typeNameComparison != 0) {
+            return typeNameComparison;
         }
-    }
 
-    public static @Nullable String oidStrFrom(final BookmarkableModel candidateBookmarkableModel) {
-        final Bookmark bookmark = bookmarkFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
-        return bookmark != null
-                ? bookmark.stringify()
-                : null;
+        return o1.getTitle().compareTo(o2.getTitle());
     }
 
 }

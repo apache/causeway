@@ -18,10 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.util.Optional;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 public interface BookmarkableModel
 extends HasTitle {
@@ -35,5 +39,9 @@ extends HasTitle {
 
     /** governs how to populate the BookmarkPanel in the UI */
     public abstract BookmarkPolicy getBookmarkPolicy();
+
+    default Optional<Bookmark> toBookmark() {
+        return PageParameterUtils.toBookmark(getPageParametersWithoutUiHints());
+    }
 
 }
