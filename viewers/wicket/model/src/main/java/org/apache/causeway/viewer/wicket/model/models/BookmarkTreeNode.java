@@ -43,13 +43,14 @@ public class BookmarkTreeNode implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final List<BookmarkTreeNode> children = _Lists.newArrayList();
-    private final int depth;
+    @Getter private final int depth;
 
     @Getter private final Bookmark oidNoVer; //TODO rename field, versions have been removed
     @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
 
     private String title;
-    private PageParameters pageParameters;
+
+    @Getter private PageParameters pageParameters;
 
     public static BookmarkTreeNode newRoot(
             final BookmarkableModel bookmarkableModel) {
@@ -133,7 +134,7 @@ public class BookmarkTreeNode implements Serializable {
         }
 
         // and also match recursively down to all children and grand-children.
-        if(candidateEntityModel.hasAsChildPolicy()) {
+        if(candidateEntityModel.getBookmarkPolicy().isChild()) {
             for(BookmarkTreeNode childNode: this.getChildren()) {
                 inGraph = childNode.matches(candidateEntityModel) || inGraph; // evaluate each
             }
@@ -219,17 +220,6 @@ public class BookmarkTreeNode implements Serializable {
         }
     }
 
-    public int getDepth() {
-        return depth;
-    }
-
-
-    // //////////////////////////////////////
-
-    public PageParameters getPageParameters() {
-        return pageParameters;
-    }
-
     // //////////////////////////////////////
 
     public static @Nullable Bookmark bookmarkFrom(final PageParameters pageParameters) {
@@ -241,7 +231,7 @@ public class BookmarkTreeNode implements Serializable {
         }
     }
 
-    public static String oidStrFrom(final BookmarkableModel candidateBookmarkableModel) {
+    public static @Nullable String oidStrFrom(final BookmarkableModel candidateBookmarkableModel) {
         final Bookmark bookmark = bookmarkFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
         return bookmark != null
                 ? bookmark.stringify()

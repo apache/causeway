@@ -66,7 +66,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
             rootNodes.add(0, rootNode);
             current = candidatePP;
         } else {
-            if (bookmarkableModel.hasAsRootPolicy()) {
+            if (bookmarkableModel.getBookmarkPolicy().isRoot()) {
                 rootNode = BookmarkTreeNode.newRoot(bookmarkableModel);
                 rootNodes.add(0, rootNode);
                 current = candidatePP;

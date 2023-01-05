@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
 
 public interface BookmarkableModel
@@ -32,6 +33,7 @@ extends HasTitle {
 
     public abstract PageParameters getPageParametersWithoutUiHints();
 
-    public abstract boolean hasAsRootPolicy();
+    /** governs how to populate the BookmarkPanel in the UI */
+    public abstract BookmarkPolicy getBookmarkPolicy();
 
 }
