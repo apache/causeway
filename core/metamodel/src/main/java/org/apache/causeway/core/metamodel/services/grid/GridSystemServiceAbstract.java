@@ -197,40 +197,47 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                GroupIdAndName groupIdAndName = null;
-                int memberOrderSequence;
-                if(actionLayoutDataOwner instanceof FieldSet) {
-                    val fieldSet = (FieldSet) actionLayoutDataOwner;
-                    for (val propertyLayoutData : fieldSet.getProperties()) {
-                        // any will do; choose the first one that we know is valid
-                        if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
-                            groupIdAndName = GroupIdAndName
-                                    .forPropertyLayoutData(propertyLayoutData)
-                                    .orElse(null);
-                            break;
+                {
+                    GroupIdAndName groupIdAndName = null;
+                    int memberOrderSequence;
+                    if(actionLayoutDataOwner instanceof FieldSet) {
+                        val fieldSet = (FieldSet) actionLayoutDataOwner;
+                        for (val propertyLayoutData : fieldSet.getProperties()) {
+                            // any will do; choose the first one that we know is valid
+                            if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
+                                groupIdAndName = GroupIdAndName
+                                        .forPropertyLayoutData(propertyLayoutData)
+                                        .orElse(null);
+                                break;
+                            }
                         }
+                        memberOrderSequence = actionPropertyGroupSequence++;
+                    } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
+                        groupIdAndName = GroupIdAndName
+                                .forPropertyLayoutData((PropertyLayoutData) actionLayoutDataOwner)
+                                .orElse(null);
+                        memberOrderSequence = actionPropertySequence++;
+                    } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
+                        groupIdAndName = GroupIdAndName
+                                .forCollectionLayoutData((CollectionLayoutData) actionLayoutDataOwner)
+                                .orElse(null);
+                        memberOrderSequence = actionCollectionSequence++;
+                    } else {
+                        // don't add: any existing metadata should be preserved
+                        groupIdAndName = null;
+                        memberOrderSequence = actionDomainObjectSequence++;
                     }
-                    memberOrderSequence = actionPropertyGroupSequence++;
-                } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
-                    groupIdAndName = GroupIdAndName
-                            .forPropertyLayoutData((PropertyLayoutData) actionLayoutDataOwner)
-                            .orElse(null);
-                    memberOrderSequence = actionPropertySequence++;
-                } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
-                    groupIdAndName = GroupIdAndName
-                            .forCollectionLayoutData((CollectionLayoutData) actionLayoutDataOwner)
-                            .orElse(null);
-                    memberOrderSequence = actionCollectionSequence++;
-                } else {
-                    // don't add: any existing metadata should be preserved
-                    groupIdAndName = null;
-                    memberOrderSequence = actionDomainObjectSequence++;
-                }
-                updateFacet(
-                        LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
+                    updateFacet(
+                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
-                updateFacetIfPresent(
-                        LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedence));
+                    //XXX hotfix: always override LayoutGroupFacetForAnnotation, otherwise actions are not shown - don't know why
+                    val precedenceHotfix = fcGrid.isFallback()
+                            ? Facet.Precedence.DEFAULT
+                            : Facet.Precedence.HIGH;
+
+                    updateFacetIfPresent(
+                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix));
+                }
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
