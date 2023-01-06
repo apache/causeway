@@ -179,7 +179,7 @@ Container app created. Access your app at https://demo-wicket-jpa.graytree-90c75
 
 * Change scaling from default (1-10) to just a single instance.
 +
-image::image-2023-01-03-08-31-58-018.png[width=600]
+image::nightly-deploys/image-2023-01-03-08-31-58-018.png[width=600]
 
 
 == Use Lets Encrypt for SSL Certs
@@ -199,15 +199,15 @@ NOTE: the intention is to change this to a more suitable domain.
 
 * from the link:https://github.com/shibayan/containerapps-acmebot/wiki/Getting-Started#1-deploy-acmebot[README]:
 +
-image::image-2023-01-03-17-58-33-718.png[width=600]
+image::nightly-deploys/image-2023-01-03-17-58-33-718.png[width=600]
 
 * add params:
 +
-image::image-2023-01-03-18-07-57-499.png[width=800]
+image::nightly-deploys/image-2023-01-03-18-07-57-499.png[width=800]
 +
 results in:
 +
-image::image-2023-01-03-18-10-33-567.png[width=800]
+image::nightly-deploys/image-2023-01-03-18-10-33-567.png[width=800]
 
 
 === Enable App Service Authentication & Access control (IAM)
@@ -216,11 +216,11 @@ Continuing with the link:https://github.com/shibayan/containerapps-acmebot/wiki/
 
 * add an identity provider to the function app:
 +
-image::image-2023-01-03-18-16-01-614.png[width=800]
+image::nightly-deploys/image-2023-01-03-18-16-01-614.png[width=800]
 
 * add contributor role assignment:
 +
-image::image-2023-01-03-18-22-59-542.png[width=1000]
+image::nightly-deploys/image-2023-01-03-18-22-59-542.png[width=1000]
 
 
 === Access function app
@@ -231,31 +231,31 @@ Continuing further with the link:https://github.com/shibayan/containerapps-acmeb
 
 * navigate to link:https://func-acmebot-y3a6.azurewebsites.net/add-certificate[], and grant permissions to access the site:
 +
-image::image-2023-01-03-18-27-32-832.png[width=300]
+image::nightly-deploys/image-2023-01-03-18-27-32-832.png[width=300]
 
 
 * complete dialog:
 +
-image::image-2023-01-04-06-23-41-099.png[width=600]
+image::nightly-deploys/image-2023-01-04-06-23-41-099.png[width=600]
 +
 and `Submit`.
 
 * The docs say "after a few tens of seconds, the certificate will be issued".
 Indeed so:
 +
-image::image-2023-01-04-06-26-42-960.png[width=400]
+image::nightly-deploys/image-2023-01-04-06-26-42-960.png[width=400]
 +
 In the DNS zone, it creates this `TXT` record:
 +
-image::image-2023-01-04-06-29-02-083.png[width=600]
+image::nightly-deploys/image-2023-01-04-06-29-02-083.png[width=600]
 
 * Also create a `CNAME` for the app:
 +
-image::image-2023-01-04-06-25-56-926.png[width=400]
+image::nightly-deploys/image-2023-01-04-06-25-56-926.png[width=400]
 
 * Confirm that the app can be accessed:
 +
-image::image-2023-01-04-06-31-36-293.png[width=800]
+image::nightly-deploys/image-2023-01-04-06-31-36-293.png[width=800]
 
 
 == Deploy Remaining Apps
@@ -582,7 +582,7 @@ Following https://dev.to/erudinsky/how-to-deploy-to-azure-with-gitlab-authentica
 +
 My guess is that this is a 'deploy' application rather than the application being deployed.
 +
-image::image-2023-01-05-11-44-09-855.png[width=800]
+image::nightly-deploys/image-2023-01-05-11-44-09-855.png[width=800]
 
 // * https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#assign-a-role-to-the-application[assign a role to the application]
 
