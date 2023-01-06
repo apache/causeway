@@ -540,16 +540,28 @@
           <h3 class="cta-title">Quick Start</h3>
 
           <div class="row">
+            <div class="col-lg-12 text-left text-lg-left">
+              <p class="cta-text text-center" style="margin-block-end: 0; ">
+                Prereqs: Java 11 and Maven 3.6+.  <br/>
+                We recommend you try out using Linux, MacOS or WSL2 <br/>
+                (to <a href="https://github.com/spring-projects/spring-boot/issues/17766">avoid exceeding</a> Windows' limits due to classpath length).
+              </p>
+              <br/>
+            </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
                 Learn about Apache Isis™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
-                You can see the app running <a href="https://helloworld.jdo.isis.incode.work/" target="_blank">here (jdo)</a> and <a href="https://helloworld.jpa.isis.incode.work/" target="_blank">here (jpa)</a>.
+                You can see the app running <a href="https://helloworld-jpa-snapshot.apps.causeway.dev/" target="_blank">here (jpa)</a> or <a href="https://helloworld-jdo-snapshot.apps.causeway.dev/" target="_blank">here (jdo)</a>.
+                <br/>
+                (These scale to zero when not in use, so please allow up to a minute for them to restart if necessary).
               </p>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
                 Develop your own Apache Isis™ app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
-                You can see the app running <a href="https://simpleapp.jdo.isis.incode.work/" target="_blank">here (jdo)</a> and <a href="https://simpleapp.jpa.isis.incode.work/" target="_blank">here (jpa)</a>.
+                You can see the app running <a href="https://simpleapp-jpa-snapshot.apps.causeway.dev/" target="_blank">here (jpa)</a> or <a href="https://simpleapp-jdo-snapshot.apps.causeway.dev/" target="_blank">here (jdo)</a>.
+                <br/>
+                (These scale to zero when not in use, so please allow up to a minute for them to restart if necessary).
               </p>
             </div>
           </div>
@@ -562,7 +574,7 @@ BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
-mvn clean install
+mvn clean install -Dskip.staging -Dskip.nightly
 mvn spring-boot:run</pre>
               </p>
             </div>
@@ -574,7 +586,7 @@ BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
-mvn clean install
+mvn clean install -Dskip.staging -Dskip.nightly
 mvn -pl webapp spring-boot:run</pre>
               </p>
             </div>
@@ -600,7 +612,7 @@ BRANCH=jpa
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
-mvn clean install
+mvn clean install -Dskip.staging -Dskip.nightly
 mvn spring-boot:run</pre>
               </p>
             </div>
@@ -612,7 +624,7 @@ BRANCH=jpa
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
-mvn clean install
+mvn clean install -Dskip.staging -Dskip.nightly
 mvn -pl webapp spring-boot:run</pre>
               </p>
             </div>
@@ -632,50 +644,12 @@ mvn -pl webapp spring-boot:run</pre>
           <div class="row">
             <div class="col-lg-12 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; margin-top: 20px;">
-                You can also explore the Apache Isis programming model through the demo app, running <a href="https://demo-wicket.isis.incode.work/" target="_blank">here</a>.
+                You can also explore the Apache Isis programming model through the demo app, running <a href="https://demo-wicket-jpa-snapshot.apps.causeway.dev/" target="_blank">here (jpa)</a> or <a href="https://demo-wicket-jdo-snapshot.apps.causeway.dev/" target="_blank">here (jdo)</a>.
+                <br/>
+                (These scale to zero when not in use, so please allow up to a minute for them to restart if necessary).
               </p>
             </div>
           </div>
-
-<!--
-          <div class="row">
-            <p class="cta-text text-center" style="margin-block-end: 0; margin-left: 20px; margin-top: 20px;">
-              If you want to use the previous 1.x version, you can use these Maven archetypes.
-            </p>
-            <div class="col-lg-6 text-left text-lg-left">
-              <p>
-                <pre>
-mvn archetype:generate  \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=1.17.0 \
-    -D groupId=com.mycompany \
-    -D artifactId=myapp \
-    -D version=1.0-SNAPSHOT \
-    -B
-
-mvn clean install
-mvn jetty:run</pre>
-              </p>
-            </div>
-            <div class="col-lg-6 text-center text-lg-left">
-              <p>
-                <pre>
-mvn archetype:generate  \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=$APP-archetype \
-    -D archetypeVersion=1.17.0 \
-    -D groupId=com.mycompany \
-    -D artifactId=myapp \
-    -D version=1.0-SNAPSHOT \
-    -B
-
-mvn clean install
-mvn -pl webapp jetty:run</pre>
-              </p>
-            </div>
-        </div>
--->
         </div>
       </div>
     </div>
