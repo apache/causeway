@@ -31,20 +31,19 @@ extends MemberNamedFacetWithStaticTextAbstract {
 
     public static Optional<MemberNamedFacet> create(
             final PropertyLayoutData propertyLayoutData,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
 
         return Optional.ofNullable(propertyLayoutData)
         .map(PropertyLayoutData::getNamed)
         .filter(_Strings::isEmpty)
         .map(named->new MemberNamedFacetForPropertyLayoutXml(
-                named,
-                holder));
+                named, holder, precedence));
     }
 
     private MemberNamedFacetForPropertyLayoutXml(
-            final String named,
-            final FacetHolder holder) {
-        super(named, holder, Precedence.HIGH); // XML layout overrules layout from annotations
+            final String named, final FacetHolder holder, final Precedence precedence) {
+        super(named, holder, precedence);
     }
 
     @Override

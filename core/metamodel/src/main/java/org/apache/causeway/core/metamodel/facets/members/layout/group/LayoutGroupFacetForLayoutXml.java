@@ -34,25 +34,30 @@ extends LayoutGroupFacetAbstract {
 
     public static Optional<LayoutGroupFacetForLayoutXml> create(
             final @Nullable GroupIdAndName groupIdAndName,
-            final @NonNull  FacetHolder holder) {
+            final @NonNull  FacetHolder holder,
+            final Precedence precedence) {
 
         return Optional.ofNullable(groupIdAndName)
-                .map(gIdAndName->new LayoutGroupFacetForLayoutXml(gIdAndName, holder));
+                .map(gIdAndName->new LayoutGroupFacetForLayoutXml(gIdAndName, holder, precedence));
     }
 
     public static Optional<LayoutGroupFacetForLayoutXml> create(
             final @NonNull FieldSet fieldSet,
-            final @NonNull FacetHolder holder) {
+            final @NonNull FacetHolder holder,
+            final Precedence precedence) {
 
         return GroupIdAndName
                 .forFieldSet(fieldSet)
-                .flatMap(groupIdAndName->create(groupIdAndName, holder));
+                .flatMap(groupIdAndName->create(groupIdAndName, holder, precedence));
     }
 
     // -- IMPLEMENTATION
 
-    private LayoutGroupFacetForLayoutXml(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
-        super(groupIdAndName, holder);
+    private LayoutGroupFacetForLayoutXml(
+            final GroupIdAndName groupIdAndName,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(groupIdAndName, holder, precedence);
     }
 
     @Override

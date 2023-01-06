@@ -29,18 +29,22 @@ public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAb
 
     public static Optional<ActionPositionFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final org.apache.causeway.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
 
         return Optional.ofNullable(position)
-        .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder));
+        .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
     }
 
-    private ActionPositionFacetForActionLayoutXml(final org.apache.causeway.applib.annotation.ActionLayout.Position position, final FacetHolder holder) {
-        super(position, holder);
+    private ActionPositionFacetForActionLayoutXml(
+            final org.apache.causeway.applib.annotation.ActionLayout.Position position,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(position, holder, precedence);
     }
 
     @Override

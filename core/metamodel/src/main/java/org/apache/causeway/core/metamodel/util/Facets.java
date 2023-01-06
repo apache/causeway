@@ -114,10 +114,8 @@ public final class Facets {
         .map(BookmarkPolicyFacet::value);
     }
 
-    public Predicate<FacetHolder> bookmarkPolicyMatches(final Predicate<BookmarkPolicy> matcher) {
-        return facetHolder->Facets.bookmarkPolicy(facetHolder)
-        .map(matcher::test)
-        .orElse(false);
+    public BookmarkPolicy bookmarkPolicyOrElseNotSpecified(final @Nullable FacetHolder facetHolder) {
+        return bookmarkPolicy(facetHolder).orElse(BookmarkPolicy.NOT_SPECIFIED);
     }
 
     public Optional<BSGrid> bootstrapGrid(

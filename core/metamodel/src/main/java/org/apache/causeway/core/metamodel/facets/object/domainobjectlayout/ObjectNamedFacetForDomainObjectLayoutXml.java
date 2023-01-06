@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
@@ -34,7 +35,8 @@ extends ObjectNamedFacetAbstract {
 
     public static Optional<ObjectNamedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
 
         if(domainObjectLayout == null) {
             return Optional.empty();
@@ -56,13 +58,15 @@ extends ObjectNamedFacetAbstract {
         return Optional.of(
                 new ObjectNamedFacetForDomainObjectLayoutXml(
                             nounForms,
-                            holder));
+                            holder,
+                            precedence));
     }
 
     private ObjectNamedFacetForDomainObjectLayoutXml(
             final NounForms nounForms,
-            final FacetHolder holder) {
-        super(nounForms, holder);
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(nounForms, holder, precedence);
     }
 
     @Override

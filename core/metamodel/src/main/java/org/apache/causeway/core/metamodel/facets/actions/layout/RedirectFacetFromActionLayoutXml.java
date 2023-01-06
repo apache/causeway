@@ -31,19 +31,20 @@ extends RedirectFacetAbstract {
 
     public static Optional<RedirectFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final Redirect redirect = actionLayout.getRedirect();
         return redirect != null
-                ? Optional.of(new RedirectFacetFromActionLayoutXml(redirect, holder))
+                ? Optional.of(new RedirectFacetFromActionLayoutXml(redirect, holder, precedence))
                 : Optional.empty();
     }
 
     public RedirectFacetFromActionLayoutXml(
-            final Redirect policy, final FacetHolder holder) {
-        super(policy, holder);
+            final Redirect policy, final FacetHolder holder, final Precedence precedence) {
+        super(policy, holder, precedence);
     }
 
     @Override

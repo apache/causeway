@@ -59,11 +59,8 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetFor
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
@@ -199,29 +196,17 @@ implements MenuBarsService {
 
                 val layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
-                FacetUtil.updateFacet(
-                        MemberNamedFacet.class,
-                        facet->facet instanceof MemberNamedFacetForMenuBarXml,
-                        MemberNamedFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        MemberNamedFacetForMenuBarXml.create(layoutData, objectAction));
 
-                FacetUtil.updateFacet(
-                        MemberDescribedFacet.class,
-                        facet->facet instanceof MemberDescribedFacetForMenuBarXml,
-                        MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction));
 
-                FacetUtil.updateFacet(
-                        CssClassFacet.class,
-                        facet->facet instanceof CssClassFacetForMenuBarXml,
-                        CssClassFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        CssClassFacetForMenuBarXml.create(layoutData, objectAction));
 
-                FacetUtil.updateFacet(
-                        CssClassFaFacet.class,
-                        facet->facet instanceof CssClassFaFacetForMenuBarXml,
-                        CssClassFaFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        CssClassFaFacetForMenuBarXml.create(layoutData, objectAction));
 
             });
 

@@ -31,20 +31,21 @@ extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
             final PropertyLayoutData propertyLayoutData,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
 
         return Optional.ofNullable(propertyLayoutData)
         .map(PropertyLayoutData::getDescribedAs)
         .filter(_Strings::isEmpty)
         .map(describedAs->new MemberDescribedFacetForPropertyLayoutXml(
-                describedAs,
-                holder));
+                describedAs, holder, precedence));
     }
 
     private MemberDescribedFacetForPropertyLayoutXml(
             final String described,
-            final FacetHolder holder) {
-        super(described, holder, Precedence.HIGH); // XML layout overrules layout from annotations
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(described, holder, precedence);
     }
 
     @Override

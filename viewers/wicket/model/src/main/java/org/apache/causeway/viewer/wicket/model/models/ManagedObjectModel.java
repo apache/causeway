@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -32,7 +31,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -136,17 +134,6 @@ extends ModelAbstract<ManagedObject> {
             isObjectSpecMemoized = true;
         }
         return elementTypeSpec;
-    }
-
-
-    public final boolean hasAsRootPolicy() {
-        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_ROOT::equals)
-                .test(getTypeOfSpecification());
-    }
-
-    public final boolean hasAsChildPolicy() {
-        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_CHILD::equals)
-                .test(getTypeOfSpecification());
     }
 
     public boolean isEmpty() {

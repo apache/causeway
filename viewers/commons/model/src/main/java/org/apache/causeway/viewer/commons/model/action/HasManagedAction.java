@@ -44,9 +44,9 @@ public interface HasManagedAction {
 
     /**
      * Metamodel of the represented {@link ManagedAction}.
-     * @apiNote implementing classes may provide this more directly 
+     * @apiNote implementing classes may provide this more directly
      *  than having to conjure up a ManagedAction only to provide its metamodel;
-     *  in other words: this is not strictly required but provides optimization opportunities   
+     *  in other words: this is not strictly required but provides optimization opportunities
      */
     ObjectAction getAction();
 
@@ -82,10 +82,8 @@ public interface HasManagedAction {
      */
     default boolean isBookmarkable() {
         val action = getAction();
-
         return action.getSemantics().isSafeInNature()
-                && Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_ROOT::equals)
-                    .test(action);
+                && Facets.bookmarkPolicyOrElseNotSpecified(action).isRoot();
     }
 
     default Identifier getFeatureIdentifier() {

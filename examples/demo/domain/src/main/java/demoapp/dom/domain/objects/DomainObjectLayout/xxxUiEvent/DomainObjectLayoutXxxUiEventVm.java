@@ -48,7 +48,7 @@ public class DomainObjectLayoutXxxUiEventVm implements HasAsciiDocDescription {
         return "DomainObjectLayout#xxxUiEvent";
     }
 
-    //TODO
+    //TODO[ISIS-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter

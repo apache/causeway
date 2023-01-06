@@ -18,9 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 public interface BookmarkableModel
 extends HasTitle {
@@ -32,6 +38,21 @@ extends HasTitle {
 
     public abstract PageParameters getPageParametersWithoutUiHints();
 
-    public abstract boolean hasAsRootPolicy();
+    /** governs how to populate the BookmarkPanel in the UI */
+    public abstract BookmarkPolicy getBookmarkPolicy();
+
+    default Optional<Bookmark> toBookmark() {
+        return PageParameterUtils.toBookmark(getPageParametersWithoutUiHints());
+    }
+
+    /**
+     * Stream bookmarks of all non mixed in properties of the underlying domain object.
+     * (empty for action bookmarks)
+     * <p>
+     * Introduced to discover parent/child relations for the BookmarkPanel.
+     */
+    default Stream<Bookmark> streamPropertyBookmarks() {
+        return Stream.empty();
+    }
 
 }

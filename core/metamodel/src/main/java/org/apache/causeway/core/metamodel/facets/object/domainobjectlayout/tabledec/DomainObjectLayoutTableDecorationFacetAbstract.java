@@ -33,7 +33,15 @@ implements DomainObjectLayoutTableDecorationFacet {
     }
 
     protected DomainObjectLayoutTableDecorationFacetAbstract(
-            final DomainObjectLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
+            final DomainObjectLayoutConfigOptions.TableDecoration value,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(), value, holder, precedence);
+    }
+
+    protected DomainObjectLayoutTableDecorationFacetAbstract(
+            final DomainObjectLayoutConfigOptions.TableDecoration value,
+            final FacetHolder holder) {
         super(type(), value, holder);
     }
 }

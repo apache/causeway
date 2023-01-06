@@ -53,7 +53,7 @@ public final class LayoutConstants {
          * end-user's perspective.
          *
          * <p>
-         *     Indended to bind using {@link PropertyLayout#fieldSetId()}.
+         *     Intended to bind using {@link PropertyLayout#fieldSetId()}.
          * </p>
          *
          * <p>
@@ -67,7 +67,7 @@ public final class LayoutConstants {
          * provided mixins are associated with this fieldset, either properties or actions.
          *
          * <p>
-         *     Indended to bind using {@link PropertyLayout#fieldSetId()}.
+         *     Intended to bind using {@link PropertyLayout#fieldSetId()}.
          * </p>
          *
          * <p>
@@ -80,7 +80,7 @@ public final class LayoutConstants {
          * The id for a field set intended to hold additional details.
          *
          * <p>
-         *     Indended to bind using {@link PropertyLayout#fieldSetId()}.
+         *     Intended to bind using {@link PropertyLayout#fieldSetId()}.
          * </p>
          *
          * <p>

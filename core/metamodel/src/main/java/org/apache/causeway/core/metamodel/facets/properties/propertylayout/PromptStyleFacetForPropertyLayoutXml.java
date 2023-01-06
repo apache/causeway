@@ -32,20 +32,22 @@ extends PromptStyleFacetAbstract {
 
     public static Optional<PromptStyleFacet> create(
             final PropertyLayoutData propertyLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(propertyLayout == null) {
             return Optional.empty();
         }
         final PromptStyle promptStyle = propertyLayout.getPromptStyle();
         return promptStyle != null
-                ? Optional.of(new PromptStyleFacetForPropertyLayoutXml(promptStyle, holder))
+                ? Optional.of(new PromptStyleFacetForPropertyLayoutXml(promptStyle, holder, precedence))
                 : Optional.empty();
     }
 
     private final PromptStyle promptStyle;
 
-    private PromptStyleFacetForPropertyLayoutXml(final PromptStyle promptStyle, final FacetHolder holder) {
-        super(holder);
+    private PromptStyleFacetForPropertyLayoutXml(
+            final PromptStyle promptStyle, final FacetHolder holder, final Precedence precedence) {
+        super(holder, precedence);
         this.promptStyle = promptStyle;
     }
 

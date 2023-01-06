@@ -30,19 +30,21 @@ extends PagedFacetAbstract {
 
     public static Optional<PagedFacet> create(
             final CollectionLayoutData collectionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(collectionLayout == null) {
             return Optional.empty();
         }
         final Integer paged = collectionLayout.getPaged();
         return paged != null
                 && paged != -1
-                        ? Optional.of(new PagedFacetForCollectionLayoutXml(paged, holder))
+                        ? Optional.of(new PagedFacetForCollectionLayoutXml(paged, holder, precedence))
                         : Optional.empty();
     }
 
-    private PagedFacetForCollectionLayoutXml(final int paged, final FacetHolder holder) {
-        super(paged, holder);
+    private PagedFacetForCollectionLayoutXml(
+            final int paged, final FacetHolder holder, final Precedence precedence) {
+        super(paged, holder, precedence);
     }
 
     @Override

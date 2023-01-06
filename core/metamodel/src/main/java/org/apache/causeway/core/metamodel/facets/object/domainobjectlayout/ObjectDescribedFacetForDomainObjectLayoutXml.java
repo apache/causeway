@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
@@ -31,20 +32,22 @@ extends ObjectDescribedFacetAbstract {
 
     public static Optional<ObjectDescribedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
         if(domainObjectLayout == null) {
             return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder))
+                ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder, precedence))
                 : Optional.empty();
     }
 
     private ObjectDescribedFacetForDomainObjectLayoutXml(
             final String described,
-            final FacetHolder holder) {
-        super(described, holder);
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(described, holder, precedence);
     }
 
     @Override
