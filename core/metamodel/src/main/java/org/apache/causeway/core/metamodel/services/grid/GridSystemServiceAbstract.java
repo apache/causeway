@@ -230,7 +230,7 @@ implements GridSystemService<G> {
                     updateFacet(
                             LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
-                    //XXX hotfix: always override LayoutGroupFacetForAnnotation, otherwise actions are not shown - don't know why
+                    //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
                     val precedenceHotfix = fcGrid.isFallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;

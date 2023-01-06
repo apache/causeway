@@ -19,9 +19,8 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -40,43 +39,25 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
 
-        // hack: remove any garbage that might've got stored in 'rootNodes'
-        cleanUpGarbage(rootNodes);
-
         val bookmark = bookmarkableModel.toBookmark().orElse(null);
         if(bookmark == null) {
             // ignore
             return;
         }
 
-        BookmarkTreeNode rootNode = null;
-        for (BookmarkTreeNode treeNode : rootNodes) {
-            if(treeNode.matches(bookmarkableModel)) {
-                rootNode = treeNode;
-            }
-        }
+        val matchingRootNode = matchRootNode(bookmarkableModel).orElse(null);
 
         // MRU/LRU algorithm
-        if(rootNode != null) {
-            rootNodes.remove(rootNode);
-            rootNodes.add(0, rootNode);
+        if(matchingRootNode != null) {
+            rootNodes.remove(matchingRootNode);
+            rootNodes.add(0, matchingRootNode);
         } else {
             if (bookmarkableModel.getBookmarkPolicy().isRoot()) {
-                rootNode = BookmarkTreeNode.newRoot(bookmark, bookmarkableModel);
-                rootNodes.add(0, rootNode);
+                rootNodes.add(0, BookmarkTreeNode.newRoot(bookmark, bookmarkableModel));
             }
         }
 
         trim(rootNodes, getMaxSize());
-    }
-
-    private int getMaxSize() {
-        return getWicketViewerSettings().getBookmarkedPages().getMaxSize();
-    }
-
-    private static void trim(final List<?> list, final int requiredSize) {
-        int numToRetain = Math.min(list.size(), requiredSize);
-        list.retainAll(list.subList(0, numToRetain));
     }
 
     @Override
@@ -90,17 +71,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
             rootNode.appendGraphTo(depthFirstGraph);
         }
         return depthFirstGraph;
-    }
-
-    private static void cleanUpGarbage(final List<BookmarkTreeNode> rootNodes) {
-        final Iterator<BookmarkTreeNode> iter = rootNodes.iterator();
-        while(iter.hasNext()) {
-            BookmarkTreeNode node = iter.next();
-            // think this is redundant...
-            if(node.getBookmark() == null) {
-                iter.remove();
-            }
-        }
     }
 
     public void clear() {
@@ -117,8 +87,27 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void remove(final UiObjectWkt entityModel) {
         val bookmark = entityModel.getOwnerBookmark();
-        rootNodes.removeIf(node->Objects.equals(node.getBookmark(), bookmark));
+        rootNodes.removeIf(node->node.getBookmark().equals(bookmark));
     }
 
+    // -- HELPER
+
+    private Optional<BookmarkTreeNode> matchRootNode(final BookmarkableModel bookmarkableModel) {
+        for (val rootNode : rootNodes) {
+            if(rootNode.matches(bookmarkableModel)) {
+                return Optional.of(rootNode);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private int getMaxSize() {
+        return getWicketViewerSettings().getBookmarkedPages().getMaxSize();
+    }
+
+    private static void trim(final List<?> list, final int requiredSize) {
+        int numToRetain = Math.min(list.size(), requiredSize);
+        list.retainAll(list.subList(0, numToRetain));
+    }
 
 }
