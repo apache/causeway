@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -29,10 +30,14 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
@@ -226,6 +231,19 @@ implements
         }
         return propertyScalarModels.get(pm);
 
+    }
+
+    @Override
+    public Stream<Bookmark> streamPropertyBookmarks() {
+        val candidateAdapter = this.getObject();
+
+        return candidateAdapter.getSpecification()
+        .streamProperties(MixedIn.EXCLUDED)
+        .map(prop->
+            ManagedObjects.bookmark(prop.get(candidateAdapter, InteractionInitiatedBy.PASS_THROUGH))
+            .orElse(null)
+        )
+        .filter(_NullSafe::isPresent);
     }
 
     // -- VIEW OR EDIT

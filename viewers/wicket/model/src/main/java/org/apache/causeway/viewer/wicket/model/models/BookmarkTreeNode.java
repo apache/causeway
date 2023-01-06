@@ -21,18 +21,13 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -51,6 +46,8 @@ implements
 
     @Getter private String title;
 
+    //private final Set<Bookmark> propertyBookmarks; ... in support of parents referencing their child
+
     // -- FACTORIES
 
     public static BookmarkTreeNode newRoot(
@@ -68,12 +65,11 @@ implements
 
         this.pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         this.bookmark = bookmark;
-
-//        // replace oid with the noVer equivalent.
-//        PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
-//        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
+//        this.propertyBookmarks = bookmarkableModel.streamPropertyBookmarks()
+//                .collect(Collectors.toCollection(HashSet::new));
 
         this.title = bookmarkableModel.getTitle();
+
         this.depth = depth;
     }
 
@@ -193,33 +189,35 @@ implements
 //        return true;
 //    }
 
+    /**
+     * For given candidate model look into its properties and see whether one matches this node's bookmark.
+     * If so, we found a parent/child relation for the tree to populate
+     */
     private boolean addToGraphIfParented(final BookmarkableModel candidateBookmarkableModel) {
 
-        val whetherAdded = _Refs.booleanRef(false);
+        val addedCount = new LongAdder();
 
-        // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
-        if(candidateBookmarkableModel instanceof UiObjectWkt) {
-            val entityModel = (UiObjectWkt) candidateBookmarkableModel;
-            val candidateAdapter = entityModel.getObject();
+        candidateBookmarkableModel.streamPropertyBookmarks()
+        .filter(getBookmark()::equals)
+        .forEach(propBookmark->{
+            if(this.addChild(candidateBookmarkableModel).isPresent()) {
+                addedCount.increment();
+            }
+        });
 
-            candidateAdapter.getSpecification()
-            .streamAssociations(MixedIn.EXCLUDED)
-            .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES) // properties only
-            .map(objectAssoc->{
-                val parentAdapter =
-                        objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
-                return parentAdapter;
-            })
-            .filter(_NullSafe::isPresent)
-            .map(parentAdapter->ManagedObjects.bookmark(parentAdapter).orElse(null))
-            .filter(_NullSafe::isPresent)
-            .forEach(parentBookmark->{
-                if(getBookmark().equals(parentBookmark)) {
-                    whetherAdded.setValue(this.addChild(candidateBookmarkableModel).isPresent());
-                }
-            });
+        if(addedCount.longValue()>0L) {
+            return true;
         }
-        return whetherAdded.isTrue();
+
+//        /* also check the other way around, that is,
+//         * whether the child is referenced from one of the parent's properties
+//         */
+//        if(candidateBookmarkableModel.toBookmark()
+//                .map(propertyBookmarks::contains)
+//                .orElse(false)) {
+//            return this.addChild(candidateBookmarkableModel).isPresent();
+//        }
+        return false;
     }
 
 

@@ -21,21 +21,17 @@ package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.Getter;
-import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -53,11 +49,10 @@ public class DomainObjectLayoutBookmarkingVm implements HasAsciiDocDescription {
         return "DomainObjectLayout#bookmarking";
     }
 
-    //TODO[ISIS-3309]
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
-    @Getter @Setter
-    private DomainObjectLayoutBookmarkingNestedVm nestedObjectLevel1 = new DomainObjectLayoutBookmarkingNestedVm();
+    @Action
+    public DomainObjectLayoutBookmarkingNestedVm nestedObject() {
+        return new DomainObjectLayoutBookmarkingNestedVm(this);
+    }
 
 }
 //end::class[]

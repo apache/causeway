@@ -35,6 +35,7 @@ import org.apache.causeway.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //tag::class[]
@@ -47,17 +48,21 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD    // <.>
         )
+@NoArgsConstructor
 public class DomainObjectLayoutBookmarkingNestedVm implements HasAsciiDocDescription {
+
+    public DomainObjectLayoutBookmarkingNestedVm(final DomainObjectLayoutBookmarkingVm parent) {
+        setParent(parent);
+    }
 
     @ObjectSupport public String title() {
         return "DomainObjectLayoutBookmarkingVmNested";
     }
 
-    //TODO[ISIS-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
-    private BookmarkPolicy dummy;
+    private DomainObjectLayoutBookmarkingVm parent;
 
 }
 //end::class[]

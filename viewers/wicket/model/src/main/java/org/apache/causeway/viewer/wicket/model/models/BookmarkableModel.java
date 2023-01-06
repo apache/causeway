@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -42,6 +43,16 @@ extends HasTitle {
 
     default Optional<Bookmark> toBookmark() {
         return PageParameterUtils.toBookmark(getPageParametersWithoutUiHints());
+    }
+
+    /**
+     * Stream bookmarks of all non mixed in properties of the underlying domain object.
+     * (empty for action bookmarks)
+     * <p>
+     * Introduced to discover parent/child relations for the BookmarkPanel.
+     */
+    default Stream<Bookmark> streamPropertyBookmarks() {
+        return Stream.empty();
     }
 
 }
