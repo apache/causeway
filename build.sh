@@ -63,7 +63,7 @@ usage() {
  echo ""                                                                                               >&2
  echo "example usage:"                                                                                 >&2
  echo ""                                                                                               >&2
- echo "sh build.sh -pctOvI        # pull, clean, no offline, verbose, no incubator"                    >&2
+ echo "sh build.sh -pctOvI        # pull, clean, no tests, no offline, verbose, no incubator"          >&2
  echo ""                                                                                               >&2
 }
 
