@@ -42,7 +42,7 @@
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.8.7</maven-model-builder.version>
 		<picocli.version>4.7.0</picocli.version>
-		<structurizr.version>1.16.2</structurizr.version>
+		<structurizr.version>1.17.0</structurizr.version>
 		<structurizr-plantuml.version>1.6.3</structurizr-plantuml.version>
 
 	</properties>
