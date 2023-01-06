@@ -31,7 +31,13 @@ implements SortedByFacet {
         return SortedByFacet.class;
     }
 
-    public SortedByFacetAbstract(final Class<? extends Comparator<?>> value, final FacetHolder holder) {
+    protected SortedByFacetAbstract(
+            final Class<? extends Comparator<?>> value, final FacetHolder holder,
+            final Precedence precedence) {
+        super(type(), value, holder, precedence);
+    }
+
+    protected SortedByFacetAbstract(final Class<? extends Comparator<?>> value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 

@@ -30,7 +30,19 @@ implements SingleValueFacet<T> {
 
     private T value;
 
-    public SingleValueFacetAbstract(final Class<? extends Facet> facetType, final T value, final FacetHolder holder) {
+    protected SingleValueFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final T value,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(facetType, holder, precedence);
+        this.value = value;
+    }
+
+    protected SingleValueFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final T value,
+            final FacetHolder holder) {
         super(facetType, holder);
         this.value = value;
     }

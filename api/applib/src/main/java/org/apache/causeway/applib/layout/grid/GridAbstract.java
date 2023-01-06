@@ -77,22 +77,30 @@ public abstract class GridAbstract implements Grid {
         this.tnsAndSchemaLocation = tnsAndSchemaLocation;
     }
 
+    private boolean fallback;
+    @Override
+    @Programmatic
+    @XmlTransient
+    public boolean isFallback() {
+        return fallback;
+    }
+    @Programmatic
+    public void setFallback(final boolean fallback) {
+        this.fallback = fallback;
+    }
 
     private boolean normalized;
-
     @Override
     @Programmatic
     @XmlTransient
     public boolean isNormalized() {
         return normalized;
     }
-
     @Override
     @Programmatic
     public void setNormalized(final boolean normalized) {
         this.normalized = normalized;
     }
-
 
     /**
      * Convenience for subclasses.

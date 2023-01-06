@@ -31,20 +31,20 @@ extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
             final CollectionLayoutData collectionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(collectionLayout == null) {
             return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(collectionLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new MemberDescribedFacetForCollectionLayoutXml(describedAs, holder))
+                ? Optional.of(new MemberDescribedFacetForCollectionLayoutXml(describedAs, holder, precedence))
                 : Optional.empty();
     }
 
     private MemberDescribedFacetForCollectionLayoutXml(
-            final String described,
-            final FacetHolder holder) {
-        super(described, holder, Precedence.HIGH); // XML layout overrules layout from annotations
+            final String described, final FacetHolder holder, final Precedence precedence) {
+        super(described, holder, precedence);
     }
 
     @Override

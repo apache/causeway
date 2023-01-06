@@ -31,19 +31,21 @@ extends DefaultViewFacetAbstract {
 
     public static Optional<DefaultViewFacet> create(
             final CollectionLayoutData collectionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if (collectionLayout == null) {
             return Optional.empty();
         }
 
         final String defaultView = _Strings.emptyToNull(collectionLayout.getDefaultView());
         return defaultView != null
-                ? Optional.of(new DefaultViewFacetForCollectionLayoutXml(defaultView, holder))
+                ? Optional.of(new DefaultViewFacetForCollectionLayoutXml(defaultView, holder, precedence))
                 : Optional.empty();
     }
 
-    private DefaultViewFacetForCollectionLayoutXml(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DefaultViewFacetForCollectionLayoutXml(
+            final String value, final FacetHolder holder, final Precedence precedence) {
+        super(value, holder, precedence);
     }
 
     @Override

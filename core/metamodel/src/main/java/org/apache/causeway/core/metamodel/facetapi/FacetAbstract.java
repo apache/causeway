@@ -54,7 +54,6 @@ implements Facet, HasMetaModelContext {
     protected FacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder facetHolder) {
-
         this(facetType, facetHolder, Facet.Precedence.DEFAULT);
     }
 

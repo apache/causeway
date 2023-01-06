@@ -30,18 +30,20 @@ extends DateRenderAdjustFacetAbstract {
 
     public static Optional<DateRenderAdjustFacet> create(
             final PropertyLayoutData propertyLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(propertyLayout == null) {
             return Optional.empty();
         }
         final int adjustByDays = propertyLayout.getDateRenderAdjustDays();
         return adjustByDays != 0
-                        ? Optional.of(new RenderedAdjustedFacetForPropertyLayoutXml(adjustByDays, holder))
+                        ? Optional.of(new RenderedAdjustedFacetForPropertyLayoutXml(adjustByDays, holder, precedence))
                         : Optional.empty();
     }
 
-    private RenderedAdjustedFacetForPropertyLayoutXml(final int adjustByDays, final FacetHolder holder) {
-        super(adjustByDays, holder);
+    private RenderedAdjustedFacetForPropertyLayoutXml(
+            final int adjustByDays, final FacetHolder holder, final Precedence precedence) {
+        super(adjustByDays, holder, precedence);
     }
 
     @Override

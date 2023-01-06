@@ -31,19 +31,23 @@ extends BookmarkPolicyFacetAbstract {
 
     public static Optional<BookmarkPolicyFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if (actionLayout == null) {
             return Optional.empty();
         }
         final BookmarkPolicy bookmarkPolicy = actionLayout.getBookmarking();
         return bookmarkPolicy != null
                 && bookmarkPolicy != BookmarkPolicy.NEVER
-                        ? Optional.of(new BookmarkPolicyFacetForActionLayoutXml(bookmarkPolicy, holder))
+                        ? Optional.of(new BookmarkPolicyFacetForActionLayoutXml(bookmarkPolicy, holder, precedence))
                         : Optional.empty();
     }
 
-    private BookmarkPolicyFacetForActionLayoutXml(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {
-        super(bookmarkPolicy, holder);
+    private BookmarkPolicyFacetForActionLayoutXml(
+            final BookmarkPolicy bookmarkPolicy,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(bookmarkPolicy, holder, precedence);
     }
 
     @Override

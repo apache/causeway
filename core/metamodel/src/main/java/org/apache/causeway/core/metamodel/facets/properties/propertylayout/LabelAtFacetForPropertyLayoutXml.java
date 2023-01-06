@@ -31,18 +31,20 @@ extends LabelAtFacetAbstract {
 
     public static Optional<LabelAtFacet> create(
             final PropertyLayoutData propertyLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if (propertyLayout == null) {
             return Optional.empty();
         }
         final LabelPosition labelPosition = propertyLayout.getLabelPosition();
         return labelPosition != null
-                ? Optional.of(new LabelAtFacetForPropertyLayoutXml(labelPosition, holder))
+                ? Optional.of(new LabelAtFacetForPropertyLayoutXml(labelPosition, holder, precedence))
                 : Optional.empty();
     }
 
-    private LabelAtFacetForPropertyLayoutXml(final LabelPosition value, final FacetHolder holder) {
-        super(value, holder);
+    private LabelAtFacetForPropertyLayoutXml(
+            final LabelPosition value, final FacetHolder holder, final Precedence precedence) {
+        super(value, holder, precedence);
     }
 
     @Override

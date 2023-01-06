@@ -34,19 +34,21 @@ extends CollectionLayoutTableDecorationFacetAbstract {
 
     public static Optional<CollectionLayoutTableDecorationFacet> create(
             final CollectionLayoutData collectionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if (collectionLayout == null) {
             return Optional.empty();
         }
 
         final TableDecoration tableDecoration = collectionLayout.getTableDecoration();
         return tableDecoration == TableDecoration.DATATABLES_NET
-                ? Optional.of(new CollectionLayoutTableDecorationFacetForCollectionLayoutXml(holder))
+                ? Optional.of(new CollectionLayoutTableDecorationFacetForCollectionLayoutXml(holder, precedence))
                 : Optional.empty();
     }
 
-    private CollectionLayoutTableDecorationFacetForCollectionLayoutXml(final FacetHolder holder) {
-        super(CollectionLayoutConfigOptions.TableDecoration.DATATABLES_NET, holder);
+    private CollectionLayoutTableDecorationFacetForCollectionLayoutXml(
+            final FacetHolder holder, final Precedence precedence) {
+        super(CollectionLayoutConfigOptions.TableDecoration.DATATABLES_NET, holder, precedence);
     }
 
 }

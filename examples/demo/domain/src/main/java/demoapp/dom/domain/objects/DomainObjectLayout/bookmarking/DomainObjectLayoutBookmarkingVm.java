@@ -21,19 +21,17 @@ package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.Getter;
-import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -42,17 +40,19 @@ import lombok.Setter;
 @Named("demo.DomainObjectLayoutBookmarkingVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(
+        bookmarking = BookmarkPolicy.AS_ROOT    // <.>
+        )
 public class DomainObjectLayoutBookmarkingVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "DomainObjectLayout#bookmarking";
     }
 
-    //TODO
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String dummy;
+    @Action
+    public DomainObjectLayoutBookmarkingNestedVm nestedObject() {
+        return new DomainObjectLayoutBookmarkingNestedVm(this);
+    }
 
 }
 //end::class[]

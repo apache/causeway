@@ -25,6 +25,7 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -114,8 +115,8 @@ implements ActionModel {
     // --
 
     @Override
-    public boolean hasAsRootPolicy() {
-        return true;
+    public BookmarkPolicy getBookmarkPolicy() {
+        return BookmarkPolicy.AS_ROOT;
     }
 
     @Override

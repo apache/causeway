@@ -132,7 +132,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                                 bookmarkNode.getPageParameters(),
                                 pageClass));
 
-                Optional.ofNullable(bookmarkNode.getOidNoVer())
+                Optional.ofNullable(bookmarkNode.getBookmark())
                 .flatMap(oid->getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName()))
                 .ifPresent(objectSpec->{
                     Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON,

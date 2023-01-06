@@ -32,20 +32,21 @@ extends PromptStyleFacetAbstract {
 
     public static Optional<PromptStyleFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final PromptStyle promptStyle = actionLayout.getPromptStyle();
         return promptStyle != null
-                ? Optional.of(new PromptStyleFacetForActionLayoutXml(promptStyle, holder))
+                ? Optional.of(new PromptStyleFacetForActionLayoutXml(promptStyle, holder, precedence))
                 : Optional.empty();
     }
 
     private final PromptStyle promptStyle;
 
-    private PromptStyleFacetForActionLayoutXml(final PromptStyle promptStyle, final FacetHolder holder) {
-        super(holder);
+    private PromptStyleFacetForActionLayoutXml(final PromptStyle promptStyle, final FacetHolder holder, final Precedence precedence) {
+        super(holder, precedence);
         this.promptStyle = promptStyle;
     }
 

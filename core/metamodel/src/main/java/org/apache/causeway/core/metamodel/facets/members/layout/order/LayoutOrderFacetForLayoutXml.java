@@ -25,12 +25,14 @@ extends LayoutOrderFacetAbstract {
 
     public static LayoutOrderFacetForLayoutXml create(
             final int sequenceAsInt,
-            final FacetHolder holder) {
-        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, holder);
+            final FacetHolder holder,
+            final Precedence precedence) {
+        return new LayoutOrderFacetForLayoutXml("" + sequenceAsInt, holder, precedence);
     }
 
-    public LayoutOrderFacetForLayoutXml(final String sequence, final FacetHolder holder) {
-        super(sequence, holder);
+    private LayoutOrderFacetForLayoutXml(
+            final String sequence, final FacetHolder holder, final Precedence precedence) {
+        super(sequence, holder, precedence);
     }
 
     @Override

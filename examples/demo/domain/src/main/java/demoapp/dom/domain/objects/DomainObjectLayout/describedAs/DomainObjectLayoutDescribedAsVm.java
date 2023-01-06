@@ -48,7 +48,7 @@ public class DomainObjectLayoutDescribedAsVm implements HasAsciiDocDescription {
         return "DomainObjectLayout#describedAs";
     }
 
-    //TODO
+    //TODO[ISIS-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
