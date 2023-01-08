@@ -45,6 +45,7 @@
 		<approvaltests.version>18.5.0</approvaltests.version>
 
 		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy-spring-boot-starter -->
+		<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version> <!-- keep in sync with property defined in causeway-bom -->
 
 	</properties>
 
@@ -155,7 +156,7 @@
 					<plugin>
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-maven-plugin</artifactId>
-						<inherited>true</inherited>
+						<version>${datanucleus-maven-plugin.version}</version>
 					</plugin>
 				</plugins>
 			</build>
