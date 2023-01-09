@@ -45,6 +45,7 @@
 		<approvaltests.version>18.5.0</approvaltests.version>
 
 		<resteasy.version>6.0.0.Alpha2</resteasy.version> <!-- keep in sync with property defined in resteasy-spring-boot-starter -->
+		<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version> <!-- keep in sync with property defined in causeway-bom -->
 
 	</properties>
 
@@ -105,13 +106,13 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-applib</artifactId>
 				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
-		
+
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures-applib</artifactId>
@@ -125,7 +126,7 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-integtestsupport-applib</artifactId>
@@ -146,17 +147,16 @@
 		<profile>
 			<id>causeway-app-starter-datanucleusenhance</id>
 			<activation>
-				<property>
-					<name>causeway-app-starter-datanucleusenhance</name>
-					<value>true</value>
-				</property>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
 			</activation>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-maven-plugin</artifactId>
-						<inherited>true</inherited>
+						<version>${datanucleus-maven-plugin.version}</version>
 					</plugin>
 				</plugins>
 			</build>

@@ -5,6 +5,9 @@
 ** xref:merging-a-pull-request.adoc[Merging a Pull Request]
 ** xref:applying-patches.adoc[Applying Patches]
 ** xref:updating-the-website.adoc[Updating the Website]
+* Nightly
+** xref:nightly-builds.adoc[Nightly Builds]
+** xref:nightly-deploys.adoc[Nightly Deploys]
 * Release
 ** xref:cutting-a-release.adoc[Cutting a Release]
 ** xref:verifying-releases.adoc[Verifying Releases]
