@@ -136,7 +136,13 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
                 String entityTypeName = determineFriendlyType() // from actual underlying model
                         .orElseGet(spec::getSingularName); // not sure if this code path is ever reached
-                WktTooltips.addTooltip(link, entityTypeName, title);
+
+                val description = typeOfSpecification.getDescription();
+
+                WktTooltips.addTooltip(link, entityTypeName,
+                        description!=null
+                            ? description
+                            : title);
             }
         }
 
