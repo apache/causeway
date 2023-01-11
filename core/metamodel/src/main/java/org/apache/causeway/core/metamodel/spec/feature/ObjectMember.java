@@ -37,6 +37,7 @@ import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -242,10 +243,13 @@ public interface ObjectMember extends ObjectFeature {
 
     // -- COLLECTION PAGE SIZE (COLL + NON-SCALAR ACTION RESULT)
 
+    /**
+     * @apiNote in theory should never return empty, as there are supposed to be fallback {@link PagedFacet}s
+     * installed originating from configuration
+     */
     default OptionalInt getPageSize() {
-        return Stream.of(this, getElementType())
-            .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
-            .filter(_NullSafe::isPresent)
+        return FacetUtil.lookupFacetIn(PagedFacet.class, this, getElementType())
+            .stream()
             .mapToInt(PagedFacet::value)
             .findFirst();
     }
