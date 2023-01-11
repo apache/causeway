@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract
 public class PagedFacetOverriddenByDataTablesDecoration extends PagedFacetAbstract {
 
     PagedFacetOverriddenByDataTablesDecoration(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder);
+        super(Integer.MAX_VALUE, holder, Precedence.HIGH);
     }
 
 }

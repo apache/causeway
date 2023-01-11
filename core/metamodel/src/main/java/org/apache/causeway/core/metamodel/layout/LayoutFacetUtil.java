@@ -39,6 +39,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
@@ -230,9 +231,9 @@ public class LayoutFacetUtil {
 
     public void setPagedIfAny(
             final CollectionLayoutData collectionLayoutData,
-            final FacetHolder facetHolder) {
+            final FacetHolder facetHolder, final ObjectSpecification objectSpec) {
 
-        val pagedFacet = facetHolder.getFacet(PagedFacet.class);
+        val pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder, objectSpec).orElse(null);
         if(isDoOp(pagedFacet)) {
             final int value = pagedFacet.value();
             if(value > 0) {
@@ -367,7 +368,7 @@ public class LayoutFacetUtil {
                 setMemberDescribedIfAny(collectionLayoutData, collection);
                 setHiddenIfAny(collectionLayoutData, collection);
                 setMemberNamedIfAny(collectionLayoutData, collection);
-                setPagedIfAny(collectionLayoutData, collection);
+                setPagedIfAny(collectionLayoutData, collection, objectSpec);
                 setSortedByIfAny(collectionLayoutData, collection);
             });
         }

@@ -27,8 +27,10 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.NonNull;
@@ -167,6 +169,23 @@ public final class FacetUtil {
         return facet.getClass() == facet.facetType()
                 ? String.format("%s[%s]", className, attributesAsString)
                 : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facet.facetType()), attributesAsString);
+    }
+
+    // -- FACET LOOKUP
+
+    /** Looks up specified facetType within given {@link FacetHolder}s, honoring Facet {@link Precedence},
+     * while first one found wins over later found if they have the same precedence. */
+    public static <F extends Facet> Optional<F> lookupFacetIn(final @NonNull Class<F> facetType, final FacetHolder ... facetHolders) {
+        if(facetHolders==null) {
+            return Optional.empty();
+        }
+        return Stream.of(facetHolders)
+        .filter(_NullSafe::isPresent)
+        .map(facetHolder->facetHolder.getFacet(facetType))
+        .filter(_NullSafe::isPresent)
+        .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
+                ? b
+                : a);
     }
 
 }

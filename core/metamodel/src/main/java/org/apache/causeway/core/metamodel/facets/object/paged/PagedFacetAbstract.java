@@ -38,11 +38,6 @@ implements PagedFacet {
         this.value = value;
     }
 
-    protected PagedFacetAbstract(final int value, final FacetHolder holder) {
-        super(type(), holder, Precedence.INFERRED);
-        this.value = value;
-    }
-
     @Override
     public int value() {
         return value;
