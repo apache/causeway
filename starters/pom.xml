@@ -153,10 +153,22 @@
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
+                    <plugin>
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-maven-plugin</artifactId>
 						<version>${datanucleus-maven-plugin.version}</version>
+						<configuration>
+							<log4jConfiguration>${basedir}/logging-dn-enhance.properties</log4jConfiguration>
+							<verbose>true</verbose>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>enhance</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>

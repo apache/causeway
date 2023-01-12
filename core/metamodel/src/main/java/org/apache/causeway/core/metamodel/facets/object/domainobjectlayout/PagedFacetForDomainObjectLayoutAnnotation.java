@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -28,7 +27,6 @@ import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 import lombok.val;
-
 
 public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
@@ -49,6 +47,6 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
     }
 
     private PagedFacetForDomainObjectLayoutAnnotation(final int value, final FacetHolder holder) {
-        super(value, holder);
+        super(value, holder, Precedence.DEFAULT);
     }
 }

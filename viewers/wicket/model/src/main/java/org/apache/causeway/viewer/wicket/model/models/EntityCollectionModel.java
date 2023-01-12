@@ -114,10 +114,9 @@ extends
         return getDataTableModel().getTitle().getValue();
     }
 
-    // -- DEPRECATIONS(?)
-
-    @Deprecated // move to DataTableModel
-    int getPageSize();
+    default int getPageSize() {
+        return getDataTableModel().getPageSize(getVariant().getPageSizeDefault());
+    }
 
     // -- PARENTED SPECIFICS
 

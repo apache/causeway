@@ -46,7 +46,7 @@ public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract 
     }
 
     private PagedFacetForCollectionLayoutAnnotation(final int paged, final FacetHolder holder) {
-        super(paged, holder);
+        super(paged, holder, Precedence.DEFAULT);
     }
 
 }

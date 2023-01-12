@@ -18,6 +18,9 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.paged;
 
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +28,9 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -42,17 +47,31 @@ import lombok.Setter;
 @Named("demo.DomainObjectLayoutPagedVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(
+        paged=3)
 public class DomainObjectLayoutPagedVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "DomainObjectLayout#paged";
     }
 
-    //TODO[ISIS-3309]
+    @Collection
+    private List<DomainObjectLayoutPagedVm> samples;
+    public List<DomainObjectLayoutPagedVm> getSamples() {
+        if(samples==null) {
+            samples = List.of(
+                    new DomainObjectLayoutPagedVm(),
+                    new DomainObjectLayoutPagedVm(),
+                    new DomainObjectLayoutPagedVm(),
+                    new DomainObjectLayoutPagedVm());
+        }
+        return samples;
+    }
+
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
-    private String dummy;
+    private String uuid = UUID.randomUUID().toString();
 
 }
 //end::class[]

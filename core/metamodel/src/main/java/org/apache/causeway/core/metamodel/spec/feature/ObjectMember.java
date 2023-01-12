@@ -37,6 +37,7 @@ import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -242,10 +243,13 @@ public interface ObjectMember extends ObjectFeature {
 
     // -- COLLECTION PAGE SIZE (COLL + NON-SCALAR ACTION RESULT)
 
+    /**
+     * @apiNote in theory should never return empty, as there are supposed to be fallback {@link PagedFacet}s
+     * installed originating from configuration
+     */
     default OptionalInt getPageSize() {
-        return Stream.of(this, getElementType())
-            .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
-            .filter(_NullSafe::isPresent)
+        return FacetUtil.lookupFacetIn(PagedFacet.class, this, getElementType())
+            .stream()
             .mapToInt(PagedFacet::value)
             .findFirst();
     }
@@ -288,43 +292,39 @@ public interface ObjectMember extends ObjectFeature {
         public static <T extends FacetHolder> Comparator<T> byMemberOrderSequence(
                 final boolean ensureInSameGroup) {
 
-            return new Comparator<T>() {
+            return (m1, m2) -> {
 
-                @Override
-                public int compare(final T m1, final T m2) {
+                val orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
+                val orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
 
-                    val orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
-                    val orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
-
-                    if (orderFacet1 == null && orderFacet2 == null) {
-                        return 0;
-                    }
-                    if (orderFacet1 == null && orderFacet2 != null) {
-                        return +1; // annotated before non-annotated
-                    }
-                    if (orderFacet1 != null && orderFacet2 == null) {
-                        return -1; // annotated before non-annotated
-                    }
-
-                    if (ensureInSameGroup) {
-
-                        val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
-                        val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
-                        val groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
-                        val groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
-
-                        if(!Objects.equals(groupId1, groupId2)) {
-                            throw _Exceptions.illegalArgument(
-                                    "Not in same fieldSetId1 when comparing: '%s', '%s'",
-                                    groupId1,
-                                    groupId2);
-                        }
-                    }
-
-                    return _Comparators.deweyOrderCompare(
-                            orderFacet1.getSequence(),
-                            orderFacet2.getSequence());
+                if (orderFacet1 == null && orderFacet2 == null) {
+                    return 0;
                 }
+                if (orderFacet1 == null && orderFacet2 != null) {
+                    return +1; // annotated before non-annotated
+                }
+                if (orderFacet1 != null && orderFacet2 == null) {
+                    return -1; // annotated before non-annotated
+                }
+
+                if (ensureInSameGroup) {
+
+                    val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
+                    val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
+                    val groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
+                    val groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
+
+                    if(!Objects.equals(groupId1, groupId2)) {
+                        throw _Exceptions.illegalArgument(
+                                "Not in same fieldSetId1 when comparing: '%s', '%s'",
+                                groupId1,
+                                groupId2);
+                    }
+                }
+
+                return _Comparators.deweyOrderCompare(
+                        orderFacet1.getSequence(),
+                        orderFacet2.getSequence());
             };
         }
 

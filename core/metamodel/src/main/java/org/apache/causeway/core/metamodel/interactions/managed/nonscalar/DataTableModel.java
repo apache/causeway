@@ -162,11 +162,15 @@ implements MultiselectChoices {
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
-        //XXX future extension: the tile could dynamically reflect the number of elements selected
+        //XXX future extension: the title could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
         title = _Observables.lazy(()->
             managedMember
             .getFriendlyName());
+    }
+
+    public int getPageSize(final int pageSizeDefault) {
+        return getMetaModel().getPageSize().orElse(pageSizeDefault);
     }
 
     /**
