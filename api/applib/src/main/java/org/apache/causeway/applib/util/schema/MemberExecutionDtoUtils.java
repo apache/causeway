@@ -18,14 +18,17 @@
  */
 package org.apache.causeway.applib.util.schema;
 
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.io.DtoMapper;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.common.v2.DifferenceDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
+import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
+import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 
 import lombok.experimental.UtilityClass;
 
@@ -36,14 +39,21 @@ import lombok.experimental.UtilityClass;
 public final class MemberExecutionDtoUtils {
 
     public void init() {
-        dtoMapper.get();
+        dtoMapperForActionInvocation.get();
+        dtoMapperForPropertyEdit.get();
     }
 
-    private _Lazy<DtoMapper<MemberExecutionDto>> dtoMapper = _Lazy.threadSafe(
-            ()->JaxbUtils.mapperFor(MemberExecutionDto.class, opts->opts.allowMissingRootElement(true)));
+    private _Lazy<DtoMapper<ActionInvocationDto>> dtoMapperForActionInvocation = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(ActionInvocationDto.class, opts->opts.allowMissingRootElement(true)));
 
-    public DtoMapper<MemberExecutionDto> dtoMapper() {
-        return dtoMapper.get();
+    private _Lazy<DtoMapper<PropertyEditDto>> dtoMapperForPropertyEdit = _Lazy.threadSafe(
+            ()->JaxbUtils.mapperFor(PropertyEditDto.class, opts->opts.allowMissingRootElement(true)));
+
+    public static <T extends MemberExecutionDto> DtoMapper<MemberExecutionDto> dtoMapper(final Class<T> dtoClass) {
+        return _Casts.uncheckedCast(
+                ActionInvocationDto.class.equals(dtoClass)
+                    ? dtoMapperForActionInvocation.get()
+                    : dtoMapperForPropertyEdit.get());
     }
 
     public MetricsDto metricsFor(final MemberExecutionDto executionDto) {
@@ -89,5 +99,7 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
+
+
 
 }

@@ -30,6 +30,7 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
@@ -57,7 +58,10 @@ implements ExecutionSubscriber {
         publishedEntries.add(execution);
 
         kvStore.put(this, "publishedExecutions", publishedEntries);
-        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.dtoMapper().toString(execution.getDto()));
+        log.debug("publish execution {}", ()->{
+            final MemberExecutionDto dto = execution.getDto();
+            return MemberExecutionDtoUtils.dtoMapper(dto.getClass()).toString(dto);
+        });
     }
 
     // -- UTILITIES
