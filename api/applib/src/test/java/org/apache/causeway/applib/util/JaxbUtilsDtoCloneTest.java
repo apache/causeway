@@ -32,8 +32,6 @@ import lombok.val;
 
 class JaxbUtilsDtoCloneTest {
 
-    ActionInvocationDto x;
-
     @Test
     void dtoCloning() {
 
@@ -79,6 +77,7 @@ class JaxbUtilsDtoCloneTest {
         val dto = mapper.read(DataSource.ofBytes(dtoAsBytes));
 
         assertNotNull(dto);
+        assertEquals(ActionInvocationDto.class, dto.getClass());
     }
 
 }

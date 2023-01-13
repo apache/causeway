@@ -141,7 +141,7 @@ public final class _Bytes {
 
     /**
      * Converts given byte array into a space separated list of 2 character fixed length hex numbers.
-     * @apiNote future extension code support pretty printing, as for now the resulting string is a single line
+     * @apiNote future extensions may support pretty printing, but for now the resulting string is just a single line
      * @see #ofHexDump(String)
      */
     public static String hexDump(final @Nullable byte[] bytes) {
