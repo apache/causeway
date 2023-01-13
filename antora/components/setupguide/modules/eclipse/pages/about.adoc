@@ -3,7 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-If you are an http://www.eclipse.org[Eclipse] user, then we recommend you download the "Eclipse JEE package" configuration.
+If you are an http://www.eclipse.org[Eclipse] user, then we recommend you download the "Spring Tools Suite" bundle.
 
 
 
@@ -20,9 +20,34 @@ If you are an http://www.eclipse.org[Eclipse] user, then we recommend you downlo
 //
 //To install, download each XML file, then go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
 
-== Install the DataNucleus plugin
 
-When running an Apache Causeway application, it's necessary to setup the development environment so that the Java bytecode can be enhanced by the link:http://www.datanucleus.org[DataNucleus] enhancer.
+== Prerequisites
+
+=== Install Project Lombok
+
+The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
+For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[installation step].
+
+image::2023-sts/1.png[]
+
+// Alternatively, you can download the `lombok.jar` from the link:https://projectlombok.org/[projectlombok.org] website, and install manually.
+//
+// * Locate the `lombok.jar` jar file:
+//
+// +
+// image::2017-oxygen/010-lombok-locate-jar.png[width="600px"]
+//
+// * Run using `java -jar` (or double click on Windows):
+//
+// +
+// image::2017-oxygen/020-lombok-install-into-eclipse.png[width="600px"]
+//
+// Then restart Eclipse.
+
+
+=== (JDO only) Install the DataNucleus plugin
+
+If using JDO persistence (rather than JPA), then it's necessary to setup the development environment so that the Java bytecode can be enhanced by the link:http://www.datanucleus.org[DataNucleus] enhancer.
 
 If using Eclipse, then JDO enhancement is most easily done by installing the http://www.datanucleus.org/products/accessplatform/jpa/tools.html#eclipse[DataNucleus' Eclipse plugin].
 This hooks the bytecode enhancement of your domain objects into Eclipse's normal incremental compilation.
@@ -50,79 +75,84 @@ image::2017-oxygen/050-datanucleus-select-plugin.png[width="600px"]
 
 Then restart Eclipse
 
-
-== Install Project Lombok
-
-The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
-For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[installation step]:
-
-* Locate the `lombok.jar` jar file:
-
-+
-image::2017-oxygen/010-lombok-locate-jar.png[width="600px"]
-
-* Run using `java -jar` (or double click on Windows):
-
-+
-image::2017-oxygen/020-lombok-install-into-eclipse.png[width="600px"]
-
-Then restart Eclipse.
-
 == Importing the Project
 
 Use File > Import, then Maven > Existing Maven Projects.
 
-However, you will have some compile errors until you enable annotation processing, discussed below.
+image::2023-sts/2.png[]
+image::2023-sts/3.png[]
+image::2023-sts/4.png[]
+image::2023-sts/7.png[]
 
-[#enable-annotation-processing]
-=== Enable Annotation Processing
+WARNING: at this point the IDE hung, apparently hitting a deadlock (as of 2023).
+I had to kill the IDE and restart, reimporting the already cloned repo.
 
-Both DataNucleus and Project Lombok use annotation processors that must be enabled in Eclipse.
+Importing:
 
-For each project, open its _Properties_ page and then _Java Compiler > Annotation Processing_ to specify the generated source directory of `target/generated-sources/annotations`:
-
-image::2017-oxygen/060-enable-annotation-processor.png[width="600px"]
-
-If your eclipse version also requires you to enter a generated test source directory, specify the following directory: `target/generated-test-sources/test-annotations`.
-
-Then under _Java Compiler > Annotation Processing > Factory Path_ add the following external JARs (for instance from your local `.m2` maven repository)
-
-* `datanucleus-jdo-query-5.0.9.jar` (under `.m2/repository/org/datanucleus/datanucleus-jdo-query/5.0.9`)
-* `javax.jdo-3.2.0-m13.jar` (under `.m2/repository/org/datanucleus/javax.jdo/3.2.0-m13`)
-
-The specific versions depend on the DataNucleus version used in your project.You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
-
-Eclipse should automatically add these directories as a source path; at this point all remaining compiler errors should disappear.
-
-If the JDO Q-files are not generated automatically into the specified source directory then check the `.log` file in your eclipse workspace to see if there are any `ClassNotFoundException`s that could indicate why the DataNucleus annotation processor is failing.
-
-A healthy DataNucleus Annotation Process execution in your eclipse `.log` file should look like this:
-
-[source]
-----
-!ENTRY org.eclipse.jdt.apt.pluggable.core 1 1 2020-11-06 19:28:41.948
-!MESSAGE DataNucleus JDO AnnotationProcessor for generating JDOQLTypedQuery Q classes
-----
-
-An error might look like this:
-
-[source]
-----
-!ENTRY org.eclipse.jdt.apt.pluggable.core 4 1 2020-11-06 18:52:30.688
-!MESSAGE Exception thrown by Java annotation processor org.datanucleus.jdo.query.JDOQueryProcessor@60e3ac5d
-!STACK 0
-java.lang.Exception: java.lang.NoClassDefFoundError: javax/jdo/query/PersistableExpression
-----
-
-If you see this specific error message then check that you added the `javax.jdo` JAR that matches the version of DataNucleus used in your project (see _Factory Path_ configuration above).
+image::2023-sts/8.png[]
 
 
 
-== JPA: Configure Eclipselink Weaving
 
-CAUTION: TODO - to document
 
-== JDO: Configure DataNucleus Enhancer
+
+// commented out, as of 2023 at least (and probably more recently) this is now automatically done.
+// However, you will have some compile errors until you enable annotation processing, discussed below.
+//
+// [#enable-annotation-processing]
+// === Enable Annotation Processing
+//
+//
+//
+// Project Lombok (and DataNucleus enhancer) uses annotation processors that must be enabled in Eclipse.
+//
+// For each project, open its _Properties_ page and then _Java Compiler > Annotation Processing_ to specify the generated source directory of `target/generated-sources/annotations`:
+//
+// image::2017-oxygen/060-enable-annotation-processor.png[width="600px"]
+//
+// If your eclipse version also requires you to enter a generated test source directory, specify the following directory: `target/generated-test-sources/test-annotations`.
+//
+// Then under _Java Compiler > Annotation Processing > Factory Path_ add the following external JARs (for instance from your local `.m2` maven repository)
+//
+// * `datanucleus-jdo-query-5.0.9.jar` (under `.m2/repository/org/datanucleus/datanucleus-jdo-query/5.0.9`)
+// * `javax.jdo-3.2.0-m13.jar` (under `.m2/repository/org/datanucleus/javax.jdo/3.2.0-m13`)
+//
+// The specific versions depend on the DataNucleus version used in your project.You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
+//
+// Eclipse should automatically add these directories as a source path; at this point all remaining compiler errors should disappear.
+//
+// If the JDO Q-files are not generated automatically into the specified source directory then check the `.log` file in your eclipse workspace to see if there are any `ClassNotFoundException`s that could indicate why the DataNucleus annotation processor is failing.
+//
+// A healthy DataNucleus Annotation Process execution in your eclipse `.log` file should look like this:
+//
+// [source]
+// ----
+// !ENTRY org.eclipse.jdt.apt.pluggable.core 1 1 2020-11-06 19:28:41.948
+// !MESSAGE DataNucleus JDO AnnotationProcessor for generating JDOQLTypedQuery Q classes
+// ----
+//
+// An error might look like this:
+//
+// [source]
+// ----
+// !ENTRY org.eclipse.jdt.apt.pluggable.core 4 1 2020-11-06 18:52:30.688
+// !MESSAGE Exception thrown by Java annotation processor org.datanucleus.jdo.query.JDOQueryProcessor@60e3ac5d
+// !STACK 0
+// java.lang.Exception: java.lang.NoClassDefFoundError: javax/jdo/query/PersistableExpression
+// ----
+//
+// If you see this specific error message then check that you added the `javax.jdo` JAR that matches the version of DataNucleus used in your project (see _Factory Path_ configuration above).
+
+
+
+
+
+== JDO
+
+*_This section applies if you are using JDO (rather than JPA) as the ORM of your application._*
+
+
+=== Configure DataNucleus Enhancer
 
 [TIP]
 ====
@@ -153,8 +183,48 @@ When the enhancer runs, it will print out to the console:
 
 image::eclipse-120-console.png[width="500px"]
 
+CAUTION: If you hit issues with path limits, then see the section xref:#workaround-for-path-limits-the-dn-plugin-to-use-the-persistence-xml[below].
+
+
+[#running-the-app]
+== Running the App
+
+Create a launch configuration that runs the main class annotated with link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication].
+
+* create a Spring Boot configuration:
++
+image::2023-sts/9.png[]
+
+* specify the module and main class
++
+image::2023-sts/A.png[]
+
+If running *JPA*, then you should enable weaving:
+
+* change `eclipselink.weaving` property to `true` in `application.yml` file:
++
+image::2023-sts/B.png[]
+
+* in the run configuration, specify the `javaagent:` JVM argument:
++
+image::2023-sts/C.png[]
+
+You should then be able to run the app:
+
+* console:
++
+image::2023-sts/D.png[]
+
+* boot dashboard:
++
+image::2023-sts/E.png[]
+
+The app should be accessible at link:http://localhost:8080[]
+
+
+
 [#workaround-for-path-limits-the-dn-plugin-to-use-the-persistence-xml]
-=== Workaround for path limits (the DN plugin to use the persistence.xml)
+== JDO : Workaround for path limits (the DN plugin to use the persistence.xml)
 
 If running on Windows then the DataNucleus plugin is very likely to hit the Windows path limit.
 
@@ -189,22 +259,7 @@ image::eclipse-220-enhancer-fails-duplicates.png[width="600px"]
 
 If you consistently hit problems, then the final recourse is to disable the automatic enhancement and to remember to manually enhance your domain object model before each run.
 
-Not ideal, we know.
-Please feel free to contribute a better solution :-)
 
-[#running-the-app]
-== Running the App
-
-Create a launch configuration that runs the main class annotated with link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication].
-
-
-== Other domain projects.
-
-There is nothing to prevent you having multiple domain projects.
-You might want to do such that each domain project corresponds to a http://www.methodsandtools.com/archive/archive.php?id=97p2[DDD module], thus guaranteeing that there are no cyclic dependencies between your modules.
-
-If you do this, make sure that each project has its own `persistence.xml` file.
-And, remember also to configure Eclipse's DataNucleus plugin for these other domain projects.
 
 //== Advanced
 //
