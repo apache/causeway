@@ -18,6 +18,9 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.plural;
 
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -25,11 +28,14 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.TableDecoration;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
@@ -42,17 +48,26 @@ import lombok.Setter;
 @Named("demo.DomainObjectLayoutPluralVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(
+        tableDecoration = TableDecoration.DATATABLES_NET,
+        plural="Example Plural Name")
 public class DomainObjectLayoutPluralVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "DomainObjectLayout#plural";
     }
 
-    //TODO[ISIS-3309]
+    @Action
+    public List<DomainObjectLayoutPluralVm> standaloneTable() {
+        return List.of(
+                    new DomainObjectLayoutPluralVm(),
+                    new DomainObjectLayoutPluralVm());
+    }
+
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
-    private String dummy;
+    private String uuid = UUID.randomUUID().toString();
 
 }
 //end::class[]

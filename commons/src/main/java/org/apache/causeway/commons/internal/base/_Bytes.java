@@ -23,10 +23,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -94,6 +97,71 @@ public final class _Bytes {
             bos.flush();
             return bos.toByteArray();
         }
+    }
+
+    // -- ARRAY TO STREAM AND VICE VERSA
+
+    /**
+     * Converts given byte array into a stream of int values,
+     * while the element wise type conversion is preserving sign.
+     * @apiNote The Java byte type is signed.
+     * @see #ofIntStream(IntStream)
+     */
+    public static IntStream streamAsInts(final @Nullable byte[] bytes) {
+        if(bytes==null
+                || bytes.length==0) {
+            return IntStream.empty();
+        }
+        return IntStream.range(0, bytes.length)
+                .map(index->(int)bytes[index]);
+    }
+
+    /**
+     * Converts given {@link IntStream} into a byte array,
+     * while the element wise type conversion is preserving sign,
+     * but ignoring overflow.
+     * @apiNote The Java byte type is signed.
+     * @implNote certainly not the most sufficient algorithm, as we resort to boxing and temporary list creation
+     * @see #streamAsInts(byte[])
+     */
+    public static byte[] ofIntStream(final @Nullable IntStream intStream) {
+        if(intStream==null) {
+            return new byte[0];
+        }
+        val listOfInts = intStream
+                .boxed()
+                .collect(Collectors.toList());
+        val bytes = new byte[listOfInts.size()];
+        IntStream.range(0, listOfInts.size())
+        .forEach(index->bytes[index]=(byte)(int)listOfInts.get(index));
+        return bytes;
+    }
+
+    // -- TO AND FROM HEX DUMP
+
+    /**
+     * Converts given byte array into a space separated list of 2 character fixed length hex numbers.
+     * @apiNote future extensions may support pretty printing, but for now the resulting string is just a single line
+     * @see #ofHexDump(String)
+     */
+    public static String hexDump(final @Nullable byte[] bytes) {
+        if(bytes==null) {
+            return "";
+        }
+        return _Bytes.streamAsInts(bytes).mapToObj(Integer::toHexString).collect(Collectors.joining(" "));
+    }
+
+    /**
+     * Converts given space separated list of 2 character fixed length hex numbers into a byte array.
+     * @see #hexDump(byte[])
+     */
+    public static byte[] ofHexDump(final @Nullable String hexDump) {
+        if(hexDump==null) {
+            return new byte[0];
+        }
+        final IntStream intStream = _Strings.splitThenStream(hexDump, " ")
+            .mapToInt(hex->Integer.parseUnsignedInt(hex, 16));
+        return ofIntStream(intStream);
     }
 
     // -- PREPEND/APPEND
@@ -271,7 +339,6 @@ public final class _Bytes {
     public static final BytesOperator ofCompressedBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
             .andThen(_Bytes::decompress);
-
 
     // --
 
