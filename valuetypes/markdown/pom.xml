@@ -40,17 +40,4 @@
 		<module>persistence-jpa</module>
 	</modules>
 
-	<profiles>
-		<profile>
-			<id>resolving-conflicts</id>
-			<activation>
-				<property>
-					<name>!skip.resolving-conflicts</name>
-				</property>
-			</activation>
-			<dependencyManagement>
-			</dependencyManagement>
-		</profile>
-	</profiles>
-
 </project>
