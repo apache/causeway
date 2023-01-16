@@ -416,7 +416,7 @@ implements ScalarModelChangeListener {
 
         Wkt.cssAppend(this, scalarModel.getCssClass());
 
-        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(scalarModel.getObjectFeature(), scalarModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }
@@ -579,7 +579,7 @@ implements ScalarModelChangeListener {
     }
 
     private static String determinePropParamLayoutCss(final ScalarModel scalarModel) {
-        return Facets.labelAtCss(scalarModel.getMetaModel());
+        return Facets.labelAtCss(scalarModel.getObjectFeature());
     }
 
     private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {

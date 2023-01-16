@@ -25,7 +25,7 @@ class _RecreatableValue implements _Recreatable{
 
     @Override
     public ManagedObject recreateObject(
-            final ObjectMementoForScalar memento,
+            final ObjectMementoSingular memento,
             final MetaModelContext mmc) {
 
         return mmc.getObjectManager().loadObjectElseFail(memento.bookmark);
@@ -33,15 +33,15 @@ class _RecreatableValue implements _Recreatable{
 
     @Override
     public boolean equals(
-            final ObjectMementoForScalar memento,
-            final ObjectMementoForScalar otherMemento) {
+            final ObjectMementoSingular memento,
+            final ObjectMementoSingular otherMemento) {
 
         return otherMemento.recreateStrategy == RecreateStrategy.VALUE
                 && memento.bookmark.equals(otherMemento.bookmark);
     }
 
     @Override
-    public int hashCode(final ObjectMementoForScalar memento) {
+    public int hashCode(final ObjectMementoSingular memento) {
         return memento.bookmark.hashCode();
     }
 

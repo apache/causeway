@@ -161,8 +161,7 @@ implements MemberExecutorService {
         val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
 
         val returnedPojo = priorExecution.getReturned();
-        val returnedAdapter = objectManager.adapt(
-                returnedPojo, owningAction::getElementType);
+        val returnedAdapter = objectManager.adapt(returnedPojo, Optional.of(owningAction));
 
         // assert has bookmark, unless non-scalar
         ManagedObjects.asScalarNonEmpty(returnedAdapter)

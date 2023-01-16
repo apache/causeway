@@ -148,11 +148,13 @@ public final class XmlSchema {
      * doc used to create the element. The element is not parented but to avoid
      * an error can only be added as a child of another element in the same doc.
      */
-    Element createElement(final Document doc, final String localName, final String fullyQualifiedClassName, final String singularName, final String pluralName) {
+    Element createElement(final Document doc, final String localName, final String fullyQualifiedClassName, final String singularName
+            //, final String pluralName
+            ) {
         final Element element = doc.createElementNS(getUri(), getPrefix() + ":" + localName);
         element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":fqn", fullyQualifiedClassName);
         element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":singular", singularName);
-        element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":plural", pluralName);
+        //element.setAttributeNS(CausewaySchema.NS_URI, CausewaySchema.NS_PREFIX + ":plural", pluralName);
         causewayMeta.addNamespace(element); // good a place as any
 
         addNamespace(element, getPrefix(), getUri());

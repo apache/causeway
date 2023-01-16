@@ -31,11 +31,13 @@ import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import static org.hamcrest.CoreMatchers.either;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -281,7 +283,7 @@ public class DomainObjectTesterFactory {
         @Override
         public Optional<ObjectAction> getMetaModel() {
             return getManagedAction()
-            .map(ManagedAction::getMetaModel)
+            .map(ManagedAction::getObjectFeature)
             .map(ObjectAction.class::cast);
         }
 
@@ -539,7 +541,7 @@ public class DomainObjectTesterFactory {
                     pendingArgs.getParamModels()
                     .forEach(param->{
 
-                        val objManager = param.getMetaModel().getObjectManager();
+                        val objManager = param.getObjectFeature().getObjectManager();
 
                         pojoArgMappers
                             .get(param.getParamNr())
@@ -683,7 +685,7 @@ public class DomainObjectTesterFactory {
         @Override
         public Optional<OneToOneAssociation> getMetaModel() {
             return managedPropertyIfAny
-            .map(ManagedProperty::getMetaModel)
+            .map(ManagedProperty::getObjectFeature)
             .map(OneToOneAssociation.class::cast);
         }
 
@@ -730,7 +732,7 @@ public class DomainObjectTesterFactory {
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
 
-                    val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+                    val newPropertyValue = managedProperty.getObjectFeature().getMetaModelContext()
                           .getObjectManager().adapt(proposedNewPropertyValue);
 
                     managedProperty.modifyProperty(newPropertyValue);
@@ -753,7 +755,7 @@ public class DomainObjectTesterFactory {
 
                     assertEquals(initialValue, propNeg.getValue().getValue());
 
-                    val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+                    val newPropertyValue = managedProperty.getObjectFeature().getMetaModelContext()
                             .getObjectManager().adapt(proposedNewPropertyValue);
                     propNeg.getValue().setValue(newPropertyValue);
 
@@ -860,7 +862,7 @@ public class DomainObjectTesterFactory {
         @Override
         public Optional<OneToManyAssociation> getMetaModel() {
             return managedCollectionIfAny
-            .map(ManagedCollection::getMetaModel)
+            .map(ManagedCollection::getObjectFeature)
             .map(OneToManyAssociation.class::cast);
         }
 

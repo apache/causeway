@@ -41,6 +41,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -212,13 +213,11 @@ implements ContentNegotiationService {
                                 resourceContext,
                                 singularActionResult));
             }, pluralActionResult->{
-                final ObjectSpecification elementSpec =
-                        objectAndActionInvocation.getAction().getElementType();
-                final ObjectSpecification actionOwnerSpec = actionOwnerSpecFrom(objectAndActionInvocation);
-                final String actionId = actionIdFrom(objectAndActionInvocation);
+                val action = objectAndActionInvocation.getAction();
+
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
                 final DomainObjectList listAsViewmodel = domainObjectListFrom(
-                        pluralActionResult, elementSpec, actionOwnerSpec, actionId, actionArguments);
+                        pluralActionResult, action, actionArguments);
 
                 val domainObjectListSpec = resourceContext.getMetaModelContext().getSpecificationLoader()
                     .specForType(DomainObjectList.class)
@@ -258,14 +257,6 @@ implements ContentNegotiationService {
 
     // -- HELPER
 
-    private static ObjectSpecification actionOwnerSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        return objectAndActionInvocation.getAction().getDeclaringType();
-    }
-
-    private static String actionIdFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        return objectAndActionInvocation.getAction().getId();
-    }
-
     private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final StringBuilder buf = new StringBuilder();
         val parameters = objectAndActionInvocation.getAction().getParameters();
@@ -301,15 +292,16 @@ implements ContentNegotiationService {
 
     private static DomainObjectList domainObjectListFrom(
             final Collection<ManagedObject> collectionAdapters,
-            final ObjectSpecification elementSpec,
-            final ObjectSpecification actionOwnerSpec,
-            final String actionId,
+            final ObjectAction action,
             final String actionArguments) {
 
-        final String title = titleFrom(collectionAdapters, elementSpec);
+        final ObjectSpecification elementSpec = action.getElementType();
+        final ObjectSpecification actionOwnerSpec = action.getDeclaringType();
+
+        final String title = titleFrom(action.getCanonicalFriendlyName(), collectionAdapters.size(), elementSpec);
 
         final DomainObjectList list = new DomainObjectList(
-                title, elementSpec.fqcn(), actionOwnerSpec.fqcn(), actionId, actionArguments);
+                title, elementSpec.fqcn(), actionOwnerSpec.fqcn(), action.getId(), actionArguments);
         for (val adapter : collectionAdapters) {
             list.getObjects().add(adapter.getPojo());
         }
@@ -317,13 +309,12 @@ implements ContentNegotiationService {
     }
 
     private static String titleFrom(
-            final Collection<ManagedObject> collectionAdapters,
+            final String pluralName,
+            final int elementCount,
             final ObjectSpecification elementSpec) {
         final String singularName = elementSpec.getSingularName();
-        final String pluralName = elementSpec.getPluralName();
-        int size = collectionAdapters.size();
         final String title;
-        switch (size) {
+        switch (elementCount) {
         case 0:
             title = "0 " + pluralName;
             break;
@@ -331,7 +322,7 @@ implements ContentNegotiationService {
             title = "1 " + singularName;
             break;
         default:
-            title = size + " " + pluralName;
+            title = elementCount + " " + pluralName;
             break;
         }
         return title;

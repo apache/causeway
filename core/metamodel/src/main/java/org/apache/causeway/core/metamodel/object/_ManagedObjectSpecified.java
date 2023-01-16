@@ -32,9 +32,9 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoCollection;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoEmpty;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoPlural;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoSingular;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
@@ -92,34 +92,39 @@ implements ManagedObject {
 
     @Override
     public String getTitle() {
-        return _InternalTitleUtil.titleString(
-                TitleRenderRequest.forObject(this));
+        return this instanceof PackedManagedObject
+                ? _InternalTitleUtil.titleStringPlural(
+                        ((PackedManagedObject)this).getObjectFeature().getCanonicalFriendlyName(),
+                        TitleRenderRequest.forObject(this))
+                : _InternalTitleUtil.titleStringSingular(
+                        TitleRenderRequest.forObject(this));
     }
 
     @Override
     public Optional<ObjectMemento> getMemento() {
         return this instanceof PackedManagedObject
                 ? Optional.ofNullable(mementoForPacked((PackedManagedObject)this))
-                : Optional.ofNullable(mementoForScalar(this));
+                : Optional.ofNullable(mementoForSingular(this));
     }
 
-    private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
+    private ObjectMemento mementoForSingular(@Nullable final ManagedObject adapter) {
         MmAssertionUtil.assertPojoIsScalar(adapter);
-        return ObjectMementoForScalar.create(adapter)
+        return ObjectMementoSingular.create(adapter)
                 .map(ObjectMemento.class::cast)
                 .orElseGet(()->
                 ManagedObjects.isSpecified(adapter)
-                ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                ? new ObjectMementoEmpty(adapter.getLogicalType())
                         : null);
     }
 
     private ObjectMemento mementoForPacked(@NonNull final PackedManagedObject packedAdapter) {
         val listOfMementos = packedAdapter.unpack().stream()
-                .map(this::mementoForScalar)
+                .map(this::mementoForSingular)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
-        return ObjectMementoCollection.of(
+        return ObjectMementoPlural.of(
                 listOfMementos,
-                packedAdapter.getLogicalType());
+                packedAdapter.getLogicalType(),
+                packedAdapter.getObjectFeature().getFeatureIdentifier());
     }
 
     //XXX compares pojos by their 'equals' semantics -

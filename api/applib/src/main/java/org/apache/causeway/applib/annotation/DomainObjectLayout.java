@@ -133,14 +133,6 @@ public @interface DomainObjectLayout {
             default -1;
 
     /**
-     * The plural name of the class.
-     *
-     * @see DomainObjectLayout#named()
-     */
-    String plural()
-            default "";
-
-    /**
      * Whether a standalone collection when represented in a table form should additionally be
      * &quot;decorated&quot; with client-side (javascript) enhancements, for example to enable paging and filtering.
      */

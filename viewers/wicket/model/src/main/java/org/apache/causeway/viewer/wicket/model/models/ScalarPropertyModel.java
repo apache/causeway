@@ -78,7 +78,7 @@ implements HasUiProperty {
 
     @Override
     public String toStringOf() {
-        val featureId = uiProperty.getMetaModel().getFeatureIdentifier();
+        val featureId = uiProperty.getObjectFeature().getFeatureIdentifier();
         return getFriendlyName() + ": " +
                 featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
 

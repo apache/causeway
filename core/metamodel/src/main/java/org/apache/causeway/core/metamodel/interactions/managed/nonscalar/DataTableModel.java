@@ -126,7 +126,7 @@ implements MultiselectChoices {
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
-                .sorted(managedMember.getMetaModel().getElementComparator()
+                .sorted(managedMember.getObjectFeature().getElementComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
@@ -181,7 +181,7 @@ implements MultiselectChoices {
     }
 
     public ObjectMember getMetaModel() {
-        return managedMember.getMetaModel();
+        return managedMember.getObjectFeature();
     }
 
     public ObjectSpecification getElementType() {
@@ -301,7 +301,7 @@ implements MultiselectChoices {
             }
             val actionInteraction = ActionInteraction.start(owner, memberId, where);
             val managedAction = actionInteraction.getManagedActionElseFail();
-            val args = argsMemento.getArgumentList(managedAction.getMetaModel());
+            val args = argsMemento.getArgumentList(managedAction.getObjectFeature());
             // invocation bypassing domain events (pass-through)
             val actionResult = managedAction.invoke(args, InteractionInitiatedBy.PASS_THROUGH)
                     .getSuccessElseFail();

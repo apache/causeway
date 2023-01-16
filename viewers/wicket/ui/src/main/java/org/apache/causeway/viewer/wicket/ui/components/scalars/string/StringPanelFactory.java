@@ -34,7 +34,7 @@ public class StringPanelFactory extends ComponentFactoryScalarAbstract {
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return Facets.multilineIsPresent(scalarModel.getMetaModel())
+        return Facets.multilineIsPresent(scalarModel.getObjectFeature())
             ? new MultiLineStringPanel(id, scalarModel)
             : new StringPanel(id, scalarModel);
     }

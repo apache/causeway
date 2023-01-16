@@ -89,7 +89,7 @@ implements ImperativeFacet {
         return _NullSafe.streamAutodetect(defaultValue)
                 .map(pojo->pojo!=null
                     ? getObjectManager().adapt(pojo)
-                    : managedParam.getMetaModel().isPlural()
+                    : managedParam.getObjectFeature().isPlural()
                         ? null // assuming for non-scalar parameters, including null makes no sense
                         : ManagedObject.empty(managedParam.getElementType()))
                 .collect(Can.toCan());

@@ -199,7 +199,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final String memberId,
             final Where where) {
         val propertyOwner = associatedWithProperty.getOwner();
-        val prop = associatedWithProperty.getMetaModel();
+        val prop = associatedWithProperty.getObjectFeature();
         val elementType = prop.getElementType();
 
         val valueFacet = elementType.isValue()
@@ -239,7 +239,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
         val actionOwner = parameterNegotiationModel.getActionTarget();
         val param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
-        val elementType = param.getMetaModel().getElementType();
+        val elementType = param.getObjectFeature().getElementType();
 
         val valueFacet = elementType.isValue()
                 ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
@@ -254,8 +254,8 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             val compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
             val compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultsProviderForParameter(param.getMetaModel())
-                            .orElseThrow(()->onMissingDefaultsProvider(param.getMetaModel()))
+                        valueFacet.selectDefaultsProviderForParameter(param.getObjectFeature())
+                            .orElseThrow(()->onMissingDefaultsProvider(param.getObjectFeature()))
                             .getDefaultValue());
 
             val mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);

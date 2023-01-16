@@ -74,7 +74,7 @@ implements
     }
 
     @Override
-    public ObjectActionParameter getMetaModel() {
+    public ObjectActionParameter getObjectFeature() {
         return actionInteraction().getMetamodel().get().getParameters().getElseFail(paramIndex);
     }
 

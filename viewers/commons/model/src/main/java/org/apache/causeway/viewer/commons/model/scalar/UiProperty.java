@@ -29,7 +29,7 @@ public interface UiProperty extends UiScalar {
 
     /** prop meta model */
     @Override
-    OneToOneAssociation getMetaModel();
+    OneToOneAssociation getObjectFeature();
 
     // -- PENDING PROPERTY VALUE MODEL
 
@@ -43,42 +43,42 @@ public interface UiProperty extends UiScalar {
 
     @Override
     default String getIdentifier() {
-        return getMetaModel().getFeatureIdentifier().getMemberLogicalName();
+        return getObjectFeature().getFeatureIdentifier().getMemberLogicalName();
     }
 
     @Override
     default String getCssClass() {
-        return getMetaModel().getCssClass("causeway-");
+        return getObjectFeature().getCssClass("causeway-");
     }
 
     @Override
     default int getAutoCompleteMinLength() {
-        return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
+        return hasAutoComplete() ? getObjectFeature().getAutoCompleteMinLength() : 0;
     }
 
     @Override
     default boolean hasChoices() {
-        return getMetaModel().hasChoices();
+        return getObjectFeature().hasChoices();
     }
 
     @Override
     default boolean hasAutoComplete() {
-        return getMetaModel().hasAutoComplete();
+        return getObjectFeature().hasAutoComplete();
     }
 
     @Override
     default ManagedObject getDefault() {
-        return getMetaModel().getDefault(getOwner());
+        return getObjectFeature().getDefault(getOwner());
     }
 
     @Override
     default Can<ManagedObject> getChoices() {
-        return getMetaModel().getChoices(getOwner(), InteractionInitiatedBy.USER);
+        return getObjectFeature().getChoices(getOwner(), InteractionInitiatedBy.USER);
     }
 
     @Override
     default Can<ManagedObject> getAutoComplete(final String searchArg) {
-        return getMetaModel().getAutoComplete(getOwner(), searchArg, InteractionInitiatedBy.USER);
+        return getObjectFeature().getAutoComplete(getOwner(), searchArg, InteractionInitiatedBy.USER);
     }
 
     @Override

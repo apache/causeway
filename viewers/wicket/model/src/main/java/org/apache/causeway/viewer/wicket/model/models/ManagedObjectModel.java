@@ -156,17 +156,4 @@ extends ModelAbstract<ManagedObject> {
         return false;
     }
 
-    // -- DEPRECATIONS
-
-//    private ObjectMemento memento() {
-//        return memento;
-//    }
-//
-//    private void memento(final ObjectMemento memento) {
-//        val manageObject = super.getMetaModelContext().reconstructObject(memento);
-//        super.setObject(manageObject);
-//        this.memento = memento;
-//        this.elementTypeSpec = null; // invalidate
-//    }
-
 }

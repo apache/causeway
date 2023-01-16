@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 
@@ -28,6 +27,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -41,7 +42,7 @@ import lombok.Getter;
 import lombok.val;
 
 public abstract class ReprRendererAbstract<T>
-implements ReprRenderer<T> {
+implements ReprRenderer<T>, HasMetaModelContext {
 
     @Getter protected final IResourceContext resourceContext;
     @Getter protected final JsonValueEncoderService jsonValueEncoder;
@@ -203,9 +204,11 @@ implements ReprRenderer<T> {
         }
     }
 
-    protected Stream<ManagedObject> streamServiceAdapters() {
-        val metaModelContext = resourceContext.getMetaModelContext();
-        return metaModelContext.streamServiceAdapters();
+    // -- HAS MMC
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return resourceContext.getMetaModelContext();
     }
 
 }

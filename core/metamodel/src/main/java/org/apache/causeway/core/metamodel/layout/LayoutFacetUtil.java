@@ -242,16 +242,16 @@ public class LayoutFacetUtil {
         }
     }
 
-    public void setPluralIfAny(
-            final DomainObjectLayoutData domainObjectLayoutData,
-            final FacetHolder facetHolder) {
-
-        facetHolder
-        .lookupNonFallbackFacet(ObjectNamedFacet.class)
-        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
-        .map(ObjectNamedFacet::pluralTranslated)
-        .ifPresent(domainObjectLayoutData::setPlural);
-    }
+//    public void setPluralIfAny(
+//            final DomainObjectLayoutData domainObjectLayoutData,
+//            final FacetHolder facetHolder) {
+//
+//        facetHolder
+//        .lookupNonFallbackFacet(ObjectNamedFacet.class)
+//        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
+//        .map(ObjectNamedFacet::pluralTranslated)
+//        .ifPresent(domainObjectLayoutData::setPlural);
+//    }
 
     public void setActionPositionIfAny(
             final ActionLayoutData actionLayoutData,
@@ -395,7 +395,7 @@ public class LayoutFacetUtil {
             setCssClassFaIfAny(domainObjectLayoutData, objectSpec);
             setObjectDescribedIfAny(domainObjectLayoutData, objectSpec);
             setObjectNamedIfAny(domainObjectLayoutData, objectSpec);
-            setPluralIfAny(domainObjectLayoutData, objectSpec);
+            //setPluralIfAny(domainObjectLayoutData, objectSpec);
         }
     }
 

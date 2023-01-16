@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -110,7 +112,7 @@ implements OneToManyAssociation {
 
         super.getServiceInjector().injectServicesInto(collection);
 
-        return objectManager.adapt(collection);
+        return objectManager.adapt(collection, Optional.of(this));
     }
 
     @Override

@@ -69,8 +69,8 @@ implements
     }
 
     @Override
-    public final OneToOneAssociation getMetaModel() {
-        return propertyInteraction().getManagedProperty().get().getMetaModel();
+    public final OneToOneAssociation getObjectFeature() {
+        return propertyInteraction().getManagedProperty().get().getObjectFeature();
     }
 
     @Override

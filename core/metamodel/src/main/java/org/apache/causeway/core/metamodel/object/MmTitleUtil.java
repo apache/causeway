@@ -43,7 +43,7 @@ public class MmTitleUtil {
         return ManagedObjects.isPacked(managedObject)
                 ? "(multiple objects)"
                 : managedObject != null
-                    ? _InternalTitleUtil.titleString(
+                    ? _InternalTitleUtil.titleStringSingular(
                             TitleRenderRequest.builder()
                             .object(managedObject)
                             .skipTitlePartEvaluator(skipTitlePart)

@@ -49,4 +49,5 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     ObjectSpecification getDeclaringType();
+
 }

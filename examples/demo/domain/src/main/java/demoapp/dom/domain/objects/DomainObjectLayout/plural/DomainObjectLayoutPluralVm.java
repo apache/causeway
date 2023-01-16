@@ -49,8 +49,8 @@ import lombok.Setter;
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        tableDecoration = TableDecoration.DATATABLES_NET,
-        plural="Example Plural Name")
+        tableDecoration = TableDecoration.DATATABLES_NET)
+//TODO rename class
 public class DomainObjectLayoutPluralVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

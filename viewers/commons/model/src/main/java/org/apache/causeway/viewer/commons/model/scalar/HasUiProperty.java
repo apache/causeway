@@ -34,8 +34,8 @@ public interface HasUiProperty extends UiProperty {
     }
 
     @Override
-    default OneToOneAssociation getMetaModel() {
-        return getUiProperty().getMetaModel();
+    default OneToOneAssociation getObjectFeature() {
+        return getUiProperty().getObjectFeature();
     }
 
     @Override

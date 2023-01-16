@@ -80,7 +80,7 @@ extends ManagedMember {
     }
 
     @Override
-    public OneToOneAssociation getMetaModel() {
+    public OneToOneAssociation getObjectFeature() {
         return getProperty();
     }
 

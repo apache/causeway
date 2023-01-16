@@ -243,7 +243,7 @@ class _DomainResourceHelper {
 
                 paramOrVeto.ifFailure(veto->{
                     InteractionFailureHandler
-                        .collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
+                        .collectParameterInvalid(managedParam.getObjectFeature(), veto, arguments);
                     vetoCount.increment();
                 });
 
@@ -264,7 +264,7 @@ class _DomainResourceHelper {
             pendingArgs.getParamModels().zip(individualParamConsents, (managedParam, consent)->{
                 if(consent.isVetoed()) {
                     val veto = InteractionVeto.actionParamInvalid(consent);
-                    InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
+                    InteractionFailureHandler.collectParameterInvalid(managedParam.getObjectFeature(), veto, arguments);
                     vetoCount.increment();
                 }
             });

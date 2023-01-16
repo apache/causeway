@@ -94,6 +94,7 @@ import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
@@ -371,7 +372,7 @@ implements WrapperFactory, HasMetaModelContext {
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
 
-        val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
+        val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(memberAndTarget.getObjectFeature(), args));
         val head = InteractionHead.regular(targetAdapter);
 
         CommandDto commandDto;
@@ -484,6 +485,17 @@ implements WrapperFactory, HasMetaModelContext {
             return type != Type.NONE;
         }
 
+        public Optional<ObjectFeature> getObjectFeature() {
+            switch (getType()) {
+            case ACTION:
+                return Optional.of(getAction());
+            case PROPERTY:
+                return Optional.of(getProperty());
+            default:
+                return Optional.empty();
+            }
+        }
+
         enum Type {
             ACTION,
             PROPERTY,
@@ -500,11 +512,12 @@ implements WrapperFactory, HasMetaModelContext {
         private final OneToOneAssociation property;
         private final ManagedObject target;
         private final Method method;
+
     }
 
-    private ManagedObject[] adaptersFor(final Object[] args) {
+    private ManagedObject[] adaptersFor(final Optional<ObjectFeature> objectFeature, final Object[] args) {
         return _NullSafe.stream(args)
-                .map(getObjectManager()::adapt)
+                .map(argPojo->getObjectManager().adapt(argPojo, objectFeature))
                 .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 

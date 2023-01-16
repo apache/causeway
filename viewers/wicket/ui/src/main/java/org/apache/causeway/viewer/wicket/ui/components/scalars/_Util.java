@@ -150,7 +150,7 @@ class _Util {
             .map(v->scalarModel
                     .getObjectManager().demementify((ObjectMemento)v))
             .collect(Can.toCan());
-            return Optional.of(ManagedObject.packed(scalarModel.getScalarTypeSpec(), unpackedValues));
+            return Optional.of(ManagedObject.packed(scalarModel.getObjectFeature(), unpackedValues));
         }
 
         if(valueObject instanceof ObjectMemento) {
@@ -177,11 +177,11 @@ class _Util {
         return scalarModel.getSpecialization().<Optional<ObjectAction>>fold(
                 param->
                     Facets.valueCompositeMixinForParameter(
-                            scalarModel.getMetaModel(),
+                            scalarModel.getObjectFeature(),
                             param.getParameterNegotiationModel(), param.getParameterIndex()),
                 prop->
                     Facets.valueCompositeMixinForProperty(
-                            scalarModel.getMetaModel(),
+                            scalarModel.getObjectFeature(),
                             prop.getManagedProperty()));
     }
 

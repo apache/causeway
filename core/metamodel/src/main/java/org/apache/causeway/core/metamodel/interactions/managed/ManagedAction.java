@@ -25,8 +25,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.routing.RoutingService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
@@ -34,7 +32,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -119,7 +116,7 @@ public final class ManagedAction extends ManagedMember {
     }
 
     @Override
-    public ObjectAction getMetaModel() {
+    public ObjectAction getObjectFeature() {
         return getAction();
     }
 
@@ -169,13 +166,13 @@ public final class ManagedAction extends ManagedMember {
         }
 
         val resultPojo = actionResult.getPojo();
-        val objManager = mmc().getObjectManager();
+        val objManager = getObjectManager();
 
         val resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
-                .map(objManager::adapt)
+                .map(pojoAfterAppliedRouting->objManager.adapt(pojoAfterAppliedRouting, Optional.of(getAction())))
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(actionResult);
@@ -195,25 +192,11 @@ public final class ManagedAction extends ManagedMember {
         return getServiceRegistry().select(RoutingService.class);
     }
 
-    // -- SERVICES
-
-    private MetaModelContext mmc() {
-        return getAction().getMetaModelContext();
-    }
-
-    private ServiceInjector getServiceInjector() {
-        return mmc().getServiceInjector();
-    }
-
-    private ServiceRegistry getServiceRegistry() {
-        return mmc().getServiceRegistry();
-    }
-
     // -- MEMENTO FOR ARGUMENT LIST
 
     public MementoForArgs getMementoForArgs(final Can<ManagedObject> args) {
         return MementoForArgs.create(
-                getMetaModel().getMetaModelContext().getObjectManager(),
+                getObjectManager(),
                 args);
     }
 
@@ -229,11 +212,10 @@ public final class ManagedAction extends ManagedMember {
 
         private final Can<ObjectMemento> argsMementos;
 
-        public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
-            val argTypes = actionMeta.getParameterTypes();
-            val objectManager = actionMeta.getMetaModelContext().getObjectManager();
-            return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
-                objectManager.demementify(argMemento, argSpec));
+        public Can<ManagedObject> getArgumentList(final ObjectAction act) {
+            val objectManager = act.getObjectManager();
+            return argsMementos.zipMap(act.getParameters(), (argMemento, feature)->
+                objectManager.demementify(feature, argMemento));
         }
     }
 

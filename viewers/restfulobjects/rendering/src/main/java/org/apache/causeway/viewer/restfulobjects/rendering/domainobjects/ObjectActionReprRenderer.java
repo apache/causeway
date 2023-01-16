@@ -133,7 +133,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
             val act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
             val paramNeg = act.startParameterNegotiation();
             for(val paramMod : paramNeg.getParamModels()) {
-                val paramMeta = paramMod.getMetaModel();
+                val paramMeta = paramMod.getObjectFeature();
                 final Object paramDetails = paramDetails(paramMod, paramNeg);
                 parameters.put(paramMeta.getId(), paramDetails);
             }
@@ -143,7 +143,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
+        val paramMeta = paramMod.getObjectFeature();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPutInt("num", paramMeta.getParameterIndex());
         paramRep.mapPutString("id", paramMeta.getId());
@@ -163,7 +163,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object choicesFor(
             final ManagedParameter paramMod,
             final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
+        val paramMeta = paramMod.getObjectFeature();
         val choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
@@ -184,7 +184,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        val paramMeta = paramMod.getMetaModel();
+        val paramMeta = paramMod.getObjectFeature();
         return DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), defaultAdapter);
     }
 

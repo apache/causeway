@@ -65,19 +65,19 @@ extends HasMemoizableTranslation {
         return translated(NounForm.SINGULAR).orElse(null);
     }
 
-    /**
-     * Originating text of plural noun-form to be translated before use in the UI.
-     */
-    default @Nullable String plural() {
-        return text(NounForm.PLURAL).orElse(null);
-    }
-
-    /**
-     * Translated text of plural noun-form to be used in the UI.
-     */
-    default @Nullable String pluralTranslated() {
-        return translated(NounForm.PLURAL).orElse(null);
-    }
+//    /**
+//     * Originating text of plural noun-form to be translated before use in the UI.
+//     */
+//    default @Nullable String plural() {
+//        return text(NounForm.PLURAL).orElse(null);
+//    }
+//
+//    /**
+//     * Translated text of plural noun-form to be used in the UI.
+//     */
+//    default @Nullable String pluralTranslated() {
+//        return translated(NounForm.PLURAL).orElse(null);
+//    }
 
 
 }

@@ -24,10 +24,10 @@ import java.util.Collection;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
-import org.apache.causeway.applib.id.HasLogicalType;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
@@ -36,7 +36,7 @@ import lombok.val;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
-implements HasLogicalType {
+implements HasObjectFeature {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ implements HasLogicalType {
         return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel, choiceProvider);
     }
 
-    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
+    @Getter(onMethod_ = {@Override}) private final ObjectFeature objectFeature;
 
     Select2MultiChoiceExt(
             final String id,
@@ -58,7 +58,7 @@ implements HasLogicalType {
             final ChoiceProviderAbstract choiceProvider) {
 
         super(id, model, choiceProvider);
-        logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
+        this.objectFeature = scalarModel.getObjectFeature();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");
@@ -68,11 +68,11 @@ implements HasLogicalType {
     }
 
     public ObjectMemento getPackedModelObject() {
-        return ObjectMemento.pack(this.getModelObject(), this.getLogicalType());
+        return ObjectMemento.pack(getObjectFeature(), getModelObject());
     }
 
     public ObjectMemento getPackedConvertedInput() {
-        return ObjectMemento.pack(this.getConvertedInput(), this.getLogicalType());
+        return ObjectMemento.pack(getObjectFeature(), getConvertedInput());
     }
 
     public IModel<ObjectMemento> getPackingAdapterModel() {
@@ -95,7 +95,7 @@ implements HasLogicalType {
             final IModel<Collection<ObjectMemento>> delegate;
             {
                 this.delegate = multi.getModel();
-                this.memento = ObjectMemento.pack(delegate.getObject(), multi.getLogicalType());
+                this.memento = ObjectMemento.pack(multi.getObjectFeature(), delegate.getObject());
             }
 
             @Override

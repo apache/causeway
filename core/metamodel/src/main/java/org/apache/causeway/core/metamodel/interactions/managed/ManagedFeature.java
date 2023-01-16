@@ -26,9 +26,9 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectFeature;
 
-public interface ManagedFeature {
+public interface ManagedFeature extends HasObjectFeature {
 
     Identifier getIdentifier();
 
@@ -57,8 +57,6 @@ public interface ManagedFeature {
         return getElementType().getCorrespondingClass();
     }
 
-    ObjectFeature getMetaModel();
-
     /**
      * @param facetType
      * @return Optionally the feature's facet of the specified {@code facetType}
@@ -66,7 +64,7 @@ public interface ManagedFeature {
      */
     default <T extends Facet> Optional<T> getFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
-                ? Optional.ofNullable(getMetaModel().getFacet(facetType))
+                ? Optional.ofNullable(getObjectFeature().getFacet(facetType))
                 : Optional.empty();
     }
 
@@ -77,7 +75,7 @@ public interface ManagedFeature {
      */
     default <T extends Facet> boolean hasFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
-                ? getMetaModel().getFacet(facetType)!=null
+                ? getObjectFeature().getFacet(facetType)!=null
                 : false;
     }
 

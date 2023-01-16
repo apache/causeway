@@ -29,18 +29,18 @@ public enum NounForm {
      */
     SINGULAR,
 
-    /**
-     * Represents the plural linguistic form.
-     */
-    PLURAL
+//    /**
+//     * Represents the plural linguistic form.
+//     */
+//    PLURAL
     ;
 
     public boolean isSingular() {
         return this == SINGULAR;
     }
 
-    public boolean isPlural() {
-        return this == PLURAL;
-    }
+//    public boolean isPlural() {
+//        return this == PLURAL;
+//    }
 
 }

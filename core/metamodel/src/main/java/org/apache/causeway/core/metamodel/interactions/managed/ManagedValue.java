@@ -27,13 +27,11 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectFeature;
 
 import lombok.val;
 
-public interface ManagedValue {
-
-    ObjectSpecification getElementType();
+public interface ManagedValue extends HasObjectFeature {
 
     Bindable<ManagedObject> getValue();
 

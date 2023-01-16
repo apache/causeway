@@ -34,9 +34,10 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoCollection;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoEmpty;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoPlural;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoSingular;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -69,14 +70,14 @@ public class ObjectManagerDefault implements ObjectManager {
     }
 
     @Override
-    public ManagedObject demementify(final @Nullable ObjectMemento memento) {
+    public ManagedObject demementify(final @Nullable ObjectFeature objectFeatureIfAny, final @Nullable ObjectMemento memento) {
 
         if(memento==null) {
             return null;
         }
 
-        if(memento instanceof ObjectMementoForEmpty) {
-            val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
+        if(memento instanceof ObjectMementoEmpty) {
+            val objectMementoForEmpty = (ObjectMementoEmpty) memento;
             val logicalType = objectMementoForEmpty.getLogicalType();
             val spec = getSpecificationLoader().specForLogicalType(logicalType);
             return spec.isPresent()
@@ -84,20 +85,19 @@ public class ObjectManagerDefault implements ObjectManager {
                     : ManagedObject.unspecified();
         }
 
-        if(memento instanceof ObjectMementoCollection) {
-            val objectMementoCollection = (ObjectMementoCollection) memento;
-
-            val elementSpec = getSpecificationLoader().specForLogicalTypeNameElseFail(memento.getLogicalTypeName());
-
-            val objects = objectMementoCollection.unwrapList().stream()
-                    .map(this::demementify)
+        if(memento instanceof ObjectMementoPlural) {
+            val objectMementoPlural = (ObjectMementoPlural) memento;
+            val objectFeature = objectFeatureIfAny!=null
+                    ? objectFeatureIfAny
+                    : getSpecificationLoader().loadFeatureElseFail(objectMementoPlural.getFeatureId());
+            val objects = objectMementoPlural.unwrapList().stream()
+                    .map(_memento->demementify(objectFeature, _memento))
                     .collect(Can.toCan());
-
-            return ManagedObject.packed(elementSpec, objects);
+            return ManagedObject.packed(objectFeature, objects);
         }
 
-        if(memento instanceof ObjectMementoForScalar) {
-            val objectMementoAdapter = (ObjectMementoForScalar) memento;
+        if(memento instanceof ObjectMementoSingular) {
+            val objectMementoAdapter = (ObjectMementoSingular) memento;
             return objectMementoAdapter.reconstructObject(getMetaModelContext());
         }
 

@@ -292,7 +292,7 @@ implements OneToOneAssociation {
 
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet
-                .autoComplete(ownerAdapter, searchArg, interactionInitiatedBy);
+                .autoComplete(this, ownerAdapter, searchArg, interactionInitiatedBy);
 
         val adapters = _NullSafe.stream(pojoOptions)
                 .map(getObjectManager()::adapt)

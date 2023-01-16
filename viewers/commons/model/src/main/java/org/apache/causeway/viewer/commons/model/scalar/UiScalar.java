@@ -21,23 +21,17 @@ package org.apache.causeway.viewer.commons.model.scalar;
 import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.UiModel;
 
-public interface UiScalar extends UiModel, HasMetaModelContext {
+public interface UiScalar
+extends UiModel, HasObjectFeature {
 
-    ObjectFeature getMetaModel();
 
-    @Override
-    default MetaModelContext getMetaModelContext() {
-        return getMetaModel().getMetaModelContext();
-    }
 
     /** action's or property's owner */
     ManagedObject getOwner();
@@ -49,44 +43,44 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
 
     /** feature name */
     default String getFriendlyName() {
-        return getMetaModel().getFriendlyName(this::getOwner);
+        return getObjectFeature().getFriendlyName(this::getOwner);
     }
 
     default boolean isSingular() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
-                || getMetaModel().getFeatureType() == FeatureType.PROPERTY;
+        return getObjectFeature().getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
+                || getObjectFeature().getFeatureType() == FeatureType.PROPERTY;
     }
 
     default boolean isPlural() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL
-                || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
+        return getObjectFeature().getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL
+                || getObjectFeature().getFeatureType() == FeatureType.COLLECTION;
     }
 
     default boolean isProperty() {
-        return getMetaModel().getFeatureType().isProperty();
+        return getObjectFeature().getFeatureType().isProperty();
     }
 
     default boolean isParameter() {
-        return getMetaModel().getFeatureType().isActionParameter();
+        return getObjectFeature().getFeatureType().isActionParameter();
     }
 
 
     default Optional<String> getDescribedAs() {
-        return getMetaModel().getDescription(this::getOwner);
+        return getObjectFeature().getDescription(this::getOwner);
     }
 
     default String getFileAccept() {
-        return Facets.fileAccept(getMetaModel()).orElse(null);
+        return Facets.fileAccept(getObjectFeature()).orElse(null);
     }
 
     int getAutoCompleteMinLength();
 
     default boolean isRequired() {
-        return !getMetaModel().isOptional();
+        return !getObjectFeature().isOptional();
     }
 
     default ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getElementType();
+        return getObjectFeature().getElementType();
     }
 
     ManagedObject getDefault();

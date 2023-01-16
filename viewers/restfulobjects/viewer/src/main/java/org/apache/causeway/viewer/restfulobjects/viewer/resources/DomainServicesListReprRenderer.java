@@ -28,7 +28,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ListRep
 
 public class DomainServicesListReprRenderer extends ListReprRenderer {
 
-    public DomainServicesListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public DomainServicesListReprRenderer(
+            final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representation);
     }
 
@@ -46,11 +47,13 @@ public class DomainServicesListReprRenderer extends ListReprRenderer {
 
 
     private void addLinkToSelf() {
-        final JsonRepresentation link = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.LIST, "services").build();
+        final JsonRepresentation link =
+                LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.LIST, "services").build();
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+            final DomainServicesListReprRenderer renderer =
+                    new DomainServicesListReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             renderer.with(streamServiceAdapters());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
@@ -59,11 +62,13 @@ public class DomainServicesListReprRenderer extends ListReprRenderer {
     }
 
     private void addLinkToUp() {
-        final JsonRepresentation link = LinkBuilder.newBuilder(resourceContext, Rel.UP.getName(), RepresentationType.HOME_PAGE, "").build();
+        final JsonRepresentation link =
+                LinkBuilder.newBuilder(resourceContext, Rel.UP.getName(), RepresentationType.HOME_PAGE, "").build();
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+            final HomePageReprRenderer renderer =
+                    new HomePageReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);

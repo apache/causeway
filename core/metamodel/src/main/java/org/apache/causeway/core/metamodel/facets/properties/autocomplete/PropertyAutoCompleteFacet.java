@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.properties.autocomplete;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 /**
  * Provides a set of auto-complete choices for a property.
@@ -40,6 +41,7 @@ public interface PropertyAutoCompleteFacet extends Facet {
      * Gets the available auto-complete choices for this property.
      */
     public Object[] autoComplete(
+            final ObjectFeature objectFeature,
             final ManagedObject inObject,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);

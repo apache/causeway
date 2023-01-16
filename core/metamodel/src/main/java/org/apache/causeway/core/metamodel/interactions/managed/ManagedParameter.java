@@ -37,7 +37,7 @@ implements
     ManagedFeature {
 
     public abstract int getParamNr();
-    @Override public abstract ObjectActionParameter getMetaModel();
+    @Override public abstract ObjectActionParameter getObjectFeature();
     public abstract ParameterNegotiationModel getNegotiationModel();
 
     /**
@@ -50,7 +50,7 @@ implements
             val head = getNegotiationModel().getHead();
 
             val usabilityConsent =
-                    getMetaModel()
+                    getObjectFeature()
                     .isUsable(head, params, InteractionInitiatedBy.USER);
 
             return usabilityConsent.isVetoed()

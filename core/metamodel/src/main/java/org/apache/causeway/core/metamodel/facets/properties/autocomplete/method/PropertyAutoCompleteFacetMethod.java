@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.properties.autocomplete.method;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
@@ -30,6 +31,7 @@ import org.apache.causeway.core.metamodel.facets.properties.autocomplete.Propert
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -44,8 +46,8 @@ implements ImperativeFacet {
     private final int minLength;
 
     public PropertyAutoCompleteFacetMethod(
-            final Method method,
-            final Class<?> choicesClass,
+            final Method method, // member support method
+            final Class<?> choicesClass, // return type of the getter, which is subject to be supported by this facet
             final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
@@ -65,6 +67,7 @@ implements ImperativeFacet {
 
     @Override
     public Object[] autoComplete(
+            final ObjectFeature objectFeature,
             final ManagedObject owningAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -75,7 +78,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
+        val collectionAdapter = getObjectManager().adapt(collectionOrArray, Optional.of(objectFeature));
 
         val visiblePojos = MmVisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);

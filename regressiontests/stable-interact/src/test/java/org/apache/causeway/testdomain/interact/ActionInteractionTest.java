@@ -459,7 +459,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
-    void whenNonScalarResult_shouldHaveDataTable() {
+    void whenPluralResult_shouldHaveDataTable() {
 
         val tester =
                 testerFactory.actionTester(InteractionDemo.class, "limitedItems", Where.OBJECT_FORMS);

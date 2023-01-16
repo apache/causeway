@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -54,7 +55,7 @@ public class PropertyNegotiationModel implements ManagedValue {
     PropertyNegotiationModel(
             final ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
-        val propMeta = managedProperty.getMetaModel();
+        val propMeta = managedProperty.getObjectFeature();
 
         validationFeedbackActive = _Bindables.forValue(false);
 
@@ -109,6 +110,11 @@ public class PropertyNegotiationModel implements ManagedValue {
     }
 
     @Override
+    public ObjectFeature getObjectFeature() {
+        return managedProperty.getObjectFeature();
+    }
+
+    @Override
     public ObjectSpecification getElementType() {
         return managedProperty.getElementType();
     }
@@ -123,7 +129,7 @@ public class PropertyNegotiationModel implements ManagedValue {
         if(proposedValueAsTitle==null) {
             // value types should have associated renderer via value semantics
             proposedValueAsTitle = _BindingUtil
-                    .bindAsFormated(TargetFormat.TITLE, managedProperty.getMetaModel(), proposedValue);
+                    .bindAsFormated(TargetFormat.TITLE, managedProperty.getObjectFeature(), proposedValue);
         }
         return proposedValueAsTitle;
     }
@@ -133,14 +139,14 @@ public class PropertyNegotiationModel implements ManagedValue {
         if(proposedValueAsHtml==null) {
             // value types should have associated renderer via value semantics
             proposedValueAsHtml = _BindingUtil
-                    .bindAsFormated(TargetFormat.HTML, managedProperty.getMetaModel(), proposedValue);
+                    .bindAsFormated(TargetFormat.HTML, managedProperty.getObjectFeature(), proposedValue);
         }
         return proposedValueAsHtml;
     }
 
     @Override
     public boolean isValueAsParsableTextSupported() {
-        return _BindingUtil.hasParser(managedProperty.getMetaModel());
+        return _BindingUtil.hasParser(managedProperty.getObjectFeature());
     }
 
     @Override
@@ -149,7 +155,7 @@ public class PropertyNegotiationModel implements ManagedValue {
             // value types should have associated parsers/formatters via value semantics
             // except for composite value types, which might have not
             proposedValueAsParsableText = (Bindable<String>) _BindingUtil
-                    .bindAsFormated(TargetFormat.PARSABLE_TEXT, managedProperty.getMetaModel(), proposedValue);
+                    .bindAsFormated(TargetFormat.PARSABLE_TEXT, managedProperty.getObjectFeature(), proposedValue);
         }
         return proposedValueAsParsableText;
     }
@@ -224,6 +230,8 @@ public class PropertyNegotiationModel implements ManagedValue {
         managedProperty.modifyProperty(getValue().getValue());
         isCurrentValueAbsent.invalidate();
     }
+
+
 
 
 }

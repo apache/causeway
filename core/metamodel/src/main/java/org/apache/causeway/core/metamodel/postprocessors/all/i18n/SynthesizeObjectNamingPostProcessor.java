@@ -65,19 +65,19 @@ extends ObjectSpecificationPostProcessorAbstract {
                 .filter(_Strings::isNotEmpty)
                 .orElseGet(()->getSingularFallbackNoun(objectSpecification));
 
-        val plural = topRank
-                .stream()
-                .filter(objectNamedFacet->objectNamedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
-                .findFirst()
-                .map(ObjectNamedFacet::plural)
-                .filter(_Strings::isNotEmpty)
-                .orElseGet(()->getPluralFallbackNoun(singular));
+//        val plural = topRank
+//                .stream()
+//                .filter(objectNamedFacet->objectNamedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
+//                .findFirst()
+//                .map(ObjectNamedFacet::plural)
+//                .filter(_Strings::isNotEmpty)
+//                .orElseGet(()->getPluralFallbackNoun(singular));
 
         FacetUtil.addFacet(
                 new ObjectNamedFacetSynthesized(
                         NounForms.builder()
                             .singular(singular)
-                            .plural(plural)
+//                            .plural(plural)
                             .build(),
                         objectSpecification)
                 );

@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -469,12 +470,13 @@ extends DelegatingInvocationHandlerDefault<T> {
         val objectManager = getObjectManager();
 
         // adapt argument pojos to managed objects
-        val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
+
+        val argAdapters = objectAction.getParameters().map(IndexedFunction.zeroBased((paramIndex, param)->{
             // guard against index out of bounds
             val argPojo = _Arrays.get(args, paramIndex).orElse(null);
             return argPojo!=null
-                    ? objectManager.adapt(argPojo)
-                    : ManagedObject.empty(paramSpec);
+                    ? objectManager.adapt(argPojo, Optional.of(param))
+                    : ManagedObject.empty(param.getElementType());
         }));
 
         runValidationTask(()->{

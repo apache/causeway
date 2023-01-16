@@ -36,7 +36,7 @@ public interface UiParameter extends UiScalar {
 
     /** param meta model */
     @Override
-    ObjectActionParameter getMetaModel();
+    ObjectActionParameter getObjectFeature();
 
     /** param value */
     @NonNull
@@ -59,57 +59,57 @@ public interface UiParameter extends UiScalar {
 
     @Override
     default int getAutoCompleteMinLength() {
-        return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
+        return hasAutoComplete() ? getObjectFeature().getAutoCompleteMinLength() : 0;
     }
 
     @Override
     default boolean hasChoices() {
-        return getMetaModel().hasChoices();
+        return getObjectFeature().hasChoices();
     }
 
     @Override
     default boolean hasAutoComplete() {
-        return getMetaModel().hasAutoComplete();
+        return getObjectFeature().hasAutoComplete();
     }
 
     @Override
     default ManagedObject getDefault() {
-        return getMetaModel().getDefault(getParameterNegotiationModel());
+        return getObjectFeature().getDefault(getParameterNegotiationModel());
     }
 
     @Override
     default Can<ManagedObject> getChoices() {
-        return getMetaModel().getChoices(getParameterNegotiationModel(), InteractionInitiatedBy.USER);
+        return getObjectFeature().getChoices(getParameterNegotiationModel(), InteractionInitiatedBy.USER);
     }
 
     @Override
     default Can<ManagedObject> getAutoComplete(final String searchArg) {
-        return getMetaModel().getAutoComplete(getParameterNegotiationModel(), searchArg, InteractionInitiatedBy.USER);
+        return getObjectFeature().getAutoComplete(getParameterNegotiationModel(), searchArg, InteractionInitiatedBy.USER);
     }
 
     @Override
     default String getFriendlyName() {
-        return getMetaModel().getFriendlyName(this::getOwner);
+        return getObjectFeature().getFriendlyName(this::getOwner);
     }
 
     @Override
     default Optional<String> getDescribedAs() {
-        return getMetaModel().getDescription(this::getOwner);
+        return getObjectFeature().getDescription(this::getOwner);
     }
 
     @Override
     default String getFileAccept() {
-        return Facets.fileAccept(getMetaModel()).orElse(null);
+        return Facets.fileAccept(getObjectFeature()).orElse(null);
     }
 
     @Override
     default boolean isRequired() {
-        return !getMetaModel().isOptional();
+        return !getObjectFeature().isOptional();
     }
 
     @Override
     default ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getElementType();
+        return getObjectFeature().getElementType();
     }
 
     @Override
@@ -118,12 +118,12 @@ public interface UiParameter extends UiScalar {
     }
 
     default int getParameterIndex() {
-        return getMetaModel().getParameterIndex();
+        return getObjectFeature().getParameterIndex();
     }
 
     @Override
     default String getCssClass() {
-        return getMetaModel().getCssClass("causeway-");
+        return getObjectFeature().getCssClass("causeway-");
     }
 
     @Override
@@ -132,12 +132,12 @@ public interface UiParameter extends UiScalar {
     }
 
     default ActionInteractionHead getPendingParamHead() {
-        return getMetaModel().getAction().interactionHead(getOwner());
+        return getObjectFeature().getAction().interactionHead(getOwner());
     }
 
     @Override
     default MetaModelContext getMetaModelContext() {
-        return getMetaModel().getMetaModelContext();
+        return getObjectFeature().getMetaModelContext();
     }
 
 

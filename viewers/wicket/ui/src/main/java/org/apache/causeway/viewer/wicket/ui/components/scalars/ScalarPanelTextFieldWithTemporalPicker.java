@@ -45,7 +45,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     protected int getDateRenderAdjustDays() {
-        return Facets.dateRenderAdjustDays(scalarModel().getMetaModel());
+        return Facets.dateRenderAdjustDays(scalarModel().getObjectFeature());
     }
 
     @Override

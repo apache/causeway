@@ -274,7 +274,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
         return cardinalityConstraint.isMultiple()
                 ? ManagedObject.packed(
-                        valueTypeHelper.getElementType(),
+                        valueTypeHelper.getFeature(),
                         recoverCollectionOfValues(valueTypeHelper, valueDto.getCollection()))
                 : recoverScalarValue(valueTypeHelper, valueDto);
     }
@@ -286,7 +286,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
         return cardinalityConstraint.isMultiple()
                 ? ManagedObject.packed(
-                        feature.getElementType(),
+                        feature,
                         recoverCollectionOfReferences(valueDto.getCollection()))
                 : recoverReferenceFrom(valueDto.getReference());
     }
@@ -343,7 +343,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
                 || (valueWithTypeDto.isNull()!=null
                     && valueWithTypeDto.isNull())) {
             return cardinalityConstraint.isMultiple()
-                    ? ManagedObject.packed(feature.getElementType(), Can.empty())
+                    ? ManagedObject.packed(feature, Can.empty())
                     : ManagedObject.empty(feature.getElementType());
         }
 

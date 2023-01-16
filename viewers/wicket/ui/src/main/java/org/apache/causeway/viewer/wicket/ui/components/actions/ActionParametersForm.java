@@ -140,7 +140,7 @@ extends PromptFormAbstract<ActionModel> {
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1; // eg. if paramNumberUpdated=0 then skipCount=1
 
-        val paramCount = updatedParamModel.getMetaModel().getAction().getParameterCount();
+        val paramCount = updatedParamModel.getObjectFeature().getAction().getParameterCount();
         val maxCapacity = paramCount - skipCount; // just an optimization, not strictly required
         val paramOnlyUpdateRequestsHavingParamIndex = _Lists.<Integer>newArrayList(maxCapacity);
 
@@ -149,7 +149,7 @@ extends PromptFormAbstract<ActionModel> {
             .map(paramModel->{
 
                 val paramIndexForReassessment = paramModel.getParameterIndex();
-                val actionParameter = paramModel.getMetaModel();
+                val actionParameter = paramModel.getObjectFeature();
 
                 actionParameter.reassessDefault(paramNegotiationModel);
                 _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);

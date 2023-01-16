@@ -119,10 +119,10 @@ public class MarkupComponent extends WebComponent {
 
     protected Optional<ObjectFeature> lookupObjectFeatureIn(final IModel<?> model) {
         if(model instanceof ScalarPropertyModel) {
-            return Optional.of(((ScalarPropertyModel)model).getMetaModel());
+            return Optional.of(((ScalarPropertyModel)model).getObjectFeature());
         }
         if(model instanceof UiParameter) {
-            return Optional.of(((UiParameter)model).getMetaModel());
+            return Optional.of(((UiParameter)model).getObjectFeature());
         }
         if(model instanceof ValueModel) {
             return Optional.ofNullable(((ValueModel)model).getActionModelHint())

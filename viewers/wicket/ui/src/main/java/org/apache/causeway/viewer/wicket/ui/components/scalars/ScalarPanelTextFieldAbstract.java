@@ -65,7 +65,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- CONVERSION
 
     protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
-        return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
+        return getConverter(scalarModel.getObjectFeature(), scalarModel.isEditMode()
                 ? ScalarRepresentation.EDITING
                 : ScalarRepresentation.VIEWING);
     }

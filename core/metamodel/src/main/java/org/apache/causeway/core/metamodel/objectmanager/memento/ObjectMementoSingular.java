@@ -40,23 +40,23 @@ import lombok.ToString;
 import lombok.val;
 
 @ToString
-public final class ObjectMementoForScalar
+public final class ObjectMementoSingular
 implements HasLogicalType, Serializable, ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
-    public static Optional<ObjectMementoForScalar> create(final @Nullable ManagedObject adapter) {
+    public static Optional<ObjectMementoSingular> create(final @Nullable ManagedObject adapter) {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
-                : Optional.of(new ObjectMementoForScalar(adapter));
+                : Optional.of(new ObjectMementoSingular(adapter));
     }
 
-    static ObjectMementoForScalar createPersistent(
+    static ObjectMementoSingular createPersistent(
             final Bookmark bookmark,
             final SpecificationLoader specificationLoader) {
-        return new ObjectMementoForScalar(bookmark, specificationLoader);
+        return new ObjectMementoSingular(bookmark, specificationLoader);
     }
 
     // --
@@ -71,7 +71,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
     @ToString.Exclude
     byte[] serializedPayload;
 
-    private ObjectMementoForScalar(
+    private ObjectMementoSingular(
             final @NonNull Bookmark bookmark,
             final @NonNull SpecificationLoader specLoader) {
 
@@ -91,7 +91,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
                 : _Recreatable.RecreateStrategy.LOOKUP;
     }
 
-    private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
+    private ObjectMementoSingular(final @NonNull ManagedObject adapter) {
 
         this.logicalType = adapter.getLogicalType();
         this.title = MmTitleUtil.titleOf(adapter);
@@ -152,10 +152,10 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     @Override
     public boolean equals(final Object other) {
-        if (!(other instanceof ObjectMementoForScalar)) {
+        if (!(other instanceof ObjectMementoSingular)) {
             return false;
         }
-        return recreateStrategy.equals(this, (ObjectMementoForScalar) other);
+        return recreateStrategy.equals(this, (ObjectMementoSingular) other);
     }
 
 }

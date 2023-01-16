@@ -186,7 +186,7 @@ implements IRequestListener {
         val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
         val pdfJsConfig =
-                scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
+                scalarModel.getObjectFeature().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
                 .withDocumentUrl(urlFor(

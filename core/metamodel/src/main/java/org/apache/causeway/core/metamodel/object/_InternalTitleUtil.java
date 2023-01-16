@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 
@@ -32,7 +33,9 @@ final class _InternalTitleUtil {
 
     // -- TITLE SUPPORT
 
-    String titleString(@NonNull final TitleRenderRequest titleRenderRequest) {
+    String titleString(
+            final String pluralName,
+            final @NonNull TitleRenderRequest titleRenderRequest) {
 
         val managedObject = titleRenderRequest.getObject();
 
@@ -44,9 +47,43 @@ final class _InternalTitleUtil {
             ? objectTitleString(titleRenderRequest)
                     .trim()
             : collectionTitleString(
+                    pluralName,
                     managedObject,
                     managedObject.getSpecification().getFacet(CollectionFacet.class));
     }
+
+    String titleStringSingular(
+            final @NonNull TitleRenderRequest titleRenderRequest) {
+
+        val managedObject = titleRenderRequest.getObject();
+
+        if(managedObject.getSpecialization().isUnspecified()) {
+            return managedObject.getTitle();
+        }
+
+        _Assert.assertTrue(managedObject.getSpecification().isSingular());
+
+        return objectTitleString(titleRenderRequest).trim();
+    }
+
+    String titleStringPlural(
+            final String pluralName,
+            final @NonNull TitleRenderRequest titleRenderRequest) {
+
+        val managedObject = titleRenderRequest.getObject();
+
+        if(managedObject.getSpecialization().isUnspecified()) {
+            return managedObject.getTitle();
+        }
+
+        _Assert.assertTrue(managedObject.getSpecification().isPlural());
+
+        return collectionTitleString(
+                    pluralName,
+                    managedObject,
+                    managedObject.getSpecification().getFacet(CollectionFacet.class));
+    }
+
 
     // -- HELPER
 
@@ -68,7 +105,7 @@ final class _InternalTitleUtil {
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
-    private String collectionTitleString(final ManagedObject managedObject, final CollectionFacet facet) {
+    private String collectionTitleString(final String pluralName, final ManagedObject managedObject, final CollectionFacet facet) {
         final int size = facet.size(managedObject);
         val elementSpec = managedObject.getElementSpecification().orElse(null);
         if (elementSpec == null
@@ -86,13 +123,13 @@ final class _InternalTitleUtil {
         } else {
             switch (size) {
             case -1:
-                return elementSpec.getPluralName();
+                return pluralName;
             case 0:
-                return "No " + elementSpec.getPluralName();
+                return "No " + pluralName;
             case 1:
                 return "1 " + elementSpec.getSingularName();
             default:
-                return size + " " + elementSpec.getPluralName();
+                return size + " " + pluralName;
             }
         }
     }

@@ -108,7 +108,7 @@ extends ReprRendererAbstract<ManagedMember> {
     @Override
     public AbstractObjectMemberReprRenderer<T> with(final ManagedMember objectAndMember) {
         this.objectAdapter = objectAndMember.getOwner();
-        this.objectMember = _Casts.uncheckedCast(objectAndMember.getMetaModel());
+        this.objectMember = _Casts.uncheckedCast(objectAndMember.getObjectFeature());
         this.objectMemberType = MemberType.determineFrom(objectMember);
         this.memberId = objectMember.getId();
         usingLinkTo(new DomainObjectLinkTo());

@@ -78,8 +78,8 @@ extends AbstractFacetFactoryJupiterTestCase {
             cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
-            paged = 20,
-            plural = "Customers Plural Form"
+            paged = 20
+            //tableDecoration = TableDecoration.DATATABLES_NET
             )
     class Customer { }
 
@@ -340,12 +340,14 @@ extends AbstractFacetFactoryJupiterTestCase {
                 facetFactory.process(ProcessClassContext
                         .forTesting(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
+                final PagedFacet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNotNull(facet);
-                assertTrue(facet instanceof PagedFacetForDomainObjectLayoutAnnotation);
+                assertEquals(PagedFacetForDomainObjectLayoutAnnotation.class, facet.getClass());
+
+                //PagedFacetOverriddenByDataTablesDecoration
 
                 final PagedFacetForDomainObjectLayoutAnnotation facetImpl = (PagedFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.value(), is(20));
+                assertThat(facet.value(), is(20));
 
                 expectNoMethodsRemoved();
             }
@@ -367,49 +369,49 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     }
 
-    public static class Plural extends DomainObjectLayoutFactoryTest {
-
-        @Mock ManagedObject mockAdapter;
-
-        public static class ForDomainObjectLayout extends Plural {
-
-            @BeforeEach
-            public void setUp2() throws Exception {
-            }
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
-
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
-                assertNotNull(namedFacet);
-
-                assertEquals("Customers Plural Form", namedFacet.pluralTranslated());
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerWithDefaults.class;
-
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
-                assertNull(namedFacet);
-
-                //assertEquals("", namedFacet.translated(NounForm.PLURAL));
-
-                expectNoMethodsRemoved();
-            }
-        }
-
-    }
+//    public static class Plural extends DomainObjectLayoutFactoryTest {
+//
+//        @Mock ManagedObject mockAdapter;
+//
+//        public static class ForDomainObjectLayout extends Plural {
+//
+//            @BeforeEach
+//            public void setUp2() throws Exception {
+//            }
+//
+//            @Test
+//            public void whenSpecified() {
+//
+//                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+//
+//                facetFactory.process(ProcessClassContext
+//                        .forTesting(cls, mockMethodRemover, facetHolder));
+//
+//                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
+//                assertNotNull(namedFacet);
+//
+//                assertEquals("Customers Plural Form", namedFacet.pluralTranslated());
+//
+//                expectNoMethodsRemoved();
+//            }
+//
+//            @Test
+//            public void whenDefaults() {
+//
+//                final Class<?> cls = CustomerWithDefaults.class;
+//
+//                facetFactory.process(ProcessClassContext
+//                        .forTesting(cls, mockMethodRemover, facetHolder));
+//
+//                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
+//                assertNull(namedFacet);
+//
+//                //assertEquals("", namedFacet.translated(NounForm.PLURAL));
+//
+//                expectNoMethodsRemoved();
+//            }
+//        }
+//
+//    }
 
 }

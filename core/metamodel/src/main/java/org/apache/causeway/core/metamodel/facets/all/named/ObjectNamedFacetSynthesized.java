@@ -35,8 +35,8 @@ extends ObjectNamedFacetAbstract {
             final NounForms nounForms,
             final FacetHolder holder) {
         super(nounForms, holder, Precedence.SYNTHESIZED);
-        // assert that both noun-forms are populated
-        _Assert.assertTrue(nounForms.getSupportedNounForms().stream().count() == 2L);
+        // assert that 1 noun-form is populated
+        _Assert.assertTrue(nounForms.getSupportedNounForms().stream().count() == 1L);
     }
 
 }

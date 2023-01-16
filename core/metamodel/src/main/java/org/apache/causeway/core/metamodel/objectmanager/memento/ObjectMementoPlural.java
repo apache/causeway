@@ -18,36 +18,52 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
+import java.util.ArrayList;
+
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.Value;
 
 /**
  * @since 2.0
  */
-@ToString
-@RequiredArgsConstructor
-public class ObjectMementoForEmpty implements ObjectMemento {
+@Value(staticConstructor = "of")
+public final class ObjectMementoPlural implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
+    private final ArrayList<ObjectMemento> container;
+
     @Getter(onMethod_ = {@Override})
-    @NonNull private LogicalType logicalType;
+    @NonNull private final LogicalType logicalType;
+
+    @Getter
+    @NonNull private final Identifier featureId;
+
+    public static ObjectMementoPlural of(
+            final ObjectFeature objectFeature,
+            final ArrayList<ObjectMemento> container) {
+        return of(container, objectFeature.getElementType().getLogicalType(), objectFeature.getFeatureIdentifier());
+    }
 
     @Override
     public String getTitle() {
-        return PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION);
+        throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     @Override
     public Bookmark getBookmark() {
-        return Bookmark.empty(logicalType);
+        throw _Exceptions.notImplemented(); // please unwrap at call-site
+    }
+
+    public ArrayList<ObjectMemento> unwrapList() {
+        return getContainer();
     }
 
 }

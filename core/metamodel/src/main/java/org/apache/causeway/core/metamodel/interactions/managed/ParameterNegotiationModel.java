@@ -146,7 +146,7 @@ public class ParameterNegotiationModel {
     }
 
     @NonNull public ObjectActionParameter getParamMetamodel(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getMetaModel();
+        return paramModels.getElseFail(paramNr).getObjectFeature();
     }
 
     @NonNull public Bindable<ManagedObject> getBindableParamValue(final int paramNr) {
@@ -235,10 +235,17 @@ public class ParameterNegotiationModel {
         paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
-    @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,
+    @NonNull public ManagedObject adaptParamValuePojo(
+            final int paramIndex,
             final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramIndex);
         return ManagedObject.adaptParameter(paramMeta, newParamValuePojo);
+    }
+
+    public void setParamValuePojo(
+            final int paramIndex,
+            final @Nullable Object newParamValuePojo) {
+        setParamValue(paramIndex, adaptParamValuePojo(paramIndex, newParamValuePojo));
     }
 
     /**
@@ -267,7 +274,7 @@ public class ParameterNegotiationModel {
     private static class ParameterModel extends ManagedParameter {
 
         @Getter(onMethod_ = {@Override}) private final int paramNr;
-        @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;
+        @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter objectFeature;
         @Getter(onMethod_ = {@Override}) @NonNull private final ParameterNegotiationModel negotiationModel;
         @Getter @NonNull private final _BindableAbstract<ManagedObject> bindableParamValue;
         @Getter @NonNull private final BooleanBindable bindableParamValueDirtyFlag;
@@ -286,18 +293,18 @@ public class ParameterNegotiationModel {
             val action = negotiationModel.getHead().getMetaModel();
 
             this.paramNr = paramNr;
-            this.metaModel = action.getParameters().getElseFail(paramNr);
+            this.objectFeature = action.getParameters().getElseFail(paramNr);
             this.negotiationModel = negotiationModel;
 
             bindableParamValue = _Bindables.forValue(initialValue);
             bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
 
             //bindableParamValue.setValueRefiner(MmEntityUtil::refetch); no longer used
-            bindableParamValue.setValueGuard(MmAssertionUtil.assertInstanceOf(metaModel.getElementType()));
+            bindableParamValue.setValueGuard(MmAssertionUtil.assertInstanceOf(objectFeature.getElementType()));
             bindableParamValue.addListener((event, oldValue, newValue)->{
                 if(newValue==null) {
                     // lift null to empty ...
-                    bindableParamValue.setValue(metaModel.getEmpty()); // triggers this event again
+                    bindableParamValue.setValue(objectFeature.getEmpty()); // triggers this event again
                     return;
                 }
                 getNegotiationModel().onNewParamValue();
@@ -305,20 +312,20 @@ public class ParameterNegotiationModel {
             });
 
             // has either autoComplete, choices, or none
-            observableParamChoices = metaModel.hasAutoComplete()
+            observableParamChoices = objectFeature.hasAutoComplete()
             ? _Observables.lazy(()->
-                getMetaModel().getAutoComplete(
+                getObjectFeature().getAutoComplete(
                         getNegotiationModel(),
                         getBindableParamSearchArgument().getValue(),
                         InteractionInitiatedBy.USER))
-            : metaModel.hasChoices()
+            : objectFeature.hasChoices()
                 ? _Observables.lazy(()->
-                    getMetaModel().getChoices(getNegotiationModel(), InteractionInitiatedBy.USER))
+                    getObjectFeature().getChoices(getNegotiationModel(), InteractionInitiatedBy.USER))
                 : _Observables.lazy(Can::empty);
 
             // if has autoComplete, then activate the search argument
             bindableParamSearchArgument = _Bindables.forValue(null);
-            if(metaModel.hasAutoComplete()) {
+            if(objectFeature.hasAutoComplete()) {
                 bindableParamSearchArgument.addListener((e,o,n)->{
                     observableParamChoices.invalidate();
                 });
@@ -327,7 +334,7 @@ public class ParameterNegotiationModel {
             // validate this parameter, but only when validationFeedback has been activated
             observableParamValidation = _Observables.lazy(()->
                 isValidationFeedbackActive()
-                ? getMetaModel()
+                ? getObjectFeature()
                         .isValid(getNegotiationModel().getHead(), getNegotiationModel().getParamValues(), InteractionInitiatedBy.USER)
                         .getReason()
                 : (String)null);
@@ -347,23 +354,23 @@ public class ParameterNegotiationModel {
 
         @Override
         public Identifier getIdentifier() {
-            return getMetaModel().getFeatureIdentifier();
+            return getObjectFeature().getFeatureIdentifier();
         }
 
         @Override
         public String getFriendlyName() {
-            return getMetaModel().getStaticFriendlyName()
+            return getObjectFeature().getStaticFriendlyName()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
         }
 
         @Override
         public Optional<String> getDescription() {
-            return getMetaModel().getStaticDescription();
+            return getObjectFeature().getStaticDescription();
         }
 
         @Override
         public ObjectSpecification getElementType() {
-            return getMetaModel().getElementType();
+            return getObjectFeature().getElementType();
         }
 
         @Override
@@ -376,7 +383,7 @@ public class ParameterNegotiationModel {
             if(bindableParamAsTitle==null) {
                 // value types should have associated rederers via value semantics
                 bindableParamAsTitle = _BindingUtil
-                        .bindAsFormated(TargetFormat.TITLE, metaModel, bindableParamValue);
+                        .bindAsFormated(TargetFormat.TITLE, objectFeature, bindableParamValue);
             }
             return bindableParamAsTitle;
         }
@@ -386,14 +393,14 @@ public class ParameterNegotiationModel {
             if(bindableParamAsHtml==null) {
                 // value types should have associated rederers via value semantics
                 bindableParamAsHtml = _BindingUtil
-                        .bindAsFormated(TargetFormat.HTML, metaModel, bindableParamValue);
+                        .bindAsFormated(TargetFormat.HTML, objectFeature, bindableParamValue);
             }
             return bindableParamAsHtml;
         }
 
         @Override
         public boolean isValueAsParsableTextSupported() {
-            return _BindingUtil.hasParser(metaModel);
+            return _BindingUtil.hasParser(objectFeature);
         }
 
         @Override
@@ -402,7 +409,7 @@ public class ParameterNegotiationModel {
                 // value types should have associated parsers/formatters via value semantics
                 // except for composite value types, which might have not
                 bindableParamAsParsableText = (Bindable<String>) _BindingUtil
-                        .bindAsFormated(TargetFormat.PARSABLE_TEXT, metaModel, bindableParamValue);
+                        .bindAsFormated(TargetFormat.PARSABLE_TEXT, objectFeature, bindableParamValue);
             }
             return bindableParamAsParsableText;
         }

@@ -153,7 +153,7 @@ extends ScalarPanelAbstract2 {
             xrayDetails.put("scalarModel.whetherHidden", ""+scalarModel().whetherHidden());
             xrayDetails.put("scalarModel.identifier", ""+scalarModel().getIdentifier());
             xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
-            xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
+            xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getObjectFeature().getFeatureIdentifier());
             xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getScalarTypeSpec().toString());
             xrayDetails.put("scalarModel.proposedValue", ""+scalarModel().proposedValue().getValue().getValue());
 //                    getSpecialization()

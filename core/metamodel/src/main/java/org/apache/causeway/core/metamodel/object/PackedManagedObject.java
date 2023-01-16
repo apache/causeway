@@ -19,13 +19,14 @@
 package org.apache.causeway.core.metamodel.object;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectFeature;
 
 /**
  * 'Collection' of {@link ManagedObject}s.
  * @see ManagedObject.Specialization#PACKED
  */
 public interface PackedManagedObject
-extends ManagedObject {
+extends ManagedObject, HasObjectFeature {
 
     Can<ManagedObject> unpack();
 

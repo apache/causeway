@@ -60,7 +60,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
         // -- HELPER
 
         private LocalResourcePath getEventStreamResource(final ScalarModel scalarModel) {
-            val observeFacet  = scalarModel.getMetaModel().getFacet(SseObserveFacet.class);
+            val observeFacet  = scalarModel.getObjectFeature().getFacet(SseObserveFacet.class);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
                     : null;

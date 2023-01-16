@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.objectmanager;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -33,6 +32,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
 import lombok.val;
@@ -66,11 +66,17 @@ public interface ObjectManager extends HasMetaModelContext {
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
     }
 
-    //TODO why not use loadObject(bookmark) instead
-    ManagedObject demementify(final ObjectMemento memento);
-    //TODO why not use loadObject(bookmark) instead
-    default ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
-        return demementify(memento);
+    /**
+     * TODO why not use loadObject(bookmark) instead?
+     *
+     * @param objectFeatureIfAny - nullable;
+     *      when present, can shortcut the process of reconstructing the associated {@link ObjectFeature} from the memento itself
+     * @param memento - nullable
+     */
+    ManagedObject demementify(@Nullable ObjectFeature objectFeatureIfAny, @Nullable ObjectMemento memento);
+
+    default ManagedObject demementify(@Nullable final ObjectMemento memento) {
+        return demementify(null, memento);
     }
 
     // -- SHORTCUTS
@@ -159,24 +165,24 @@ public interface ObjectManager extends HasMetaModelContext {
     // -- ADAPTING POJOS
 
     /**
-     * Not suitable for adapting a non-scalar.
+     * Suitable for adapting a singular (not plural).
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public default ManagedObject adapt(final @Nullable Object pojo) {
-        return adapt(pojo, ()->specForType(Object.class).orElseThrow());
+        return adapt(pojo, Optional.empty());
     }
 
     /**
-     * Suitable for adapting a non-scalar.
+     * Suitable for adapting a singular or plural.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public default ManagedObject adapt(
             final @Nullable Object pojo,
-            final @NonNull Supplier<ObjectSpecification> fallbackElementType) {
+            final @NonNull Optional<ObjectFeature> objectFeatureIfPlural) {
         if(pojo==null) {
             return ManagedObject.unspecified();
         }
@@ -192,11 +198,13 @@ public interface ObjectManager extends HasMetaModelContext {
         return spec.isSingular()
                 ? ManagedObject.adaptSingular(spec, pojo)
                 : ManagedObject.packed(
-                        spec.getElementSpecification().orElseGet(fallbackElementType),
+                        objectFeatureIfPlural.orElseThrow(()->_Exceptions
+                                .unrecoverable("framework bug: for the plural case an ObjectFeature is required")),
                         _NullSafe.streamAutodetect(pojo)
                         .map(element->adapt(element))
                         .collect(Can.toCan()));
     }
+
 
 
 }

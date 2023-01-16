@@ -147,7 +147,7 @@ extends ScalarPanelAbstract {
     // -- SEMANTICS
 
     private OptionsBasedOnValueSemantics getSemantics(final ScalarModel scalarModel) {
-        return new OptionsBasedOnValueSemantics(scalarModel.getMetaModel(), scalarModel.isEditMode()
+        return new OptionsBasedOnValueSemantics(scalarModel.getObjectFeature(), scalarModel.isEditMode()
                 ? ScalarRepresentation.EDITING
                 : ScalarRepresentation.VIEWING);
     }

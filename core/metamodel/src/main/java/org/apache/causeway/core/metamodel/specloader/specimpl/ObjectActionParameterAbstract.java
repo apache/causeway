@@ -251,7 +251,7 @@ implements
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
-            val packed = ManagedObject.packed(paramSpec, pluralDefaults);
+            val packed = ManagedObject.packed(this, pluralDefaults);
             return packed;
         }
 

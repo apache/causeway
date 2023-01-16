@@ -75,32 +75,32 @@ implements ManagedFeature {
 
 
     @Override
-    public abstract ObjectMember getMetaModel();
+    public abstract ObjectMember getObjectFeature();
 
     public abstract Identifier.Type getMemberType();
 
     @Override
     public ObjectSpecification getElementType() {
-        return getMetaModel().getElementType();
+        return getObjectFeature().getElementType();
     }
 
     public String getId() {
-        return getMetaModel().getId();
+        return getObjectFeature().getId();
     }
 
     @Override
     public Identifier getIdentifier() {
-        return getMetaModel().getFeatureIdentifier();
+        return getObjectFeature().getFeatureIdentifier();
     }
 
     @Override
     public String getFriendlyName() {
-        return getMetaModel().getFriendlyName(this::getOwner);
+        return getObjectFeature().getFriendlyName(this::getOwner);
     }
 
     @Override
     public Optional<String> getDescription() {
-        return getMetaModel().getDescription(this::getOwner);
+        return getObjectFeature().getDescription(this::getOwner);
     }
 
     @Getter @Setter @NonNull
@@ -114,7 +114,7 @@ implements ManagedFeature {
 
         try {
             val visibilityConsent =
-                    getMetaModel()
+                    getObjectFeature()
                     .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
 
             return visibilityConsent.isVetoed()
@@ -138,7 +138,7 @@ implements ManagedFeature {
         try {
 
             val usabilityConsent =
-                    getMetaModel()
+                    getObjectFeature()
                     .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
 
             return usabilityConsent.isVetoed()

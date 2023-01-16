@@ -25,7 +25,9 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -38,12 +40,16 @@ implements
     Bookmarkable.NoBookmark,
     PackedManagedObject {
 
+    @Getter(onMethod_={@Override})
+    private final @NonNull ObjectFeature objectFeature;
     private final @NonNull Can<ManagedObject> nonScalar;
 
     _ManagedObjectPacked(
+            final ObjectFeature objectFeature,
             final ObjectSpecification elementSpec,
             final @Nullable Can<ManagedObject> nonScalar) {
         super(Specialization.PACKED, elementSpec);
+        this.objectFeature = objectFeature;
         this.nonScalar = nonScalar!=null
                 ? nonScalar
                 : Can.empty();

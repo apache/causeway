@@ -42,7 +42,6 @@ extends MemberSupportFacetFactoryAbstract {
             final MethodFinder methodFinder) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val getterType = getterOrMixinMain.getReturnType();
 
         methodFinder
         .streamMethodsMatchingSignature(STRING_ARG)
@@ -50,7 +49,7 @@ extends MemberSupportFacetFactoryAbstract {
         .forEach(autoCompleteMethod->{
             addFacet(
                     new PropertyAutoCompleteFacetMethod(
-                            autoCompleteMethod, getterType, processMethodContext.getFacetHolder()));
+                            autoCompleteMethod, getterOrMixinMain.getReturnType(), processMethodContext.getFacetHolder()));
         });
 
     }

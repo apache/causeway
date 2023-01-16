@@ -36,7 +36,7 @@ class TitleServiceDefaultTest {
 
         val mmc = MetaModelContext_forTesting.buildDefault();
 
-        titleService = new TitleServiceDefault(null, mmc.getObjectManager());
+        titleService = new TitleServiceDefault(mmc.getObjectManager());
     }
 
     // -- FEATURED

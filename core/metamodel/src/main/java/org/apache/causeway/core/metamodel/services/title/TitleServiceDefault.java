@@ -27,9 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.title.TitleService;
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtil;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -44,7 +42,6 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class TitleServiceDefault implements TitleService {
 
-    private final WrapperFactory wrapperFactory;
     private final ObjectManager objectManager;
 
     @Override
@@ -54,8 +51,7 @@ public class TitleServiceDefault implements TitleService {
             return "" + domainObject;
         }
 
-        val pojo = unwrapped(domainObject);
-        val objectAdapter = objectManager.adapt(pojo);
+        val objectAdapter = objectManager.adapt(domainObject);
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "[UNSPECIFIED]";
@@ -64,10 +60,7 @@ public class TitleServiceDefault implements TitleService {
         if(MmEntityUtil.isDetachedCannotReattach(objectAdapter)) {
             return "[DETACHED]";
         } else {
-            return objectAdapter.getSpecification().getTitle(
-                    TitleRenderRequest.builder()
-                    .object(objectAdapter)
-                    .build());
+            return objectAdapter.getTitle();
         }
     }
 
@@ -75,23 +68,16 @@ public class TitleServiceDefault implements TitleService {
     public String iconNameOf(final Object domainObject) {
 
         if(objectManager == null) { // simplified JUnit test support
-            return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
+            return domainObject!=null
+                    ? domainObject.getClass().getSimpleName()
+                    : "null";
         }
 
-        val pojo = unwrapped(domainObject);
-        val objectAdapter = objectManager.adapt(pojo);
+        val objectAdapter = objectManager.adapt(domainObject);
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "unspecified";
-        }
-
-        return objectAdapter.getSpecification().getIconName(objectAdapter);
-    }
-
-    //-- HELPER
-
-    private Object unwrapped(final Object domainObject) {
-        return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
+            ? "unspecified"
+            : objectAdapter.getIconName();
     }
 
 }

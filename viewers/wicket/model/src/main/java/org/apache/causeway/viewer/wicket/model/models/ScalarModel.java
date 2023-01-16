@@ -186,7 +186,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
 
     @Override
     public final PromptStyle getPromptStyle() {
-        return Facets.promptStyleOrElse(getMetaModel(), PromptStyle.INLINE);
+        return Facets.promptStyleOrElse(getObjectFeature(), PromptStyle.INLINE);
     }
 
     public boolean canEnterEditMode() {
@@ -286,7 +286,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     public final OptionalInt multilineNumberOfLines() {
-        return Facets.multilineNumberOfLines(getMetaModel());
+        return Facets.multilineNumberOfLines(getObjectFeature());
     }
 
     public final OptionalInt maxLength() {

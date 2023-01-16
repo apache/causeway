@@ -162,7 +162,7 @@ implements MetaModelContext {
     private AuthenticationManager authenticationManager;
 
     @Builder.Default
-    private TitleService titleService = new TitleServiceDefault(null, null);
+    private TitleService titleService = new TitleServiceDefault(null);
 
     private ObjectIconService objectIconService;
 

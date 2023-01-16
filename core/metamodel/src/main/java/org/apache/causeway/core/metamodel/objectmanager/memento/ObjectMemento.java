@@ -27,13 +27,13 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.HasLogicalType;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.val;
 
@@ -57,14 +57,14 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
     // -- FACTORIES
 
     static ObjectMemento pack(
-            final Collection<ObjectMemento> container,
-            final LogicalType logicalType) {
+            final ObjectFeature objectFeature,
+            final Collection<ObjectMemento> container) {
 
         // ArrayList is serializable
         if(container instanceof ArrayList) {
-            return ObjectMementoCollection.of((ArrayList<ObjectMemento>)container, logicalType);
+            return ObjectMementoPlural.of(objectFeature, (ArrayList<ObjectMemento>)container);
         }
-        return ObjectMementoCollection.of(_Lists.newArrayList(container), logicalType);
+        return ObjectMementoPlural.of(objectFeature, _Lists.newArrayList(container));
     }
 
     // ArrayList is serializable
@@ -72,10 +72,10 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
         if(memento==null) {
             return Optional.empty();
         }
-        if(!(memento instanceof ObjectMementoCollection)) {
+        if(!(memento instanceof ObjectMementoPlural)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
+        return Optional.ofNullable(((ObjectMementoPlural)memento).unwrapList());
     }
 
     @Nullable
@@ -104,5 +104,6 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
         }
 
     }
+
 
 }

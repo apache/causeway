@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.Getter;
 import lombok.val;
@@ -39,7 +39,7 @@ public class SimulatedUiChoices extends HasValueValidation {
     @Getter private final LongAdder choiceBoxUpdateEventCount = new LongAdder();
     @Getter private final LongAdder selectedItemUpdateEventCount = new LongAdder();
 
-    private ObjectSpecification valueSpecification;
+    private ObjectFeature objectFeature;
 
     @Override
     public void bind(final ManagedValue managedValue) {
@@ -54,7 +54,7 @@ public class SimulatedUiChoices extends HasValueValidation {
             selectedItemUpdateEventCount.increment();
         });
 
-        valueSpecification = managedValue.getElementType();
+        objectFeature = managedValue.getObjectFeature();
     }
 
     public void bind(final ParameterNegotiationModel pendingArgs, final int paramNr) {
@@ -62,7 +62,7 @@ public class SimulatedUiChoices extends HasValueValidation {
     }
 
     /**
-     * assuming the parameter is a scalar type
+     * assuming the parameter is a singular type
      * @param choiceIndex
      */
     public void simulateChoiceSelect(final int choiceIndex) {
@@ -70,13 +70,13 @@ public class SimulatedUiChoices extends HasValueValidation {
     }
 
     /**
-     * assuming the parameter is a non-scalar type
+     * assuming the parameter is a plural type
      * @param choiceIndices
      */
     public void simulateMultiChoiceSelect(final int ... choiceIndices) {
         val newValues = choiceBox.getValue()
                 .pickByIndex(choiceIndices);
-        selectedItem.setValue(ManagedObject.packed(valueSpecification, newValues));
+        selectedItem.setValue(ManagedObject.packed(objectFeature, newValues));
     }
 
     public ManagedObject getValue() {

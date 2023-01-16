@@ -18,41 +18,36 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
-import java.util.ArrayList;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * @since 2.0
  */
-@Value(staticConstructor = "of")
-public final class ObjectMementoCollection implements ObjectMemento {
+@ToString
+@RequiredArgsConstructor
+public class ObjectMementoEmpty implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
-    private final ArrayList<ObjectMemento> container;
-
     @Getter(onMethod_ = {@Override})
-    @NonNull private final LogicalType logicalType;
+    @NonNull private LogicalType logicalType;
 
     @Override
     public String getTitle() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
+        return PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION);
     }
 
     @Override
     public Bookmark getBookmark() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
-    }
-
-    public ArrayList<ObjectMemento> unwrapList() {
-        return getContainer();
+        return Bookmark.empty(logicalType);
     }
 
 }

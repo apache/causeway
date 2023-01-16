@@ -33,7 +33,10 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -507,16 +510,18 @@ extends
     }
     /**
      * PACKED
-     * @param elementSpec - required
+     * @param objectFeature - required;
+     *      the {@link ObjectFeature} which this packed {@link ManagedObject} originates from,
+     *      either an {@link ObjectAction}, an {@link ObjectActionParameter} or an {@link OneToManyAssociation}
      * @param nonScalar - if <code>null</code> uses {@link Can#empty()} instead
      * @see ManagedObject.Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#PACKED
      */
     static PackedManagedObject packed(
-            final @NonNull ObjectSpecification elementSpec,
+            final @NonNull ObjectFeature objectFeature,
             final @Nullable Can<ManagedObject> nonScalar) {
-        return new _ManagedObjectPacked(elementSpec, nonScalar);
+        return new _ManagedObjectPacked(objectFeature, objectFeature.getElementType(), nonScalar);
     }
 
     /**
@@ -600,7 +605,7 @@ extends
         return param.isSingular()
                 ? adaptSingular(param.getElementType(), paramValue)
                 // else adopt each element pojo then pack
-                : packed(param.getElementType(),
+                : packed(param,
                         ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
     }
 

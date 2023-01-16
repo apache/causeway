@@ -38,7 +38,7 @@ public class ActionUiModelVaa implements UiAction<Component, Component> {
 
     @Override
     public ObjectAction getAction() {
-        return managedAction.getMetaModel();
+        return managedAction.getObjectFeature();
     }
 
     @Override

@@ -41,7 +41,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
@@ -199,7 +198,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     private PackedManagedObject demementify(
             final @NonNull List<ObjectMemento> mementos) {
         return ManagedObject.packed(
-                elementSpec(),
+                scalarModel.getObjectFeature(),
                 mementos.stream().map(this::demementify).collect(Can.toCan()));
     }
 
@@ -209,13 +208,6 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                     param.getParameterNegotiationModel().getBindableParamValue(param.getParameterIndex()),
                 prop->
                     prop.getPendingPropertyModel().getValue());
-        return updateReceiver;
-    }
-
-    private @NonNull ObjectSpecification elementSpec() {
-        val updateReceiver = scalarModel.getSpecialization().fold(
-                param->param.getScalarTypeSpec(),
-                prop->prop.getScalarTypeSpec());
         return updateReceiver;
     }
 

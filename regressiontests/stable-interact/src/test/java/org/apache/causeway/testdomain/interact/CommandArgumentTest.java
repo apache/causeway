@@ -106,7 +106,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
 
-        pendingArgs.setParamValue(0, objectManager.adapt(Arrays.asList(1L, 2L, 3L)));
+        pendingArgs.setParamValuePojo(0, Arrays.asList(1L, 2L, 3L));
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());

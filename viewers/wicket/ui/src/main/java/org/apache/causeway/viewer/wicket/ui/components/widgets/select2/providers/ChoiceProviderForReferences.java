@@ -107,8 +107,11 @@ extends ChoiceProviderAbstractForScalarModel {
             final UiParameter parameterModel,
             final Can<ObjectMemento> pendingArgMementos) {
 
+
+        val feature = parameterModel.getObjectFeature();
+
         val pendingArgsList = _NullSafe.stream(pendingArgMementos)
-            .map(getObjectManager()::demementify)
+            .map(memento->getObjectManager().demementify(feature, memento))
             .collect(Can.toCan());
 
        return pendingArgsList;

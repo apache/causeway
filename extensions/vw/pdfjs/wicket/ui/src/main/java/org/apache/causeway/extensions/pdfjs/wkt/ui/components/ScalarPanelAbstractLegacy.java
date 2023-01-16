@@ -80,7 +80,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
         Wkt.cssAppend(this, scalarModel.getCssClass());
 
-        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(scalarModel.getObjectFeature(), scalarModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }

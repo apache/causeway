@@ -18,9 +18,31 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
 @FunctionalInterface
-public interface HasObjectFeature {
+public interface HasObjectFeature
+extends HasMetaModelContext {
 
     ObjectFeature getObjectFeature();
+
+    default ObjectSpecification getElementType() {
+        return getObjectFeature().getElementType();
+    }
+
+    @Override
+    default MetaModelContext getMetaModelContext() {
+        return getObjectFeature().getMetaModelContext();
+    }
+
+    /**
+     * @deprecated use {@link #getObjectFeature()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default ObjectFeature getMetaModel() {
+        return getObjectFeature();
+    }
 
 }

@@ -69,7 +69,7 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     @Override
-    public OneToManyAssociation getMetaModel() {
+    public OneToManyAssociation getObjectFeature() {
         return getCollection();
     }
 

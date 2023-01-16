@@ -41,7 +41,7 @@ implements UiAction<MenuItem, Node> {
 
     @Override
     public ObjectAction getAction() {
-        return managedAction.getMetaModel();
+        return managedAction.getObjectFeature();
     }
 
     @Override

@@ -19,9 +19,11 @@
 package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -41,11 +43,14 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
+    private final String collId;
+
     public CollectionAccessorFacetViaAccessor(
             final ObjectSpecification declaringType,
             final Method method,
             final FacetHolder holder) {
         super(declaringType, holder);
+        this.collId = _Strings.decapitalize(method.getName().substring(3)); // infer object feature id from method name
         this.methods = ImperativeFacet.singleMethod(method);
     }
 
@@ -65,7 +70,9 @@ implements ImperativeFacet {
             return null;
         }
 
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
+        //TODO optimize: the caller most likely already has an instance of coll ready to use
+        val coll = owningAdapter.getSpecification().getCollectionElseFail(collId); // doing this lazily after MM was populated
+        val collectionAdapter = getObjectManager().adapt(collectionOrArray, Optional.of(coll));
 
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
