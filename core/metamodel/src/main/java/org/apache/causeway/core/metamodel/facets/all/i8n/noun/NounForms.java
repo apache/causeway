@@ -38,7 +38,7 @@ import lombok.val;
  * Immutable value object that holds literals for its various supported {@link NounForm}(s).
  * @since 2.0
  */
-@Value @Builder
+@Value @Builder @Deprecated
 public class NounForms {
 
     public static NounFormsBuilder builderSingular(final @Nullable String singular) {
@@ -46,13 +46,7 @@ public class NounForms {
                 .singular(singular);
     }
 
-//    public static NounFormsBuilder builderPlural(final @Nullable String plural) {
-//        return NounForms.builder()
-//                .plural(plural);
-//    }
-
     private final @Nullable String singular;
-    //private final @Nullable String plural;
 
     @Getter(lazy = true)
     final ImmutableEnumSet<NounForm> supportedNounForms = supportedNounForms();
@@ -65,10 +59,6 @@ public class NounForms {
             supportedNounForms.add(NounForm.SINGULAR);
         }
 
-//        if(plural!=null) {
-//            supportedNounForms.add(NounForm.PLURAL);
-//        }
-
         return ImmutableEnumSet.from(supportedNounForms);
     }
 
@@ -80,9 +70,6 @@ public class NounForms {
         case SINGULAR:
             // non-null, as nulls are guarded by getSupportedNounForms()
             return Optional.of(getSingular());
-//        case PLURAL:
-//            // non-null, as nulls are guarded by getSupportedNounForms()
-//            return Optional.of(getPlural());
         default:
             break;
         }
@@ -103,9 +90,6 @@ public class NounForms {
             case SINGULAR:
                 builder.singular(translationService.translate(context, singular));
                 break;
-//            case PLURAL:
-//                builder.plural(translationService.translate(context, plural));
-//                break;
             default:
                 throw _Exceptions.unmatchedCase(nounForm);
             }

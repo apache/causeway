@@ -67,11 +67,11 @@ public interface ObjectManager extends HasMetaModelContext {
     }
 
     /**
-     * TODO why not use loadObject(bookmark) instead?
-     *
      * @param objectFeatureIfAny - nullable;
      *      when present, can shortcut the process of reconstructing the associated {@link ObjectFeature} from the memento itself
      * @param memento - nullable
+     *
+     * @apiNote Why not use loadObject(bookmark) instead? I think the reason is, that action parameters have no bookmark.
      */
     ManagedObject demementify(@Nullable ObjectFeature objectFeatureIfAny, @Nullable ObjectMemento memento);
 

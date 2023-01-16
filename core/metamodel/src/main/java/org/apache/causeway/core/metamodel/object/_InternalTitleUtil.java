@@ -33,25 +33,6 @@ final class _InternalTitleUtil {
 
     // -- TITLE SUPPORT
 
-    String titleString(
-            final String pluralName,
-            final @NonNull TitleRenderRequest titleRenderRequest) {
-
-        val managedObject = titleRenderRequest.getObject();
-
-        if(managedObject.getSpecialization().isUnspecified()) {
-            return managedObject.getTitle();
-        }
-
-        return managedObject.getSpecification().isSingular()
-            ? objectTitleString(titleRenderRequest)
-                    .trim()
-            : collectionTitleString(
-                    pluralName,
-                    managedObject,
-                    managedObject.getSpecification().getFacet(CollectionFacet.class));
-    }
-
     String titleStringSingular(
             final @NonNull TitleRenderRequest titleRenderRequest) {
 
