@@ -23,8 +23,8 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.internal.base._Optionals;
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 
@@ -37,35 +37,22 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  * @since 2.0
  */
 public interface DomainObjectLayoutTableDecorationFacet
-extends SingleValueFacet<DomainObjectLayoutConfigOptions.TableDecoration> {
+extends SingleValueFacet<Class<? extends TableDecorator>> {
 
     static Optional<DomainObjectLayoutTableDecorationFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
-        final DomainObjectLayoutConfigOptions.TableDecoration defaultPolicyFromConfig =
-                DomainObjectLayoutConfigOptions.tableDecoration(holder.getConfiguration());
-
         return _Optionals.orNullable(
 
         domainObjectLayoutIfAny
-        .map(DomainObjectLayout::tableDecoration)
-        .<DomainObjectLayoutTableDecorationFacet>map(tableDecoration -> {
-            switch (tableDecoration) {
-            case NONE:
-                return new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation(
-                        DomainObjectLayoutConfigOptions.TableDecoration.NONE, holder);
-            case DATATABLES_NET:
-                return new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation(
-                        DomainObjectLayoutConfigOptions.TableDecoration.DATATABLES_NET, holder);
-            case NOT_SPECIFIED:
-            case AS_CONFIGURED:
-                return new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation(defaultPolicyFromConfig, holder);
-            default:
-            }
-            throw new IllegalStateException("tableDecoration '" + tableDecoration + "' not recognised");
-        })
+        .map(DomainObjectLayout::tableDecorator)
+        .<DomainObjectLayoutTableDecorationFacet>map(tableDecorator ->
+                new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation(
+                        tableDecorator, holder))
         ,
-        () -> new DomainObjectLayoutTableDecorationFacetFromConfiguration(defaultPolicyFromConfig, holder));
+        () -> new DomainObjectLayoutTableDecorationFacetFromConfiguration(
+                holder.getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getTableDecoration(),
+                holder));
     }
 }

@@ -19,13 +19,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
 abstract class CollectionLayoutTableDecorationFacetAbstract
-extends SingleValueFacetAbstract<CollectionLayoutConfigOptions.TableDecoration>
+extends SingleValueFacetAbstract<Class<? extends TableDecorator>>
 implements CollectionLayoutTableDecorationFacet {
 
     private static final Class<? extends Facet> type() {
@@ -33,13 +33,13 @@ implements CollectionLayoutTableDecorationFacet {
     }
 
     protected CollectionLayoutTableDecorationFacetAbstract(
-            final CollectionLayoutConfigOptions.TableDecoration value, final FacetHolder holder,
+            final Class<? extends TableDecorator> value, final FacetHolder holder,
             final Precedence precedence) {
         super(type(), value, holder, precedence);
     }
 
     protected CollectionLayoutTableDecorationFacetAbstract(
-            final CollectionLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
+            final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 }

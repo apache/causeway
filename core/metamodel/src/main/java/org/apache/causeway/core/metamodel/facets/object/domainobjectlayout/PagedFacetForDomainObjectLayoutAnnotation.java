@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
@@ -36,7 +37,7 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
 
 
         val tableDecorationFacet = holder.getFacet(DomainObjectLayoutTableDecorationFacet.class);
-        if (tableDecorationFacet.value().isDataTablesNet()) {
+        if (TableDecorator.DatatablesNet.class.equals(tableDecorationFacet.value())) {
             return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
         }
 

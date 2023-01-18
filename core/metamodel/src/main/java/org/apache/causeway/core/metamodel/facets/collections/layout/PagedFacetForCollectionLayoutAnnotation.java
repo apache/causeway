@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.collections.layout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
@@ -35,7 +36,7 @@ public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract 
             final FacetHolder holder) {
 
         val tableDecorationFacet = holder.getFacet(CollectionLayoutTableDecorationFacet.class);
-        if (tableDecorationFacet.value().isDataTablesNet()) {
+        if (TableDecorator.DatatablesNet.class.equals(tableDecorationFacet.value())) {
             return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
         }
 

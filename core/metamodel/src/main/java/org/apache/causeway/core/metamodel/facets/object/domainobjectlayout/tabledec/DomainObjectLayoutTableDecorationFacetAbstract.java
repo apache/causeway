@@ -19,13 +19,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
 abstract class DomainObjectLayoutTableDecorationFacetAbstract
-extends SingleValueFacetAbstract<DomainObjectLayoutConfigOptions.TableDecoration>
+extends SingleValueFacetAbstract<Class<? extends TableDecorator>>
 implements DomainObjectLayoutTableDecorationFacet {
 
     private static final Class<? extends Facet> type() {
@@ -33,14 +33,14 @@ implements DomainObjectLayoutTableDecorationFacet {
     }
 
     protected DomainObjectLayoutTableDecorationFacetAbstract(
-            final DomainObjectLayoutConfigOptions.TableDecoration value,
+            final Class<? extends TableDecorator> value,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), value, holder, precedence);
     }
 
     protected DomainObjectLayoutTableDecorationFacetAbstract(
-            final DomainObjectLayoutConfigOptions.TableDecoration value,
+            final Class<? extends TableDecorator> value,
             final FacetHolder holder) {
         super(type(), value, holder);
     }

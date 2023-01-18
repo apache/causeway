@@ -30,15 +30,17 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -51,6 +53,7 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.Col
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
@@ -328,10 +331,25 @@ public final class Facets {
         .orElse(fallback);
     }
 
-    public Optional<CollectionLayoutConfigOptions.TableDecoration> tableDecoration(
+    public Optional<TableDecorator> tableDecoration(
+            final FacetHolder facetHolder) {
+        return parentedTableDecoration(facetHolder)
+                .or(()->standaloneTableDecoration(facetHolder))
+                .map(decoratorClass->
+                    facetHolder.injectServicesInto(
+                            _InstanceUtil.createInstance(decoratorClass, decoratorClass, _Constants.emptyObjects)));
+    }
+
+    private Optional<Class<? extends TableDecorator>> parentedTableDecoration(
             final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(CollectionLayoutTableDecorationFacet.class)
                 .map(CollectionLayoutTableDecorationFacet::value);
+    }
+
+    private Optional<Class<? extends TableDecorator>> standaloneTableDecoration(
+            final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(DomainObjectLayoutTableDecorationFacet.class)
+                .map(DomainObjectLayoutTableDecorationFacet::value);
     }
 
     public Optional<ObjectSpecification> elementSpec(final FacetHolder facetHolder) {

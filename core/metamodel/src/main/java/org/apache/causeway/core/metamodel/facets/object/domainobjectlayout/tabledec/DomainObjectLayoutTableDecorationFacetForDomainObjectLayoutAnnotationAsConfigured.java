@@ -19,14 +19,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotationAsConfigured
 extends DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation {
 
     DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotationAsConfigured(
-            final DomainObjectLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
+            final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(value, holder);
     }
 

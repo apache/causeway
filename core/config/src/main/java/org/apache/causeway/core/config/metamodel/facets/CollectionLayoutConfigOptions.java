@@ -18,48 +18,9 @@
  */
 package org.apache.causeway.core.config.metamodel.facets;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.experimental.Accessors;
-
 public final class CollectionLayoutConfigOptions {
-
-    //@RequiredArgsConstructor XXX[ISIS-3287] don't use lombok here: hibernate-validation bug
-    public enum TableDecoration {
-
-        /**
-         * If this option declares that the collection's table representation should not be decorated.
-         */
-        NONE(null),
-
-        /**
-         * If this option declares that the collection's table representation be decorated using
-         * <a href="https://datatables.net>datatables.net</a> for client-side paging and filtering.
-         */
-        DATATABLES_NET("table-decoration");
-
-        @Getter @Accessors(fluent = true)
-        private final @Nullable String cssClass;
-
-        public boolean isNone() { return this == NONE; }
-        public boolean isDataTablesNet() { return this == DATATABLES_NET; }
-
-        private TableDecoration(final String cssClass) {
-            this.cssClass = cssClass;
-        }
-    }
-
-    // -- FACTORIES
-
-    public static TableDecoration tableDecoration(
-            final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getCollectionLayout().getTableDecoration();
-    }
-
 
     public enum DefaultView {
         HIDDEN(),

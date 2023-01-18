@@ -20,13 +20,10 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabl
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.applib.layout.component.TableDecoration;
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
-import lombok.val;
 
 public class DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml
 extends DomainObjectLayoutTableDecorationFacetAbstract {
@@ -40,21 +37,17 @@ extends DomainObjectLayoutTableDecorationFacetAbstract {
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
-        if(domainObjectLayout == null) {
-            return Optional.empty();
-        }
-
-        val tableDecoration = domainObjectLayout.getTableDecoration();
-        return Optional.ofNullable(
-                tableDecoration == TableDecoration.DATATABLES_NET ?
-                    new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml(holder, precedence)
-                    : null);
+        return Optional.ofNullable(domainObjectLayout)
+        .map(DomainObjectLayoutData::getTableDecoration)
+        .map(tableDecoration->
+            new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml(tableDecoration, holder, precedence));
     }
 
     private DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml(
+            final Class<? extends TableDecorator> value,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(DomainObjectLayoutConfigOptions.TableDecoration.DATATABLES_NET, holder, precedence);
+        super(value, holder, precedence);
     }
 
 

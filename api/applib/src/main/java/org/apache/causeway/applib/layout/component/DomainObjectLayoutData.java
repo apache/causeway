@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.links.Link;
 
 /**
@@ -162,14 +163,14 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
-    private TableDecoration tableDecoration;
+    private Class<? extends TableDecorator> tableDecoration;
 
     @XmlElement(required = false)
-    public TableDecoration getTableDecoration() {
+    public Class<? extends TableDecorator> getTableDecoration() {
         return tableDecoration;
     }
 
-    public void setTableDecoration(final TableDecoration tableDecoration) {
+    public void setTableDecoration(final Class<? extends TableDecorator> tableDecoration) {
         this.tableDecoration = tableDecoration;
     }
 

@@ -59,11 +59,10 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
@@ -74,10 +73,11 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
@@ -570,7 +570,7 @@ public class CausewayConfiguration {
                  * Defines whether the table representation of a standalone collection of this domain class should be
                  * decorated using a client-side Javascript library, eg for client-side paging and filtering.
                  */
-                private DomainObjectLayoutConfigOptions.TableDecoration tableDecoration = DomainObjectLayoutConfigOptions.TableDecoration.NONE;
+                private Class<? extends TableDecorator> tableDecoration = TableDecorator.Default.class;
 
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data
@@ -1102,7 +1102,7 @@ public class CausewayConfiguration {
                  * Defines whether the table representation of a collection should be decorated using a client-side
                  * Javascript library, eg for client-side paging and filtering.
                  */
-                private CollectionLayoutConfigOptions.TableDecoration tableDecoration = CollectionLayoutConfigOptions.TableDecoration.NONE;
+                private Class<? extends TableDecorator> tableDecorator = TableDecorator.Default.class;
 
             }
 
@@ -2651,49 +2651,6 @@ public class CausewayConfiguration {
                      */
                     Horizontal horizontal = Horizontal.RIGHT;
                 }
-            }
-
-            private final Table table = new Table();
-            @Data
-            public static class Table {
-
-                private final Decoration decoration = new Decoration();
-                @Data
-                public static class Decoration {
-
-                    private final DataTablesNet dataTablesNet = new DataTablesNet();
-                    @Data
-                    public static class DataTablesNet {
-
-                        /**
-                         * If specified, then the string is passed verbatim as the initialization options for the
-                         * <a href="https://datatables.net">https://datatables.net</a> table decoration
-                         * (as defined by {@link DomainObjectLayout#tableDecoration()} or by
-                         * {@link CollectionLayout#tableDecoration()}).
-                         *
-                         * <p>
-                         *     For example, a value of "info: false, pagingType: 'numbers'" will result in
-                         *     datatables.net being initialized using:
-                         *
-                         *     <pre>
-                         *     $(document).ready(function () {
-                         *       $('table.table-decoration').DataTable({
-                         *         info: false, pagingType: 'numbers'
-                         *       });
-                         *     });
-                         *     </pre>
-                         *     thus switching off the info panel and using the simple 'numbers' paging type.
-                         * </p>
-                         *
-                         * @see <a href="https://datatables.net/examples/basic_init/index.html">https://datatables.net/examples/basic_init/index.html</a>
-                         */
-                        private Optional<String> options = Optional.empty();
-
-                    }
-
-                }
-
-
             }
 
         }
