@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.links.Link;
 
@@ -50,7 +51,7 @@ import org.apache.causeway.applib.layout.links.Link;
                 ,"hidden"
                 ,"paged"
                 ,"sortedBy"
-                ,"tableDecoration"
+                ,"tableDecorator"
                 , "actions"
                 , "metadataError"
                 , "link"
@@ -188,15 +189,15 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
 
 
 
-    private TableDecoration tableDecoration;
+    private Class<? extends TableDecorator> tableDecorator;
 
     @XmlElement(required = false)
-    public TableDecoration getTableDecoration() {
-        return tableDecoration;
+    public Class<? extends TableDecorator> getTableDecorator() {
+        return tableDecorator;
     }
 
-    public void setTableDecoration(final TableDecoration tableDecoration) {
-        this.tableDecoration = tableDecoration;
+    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
+        this.tableDecorator = tableDecorator;
     }
 
 

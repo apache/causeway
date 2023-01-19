@@ -64,6 +64,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.commanddto;
     exports org.apache.causeway.applib.services.confview;
     exports org.apache.causeway.applib.services.conmap;
+    exports org.apache.causeway.applib.services.documentation;
     exports org.apache.causeway.applib.services.email;
     exports org.apache.causeway.applib.services.error;
     exports org.apache.causeway.applib.services.eventbus;

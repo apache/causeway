@@ -15,19 +15,16 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
+package org.apache.causeway.applib.services.documentation;
 
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+/**
+ * Provides a documentation based on the menu bar layout.
+ *
+ * @since 2.x {@index}
+ */
+public interface DocumentationService {
 
-public class DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotationAsConfigured
-extends DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation {
-
-    DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotationAsConfigured(
-            final DomainObjectLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
-        super(value, holder);
-    }
+    String toDocumentationHtml();
 
 }

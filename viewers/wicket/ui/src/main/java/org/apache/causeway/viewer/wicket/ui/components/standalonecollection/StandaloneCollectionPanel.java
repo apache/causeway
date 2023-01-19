@@ -19,12 +19,14 @@
 package org.apache.causeway.viewer.wicket.ui.components.standalonecollection;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -54,7 +56,6 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
     private final CollectionPresentationSelectorPanel selectorDropdownPanel;
 
-
     private MarkupContainer outerDiv = this;
 
     public StandaloneCollectionPanel(
@@ -75,9 +76,10 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
-        Facets.tableDecoration(collectionModel.getElementType())
-            .map(CollectionLayoutConfigOptions.TableDecoration::cssClass)
-            .ifPresent(tableDecorationCssClass->Wkt.cssAppend(outerDiv, tableDecorationCssClass));
+        this.tableDecorator = Facets.tableDecorator(collectionModel.getElementType());
+        tableDecorator.ifPresent(tableDecorator->{
+            Wkt.cssAppend(outerDiv, tableDecorator.cssClass());
+        });
 
         // selector
         final CollectionPresentationSelectorHelper selectorHelper = new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());
@@ -107,6 +109,12 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
             .addOrReplaceComponent(outerDiv, UiComponentType.COLLECTION_CONTENTS, collectionModel);
     }
 
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        tableDecorator().ifPresent(tableDecorator->
+            renderHeadForTableDecorator(response, tableDecorator));
+    }
 
     // -- CollectionSelectorProvider
 
@@ -121,6 +129,19 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
     public Integer getCount() {
         final EntityCollectionModel model = getModel();
         return model.getElementCount();
+    }
+
+    // -- HELPER
+
+    // TableDecorator caching
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator==null) {
+            val collectionModel = getModel();
+            val collectionMetaModel = collectionModel.getElementType();
+            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+        }
+        return tableDecorator;
     }
 
 }

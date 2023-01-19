@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
+import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
@@ -74,7 +74,7 @@ extends FacetFactoryAbstract {
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                CollectionLayoutTableDecorationFacet
+                CollectionLayoutTableDecoratorFacet
                         .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

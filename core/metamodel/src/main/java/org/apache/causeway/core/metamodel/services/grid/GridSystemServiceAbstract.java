@@ -56,7 +56,7 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.MemberDescri
 import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.PagedFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.SortedByFacetForCollectionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecoratorFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml;
@@ -65,7 +65,7 @@ import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssCl
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
-import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml;
@@ -184,7 +184,7 @@ implements GridSystemService<G> {
                         ObjectNamedFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence));
                 updateFacetIfPresent(
-                        DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml
+                        DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence));
             }
 
@@ -350,7 +350,7 @@ implements GridSystemService<G> {
                             .create(collectionLayoutData, oneToManyAssociation, precedence));
 
                 updateFacetIfPresent(
-                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml
+                        CollectionLayoutTableDecoratorFacetForCollectionLayoutXml
                             .create(collectionLayoutData, oneToManyAssociation, precedence));
 
                 updateFacetIfPresent(

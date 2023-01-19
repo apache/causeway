@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -279,7 +280,7 @@ public interface ObjectMember extends ObjectFeature {
         }
 
         val pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
-                _InstanceUtil.createInstance(sortedBy));
+                _InstanceUtil.createInstance(sortedBy, _Constants.emptyObjects));
         getMetaModelContext().getServiceInjector().injectServicesInto(pojoComparator);
 
         return Optional.of((a, b) -> pojoComparator.compare(a.getPojo(), b.getPojo()));
