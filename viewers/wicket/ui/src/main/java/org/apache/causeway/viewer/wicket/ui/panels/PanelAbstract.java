@@ -28,10 +28,6 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssBootstrap5ReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptBootstrap5ReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptReferenceWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -110,15 +106,6 @@ extends PanelBase<T> {
     protected void renderHeadForTableDecorator(
             final IHeaderResponse response,
             final TableDecorator tableDecorator) {
-
-        //FIXME[ISIS-3329] move to an WicketApplicationInitializer
-        if(tableDecorator instanceof TableDecorator.DatatablesNet) {
-            response.render(DatatablesJavaScriptReferenceWkt.asHeaderItem());
-            response.render(DatatablesJavaScriptBootstrap5ReferenceWkt.asHeaderItem());
-            response.render(DatatablesCssReferenceWkt.asHeaderItem());
-            response.render(DatatablesCssBootstrap5ReferenceWkt.asHeaderItem());
-        }
-
         _Strings.nonEmpty(tableDecorator.documentReadyJavaScript())
             .map(Wkt::javaScriptAsOnDomReadyHeaderItem)
             .ifPresent(response::render);
