@@ -284,7 +284,7 @@ public final class _ClassCache implements AutoCloseable {
                     } else {
                         // key-clash originating from one method overriding the other
                         // we need to figure out which is the overriding one (not the overwritten one)
-                        model.publicMethodsByKey.put(key, whichIsOverridingTheOther(methodWithSameKey, method));
+                        model.publicMethodsByKey.put(key, _Reflect.methodsWhichIsOverridingTheOther(methodWithSameKey, method));
                     }
 
                     model.nonPublicDeclaredMethodsByKey.remove(key);
@@ -386,30 +386,6 @@ public final class _ClassCache implements AutoCloseable {
             return null;
         }
         return _Strings.decapitalize(fieldName);
-    }
-
-    /**
-     * If MethodKey(type, a) equals MethodKey(type, b), which one wins, that is,
-     * which one overrides the other?
-     * @implNote if both declaring type and return type are the same we don't care
-     */
-    private Method whichIsOverridingTheOther(final Method a, final Method b) {
-        val aType = a.getDeclaringClass();
-        val bType = b.getDeclaringClass();
-        if(aType.equals(bType)) {
-            val aReturn = a.getReturnType();
-            val bReturn = b.getReturnType();
-            if(aReturn.equals(bReturn)) {
-                // we should not care, arbitrarily picking b
-                return b;
-            }
-            return aReturn.isAssignableFrom(bReturn)
-                    ? b
-                    : a;
-        }
-        return aType.isAssignableFrom(bType)
-                ? b
-                : a;
     }
 
 }
