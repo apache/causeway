@@ -36,10 +36,10 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  *
  * @since 2.0
  */
-public interface DomainObjectLayoutTableDecorationFacet
+public interface DomainObjectLayoutTableDecoratorFacet
 extends SingleValueFacet<Class<? extends TableDecorator>> {
 
-    static Optional<DomainObjectLayoutTableDecorationFacet> create(
+    static Optional<DomainObjectLayoutTableDecoratorFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
@@ -47,12 +47,12 @@ extends SingleValueFacet<Class<? extends TableDecorator>> {
 
         domainObjectLayoutIfAny
         .map(DomainObjectLayout::tableDecorator)
-        .<DomainObjectLayoutTableDecorationFacet>map(tableDecorator ->
-                new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutAnnotation(
+        .<DomainObjectLayoutTableDecoratorFacet>map(tableDecorator ->
+                new DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutAnnotation(
                         tableDecorator, holder))
         ,
-        () -> new DomainObjectLayoutTableDecorationFacetFromConfiguration(
-                holder.getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getTableDecoration(),
+        () -> new DomainObjectLayoutTableDecoratorFacetFromConfiguration(
+                holder.getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getTableDecorator(),
                 holder));
     }
 }

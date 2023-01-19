@@ -47,7 +47,7 @@ import org.apache.causeway.applib.layout.links.Link;
                 , "cssClass"
                 , "cssClassFa"
                 , "cssClassFaPosition"
-                , "tableDecoration"
+                , "tableDecorator"
                 , "metadataError"
                 , "link"
         }
@@ -163,15 +163,15 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
-    private Class<? extends TableDecorator> tableDecoration;
+    private Class<? extends TableDecorator> tableDecorator;
 
     @XmlElement(required = false)
-    public Class<? extends TableDecorator> getTableDecoration() {
-        return tableDecoration;
+    public Class<? extends TableDecorator> getTableDecorator() {
+        return tableDecorator;
     }
 
-    public void setTableDecoration(final Class<? extends TableDecorator> tableDecoration) {
-        this.tableDecoration = tableDecoration;
+    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
+        this.tableDecorator = tableDecorator;
     }
 
 

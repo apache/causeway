@@ -15,17 +15,19 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.causeway.applib.layout.component;
+package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
-import javax.xml.bind.annotation.XmlType;
+import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-/**
- * @since 1.x {@index}
- */
-@XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
-        )
-public enum TableDecoration {
-    NONE, DATATABLES_NET;
+public class CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotationAsConfigured
+extends CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotation {
+
+    CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotationAsConfigured(
+            final Class<? extends TableDecorator> value, final FacetHolder holder) {
+        super(value, holder);
+    }
+
 }

@@ -73,8 +73,6 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -570,7 +568,7 @@ public class CausewayConfiguration {
                  * Defines whether the table representation of a standalone collection of this domain class should be
                  * decorated using a client-side Javascript library, eg for client-side paging and filtering.
                  */
-                private Class<? extends TableDecorator> tableDecoration = TableDecorator.Default.class;
+                private Class<? extends TableDecorator> tableDecorator = TableDecorator.Default.class;
 
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data

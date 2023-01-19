@@ -22,10 +22,10 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class CollectionLayoutTableDecorationFacetFromConfiguration
-extends CollectionLayoutTableDecorationFacetAbstract {
+public class CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotation
+extends CollectionLayoutTableDecoratorFacetAbstract {
 
-    CollectionLayoutTableDecorationFacetFromConfiguration(
+    CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotation(
             final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(value, holder);
     }

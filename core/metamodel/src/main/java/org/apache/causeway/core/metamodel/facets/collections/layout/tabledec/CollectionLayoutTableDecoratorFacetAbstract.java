@@ -17,17 +17,29 @@
  *  under the License.
  *
  */
-package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
+package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
-public class DomainObjectLayoutTableDecorationFacetFromConfiguration
-extends DomainObjectLayoutTableDecorationFacetAbstract {
+abstract class CollectionLayoutTableDecoratorFacetAbstract
+extends SingleValueFacetAbstract<Class<? extends TableDecorator>>
+implements CollectionLayoutTableDecoratorFacet {
 
-    DomainObjectLayoutTableDecorationFacetFromConfiguration(
-            final Class<? extends TableDecorator> value, final FacetHolder holder) {
-        super(value, holder);
+    private static final Class<? extends Facet> type() {
+        return CollectionLayoutTableDecoratorFacet.class;
     }
 
+    protected CollectionLayoutTableDecoratorFacetAbstract(
+            final Class<? extends TableDecorator> value, final FacetHolder holder,
+            final Precedence precedence) {
+        super(type(), value, holder, precedence);
+    }
+
+    protected CollectionLayoutTableDecoratorFacetAbstract(
+            final Class<? extends TableDecorator> value, final FacetHolder holder) {
+        super(type(), value, holder);
+    }
 }

@@ -76,8 +76,8 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
-        this.tableDecoration = Facets.tableDecoration(collectionModel.getElementType());
-        tableDecoration.ifPresent(tableDecorator->{
+        this.tableDecorator = Facets.tableDecorator(collectionModel.getElementType());
+        tableDecorator.ifPresent(tableDecorator->{
             Wkt.cssAppend(outerDiv, tableDecorator.cssClass());
         });
 
@@ -112,7 +112,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        tableDecoration().ifPresent(tableDecorator->
+        tableDecorator().ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
     }
 
@@ -134,14 +134,14 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
     // -- HELPER
 
     // TableDecorator caching
-    private transient Optional<TableDecorator> tableDecoration;
-    private Optional<TableDecorator> tableDecoration() {
-        if(tableDecoration==null) {
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator==null) {
             val collectionModel = getModel();
             val collectionMetaModel = collectionModel.getElementType();
-            this.tableDecoration = Facets.tableDecoration(collectionMetaModel);
+            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
         }
-        return tableDecoration;
+        return tableDecorator;
     }
 
 }

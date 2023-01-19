@@ -111,7 +111,7 @@ implements HasDynamicallyVisibleContent {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        tableDecoration().ifPresent(tableDecorator->
+        tableDecorator().ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
     }
 
@@ -138,8 +138,8 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            this.tableDecoration = Facets.tableDecoration(collectionMetaModel);
-            tableDecoration.ifPresent(tableDecorator->{
+            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+            tableDecorator.ifPresent(tableDecorator->{
                     Wkt.cssAppend(div, tableDecorator.cssClass());
                 });
 
@@ -165,14 +165,14 @@ implements HasDynamicallyVisibleContent {
     }
 
     // TableDecorator caching
-    private transient Optional<TableDecorator> tableDecoration;
-    private Optional<TableDecorator> tableDecoration() {
-        if(tableDecoration==null) {
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator==null) {
             val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
             val collectionMetaModel = collectionModel.getMetaModel();
-            this.tableDecoration = Facets.tableDecoration(collectionMetaModel);
+            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
         }
-        return tableDecoration;
+        return tableDecorator;
     }
 
     private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {

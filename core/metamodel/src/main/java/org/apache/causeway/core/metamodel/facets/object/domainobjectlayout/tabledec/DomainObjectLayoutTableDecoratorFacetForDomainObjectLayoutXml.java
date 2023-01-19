@@ -25,25 +25,25 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml
-extends DomainObjectLayoutTableDecorationFacetAbstract {
+public class DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml
+extends DomainObjectLayoutTableDecoratorFacetAbstract {
 
-    public static final Class<DomainObjectLayoutTableDecorationFacet> type() {
-        return DomainObjectLayoutTableDecorationFacet.class;
+    public static final Class<DomainObjectLayoutTableDecoratorFacet> type() {
+        return DomainObjectLayoutTableDecoratorFacet.class;
     }
 
-    public static Optional<DomainObjectLayoutTableDecorationFacet> create(
+    public static Optional<DomainObjectLayoutTableDecoratorFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
         return Optional.ofNullable(domainObjectLayout)
-        .map(DomainObjectLayoutData::getTableDecoration)
-        .map(tableDecoration->
-            new DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml(tableDecoration, holder, precedence));
+        .map(DomainObjectLayoutData::getTableDecorator)
+        .map(tableDecorator->
+            new DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml(tableDecorator, holder, precedence));
     }
 
-    private DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml(
+    private DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml(
             final Class<? extends TableDecorator> value,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
