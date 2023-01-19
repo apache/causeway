@@ -43,6 +43,7 @@ import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServi
 import org.apache.causeway.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
 import org.apache.causeway.applib.services.confview.ConfigurationMenu;
 import org.apache.causeway.applib.services.confview.ConfigurationProperty;
+import org.apache.causeway.applib.services.helpui.DocumentationMenu;
 import org.apache.causeway.applib.services.layout.LayoutServiceMenu;
 import org.apache.causeway.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
@@ -90,6 +91,7 @@ import org.apache.causeway.schema.CausewayModuleSchema;
     QueryResultsCache.class,
     ApplicationFeatureMenu.class,
     UserMenu.class,
+    DocumentationMenu.class,
 
     // @Service(s)
     CommandDtoProcessorServiceIdentity.class,

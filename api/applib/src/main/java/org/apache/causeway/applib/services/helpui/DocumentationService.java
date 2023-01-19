@@ -16,15 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.documentation;
+package org.apache.causeway.applib.services.helpui;
+
+import org.apache.causeway.applib.ViewModel;
 
 /**
- * Provides a documentation based on the menu bar layout.
+ * Provides the content for the {@link DocumentationMenu} entries.
+ * <p>
+ * Currently there is only one, namely (<i>help</i>).
  *
+ * @see DocumentationMenu
  * @since 2.x {@index}
  */
 public interface DocumentationService {
 
-    String toDocumentationHtml();
+    /** Returns the view-model that represents the application's primary help page. */
+    ViewModel getHelp();
 
 }

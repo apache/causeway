@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.documentation;
+package org.apache.causeway.core.runtimeservices.helpui;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +26,10 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -36,7 +40,7 @@ import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.documentation.DocumentationService;
+import org.apache.causeway.applib.services.helpui.DocumentationService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -51,9 +55,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -69,8 +72,12 @@ public class DocumentationServiceDefault implements DocumentationService {
     private final HomePageResolverService homePageResolverService;
     private final TranslationService translationService;
 
-    @Override
-    public String toDocumentationHtml() {
+    @Getter(onMethod_={@Override}, lazy = true)
+    private final ViewModel help = new DefaultHelpVm(this);
+
+    // -- HELPER
+
+    String getDocumentationAsHtml() {
         final StringBuilder html = new StringBuilder();
         Object homePage = homePageResolverService.getHomePage();
         if (homePage != null) {
@@ -153,9 +160,7 @@ public class DocumentationServiceDefault implements DocumentationService {
         return html.toString();
     }
 
-    // -- HELPER
-
-    private StringBuffer documentationForObjectType(ObjectSpecification objectSpec) {
+    private StringBuffer documentationForObjectType(final ObjectSpecification objectSpec) {
         StringBuffer html = new StringBuffer();
 
         Grid grid = toGrid(objectSpec.getCorrespondingClass());
@@ -266,4 +271,5 @@ public class DocumentationServiceDefault implements DocumentationService {
                 .map(gridFacet -> gridFacet.getGrid(null))
                 .orElse(null);
     }
+
 }

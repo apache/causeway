@@ -391,6 +391,10 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         <mb3:menu>
             <mb3:named/>
             <mb3:section>
+                <mb3:named>Documentation</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.DocumentationMenu" id="help"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>Configuration</mb3:named>
                 <mb3:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
 	        </mb3:section>
@@ -408,6 +412,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.applib.UserMenu" id="me"/>
 	            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
 	        </mb3:section>
+
         </mb3:menu>
     </mb3:tertiary>
 </mb3:menuBars>

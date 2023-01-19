@@ -36,6 +36,7 @@ import org.apache.causeway.core.runtimeservices.email.EmailServiceDefault;
 import org.apache.causeway.core.runtimeservices.eventbus.EventBusServiceSpring;
 import org.apache.causeway.core.runtimeservices.executor.MemberExecutorServiceDefault;
 import org.apache.causeway.core.runtimeservices.factory.FactoryServiceDefault;
+import org.apache.causeway.core.runtimeservices.helpui.DocumentationServiceDefault;
 import org.apache.causeway.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePoMenu;
@@ -86,6 +87,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,
         CommandPublisherDefault.class,
+        DocumentationServiceDefault.class,
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,
         EntityChangesPublisherDefault.class,
