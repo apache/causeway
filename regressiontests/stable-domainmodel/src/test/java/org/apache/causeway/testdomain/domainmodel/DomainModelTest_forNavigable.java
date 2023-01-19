@@ -26,6 +26,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
@@ -34,6 +35,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
+import org.apache.causeway.testdomain.model.navigable.ITypeA;
 import org.apache.causeway.testdomain.model.navigable.TypeA;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
@@ -60,15 +62,23 @@ class DomainModelTest_forNavigable extends CausewayIntegrationTestAbstract {
     @Test
     void overridden_getter_from_interface_should_be_included_with_snapshots() {
 
+        // prereq.
         val introspectorCfg = causewayConfiguration.getCore().getMetaModel().getIntrospector();
         assertEquals(IntrospectionPolicy.ANNOTATION_REQUIRED, introspectorCfg.getPolicy());
 
+        // when
+        val specIA = specificationLoader.specForTypeElseFail(ITypeA.class);
         val specA = specificationLoader.specForTypeElseFail(TypeA.class);
-        //val specB = specificationLoader.specForTypeElseFail(TypeB.class);
 
+        // then ... interface has no setter, so should exclude the single property from snapshots
+        val propsIA = specIA.streamProperties(MixedIn.EXCLUDED)
+                .collect(Can.toCan());
+        assertEquals(1, propsIA.size());
+        assertTrue(propsIA.getSingletonOrFail().isExcludedFromSnapshots());
+
+        // then ... concrete class has setter, so should include the single property with snapshots
         val propsA = specA.streamProperties(MixedIn.EXCLUDED)
                 .collect(Can.toCan());
-
         assertEquals(1, propsA.size());
         assertFalse(propsA.getSingletonOrFail().isExcludedFromSnapshots());
     }
