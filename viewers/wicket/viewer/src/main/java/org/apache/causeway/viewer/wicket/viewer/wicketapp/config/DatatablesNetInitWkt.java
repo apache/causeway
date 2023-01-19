@@ -18,14 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssBootstrap5ReferenceWkt;
 import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssReferenceWkt;
@@ -33,9 +30,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJa
 import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptReferenceWkt;
 
 @Configuration
-public class DatatableNetInitWkt implements WicketApplicationInitializer {
-
-    @Inject ServiceRegistry serviceRegistry;
+public class DatatablesNetInitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
