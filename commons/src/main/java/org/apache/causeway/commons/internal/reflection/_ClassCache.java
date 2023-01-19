@@ -266,10 +266,11 @@ public final class _ClassCache implements AutoCloseable {
 
                     val key = MethodKey.of(type, method);
                     // add all now, remove public ones later
-                    model.nonPublicDeclaredMethodsByKey.put(key, method);
+                    val methodToKeep = putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
+
                     // collect post-construct methods
-                    if(isPostConstruct(method)) {
-                        model.postConstructMethodsByKey.put(key, method);
+                    if(isPostConstruct(methodToKeep)) {
+                        model.postConstructMethodsByKey.put(key, methodToKeep);
                     }
                 }
 
@@ -278,15 +279,7 @@ public final class _ClassCache implements AutoCloseable {
                     if(Modifier.isStatic(method.getModifiers())) continue;
 
                     val key = MethodKey.of(type, method);
-                    val methodWithSameKey = model.publicMethodsByKey.get(key);
-                    if(methodWithSameKey==null) {
-                        model.publicMethodsByKey.put(key, method);
-                    } else {
-                        // key-clash originating from one method overriding the other
-                        // we need to figure out which is the overriding one (not the overwritten one)
-                        model.publicMethodsByKey.put(key, _Reflect.methodsWhichIsOverridingTheOther(methodWithSameKey, method));
-                    }
-
+                    putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);
                     model.nonPublicDeclaredMethodsByKey.remove(key);
                 }
 
@@ -294,6 +287,22 @@ public final class _ClassCache implements AutoCloseable {
 
             });
         }
+    }
+
+    /**
+     * Handles the case well, when a method is already in the map and is about to be overwritten.
+     * We keep or put that one that overrides the other (in a Java language sense) and return the winner so to speak.
+     */
+    private static Method putIntoMapHonoringOverridingRelation(
+            final Map<MethodKey, Method> map, final MethodKey key, final Method method) {
+        val methodWithSameKey = map.get(key); // in case the map is already populated
+        val methodToKeep = methodWithSameKey==null
+            ? method
+            /* key-clash originating from one method overriding the other
+             * we need to keep or put the one which is the overriding one (not the overwritten one) */
+            : _Reflect.methodsWhichIsOverridingTheOther(methodWithSameKey, method);
+        map.put(key, methodToKeep);
+        return methodToKeep;
     }
 
     /**
