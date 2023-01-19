@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObjectLayout.plural;
+package demoapp.dom.domain.objects.DomainObjectLayout.tabledec;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,12 +29,15 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.TableDecorator;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
@@ -44,22 +47,34 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutPluralVm")
+@Named("demo.DomainObjectLayoutTableDecoratorVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        plural="Example Plural Name")
-public class DomainObjectLayoutPluralVm implements HasAsciiDocDescription {
+        tableDecorator = TableDecorator.DatatablesNet.class)
+public class DomainObjectLayoutTableDecoratorVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#plural";
+        return "DomainObjectLayout#tableDecorator";
     }
 
     @Action
-    public List<DomainObjectLayoutPluralVm> standaloneTable() {
-        return List.of(
-                    new DomainObjectLayoutPluralVm(),
-                    new DomainObjectLayoutPluralVm());
+    public List<DomainObjectLayoutTableDecoratorVm> standaloneTable() {
+        return getSamples();
+    }
+
+    @Collection
+    @CollectionLayout(tableDecorator = TableDecorator.DatatablesNet.class)
+    private List<DomainObjectLayoutTableDecoratorVm> samples;
+    public List<DomainObjectLayoutTableDecoratorVm> getSamples() {
+        if(samples==null) {
+            samples = List.of(
+                    new DomainObjectLayoutTableDecoratorVm(),
+                    new DomainObjectLayoutTableDecoratorVm(),
+                    new DomainObjectLayoutTableDecoratorVm(),
+                    new DomainObjectLayoutTableDecoratorVm());
+        }
+        return samples;
     }
 
     @Property(optionality = Optionality.OPTIONAL)

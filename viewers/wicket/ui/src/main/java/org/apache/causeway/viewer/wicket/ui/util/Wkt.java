@@ -1000,6 +1000,10 @@ public class Wkt {
                 : String.format("Wicket.Event.publish(Causeway.Topic.%s)", topic.name());
     }
 
+    public OnDomReadyHeaderItem javaScriptAsOnDomReadyHeaderItem(final String javaScript) {
+        return OnDomReadyHeaderItem.forScript(javaScript);
+    }
+
     // -- TABBING UTILITY
 
     public Component noTabbing(final @Nullable Component component) {
@@ -1094,5 +1098,7 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
+
 
 }

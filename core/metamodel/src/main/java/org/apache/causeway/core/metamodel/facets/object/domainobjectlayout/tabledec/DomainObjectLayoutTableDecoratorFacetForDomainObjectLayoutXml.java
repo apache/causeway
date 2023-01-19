@@ -15,33 +15,40 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
+import java.util.Optional;
+
+import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
-abstract class DomainObjectLayoutTableDecorationFacetAbstract
-extends SingleValueFacetAbstract<DomainObjectLayoutConfigOptions.TableDecoration>
-implements DomainObjectLayoutTableDecorationFacet {
+public class DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml
+extends DomainObjectLayoutTableDecoratorFacetAbstract {
 
-    private static final Class<? extends Facet> type() {
-        return DomainObjectLayoutTableDecorationFacet.class;
+    public static final Class<DomainObjectLayoutTableDecoratorFacet> type() {
+        return DomainObjectLayoutTableDecoratorFacet.class;
     }
 
-    protected DomainObjectLayoutTableDecorationFacetAbstract(
-            final DomainObjectLayoutConfigOptions.TableDecoration value,
+    public static Optional<DomainObjectLayoutTableDecoratorFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(type(), value, holder, precedence);
+
+        return Optional.ofNullable(domainObjectLayout)
+        .map(DomainObjectLayoutData::getTableDecorator)
+        .map(tableDecorator->
+            new DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml(tableDecorator, holder, precedence));
     }
 
-    protected DomainObjectLayoutTableDecorationFacetAbstract(
-            final DomainObjectLayoutConfigOptions.TableDecoration value,
-            final FacetHolder holder) {
-        super(type(), value, holder);
+    private DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml(
+            final Class<? extends TableDecorator> value,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(value, holder, precedence);
     }
+
+
 }

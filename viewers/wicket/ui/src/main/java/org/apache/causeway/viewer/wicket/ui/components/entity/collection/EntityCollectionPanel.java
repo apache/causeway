@@ -19,12 +19,14 @@
 package org.apache.causeway.viewer.wicket.ui.components.entity.collection;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -106,6 +108,15 @@ implements HasDynamicallyVisibleContent {
 
     }
 
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        tableDecorator().ifPresent(tableDecorator->
+            renderHeadForTableDecorator(response, tableDecorator));
+    }
+
+    // -- HELPER
+
     private void buildGui() {
 
         val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
@@ -127,9 +138,10 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            Facets.tableDecoration(collectionMetaModel)
-                .map(CollectionLayoutConfigOptions.TableDecoration::cssClass)
-                .ifPresent(tableDecorationCssClass->Wkt.cssAppend(div, tableDecorationCssClass));
+            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+            tableDecorator.ifPresent(tableDecorator->{
+                    Wkt.cssAppend(div, tableDecorator.cssClass());
+                });
 
             val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
@@ -150,6 +162,17 @@ implements HasDynamicallyVisibleContent {
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
 
         }
+    }
+
+    // TableDecorator caching
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator==null) {
+            val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
+            val collectionMetaModel = collectionModel.getMetaModel();
+            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+        }
+        return tableDecorator;
     }
 
     private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {

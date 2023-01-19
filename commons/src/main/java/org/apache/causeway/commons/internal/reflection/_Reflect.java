@@ -107,6 +107,30 @@ public final class _Reflect {
                 || b.getReturnType().isAssignableFrom(a.getReturnType());
     }
 
+    /**
+     * If a and b are related, such that one overrides the other,
+     * that one which is overriding the other is returned.
+     * @implNote if both declaring type and return type are the same we (arbitrarily) return b
+     */
+    public static Method methodsWhichIsOverridingTheOther(final Method a, final Method b) {
+        val aType = a.getDeclaringClass();
+        val bType = b.getDeclaringClass();
+        if(aType.equals(bType)) {
+            val aReturn = a.getReturnType();
+            val bReturn = b.getReturnType();
+            if(aReturn.equals(bReturn)) {
+                // if a and b are not equal, this code path is expected unreachable
+                return b;
+            }
+            return aReturn.isAssignableFrom(bReturn)
+                    ? b
+                    : a;
+        }
+        return aType.isAssignableFrom(bType)
+                ? b
+                : a;
+    }
+
     // -- COMPARATORS
 
     /**

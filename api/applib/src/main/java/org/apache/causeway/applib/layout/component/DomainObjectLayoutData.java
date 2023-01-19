@@ -21,6 +21,7 @@ package org.apache.causeway.applib.layout.component;
 import java.io.Serializable;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.links.Link;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -46,7 +47,7 @@ import jakarta.xml.bind.annotation.XmlType;
                 , "cssClass"
                 , "cssClassFa"
                 , "cssClassFaPosition"
-                , "tableDecoration"
+                , "tableDecorator"
                 , "metadataError"
                 , "link"
         }
@@ -162,15 +163,15 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
-    private TableDecoration tableDecoration;
+    private Class<? extends TableDecorator> tableDecorator;
 
     @XmlElement(required = false)
-    public TableDecoration getTableDecoration() {
-        return tableDecoration;
+    public Class<? extends TableDecorator> getTableDecorator() {
+        return tableDecorator;
     }
 
-    public void setTableDecoration(final TableDecoration tableDecoration) {
-        this.tableDecoration = tableDecoration;
+    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
+        this.tableDecorator = tableDecorator;
     }
 
 

@@ -22,14 +22,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.layout.links.Link;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single collection, broadly corresponds to the
@@ -50,7 +51,7 @@ import jakarta.xml.bind.annotation.XmlType;
                 ,"hidden"
                 ,"paged"
                 ,"sortedBy"
-                ,"tableDecoration"
+                ,"tableDecorator"
                 , "actions"
                 , "metadataError"
                 , "link"
@@ -188,15 +189,15 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
 
 
 
-    private TableDecoration tableDecoration;
+    private Class<? extends TableDecorator> tableDecorator;
 
     @XmlElement(required = false)
-    public TableDecoration getTableDecoration() {
-        return tableDecoration;
+    public Class<? extends TableDecorator> getTableDecorator() {
+        return tableDecorator;
     }
 
-    public void setTableDecoration(final TableDecoration tableDecoration) {
-        this.tableDecoration = tableDecoration;
+    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
+        this.tableDecorator = tableDecorator;
     }
 
 

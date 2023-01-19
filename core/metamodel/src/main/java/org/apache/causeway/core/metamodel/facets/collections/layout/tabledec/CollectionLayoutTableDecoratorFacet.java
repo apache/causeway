@@ -23,8 +23,8 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.internal.base._Optionals;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 
@@ -36,37 +36,24 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  *
  * @since 2.0
  */
-public interface CollectionLayoutTableDecorationFacet
-extends SingleValueFacet<CollectionLayoutConfigOptions.TableDecoration> {
+public interface CollectionLayoutTableDecoratorFacet
+extends SingleValueFacet<Class<? extends TableDecorator>> {
 
-    static Optional<CollectionLayoutTableDecorationFacet> create(
+    static Optional<CollectionLayoutTableDecoratorFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
-
-        final CollectionLayoutConfigOptions.TableDecoration defaultPolicyFromConfig =
-                CollectionLayoutConfigOptions.tableDecoration(holder.getConfiguration());
 
         return _Optionals.orNullable(
 
         collectionLayoutIfAny
-        .map(CollectionLayout::tableDecoration)
-        .<CollectionLayoutTableDecorationFacet>map(tableDecoration -> {
-            switch (tableDecoration) {
-            case NONE:
-                return new CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation(
-                        CollectionLayoutConfigOptions.TableDecoration.NONE, holder);
-            case DATATABLES_NET:
-                return new CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation(
-                        CollectionLayoutConfigOptions.TableDecoration.DATATABLES_NET, holder);
-            case NOT_SPECIFIED:
-            case AS_CONFIGURED:
-                return new CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation(defaultPolicyFromConfig, holder);
-            default:
-            }
-            throw new IllegalStateException("tableDecoration '" + tableDecoration + "' not recognised");
+        .map(CollectionLayout::tableDecorator)
+        .<CollectionLayoutTableDecoratorFacet>map(tableDecorator -> {
+                return new CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotation(
+                        tableDecorator, holder);
         })
         ,
-        () -> new CollectionLayoutTableDecorationFacetFromConfiguration(defaultPolicyFromConfig, holder));
+        () -> new CollectionLayoutTableDecoratorFacetFromConfiguration(
+                holder.getConfiguration().getApplib().getAnnotation().getCollectionLayout().getTableDecorator(), holder));
 
     }
 }
