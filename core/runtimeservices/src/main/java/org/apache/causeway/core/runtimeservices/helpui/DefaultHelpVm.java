@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
@@ -51,12 +52,11 @@ public class DefaultHelpVm implements ViewModel {
 
     @Property
     @PropertyLayout(labelPosition = LabelPosition.NONE)
-    public Markup getHelpContent() {
-        return new Markup(documentationServiceDefault.getDocumentationAsHtml());
-    }
+    @Getter(lazy = true)
+    private final Markup helpContent = new Markup(documentationServiceDefault.getDocumentationAsHtml());
 
     @Override
     public String viewModelMemento() {
-        return "DefaultHelpVm";
+        return "DefaultHelpVm"; // arbitrary string (used only to create bookmarks)
     }
 }
