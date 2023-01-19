@@ -141,11 +141,12 @@ public @interface DomainObjectLayout {
             default "";
 
     /**
-     * Whether a standalone collection when represented in a table form should additionally be
+     * Whether a standalone collection, when represented in a table form, should additionally be
      * &quot;decorated&quot; with client-side (javascript) enhancements, for example to enable paging and filtering.
      */
-    TableDecoration tableDecoration()
-            default TableDecoration.NOT_SPECIFIED;
+    Class<? extends TableDecorator>
+        tableDecorator()
+        default TableDecorator.Default.class;
 
 
     /**

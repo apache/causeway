@@ -20,35 +20,33 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
-import org.apache.causeway.applib.layout.component.TableDecoration;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class CollectionLayoutTableDecorationFacetForCollectionLayoutXml
-extends CollectionLayoutTableDecorationFacetAbstract {
+public class CollectionLayoutTableDecoratorFacetForCollectionLayoutXml
+extends CollectionLayoutTableDecoratorFacetAbstract {
 
-    public static final Class<CollectionLayoutTableDecorationFacet> type() {
-        return CollectionLayoutTableDecorationFacet.class;
+    public static final Class<CollectionLayoutTableDecoratorFacet> type() {
+        return CollectionLayoutTableDecoratorFacet.class;
     }
 
-    public static Optional<CollectionLayoutTableDecorationFacet> create(
+    public static Optional<CollectionLayoutTableDecoratorFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if (collectionLayout == null) {
-            return Optional.empty();
-        }
 
-        final TableDecoration tableDecoration = collectionLayout.getTableDecoration();
-        return tableDecoration == TableDecoration.DATATABLES_NET
-                ? Optional.of(new CollectionLayoutTableDecorationFacetForCollectionLayoutXml(holder, precedence))
-                : Optional.empty();
+        return Optional.ofNullable(collectionLayout)
+        .map(CollectionLayoutData::getTableDecorator)
+        .map(tableDecorator->
+            new CollectionLayoutTableDecoratorFacetForCollectionLayoutXml(tableDecorator, holder, precedence));
     }
 
-    private CollectionLayoutTableDecorationFacetForCollectionLayoutXml(
-            final FacetHolder holder, final Precedence precedence) {
-        super(CollectionLayoutConfigOptions.TableDecoration.DATATABLES_NET, holder, precedence);
+    private CollectionLayoutTableDecoratorFacetForCollectionLayoutXml(
+            final Class<? extends TableDecorator> value,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(value, holder, precedence);
     }
 
 }

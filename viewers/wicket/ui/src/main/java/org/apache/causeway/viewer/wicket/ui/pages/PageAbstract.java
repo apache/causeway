@@ -71,11 +71,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.Bread
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssBootstrap5ReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptBootstrap5ReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptResourceReferenceInit;
 import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
 import org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
@@ -242,12 +237,6 @@ implements ActionPromptProvider {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
         response.render(FontAwesomeCssReferenceWkt.asHeaderItem());
-
-        response.render(DatatablesJavaScriptReferenceWkt.asHeaderItem());
-        response.render(DatatablesJavaScriptBootstrap5ReferenceWkt.asHeaderItem());
-        response.render(DatatablesCssReferenceWkt.asHeaderItem());
-        response.render(DatatablesCssBootstrap5ReferenceWkt.asHeaderItem());
-        response.render(DatatablesJavaScriptResourceReferenceInit.instance(getConfiguration()));
 
         response.render(BootstrapOverridesCssResourceReference.asHeaderItem());
         BootstrapOverridesCssResourceReference
