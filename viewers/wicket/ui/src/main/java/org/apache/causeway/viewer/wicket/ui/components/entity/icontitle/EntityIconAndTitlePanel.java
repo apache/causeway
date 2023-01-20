@@ -134,15 +134,13 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 final String title = determineTitle();
                 Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
 
-                String entityTypeName = determineFriendlyType() // from actual underlying model
+                final String tooltipTitle = determineFriendlyType() // from actual underlying model
                         .orElseGet(spec::getSingularName); // not sure if this code path is ever reached
+                final String tooltipBody = _Strings.nonEmpty(typeOfSpecification.getDescription())
+                        .orElseGet(()->title);
 
-                val description = typeOfSpecification.getDescription();
+                WktTooltips.addTooltip(link, tooltipTitle, tooltipBody);
 
-                WktTooltips.addTooltip(link, entityTypeName,
-                        description!=null
-                            ? description
-                            : title);
             }
         }
 
