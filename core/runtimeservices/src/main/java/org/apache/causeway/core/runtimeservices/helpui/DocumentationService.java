@@ -16,9 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.helpui;
-
-import org.apache.causeway.applib.ViewModel;
+package org.apache.causeway.core.runtimeservices.helpui;
 
 /**
  * Provides the content for the {@link DocumentationMenu} entries.
@@ -30,7 +28,7 @@ import org.apache.causeway.applib.ViewModel;
  */
 public interface DocumentationService {
 
-    /** Returns the view-model that represents the application's primary help page. */
-    ViewModel getHelp();
+    /** Returns a view-model or value that represents the application's primary help page. */
+    Object getHelp();
 
 }

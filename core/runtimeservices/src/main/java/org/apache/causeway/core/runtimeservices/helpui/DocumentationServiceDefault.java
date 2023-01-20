@@ -40,7 +40,6 @@ import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.helpui.DocumentationService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -73,7 +72,7 @@ public class DocumentationServiceDefault implements DocumentationService {
     private final TranslationService translationService;
 
     @Getter(onMethod_={@Override}, lazy = true)
-    private final ViewModel help = new DefaultHelpVm(this);
+    private final ViewModel help = new DefaultHelpVm(this, "Application Help");
 
     // -- HELPER
 

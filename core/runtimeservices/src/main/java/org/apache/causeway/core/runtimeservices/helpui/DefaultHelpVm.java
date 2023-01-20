@@ -35,19 +35,20 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".DefaultHelpVm")
 @DomainObject(nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         named = "Application Help",
         cssClassFa = "fa-regular fa-circle-question")
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".DefaultHelpVm")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DefaultHelpVm implements ViewModel {
 
     private final DocumentationServiceDefault documentationServiceDefault;
+    private final String title;
 
     @ObjectSupport
     public String title() {
-        return "Application Help";
+        return title;
     }
 
     @Property
@@ -57,6 +58,6 @@ public class DefaultHelpVm implements ViewModel {
 
     @Override
     public String viewModelMemento() {
-        return "DefaultHelpVm"; // arbitrary string (used only to create bookmarks)
+        return title;
     }
 }

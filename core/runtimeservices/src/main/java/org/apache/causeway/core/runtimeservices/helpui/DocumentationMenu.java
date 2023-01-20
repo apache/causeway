@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.helpui;
+package org.apache.causeway.core.runtimeservices.helpui;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +42,7 @@ import lombok.RequiredArgsConstructor;
  * @see DocumentationService
  * @since 2.x {@index}
  */
-@Named(DocumentationMenu.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".DocumentationMenu")
 @DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
@@ -49,8 +50,6 @@ import lombok.RequiredArgsConstructor;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DocumentationMenu {
-
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".DocumentationMenu";
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
