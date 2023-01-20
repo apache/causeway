@@ -29,6 +29,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
@@ -64,7 +65,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
                     new ComponentFeedbackMessageFilter(wicketImage)));
 
         } else {
-            permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
+            WktComponents.permanentlyHide(this, ID_SCALAR_VALUE, ID_FEEDBACK);
         }
 
     }

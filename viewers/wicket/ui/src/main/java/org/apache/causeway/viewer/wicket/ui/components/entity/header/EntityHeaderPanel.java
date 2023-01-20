@@ -29,6 +29,7 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -82,7 +83,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
                     .addAdditionalLinks(this, ID_ENTITY_ACTIONS, topLevelActions,
                             AdditionalLinksPanel.Style.INLINE_LIST);
         } else {
-            permanentlyHide(ID_ENTITY_ACTIONS);
+            WktComponents.permanentlyHide(this, ID_ENTITY_ACTIONS);
         }
     }
 

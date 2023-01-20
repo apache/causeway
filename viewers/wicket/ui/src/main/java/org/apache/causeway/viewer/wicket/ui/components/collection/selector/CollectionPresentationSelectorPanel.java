@@ -38,6 +38,7 @@ import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.val;
@@ -99,7 +100,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
         // selector
         if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_VIEWS);
+            WktComponents.permanentlyHide(this, ID_VIEWS);
             return;
         }
 

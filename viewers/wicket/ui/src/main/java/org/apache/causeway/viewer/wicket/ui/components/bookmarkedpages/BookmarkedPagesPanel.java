@@ -42,6 +42,7 @@ import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.val;
@@ -117,7 +118,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                 val clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
                     bookmarkedPagesModel.remove(bookmarkNode);
                     if(bookmarkedPagesModel.isEmpty()) {
-                        permanentlyHide(CLEAR_BOOKMARKS);
+                        WktComponents.permanentlyHide(this, CLEAR_BOOKMARKS);
                     }
                     target.add(container, clearAllBookmarksLink);
                 });
