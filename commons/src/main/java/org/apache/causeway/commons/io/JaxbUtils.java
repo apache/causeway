@@ -89,7 +89,7 @@ public class JaxbUtils {
     public static class JaxbOptions {
         private final @Builder.Default boolean useContextCache = true;
         private final @Builder.Default boolean allowMissingRootElement = false;
-        private final @Builder.Default boolean formattedOutput = false;
+        private final @Builder.Default boolean formattedOutput = true;
         private final @Singular Map<String, Object> properties;
         private final @Builder.Default @NonNull Consumer<Marshaller> marshallerConfigurer = _Functions.noopConsumer();
         private final @Builder.Default @NonNull Consumer<Unmarshaller> unmarshallerConfigurer = _Functions.noopConsumer();

@@ -61,7 +61,7 @@ public class WktTooltips {
         if(target instanceof ActionLink) {
             val actionLink = (ActionLink)target;
             if(!actionLink.getActionModel().hasParameters()) {
-                //XXX[CAUSEWAY-3051] adding a tooltip to an ActionLink will break any ConfirmationBehavior,
+                //XXX[ISIS-3051] adding a tooltip to an ActionLink will break any ConfirmationBehavior,
                 //that's also applied to the ActionLink.
                 throw _Exceptions.illegalArgument(
                         "Adding a tooltip to an ActionLink will break any ConfirmationBehavior, "
