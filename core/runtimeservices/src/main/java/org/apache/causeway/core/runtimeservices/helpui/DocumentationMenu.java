@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.documentation;
+package org.apache.causeway.core.runtimeservices.helpui;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -26,51 +27,48 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Markup;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+
+import lombok.RequiredArgsConstructor;
 
 /**
- * Simply provides a UI to for the generation of a documentation (obtained from {@link DocumentationService}).
+ * Provides entries for a <i>Documentation</i> sub-menu section utilizing the {@link DocumentationService}.
+ * <p>
+ * Currently there is only one, namely (<i>help</i>).
  *
+ * @see DocumentationService
  * @since 2.x {@index}
  */
-@Named(DocumentationServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService()
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".DocumentationMenu")
+@DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(
-        named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY
+        menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-public class DocumentationServiceMenu {
-
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".DocumentationServiceMenu";
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class DocumentationMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
     private final DocumentationService documentationService;
 
-    public DocumentationServiceMenu(final DocumentationService DocumentationService) {
-        this.documentationService = DocumentationService;
-    }
-
     @Action(
-            domainEvent = downloadDocumentation.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            domainEvent = help.ActionDomainEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
-            cssClassFa = "fa-download",
-            named = "The application-level help & documentation",
-            sequence="500.450.2")
-    public class downloadDocumentation{
+            cssClassFa = "fa-regular fa-circle-question",
+            named = "Help",
+            sequence = "100")
+    public class help{
 
-        public class ActionDomainEvent extends DocumentationServiceMenu.ActionDomainEvent<downloadDocumentation> {}
+        public class ActionDomainEvent extends DocumentationMenu.ActionDomainEvent<help> {}
 
-        @MemberSupport public Markup act() {
-            final String html = documentationService.toDocumentationHtml();
-            return new Markup(html);
+        @MemberSupport public Object act() {
+            return documentationService.getHelp();
         }
 
     }

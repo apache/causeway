@@ -184,7 +184,7 @@ implements HasDynamicallyVisibleContent {
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_SELECTOR_DROPDOWN);
+            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
         } else {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);

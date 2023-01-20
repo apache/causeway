@@ -29,7 +29,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link UiComponentType}s.
@@ -77,20 +76,6 @@ extends PanelBase<T> {
      */
     protected Component addOrReplace(final UiComponentType uiComponentType, final IModel<?> model) {
         return getComponentFactoryRegistry().addOrReplaceComponent(this, uiComponentType, model);
-    }
-
-    /**
-     * For subclasses
-     */
-    protected void permanentlyHide(final UiComponentType... componentIds) {
-        WktComponents.permanentlyHide(this, componentIds);
-    }
-
-    /**
-     * For subclasses
-     */
-    public void permanentlyHide(final String... ids) {
-        WktComponents.permanentlyHide(this, ids);
     }
 
     protected static void setVisible(@Nullable final Component component, final boolean visible) {
