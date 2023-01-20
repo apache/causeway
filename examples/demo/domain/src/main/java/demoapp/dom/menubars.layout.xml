@@ -392,7 +392,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             <mb3:named/>
             <mb3:section>
                 <mb3:named>Documentation</mb3:named>
-                <mb3:serviceAction objectType="causeway.applib.DocumentationMenu" id="help"/>
+                <mb3:serviceAction objectType="causeway.runtimeservices.DocumentationMenu" id="help"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Configuration</mb3:named>
