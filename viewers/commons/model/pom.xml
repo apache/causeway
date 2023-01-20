@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>font-awesome</artifactId>
-			<version>6.2.0</version> <!-- must correspond to entry in /viewer/common/.../IconDecorator.java -->
+			<version>6.2.1</version> <!-- must correspond to entry in /viewer/common/.../IconDecorator.java -->
 		</dependency>
 
     </dependencies>
