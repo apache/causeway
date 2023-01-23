@@ -40,7 +40,7 @@ import lombok.NonNull;
 @SuppressWarnings({"rawtypes", "unchecked"})
 class _TreeModelTreeAdapter
 implements
-    TreeAdapter<_TreeModel>,
+    TreeAdapter<_TreeNodeMemento>,
     HasMetaModelContext,
     Serializable {
 
@@ -64,7 +64,7 @@ implements
     }
 
     @Override
-    public Optional<_TreeModel> parentOf(final _TreeModel treeModel) {
+    public Optional<_TreeNodeMemento> parentOf(final _TreeNodeMemento treeModel) {
         if(treeModel==null) {
             return Optional.empty();
         }
@@ -73,7 +73,7 @@ implements
     }
 
     @Override
-    public int childCountOf(final _TreeModel treeModel) {
+    public int childCountOf(final _TreeNodeMemento treeModel) {
         if(treeModel==null) {
             return 0;
         }
@@ -81,7 +81,7 @@ implements
     }
 
     @Override
-    public Stream<_TreeModel> childrenOf(final _TreeModel treeModel) {
+    public Stream<_TreeNodeMemento> childrenOf(final _TreeNodeMemento treeModel) {
         if(treeModel==null) {
             return Stream.empty();
         }
@@ -89,19 +89,18 @@ implements
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
-    _TreeModel wrap(final @NonNull Object pojo, final TreePath treePath) {
-        return new _TreeModel(
-                getMetaModelContext(),
-                ManagedObject.adaptSingular(getSpecificationLoader(), pojo),
+    _TreeNodeMemento wrap(final @NonNull Object pojo, final TreePath treePath) {
+        return new _TreeNodeMemento(
+                ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow(),
                 treePath);
     }
 
-    private Object unwrap(final _TreeModel model) {
+    private Object unwrap(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);
-        return model.getObject().getPojo();
+        return model.getPojo(getMetaModelContext());
     }
 
-    private Function<Object, _TreeModel> newPojoToTreeModelMapper(final _TreeModel parent) {
+    private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {
         return IndexedFunction.zeroBased((indexWithinSiblings, pojo)->
         wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
     }

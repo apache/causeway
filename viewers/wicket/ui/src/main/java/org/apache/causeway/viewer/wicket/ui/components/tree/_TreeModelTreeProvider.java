@@ -29,17 +29,17 @@ import org.apache.causeway.commons.internal.collections._Lists;
 /**
  * Wicket's {@link ITreeProvider} implemented for Causeway
  */
-class _TreeModelTreeProvider implements ITreeProvider<_TreeModel> {
+class _TreeModelTreeProvider implements ITreeProvider<_TreeNodeMemento> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * tree's root
      */
-    private final _TreeModel primaryValue;
+    private final _TreeNodeMemento primaryValue;
     private final _TreeModelTreeAdapter treeAdapter;
 
-    _TreeModelTreeProvider(final _TreeModel primaryValue, final _TreeModelTreeAdapter treeAdapter) {
+    _TreeModelTreeProvider(final _TreeNodeMemento primaryValue, final _TreeModelTreeAdapter treeAdapter) {
         this.primaryValue = primaryValue;
         this.treeAdapter = treeAdapter;
     }
@@ -49,25 +49,23 @@ class _TreeModelTreeProvider implements ITreeProvider<_TreeModel> {
     }
 
     @Override
-    public Iterator<? extends _TreeModel> getRoots() {
+    public Iterator<? extends _TreeNodeMemento> getRoots() {
         return _Lists.singleton(primaryValue).iterator();
     }
 
     @Override
-    public boolean hasChildren(final _TreeModel node) {
+    public boolean hasChildren(final _TreeNodeMemento node) {
         return treeAdapter.childCountOf(node)>0;
     }
 
     @Override
-    public Iterator<? extends _TreeModel> getChildren(final _TreeModel node) {
+    public Iterator<? extends _TreeNodeMemento> getChildren(final _TreeNodeMemento node) {
         return treeAdapter.childrenOf(node).iterator();
     }
 
     @Override
-    public IModel<_TreeModel> model(final _TreeModel treeModel) {
-        return treeModel.isTreePathModelOnly()
-                ? Model.of(treeModel)
-                : new _LoadableDetachableTreeModel(treeModel);
+    public IModel<_TreeNodeMemento> model(final _TreeNodeMemento treeModel) {
+        return Model.of(treeModel);
     }
 
 }

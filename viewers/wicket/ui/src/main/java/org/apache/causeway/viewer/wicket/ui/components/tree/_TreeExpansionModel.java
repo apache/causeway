@@ -24,26 +24,23 @@ import java.util.stream.Collectors;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreePath;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 /**
  * Wicket's model for collapse/expand state
  */
-class _TreeExpansionModel implements IModel<Set<_TreeModel>> {
+class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
     private static final long serialVersionUID = 648152234030889164L;
 
     public static _TreeExpansionModel of(
-            final MetaModelContext commonContext,
             final Set<TreePath> expandedTreePaths) {
-
-        return new _TreeExpansionModel(commonContext, expandedTreePaths);
+        return new _TreeExpansionModel( expandedTreePaths);
     }
 
     /**
      * Happens on user interaction via UI.
      * @param t
      */
-    public void onExpand(final _TreeModel t) {
+    public void onExpand(final _TreeNodeMemento t) {
         expandedTreePaths.add(t.getTreePath());
     }
 
@@ -51,7 +48,7 @@ class _TreeExpansionModel implements IModel<Set<_TreeModel>> {
      * Happens on user interaction via UI.
      * @param t
      */
-    public void onCollapse(final _TreeModel t) {
+    public void onCollapse(final _TreeNodeMemento t) {
         expandedTreePaths.remove(t.getTreePath());
     }
 
@@ -60,20 +57,19 @@ class _TreeExpansionModel implements IModel<Set<_TreeModel>> {
     }
 
     private final Set<TreePath> expandedTreePaths;
-    private final Set<_TreeModel> expandedNodes;
+    private final Set<_TreeNodeMemento> expandedNodes;
 
     private _TreeExpansionModel(
-            final MetaModelContext commonContext,
             final Set<TreePath> expandedTreePaths) {
 
         this.expandedTreePaths = expandedTreePaths;
         this.expandedNodes = expandedTreePaths.stream()
-                .map(tPath->new _TreeModel(commonContext, tPath))
+                .map(tPath->new _TreeNodeMemento(tPath))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<_TreeModel> getObject() {
+    public Set<_TreeNodeMemento> getObject() {
         return expandedNodes;
     }
 
