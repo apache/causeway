@@ -21,10 +21,13 @@ package org.apache.causeway.viewer.wicket.ui.components.tree;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
@@ -57,11 +60,8 @@ class _TreeNodeMemento implements Serializable {
         return bookmark==null;
     }
 
-    public Object getPojo(final MetaModelContext mmc) {
-        _Assert.assertFalse(isTreePathMemento());
-        return /*isTreePathMemento()
-                ? null
-                : */asObjectAdapterModel(mmc).getObject().getPojo();
+    public @Nullable Object getPojo(final MetaModelContext mmc) {
+        return MmUnwrapUtil.single(asObjectAdapterModel(mmc).getObject());
     }
 
     public ObjectAdapterModel asObjectAdapterModel(final MetaModelContext mmc) {

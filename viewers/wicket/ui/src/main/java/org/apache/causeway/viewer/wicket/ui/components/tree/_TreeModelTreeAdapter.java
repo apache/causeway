@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.commons.functional.IndexedFunction;
@@ -33,6 +35,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  *  {@link TreeAdapter} for _TreeModel nodes.
@@ -68,7 +71,11 @@ implements
         if(treeModel==null) {
             return Optional.empty();
         }
-        return wrappedTreeAdapter().parentOf(unwrap(treeModel))
+        val pojoNode = unwrap(treeModel);
+        if(pojoNode==null) {
+            return Optional.empty();
+        }
+        return wrappedTreeAdapter().parentOf(pojoNode)
                 .map(pojo->wrap(pojo, treeModel.getTreePath().getParentIfAny()));
     }
 
@@ -77,7 +84,11 @@ implements
         if(treeModel==null) {
             return 0;
         }
-        return wrappedTreeAdapter().childCountOf(unwrap(treeModel));
+        val pojoNode = unwrap(treeModel);
+        if(pojoNode==null) {
+            return 0;
+        }
+        return wrappedTreeAdapter().childCountOf(pojoNode);
     }
 
     @Override
@@ -85,7 +96,11 @@ implements
         if(treeModel==null) {
             return Stream.empty();
         }
-        return wrappedTreeAdapter().childrenOf(unwrap(treeModel))
+        val pojoNode = unwrap(treeModel);
+        if(pojoNode==null) {
+            return Stream.empty();
+        }
+        return wrappedTreeAdapter().childrenOf(pojoNode)
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
@@ -94,8 +109,7 @@ implements
                 ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow(),
                 treePath);
     }
-
-    private Object unwrap(final _TreeNodeMemento model) {
+    private @Nullable Object unwrap(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);
         return model.getPojo(getMetaModelContext());
     }
