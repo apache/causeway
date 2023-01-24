@@ -64,8 +64,8 @@
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-				<mb3:serviceAction objectType="causeway.applib.MetaModelServicesMenu" id="downloadMetaModelXml">
-                    <cpt:named>Download Meta Model (XML)</cpt:named>
+				<mb3:serviceAction objectType="causeway.applib.MetaModelServicesMenu" id="downloadMetaModel">
+                    <cpt:named>Download Meta Model</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="causeway.applib.MetaModelServicesMenu" id="downloadMetaModelCsv">
                     <cpt:named>Download Meta Model (CSV)</cpt:named>
