@@ -29,7 +29,7 @@
                 <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
                 <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
                 <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
-                <cpt:action id="downloadMetaModelXml" position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadMetaModel" position="PANEL_DROPDOWN"/>
                 <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
                 <cpt:property id="key"/>
                 <cpt:property id="fixtureScriptClassName" hidden="OBJECT_FORMS"/>
