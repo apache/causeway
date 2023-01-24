@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -76,11 +77,13 @@ implements HasDynamicallyVisibleContent {
     @Getter(value = AccessLevel.PROTECTED)
     private CollectionPresentationSelectorPanel selectorDropdownPanel;
 
+    private final CollectionLayoutData layoutData;
     private final WebMarkupContainer div;
 
-    public EntityCollectionPanel(final String id, final UiObjectWkt entityModel) {
+    public EntityCollectionPanel(final String id, final UiObjectWkt entityModel, final CollectionLayoutData layoutData) {
         super(id, entityModel);
 
+        this.layoutData = layoutData;
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
@@ -89,7 +92,6 @@ implements HasDynamicallyVisibleContent {
 
         buildGui();
     }
-
 
     /**
      * Attach UI only after added to parent.
@@ -119,7 +121,7 @@ implements HasDynamicallyVisibleContent {
 
     private void buildGui() {
 
-        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
+        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
         val collectionMetaModel = collectionModel.getMetaModel();
@@ -168,7 +170,7 @@ implements HasDynamicallyVisibleContent {
     private transient Optional<TableDecorator> tableDecorator;
     private Optional<TableDecorator> tableDecorator() {
         if(tableDecorator==null) {
-            val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
+            val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
             val collectionMetaModel = collectionModel.getMetaModel();
             this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
         }

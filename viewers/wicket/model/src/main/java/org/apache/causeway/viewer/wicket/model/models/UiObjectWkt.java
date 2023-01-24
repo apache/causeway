@@ -26,7 +26,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -271,9 +270,6 @@ implements
     }
 
     // -- TAB AND COLUMN (metadata if any)
-
-    @Getter @Setter
-    private CollectionLayoutData collectionLayoutData;
 
     @Setter
     private @Nullable Bookmark contextBookmarkIfAny;

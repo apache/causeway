@@ -19,11 +19,13 @@
 package org.apache.causeway.viewer.wicket.ui.components.layout.bs.col;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -42,6 +44,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory.CollectionOwnerAndLayout;
 import org.apache.causeway.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.tabs.TabGroupPanel;
@@ -229,48 +232,34 @@ implements HasDynamicallyVisibleContent {
             WktComponents.permanentlyHide(div, ID_FIELD_SETS);
         }
 
+        final UiObjectWkt entityModel = getModel();
+        val ownerSpec = entityModel.getManagedObject().getSpecification();
 
-        // collections
-        final List<CollectionLayoutData> collections =
+        // collection layout data by collection id (the collection's member-id)
+        final Map<String, CollectionLayoutData> collectionLayoutById =
                 _NullSafe.stream(bsCol.getCollections())
-                .filter(
-                        new Predicate<CollectionLayoutData>() {
-                            @Override
-                            public boolean test(final CollectionLayoutData collectionLayoutData) {
-                                return collectionLayoutData.getMetadataError() == null;
-                            }
-                        })
-                .collect(Collectors.toList());
-        if(!collections.isEmpty()) {
+                .filter(collectionLayoutData -> collectionLayoutData.getMetadataError() == null)
+                .filter(collectionLayoutData -> !ownerSpec.getCollection(collectionLayoutData.getId()).isEmpty())
+                .collect(Collectors.toUnmodifiableMap(CollectionLayoutData::getId, UnaryOperator.identity()));
+
+        if(!collectionLayoutById.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);
 
-            final UiObjectWkt entityModel = getModel();
-            final CollectionLayoutData snapshot = entityModel.getCollectionLayoutData();
+            collectionLayoutById.forEach((id, layout)->{
 
-            for (CollectionLayoutData collection : collections) {
+                val helperModel = Model.of(new CollectionOwnerAndLayout(entityModel, layout));
 
-                if (entityModel.getManagedObject().getSpecification().getAssociation(collection.getId()).isEmpty()) {
-                    continue;
-                }
-
-                final String id = collectionRv.newChildId();
-
-                // we successively trample over the layout data; but that's ok, this is synchronous code anyway...
-                entityModel.setCollectionLayoutData(collection);
-
-                // the entityModel's getLayoutData() provides the hint as to which collection of the entity to render.
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(
-                                UiComponentType.ENTITY_COLLECTION, entityModel);
-                final Component collectionPanel = componentFactory.createComponent(id, entityModel);
+                                UiComponentType.ENTITY_COLLECTION, helperModel);
+
+                final Component collectionPanel = componentFactory.createComponent(collectionRv.newChildId(), helperModel);
                 collectionRv.add(collectionPanel);
-            }
+            });
+
             div.add(collectionRv);
             visible = visible || collectionRv.isVisible();
-
-            //XXX CAUSEWAY-1698 restore original state after trampling over
-            entityModel.setCollectionLayoutData(snapshot);
 
         } else {
             WktComponents.permanentlyHide(div, ID_COLLECTIONS);
