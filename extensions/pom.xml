@@ -94,6 +94,7 @@
 	<modules>
 
 		<module>core/commandlog</module>
+		<module>core/docgen</module>
 		<module>core/excel</module>
 		<module>core/executionlog</module>
 		<module>core/executionoutbox</module>

@@ -20,7 +20,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices;
     exports org.apache.causeway.core.runtimeservices.bookmarks;
     exports org.apache.causeway.core.runtimeservices.command;
-    exports org.apache.causeway.core.runtimeservices.helpui;
     exports org.apache.causeway.core.runtimeservices.email;
     exports org.apache.causeway.core.runtimeservices.eventbus;
     exports org.apache.causeway.core.runtimeservices.executor;
