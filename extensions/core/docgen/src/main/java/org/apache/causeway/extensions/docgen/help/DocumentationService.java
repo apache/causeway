@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.helpui;
+package org.apache.causeway.extensions.docgen.help;
+
+import org.apache.causeway.extensions.docgen.menu.DocumentationMenu;
 
 /**
  * Provides the content for the {@link DocumentationMenu} entries.

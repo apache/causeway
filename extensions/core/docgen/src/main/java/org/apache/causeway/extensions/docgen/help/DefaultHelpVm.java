@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.helpui;
+package org.apache.causeway.extensions.docgen.help;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,12 +30,12 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.value.Markup;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".DefaultHelpVm")
+@Named(CausewayModuleExtDocgen.NAMESPACE + ".DefaultHelpVm")
 @DomainObject(nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         named = "Application Help",

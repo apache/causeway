@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.helpui;
+package org.apache.causeway.extensions.docgen.help;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,13 +53,13 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".DocumentationServiceDefault")
+@Named(CausewayModuleExtDocgen.NAMESPACE + ".DocumentationServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
