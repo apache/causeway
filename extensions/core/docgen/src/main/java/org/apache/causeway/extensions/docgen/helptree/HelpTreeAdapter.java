@@ -16,21 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.help;
+package org.apache.causeway.extensions.docgen.helptree;
 
-import org.apache.causeway.extensions.docgen.menu.DocumentationMenu;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-/**
- * Provides the content for the {@link DocumentationMenu} entries.
- * <p>
- * Currently there is only one, namely (<i>help</i>).
- *
- * @see DocumentationMenu
- * @since 2.x {@index}
- */
-public interface DocumentationService {
+import org.apache.causeway.applib.graph.tree.TreeAdapter;
 
-    /** Returns a view-model or value that represents the application's primary help page. */
-    Object getHelp();
+public class HelpTreeAdapter implements TreeAdapter<HelpNodeVm> {
+
+    @Override
+    public Optional<HelpNodeVm> parentOf(final HelpNodeVm value) {
+        return Optional.ofNullable(value.getParent());
+    }
+
+    @Override
+    public int childCountOf(final HelpNodeVm value) {
+        return value.getHelpNode().childCount();
+    }
+
+    @Override
+    public Stream<HelpNodeVm> childrenOf(final HelpNodeVm value) {
+        return value.getHelpNode().streamChildNodes()
+                .map(childNode->new HelpNodeVm(value.getRootTopic(), childNode));
+    }
 
 }

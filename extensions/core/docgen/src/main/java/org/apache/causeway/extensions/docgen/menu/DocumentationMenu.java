@@ -31,16 +31,17 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
-import org.apache.causeway.extensions.docgen.help.DocumentationService;
+import org.apache.causeway.extensions.docgen.applib.HelpNode.HelpTopic;
+import org.apache.causeway.extensions.docgen.helptree.HelpNodeVm;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * Provides entries for a <i>Documentation</i> sub-menu section utilizing the {@link DocumentationService}.
+ * Provides entries for a <i>Documentation</i> sub-menu section.
  * <p>
- * Currently there is only one, namely (<i>help</i>).
+ * Currently there is only one, namely (<i>help</i>), utilizing the {@link HelpTopic}.
  *
- * @see DocumentationService
+ * @see HelpTopic
  * @since 2.x {@index}
  */
 @Named(CausewayModuleExtDocgen.NAMESPACE + ".DocumentationMenu")
@@ -54,8 +55,9 @@ public class DocumentationMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
-    private final DocumentationService documentationService;
+    private final HelpTopic rootHelpTopic;
 
+    /** Returns a view-model that represents the application's primary help page. */
     @Action(
             domainEvent = help.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
@@ -68,8 +70,8 @@ public class DocumentationMenu {
 
         public class ActionDomainEvent extends DocumentationMenu.ActionDomainEvent<help> {}
 
-        @MemberSupport public Object act() {
-            return documentationService.getHelp();
+        @MemberSupport public HelpNodeVm act() {
+            return HelpNodeVm.forRootTopic(rootHelpTopic);
         }
 
     }

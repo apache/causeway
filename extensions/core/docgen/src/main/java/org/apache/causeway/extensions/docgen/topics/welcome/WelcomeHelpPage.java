@@ -16,22 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.help;
+package org.apache.causeway.extensions.docgen.topics.welcome;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
@@ -54,29 +50,39 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
+import org.apache.causeway.extensions.docgen.applib.HelpPage;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".DocumentationServiceDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
+@Component
+@Named(CausewayModuleExtDocgen.NAMESPACE + ".WelcomeHelpPage")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
-public class DocumentationServiceDefault implements DocumentationService {
+public class WelcomeHelpPage implements HelpPage {
 
     private final SpecificationLoader specificationLoader;
     private final MenuBarsService menuBarsService;
     private final HomePageResolverService homePageResolverService;
     private final TranslationService translationService;
 
-    @Getter(onMethod_={@Override}, lazy = true)
-    private final ViewModel help = new DefaultHelpVm(this, "Application Help");
+    @Override
+    public String getTitle() {
+        return "Welcome";
+    }
+
+    @Override
+    public AsciiDoc getContent() {
+        // uses a HTML passthrough block (https://docs.asciidoctor.org/asciidoc/latest/pass/pass-block/)
+        return AsciiDoc.valueOf(
+                "== Welcome\n\n"
+                + "++++\n"
+                + getDocumentationAsHtml()
+                + "++++\n");
+    }
 
     // -- HELPER
 
-    String getDocumentationAsHtml() {
+    private String getDocumentationAsHtml() {
         final StringBuilder html = new StringBuilder();
         Object homePage = homePageResolverService.getHomePage();
         if (homePage != null) {
@@ -236,7 +242,8 @@ public class DocumentationServiceDefault implements DocumentationService {
                                                 html.append(String.format("<li><b>%s</b>: %s.",
                                                         member.getCanonicalFriendlyName(),
                                                         describedAs));
-                                                if (member.getElementType().getLogicalType().getCorrespondingClass().isAnnotationPresent(DomainObject.class)) {
+                                                if (member.getElementType().getLogicalType().getCorrespondingClass()
+                                                        .isAnnotationPresent(DomainObject.class)) {
                                                     html.append(String.format(" <i> See: <a href='#%s'>%s</a></i>",
                                                             member.getElementType().getLogicalTypeName(),
                                                             member.getElementType().getSingularName()));
@@ -271,4 +278,6 @@ public class DocumentationServiceDefault implements DocumentationService {
                 .orElse(null);
     }
 
+
 }
+

@@ -18,11 +18,17 @@
  */
 package org.apache.causeway.extensions.docgen;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.docgen.help.DocumentationServiceDefault;
+import org.apache.causeway.extensions.docgen.applib.HelpNode.HelpTopic;
 import org.apache.causeway.extensions.docgen.menu.DocumentationMenu;
+import org.apache.causeway.extensions.docgen.topics.welcome.WelcomeHelpPage;
+
+import lombok.val;
 
 /**
  * Adds the {@link DocumentationMenu} with its auto-configured menu entries.
@@ -30,11 +36,29 @@ import org.apache.causeway.extensions.docgen.menu.DocumentationMenu;
  */
 @Configuration
 @Import({
+    // menu providers
     DocumentationMenu.class,
-    DocumentationServiceDefault.class,
+
+    // help pages, as required by the default rootHelpTopic below (in case when to be managed by Spring)
+    WelcomeHelpPage.class
+
 })
 public class CausewayModuleExtDocgen {
 
     public static final String NAMESPACE = "causeway.ext.docgen";
+
+    @Bean(NAMESPACE + "RootHelpTopic")
+    @ConditionalOnMissingBean(HelpTopic.class)
+    @Qualifier("Default")
+    public HelpTopic rootHelpTopic(final WelcomeHelpPage welcomeHelpPage) {
+        val root = HelpTopic.root("Topics");
+
+        root.addPage(welcomeHelpPage);
+
+//        root.subTopic("Legacy")
+//            .addPage(legacyHelpPage);
+
+        return root;
+    }
 
 }
