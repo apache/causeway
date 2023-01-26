@@ -67,6 +67,12 @@ causeway:
       translation:
         po:
           mode: disabled
+          
+  value-types:
+    kroki:
+      # don't use this in production, as you might not want to share sensitive data over the public wire
+      # instead use a private docker instance like eg. yuzutech/kroki 
+      backend-url: https://kroki.io
 
   viewer:
     common:
