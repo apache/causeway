@@ -21,6 +21,7 @@ package org.apache.causeway.core.config;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2661,9 +2662,18 @@ public class CausewayConfiguration {
         private final Temporal temporal = new Temporal();
         @Data
         public static class Temporal {
-
             private final TemporalEditingPattern editing = new TemporalEditingPattern();
+        }
 
+        private final Kroki kroki = new Kroki();
+        @Data
+        public static class Kroki {
+            /**
+             * If set adds plantuml support to the AsciiDoc value type.
+             * <p>
+             * Eg. a docker instance like {@literal yuzutech/kroki}.
+             */
+            private URL backendUrl = null;
         }
 
     }

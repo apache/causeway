@@ -29,4 +29,7 @@ module org.apache.causeway.valuetypes.asciidoc.applib {
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;
+    requires org.apache.causeway.core.config;
+    requires spring.boot.autoconfigure;
+    requires java.net.http;
 }

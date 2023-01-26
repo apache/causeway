@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib.AdocToHtmlConverter;
 import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -55,7 +56,7 @@ public final class AsciiDoc implements Serializable {
     @EqualsAndHashCode.Exclude
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     @Accessors(fluent = true)
-    private final String html = Converter.adocToHtml(getAdoc());
+    private final String html = AdocToHtmlConverter.instance().adocToHtml(getAdoc());
 
     public AsciiDoc() {
         this(null);
@@ -77,16 +78,6 @@ public final class AsciiDoc implements Serializable {
     public String toString() {
         return String.format("AsciiDoc[length=%d,content=%s]",
                 adoc.length(), Markup.summarizeHtmlAsTitle(adoc));
-    }
-
-    // -- UTILITY
-
-    /**
-     * Not strictly required, but allows for eager loading.
-     * Is a one-shot, that may take about 5 seconds.
-     */
-    public static void loadJRuby() {
-        Converter.getAsciidoctor();
     }
 
 }

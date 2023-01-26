@@ -53,11 +53,30 @@ public class EntityDiagramPage implements HelpPage {
     public AsciiDoc getContent() {
         return AsciiDoc.valueOf(
                 "== Entities\n\n"
-                + entityTypesAsOrderedList() // TODO generate a diagram instead
-                + "\n");
+                + adocPlantumlSample); //TODO create actual ER diagrams
     }
 
     // -- HELPER
+
+    private String sample =
+            "object user\n"
+            + "\n"
+            + "user : name = \"Dummy\"\n"
+            + "user : id = 123\n"
+            + "\n";
+
+    private String adocPlantumlSample = "[plantuml]\n"
+            + ".Typical application dependencies\n"
+            + "----\n"
+            + "[webapp] <<maven module>>\n"
+            + "[module-order]  <<maven module>>\n"
+            + "[module-customer]  <<maven module>>\n"
+            + "[module-product]  <<maven module>>\n"
+            + "\n"
+            + "[webapp] .u-> [module-order]\n"
+            + "[module-order] .u-> [module-customer]\n"
+            + "[module-order] .u-> [module-product]\n"
+            + "----\n";
 
     private String entityTypesAsOrderedList() {
         return streamEntityTypes()
