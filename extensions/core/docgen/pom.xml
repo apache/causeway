@@ -35,13 +35,6 @@
 			<groupId>org.apache.causeway.valuetypes</groupId>
 			<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
 		</dependency>
-
-		<dependency>
-		    <groupId>org.asciidoctor</groupId>
-		    <artifactId>asciidoctorj-diagram</artifactId>
-		    <version>2.2.3</version>
-		</dependency>
-
     </dependencies>
 
 </project>
