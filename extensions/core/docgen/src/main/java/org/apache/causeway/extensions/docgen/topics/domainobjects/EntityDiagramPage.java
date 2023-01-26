@@ -53,35 +53,17 @@ public class EntityDiagramPage implements HelpPage {
     public AsciiDoc getContent() {
         return AsciiDoc.valueOf(
                 "== Entities\n\n"
-                + adocPlantumlSample); //TODO create actual ER diagrams
+                + _DiagramUtils.plantumlBlock(entityTypesAsDiagram()));
     }
 
     // -- HELPER
 
-    private String sample =
-            "object user\n"
-            + "\n"
-            + "user : name = \"Dummy\"\n"
-            + "user : id = 123\n"
-            + "\n";
-
-    private String adocPlantumlSample = "[plantuml]\n"
-            + ".Typical application dependencies\n"
-            + "----\n"
-            + "[webapp] <<maven module>>\n"
-            + "[module-order]  <<maven module>>\n"
-            + "[module-customer]  <<maven module>>\n"
-            + "[module-product]  <<maven module>>\n"
-            + "\n"
-            + "[webapp] .u-> [module-order]\n"
-            + "[module-order] .u-> [module-customer]\n"
-            + "[module-order] .u-> [module-product]\n"
-            + "----\n";
-
-    private String entityTypesAsOrderedList() {
+    private String entityTypesAsDiagram() {
         return streamEntityTypes()
-            .map(spec->". " + spec.getLogicalTypeName())
+            .map(spec->_DiagramUtils.object(spec))
             .collect(Collectors.joining("\n"));
+
+        //TODO add entity relations - that is, model the object graph
     }
 
     private Stream<ObjectSpecification> streamEntityTypes() {
