@@ -16,27 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom._infra;
+package org.apache.causeway.extensions.docgen.applib;
 
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
-import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Named;
-import lombok.val;
+public interface HelpPage {
 
-@Service
-@Named("demo.LibraryPreloadingService")
-public class LibraryPreloadingService {
-
-    @PostConstruct
-    public void preloadLibraries() {
-        val tasks = _ConcurrentTaskList.named("LibraryPreloading")
-        .addRunnable("Preload JRuby for AsciiDoc", AsciiDoc::loadJRuby);
-        tasks.submit(_ConcurrentContext.forkJoin());
-    }
+    String getTitle();
+    AsciiDoc getContent();
 
 }

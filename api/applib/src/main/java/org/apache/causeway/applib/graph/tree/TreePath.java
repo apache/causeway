@@ -19,8 +19,18 @@
 package org.apache.causeway.applib.graph.tree;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.primitives._Ints;
 
 /**
  * Provides an unambiguous way to address nodes by position within a tree-structure. Examples:
@@ -40,12 +50,18 @@ public interface TreePath extends Serializable {
     public TreePath append(int indexWithinSiblings);
 
     /**
-     *
-     * @return a new TreePath instance that represents the parent path of this
+     * Returns a TreePath instance that represents the parent path of this TreePath,
+     * if this is not the root.
      */
     public @Nullable TreePath getParentIfAny();
 
     public boolean isRoot();
+
+    public IntStream streamPathElements();
+
+    public String stringify(String delimiter);
+
+    public Stream<TreePath> streamUpTheHierarchyStartingAtSelf();
 
     // -- CONSTRUCTION
 
@@ -55,6 +71,37 @@ public interface TreePath extends Serializable {
 
     public static TreePath root() {
         return of(0);
+    }
+
+    /**
+     * Parses stringified tree path of format {@code <delimiter>0<delimiter>3<delimiter>1} ...,
+     * as returned by {@link TreePath#stringify(String)}.
+     * <p>
+     * For null or empty input the root is returned.
+     * @throws IllegalArgumentException if parsing fails
+     */
+    public static TreePath parse(final @Nullable String treePathStringified, final String delimiter) {
+        if(_Strings.isNullOrEmpty(treePathStringified)) {
+            return root();
+        }
+        _Assert.assertTrue(_Strings.isNotEmpty(delimiter), ()->"non-empty delimiter required");
+
+        // parse the input String into a list of integers
+        final List<Integer> pathElementsAsList =
+            _Strings.splitThenStream(treePathStringified, delimiter)
+            .filter(_Strings::isNotEmpty)
+            .map(pathElement->
+                _Ints.parseInt(pathElement, 10)
+                .orElseThrow(()->
+                    _Exceptions.illegalArgument("illformed treePath '%s' while parsing element '%s' using delimiter '%s'",
+                            treePathStringified, pathElement, delimiter)))
+            .collect(Collectors.toList());
+
+        // convert the list of integers into an array of int
+        final int[] canonicalPath = new int[pathElementsAsList.size()];
+        pathElementsAsList.forEach(IndexedConsumer.zeroBased((index, value)->canonicalPath[index] = value));
+
+        return of(canonicalPath);
     }
 
 }

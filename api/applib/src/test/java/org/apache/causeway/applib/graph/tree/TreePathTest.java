@@ -18,23 +18,27 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
+import java.util.List;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.commons.collections.Can;
+
 class TreePathTest {
 
     @Test
-    public void rootConstructor() {
+    void rootConstructor() {
         final TreePath treePath = TreePath.root();
         assertThat(treePath.isRoot(), Matchers.is(true));
         assertThat(treePath.toString(), Matchers.is("/0"));
     }
 
     @Test
-    public void samePathsShouldBeEqual() {
+    void samePathsShouldBeEqual() {
         final TreePath treePath1 = TreePath.of(0, 1, 2, 3);
         final TreePath treePath2 = TreePath.of(0, 1, 2, 3);
         assertEquals(treePath1, treePath2);
@@ -43,6 +47,31 @@ class TreePathTest {
         assertEquals(treePath1.toString(), treePath2.toString());
 
         assertThat(treePath1.toString(), Matchers.is("/0/1/2/3"));
+    }
+
+    @Test
+    void hierarchyStreamingOfRoot() {
+        assertEquals(
+                Can.ofCollection(List.of("/0")),
+                TreePath.root()
+                    .streamUpTheHierarchyStartingAtSelf()
+                    .map(TreePath::toString)
+                    .collect(Can.toCan()));
+    }
+
+    @Test
+    void hierarchyStreamingOfNonRoot() {
+        assertEquals(
+                Can.ofCollection(
+                        List.of(
+                                "/0/1/2/3",
+                                "/0/1/2",
+                                "/0/1",
+                                "/0")),
+                TreePath.of(0, 1, 2, 3)
+                    .streamUpTheHierarchyStartingAtSelf()
+                    .map(TreePath::toString)
+                    .collect(Can.toCan()));
     }
 
 }
