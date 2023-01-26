@@ -82,6 +82,7 @@ public class WelcomeHelpPage implements HelpPage {
 
     // -- HELPER
 
+    //TODO generate ascii-doc syntax instead; also eventually split the page into smaller sub-pages
     private String getDocumentationAsHtml() {
         final StringBuilder html = new StringBuilder();
         Object homePage = homePageResolverService.getHomePage();
