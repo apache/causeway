@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.docgen.topics.domainobjects;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -35,6 +34,7 @@ import org.apache.causeway.extensions.docgen.applib.HelpPage;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Component
 @Named(CausewayModuleExtDocgen.NAMESPACE + ".EntityDiagramPage")
@@ -56,14 +56,20 @@ public class EntityDiagramPage implements HelpPage {
                 + _DiagramUtils.plantumlBlock(entityTypesAsDiagram()));
     }
 
+    /** governs which entities to include */
+    protected boolean accept(final ObjectSpecification objSpec) {
+        // exclude demo entities, so we don't overflow kroki.io limits in the causeway demo app
+        return !"demo".equals(objSpec.getLogicalType().getNamespace());
+    }
+
     // -- HELPER
 
     private String entityTypesAsDiagram() {
-        return streamEntityTypes()
-            .map(spec->_DiagramUtils.object(spec))
-            .collect(Collectors.joining("\n"));
-
-        //TODO add entity relations - that is, model the object graph
+        val objectGraph = new ObjectGraph();
+        streamEntityTypes()
+            .filter(this::accept)
+            .forEach(objSpec->objectGraph.registerObject(objSpec));
+        return objectGraph.render();
     }
 
     private Stream<ObjectSpecification> streamEntityTypes() {
