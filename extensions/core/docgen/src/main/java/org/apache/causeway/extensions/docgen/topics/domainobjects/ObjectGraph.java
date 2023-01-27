@@ -36,8 +36,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import static org.apache.causeway.extensions.docgen.topics.domainobjects._DiagramUtils.doubleQuoted;
-
 import lombok.Value;
 import lombok.val;
 
@@ -227,7 +225,7 @@ class ObjectGraph {
         String render() {
             val sb = new StringBuilder()
                 .append(String.format("object %s as %s",
-                    doubleQuoted(name),
+                    _DiagramUtils.doubleQuoted(name),
                     stereotype
                         .map(stp->String.format("%s <<%s>>", id, stp)).orElse(id)))
                 .append('\n');
