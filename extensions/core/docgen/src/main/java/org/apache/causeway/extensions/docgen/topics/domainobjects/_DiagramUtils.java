@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.extensions.docgen.topics.domainobjects;
 
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -37,27 +36,27 @@ class _DiagramUtils {
                 + "--\n";
     }
 
-    String object(final String name, final List<String> fields) {
-        val sb = new StringBuilder();
-
-        sb.append("object " + name).append('\n');
-
-        fields.forEach(field->{
-            sb.append(name + " : " + field).append('\n');
-        });
-
-        return sb.toString();
+    String multilineLabel(final String...lines) {
+        return Stream.of(lines).collect(Collectors.joining("\\n"));
     }
 
-    String object(final ObjectSpecification objSpec) {
-
-        val props = objSpec.streamProperties(MixedIn.EXCLUDED)
-                .collect(Can.toCan());
-        val fields = props.map(prop->prop.getId())
-                .toList();
-
-        return object(objSpec.getLogicalType().getLogicalTypeSimpleName(), fields);
+    String doubleQuoted(final String string) {
+        return "\"" + string + "\"";
     }
 
+    String objectId(final ObjectSpecification objSpec) {
+        return objSpec.getLogicalType().getLogicalTypeName();
+    }
+
+    String objectName(final ObjectSpecification objSpec) {
+        return multilineLabel(
+                objectShortName(objSpec),
+                "<" + objSpec.getLogicalType().getNamespace() + ">");
+    }
+
+    String objectShortName(final ObjectSpecification objSpec) {
+        val simpleName = objSpec.getLogicalType().getLogicalTypeSimpleName();
+        return simpleName;
+    }
 
 }
