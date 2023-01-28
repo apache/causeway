@@ -81,16 +81,26 @@ class ObjectGraph {
                             || elementType.isAbstract()) {
                         val referencedObj = registerObject(elementType);
 
-                        val thisCls = objSpec.getLogicalType().getCorrespondingClass();
-                        val refCls = elementType.getLogicalType().getCorrespondingClass();
-                        if(thisCls.equals(refCls)
-                                || !refCls.isAssignableFrom(thisCls)) {
-                            // we found a 1-x relation
-                            registerRelation(
-                                    ass.isOneToOneAssociation()
-                                        ? ObjectGraph.Relation.RelationType.ONE_TO_ONE
-                                        : ObjectGraph.Relation.RelationType.ONE_TO_MANY,
-                                    obj.id, referencedObj.id, ass.getId());
+                        val thisType = objSpec.getLogicalType();
+                        val refType = elementType.getLogicalType();
+
+                        val thisNs = thisType.getNamespace();
+                        val refNs = refType.getNamespace();
+
+                        // only register association relations if they don't cross namespace boundaries
+                        // in other words: only include, if they share the same namespace
+                        if(thisNs.equals(refNs)) {
+                            val thisCls = thisType.getCorrespondingClass();
+                            val refCls = refType.getCorrespondingClass();
+                            if(thisCls.equals(refCls)
+                                    || !refCls.isAssignableFrom(thisCls)) {
+                                // we found a 1-x relation
+                                registerRelation(
+                                        ass.isOneToOneAssociation()
+                                            ? ObjectGraph.Relation.RelationType.ONE_TO_ONE
+                                            : ObjectGraph.Relation.RelationType.ONE_TO_MANY,
+                                        obj.id, referencedObj.id, ass.getId());
+                            }
                         }
 
                     }
@@ -106,10 +116,65 @@ class ObjectGraph {
                 final String fromId,
                 final String toId,
                 final String label) {
-            val relation = new ObjectGraph.Relation(relationType, fromId, toId, label);
+            val relation = new ObjectGraph.Relation(relationType, fromId, toId, label, "");
             relations.add(relation);
             return relation;
         }
+
+        public void consolidateAssociationRelations() {
+
+            // collect association-relations into a list-multi-map,
+            // where each key references a list of relations that need to be merged into one
+            final ListMultimap<String, ObjectGraph.Relation> shared = _Multimaps.newListMultimap();
+            relations.stream()
+                .filter(ObjectGraph.Relation::isAssociation)
+                .forEach(ass->{
+                    shared.putElement(ass.toId + " " + ass.fromId, ass);
+                });
+
+            relations.removeIf(ObjectGraph.Relation::isAssociation);
+
+            shared.forEach((key, list) -> {
+                val merged = list.stream().reduce((a, b)->new ObjectGraph.Relation(
+                        ObjectGraph.Relation.RelationType.MERGED_ASSOCIATIONS,
+                        a.fromId, a.toId,
+                        a.labelFormatted() + "," + b.labelFormatted(), ""));
+                merged.ifPresent(relations::add);
+            });
+
+            consolidateBidirRelations();
+        }
+
+        private void consolidateBidirRelations() {
+
+            // collect association-relations into a list-multi-map,
+            // where each key references a list of relations that need to be merged into one;
+            // we are using a sorted key where relation direction does not matter
+            final ListMultimap<String, ObjectGraph.Relation> shared = _Multimaps.newListMultimap();
+            relations.stream()
+                .filter(ObjectGraph.Relation::isAssociation)
+                .filter(ass->!ass.toId.equals(ass.fromId)) // exclude self referencing relations
+                .forEach(ass->{
+                    if(ass.fromId.compareTo(ass.toId)>0) {
+                        shared.putElement(ass.toId + " " + ass.fromId, ass);
+                    } else {
+                        shared.putElement(ass.fromId + " " + ass.toId, ass);
+                    }
+                });
+
+            shared.forEach((key, list) -> {
+                if(list.size()==2) {
+                    relations.removeAll(list);
+                    val a = list.get(0);
+                    val b = list.get(1);
+                    relations.add(new ObjectGraph.Relation(
+                            ObjectGraph.Relation.RelationType.BIDIR_ASSOCIATION,
+                            a.fromId, a.toId,
+                            a.labelFormatted(), b.labelFormatted()));
+                }
+            });
+        }
+
 
         public void createInheritanceRelations() {
 
@@ -129,7 +194,7 @@ class ObjectGraph {
                         // we found an inheritance relation
                         val relation = new ObjectGraph.Relation(
                                 ObjectGraph.Relation.RelationType.INHERITANCE,
-                                o1.id, o2.id, "");
+                                o1.id, o2.id, "", "");
                         inheritanceRelations.add(relation);
                     }
                 }
@@ -176,18 +241,30 @@ class ObjectGraph {
         public static enum RelationType {
             ONE_TO_ONE,
             ONE_TO_MANY,
-            INHERITANCE,
+            MERGED_ASSOCIATIONS,
+            BIDIR_ASSOCIATION,
+            INHERITANCE;
+            public boolean isAssociation() { return this!=INHERITANCE; }
         }
         private final RelationType relationType;
         private final String fromId;
         private final String toId;
         private final String label;
+        private final String label2;
+        public String labelFormatted() {
+            return relationType==RelationType.ONE_TO_MANY
+                    ? String.format("[%s]", label)
+                    : label;
+        }
+        public boolean isAssociation() { return relationType.isAssociation(); }
         public String render() {
             switch(relationType) {
             case ONE_TO_ONE:
-                return String.format("%s -> %s : %s", fromId, toId, label);
             case ONE_TO_MANY:
-                return String.format("%s -> %s : [%s]", fromId, toId, label);
+            case MERGED_ASSOCIATIONS:
+                return String.format("%s -> \"%s\" %s", fromId, labelFormatted(), toId);
+            case BIDIR_ASSOCIATION:
+                return String.format("%s \"%s\" -- \"%s\" %s", fromId, label, label2, toId);
             case INHERITANCE:
                 return String.format("%s --|> %s", fromId, toId);
             }
@@ -266,6 +343,7 @@ class ObjectGraph {
 
         });
 
+        context.consolidateAssociationRelations();
         context.createInheritanceRelations();
 
         context.getRelations().stream()
@@ -281,7 +359,5 @@ class ObjectGraph {
 
         return plantuml;
     }
-
-
 
 }
