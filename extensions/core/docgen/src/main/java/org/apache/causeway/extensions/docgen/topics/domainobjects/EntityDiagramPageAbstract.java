@@ -45,9 +45,14 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
 
     @Override
     public AsciiDoc getContent() {
+        val title = getTitle();
+        val plantumlSource = entityTypesAsDiagram();
+
         return AsciiDoc.valueOf(
-                "== Entities\n\n"
-                + _DiagramUtils.plantumlBlock(entityTypesAsDiagram()));
+                "== " + title + "\n\n"
+                + _DiagramUtils.plantumlBlock(plantumlSource)
+                + "\n"
+                + _DiagramUtils.plantumlSourceBlock(plantumlSource));
     }
 
     /** governs which entities to include */

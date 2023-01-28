@@ -30,10 +30,32 @@ import lombok.experimental.UtilityClass;
 class _DiagramUtils {
 
     String plantumlBlock(final String diagramSource) {
-        return "[plantuml]\n"
-                + "--\n"
-                + diagramSource
-                + "--\n";
+        return adocBlockHeader("plantuml")
+                + adocDelimited("----", diagramSource);
+    }
+
+    String plantumlSourceBlock(final String diagramSource) {
+        return adocLabel("Diagram Source")
+            + adocCollapsibeBlock(
+                    adocBlockHeader("source")
+                    + adocLabel("Plantuml Syntax")
+                    + adocDelimited("----", diagramSource));
+    }
+
+    String adocCollapsibeBlock(final String content) {
+        return "[%collapsible]\n"
+                + adocDelimited("====", content);
+    }
+    String adocBlockHeader(final String entry) {
+        return "[" + entry + "]\n";
+    }
+    String adocDelimited(final String delimiter, final String content) {
+        return delimiter + "\n"
+            + content
+            + "\n" + delimiter + "\n";
+    }
+    String adocLabel(final String label) {
+        return "." + label + "\n";
     }
 
     String multilineLabel(final String...lines) {
