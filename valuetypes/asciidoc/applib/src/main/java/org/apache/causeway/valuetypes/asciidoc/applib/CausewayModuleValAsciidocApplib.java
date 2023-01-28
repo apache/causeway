@@ -26,10 +26,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.zip.Deflater;
 
 import org.asciidoctor.Asciidoctor;
@@ -122,19 +122,57 @@ public class CausewayModuleValAsciidocApplib {
     }
 
     /**
-     * Normalizes 'open' blocks, such that these are recognized by the
+     * Converts 'plantuml' blocks to 'open' blocks, such that these are recognized by the
      * {@link PlantumlBlockProcessor}. Not needed otherwise.
      */
     public static class OpenBlockPreProcessor extends Preprocessor {
+
+        private static enum State {
+            DISABLED,
+            BEFORE_BLOCK_START,
+            AFTER_BLOCK_STARTED;
+            State next() {
+                val values = State.values();
+                return values[(this.ordinal() + 1) % values.length];
+            }
+        }
+
         @Override
         public void process(final Document document, final PreprocessorReader reader) {
+
+            var state = State.DISABLED;
+
+            final List<String> processedLines = new ArrayList<>();
             final List<String> lines = reader.readLines();
-            val processedLines = lines.stream()
-                    .map(line->
-                    line.trim().equals("----")
-                    ? "--"
-                            : line)
-                    .collect(Collectors.toList());
+            for(val line : lines) {
+                val trimmedLine = line.trim();
+
+                switch(state) {
+                case DISABLED: {
+                    if(trimmedLine.startsWith("[plantuml")) {
+                        // condition causes a state transition
+                        state = state.next();
+                    }
+                }
+                case BEFORE_BLOCK_START: {
+                    if(trimmedLine.equals("----")) {
+                        // condition causes a state transition
+                        state = state.next();
+                        processedLines.add("--");
+                        continue;
+                    }
+                }
+                case AFTER_BLOCK_STARTED: {
+                    if(trimmedLine.equals("----")) {
+                        // condition causes a state transition
+                        state = state.next();
+                        processedLines.add("--");
+                        continue;
+                    }
+                }}
+                processedLines.add(line);
+            }
+
             reader.restoreLines(processedLines);
         }
     }
