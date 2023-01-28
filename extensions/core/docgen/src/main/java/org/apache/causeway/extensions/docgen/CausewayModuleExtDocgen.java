@@ -26,7 +26,8 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.docgen.applib.HelpNode.HelpTopic;
 import org.apache.causeway.extensions.docgen.menu.DocumentationMenu;
-import org.apache.causeway.extensions.docgen.topics.domainobjects.EntityDiagramPage;
+import org.apache.causeway.extensions.docgen.topics.domainobjects.CausewayEntityDiagramPage;
+import org.apache.causeway.extensions.docgen.topics.domainobjects.DomainEntityDiagramPage;
 import org.apache.causeway.extensions.docgen.topics.welcome.WelcomeHelpPage;
 
 import lombok.val;
@@ -42,7 +43,8 @@ import lombok.val;
 
     // help pages, as required by the default RootHelpTopic below (in case when to be managed by Spring)
     WelcomeHelpPage.class,
-    EntityDiagramPage.class
+    CausewayEntityDiagramPage.class,
+    DomainEntityDiagramPage.class
 
 })
 public class CausewayModuleExtDocgen {
@@ -57,14 +59,18 @@ public class CausewayModuleExtDocgen {
     @Qualifier("Default")
     public HelpTopic rootHelpTopic(
             final WelcomeHelpPage welcomeHelpPage,
-            final EntityDiagramPage entityDiagramPage) {
+            final CausewayEntityDiagramPage causewayEntityDiagramPage,
+            final DomainEntityDiagramPage domainEntityDiagramPage) {
 
         val root = HelpTopic.root("Topics");
 
         root.addPage(welcomeHelpPage);
 
+        root.subTopic("Causeway")
+            .addPage(causewayEntityDiagramPage);
+
         root.subTopic("Domain")
-            .addPage(entityDiagramPage);
+            .addPage(domainEntityDiagramPage);
 
         return root;
     }

@@ -21,7 +21,6 @@ package org.apache.causeway.extensions.docgen.topics.domainobjects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
@@ -37,17 +36,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Component
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".EntityDiagramPage")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class EntityDiagramPage implements HelpPage {
+@Named(CausewayModuleExtDocgen.NAMESPACE + ".EntityDiagramPageAbstract")
+@RequiredArgsConstructor
+public abstract class EntityDiagramPageAbstract implements HelpPage {
 
     private final SpecificationLoader specLoader;
     private final CausewayBeanTypeRegistry beanTypeRegistry;
-
-    @Override
-    public String getTitle() {
-        return "Entity Diagram";
-    }
 
     @Override
     public AsciiDoc getContent() {
@@ -57,10 +51,7 @@ public class EntityDiagramPage implements HelpPage {
     }
 
     /** governs which entities to include */
-    protected boolean accept(final ObjectSpecification objSpec) {
-        // exclude demo entities, so we don't overflow kroki.io limits in the causeway demo app
-        return !"demo".equals(objSpec.getLogicalType().getNamespace());
-    }
+    protected abstract boolean accept(final ObjectSpecification objSpec);
 
     // -- HELPER
 
