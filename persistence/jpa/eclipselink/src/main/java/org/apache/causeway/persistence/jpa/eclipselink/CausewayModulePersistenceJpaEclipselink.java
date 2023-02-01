@@ -198,7 +198,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                                     "JPA operation: " + nextEx.getMessage(),
                                     extractSqlStringFromException(nextEx),
                                     nextEx))
-                    .filter(_NullSafe::isPresent) //ISIS-3282
+                    .filter(_NullSafe::isPresent) //CAUSEWAY-3282
                     .findFirst()
                     .orElse(null);
 

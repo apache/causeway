@@ -89,7 +89,7 @@ implements _Refetchable {
             return pojo; // is attached
         }
 
-        //[ISIS-3265] this getPojo() call might originate from a CausewayEntityListener.onPostLoad event,
+        //[CAUSEWAY-3265] this getPojo() call might originate from a CausewayEntityListener.onPostLoad event,
         // in which case potentially runs into a nested loop resulting in a stack overflow;
         if(refetching) {
             throw _Exceptions.unrecoverable("framework bug: nested call to getPojo() while already refetching");

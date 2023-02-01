@@ -78,7 +78,7 @@ public class CausewayEntityListener {
 
         val entityState = entity.getEntityState();
         if(!entityState.isAttached()) {
-            // [ISIS-3265] seeing this with JPA
+            // [CAUSEWAY-3265] seeing this with JPA
             // if we don't exit here will cause a nested loop repeatedly trying to refetch the pojo
             log.error("onPostLoad event while pojo not attached ({}); ignoring the event",
                     entityState.name());
