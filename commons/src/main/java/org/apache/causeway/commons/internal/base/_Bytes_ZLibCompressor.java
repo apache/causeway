@@ -21,42 +21,41 @@ package org.apache.causeway.commons.internal.base;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 import lombok.experimental.UtilityClass;
 
 /**
  * package private utility for {@link _Bytes}
  */
 @UtilityClass
-class _Bytes_GZipCompressor {
+class _Bytes_ZLibCompressor {
 
     static byte[] compress(final byte[] input) throws IOException {
-
         final int BUFFER_SIZE = Math.max(256, input.length); // at least 256
 
         final ByteArrayOutputStream os = new ByteArrayOutputStream(BUFFER_SIZE);
-        final GZIPOutputStream gos = new GZIPOutputStream(os);
-        gos.write(input);
-        gos.close();
+        final DeflaterOutputStream zlibOs = new DeflaterOutputStream(os);
+        zlibOs.write(input);
+        zlibOs.close();
 
         return os.toByteArray();
     }
 
     static byte[] decompress(final byte[] compressed) throws IOException {
 
-        final int BUFFER_SIZE = 32;
+        final int BUFFER_SIZE = 512;
 
         final ByteArrayInputStream is = new ByteArrayInputStream(compressed);
-        final GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
+        final InflaterInputStream zlibIs = new InflaterInputStream(is, new Inflater(), BUFFER_SIZE);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final byte[] data = new byte[BUFFER_SIZE];
         int bytesRead;
-        while ((bytesRead = gis.read(data)) != -1) {
+        while ((bytesRead = zlibIs.read(data)) != -1) {
             baos.write(data, 0, bytesRead);
         }
-        gis.close();
+        zlibIs.close();
         return baos.toByteArray();
     }
 

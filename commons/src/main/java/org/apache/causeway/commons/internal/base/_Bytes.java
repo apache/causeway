@@ -25,6 +25,8 @@ import java.util.Base64;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import org.springframework.lang.Nullable;
 
@@ -278,6 +280,49 @@ public final class _Bytes {
         }
     }
 
+
+    /**
+     * Compresses the given byte array, using {@link Deflater} algorithm.<br/>
+     * Symmetry holds: <br/>
+     * {@code x == decompressZlib(compressZlib(x))}
+     * @param input
+     * @return null if {@code input} is null
+     */
+    public static final byte[] compressZlib(final @Nullable byte[] input) {
+        if(input==null) {
+            return null;
+        }
+        if(input.length==0) {
+            return input;
+        }
+        try {
+            return _Bytes_ZLibCompressor.compress(input);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * Decompresses the given byte array, using {@link Inflater} algorithm.<br/>
+     * Symmetry holds: <br/>
+     * {@code x == decompressZlib(compressZlib(x))}
+     * @param compressed
+     * @return null if {@code compressed} is null
+     */
+    public static final byte[] decompressZlib(final @Nullable byte[] compressed) {
+        if(compressed==null) {
+            return null;
+        }
+        if(compressed.length==0) {
+            return compressed;
+        }
+        try {
+            return _Bytes_ZLibCompressor.decompress(compressed);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     // -- UNARY OPERATOR COMPOSITION
 
     /**
@@ -325,6 +370,14 @@ public final class _Bytes {
     public static final BytesOperator ofCompressedUrlBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
             .andThen(_Bytes::decompress);
+
+    public static final BytesOperator asZlibCompressedUrlBase64 = operator()
+            .andThen(_Bytes::compressZlib)
+            .andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));
+
+    public static final BytesOperator ofZlibCompressedUrlBase64 = operator()
+            .andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
+            .andThen(_Bytes::decompressZlib);
 
     public static final BytesOperator asBase64 = operator()
             .andThen(bytes->encodeToBase64(Base64.getEncoder(), bytes));

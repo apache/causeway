@@ -18,16 +18,17 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import lombok.experimental.UtilityClass;
+
 /**
- *
- * package private mixin for utility class {@link _Strings}
- *
+ * package private utility for {@link _Strings}
  */
-final class _Strings_HtmlEscaper {
+@UtilityClass
+class _Strings_HtmlEscaper {
 
     // as declared int guava's com.google.common.html.HtmlEscapers
     // order matters: replace '&' first
-    private static final _Strings.KeyValuePair[] replacements = {
+    private final _Strings.KeyValuePair[] replacements = {
             _Strings.pair("&", "&amp;"),
             _Strings.pair("<", "&lt;"),
             _Strings.pair(">", "&gt;"),
@@ -36,7 +37,7 @@ final class _Strings_HtmlEscaper {
             _Strings.pair("'", "&#39;"),
     };
 
-    static String htmlEscape(final String input) {
+    String htmlEscape(final String input) {
         if(_Strings.isEmpty(input)) {
             return input;
         }

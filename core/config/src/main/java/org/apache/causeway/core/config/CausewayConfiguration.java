@@ -2676,6 +2676,12 @@ public class CausewayConfiguration {
              * Eg. via docker instance like {@literal yuzutech/kroki}.
              */
             private URL backendUrl = null;
+
+            /**
+             * Max time for requests to the {@link #getBackendUrl()},
+             * when waiting for a response. (default: 5 seconds)
+             */
+            private Duration requestTimeout = Duration.ofMillis(5000);
         }
 
     }

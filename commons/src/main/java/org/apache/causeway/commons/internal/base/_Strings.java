@@ -47,7 +47,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Bytes.BytesOperator;
 import org.apache.causeway.commons.internal.functions._Predicates;
-
 import static org.apache.causeway.commons.internal.base._NullSafe.size;
 import static org.apache.causeway.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.causeway.commons.internal.base._With.mapIfPresentElse;
@@ -834,6 +833,14 @@ public final class _Strings {
 
     public static String base64UrlEncode(final @Nullable String str) {
         return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
+    }
+
+    public static String base64UrlDecodeZlibCompressed(final @Nullable String str) {
+        return _Strings.convert(str, _Bytes.ofZlibCompressedUrlBase64, StandardCharsets.UTF_8);
+    }
+
+    public static String base64UrlEncodeZlibCompressed(final @Nullable String str) {
+        return _Strings.convert(str, _Bytes.asZlibCompressedUrlBase64, StandardCharsets.UTF_8);
     }
 
     // -- CHARACTER PROCESSING

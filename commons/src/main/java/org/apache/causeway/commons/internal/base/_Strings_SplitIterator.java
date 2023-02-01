@@ -25,12 +25,13 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import lombok.experimental.UtilityClass;
+
 /**
- *
- * package private mixin for utility class {@link _Strings}
- *
+ * package private utility for {@link _Strings}
  */
-final class _Strings_SplitIterator {
+@UtilityClass
+class _Strings_SplitIterator {
 
     public static Iterator<String> splitIterator(final @Nullable String x, final String delimiter){
         if(_Strings.isEmpty(delimiter)) {

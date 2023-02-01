@@ -23,19 +23,20 @@ import java.util.Arrays;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import lombok.experimental.UtilityClass;
+
 /**
- *
- * package private mixin for utility class {@link _Bytes}
- *
+ * package private utility for {@link _Bytes}
  */
-final class _Bytes_GZipCompressorSmart {
+@UtilityClass
+class _Bytes_GZipCompressorSmart {
 
     private static final int INPUT_LENGTH_THRESHOLD_FOR_SMART_COMPRESSION = 256;
     private static final int GZIP_MIN_OVERHEAD = 18;
     private static final byte COMPRESSION_NONE = 0;
     private static final byte COMPRESSION_GZIP = 1;
 
-    static byte[] compress(byte[] input) throws IOException {
+    byte[] compress(final byte[] input) throws IOException {
         if(input.length<GZIP_MIN_OVERHEAD) {
             return input;
         }
@@ -46,7 +47,7 @@ final class _Bytes_GZipCompressorSmart {
         }
     }
 
-    static byte[] decompress(byte[] input) throws IOException {
+    byte[] decompress(final byte[] input) throws IOException {
         if(input==null || input.length<GZIP_MIN_OVERHEAD)
             return input;
 
@@ -58,7 +59,7 @@ final class _Bytes_GZipCompressorSmart {
 
     // -- HELPER
 
-    private static boolean isCompressed(byte[] input) {
+    private boolean isCompressed(final byte[] input) {
         switch (input[0]) {
         case COMPRESSION_NONE:
             return false;
