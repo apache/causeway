@@ -70,11 +70,17 @@
 		    <artifactId>jakarta.inject-api</artifactId>
 		</dependency>
 		<dependency>
-        	<!-- provides javax.enterprise.inject.* -->
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
             <version>4.0.1</version>
             <exclusions>
+				<exclusion>
+					<!-- outdated v5.0.0 transitively brought in by 
+						jakarta.enterprise:jakarta.enterprise.cdi-api:jar:4.0.1:compile
+						-->
+					<groupId>jakarta.el</groupId>
+		    		<artifactId>jakarta.el-api</artifactId>
+				</exclusion>
             	<exclusion>
             		<groupId>jakarta.inject</groupId>
 		    		<artifactId>jakarta.inject-api</artifactId>
