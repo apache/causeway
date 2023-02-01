@@ -20,12 +20,11 @@ package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
-import org.apache.causeway.client.kroviz.layout.Layout
+import org.apache.causeway.client.kroviz.core.model.ObjectLayout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
 
@@ -37,10 +36,11 @@ import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
  * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
 class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
-    var collectionMap = mutableMapOf<String, CollectionAggregator>()
+
+    private var collectionMap = mutableMapOf<String, CollectionAggregator>()
 
     init {
-        dpm = ObjectDM(actionTitle)
+        displayModel = ObjectDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String?) {
@@ -52,30 +52,14 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
                 is ResultObject -> handleResultObject(obj)
                 is ResultValue -> handleResultValue(obj)
                 is Property -> handleProperty(obj, referrer)
-                is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
-                is GridBs -> handleGrid(obj, dpm as DisplayModelWithLayout, referrer)
+                is GridBs -> handleGrid(obj, referrer)
                 is HttpError -> ErrorDialog(logEntry).open()
                 else -> log(logEntry)
             }
         }
 
-        if (dpm.canBeDisplayed() && collectionsCanBeDisplayed()) {
-            collectionMap.forEach {
-                (dpm as ObjectDM).addCollection(it.key, it.value.dpm as CollectionDM)
-            }
-            console.log("[OA.canBeDisplayed]")
-            console.log(this)
-            console.log((dpm as DisplayModelWithLayout).collectionProperties.debug())
-
+        if (displayModel.readyToRender()) {
             ViewManager.openObjectView(this)
-        }
-    }
-
-    private fun collectionsCanBeDisplayed(): Boolean {
-        if (collectionMap.isEmpty()) return true
-        return collectionMap.all {
-            val cdm = it.value.dpm as CollectionDM
-            cdm.canBeDisplayed()
         }
     }
 
@@ -85,7 +69,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         if (obj.getProperties().size == 0) {
             invokeInstance(obj, referrer)
         } else {
-            dpm.addData(obj)
+            displayModel.addData(obj, this, referrer)
         }
         if (collectionMap.isEmpty()) {
             handleCollections(obj, referrer)
@@ -101,46 +85,63 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleResultObject(resultObject: ResultObject) {
-        (dpm as ObjectDM).addResult(resultObject)
+        (displayModel as ObjectDM).addResult(resultObject)
     }
 
     private fun handleResultValue(resultValue: ResultValue) {
-// TODO       (dpm as ObjectDM).addResult(resultObject)
-        console.log("[OA.handleResultValue]")
-        console.log(resultValue)
+        throw NotImplementedError("$resultValue to be handled")
     }
 
     override fun getObject(): TObject? {
-        return dpm.getObject()
+        return displayModel.getObject()
     }
 
     private fun handleCollections(obj: TObject, referrer: String) {
-        console.log("[OA.handleCollections]")
-        console.log(obj)
-        obj.getCollections().forEach {
-            console.log(it)
+        console.log("[OA_handleCollection] collections")
+        val collections = obj.getCollections()
+        console.log(collections)
+        collections.forEach {
             val key = it.id
             val aggregator = CollectionAggregator(key, this)
             collectionMap[key] = aggregator
             val link = it.links.first()
-            console.log(link)
             ResourceProxy().fetch(link, aggregator, referrer = referrer)
         }
     }
 
-    private fun handleProperty(p: Property, referrer: String) {
-        val dm = dpm as ObjectDM
-        if (p.isPropertyDescription()) {
-            dm.addPropertyDescription(p)
-        } else {
-            dm.addProperty(p)
-            val pdl = p.getDescriptionLink() ?: return
-            invoke(pdl, this, referrer = referrer)
+    private fun handleProperty(property: Property, referrer: String) {
+        val dm = displayModel as ObjectDM
+        val layout = dm.layout!!
+        handleProperty(property, referrer, layout)
+    }
+
+    private fun handleGrid(grid: GridBs, referrer: String) {
+        val odm = displayModel as ObjectDM
+        val ol = odm.layout as ObjectLayout
+        // for a yet unknown reason, handleGrid may be called twice, therefore we check if it's already set
+        if (ol.grid == null) {
+            console.log("[OA_handleGrid]")
+            ol.addGrid(grid, this, referrer = referrer)
+            val pl = grid.getPropertyList()
+            pl.forEach {
+                val link = it.link!!
+                // properties to be handled by ObjectAggregator
+                ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
+            }
+            val cl = grid.getCollectionList()
+            cl.forEach {
+                val href = it.linkList.first().href
+                console.log("CollectionBs")
+                console.log(href)
+                val l = Link(href = href)
+                // collections to be handled by ObjectAggregator
+                ResourceProxy().fetch(l, this, subType = Constants.subTypeJson, referrer = referrer)
+            }
         }
     }
 
     override fun reset(): ObjectAggregator {
-        dpm.isRendered = false
+        displayModel.reset()
         return this
     }
 

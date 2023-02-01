@@ -25,6 +25,7 @@ import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
+import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 
@@ -103,19 +104,18 @@ class ColumnFactory {
         displayCollection: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        val propertyLabels = displayCollection.collectionProperties.list
-        for (pl in propertyLabels) {
-            if (!pl.hidden) {
-                val id = pl.key
-                val friendlyName = pl.friendlyName
-                var cd = ColumnDefinition<dynamic>(
-                    title = friendlyName,
-                    field = id,
+        val cl = displayCollection.layout as CollectionLayout
+        val colDescList = cl.getColumnDescriptions()
+        for (cd in colDescList) {
+            if (!cd.hidden) {
+                var colDef = ColumnDefinition<dynamic>(
+                    title = cd.name,
+                    field = cd.id,
                     headerFilter = Editor.INPUT)
-                if (id == "object") {
-                    cd = buildLink()
+                if (cd.id == "object") {
+                    colDef = buildLink()
                 }
-                columns.add(cd)
+                columns.add(colDef)
             }
         }
     }

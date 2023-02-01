@@ -47,7 +47,7 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
     // callback parameter
     private val LOG: String = "log"
     private val LNK: String = "lnk"
-    private val DPM: String = "dpm"
+    private val displayModel: String = "displayModel"
 
     override fun open() {
         val responseStr = if (logEntry.subType == Constants.subTypeJson) {
@@ -69,7 +69,7 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
                 ValueType.BUTTON,
                 null,
                 callBack = this,
-                callBackAction = DPM
+                callBackAction = displayModel
             )
         )
         customButtons.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
@@ -98,7 +98,7 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
                 linkTreeDiagram()
             }
 
-            action == DPM -> {
+            action == displayModel -> {
                 displayModelDiagram()
             }
 
@@ -119,8 +119,8 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
 
     private fun displayModelDiagram() {
         logEntry.aggregators.forEach {
-            val dpm = it.dpm
-            val json = Flatted.stringify(dpm)
+            val displayModel = it.displayModel
+            val json = Flatted.stringify(displayModel)
             console.log("[ELD.displayModelDiagram]")
             console.log(json)
             val code = JsonDiagram.build(json)

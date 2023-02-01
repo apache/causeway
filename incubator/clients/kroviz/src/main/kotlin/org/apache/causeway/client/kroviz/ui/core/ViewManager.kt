@@ -164,7 +164,7 @@ object ViewManager {
     }
 
     fun openCollectionView(aggregator: BaseAggregator) {
-        val displayable = aggregator.dpm
+        val displayable = aggregator.displayModel
         val title: String = StringUtils.extractTitle(displayable.title)
         val panel = RoTable(displayable as CollectionDM)
         add(title, panel, aggregator)
@@ -173,7 +173,7 @@ object ViewManager {
     }
 
     fun openObjectView(aggregator: ObjectAggregator) {
-        val dm = aggregator.dpm as ObjectDM
+        val dm = aggregator.displayModel as ObjectDM
         var title: String = StringUtils.extractTitle(dm.title)
         if (title.isEmpty()) {
             title = aggregator.actionTitle

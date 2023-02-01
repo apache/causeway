@@ -52,4 +52,14 @@ class GridBs(document: Document) : XmlLayout(), TransferObject {
         return list
     }
 
+    fun getCollectionList(): List<CollectionBs> {
+        val list = mutableListOf<CollectionBs>()
+        rows.forEach { r ->
+            r.colList.forEach { cl ->
+                list.addAll(cl.collectionList)
+            }
+        }
+        return list
+    }
+
 }

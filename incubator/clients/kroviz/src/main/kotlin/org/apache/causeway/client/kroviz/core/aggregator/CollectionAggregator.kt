@@ -23,8 +23,7 @@ import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.DisplayModelWithLayout
-import org.apache.causeway.client.kroviz.layout.Layout
+import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
@@ -36,16 +35,16 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
+class CollectionAggregator(actionTitle: String, private val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
 
     init {
-        dpm = CollectionDM(actionTitle)
+        displayModel = CollectionDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
         if (logEntry.state == EventState.DUPLICATE) {
-            console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")
+            throw IllegalStateException("duplicates should not be propagated to handlers")
             //TODO this may not hold true for changed and deleted objects - object version required to deal with it?
         } else {
             val referrer = logEntry.url
@@ -54,8 +53,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 is ResultList -> handleList(obj, referrer)
                 is TObject -> handleObject(obj, referrer)
                 is DomainType -> handleDomainType(obj, referrer)
-                is Layout -> handleLayout(obj, dpm as CollectionDM, referrer)
-                is GridBs -> handleGrid(obj, dpm as DisplayModelWithLayout, referrer)
+                is GridBs -> handleGrid(obj, referrer)
                 is Property -> handleProperty(obj, referrer)
                 is Collection -> handleCollection(obj, referrer)
                 is Icon -> handleIcon(obj)
@@ -63,15 +61,24 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
             }
 
             if (parent == null) {
-                if (dpm.canBeDisplayed()) {
+                if (displayModel.readyToRender()) {
                     ViewManager.openCollectionView(this)
                 }
             } else {
                 val le = LogEntry(ResourceSpecification(""))
-                //in case of a _parented_collection_ an empty LogEntry is passed on
+                // in case of a _parented_collection_ an empty LogEntry is passed on
                 parent.update(le, subType)
             }
         }
+    }
+
+    private fun handleGrid(grid: GridBs, referrer: String) {
+        val cdm = displayModel as CollectionDM
+        console.log("[CA.handleGrid] In the case of CollectionDM, object-layout can be ignored?")
+        console.log(grid)
+        console.log(cdm)
+        console.log(referrer)
+        //TODO("In the case of CollectionDM, object-layout can be ignored: " + vars)
     }
 
     private fun handleList(resultList: ResultList, referrer: String) {
@@ -84,13 +91,24 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleObject(obj: TObject, referrer: String) {
-        dpm.addData(obj)
-        invokeLayoutLink(obj, this, referrer = referrer)
+        displayModel.addData(obj, this, referrer)
+        if (isStandAloneCollection()) {
+            invokeLayoutLink(obj, this, referrer = referrer)
+        }
         invokeIconLink(obj, this, referrer = referrer)
+        // set the number of columns
+        val numberOfColumns = obj.getProperties().size
+        val cdm = displayModel as CollectionDM
+        val cl = cdm.layout as CollectionLayout
+        cl.numberOfColumns = numberOfColumns
+    }
+
+    private fun isStandAloneCollection(): Boolean {
+        return parent == null
     }
 
     private fun handleIcon(obj: TransferObject?) {
-        (dpm as CollectionDM).addIcon(obj)
+        (displayModel as CollectionDM).addIcon(obj)
     }
 
     private fun handleDomainType(obj: DomainType, referrer: String) {
@@ -107,15 +125,11 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         }
     }
 
-    private fun handleProperty(p: Property, referrer: String) {
-        val dm = dpm as CollectionDM
-        if (p.isPropertyDescription()) {
-            dm.addPropertyDescription(p)
-        } else {
-            dm.addProperty(p)
-            val pdl = p.getDescriptionLink() ?: return
-            invoke(pdl, this, referrer = referrer)
-        }
+    private fun handleProperty(property: Property, referrer: String) {
+        console.log("[CA.handleProperty]")
+        val dm = displayModel as CollectionDM
+        val layout = dm.layout!!
+        handleProperty(property, referrer, layout)
     }
 
     private fun handleCollection(collection: Collection, referrer: String) {
@@ -130,7 +144,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     override fun reset(): CollectionAggregator {
-        dpm.reset()
+        displayModel.reset()
         return this
     }
 

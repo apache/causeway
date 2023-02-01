@@ -1,0 +1,160 @@
+
+|===
+|repr-type |Aggregator |referrer (parent)|link
+
+|object-layout
+|ObjectAggregator
+|n/a
+|http://localhost:9090/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz48RGVtby8-/object-layout
+
+|object-collection
+|c2r2
+|object-layout
+|http://localhost:9090/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz48RGVtby8-/collections/entities
+
+|collection-description
+|out of scope
+|object-collection
+|http://localhost:9090/restful/domain-types/demo.JavaLangStrings/collections/entities
+
+|object
+|c2r4
+|object-collection
+|http://localhost:9090/restful/objects/demo.JavaLangStringEntity/355
+
+|object-property
+|c2r5
+|object
+|http://localhost:9090/restful/objects/demo.JavaLangStringEntity/355/properties/mixinProperty
+
+|property-description
+|c2r6
+|object-property
+|http://localhost:9090/restful/domain-types/demo.JavaLangStringEntity/properties/mixinProperty
+|===
+
+.Collection Layout Aggregation
+[plantuml,file="layout_aggregation.png"]
+----
+allowmixing
+
+() START
+() END
+together {
+    file "..<<xml>>..\nobject-layout" as OL
+    class "<<TransferObject>>\nGridBs" as GRID {}
+    OL . GRID
+}
+together {
+    file "..<<json>>..\nobject-collection" as OC
+    class "<<TransferObject>>\nCollection" as COL {
+        id
+        memberType= Collection
+        value[] = data
+    }
+    COL . OC
+}
+together {
+    file "<<json>>\n..object.." as O
+    class "<<TransferObject>>\nTObject" as TOBJ {
+        members[]
+    }
+    TOBJ . O
+}
+file "..<<json>>..\ncollection-description" as CD
+
+together {
+    file "..<<json>>..\nobject-property" as OP
+    class "<<TransferObject>>\nObjectProperty" as OPR {
+        disabledReason
+    }
+    OP . OPR
+}
+together {
+    file "..<<json>>..\nproperty-description" as PD
+    class "<<TransferObject>>\nPropertyDescription" as PRD {
+        extensions.friendlyName
+    }
+    PD .r. PRD
+}
+
+' references between TransferObjects (xml/json)
+START --> OL : menu action \ninvoked by user
+OL --> OC : contains\nreference\nto
+OC --> CD : contains\ncollection\ntitle
+OC --> O : contains\nreference\nto
+O --> OP : contains\nreference\nto
+OP --> PD : contains\nreference\nto
+PD --> END
+
+' references between TO classes
+GRID o->"0.n" COL
+COL o-> TOBJ : first element is required
+
+' object
+together {
+    class "ObjectAggregator" as OBJAGR {
+        collectionMap
+        update()
+        handleGrid()
+    }
+    class "ObjectDM" as OBJDM {
+        layout
+        data: Exposer
+        readyToRender()
+    }
+    class "<<2nd level aggregator>>\nObjectLayout" as OBJLO {
+        grid
+        collectionLayout:Map
+        readyToRender()
+    }
+    OBJAGR --> OBJDM
+    OBJDM --> OBJLO
+}
+OBJLO --> GRID
+
+'collection
+together {
+    class "CollectionAggregator" as COLAGR {
+        update()
+    }
+    class "CollectionDM" as COLDM {
+        layout
+        data[]: Exposer
+        readyToRender()
+    }
+    class "<<2nd level aggregator>>\nCollectionLayout" as COLLO {
+        numberOfColumns
+        columnDescriptions
+        objectPropertyList
+        propertyDescriptionList
+        readyToRender()
+    }
+    COLAGR --> COLDM
+    COLDM --> COLLO
+}
+OBJLO o-> COLLO
+' references between Layout and TO classes
+COLLO -> TOBJ
+COLLO -> OPR
+COLLO -> PRD
+
+note bottom of COLLO
+the number of columns is to be set from object/TObject
+for each attribute/property/column get object-property
+for each object-property, get the property-description (friendlyName)
+end note
+
+
+note bottom of COLAGR
+iterate over value[]
+and add data to DisplayModel
+end note
+
+OBJAGR o--> COLAGR
+----
+Colors
+TO
+AGR
+DM
+LO

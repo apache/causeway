@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
 
@@ -27,9 +28,9 @@ abstract class BaseDisplayModel {
 
     abstract val title: String
 
-    abstract fun canBeDisplayed(): Boolean
+    abstract fun readyToRender(): Boolean
 
-    abstract fun addData(obj: TransferObject)
+    abstract fun addData(obj: TransferObject, aggregator: AggregatorWithLayout? = null, referrer: String? = null)
 
     open fun getObject(): TObject? {
         // subclass responsibility

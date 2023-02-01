@@ -18,19 +18,24 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.layout.Layout
-import org.apache.causeway.client.kroviz.to.Icon
-import org.apache.causeway.client.kroviz.to.TransferObject
+import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
+import org.apache.causeway.client.kroviz.to.ObjectProperty
+import org.apache.causeway.client.kroviz.to.PropertyDescription
 
-abstract class DisplayModelWithLayout : BaseDisplayModel() {
+abstract class BaseLayout {
 
-    var layout: BaseLayout? = null
-    var icon: Icon? = null
+    abstract fun addObjectProperty(
+        property: ObjectProperty,
+        aggregator: AggregatorWithLayout,
+        referrer: String
+    )
 
-    fun addIcon(obj: TransferObject?) {
-        icon = obj as Icon
-    }
+    abstract fun addPropertyDescription(
+        property: PropertyDescription,
+        aggregator: AggregatorWithLayout,
+        referrer: String
+    )
 
-    open fun addLayout(lt: Layout) {}
+    abstract fun readyToRender(): Boolean
 
 }

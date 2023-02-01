@@ -19,67 +19,21 @@
 package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.core.model.DisplayModelWithLayout
-import org.apache.causeway.client.kroviz.layout.Layout
+import org.apache.causeway.client.kroviz.core.model.BaseLayout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.diagram.Tree
 
 abstract class AggregatorWithLayout : BaseAggregator() {
-    // parentUrl is to be set in update
-    // and to be used in subsequent invocations
+    /**
+     * parentUrl is to be set in update
+     * and to be used in subsequent invocations
+     */
     private var parentUrl: String? = null
     var tree: Tree? = null
 
     override fun update(logEntry: LogEntry, subType: String?) {
         parentUrl = logEntry.url
-    }
-
-    protected fun handleLayout(layout: Layout, dm: DisplayModelWithLayout, referrer: String) {
-        console.log("[AWL.handleLayout]")
-        console.log(layout)
-        if (dm.layout == null) {
-            dm.addLayout(layout)
-            dm.collectionProperties.propertyLayoutList.forEach { p ->
-                val l = p.link
-                if (l == null) {
-                    console.log(p.id + " link empty")  // ISIS-2846
-                    console.log(p)
-                } else {
-                    val isDn = l.href.contains("datanucleus")
-                    if (!isDn) {
-                        //invoking DN links leads to an error
-                        invoke(l, this, referrer = referrer)
-                    }
-                }
-            }
-        }
-    }
-
-    protected fun handleGrid(grid: GridBs, dm: DisplayModelWithLayout, referrer: String) {
-        grid.getPropertyList().forEach {
-            val link = it.link!!
-            ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
-        }
-        //FIXME
-        if (dm.grid == null) {
-            dm.addGrid(grid)
-            dm.collectionProperties.propertyLayoutList.forEach { p ->
-                val l = p.link
-                if (l == null) {
-                    console.log(p.id + " link empty")  // ISIS-2846
-                    console.log(p)
-                } else {
-                    val isDn = l.href.contains("datanucleus")
-                    if (!isDn) {
-                        //invoking DN links leads to an error
-                        invoke(l, this, referrer = referrer)
-                    }
-                }
-            }
-        }
     }
 
     protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout, referrer: String) {
@@ -96,17 +50,24 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         invoke(l, aggregator, referrer = referrer)
     }
 
-    protected fun Property.getDescriptionLink(): Link? {
-        return this.links.firstOrNull {
-            it.rel == Relation.DESCRIBED_BY.type
-        }
-    }
 
-    protected fun Property.isPropertyDescription(): Boolean {
-        val selfLink = this.links.find {
-            it.relation() == Relation.SELF
+    protected fun handleProperty(property: Property, referrer: String, layout: BaseLayout) {
+        console.log("[AWL_handleProperty]")
+        when {
+            property.isPropertyDescription() -> {
+                val pd = PropertyDescription(property)
+                layout.addPropertyDescription(pd, this, referrer)
+            }
+
+            property.isObjectProperty() -> {
+                val op = ObjectProperty(property)
+                layout.addObjectProperty(op, this, referrer)
+            }
+
+            else -> {
+                TODO("handle 3rd type of property")
+            }
         }
-        return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }
 
 }

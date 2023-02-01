@@ -19,16 +19,23 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import io.kvision.state.observableListOf
+import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
 
 class CollectionDM(override val title: String) : DisplayModelWithLayout() {
+    init {
+        layout = CollectionLayout()
+    }
+
     var data = observableListOf<Exposer>()
     private var rawData = observableListOf<TransferObject>()
 
-    override fun addData(obj: TransferObject) {
- //       console.log("[CDM.addData]")
- //       console.log(obj)
+    override fun readyToRender(): Boolean {
+        return (layout as CollectionLayout).readyToRender()
+    }
+
+    override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)

@@ -30,10 +30,10 @@ import org.apache.causeway.client.kroviz.utils.UrlUtils
  * An Aggregator:
  * @item is initially created in ResponseHandlers, DisplayModels, Menus
  * @item is assigned to at least one LogEntry,
- * @item is passed on to related LogEntries (eg. siblings in a list, Layout),
+ * @item is passed on to related LogEntries (e.g. siblings in a list, Layout),
  * @item is notified about changes to related LogEntries,
  * @item invokes subsequent links, and
- * @item triggers creation a view for an object or a list.
+ * @item triggers creation of a view for an object or a list.
  *
  * @see: https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html
  *
@@ -41,7 +41,7 @@ import org.apache.causeway.client.kroviz.utils.UrlUtils
  */
 abstract class BaseAggregator {
 
-    open lateinit var dpm: BaseDisplayModel
+    open lateinit var displayModel: BaseDisplayModel
 
     open fun update(logEntry: LogEntry, subType: String?) {
         /* default is do nothing - can be overridden in subclasses */
@@ -57,13 +57,12 @@ abstract class BaseAggregator {
 
     protected fun log(logEntry: LogEntry) {
         logEntry.setUndefined("no handler found")
-        console.log("[BaseAggregator.log] ")
-        console.log(logEntry)
-        console.log(logEntry.response)
         val className = this::class.simpleName
-        throw Throwable("No handler found: $className. " +
-                "Probable cause is a format change in response, that leads to a parsing error, hence response is passed on." +
-                "logEntry.obj is likely null, i.e. no TransferObject was created in parse function.")
+        throw Throwable(
+            "No handler found: $className. \n" +
+                    "response format changed, i.e. parsing error?\n" +
+                    "logEntry.obj is null, i.e. no TransferObject was created in parse function?"
+        )
     }
 
     fun TObject.getLayoutLink(): Link? {
@@ -87,12 +86,14 @@ abstract class BaseAggregator {
         return href.isNotEmpty() && UrlUtils.isObjectIcon(href)
     }
 
-    protected fun invoke(
+    fun invoke(
         link: Link,
         aggregator: BaseAggregator,
         subType: String = Constants.subTypeJson,
         referrer: String,
     ) {
+        //       console.log("[BA.invoke]")
+        //       console.log("$link ${aggregator::class.simpleName} $referrer")
         ResourceProxy().fetch(link, aggregator, subType, referrer = referrer)
     }
 

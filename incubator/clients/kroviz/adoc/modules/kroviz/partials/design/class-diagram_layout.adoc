@@ -52,7 +52,7 @@ Exposer..ExposerNote
 abstract class BaseDisplayModel {
     isRendered:Boolean
     title:String
-    {abstract} canBeDisplayed():Boolean
+    {abstract} readyToRender():Boolean
 }
 
 abstract class DisplayModelWithLayout {
@@ -60,7 +60,7 @@ abstract class DisplayModelWithLayout {
     grid: Grid
     collectionProperties: CollectionProperties
     icon: Icon
-    + canBeDisplayed()
+    + readyToRender()
 }
 
 DisplayModelWithLayout --> CollectionProperties
@@ -69,7 +69,7 @@ class ObjectDM {
     + data:Exposer
     + collections:Map<String,CollectionDM>
     - dirty:Boolean
-    + canBeDisplayed()
+    + readyToRender()
 }
 note left of ObjectDM::dirty
 Used in

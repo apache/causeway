@@ -26,7 +26,7 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     init {
-        dpm = DiagramDM(url)
+        displayModel = DiagramDM(url)
     }
 
     override fun update(logEntry: LogEntry, subType: String?) {
@@ -38,14 +38,14 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (dpm.canBeDisplayed()) {
-            ViewManager.getRoStatusBar().updateDiagram(dpm as DiagramDM)
-            dpm.isRendered = true
+        if (displayModel.readyToRender()) {
+            ViewManager.getRoStatusBar().updateDiagram(displayModel as DiagramDM)
+            displayModel.isRendered = true
         }
     }
 
     private fun handleProperty(obj: Property) {
-        dpm.addData(obj)
+        displayModel.addData(obj, null, null)
     }
 
     private fun handleAction(obj: Action) {
@@ -55,13 +55,13 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     private fun handleDomainType(obj: DomainType) {
         if (obj.isPrimitiveOrService()) {
-            (dpm as DiagramDM).decNumberOfClasses()
+            (displayModel as DiagramDM).decNumberOfClasses()
         } else {
-            dpm.addData(obj)
+            displayModel.addData(obj, null, null)
             val propertyList = obj.members.filter {
                 it.value.isProperty()
             }
-            (dpm as DiagramDM).incNumberOfProperties(propertyList.size)
+            (displayModel as DiagramDM).incNumberOfProperties(propertyList.size)
             propertyList.forEach {
                 invoke(it.value, this, referrer = "")
             }
@@ -100,7 +100,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
                 }
             }
         }
-        (dpm as DiagramDM).numberOfClasses = domainTypeLinkList.size
+        (displayModel as DiagramDM).numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
             invoke(it, this, referrer = "")
         }

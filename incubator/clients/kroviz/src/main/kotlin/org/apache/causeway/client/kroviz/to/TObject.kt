@@ -66,9 +66,4 @@ data class TObject(override val links: List<Link> = emptyList(),
         }
     }
 
-    fun getSelfLink() : Link {
-        return this.links.first {
-            it.relation() == Relation.SELF
-        }
-    }
 }

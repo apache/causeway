@@ -30,14 +30,14 @@ import org.apache.causeway.client.kroviz.utils.UrlUtils
 class SystemAggregator() : BaseAggregator() {
 
     init {
-        dpm = SystemDM("not filled (yet)")
+        displayModel = SystemDM("not filled (yet)")
     }
 
     override fun update(logEntry: LogEntry, subType: String?) {
         when (val obj = logEntry.getTransferObject()) {
-            is User -> dpm.addData(obj)
-            is Version -> dpm.addData(obj)
-            is DomainTypes -> dpm.addData(obj)
+            is User -> displayModel.addData(obj)
+            is Version -> displayModel.addData(obj)
+            is DomainTypes -> displayModel.addData(obj)
             else -> {
                 if (logEntry.blob != null) {
                     val icon = ImageUtils.extractIcon(logEntry)
@@ -45,11 +45,11 @@ class SystemAggregator() : BaseAggregator() {
                     val isApplicationIcon = UrlUtils.isApplicationIcon(url)
                     when (isApplicationIcon) {
                         url.contains("48") -> {
-                            (dpm as SystemDM).addSmallIcon(icon)
+                            (displayModel as SystemDM).addSmallIcon(icon)
                             val iconUrl = icon.image.src
                             SessionManager.setApplicationIcon(iconUrl)
                         }
-                        url.contains("256") -> (dpm as SystemDM).addLargeIcon(icon)
+                        url.contains("256") -> (displayModel as SystemDM).addLargeIcon(icon)
                         else -> log(logEntry)
                     }
                 } else {
@@ -58,13 +58,13 @@ class SystemAggregator() : BaseAggregator() {
             }
         }
 
-        if (dpm.canBeDisplayed()) {
+        if (displayModel.readyToRender()) {
 //  TODO          UiManager.openObjectView(this)
         }
     }
 
     override fun reset(): SystemAggregator {
-        dpm.isRendered = false
+        displayModel.isRendered = false
         return this
     }
 

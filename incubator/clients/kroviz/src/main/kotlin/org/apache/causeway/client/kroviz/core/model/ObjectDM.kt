@@ -18,31 +18,48 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
+import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
-    var data: Exposer? = null
+
+    init {
+        layout = ObjectLayout()
+    }
+
     val collectionMap = mutableMapOf<String, CollectionDM>()
+    var data: Exposer? = null
     private var dirty: Boolean = false
 
     fun setDirty(value: Boolean) {
         dirty = value
     }
 
-    fun addCollection(key: String, value: CollectionDM) {
-        collectionMap[key] = value
+    override fun addLayout(lt: Layout) {
+        TODO("Not yet implemented")
     }
 
-    override fun addData(obj: TransferObject) {
+    override fun readyToRender(): Boolean {
+        return when {
+            data == null -> false
+            isRendered -> false
+            layout == null -> false
+            else -> layout!!.readyToRender() //collectionsReadyToRender()
+        }
+    }
+
+    override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
         obj.getProperties().forEach { m ->
             val p = createPropertyFrom(m)
-            addProperty(p)
+            val op = ObjectProperty(p)
+            layout?.addObjectProperty(op, aggregator!!, referrer!!)
         }
     }
 

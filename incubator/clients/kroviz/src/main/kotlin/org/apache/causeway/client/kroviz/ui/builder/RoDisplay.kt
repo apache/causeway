@@ -22,6 +22,7 @@ import io.kvision.core.*
 import io.kvision.dropdown.DropDown
 import io.kvision.panel.VPanel
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
+import org.apache.causeway.client.kroviz.core.model.ObjectLayout
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.ui.core.Displayable
 import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
@@ -34,7 +35,7 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
     init {
         val model = displayModel.data!!
         val tObject: TObject = model.delegate
-        val grid = displayModel.grid!!
+        val grid = (displayModel.layout as ObjectLayout).grid!!
         objectPanel = LayoutBuilder().create(grid, tObject, this)
         objectPanel.overflow = Overflow.AUTO
         objectPanel.width = CssSize(100, UNIT.perc)

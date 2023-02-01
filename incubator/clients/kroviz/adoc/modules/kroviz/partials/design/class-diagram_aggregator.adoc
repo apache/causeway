@@ -93,7 +93,7 @@ package "model" {
     abstract class BaseDisplayModel {
         isRendered:Boolean
         title:String
-        {abstract} canBeDisplayed():Boolean
+        {abstract} readyToRender():Boolean
     }
 
     abstract class DisplayModelWithLayout {
@@ -101,14 +101,14 @@ package "model" {
         grid: GridBs
         collectionProperties: CollectionProperties
         icon: Icon
-        + canBeDisplayed()
+        + readyToRender()
     }
 
     class ObjectDM {
         + data:Exposer
         + collections:Map<String,CollectionDM>
         - dirty:Boolean
-        + canBeDisplayed()
+        + readyToRender()
     }
     note left of ObjectDM::dirty
     Used in
