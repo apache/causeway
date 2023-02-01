@@ -41,13 +41,13 @@ class BytesTest {
     final int n = 256;
     private final byte[] allBytes = new byte[n];
 
-    private static final byte[] testimonial = 
+    private static final byte[] testimonial =
             _Strings.toBytes(
                     "https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#basic?"+
                             "0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-"
                             + "tabPanel-rows-1-rowContents-1-col-fieldSets-1-memberGroup-properties-1-property-"
                             + "scalarTypeContainer-scalarIfRegular-associatedActionLinksBelow-additionalLinkList-"
-                            + "additionalLinkItem-0-additionalLink", 
+                            + "additionalLinkItem-0-additionalLink",
                             StandardCharsets.UTF_8);
 
     @BeforeEach
@@ -107,6 +107,18 @@ class BytesTest {
     }
 
     @Test
+    void zlibCompressIdentityWithByteRange() throws Exception {
+        assertArrayEquals(allBytes,
+                _Bytes.decompressZlib(_Bytes.compressZlib(allBytes)));
+    }
+
+    @Test
+    void zlibCompressIdentityWithTestimonial() throws Exception {
+        assertArrayEquals(testimonial,
+                _Bytes.decompressZlib(_Bytes.compressZlib(testimonial)));
+    }
+
+    @Test
     void compressionRatio() throws Exception {
         // lower is better
         final double compressionRatio = (double)_Bytes.compress(testimonial).length / testimonial.length;
@@ -116,21 +128,21 @@ class BytesTest {
 
     // -- COMPRESSION
 
-    private static byte[] data(int index) {
-        return (byte[]) new Object[] { 
-                (byte[]) null,
+    private static byte[] data(final int index) {
+        return (byte[]) new Object[] {
+                null,
                 new byte[] { },
-                new byte[] { 0 }, 
+                new byte[] { 0 },
                 new byte[] { 0, 1 },
-                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 17 
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 17
                 new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 18
                 new byte[] { 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 19
         }[index];
     }
-    
+
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6}) // data indices
-    void compressionRundtrip(int dataIndex) throws Exception {
+    void compressionRundtrip(final int dataIndex) throws Exception {
         val input = data(dataIndex);
         assertArrayEquals(input,
                 _Bytes.decompress(_Bytes.compress(input)));
@@ -141,7 +153,7 @@ class BytesTest {
     @Test
     void base64IdentityWithNull() throws Exception {
         assertNull(_Bytes.decodeBase64(
-                Base64.getUrlDecoder(), 
+                Base64.getUrlDecoder(),
                 _Bytes.encodeToBase64(Base64.getUrlEncoder(), null)));
     }
 
@@ -149,7 +161,7 @@ class BytesTest {
     void base64IdentityWithByteRange() throws Exception {
         assertArrayEquals(allBytes,
                 _Bytes.decodeBase64(
-                        Base64.getUrlDecoder(), 
+                        Base64.getUrlDecoder(),
                         _Bytes.encodeToBase64(Base64.getUrlEncoder(), allBytes)));
     }
 
@@ -157,7 +169,7 @@ class BytesTest {
     void base64IdentityWithTestimonial() throws Exception {
         assertArrayEquals(testimonial,
                 _Bytes.decodeBase64(
-                        Base64.getUrlDecoder(), 
+                        Base64.getUrlDecoder(),
                         _Bytes.encodeToBase64(Base64.getUrlEncoder(), testimonial)));
     }
 
@@ -187,7 +199,7 @@ class BytesTest {
 
     // -- HELPER
 
-    private void assertArrayEqualsButNotSame(byte[] a, byte[] b) {
+    private void assertArrayEqualsButNotSame(final byte[] a, final byte[] b) {
         assertFalse(a == b);
         assertArrayEquals(a, b);
     }

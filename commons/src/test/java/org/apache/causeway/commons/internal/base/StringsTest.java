@@ -22,6 +22,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -33,21 +35,21 @@ import org.apache.causeway.commons.internal._Constants;
 class StringsTest {
 
     @Test
-    public void isEmpty() throws Exception {
+    void isEmpty() throws Exception {
         assertThat(_Strings.isEmpty(" 12 aBc"), is(false));
         assertThat(_Strings.isEmpty(""), is(true));
         assertThat(_Strings.isEmpty(null), is(true));
     }
 
     @Test
-    public void isNotEmpty() throws Exception {
+    void isNotEmpty() throws Exception {
         assertThat(_Strings.isNotEmpty(" 12 aBc"), is(true));
         assertThat(_Strings.isNotEmpty(""), is(false));
         assertThat(_Strings.isNotEmpty(null), is(false));
     }
 
     @Test
-    public void substring() throws Exception {
+    void substring() throws Exception {
         assertThat(_Strings.substring("12abc", 0, 5), is("12abc"));
         assertThat(_Strings.substring("12abc", 1, 5), is("2abc"));
         assertThat(_Strings.substring("12abc", 0, 4), is("12ab"));
@@ -57,14 +59,14 @@ class StringsTest {
     }
 
     @Test
-    public void lowerWithNull() throws Exception {
+    void lowerWithNull() throws Exception {
         assertThat(
                 _Strings.lower(null),
                 nullValue());
     }
 
     @Test
-    public void lowerMixed() throws Exception {
+    void lowerMixed() throws Exception {
         assertThat(
                 _Strings.lower("12aBc"),
                 is("12abc"));
@@ -72,63 +74,63 @@ class StringsTest {
 
 
     @Test
-    public void upperWithNull() throws Exception {
+    void upperWithNull() throws Exception {
         assertThat(
                 _Strings.upper(null),
                 nullValue());
     }
 
     @Test
-    public void upperMixed() throws Exception {
+    void upperMixed() throws Exception {
         assertThat(
                 _Strings.upper("12aBc"),
                 is("12ABC"));
     }
 
     @Test
-    public void capitalizeWithNull() throws Exception {
+    void capitalizeWithNull() throws Exception {
         assertThat(
                 _Strings.capitalize(null),
                 nullValue());
     }
 
     @Test
-    public void capitalizeSize0() throws Exception {
+    void capitalizeSize0() throws Exception {
         assertThat(
                 _Strings.capitalize(""),
                 is(""));
     }
 
     @Test
-    public void capitalizeSize1() throws Exception {
+    void capitalizeSize1() throws Exception {
         assertThat(
                 _Strings.capitalize("a"),
                 is("A"));
     }
 
     @Test
-    public void capitalizeSize2() throws Exception {
+    void capitalizeSize2() throws Exception {
         assertThat(
                 _Strings.capitalize("ab"),
                 is("Ab"));
     }
 
     @Test
-    public void trimWithNull() throws Exception {
+    void trimWithNull() throws Exception {
         assertThat(
                 _Strings.trim(null),
                 nullValue());
     }
 
     @Test
-    public void trimMixed() throws Exception {
+    void trimMixed() throws Exception {
         assertThat(
                 _Strings.trim(" 12 aBc"),
                 is("12 aBc"));
     }
 
     @Test
-    public void splitThenStreamWithNull() throws Exception {
+    void splitThenStreamWithNull() throws Exception {
         assertThat(
                 _Strings.splitThenStream(null, "$")
                 .collect(Collectors.joining("|")),
@@ -136,7 +138,7 @@ class StringsTest {
     }
 
     @Test
-    public void splitThenStreamSingle() throws Exception {
+    void splitThenStreamSingle() throws Exception {
         assertThat(
                 _Strings.splitThenStream(" 12 aBc ", "$")
                 .collect(Collectors.joining("|")),
@@ -144,7 +146,7 @@ class StringsTest {
     }
 
     @Test
-    public void splitThenStreamMultipleWithSeparatorAtBegin() throws Exception {
+    void splitThenStreamMultipleWithSeparatorAtBegin() throws Exception {
         assertThat(
                 _Strings.splitThenStream("$ 1$2 a$Bc ", "$")
                 .collect(Collectors.joining("|")),
@@ -152,7 +154,7 @@ class StringsTest {
     }
 
     @Test
-    public void splitThenStreamMultipleWithSeparatorAtEnd() throws Exception {
+    void splitThenStreamMultipleWithSeparatorAtEnd() throws Exception {
         assertThat(
                 _Strings.splitThenStream(" 1$2 a$Bc $", "$")
                 .collect(Collectors.joining("|")),
@@ -160,7 +162,7 @@ class StringsTest {
     }
 
     @Test
-    public void splitThenStreamMultipleWithSeparatorsInSequence() throws Exception {
+    void splitThenStreamMultipleWithSeparatorsInSequence() throws Exception {
         assertThat(
                 _Strings.splitThenStream(" 1$2 a$$Bc ", "$")
                 .collect(Collectors.joining("|")),
@@ -168,7 +170,7 @@ class StringsTest {
     }
 
     @Test
-    public void splitThenStreamWithnewLine() throws Exception {
+    void splitThenStreamWithnewLine() throws Exception {
         assertThat(
                 _Strings.splitThenStream(" 1\n2 a\n\nBc ", "\n")
                 .collect(Collectors.joining("|")),
@@ -176,14 +178,14 @@ class StringsTest {
     }
 
     @Test
-    public void condenseWhitespacesWithNull() throws Exception {
+    void condenseWhitespacesWithNull() throws Exception {
         assertThat(
                 _Strings.condenseWhitespaces(null,"|"),
                 nullValue());
     }
 
     @Test
-    public void condenseWhitespaces() throws Exception {
+    void condenseWhitespaces() throws Exception {
         assertThat(
                 _Strings.condenseWhitespaces("  12 aBc","|"),
                 is("|12|aBc"));
@@ -192,21 +194,21 @@ class StringsTest {
     // -- TO BYTE CONVERSION
 
     @Test
-    public void toByteConvertWithNull() throws Exception {
+    void toByteConvertWithNull() throws Exception {
         assertThat(
                 _Strings.toBytes(null, StandardCharsets.UTF_8),
                 nullValue());
     }
 
     @Test
-    public void toByteConvertWithEmpty() throws Exception {
+    void toByteConvertWithEmpty() throws Exception {
         assertArrayEquals(
                 _Constants.emptyBytes,
                 _Strings.toBytes("", StandardCharsets.UTF_8));
     }
 
     @Test
-    public void toByteConvert() throws Exception {
+    void toByteConvert() throws Exception {
         assertArrayEquals(
                 new byte[] {48,49,50,51},
                 _Strings.toBytes("0123", StandardCharsets.UTF_8));
@@ -215,21 +217,21 @@ class StringsTest {
     // -- FROM BYTE CONVERSION
 
     @Test
-    public void fromByteConvertWithNull() throws Exception {
+    void fromByteConvertWithNull() throws Exception {
         assertThat(
                 _Strings.ofBytes(null, StandardCharsets.UTF_8),
                 nullValue());
     }
 
     @Test
-    public void fromByteConvertWithEmpty() throws Exception {
+    void fromByteConvertWithEmpty() throws Exception {
         assertThat(
                 _Strings.ofBytes(_Constants.emptyBytes, StandardCharsets.UTF_8),
                 is(""));
     }
 
     @Test
-    public void fromByteConvert() throws Exception {
+    void fromByteConvert() throws Exception {
         assertThat(
                 _Strings.ofBytes(new byte[] {48,49,50,51}, StandardCharsets.UTF_8),
                 is("0123"));
@@ -238,7 +240,7 @@ class StringsTest {
     // -- BYTE MANIPULATION
 
     @Test
-    public void convertIdentity() throws Exception {
+    void convertIdentity() throws Exception {
 
         assertThat(
                 _Strings.convert(null, _Bytes.operator(), StandardCharsets.UTF_8),
@@ -252,21 +254,21 @@ class StringsTest {
     // -- OPERATOR COMPOSITION
 
     @Test
-    public void composeIdentityWithNull() throws Exception {
+    void composeIdentityWithNull() throws Exception {
         assertThat(
                 _Strings.operator().apply(null),
                 nullValue());
     }
 
     @Test
-    public void composeIdentity() throws Exception {
+    void composeIdentity() throws Exception {
         assertThat(
                 _Strings.operator().apply(" 12 aBc"),
                 is(" 12 aBc"));
     }
 
     @Test
-    public void compose2WithNull() throws Exception {
+    void compose2WithNull() throws Exception {
         assertThat(
                 _Strings.operator()
                 .andThen(_Strings::lower)
@@ -275,7 +277,7 @@ class StringsTest {
     }
 
     @Test
-    public void compose2() throws Exception {
+    void compose2() throws Exception {
         assertThat(
                 _Strings.operator()
                 .andThen(_Strings::lower)
@@ -284,7 +286,7 @@ class StringsTest {
     }
 
     @Test
-    public void composeOperatorSequency_LastShouldWin() throws Exception {
+    void composeOperatorSequency_LastShouldWin() throws Exception {
         assertThat(
                 _Strings.operator()
                 .andThen(_Strings::lower)
@@ -293,10 +295,22 @@ class StringsTest {
                 is(" 12 ABC"));
     }
 
+    // -- BASE64
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "-12-abc !@#$%^&*()_-+={}[]<>,./?\\:\"",
+            ""})
+    void base64UrlZlibCompressedRoundtrip(final String input) throws Exception {
+        assertThat(
+                _Strings.base64UrlDecodeZlibCompressed(_Strings.base64UrlEncodeZlibCompressed(input)),
+                is(input));
+    }
+
     // -- SPECIAL COMPOSITES
 
     @Test
-    public void asLowerDashed() throws Exception {
+    void asLowerDashed() throws Exception {
         assertThat(
                 _Strings.asLowerDashed
                 .apply(" 12    aBc"),
@@ -304,7 +318,7 @@ class StringsTest {
     }
 
     @Test
-    public void asNormalized() throws Exception {
+    void asNormalized() throws Exception {
         assertThat(
                 _Strings.asNormalized
                 .apply(" 12 a B         c"),
@@ -312,7 +326,7 @@ class StringsTest {
     }
 
     @Test
-    public void asNaturalName2() throws Exception {
+    void asNaturalName2() throws Exception {
         assertThat(
                 _Strings.asNaturalName2
                 .apply("NextAvailableDate"),

@@ -20,12 +20,13 @@ package org.apache.causeway.commons.internal.base;
 
 import org.springframework.lang.Nullable;
 
+import lombok.experimental.UtilityClass;
+
 /**
- *
- * package private mixin for utility class {@link _Strings}
- *
+ * package private utility for {@link _Strings}
  */
-final class _Strings_NaturalNames {
+@UtilityClass
+class _Strings_NaturalNames {
 
     private static final char SPACE = ' ';
     /**
@@ -38,7 +39,7 @@ final class _Strings_NaturalNames {
      * @return
      *
      */
-    static String naturalName2(@Nullable String name, final boolean handleNestedClassNames) {
+    String naturalName2(@Nullable String name, final boolean handleNestedClassNames) {
 
         if(name==null)
             return null;

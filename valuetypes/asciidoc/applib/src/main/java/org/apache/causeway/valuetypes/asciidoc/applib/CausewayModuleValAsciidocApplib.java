@@ -24,14 +24,10 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.Deflater;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
@@ -70,9 +66,11 @@ public class CausewayModuleValAsciidocApplib {
         val asciidoctor = Asciidoctor.Factory.create();
 
         val krokiBaseUri = config.getValueTypes().getKroki().getBackendUrl();
+        val requestTimeout = config.getValueTypes().getKroki().getRequestTimeout();
+
         if(krokiBaseUri!=null) {
             asciidoctor.javaExtensionRegistry().preprocessor(new OpenBlockPreProcessor());
-            asciidoctor.javaExtensionRegistry().block("plantuml", new PlantumlBlockProcessor(krokiBaseUri));
+            asciidoctor.javaExtensionRegistry().block("plantuml", new PlantumlBlockProcessor(krokiBaseUri, requestTimeout));
         }
 
         return new AdocToHtmlConverter(asciidoctor, org.asciidoctor.Options.builder()
@@ -183,24 +181,26 @@ public class CausewayModuleValAsciidocApplib {
     public static class PlantumlBlockProcessor extends BlockProcessor {
 
         private final @NonNull URL krokiBaseUri;
+        private final @NonNull Duration requestTimeout;
 
-        public PlantumlBlockProcessor(final URL krokiBaseUri) {
+        public PlantumlBlockProcessor(final URL krokiBaseUri, final Duration requestTimeout) {
             this.krokiBaseUri = krokiBaseUri;
+            this.requestTimeout = requestTimeout;
         }
 
         @Override
         public Object process(final StructuralNode parent, final Reader reader, final Map<String, Object> attributes) {
             final String diagramSource = reader.read();
-            return createBlock(parent, "pass", getPlantumlSvg(krokiBaseUri.toString() , diagramSource));
+            return createBlock(parent, "pass", getPlantumlSvg(krokiBaseUri.toString(), requestTimeout, diagramSource));
         }
 
         // -- HELPER
 
         @SneakyThrows
-        private static String getPlantumlSvg(final String krokiBaseUri, final String diagramSource) {
+        private static String getPlantumlSvg(final String krokiBaseUri, final Duration requestTimeout, final String diagramSource) {
             val request = HttpRequest.newBuilder()
-                    .uri(URI.create(krokiBaseUri + "/plantuml/svg/" + encodeDiagramSource(diagramSource)))
-                    .timeout(Duration.ofSeconds(5))
+                    .uri(URI.create(krokiBaseUri + "/plantuml/svg/" + _Strings.base64UrlEncodeZlibCompressed(diagramSource)))
+                    .timeout(requestTimeout)
                     .header("Content-Type", "image/svg+xml")
                     .GET()
                     .build();
@@ -208,26 +208,6 @@ public class CausewayModuleValAsciidocApplib {
             val client = HttpClient.newHttpClient();
             return client.send(request, BodyHandlers.ofString())
                 .body();
-        }
-
-        private static String encodeDiagramSource(final String diagramSource) {
-            val bytes = Base64.getUrlEncoder().encode(compress(diagramSource.getBytes(StandardCharsets.UTF_8)));
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
-
-        // see https://docs.kroki.io/kroki/setup/encode-diagram/#java
-        private static byte[] compress(final byte[] source) {
-            val deflater = new Deflater(Deflater.BEST_COMPRESSION);
-            deflater.setInput(source);
-            deflater.finish();
-
-            final byte[] buffer = new byte[source.length + 2048]; // make sure the buffer is large enough
-            final int compressedLength = deflater.deflate(buffer);
-            deflater.end();
-
-            final byte[] result = new byte[compressedLength];
-            System.arraycopy(buffer, 0, result, 0, compressedLength);
-            return result;
         }
 
     }
