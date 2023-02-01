@@ -208,7 +208,7 @@ public class WelcomeHelpPage implements HelpPage {
                                             "fa fa-fw fa-list",
                                             member.getCanonicalFriendlyName(),
                                             description != null ? description : ""));
-                                    // FIXME[ISIS-2883] also visit associated actions
+                                    // FIXME[CAUSEWAY-2883] also visit associated actions
                                     // ... collection.streamAssociatedActions()
                                     html.append("<ul>");
                                     member.streamAssociatedActions().forEach(action -> {

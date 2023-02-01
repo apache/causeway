@@ -380,7 +380,7 @@ implements
         try {
             transactionServiceProvider.get().flushTransaction();
         } catch (RuntimeException e) {
-            //[ISIS-3262] if flush fails rethrow later, when interaction was closed ...
+            //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
             flushException = e;
         }
 

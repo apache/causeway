@@ -243,7 +243,7 @@ public final class _ClassCache implements AutoCloseable {
                 val declaredFields = type.getDeclaredFields();
                 val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
                         Can.ofStream(_Reflect.streamAllMethods(type, true));
-                val publicMethods = type.getMethods(); //XXX[ISIS-3327] order of methods returned might differ among JVM instances
+                val publicMethods = type.getMethods(); //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
 
                 val model = new ClassModel(
                         Can.ofArray(declaredFields),
