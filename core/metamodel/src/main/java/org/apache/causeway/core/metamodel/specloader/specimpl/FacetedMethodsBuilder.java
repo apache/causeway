@@ -376,7 +376,7 @@ implements HasMetaModelContext {
     private FacetedMethod createActionFacetedMethod(
             final Method actionMethod) {
 
-        val actionMethodFacade = _MethodFacades.autodetect(actionMethod);
+        val actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
 
         if (!isAllParamTypesValid(actionMethodFacade)) {
             return null;

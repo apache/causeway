@@ -527,6 +527,10 @@ public final class ProgrammingModelConstants {
         UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
         ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
                 + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),
+        PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION("${type}#${member}: "
+                + "Can use @ParameterTuple only on parameter of a single arg action."),
+        PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS("${type}#${member}: "
+                + "Tuple type ${patType} referenced by @ParameterTuple annotated parameter has no or more than one public constructor."),
         ;
 
         private final String template;

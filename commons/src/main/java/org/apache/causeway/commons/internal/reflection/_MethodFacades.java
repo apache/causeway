@@ -43,13 +43,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _MethodFacades {
 
-    @Deprecated
-    public MethodFacade autodetect(final Method method) {
-        return method.getParameterCount()!=0
-                ? new RegularMethod(method) //FIXME check if Parameters-as-Tuple semantics applies
-                : new RegularMethod(method);
-    }
-
     public static MethodFacade paramsAsTuple(final @NonNull Method method, final @NonNull Constructor<?> patConstructor) {
         return new ParamsAsTupleMethod(patConstructor, regularMethodForSyntheticElseFail(method));
     }
