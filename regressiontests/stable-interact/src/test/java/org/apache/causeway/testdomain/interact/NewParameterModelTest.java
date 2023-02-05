@@ -72,7 +72,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"biArgEnabled", "patEnabled"})
+    @ValueSource(strings = {"biArgEnabled", "patEnabled", "patRecordEnabled"})
     void paramAnnotations_whenNpm_shouldBeRecognized(final String mixinName) {
 
         val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
@@ -167,7 +167,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"biArgEnabled", "patEnabled"})
+    @ValueSource(strings = {"biArgEnabled", "patEnabled", "patRecordEnabled"})
     void actionInteraction_shouldProvideChoices(final String mixinName) {
 
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
@@ -188,7 +188,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         val actualChoices = param1Choices.getValue();
 
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
-        
+
     }
 
 
