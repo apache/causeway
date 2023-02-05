@@ -1,4 +1,4 @@
-name: Build, Test (JDK 19)
+name: Build, Test (JDK 18)
 
 on:
   push:
@@ -35,11 +35,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 19
+    - name: Set up JDK 18
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: 19
+        # tried 19 on 2023-02-05 casing org.codehaus.plexus.archiver.ArchiverException: 
+        # Could not create modular JAR file. The JDK jar tool exited with 1
+        java-version: 18
 
     - name: Print Maven Version
       run: mvn --version
