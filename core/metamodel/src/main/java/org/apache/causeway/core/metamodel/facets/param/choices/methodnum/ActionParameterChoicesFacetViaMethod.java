@@ -74,7 +74,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail();
-        final Object collectionOrArray = MmInvokeUtil.invoke(patConstructor, method, head.getTarget(), pendingArgs);
+        final Object collectionOrArray = MmInvokeUtil.invokeAutofit(patConstructor, method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }

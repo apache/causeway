@@ -65,7 +65,18 @@ public final class MmInvokeUtil {
         CanonicalInvoker.invokeAll(methods, MmUnwrapUtil.single(adapter));
     }
 
-    public static Object invoke(
+    public static Object invokeAutofit(
+            final Optional<Constructor<?>> patConstructor,
+            final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs) {
+        return patConstructor.isPresent()
+                ? invokeWithPAT(patConstructor.get(),
+                        methodFacade.asMethodForIntrospection(),
+                        owningAdapter, pendingArgs)
+                : invokeAutofit(methodFacade.asMethodElseFail(),
+                        owningAdapter, pendingArgs);
+    }
+
+    public static Object invokeNoAutofit(
             final Optional<Constructor<?>> patConstructor,
             final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs) {
         return patConstructor.isPresent()

@@ -67,7 +67,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs) {
 
         val method = methods.getFirstElseFail();
-        final Object returnValue = MmInvokeUtil.invoke(patConstructor, method, owningAdapter, pendingArgs);
+        final Object returnValue = MmInvokeUtil.invokeAutofit(patConstructor, method, owningAdapter, pendingArgs);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

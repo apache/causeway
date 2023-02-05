@@ -64,7 +64,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters) {
 
         val method = methods.getFirstElseFail();
-        final Object returnValue = MmInvokeUtil.invoke(patConstructor, method, owningAdapter, argumentAdapters);
+        final Object returnValue = MmInvokeUtil.invokeAutofit(patConstructor, method, owningAdapter, argumentAdapters);
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;
         }

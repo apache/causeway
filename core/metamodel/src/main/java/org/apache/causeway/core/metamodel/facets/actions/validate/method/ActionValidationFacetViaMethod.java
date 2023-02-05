@@ -65,7 +65,7 @@ implements ImperativeFacet {
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
 
         val method = methods.getFirstElseFail();
-        final Object returnValue = MmInvokeUtil.invoke(patConstructor, method, owningAdapter, proposedArgumentAdapters);
+        final Object returnValue = MmInvokeUtil.invokeNoAutofit(patConstructor, method, owningAdapter, proposedArgumentAdapters);
 
         if(returnValue instanceof String) {
             return (String) returnValue;
