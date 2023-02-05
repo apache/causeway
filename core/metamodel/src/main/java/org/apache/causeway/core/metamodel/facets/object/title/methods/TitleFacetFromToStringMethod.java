@@ -49,7 +49,7 @@ implements HasImperativeAspect {
         .filter(method->!ClassExtensions.isJavaClass(method.getDeclaringClass()))
         .map(method->
             new TitleFacetFromToStringMethod(
-                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
                     holder));
     }
 

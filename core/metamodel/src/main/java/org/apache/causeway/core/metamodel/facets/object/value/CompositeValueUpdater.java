@@ -78,13 +78,14 @@ public abstract class CompositeValueUpdater {
 
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
-        val method = delegate.getFacetedMethod().getMethod();
-
         final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(parameters);
         final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
 
+        val methodFacade = delegate.getFacetedMethod().getMethod();
+        val method = methodFacade.asMethodForIntrospection();
+
         val resultPojo = CanonicalInvoker
-                .invoke(method, targetPojo, executionParameters);
+                .invoke(method, targetPojo, methodFacade.getArguments(executionParameters));
 
         return ManagedObject.value(delegate.getReturnType(), resultPojo);
     }

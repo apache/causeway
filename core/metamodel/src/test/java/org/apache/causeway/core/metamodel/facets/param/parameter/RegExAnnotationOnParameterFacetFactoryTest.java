@@ -57,7 +57,7 @@ class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTes
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParams(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
@@ -78,7 +78,7 @@ class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTes
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParams(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));

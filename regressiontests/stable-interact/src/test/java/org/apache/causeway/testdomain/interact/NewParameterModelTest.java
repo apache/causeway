@@ -21,6 +21,8 @@ package org.apache.causeway.testdomain.interact;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -69,10 +71,11 @@ class NewParameterModelTest extends InteractionTestAbstract {
         assertMetamodelValid();
     }
 
-    @Test
-    void paramAnnotations_whenNpm_shouldBeRecognized() {
+    @ParameterizedTest
+    @ValueSource(strings = {"biArgEnabled", "patEnabled"})
+    void paramAnnotations_whenNpm_shouldBeRecognized(final String mixinName) {
 
-        val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
                 .getMetamodel().get().getParameters().getElseFail(0);
 
         // as with first param's @Parameter(maxLength = 2)
@@ -163,10 +166,11 @@ class NewParameterModelTest extends InteractionTestAbstract {
         assertComponentWiseEquals(expectedDefaults, actualDefaults);
     }
 
-    @Test
-    void actionInteraction_shouldProvideChoices() {
+    @ParameterizedTest
+    @ValueSource(strings = {"biArgEnabled", "patEnabled"})
+    void actionInteraction_shouldProvideChoices(final String mixinName) {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
@@ -184,6 +188,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         val actualChoices = param1Choices.getValue();
 
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
+        
     }
 
 

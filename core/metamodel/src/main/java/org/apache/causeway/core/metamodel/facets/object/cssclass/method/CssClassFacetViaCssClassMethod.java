@@ -47,7 +47,7 @@ implements HasImperativeAspect {
         return Optional.ofNullable(methodIfAny)
         .map(method->
             new CssClassFacetViaCssClassMethod(
-                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
                     holder));
     }
 

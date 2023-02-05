@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
@@ -36,17 +35,17 @@ extends TypedHolderAbstract {
             final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
-            final Method method,
+            final MethodFacade methodFacade,
             final int paramIndex) {
 
         super(mmc,
                 featureType,
-                TypeOfAnyCardinality.forMethodParameter(declaringType, method, paramIndex),
+                TypeOfAnyCardinality.forMethodFacadeParameter(declaringType, methodFacade, paramIndex),
                 FeatureType.ACTION.identifierFor(
                         LogicalType.lazy(
                                 declaringType,
                                 ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
-                        method));
+                        methodFacade));
 
         this.paramIndex = paramIndex;
     }

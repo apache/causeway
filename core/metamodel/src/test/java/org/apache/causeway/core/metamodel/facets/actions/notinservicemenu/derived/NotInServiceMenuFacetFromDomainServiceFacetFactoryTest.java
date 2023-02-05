@@ -68,7 +68,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // when
         facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
@@ -97,7 +97,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // when
         facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
@@ -123,7 +123,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // when
         facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
@@ -148,7 +148,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // when
         facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);

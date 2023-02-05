@@ -25,6 +25,7 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionParameterValidationFacetAbstract;
@@ -39,26 +40,29 @@ public class ActionParameterValidationFacetViaMethod
 extends ActionParameterValidationFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TranslationService translationService;
     private final TranslationContext translationContext;
 
-    public ActionParameterValidationFacetViaMethod(final Method method, final TranslationService translationService,
-    		final TranslationContext translationContext, final FacetHolder holder) {
+    public ActionParameterValidationFacetViaMethod(
+            final Method method,
+            final TranslationService translationService,
+    		final TranslationContext translationContext,
+    		final FacetHolder holder) {
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleRegularMethod(method);
         this.translationService = translationService;
         this.translationContext = translationContext;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.CHECK_IF_VALID;
     }
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
-        val method = methods.getFirstElseFail();
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object returnValue = MmInvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;

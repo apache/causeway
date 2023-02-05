@@ -59,14 +59,13 @@ public final class MethodFinderPAT {
         return finder.streamMethodsIgnoringSignature()
             .filter(MethodUtil.Predicates.paramCount(1 + additionalParamTypes.size()))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
-            .map(method->lookupPatConstructor(finder, method, signature))
+            .map(method->lookupPatConstructor(method, signature))
             .flatMap(Optional::stream);
     }
 
     // -- HELPER
 
     private Optional<MethodAndPatConstructor> lookupPatConstructor(
-            final MethodFinder finder,
             final Method supportingMethod,
             final Class<?>[] signature) {
 

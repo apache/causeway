@@ -135,8 +135,8 @@ public abstract class AbstractFacetFactoryTest {
             final String methodName,
             final Class<?>[] signature) {
 
-        facetFactory.processParams(new FacetFactory
-                .ProcessParameterContext(type, IntrospectionPolicy.ANNOTATION_OPTIONAL,
+        facetFactory.processParams(FacetFactory.ProcessParameterContext
+                .forTesting(type, IntrospectionPolicy.ANNOTATION_OPTIONAL,
                         findMethod(type, methodName, signature),
                         null, facetedMethodParameter));
     }

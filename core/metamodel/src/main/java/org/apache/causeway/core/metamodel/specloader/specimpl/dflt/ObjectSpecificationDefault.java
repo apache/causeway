@@ -33,9 +33,11 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.commons.ToString;
@@ -250,8 +252,8 @@ implements FacetHolder {
             final MixedIn mixedIn) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-
-        return id == null
+        
+        return _Strings.isEmpty(id)
             ? Optional.empty()
             : streamDeclaredActions(actionScopes, mixedIn)
                 .filter(action->
@@ -287,6 +289,7 @@ implements FacetHolder {
             field.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
+                .map(MethodFacade::asMethodElseFail) // expected regular
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
@@ -296,8 +299,9 @@ implements FacetHolder {
             userAction.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
+                .map(MethodFacade::asMethodForIntrospection)
                 .forEach(imperativeFacetMethod->
-                onMember.accept(imperativeFacetMethod, userAction)));
+                    onMember.accept(imperativeFacetMethod, userAction)));
     }
 
     /**

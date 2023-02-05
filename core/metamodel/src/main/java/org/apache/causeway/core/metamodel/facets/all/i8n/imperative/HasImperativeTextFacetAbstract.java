@@ -25,6 +25,7 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -32,6 +33,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -42,7 +44,8 @@ implements
     HasImperativeText {
 
     protected final TranslationContext translationContext;
-    protected final @NonNull Method method;
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
     protected HasImperativeTextFacetAbstract(
             final Class<? extends Facet> facetType,
@@ -51,22 +54,18 @@ implements
             final FacetHolder holder) {
         // imperative takes precedence over any other (except for events)
         super(facetType, holder, Precedence.IMPERATIVE);
-        this.method = method;
+        this.methods = ImperativeFacet.singleRegularMethod(method);
         this.translationContext = translationContext;
     }
 
     @Override
     public final Try<String> text(final ManagedObject object) {
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         return ManagedObjects.imperativeText(object, method, translationContext);
     }
 
     @Override
-    public final Can<Method> getMethods() {
-        return Can.ofSingleton(method);
-    }
-
-    @Override
-    public final Intent getIntent(final Method method) {
+    public final Intent getIntent() {
         return Intent.UI_HINT;
     }
 
@@ -88,7 +87,7 @@ implements
 
         val otherFacet = (HasImperativeTextFacetAbstract)other;
 
-        return Objects.equals(this.method, otherFacet.method)
+        return Objects.equals(this.methods, otherFacet.methods)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);
 
     }

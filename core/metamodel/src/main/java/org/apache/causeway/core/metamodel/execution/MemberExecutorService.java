@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.execution;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
@@ -86,7 +86,7 @@ public interface MemberExecutorService {
             @NonNull InteractionHead head,
             @NonNull Can<ManagedObject> argumentAdapters,
             @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            @NonNull Method method,
+            @NonNull MethodFacade method,
             @NonNull ActionExecutorFactory actionExecutorFactory,
             @NonNull FacetHolder facetHolder);
 

@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
@@ -37,23 +38,23 @@ public class PropertyDefaultFacetViaMethod
 extends PropertyDefaultFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
     public PropertyDefaultFacetViaMethod(
             final Method method,
             final FacetHolder holder) {
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleRegularMethod(method);
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.DEFAULTS;
     }
 
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
-        val method = methods.getFirstElseFail();
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object result = MmInvokeUtil.invoke(method, owningAdapter);
         if (result == null) {
             return null;

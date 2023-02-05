@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -144,7 +145,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[]{});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, Customer.class, actionMethod);
+                .createForAction(metaModelContext, Customer.class, _MethodFacades.regular(actionMethod));
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
@@ -197,7 +198,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method choices2Method = findMethod(Customer.class, "choices2SomeAction", new Class[] {});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(
-                metaModelContext, Customer.class, actionMethod);
+                metaModelContext, Customer.class, _MethodFacades.regular(actionMethod));
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
@@ -247,7 +248,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method autoComplete0Method = findMethod(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, Customer.class, actionMethod);
+                .createForAction(metaModelContext, Customer.class, _MethodFacades.regular(actionMethod));
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));

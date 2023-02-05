@@ -57,7 +57,7 @@ implements HasImperativeAspect {
         return Optional.ofNullable(methodIfAny)
         .map(method->
             new TitleFacetViaTitleMethod(
-                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
                     TranslationContext.forMethod(method),
                     holder));
     }

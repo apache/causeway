@@ -56,7 +56,7 @@ class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extend
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParamsOptional(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
@@ -74,7 +74,7 @@ class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extend
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParamsOptional(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
@@ -90,7 +90,7 @@ class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extend
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParamsOptional(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
@@ -108,7 +108,7 @@ class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extend
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParamsOptional(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));

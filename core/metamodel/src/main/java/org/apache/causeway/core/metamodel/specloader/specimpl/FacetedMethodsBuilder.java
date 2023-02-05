@@ -40,6 +40,8 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ToString;
@@ -246,17 +248,19 @@ implements HasMetaModelContext {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
 
+            val accessorMethodFacade = _MethodFacades.regular(accessorMethod);
+
             // create property and add facets
             val facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
             getFacetProcessor()
             .process(
                     introspectedClass,
                     introspectionPolicy(),
-                    accessorMethod,
+                    accessorMethodFacade,
                     methodRemover,
                     facetedMethod,
                     FeatureType.COLLECTION,
-                    isMixinMain(accessorMethod));
+                    isMixinMain(accessorMethodFacade));
 
             // figure out what the type is
             final Class<?> elementType = facetedMethod.lookupFacet(TypeOfFacet.class)
@@ -290,16 +294,18 @@ implements HasMetaModelContext {
             val facetedMethod = FacetedMethod
                     .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
 
+            val accessorMethodFacade = _MethodFacades.regular(accessorMethod);
+
             // process facets for the 1:1 association (eg. contributed properties)
             getFacetProcessor()
             .process(
                     introspectedClass,
                     introspectionPolicy(),
-                    accessorMethod,
+                    accessorMethodFacade,
                     methodRemover,
                     facetedMethod,
                     FeatureType.PROPERTY,
-                    isMixinMain(accessorMethod));
+                    isMixinMain(accessorMethodFacade));
 
             onNewFacetedMethod.accept(facetedMethod);
         }
@@ -360,45 +366,47 @@ implements HasMetaModelContext {
         // build action (first convert any synthetic method to a regular one)
 
         return _Reflect
-        .lookupRegularMethodForSynthetic(actionMethod)
-        .map(this::createActionFacetedMethod)
-        .filter(_NullSafe::isPresent)
-        .orElse(null);
+            .lookupRegularMethodForSynthetic(actionMethod)
+            .map(this::createActionFacetedMethod)
+            .filter(_NullSafe::isPresent)
+            .orElse(null);
     }
 
     @Nullable
     private FacetedMethod createActionFacetedMethod(
             final Method actionMethod) {
 
-        if (!isAllParamTypesValid(actionMethod)) {
+        val actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
+
+        if (!isAllParamTypesValid(actionMethodFacade)) {
             return null;
         }
 
         final FacetedMethod action = FacetedMethod
-                .createForAction(getMetaModelContext(), introspectedClass, actionMethod);
+                .createForAction(getMetaModelContext(), introspectedClass, actionMethodFacade);
 
         // process facets on the action & parameters
         getFacetProcessor()
         .process(
                 introspectedClass,
                 introspectionPolicy(),
-                actionMethod,
+                actionMethodFacade,
                 methodRemover,
                 action,
                 FeatureType.ACTION,
-                isMixinMain(actionMethod));
+                isMixinMain(actionMethodFacade));
 
         action.getParameters()
         .forEach(actionParam->{
             getFacetProcessor()
-            .processParams(introspectedClass, introspectionPolicy(), actionMethod, methodRemover, actionParam);
+            .processParams(introspectedClass, introspectionPolicy(), actionMethodFacade, methodRemover, actionParam);
 
         });
 
         return action;
     }
 
-    private boolean isAllParamTypesValid(final Method actionMethod) {
+    private boolean isAllParamTypesValid(final MethodFacade actionMethod) {
         for (val paramType : actionMethod.getParameterTypes()) {
             val paramSpec = getSpecificationLoader().loadSpecification(paramType);
             if (paramSpec == null) {
@@ -459,6 +467,10 @@ implements HasMetaModelContext {
     // Helpers for finding and removing methods.
     // ////////////////////////////////////////////////////////////////////////////
 
+    private boolean isMixinMain(final MethodFacade methodFacade) {
+        return isMixinMain(methodFacade.asMethodForIntrospection());
+    }
+
     /**
      * In case this inspected type is a mixin, returns whether given method can be identified
      * as this mixin's main method.
@@ -480,6 +492,7 @@ implements HasMetaModelContext {
                 .lookupMixedInAction(inspectedTypeSpec)
                 .map(ObjectActionMixedIn::getFacetedMethod)
                 .map(FacetedMethod::getMethod)
+                .map(MethodFacade::asMethodForIntrospection)
                 .map(method::equals)
                 .orElse(false);
     }
