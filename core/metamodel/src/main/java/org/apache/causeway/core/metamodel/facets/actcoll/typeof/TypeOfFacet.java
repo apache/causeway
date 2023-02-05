@@ -57,7 +57,7 @@ public interface TypeOfFacet extends Facet {
             final MethodFacade method,
             final int paramIndex,
             final FacetHolder holder) {
-        val type = TypeOfAnyCardinality.forMethodParameter(implementationClass, method, paramIndex);
+        val type = TypeOfAnyCardinality.forMethodFacadeParameter(implementationClass, method, paramIndex);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
@@ -65,7 +65,7 @@ public interface TypeOfFacet extends Facet {
             final Class<?> implementationClass,
             final MethodFacade method,
             final FacetHolder holder) {
-        val type = TypeOfAnyCardinality.forMethodReturn(implementationClass, method);
+        val type = TypeOfAnyCardinality.forMethodFacadeReturn(implementationClass, method);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 

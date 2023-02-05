@@ -66,10 +66,10 @@ extends TypedHolderAbstract {
     public static FacetedMethod createForAction(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final MethodFacade method) {
+            final MethodFacade methodFacade) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method),
-                getParameters(mmc, declaringType, method));
+                declaringType, methodFacade, TypeOfAnyCardinality.forMethodFacadeReturn(declaringType, methodFacade),
+                getParameters(mmc, declaringType, methodFacade));
     }
 
     private static Can<FacetedMethodParameter> getParameters(

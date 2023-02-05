@@ -100,10 +100,6 @@ public class _MethodFacades {
         <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType);
         <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, int paramNum);
 
-        @Deprecated // intermediate refactoring step
-        default Method asMethodUnsafe() {
-            return asMethodForIntrospection();
-        }
         default Method asMethodElseFail() {
             return asMethod().orElseThrow(()->
                 _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, regular variant expected"));

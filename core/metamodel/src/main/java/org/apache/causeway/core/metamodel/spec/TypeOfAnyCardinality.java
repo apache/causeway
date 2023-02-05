@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.spec;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +28,9 @@ import java.util.Optional;
 import org.springframework.core.ResolvableType;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.internal.reflection._Reflect.ConstructorAndImplementingClass;
 import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
@@ -88,10 +91,9 @@ public class TypeOfAnyCardinality {
                 Optional.of(collectionSemantics));
     }
 
-    public static TypeOfAnyCardinality forMethodReturn(
+    public static TypeOfAnyCardinality forMethodFacadeReturn(
             final Class<?> _implementationClass, final MethodFacade methodFacade) {
-        val _method = methodFacade.asMethodUnsafe(); //FIXME
-        return forMethodReturn(_implementationClass, _method);
+        return forMethodReturn(_implementationClass, methodFacade.asMethodForIntrospection());
     }
 
     public static TypeOfAnyCardinality forMethodReturn(
@@ -122,10 +124,43 @@ public class TypeOfAnyCardinality {
         .orElseGet(()->scalar(methodReturnGuess));
     }
 
-    public static TypeOfAnyCardinality forMethodParameter(
+    public static TypeOfAnyCardinality forMethodFacadeParameter(
             final Class<?> _implementationClass, final MethodFacade methodFacade, final int paramIndex) {
-        val _method = methodFacade.asMethodUnsafe(); // FIXME
-        return forMethodParameter(_implementationClass, _method, paramIndex);
+        val executable = methodFacade.asExecutable();
+        if(executable instanceof Method) {
+            return forMethodParameter(_implementationClass, (Method)executable, paramIndex);
+        } else if(executable instanceof Constructor) {
+            return forConstructorParameter(_implementationClass, (Constructor<?>)executable, paramIndex);
+        }
+        throw _Exceptions.unexpectedCodeReach();
+    }
+
+    public static TypeOfAnyCardinality forConstructorParameter(
+            final Class<?> _implementationClass, final Constructor<?> _constructor, final int paramIndex) {
+        val paramTypeGuess = _constructor.getParameters()[paramIndex].getType();
+        return ProgrammingModelConstants.CollectionSemantics.valueOf(paramTypeGuess)
+        .map(__->{
+            // adopt into default class loader context
+
+            val origin = ConstructorAndImplementingClass.of(_constructor, _implementationClass);
+            val adopted = origin
+                    .adoptIntoDefaultClassLoader()
+                    .getValue()
+                    .orElse(origin);
+
+            val constructor = adopted.getConstructor();
+            val paramType = constructor.getParameters()[paramIndex].getType();
+
+            return ProgrammingModelConstants.CollectionSemantics.valueOf(paramType)
+            .map(collectionSemantics->
+                nonScalar(
+                        adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
+                        paramType,
+                        collectionSemantics)
+            )
+            .orElseGet(()->scalar(paramType));
+        })
+        .orElseGet(()->scalar(paramTypeGuess));
     }
 
     public static TypeOfAnyCardinality forMethodParameter(

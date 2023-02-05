@@ -366,21 +366,21 @@ implements HasMetaModelContext {
         // build action (first convert any synthetic method to a regular one)
 
         return _Reflect
-        .lookupRegularMethodForSynthetic(actionMethod)
-        .map(this::createActionFacetedMethod)
-        .filter(_NullSafe::isPresent)
-        .orElse(null);
+            .lookupRegularMethodForSynthetic(actionMethod)
+            .map(this::createActionFacetedMethod)
+            .filter(_NullSafe::isPresent)
+            .orElse(null);
     }
 
     @Nullable
     private FacetedMethod createActionFacetedMethod(
             final Method actionMethod) {
 
-        if (!isAllParamTypesValid(actionMethod)) {
+        val actionMethodFacade = _MethodFacades.autodetect(actionMethod);
+
+        if (!isAllParamTypesValid(actionMethodFacade)) {
             return null;
         }
-
-        val actionMethodFacade = _MethodFacades.autodetect(actionMethod);
 
         final FacetedMethod action = FacetedMethod
                 .createForAction(getMetaModelContext(), introspectedClass, actionMethodFacade);
@@ -406,7 +406,7 @@ implements HasMetaModelContext {
         return action;
     }
 
-    private boolean isAllParamTypesValid(final Method actionMethod) {
+    private boolean isAllParamTypesValid(final MethodFacade actionMethod) {
         for (val paramType : actionMethod.getParameterTypes()) {
             val paramSpec = getSpecificationLoader().loadSpecification(paramType);
             if (paramSpec == null) {

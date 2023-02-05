@@ -35,17 +35,17 @@ extends TypedHolderAbstract {
             final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
-            final MethodFacade method,
+            final MethodFacade methodFacade,
             final int paramIndex) {
 
         super(mmc,
                 featureType,
-                TypeOfAnyCardinality.forMethodParameter(declaringType, method, paramIndex),
+                TypeOfAnyCardinality.forMethodFacadeParameter(declaringType, methodFacade, paramIndex),
                 FeatureType.ACTION.identifierFor(
                         LogicalType.lazy(
                                 declaringType,
                                 ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
-                        method.asMethodForIntrospection()));
+                        methodFacade.asMethodForIntrospection()));
 
         this.paramIndex = paramIndex;
     }

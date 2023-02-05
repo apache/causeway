@@ -640,6 +640,42 @@ public final class _Reflect {
         }
     }
 
+    @lombok.Value(staticConstructor = "of")
+    public static class ConstructorAndImplementingClass {
+        final @NonNull Constructor<?> constructor;
+        final @NonNull Class<?> implementingClass;
+        /**
+         * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+         */
+        public Try<ConstructorAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
+            try {
+                val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
+                val methodReloaded = ownerReloaded.getConstructor(constructor.getParameterTypes());
+                return Try.success(ConstructorAndImplementingClass.of(methodReloaded, ownerReloaded));
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
+        }
+        public Try<ConstructorAndImplementingClass> adoptIntoDefaultClassLoader() {
+            return adopt(_Context.getDefaultClassLoader());
+        }
+//        public Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
+//            return genericTypeArg(ResolvableType.forConstructorParameter(executable, implementingClass))
+//                    .toClass();
+//        }
+        public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+            return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementingClass))
+                    .toClass();
+        }
+        // -- HELPER
+        private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
+            val genericTypeArg = nonScalar.isArray()
+                    ? nonScalar.getComponentType()
+                    : nonScalar.getGeneric(0);
+            return genericTypeArg;
+        }
+    }
+
     // -- FILTER
 
     @UtilityClass
