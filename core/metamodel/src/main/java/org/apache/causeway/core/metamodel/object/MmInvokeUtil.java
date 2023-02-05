@@ -23,11 +23,13 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 
@@ -52,15 +54,42 @@ public final class MmInvokeUtil {
 
     /** PAT ... Parameters as Tuple */
     public static Object invokeWithPAT(
-            final Constructor<?> ppmConstructor,
+            final Constructor<?> patConstructor,
             final Method method,
             final ManagedObject adapter,
             final Can<ManagedObject> argumentAdapters) {
-        return invokeWithPAT(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
+        return invokeWithPAT(patConstructor, method, adapter, argumentAdapters, Collections.emptyList());
     }
 
     public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {
         CanonicalInvoker.invokeAll(methods, MmUnwrapUtil.single(adapter));
+    }
+
+    public static Object invoke(
+            final Optional<Constructor<?>> patConstructor,
+            final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs) {
+        return patConstructor.isPresent()
+                ? invokeWithPAT(patConstructor.get(),
+                        methodFacade.asMethodForIntrospection(),
+                        owningAdapter, pendingArgs)
+                : invoke(methodFacade.asMethodElseFail(),
+                        owningAdapter, pendingArgs);
+    }
+
+    public static Object invokeWithSearchArg(
+            final Optional<Constructor<?>> patConstructor,
+            final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs, final String searchArg) {
+        final Object collectionOrArray = patConstructor.isPresent()
+                ? invokeWithPAT(
+                        patConstructor.get(),
+                        methodFacade.asMethodForIntrospection(),
+                        owningAdapter, pendingArgs,
+                        Collections.singletonList(searchArg))
+                : invokeAutofit(
+                        methodFacade.asMethodElseFail(),
+                        owningAdapter, pendingArgs,
+                        Collections.singletonList(searchArg));
+        return collectionOrArray;
     }
 
     public static Object invoke(final Method method, final ManagedObject adapter) {
@@ -172,6 +201,5 @@ public final class MmInvokeUtil {
         }
         return value;
     }
-
 
 }

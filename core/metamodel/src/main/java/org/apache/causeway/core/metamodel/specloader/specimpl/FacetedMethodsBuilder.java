@@ -248,7 +248,7 @@ implements HasMetaModelContext {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
 
-            val accessorMethodFacade = _MethodFacades.autodetect(accessorMethod);
+            val accessorMethodFacade = _MethodFacades.regular(accessorMethod);
 
             // create property and add facets
             val facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
@@ -294,7 +294,7 @@ implements HasMetaModelContext {
             val facetedMethod = FacetedMethod
                     .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
 
-            val accessorMethodFacade = _MethodFacades.autodetect(accessorMethod);
+            val accessorMethodFacade = _MethodFacades.regular(accessorMethod);
 
             // process facets for the 1:1 association (eg. contributed properties)
             getFacetProcessor()

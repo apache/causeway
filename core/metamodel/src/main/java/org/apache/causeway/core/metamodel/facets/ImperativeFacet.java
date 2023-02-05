@@ -18,14 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -54,7 +56,7 @@ public interface ImperativeFacet extends Facet {
     /**
      * The {@link Method}s invoked by this {@link Facet}.
      */
-    public Can<Method> getMethods();
+    public Can<MethodFacade> getMethods();
 
     public static enum Intent {
         CHECK_IF_HIDDEN,
@@ -76,37 +78,36 @@ public interface ImperativeFacet extends Facet {
 
     /**
      * The intent of this method, so that the {@link WrapperFactory} knows whether to delegate on or to reject.
-     * @param method - one of the methods returned from {@link #getMethods()}
      */
-    public Intent getIntent(Method method);
+    public Intent getIntent();
 
     public static void visitAttributes(final ImperativeFacet imperativeFacet, final BiConsumer<String, Object> visitor) {
         val methods = imperativeFacet.getMethods();
         visitor.accept("methods",
                 methods.stream()
-                .map(Method::toString)
+                .map(MethodFacade::toString)
                 .collect(Collectors.joining(", ")));
         methods.forEach(method->
             visitor.accept(
-                    "intent." + method.getName(), imperativeFacet.getIntent(method)));
+                    "intent." + method.getName(), imperativeFacet.getIntent()));
     }
 
     // -- UTILITIES
 
     public static Intent getIntent(final ObjectMember member, final Method method) {
         val imperativeFacets = member.streamFacets(ImperativeFacet.class)
-                .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
+                .filter(imperativeFacet->imperativeFacet.containsMethod(method))
                 .collect(Collectors.toList());
 
         switch(imperativeFacets.size()) {
         case 0:
             break;
         case 1:
-            return imperativeFacets.get(0).getIntent(method);
+            return imperativeFacets.get(0).getIntent();
         default:
             Intent intentToReturn = null;
             for (ImperativeFacet imperativeFacet : imperativeFacets) {
-                Intent intent = imperativeFacet.getIntent(method);
+                Intent intent = imperativeFacet.getIntent();
                 if(intentToReturn == null) {
                     intentToReturn = intent;
                 } else if(intentToReturn != intent) {
@@ -118,13 +119,33 @@ public interface ImperativeFacet extends Facet {
         throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": unable to determine intent of " + method.getName());
     }
 
-    public static Can<Method> singleMethod(final @NonNull Method method) {
-        return _Reflect
-                .lookupRegularMethodForSynthetic(method)
-                .map(Can::ofSingleton)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot resolve syntetic method %s to a regular one", method));
+    public static Can<MethodFacade> singleMethod(final @NonNull MethodFacade method) {
+        return Can.ofSingleton(method);
     }
 
+    public static Can<MethodFacade> singleMethod(final Method method, final Optional<Constructor<?>> patConstructor) {
+        return patConstructor
+            .map(patCons->ImperativeFacet.singleParamsAsTupleMethod(method, patCons))
+            .orElseGet(()->ImperativeFacet.singleRegularMethod(method));
+    }
 
+    public static Can<MethodFacade> singleParamsAsTupleMethod(final @NonNull Method patMethod, final Constructor<?> patConstructor) {
+        return Can.ofSingleton(_MethodFacades.paramsAsTuple(patMethod, patConstructor));
+    }
+
+    /**
+     * Use only for no-arg actions, getters or setters, or support methods!
+     */
+    public static Can<MethodFacade> singleRegularMethod(final @NonNull Method method) {
+        return Can.ofSingleton(_MethodFacades.regular(method));
+    }
+
+    // -- HELPER
+
+    private boolean containsMethod(final Method method) {
+        return getMethods().stream()
+                .map(MethodFacade::asMethodForIntrospection)
+                .anyMatch(method::equals);
+    }
 
 }

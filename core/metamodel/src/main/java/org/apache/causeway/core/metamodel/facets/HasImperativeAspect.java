@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 
 public interface HasImperativeAspect
 extends ImperativeFacet {
@@ -28,13 +27,13 @@ extends ImperativeFacet {
     ImperativeAspect getImperativeAspect();
 
     @Override
-    default Can<Method> getMethods() {
+    default Can<MethodFacade> getMethods() {
         return getImperativeAspect().getMethods();
     }
 
     @Override
-    default Intent getIntent(final Method method) {
-        return getImperativeAspect().getIntent(method);
+    default Intent getIntent() {
+        return getImperativeAspect().getIntent();
     }
 
 }

@@ -36,6 +36,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.commons.ToString;
@@ -287,6 +288,7 @@ implements FacetHolder {
             field.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
+                .map(MethodFacade::asMethodElseFail) // expected regular
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
@@ -296,8 +298,9 @@ implements FacetHolder {
             userAction.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
+                .map(MethodFacade::asMethodForIntrospection)
                 .forEach(imperativeFacetMethod->
-                onMember.accept(imperativeFacetMethod, userAction)));
+                    onMember.accept(imperativeFacetMethod, userAction)));
     }
 
     /**

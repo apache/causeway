@@ -108,6 +108,7 @@ extends MetaModelVisitingValidatorAbstract {
         .map(ImperativeFacet.class::cast)
         .map(ImperativeFacet::getMethods)
         .flatMap(Can::stream)
+        .map(MethodFacade::asMethodForIntrospection)
         .forEach(supportMethods::add);
 
         val methodsIntendedToBeIncludedButNotPickedUp = _Sets.<Method>newHashSet();

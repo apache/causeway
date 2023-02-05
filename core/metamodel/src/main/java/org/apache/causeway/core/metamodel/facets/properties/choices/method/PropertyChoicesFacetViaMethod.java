@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -39,21 +40,20 @@ public class PropertyChoicesFacetViaMethod
 extends PropertyChoicesFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final Class<?> choicesClass;
 
     public PropertyChoicesFacetViaMethod(
             final Method method,
             final Class<?> choicesClass,
             final FacetHolder holder) {
-
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleRegularMethod(method);
         this.choicesClass = choicesClass;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.CHOICES_OR_AUTOCOMPLETE;
     }
 
@@ -62,7 +62,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail();
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
         val optionPojos = MmInvokeUtil.invoke(method, owningAdapter);
         val visibleChoices = ManagedObjects

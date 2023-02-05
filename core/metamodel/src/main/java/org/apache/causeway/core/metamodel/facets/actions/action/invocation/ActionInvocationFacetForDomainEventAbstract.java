@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -60,7 +59,7 @@ extends ActionInvocationFacetAbstract
 implements ImperativeFacet {
 
     @Getter private final Class<? extends ActionDomainEvent<?>> eventType;
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification declaringType;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification returnType;
     private final ServiceRegistry serviceRegistry;
@@ -75,7 +74,7 @@ implements ImperativeFacet {
 
         super(holder);
         this.eventType = eventType;
-        this.methods = ImperativeFacet.singleMethod(method.asMethodUnsafe());
+        this.methods = ImperativeFacet.singleMethod(method);
         this.declaringType = declaringType;
         this.returnType = returnType;
         this.serviceRegistry = getServiceRegistry();
@@ -83,7 +82,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.EXECUTE;
     }
 

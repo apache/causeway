@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -37,15 +38,15 @@ public class PropertyClearFacetViaClearMethod
 extends PropertyClearFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
     public PropertyClearFacetViaClearMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleRegularMethod(method);
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.MODIFY_PROPERTY_SUPPORTING;
     }
 
@@ -54,7 +55,7 @@ implements ImperativeFacet {
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val method = methods.getFirstElseFail();
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         MmInvokeUtil.invoke(method, targetAdapter);
         return targetAdapter;
     }

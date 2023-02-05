@@ -25,6 +25,7 @@ import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
@@ -40,7 +41,7 @@ public class ActionParameterDefaultsFacetViaMethod
 extends ActionParameterDefaultsFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final int paramNum;
     private final Optional<Constructor<?>> patConstructor;
 
@@ -57,14 +58,13 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleMethod(method, patConstructor);
         this.paramNum = paramNum;
         this.patConstructor = patConstructor;
     }
 
-
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.DEFAULTS;
     }
 
@@ -79,11 +79,11 @@ implements ImperativeFacet {
         val defaultValue = patConstructor.isPresent()
             // PAT programming model
             ? MmInvokeUtil
-                    .invokeWithPAT(patConstructor.get(), method,
+                    .invokeWithPAT(patConstructor.get(), method.asMethodForIntrospection(),
                             pendingArgs.getActionTarget(), pendingArgs.getParamValues())
             // else support legacy programming model, call any-arg defaultNAct(...)
             : MmInvokeUtil
-                    .invokeAutofit(method,
+                    .invokeAutofit(method.asMethodElseFail(),
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 
         return _NullSafe.streamAutodetect(defaultValue)

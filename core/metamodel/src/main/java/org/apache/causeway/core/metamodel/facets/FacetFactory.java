@@ -352,7 +352,7 @@ public interface FacetFactory {
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
             return new ProcessMethodContext(
-                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, _MethodFacades.autodetect(method),
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, _MethodFacades.regular(method),
                     methodRemover, facetedMethod, false);
         }
 
