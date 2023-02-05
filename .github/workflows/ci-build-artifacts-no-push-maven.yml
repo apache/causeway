@@ -1,4 +1,4 @@
-name: Build, Test (JDK 18)
+name: Build, Test (JDK 19)
 
 on:
   push:
@@ -83,6 +83,7 @@ jobs:
           -Dproject.build.outputTimestamp=1
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
+          -e
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context
