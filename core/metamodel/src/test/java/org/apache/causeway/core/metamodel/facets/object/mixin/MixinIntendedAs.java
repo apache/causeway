@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -84,11 +85,11 @@ abstract class MixinIntendedAs {
                 metaModelContext,
                 FeatureType.ACTION_PARAMETER_SINGULAR,
                 owningType,
-                actionMethod,
+                _MethodFacades.regular(actionMethod),
                 0);
 
         val processParameterContext =
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         owningType,
                         IntrospectionPolicy.ANNOTATION_OPTIONAL,
                         actionMethod,

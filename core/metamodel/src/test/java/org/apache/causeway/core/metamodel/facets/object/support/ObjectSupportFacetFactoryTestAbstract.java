@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.support;
 
-import org.junit.jupiter.api.Assertions;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -61,9 +61,10 @@ extends AbstractFacetFactoryTest {
                 .forTesting(type, methodRemover, facetedMethod));
 
         val supportMethods = supportMethodEnum.getMethodNames()
-                .map(methodName->findMethod(type, methodName));
+                .map(methodName->findMethod(type, methodName))
+                .map(_MethodFacades::regular);
 
-        Assertions.assertEquals(expectedSupportMethodCount, supportMethods.size());
+        assertEquals(expectedSupportMethodCount, supportMethods.size());
 
         val facet = facetedMethod.getFacet(facetType);
         assertNotNull(facet);

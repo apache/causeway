@@ -46,7 +46,7 @@ implements HasImperativeAspect {
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)
-        .map(method->ImperativeAspect.singleMethod(method, Intent.CHECK_IF_HIDDEN))
+        .map(method->ImperativeAspect.singleRegularMethod(method, Intent.CHECK_IF_HIDDEN))
         .map(imperativeAspect->new HiddenObjectFacetViaMethod(imperativeAspect, holder));
     }
 

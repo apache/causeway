@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -44,7 +45,7 @@ public class ActionParameterChoicesFacetViaMethod
 extends ActionParameterChoicesFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TypeOfAnyCardinality paramSupportReturnType;
     private final Optional<Constructor<?>> patConstructor;
 
@@ -55,13 +56,13 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleMethod(method, patConstructor);
         this.paramSupportReturnType = paramSupportReturnType;
         this.patConstructor = patConstructor;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.CHOICES_OR_AUTOCOMPLETE;
     }
 
@@ -73,9 +74,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail();
-        final Object collectionOrArray = patConstructor.isPresent()
-                ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, head.getTarget(), pendingArgs)
-                : MmInvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
+        final Object collectionOrArray = MmInvokeUtil.invokeAutofit(patConstructor, method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }

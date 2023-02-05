@@ -52,7 +52,7 @@ implements HasImperativeAspect {
         return Optional.ofNullable(methodIfAny)
         .map(method->
             new DisabledObjectFacetViaMethod(
-                    ImperativeAspect.singleMethod(method, Intent.CHECK_IF_DISABLED),
+                    ImperativeAspect.singleRegularMethod(method, Intent.CHECK_IF_DISABLED),
                     TranslationContext.forMethod(method),
                     holder));
     }

@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.Builder;
@@ -87,6 +88,11 @@ public class CanonicalInvoker {
     }
 
     // -- INVOKE
+
+    public static Object invoke(final MethodFacade methodFacade, final Object targetPojo, final Object[] executionParameters) {
+        return CanonicalInvoker.invoke(
+                methodFacade.asMethodForIntrospection(), targetPojo, methodFacade.getArguments(executionParameters));
+    }
 
     public void invokeAll(final Iterable<Method> methods, final Object object) {
         methods.forEach(method->invoke(method, object));

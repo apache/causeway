@@ -50,7 +50,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        final Method accessorMethod = processMethodContext.getMethod();
+        final Method accessorMethod = processMethodContext.getMethod().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
         final Class<?> cls = processMethodContext.getCls();

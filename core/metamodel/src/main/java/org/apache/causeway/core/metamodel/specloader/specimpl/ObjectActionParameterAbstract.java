@@ -77,7 +77,7 @@ implements
         this.paramElementType = paramElementType;
 
         this.javaSourceParamName =
-                objectAction.getFacetedMethod().getMethod().getParameters()[parameterIndex].getName();
+                objectAction.getFacetedMethod().getMethod().getParameterName(parameterIndex);
     }
 
     @Override

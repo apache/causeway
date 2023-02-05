@@ -44,6 +44,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -116,7 +117,7 @@ implements MemberExecutorService {
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull Method method,
+            final @NonNull MethodFacade methodFacade,
             final @NonNull ActionExecutorFactory actionExecutorFactory,
             final @NonNull FacetHolder facetHolder) {
 
@@ -129,7 +130,7 @@ implements MemberExecutorService {
         }});
 
         if(interactionInitiatedBy.isPassThrough()) {
-            val resultPojo = invokeMethodPassThrough(method, head, argumentAdapters);
+            val resultPojo = invokeMethodPassThrough(methodFacade, head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
@@ -189,7 +190,7 @@ implements MemberExecutorService {
             executionPublisher().publishActionInvocation(priorExecution);
         }
 
-        val result = resultFilteredHonoringVisibility(method, returnedAdapter, interactionInitiatedBy);
+        val result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -256,13 +257,13 @@ implements MemberExecutorService {
 
     @SneakyThrows
     private Object invokeMethodPassThrough(
-            final Method method,
+            final MethodFacade methodFacade,
             final InteractionHead head,
             final Can<ManagedObject> arguments) {
 
         final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
         final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
-        return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
+        return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 
     private void setCommandResultIfEntity(
@@ -295,7 +296,6 @@ implements MemberExecutorService {
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
-            final Method method,
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

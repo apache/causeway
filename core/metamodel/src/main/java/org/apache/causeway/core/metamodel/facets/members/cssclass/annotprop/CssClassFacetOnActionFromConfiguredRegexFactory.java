@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -31,6 +30,8 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
+
+import lombok.val;
 
 public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
@@ -51,7 +52,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        final Method method = processMethodContext.getMethod();
+        val method = processMethodContext.getMethod();
         final String name = method.getName();
 
         addFacetIfPresent(createFromConfiguredRegexIfPossible(name, facetHolder));

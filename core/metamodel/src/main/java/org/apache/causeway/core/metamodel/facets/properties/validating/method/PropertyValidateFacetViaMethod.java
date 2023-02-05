@@ -24,41 +24,38 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+
 public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstract implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TranslationContext translationContext;
 
     public PropertyValidateFacetViaMethod(
             final Method method,
     		final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = ImperativeFacet.singleRegularMethod(method);
         this.translationContext = holder.getTranslationContext();
     }
 
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
     @Override
-    public Can<Method> getMethods() {
-        return Can.ofSingleton(method);
-    }
-
-    @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.CHECK_IF_VALID;
     }
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedAdapter) {
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object returnValue = MmInvokeUtil.invoke(method, owningAdapter, proposedAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;

@@ -91,9 +91,9 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(property instanceof OneToOneAssociationMixedIn) {
             final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
             final FacetedMethod facetedMethod = propertyMixin.getFacetedMethod();
-            final Method method = facetedMethod != null ? facetedMethod.getMethod() : null;
+            final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
 
-            if(method != null) {
+            {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
                 // ignoring stuff which is deprecated for Causeway v2
 
@@ -132,9 +132,9 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(collection instanceof OneToManyAssociationMixedIn) {
             final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
             final FacetedMethod facetedMethod = collectionMixin.getFacetedMethod();
-            final Method method = facetedMethod != null ? facetedMethod.getMethod() : null;
+            final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
 
-            if(method != null) {
+            {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
                 // ignoring stuff which is deprecated for Causeway v2
 

@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -39,7 +40,7 @@ public class ActionParameterHiddenFacetViaMethod
 extends ActionParameterHiddenFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final @NonNull Optional<Constructor<?>> patConstructor;
 
     public ActionParameterHiddenFacetViaMethod(
@@ -48,12 +49,12 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleMethod(method, patConstructor);
         this.patConstructor = patConstructor;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.CHECK_IF_VALID;
     }
 
@@ -63,10 +64,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters) {
 
         val method = methods.getFirstElseFail();
-        final Object returnValue = patConstructor.isPresent()
-                ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, argumentAdapters)
-                : MmInvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
-
+        final Object returnValue = MmInvokeUtil.invokeAutofit(patConstructor, method, owningAdapter, argumentAdapters);
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;
         }

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.derived;
 
-import java.lang.reflect.Method;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.NatureOfService;
@@ -30,6 +28,8 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class NotInServiceMenuFacetFromDomainServiceFacetFactory
 extends FacetFactoryAbstract {
@@ -42,7 +42,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
+        val method = processMethodContext.getMethod();
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
