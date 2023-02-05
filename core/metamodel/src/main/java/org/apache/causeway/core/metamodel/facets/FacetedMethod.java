@@ -217,7 +217,7 @@ extends TypedHolderAbstract {
                 featureType.identifierFor(LogicalType.lazy(
                         declaringType,
                         ()->mmc.getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()),
-                    method.asMethodForIntrospection()));
+                    method));
         this.owningType = declaringType;
         this.method = method;
         this.parameters = parameters;

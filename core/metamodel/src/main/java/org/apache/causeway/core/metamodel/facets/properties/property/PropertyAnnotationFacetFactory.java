@@ -327,7 +327,7 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(hasNullable, method.asMethodElseFail(), holder))
+                .create(hasNullable, method, holder))
         .ifPresent(mandatoryFacet->
                 MetaModelValidatorForConflictingOptionality
                 .flagIfConflict(
@@ -337,7 +337,7 @@ extends FacetFactoryAbstract {
         // search for @Property(optional=...)
         addFacetIfPresent(
                 MandatoryFacetForPropertyAnnotation
-                .create(propertyIfAny, method.asMethodElseFail(), holder))
+                .create(propertyIfAny, method, holder))
         .ifPresent(mandatoryFacet->
                 MetaModelValidatorForConflictingOptionality
                 .flagIfConflict(

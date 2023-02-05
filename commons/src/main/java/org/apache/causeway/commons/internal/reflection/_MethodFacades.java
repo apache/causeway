@@ -95,7 +95,8 @@ public class _MethodFacades {
 
         default Method asMethodElseFail() {
             return asMethod().orElseThrow(()->
-                _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, regular variant expected"));
+                _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, "
+                        + "regular variant expected: %s", asMethodForIntrospection()));
         }
         boolean isAnnotatedAsNullable();
     }

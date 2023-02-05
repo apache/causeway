@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.mandatory;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
@@ -33,7 +32,7 @@ extends MandatoryFacetAbstract {
 
     public static java.util.Optional<MandatoryFacet> create(
             final java.util.Optional<Property> propertyIfAny,
-            final Method method,
+            final MethodFacade method,
             final FacetHolder holder) {
 
         if(!propertyIfAny.isPresent()) {

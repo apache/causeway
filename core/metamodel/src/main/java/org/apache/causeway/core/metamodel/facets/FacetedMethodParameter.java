@@ -45,7 +45,7 @@ extends TypedHolderAbstract {
                         LogicalType.lazy(
                                 declaringType,
                                 ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
-                        methodFacade.asMethodForIntrospection()));
+                        methodFacade));
 
         this.paramIndex = paramIndex;
     }

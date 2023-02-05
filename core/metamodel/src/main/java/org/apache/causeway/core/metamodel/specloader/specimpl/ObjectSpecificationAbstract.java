@@ -673,6 +673,10 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
+        if(_Strings.isEmpty(memberId)) {
+            return Optional.empty();
+        }
+        
         val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
@@ -687,6 +691,11 @@ implements ObjectSpecification {
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        
+        if(_Strings.isEmpty(id)) {
+            return Optional.empty();
+        }
+        
         return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();

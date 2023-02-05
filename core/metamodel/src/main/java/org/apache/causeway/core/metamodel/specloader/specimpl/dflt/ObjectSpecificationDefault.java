@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -251,8 +252,8 @@ implements FacetHolder {
             final MixedIn mixedIn) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-
-        return id == null
+        
+        return _Strings.isEmpty(id)
             ? Optional.empty()
             : streamDeclaredActions(actionScopes, mixedIn)
                 .filter(action->
