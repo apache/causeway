@@ -33,6 +33,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
@@ -67,14 +68,14 @@ implements ImperativeFacet {
 
     public ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final Method method,
+            final MethodFacade method,
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
 
         super(holder);
         this.eventType = eventType;
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleMethod(method.asMethodUnsafe());
         this.declaringType = declaringType;
         this.returnType = returnType;
         this.serviceRegistry = getServiceRegistry();

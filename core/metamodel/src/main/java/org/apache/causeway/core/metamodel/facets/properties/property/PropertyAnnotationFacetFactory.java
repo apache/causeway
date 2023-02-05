@@ -27,7 +27,6 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -324,15 +323,11 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Nullable
-        val hasNullable =
-                _NullSafe.stream(method.getAnnotations())
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
-        //val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
+        val hasNullable = method.isAnnotatedAsNullable();
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(hasNullable, method, holder))
+                .create(hasNullable, method.asMethodElseFail(), holder))
         .ifPresent(mandatoryFacet->
                 MetaModelValidatorForConflictingOptionality
                 .flagIfConflict(
@@ -342,7 +337,7 @@ extends FacetFactoryAbstract {
         // search for @Property(optional=...)
         addFacetIfPresent(
                 MandatoryFacetForPropertyAnnotation
-                .create(propertyIfAny, method, holder))
+                .create(propertyIfAny, method.asMethodElseFail(), holder))
         .ifPresent(mandatoryFacet->
                 MetaModelValidatorForConflictingOptionality
                 .flagIfConflict(

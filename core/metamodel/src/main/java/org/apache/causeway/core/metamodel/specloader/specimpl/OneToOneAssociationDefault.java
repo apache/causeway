@@ -26,7 +26,6 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -336,10 +335,9 @@ implements OneToOneAssociation {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Property.class).isPresent()
-                || _Annotations.synthesize(javaMethod, PropertyLayout.class).isPresent();
+        val methodFacade = getFacetedMethod().getMethod();
+        return methodFacade.synthesize(Property.class).isPresent()
+                || methodFacade.synthesize(PropertyLayout.class).isPresent();
     }
-
 
 }

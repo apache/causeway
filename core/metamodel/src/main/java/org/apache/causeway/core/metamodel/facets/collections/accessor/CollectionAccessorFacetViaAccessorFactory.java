@@ -49,7 +49,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachAccessorFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        final Method accessorMethod = processMethodContext.getMethod();
+        val accessorMethod = processMethodContext.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
         processMethodContext.removeMethod(accessorMethod);
 
         val cls = processMethodContext.getCls();

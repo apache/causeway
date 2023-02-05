@@ -55,8 +55,7 @@ extends FacetFactoryAbstract {
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
 
-        val parameter = processParameterContext.getParameter();
-        val parameterName = parameter.getName();
+        val parameterName = processParameterContext.getParameterName();
 
         // if not compiled with -parameters flag or synthetic, then ignore
         val argXMatcher = argXPattern.matcher(parameterName);

@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -29,7 +28,7 @@ extends ActionInvocationFacetForDomainEventAbstract {
 
     public ActionInvocationFacetForDomainEventFromActionAnnotation(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final Method method,
+            final MethodFacade method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {

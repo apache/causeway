@@ -99,7 +99,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // when
         val processParameterContext =
-                new FacetFactory.ProcessParameterContext(
+                FacetFactory.ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
 
         programmingModel.streamFactories()
@@ -131,7 +131,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // when
         val processParameterContext =
-                new FacetFactory.ProcessParameterContext(
+                FacetFactory.ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 

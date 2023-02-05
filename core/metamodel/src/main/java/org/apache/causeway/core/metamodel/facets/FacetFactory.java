@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -31,6 +30,8 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -107,13 +108,13 @@ public interface FacetFactory {
     extends AbstractProcessWithClsContext<T>
     implements MethodRemover{
 
-        @Getter private final Method method;
+        @Getter private final MethodFacade method;
         protected final MethodRemover methodRemover;
 
         AbstractProcessWithMethodContext(
                 final Class<?> cls,
                 final IntrospectionPolicy introspectionPolicy,
-                final Method method,
+                final MethodFacade method,
                 final MethodRemover methodRemover,
                 final T facetHolder) {
 
@@ -241,7 +242,7 @@ public interface FacetFactory {
                 final Class<?> cls,
                 final IntrospectionPolicy introspectionPolicy,
                 final FeatureType featureType,
-                final Method method,
+                final MethodFacade method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod,
                 final boolean isMixinMain) {
@@ -256,7 +257,7 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(final Class<A> annotationType) {
-            return _Annotations.synthesize(getMethod(), annotationType);
+            return getMethod().synthesize(annotationType);
         }
 
         /**
@@ -351,7 +352,7 @@ public interface FacetFactory {
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
             return new ProcessMethodContext(
-                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method,
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, _MethodFacades.autodetect(method),
                     methodRemover, facetedMethod, false);
         }
 
@@ -370,19 +371,19 @@ public interface FacetFactory {
 
         @Getter private final int paramNum;
         @Getter private final Class<?> parameterType;
-        @Getter private final Parameter parameter;
+        @Getter private final String parameterName;
 
         public ProcessParameterContext(
                 final Class<?> cls,
                 final IntrospectionPolicy introspectionPolicy,
-                final Method method,
+                final MethodFacade method,
                 final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
 
             super(cls, introspectionPolicy, method, methodRemover, facetedMethodParameter);
             this.paramNum = facetedMethodParameter.getParamIndex();
-            this.parameterType = super.method.getParameterTypes()[paramNum];
-            this.parameter = super.method.getParameters()[paramNum];
+            this.parameterType = super.method.getParameterType(paramNum);
+            this.parameterName = super.method.getParameterName(paramNum);
         }
 
         /**
@@ -390,7 +391,15 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType) {
-            return _Annotations.synthesize(parameter, annotationType);
+            return super.method.synthesizeOnParameter(annotationType, paramNum);
+        }
+
+        //JUnit
+        public static ProcessParameterContext forTesting(
+                final Class<?> type, final IntrospectionPolicy annotationOptional,
+                final Method method, final MethodRemover methodRemover, final FacetedMethodParameter facetedMethodParameter) {
+            return new ProcessParameterContext(type, annotationOptional,
+                    _MethodFacades.regular(method), methodRemover, facetedMethodParameter);
         }
 
     }

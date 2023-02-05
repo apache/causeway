@@ -27,6 +27,7 @@ import java.util.Optional;
 import org.springframework.core.ResolvableType;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
@@ -88,6 +89,12 @@ public class TypeOfAnyCardinality {
     }
 
     public static TypeOfAnyCardinality forMethodReturn(
+            final Class<?> _implementationClass, final MethodFacade methodFacade) {
+        val _method = methodFacade.asMethodUnsafe(); //FIXME
+        return forMethodReturn(_implementationClass, _method);
+    }
+
+    public static TypeOfAnyCardinality forMethodReturn(
             final Class<?> _implementationClass, final Method _method) {
         val methodReturnGuess = _method.getReturnType();
         return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnGuess)
@@ -113,6 +120,12 @@ public class TypeOfAnyCardinality {
             .orElseGet(()->scalar(methodReturn));
         })
         .orElseGet(()->scalar(methodReturnGuess));
+    }
+
+    public static TypeOfAnyCardinality forMethodParameter(
+            final Class<?> _implementationClass, final MethodFacade methodFacade, final int paramIndex) {
+        val _method = methodFacade.asMethodUnsafe(); // FIXME
+        return forMethodParameter(_implementationClass, _method, paramIndex);
     }
 
     public static TypeOfAnyCardinality forMethodParameter(

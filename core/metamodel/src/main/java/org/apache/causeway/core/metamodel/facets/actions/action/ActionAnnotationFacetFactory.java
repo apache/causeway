@@ -150,7 +150,7 @@ extends FacetFactoryAbstract {
                             actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder));
 
         } finally {
-            processMethodContext.removeMethod(actionMethod);
+            processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }
     }
 

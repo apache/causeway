@@ -113,7 +113,7 @@ extends FacetFactoryAbstract {
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         val parameterAnnotations = MethodParameter
-                .forExecutable(processParameterContext.getMethod(), processParameterContext.getParamNum())
+                .forExecutable(processParameterContext.getMethod().asExecutable(), processParameterContext.getParamNum())
                 .getParameterAnnotations();
         val parameterType = processParameterContext.getParameterType();
 

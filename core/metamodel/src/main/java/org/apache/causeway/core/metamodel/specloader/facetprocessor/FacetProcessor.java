@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -329,7 +330,7 @@ implements HasMetaModelContext{
     public void process(
             final Class<?> cls,
             final IntrospectionPolicy introspectionPolicy,
-            final Method method,
+            final MethodFacade method,
             final MethodRemover methodRemover,
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
@@ -372,7 +373,7 @@ implements HasMetaModelContext{
     public void processParams(
             final Class<?> introspectedClass,
             final IntrospectionPolicy introspectionPolicy,
-            final Method method,
+            final MethodFacade method,
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
 

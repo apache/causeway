@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.actcoll.typeof;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -54,7 +54,7 @@ public interface TypeOfFacet extends Facet {
 
     static Optional<TypeOfFacet> inferFromMethodParameter(
             final Class<?> implementationClass,
-            final Method method,
+            final MethodFacade method,
             final int paramIndex,
             final FacetHolder holder) {
         val type = TypeOfAnyCardinality.forMethodParameter(implementationClass, method, paramIndex);
@@ -63,7 +63,7 @@ public interface TypeOfFacet extends Facet {
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
             final Class<?> implementationClass,
-            final Method method,
+            final MethodFacade method,
             final FacetHolder holder) {
         val type = TypeOfAnyCardinality.forMethodReturn(implementationClass, method);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
