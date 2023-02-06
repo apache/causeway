@@ -18,12 +18,43 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
+import lombok.val;
+
 public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimple {
 
-    public CssClassFacetOnActionFromConfiguredRegex(final String value, final FacetHolder holder) {
-        super(value, holder);
+    public static Optional<CssClassFacetOnActionFromConfiguredRegex> create(
+            final String name, final FacetHolder holder) {
+        return cssIfAnyFor(name, holder.getConfiguration())
+            .map(css->new CssClassFacetOnActionFromConfiguredRegex(css, holder));
+    }
+
+    private CssClassFacetOnActionFromConfiguredRegex(final String css, final FacetHolder holder) {
+        super(css, holder, Precedence.INFERRED); // inferred from config, if not specified otherwise
+    }
+
+    // -- HELPER
+
+    private static Optional<String> cssIfAnyFor(
+            final String name, final CausewayConfiguration causewayConfiguration) {
+
+        val cssClassByPattern = causewayConfiguration.getApplib().getAnnotation().getActionLayout()
+                .getCssClass().getPatternsAsMap();
+
+        for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {
+            final Pattern pattern = entry.getKey();
+            final String cssClass = entry.getValue();
+            if(pattern.matcher(name).matches()) {
+                return Optional.ofNullable(cssClass);
+            }
+        }
+        return Optional.empty();
     }
 }

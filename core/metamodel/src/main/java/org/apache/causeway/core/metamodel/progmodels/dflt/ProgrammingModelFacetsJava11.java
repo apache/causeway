@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.facets.collections.sortedby.annotation
 import org.apache.causeway.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.causeway.core.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberPostProcessor;
 import org.apache.causeway.core.metamodel.facets.members.described.method.DescribedAsFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
@@ -83,6 +82,7 @@ import org.apache.causeway.core.metamodel.facets.properties.validating.dflt.Prop
 import org.apache.causeway.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.value.semantics.ValueSemanticsAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
+import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
@@ -243,7 +243,7 @@ extends ProgrammingModelAbstract {
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));
 
         // requires member names to have settled
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CssClassFaFacetOnMemberPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CssOnActionFromConfiguredRegexPostProcessor(mmc));
 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DescribedAsFromTypePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TypicalLengthFromTypePostProcessor(mmc));
