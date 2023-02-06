@@ -22,7 +22,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.applib.annotation.ParameterAsTuple;
+import org.apache.causeway.applib.annotation.ParameterTuple;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,7 @@ public class InteractionNpmDemo_patEnabled {
         }
     }
 
-    @MemberSupport public int act(final @ParameterAsTuple Params p) {
+    @MemberSupport public int act(final @ParameterTuple Params p) {
         return p.a + p.b;
     }
 

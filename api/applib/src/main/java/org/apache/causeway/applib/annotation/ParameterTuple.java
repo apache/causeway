@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  * &#64;MemberSupport public Result act(&#64;ParameterTuple Params p) { ... }
  * </pre>
  *
- * @apiNote Java record support will not come before version 3.0
+ * @apiNote Java <b>record</b> support is planned for version 3.0
  *
  * @since 2.0 {@index}
  */
@@ -46,5 +46,5 @@ import java.lang.annotation.Target;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ParameterAsTuple {
+public @interface ParameterTuple {
 }

@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.annotation.ParameterAsTuple;
+import org.apache.causeway.applib.annotation.ParameterTuple;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
@@ -39,12 +39,12 @@ import lombok.experimental.UtilityClass;
 class _MethodFacadeAutodetect {
 
     /**
-     * Detects whether an action uses the {@link ParameterAsTuple} annotation on its single argument.
+     * Detects whether an action uses the {@link ParameterTuple} annotation on its single argument.
      * If so, we follow Parameters as Tuple (PAT) semantics.
      */
     MethodFacade autodetect(final Method method, final FacetHolder inspectedTypeSpec) {
         final long paramTupleCount = Stream.of(method.getParameters())
-            .map(parameter->_Annotations.synthesize(parameter, ParameterAsTuple.class))
+            .map(parameter->_Annotations.synthesize(parameter, ParameterTuple.class))
             .filter(Optional::isPresent)
             .count();
         if(paramTupleCount == 0) {
