@@ -138,15 +138,8 @@ public class WktDecorators {
     }
 
     public final static class Danger implements DangerDecorator<Component> {
-
-        private final CssClassNameRemover cssButtonSemanticsRemover =
-                ButtonSemantics.createButtonSemanticsRemover();
-
         @Override
         public void decorate(final Component uiComponent) {
-
-            uiComponent.add(cssButtonSemanticsRemover);
-
             Wkt.cssAppend(uiComponent, ButtonSemantics.DANGER.buttonDefaultCss());
         }
     }

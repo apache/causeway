@@ -23,8 +23,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -71,12 +73,18 @@ public class BootstrapConstants {
             return Stream.of(BootstrapConstants.ButtonSemantics.values())
                     .flatMap(bs->Stream.of(bs.buttonDefaultCss(), bs.buttonOutlineCss()));
         }
-        public static CssClassNameRemover createButtonSemanticsRemover() {
-            return new CssClassNameRemover(ButtonSemantics.streamAllSemanticsNamesAndVariants()
-                    .collect(Collectors.toList()));
+
+        @Getter(lazy=true) @Accessors(fluent=true)
+        private static final CssClassNameRemover remover =
+            new CssClassNameRemover(ButtonSemantics.streamAllSemanticsNamesAndVariants()
+                .collect(Collectors.toList()));
+
+        public static boolean appliesTo(final String cssClass) {
+            return cssClass.startsWith("btn-")
+                    ? streamAllSemanticsNamesAndVariants()
+                            .anyMatch(cssClass::equals)
+                    : false;
         }
-
-
     }
 
 }
