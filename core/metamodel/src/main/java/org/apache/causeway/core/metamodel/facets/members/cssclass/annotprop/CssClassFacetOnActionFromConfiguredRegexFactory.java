@@ -18,14 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.regex.Pattern;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -36,48 +31,29 @@ import lombok.val;
 public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
 
-    private final Map<Pattern, String> cssClassByPattern;
-
     @Inject
     public CssClassFacetOnActionFromConfiguredRegexFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.ACTIONS_ONLY);
-        this.cssClassByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClass().getPatternsAsMap();
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
+        if(processMethodContext.isMixinMain()) {
+            return; // don't match regex against 'act' say
+        }
+        
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         if(facetHolder.containsNonFallbackFacet(CssClassFacet.class)) {
             return;
         }
 
-        val method = processMethodContext.getMethod();
-        final String name = method.getName();
+        // the name which we match the regex against
+        val actionName = processMethodContext.getMethod().getName();
 
-        addFacetIfPresent(createFromConfiguredRegexIfPossible(name, facetHolder));
-    }
-
-    // -- cssClassFromPattern
-
-
-    private Optional<CssClassFacet> createFromConfiguredRegexIfPossible(
-            final String name,
-            final FacetHolder facetHolder) {
-        return cssIfAnyFor(name)
-                .map(css->new CssClassFacetOnActionFromConfiguredRegex(css, facetHolder));
-    }
-
-    private Optional<String> cssIfAnyFor(final String name) {
-
-        for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {
-            final Pattern pattern = entry.getKey();
-            final String cssClass = entry.getValue();
-            if(pattern.matcher(name).matches()) {
-                return Optional.ofNullable(cssClass);
-            }
-        }
-        return Optional.empty();
+        addFacetIfPresent(
+                CssClassFacetOnActionFromConfiguredRegex
+                    .create(actionName, facetHolder));
     }
 
 }

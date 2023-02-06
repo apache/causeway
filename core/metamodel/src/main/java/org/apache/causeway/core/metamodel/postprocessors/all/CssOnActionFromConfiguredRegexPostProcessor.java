@@ -16,24 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop;
+package org.apache.causeway.core.metamodel.postprocessors.all;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegex;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFromConfiguredRegex;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.val;
-
-public class CssClassFaFacetOnMemberPostProcessor
+public class CssOnActionFromConfiguredRegexPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public CssClassFaFacetOnMemberPostProcessor(final MetaModelContext mmc) {
+    public CssOnActionFromConfiguredRegexPostProcessor(final MetaModelContext mmc) {
         super(mmc);
     }
 
@@ -44,12 +45,16 @@ extends ObjectSpecificationPostProcessorAbstract {
             return; // don't process mixin main method, instead process its peer
         }
 
-        val hasExplicitFaIcon = objectAction.containsNonFallbackFacet(CssClassFaFacet.class);
-
-        if(!hasExplicitFaIcon) {
+        if(!objectAction.containsNonFallbackFacet(CssClassFaFacet.class)) {
             FacetUtil.addFacetIfPresent(
-                    CssClassFaFacetOnMemberFromConfiguredRegex
+                CssClassFaFacetOnMemberFromConfiguredRegex
                     .create(objectSpecification, objectAction));
+        }
+        
+        if(!objectAction.containsNonFallbackFacet(CssClassFacet.class)) {
+            FacetUtil.addFacetIfPresent(
+                CssClassFacetOnActionFromConfiguredRegex
+                    .create(objectAction.getId(), objectAction));
         }
     }
 
