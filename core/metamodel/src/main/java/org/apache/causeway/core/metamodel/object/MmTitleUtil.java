@@ -18,10 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -52,15 +58,24 @@ public class MmTitleUtil {
     }
 
     public static String formatAnyCardinalityAsTitle(
-            int cardinality, // number of items 
-            String singularName) {
+            final int cardinality, // number of items
+            final String singularName,
+            final @Nullable TranslationService translationService) {
+
+        val nounTranslated = Optional.ofNullable(translationService)
+                .map(ts->ts.translate(TranslationContext.empty(), singularName))
+                .orElse(singularName);
+        val entriesOfTranslated = Optional.ofNullable(translationService)
+                .map(ts->ts.translate(TranslationContext.empty(), "entries of"))
+                .orElse("entries of");
+
         switch (cardinality) {
         case 0:
-            return "No " + singularName;
+            return "No " + nounTranslated;
         case 1:
-            return "1 " + singularName;
+            return "1 " + nounTranslated;
         default:
-            return "" + cardinality + " entries of " + singularName;
+            return "" + cardinality + " " + entriesOfTranslated + " " + nounTranslated;
         }
     }
 

@@ -20,8 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -43,12 +42,12 @@ final class _InternalTitleUtil {
             return managedObject.getTitle();
         }
 
-        return managedObject.getSpecification().isSingular()
+        val objSpec = managedObject.getSpecification();
+
+        return objSpec.isSingular()
             ? objectTitleString(titleRenderRequest)
                     .trim()
-            : formatAnyCardinalityAsTitle(
-                    managedObject.getSpecification().getFacet(CollectionFacet.class).size(managedObject),
-                    managedObject.getElementSpecification().orElse(null));
+            : formatAnyCardinalityAsTitle(objSpec, managedObject);
     }
 
     // -- HELPER
@@ -71,15 +70,20 @@ final class _InternalTitleUtil {
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
-    private String formatAnyCardinalityAsTitle(final int size, final @Nullable ObjectSpecification elementSpec) {
+    private String getDefaultTitle(final ManagedObject managedObject) {
+        return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
+    }
+
+    private String formatAnyCardinalityAsTitle(@NonNull final ObjectSpecification objSpec, @NonNull final ManagedObject managedObject) {
+        final int size = objSpec.getFacet(CollectionFacet.class).size(managedObject);
+        val elementSpec = objSpec.getElementSpecification().orElse(null);
+        objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.getCorrespondingClass()), null);
+
         final String noun = (elementSpec == null
                 || elementSpec.getFullIdentifier().equals(Object.class.getName()))
                     ? "object"
                     : elementSpec.getSingularName();
-        return MmTitleUtil.formatAnyCardinalityAsTitle(size, noun);
+        return MmTitleUtil.formatAnyCardinalityAsTitle(size, noun, objSpec.getTranslationService());
     }
 
-    private String getDefaultTitle(final ManagedObject managedObject) {
-        return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
-    }
 }

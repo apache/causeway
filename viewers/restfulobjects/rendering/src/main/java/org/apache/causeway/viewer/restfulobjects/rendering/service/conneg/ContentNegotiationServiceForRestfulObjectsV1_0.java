@@ -321,7 +321,7 @@ implements ContentNegotiationService {
             final Collection<ManagedObject> collectionAdapters,
             final ObjectSpecification elementSpec) {
         final String singularName = elementSpec.getSingularName();
-        return MmTitleUtil.formatAnyCardinalityAsTitle(collectionAdapters.size(), singularName);
+        return MmTitleUtil.formatAnyCardinalityAsTitle(collectionAdapters.size(), singularName, elementSpec.getTranslationService());
     }
 
     /**
