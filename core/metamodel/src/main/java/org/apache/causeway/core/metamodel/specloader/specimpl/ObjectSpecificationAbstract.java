@@ -512,17 +512,6 @@ implements ObjectSpecification {
                     getFullIdentifier()));
     }
 
-    @Override
-    public String getPluralName() {
-        return lookupFacet(ObjectNamedFacet.class)
-            .flatMap(textFacet->textFacet.translated(NounForm.PLURAL))
-            // unexpected code reach, however keep for JUnit testing
-            .orElseGet(()->String.format(
-                    "(%s has neither title- nor object-named-facet)",
-                    getFullIdentifier()));
-
-    }
-
     /**
      * The translated description according to any available {@link ObjectDescribedFacet},
      * else empty string (<tt>""</tt>).

@@ -48,7 +48,8 @@ import lombok.Setter;
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        plural="Example Plural Name")
+        // plural="Example Plural Name" TODO: DEPRECATED
+        )
 public class DomainObjectLayoutPluralVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

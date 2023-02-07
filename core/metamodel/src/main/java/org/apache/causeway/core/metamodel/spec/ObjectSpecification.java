@@ -208,15 +208,6 @@ extends
     String getSingularName();
 
     /**
-     * Returns the plural name for objects of this specification.
-     * Corresponds to the {@link HasNoun#translated(NounForm)}
-     * with {@link NounForm#PLURAL}
-     * of {@link ObjectNamedFacet}; is
-     * not necessarily immutable.
-     */
-    String getPluralName();
-
-    /**
      * Returns the description, if any, of the specification.
      *
      * <p>

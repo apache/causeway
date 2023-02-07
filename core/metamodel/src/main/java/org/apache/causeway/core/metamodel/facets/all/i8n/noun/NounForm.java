@@ -22,6 +22,7 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
  * Represents various linguistic forms, based on <i>cardinality</i>.
  * @since 2.0
  */
+@Deprecated
 public enum NounForm {
 
     /**
@@ -29,18 +30,10 @@ public enum NounForm {
      */
     SINGULAR,
 
-    /**
-     * Represents the plural linguistic form.
-     */
-    PLURAL
     ;
 
     public boolean isSingular() {
         return this == SINGULAR;
-    }
-
-    public boolean isPlural() {
-        return this == PLURAL;
     }
 
 }

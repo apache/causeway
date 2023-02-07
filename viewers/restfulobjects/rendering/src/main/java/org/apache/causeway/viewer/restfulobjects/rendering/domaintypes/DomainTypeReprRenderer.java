@@ -176,9 +176,6 @@ extends ReprRendererAbstract<ObjectSpecification> {
     protected void putExtensionsNames() {
         final String singularName = objectSpecification.getSingularName();
         getExtensions().mapPutString("friendlyName", singularName);
-
-        final String pluralName = objectSpecification.getPluralName();
-        getExtensions().mapPutString("pluralName", pluralName);
     }
 
     protected void putExtensionsDescriptionIfAvailable() {

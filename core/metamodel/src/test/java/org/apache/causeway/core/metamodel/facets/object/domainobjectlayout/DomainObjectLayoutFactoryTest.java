@@ -78,8 +78,7 @@ extends AbstractFacetFactoryJupiterTestCase {
             cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
-            paged = 20,
-            plural = "Customers Plural Form"
+            paged = 20
             )
     class Customer { }
 
@@ -360,51 +359,6 @@ extends AbstractFacetFactoryJupiterTestCase {
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNull(facet);
-
-                expectNoMethodsRemoved();
-            }
-        }
-
-    }
-
-    public static class Plural extends DomainObjectLayoutFactoryTest {
-
-        @Mock ManagedObject mockAdapter;
-
-        public static class ForDomainObjectLayout extends Plural {
-
-            @BeforeEach
-            public void setUp2() throws Exception {
-            }
-
-            @Test
-            public void whenSpecified() {
-
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
-
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
-                assertNotNull(namedFacet);
-
-                assertEquals("Customers Plural Form", namedFacet.pluralTranslated());
-
-                expectNoMethodsRemoved();
-            }
-
-            @Test
-            public void whenDefaults() {
-
-                final Class<?> cls = CustomerWithDefaults.class;
-
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
-                assertNull(namedFacet);
-
-                //assertEquals("", namedFacet.translated(NounForm.PLURAL));
 
                 expectNoMethodsRemoved();
             }
