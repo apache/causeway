@@ -51,4 +51,18 @@ public class MmTitleUtil {
                     : "(no object)";
     }
 
+    public static String formatAnyCardinalityAsTitle(
+            int cardinality, // number of items 
+            String singularName) {
+        switch (cardinality) {
+        case 0:
+            return "No " + singularName;
+        case 1:
+            return "1 " + singularName;
+        default:
+            return "" + cardinality + " entries of " + singularName;
+        }
+    }
+
+
 }

@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
@@ -65,19 +64,10 @@ extends ObjectSpecificationPostProcessorAbstract {
                 .filter(_Strings::isNotEmpty)
                 .orElseGet(()->getSingularFallbackNoun(objectSpecification));
 
-        val plural = topRank
-                .stream()
-                .filter(objectNamedFacet->objectNamedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
-                .findFirst()
-                .map(ObjectNamedFacet::plural)
-                .filter(_Strings::isNotEmpty)
-                .orElseGet(()->getPluralFallbackNoun(singular));
-
         FacetUtil.addFacet(
                 new ObjectNamedFacetSynthesized(
                         NounForms.builder()
                             .singular(singular)
-                            .plural(plural)
                             .build(),
                         objectSpecification)
                 );
@@ -88,10 +78,6 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     private String getSingularFallbackNoun(final ObjectSpecification spec) {
         return spec.getFeatureIdentifier().getClassNaturalName();
-    }
-
-    private String getPluralFallbackNoun(final String singular) {
-        return StringExtensions.asPluralName(singular);
     }
 
 }

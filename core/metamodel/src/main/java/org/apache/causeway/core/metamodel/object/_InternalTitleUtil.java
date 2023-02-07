@@ -20,8 +20,11 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.val;
@@ -43,9 +46,9 @@ final class _InternalTitleUtil {
         return managedObject.getSpecification().isSingular()
             ? objectTitleString(titleRenderRequest)
                     .trim()
-            : collectionTitleString(
-                    managedObject,
-                    managedObject.getSpecification().getFacet(CollectionFacet.class));
+            : formatAnyCardinalityAsTitle(
+                    managedObject.getSpecification().getFacet(CollectionFacet.class).size(managedObject),
+                    managedObject.getElementSpecification().orElse(null));
     }
 
     // -- HELPER
@@ -68,33 +71,12 @@ final class _InternalTitleUtil {
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
-    private String collectionTitleString(final ManagedObject managedObject, final CollectionFacet facet) {
-        final int size = facet.size(managedObject);
-        val elementSpec = managedObject.getElementSpecification().orElse(null);
-        if (elementSpec == null
-                || elementSpec.getFullIdentifier().equals(Object.class.getName())) {
-            switch (size) {
-            case -1:
-                return "Objects";
-            case 0:
-                return "No objects";
-            case 1:
-                return "1 object";
-            default:
-                return size + " objects";
-            }
-        } else {
-            switch (size) {
-            case -1:
-                return elementSpec.getPluralName();
-            case 0:
-                return "No " + elementSpec.getPluralName();
-            case 1:
-                return "1 " + elementSpec.getSingularName();
-            default:
-                return size + " " + elementSpec.getPluralName();
-            }
-        }
+    private String formatAnyCardinalityAsTitle(final int size, final @Nullable ObjectSpecification elementSpec) {
+        final String noun = (elementSpec == null
+                || elementSpec.getFullIdentifier().equals(Object.class.getName()))
+                    ? "object"
+                    : elementSpec.getSingularName();
+        return MmTitleUtil.formatAnyCardinalityAsTitle(size, noun);
     }
 
     private String getDefaultTitle(final ManagedObject managedObject) {

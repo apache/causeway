@@ -43,12 +43,10 @@ extends ObjectNamedFacetAbstract {
         }
 
         val singular = _Strings.emptyToNull(domainObjectLayout.getNamed());
-        val plural = _Strings.emptyToNull(domainObjectLayout.getPlural());
 
         val nounForms = NounForms
                 .builder()
                 .singular(singular)
-                .plural(plural)
                 .build();
 
         if(nounForms.getSupportedNounForms().isEmpty()) {

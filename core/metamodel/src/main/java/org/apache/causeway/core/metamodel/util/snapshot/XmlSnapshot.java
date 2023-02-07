@@ -634,7 +634,7 @@ public class XmlSnapshot implements Snapshot {
             log.debug("objectToElement(NO): create element and causeway:title");
         }
         final Element element = schema.createElement(getXmlDocument(), spec.getShortIdentifier(),
-                spec.getFullIdentifier(), spec.getSingularName(), spec.getPluralName());
+                spec.getFullIdentifier(), spec.getSingularName());
         causewayMetaModel.appendCausewayTitle(element, adapter.getTitle());
 
         if (log.isDebugEnabled()) {

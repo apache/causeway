@@ -110,7 +110,6 @@ public @interface DomainObjectLayout {
      * @see PropertyLayout#named()
      * @see CollectionLayout#named()
      * @see DomainServiceLayout#named()
-     * @see DomainObjectLayout#plural()
      */
     String named()
             default "";
