@@ -17,14 +17,14 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/chg"
+<xs:schema targetNamespace="https://causeway.apache.org/schema/chg"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://isis.apache.org/schema/chg"
-           xmlns:com="http://isis.apache.org/schema/common"
+           xmlns="https://causeway.apache.org/schema/chg"
+           xmlns:com="https://causeway.apache.org/schema/common"
 >
 
-    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
+    <xs:import namespace="https://causeway.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
 
     <xs:element name="changesDto">
         <xs:annotation>
