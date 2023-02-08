@@ -17,9 +17,9 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/metamodel"
+<xs:schema targetNamespace="https://causeway.apache.org/schema/metamodel"
            elementFormDefault="qualified"
-           xmlns="http://isis.apache.org/schema/metamodel"
+           xmlns="https://causeway.apache.org/schema/metamodel"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:element name="metamodelDto">

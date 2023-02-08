@@ -21,7 +21,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-  <Project rdf:about="http://isis.apache.org">
+  <Project rdf:about="https://causeway.apache.org">
     <created>2013-01-03</created>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
     <name>Apache Causeway</name>
@@ -927,8 +927,8 @@
 
     <repository>
       <GITRepository>
-        <location rdf:resource="https://github.com/apache/isis.git"/>
-        <browse rdf:resource="https://github.com/apache/isis"/>
+        <location rdf:resource="https://github.com/apache/causeway.git"/>
+        <browse rdf:resource="https://github.com/apache/causeway"/>
       </GITRepository>
     </repository>
     <maintainer>
