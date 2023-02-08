@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * @see org.apache.causeway.applib.annotation.ParameterLayout
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum LabelPosition {
 

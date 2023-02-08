@@ -87,8 +87,8 @@ import lombok.extern.log4j.Log4j2;
 public class MenuBarsServiceBootstrap
 implements MenuBarsService {
 
-    public static final String MB3_TNS = "http://causeway.apache.org/applib/layout/menubars/bootstrap3";
-    public static final String MB3_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
+    public static final String MB3_TNS = "https://causeway.apache.org/applib/layout/menubars/bootstrap3";
+    public static final String MB3_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
 
     public static final String COMPONENT_TNS = GridServiceDefault.COMPONENT_TNS;
     public static final String COMPONENT_SCHEMA_LOCATION = GridServiceDefault.COMPONENT_SCHEMA_LOCATION;

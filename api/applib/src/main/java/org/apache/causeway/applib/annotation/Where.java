@@ -45,7 +45,7 @@ import org.apache.causeway.applib.util.Enums;
  * the framework developer should only use those values that represent concrete locations.
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum Where {
 

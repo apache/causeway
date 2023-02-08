@@ -28,11 +28,11 @@
  *
  */
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://causeway.apache.org/applib/layout/component",
+        namespace = "https://causeway.apache.org/applib/layout/component",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://causeway.apache.org/applib/layout/component", prefix = "cpt")
+                        namespaceURI = "https://causeway.apache.org/applib/layout/component", prefix = "cpt")
         }        // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
         //, location = ..."http://causeway.apache.org/schema/metamodel/layout/common/common.xsd"
         )
