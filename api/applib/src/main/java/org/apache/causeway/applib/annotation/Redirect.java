@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * @since 1.x {@index}
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum Redirect {
     /**

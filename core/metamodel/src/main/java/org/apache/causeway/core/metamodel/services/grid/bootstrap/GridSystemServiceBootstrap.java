@@ -94,8 +94,8 @@ import lombok.extern.log4j.Log4j2;
 public class GridSystemServiceBootstrap
 extends GridSystemServiceAbstract<BSGrid> {
 
-    public static final String TNS = "http://causeway.apache.org/applib/layout/grid/bootstrap3";
-    public static final String SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
+    public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
+    public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support

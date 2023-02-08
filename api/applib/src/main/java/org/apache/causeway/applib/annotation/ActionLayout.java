@@ -217,7 +217,7 @@ public @interface ActionLayout {
     Position position()
             default Position.NOT_SPECIFIED;
 
-    @XmlType(namespace = "http://causeway.apache.org/applib/layout/component")
+    @XmlType(namespace = "https://causeway.apache.org/applib/layout/component")
     enum Position {
         BELOW,
         RIGHT,

@@ -28,10 +28,10 @@
  * </p>
  */
 @jakarta.xml.bind.annotation.XmlSchema(
-        namespace = "http://causeway.apache.org/applib/layout/grid/bootstrap3",
+        namespace = "https://causeway.apache.org/applib/layout/grid/bootstrap3",
         elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @jakarta.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://causeway.apache.org/applib/layout/grid/bootstrap3", prefix = "bs")
+                        namespaceURI = "https://causeway.apache.org/applib/layout/grid/bootstrap3", prefix = "bs")
         })
 package org.apache.causeway.applib.layout.grid.bootstrap;

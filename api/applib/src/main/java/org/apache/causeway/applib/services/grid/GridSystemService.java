@@ -51,7 +51,7 @@ public interface GridSystemService<G extends Grid> {
      * <p>
      *     This is used when generating the XML.  The Bootstrap3 grid system
      *     provided by the framework returns the value
-     *     `http://causeway.apache.org/applib/layout/grid/bootstrap3`.
+     *     `https://causeway.apache.org/applib/layout/grid/bootstrap3`.
      * </p>
      */
     String tns();
@@ -63,7 +63,7 @@ public interface GridSystemService<G extends Grid> {
      *     Every grid system is expected to provide a schema XSD in order to
      *     provide code completion in an IDE. The Bootstrap3 grid system
      *     provided by the framework returns the value
-     *     `http://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
+     *     `https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
      * </p>
      */
     String schemaLocation();

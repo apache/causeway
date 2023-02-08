@@ -45,7 +45,7 @@ import jakarta.xml.bind.annotation.XmlType;
  * the framework developer should only use those values that represent concrete locations.
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum Where {
 

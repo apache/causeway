@@ -28,11 +28,11 @@
  *
  */
 @jakarta.xml.bind.annotation.XmlSchema(
-        namespace = "http://causeway.apache.org/applib/layout/menubars/bootstrap3",
+        namespace = "https://causeway.apache.org/applib/layout/menubars/bootstrap3",
         elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @jakarta.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://causeway.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
+                        namespaceURI = "https://causeway.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
         }
         )
 package org.apache.causeway.applib.layout.menubars.bootstrap;
