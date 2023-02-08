@@ -12,12 +12,12 @@
 
 <!--
 For latest we use: https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd
-      rather than: http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
+      rather than: https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
  -->
 <mb3:menuBars
-        xsi:schemaLocation="http://causeway.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd http://causeway.apache.org/applib/layout/component http://causeway.apache.org/applib/layout/component/component.xsd"
-        xmlns:cpt="http://causeway.apache.org/applib/layout/component"
-        xmlns:mb3="http://causeway.apache.org/applib/layout/menubars/bootstrap3"
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:mb3="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <mb3:primary>
