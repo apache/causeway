@@ -211,7 +211,11 @@ class RenameProject {
                 var newLine = line
                         .replace(fromLower, toLower)
                         .replace(fromUpper, toUpper)
-                        .replace(fromTitle, toTitle);
+                        .replace(fromTitle, toTitle)
+                        // restore XML namespace identifiers 
+                        .replace(
+                                "https://" + fromLower + ".apache.org/applib/layout",
+                                "http://" + toLower + ".apache.org/applib/layout");
                 newLines.add(newLine);
                 return line.equals(newLine)
                         ? 0
