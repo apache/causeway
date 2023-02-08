@@ -92,8 +92,6 @@ abstract class BaseAggregator {
         subType: String = Constants.subTypeJson,
         referrer: String,
     ) {
-        //       console.log("[BA.invoke]")
-        //       console.log("$link ${aggregator::class.simpleName} $referrer")
         ResourceProxy().fetch(link, aggregator, subType, referrer = referrer)
     }
 

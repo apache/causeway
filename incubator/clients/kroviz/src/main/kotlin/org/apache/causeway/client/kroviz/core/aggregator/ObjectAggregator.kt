@@ -37,8 +37,6 @@ import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
  */
 class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
 
-    private var collectionMap = mutableMapOf<String, CollectionAggregator>()
-
     init {
         displayModel = ObjectDM(actionTitle)
     }
@@ -58,7 +56,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             }
         }
 
-        if (displayModel.readyToRender()) {
+        if (getDisplayModel().readyToRender()) {
             ViewManager.openObjectView(this)
         }
     }
@@ -71,9 +69,6 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         } else {
             displayModel.addData(obj, this, referrer)
         }
-        if (collectionMap.isEmpty()) {
-            handleCollections(obj, referrer)
-        }
         invokeLayoutLink(obj, this, referrer = referrer)
     }
 
@@ -84,8 +79,16 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         invoke(selfLink!!, this, referrer = referrer)
     }
 
+    fun getDisplayModel(): ObjectDM {
+        return displayModel as ObjectDM
+    }
+
+    private fun getLayout(): ObjectLayout {
+        return getDisplayModel().layout as ObjectLayout
+    }
+
     private fun handleResultObject(resultObject: ResultObject) {
-        (displayModel as ObjectDM).addResult(resultObject)
+        getDisplayModel().addResult(resultObject)
     }
 
     private fun handleResultValue(resultValue: ResultValue) {
@@ -96,46 +99,18 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         return displayModel.getObject()
     }
 
-    private fun handleCollections(obj: TObject, referrer: String) {
-        console.log("[OA_handleCollection] collections")
-        val collections = obj.getCollections()
-        console.log(collections)
-        collections.forEach {
-            val key = it.id
-            val aggregator = CollectionAggregator(key, this)
-            collectionMap[key] = aggregator
-            val link = it.links.first()
-            ResourceProxy().fetch(link, aggregator, referrer = referrer)
-        }
-    }
-
     private fun handleProperty(property: Property, referrer: String) {
-        val dm = displayModel as ObjectDM
-        val layout = dm.layout!!
-        handleProperty(property, referrer, layout)
+        handleProperty(property, referrer, getLayout()) //FIXME
     }
 
     private fun handleGrid(grid: GridBs, referrer: String) {
-        val odm = displayModel as ObjectDM
-        val ol = odm.layout as ObjectLayout
+        val ol = getLayout()
         // for a yet unknown reason, handleGrid may be called twice, therefore we check if it's already set
         if (ol.grid == null) {
-            console.log("[OA_handleGrid]")
             ol.addGrid(grid, this, referrer = referrer)
-            val pl = grid.getPropertyList()
-            pl.forEach {
+            grid.getPropertyList().forEach {
                 val link = it.link!!
-                // properties to be handled by ObjectAggregator
                 ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
-            }
-            val cl = grid.getCollectionList()
-            cl.forEach {
-                val href = it.linkList.first().href
-                console.log("CollectionBs")
-                console.log(href)
-                val l = Link(href = href)
-                // collections to be handled by ObjectAggregator
-                ResourceProxy().fetch(l, this, subType = Constants.subTypeJson, referrer = referrer)
             }
         }
     }

@@ -74,7 +74,7 @@ class CollectionAggregatorTest : IntegrationTest() {
             val expected = "ResultListResult class"
 //            assertEquals(expected, lbl)  // 6
             val vars = "$property , $cdm, $expected"
-            console.log(vars)
+//            console.log(vars)
         }
     }
 

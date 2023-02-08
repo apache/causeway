@@ -42,10 +42,12 @@ class ColumnFactory {
     }
 
     fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
+        console.log("[CF_buildColumns]")
         val columns = mutableListOf<ColumnDefinition<Exposer>>()
         addColumnForObjectIcon(displayCollection, columns)
         addColumnsForProperties(displayCollection, columns)
         columns.add(columnForObjectMenu())
+        console.log(columns)
         return columns
     }
 

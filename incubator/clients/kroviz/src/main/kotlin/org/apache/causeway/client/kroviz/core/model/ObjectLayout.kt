@@ -19,10 +19,13 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
+import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
+import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.ObjectProperty
 import org.apache.causeway.client.kroviz.to.PropertyDescription
+import org.apache.causeway.client.kroviz.to.bs.CollectionBs
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.to.bs.RowBs
 
@@ -33,59 +36,72 @@ class ObjectLayout : BaseLayout() {
 
     override fun readyToRender(): Boolean {
         console.log("[OL_readyToRender]")
-        return when (grid) {
+//        val o = js(arrayOf(collectionLayoutMap.values))
+        console.log(collectionLayoutMap.keys)
+        var answer = when (grid) {
             null -> false
             else -> {
                 var answer = true
                 collectionLayoutMap.values.forEach {
-                    console.log(it)
-                    if (!it.readyToRender()) answer = false
+                    if (!it.readyToRender()) {
+                        answer = false
+                    }
                 }
                 answer
             }
         }
+        return answer
     }
 
     override fun addObjectProperty(
-        property: ObjectProperty,
+        objectProperty: ObjectProperty,
         aggregator: AggregatorWithLayout,
         referrer: String
     ) {
-        TODO("Not yet implemented")
+        console.log("[OL_addObjectProperty]")
+//        TODO("Not yet implemented")
     }
 
     override fun addPropertyDescription(
-        property: PropertyDescription,
+        propertyDescription: PropertyDescription,
         aggregator: AggregatorWithLayout,
         referrer: String
     ) {
-        TODO("Not yet implemented")
+        console.log("[OL_addPropertyDescription]")
+//        TODO("Not yet implemented")
     }
 
-    fun addGrid(grid: GridBs, aggregator: AggregatorWithLayout?, referrer: String?) {
+    fun addGrid(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {
         this.grid = grid
         grid.rows.forEach { r ->
-            initRow(r, aggregator!!, referrer = referrer!!)
+            initRow(r, aggregator, referrer = referrer!!)
         }
     }
 
-    private fun initRow(r: RowBs, aggregator: AggregatorWithLayout, referrer: String) {
+    private fun initRow(r: RowBs, aggregator: ObjectAggregator, referrer: String) {
         r.colList.forEach { c ->
-            c.collectionList.forEach { col ->
-                collectionLayoutMap[col.id] =
-                    CollectionLayout() // create empty entry for id - for later usage when response arrives
-                val href = col.linkList.first().href // we assume, linklist has always one element
-                val l = Link(href = href)
-                ResourceProxy().fetch(l, aggregator, referrer = referrer)
+            c.rowList.forEach { r2 ->
+                r2.colList.forEach { c2 ->
+                    c2.collectionList.forEach { col ->
+                        initCollection(col, aggregator, referrer)
+                    }
+                }
             }
             c.tabGroupList.forEach { tg ->
                 tg.tabList.forEach { t ->
-                    t.rowList.forEach { r2 ->
-                        initRow(r2, aggregator, referrer)
+                    t.rowList.forEach { r3 ->
+                        initRow(r3, aggregator, referrer)
                     }
                 }
             }
         }
+    }
+
+    private fun initCollection(collection: CollectionBs, parent: ObjectAggregator, referrer: String) {
+        val href = collection.linkList.first().href // we assume, linklist has always one element
+        val l = Link(href = href)
+        val aggt = CollectionAggregator("", parent)
+        ResourceProxy().fetch(l, aggt, referrer = referrer)
     }
 
 }

@@ -31,7 +31,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         layout = ObjectLayout()
     }
 
-    val collectionMap = mutableMapOf<String, CollectionDM>()
+    val collectionModelList = mutableListOf<CollectionDM>()
     var data: Exposer? = null
     private var dirty: Boolean = false
 
@@ -43,7 +43,12 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         TODO("Not yet implemented")
     }
 
+    fun getCollectionDisplayModelFor(id: String): CollectionDM {
+        return collectionModelList.find { it.id == id }!!
+    }
+
     override fun readyToRender(): Boolean {
+        console.log("[ODM_readyToRender]")
         return when {
             data == null -> false
             isRendered -> false

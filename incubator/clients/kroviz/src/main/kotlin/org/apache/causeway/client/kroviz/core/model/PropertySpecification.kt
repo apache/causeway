@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.to.ObjectProperty
+import org.apache.causeway.client.kroviz.to.Member
 import org.apache.causeway.client.kroviz.to.PropertyDescription
 
 /**
@@ -31,37 +31,27 @@ import org.apache.causeway.client.kroviz.to.PropertyDescription
  *
  * All are required in order to be correctly displayed (in a table).
  */
-class PropertySpecification(val id: String) {
-    var name = "" // aka: columnName, named, label
+class PropertySpecification(member: Member) {
+    var id = ""
+    var name = "" // aka: columnName, named, label, title
     var hidden = false
-    var disabledReason = ""
+    var disabled = false
 
-    fun addObjectProperty(op: ObjectProperty) {}
-    fun addPropertyDescription(pd: PropertyDescription) {
-        val ex = pd.extensions!!
-        name = ex.getFriendlyName()
-        if (name.isEmpty()) {
-            name = id
-            console.log(pd)
-        }
+    init {
+        id = member.id
+        name = member.id // can be changed later via property-description
+        hidden = false // can be changed later via ...
+        disabled = member.disabledReason.isNotEmpty()
     }
-    //FIXME use setter Methods using:
-    /** Property
-     *ObjectProperty
-    PropertyDescription */
-    /*init {
-        id = grid.id
-        when {
-            grid.named.isNotEmpty() -> columnName = grid.named
-            else -> columnName = id
+
+    fun amendWith(pd: PropertyDescription) {
+        console.log("[PS_addPropertyDescription]")
+        val ex = pd.extensions!!
+        val fn = ex.getFriendlyName()
+        if (fn.isNotEmpty()) {
+            name = fn
         }
-        //       console.log("[CD.init]")
-        when {
-            // grid.hidden can be null -- intellij inference is wrong
-            (grid.hidden == null) || grid.hidden.isEmpty() -> {}
-            grid.hidden.contains("TABLE") -> hidden = true
-        }
-        //       console.log("$id $columnName Hidden: $hidden")
-    } */
+        console.log(this)
+    }
 
 }

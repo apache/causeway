@@ -28,6 +28,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         layout = CollectionLayout()
     }
 
+    var id = ""
     var data = observableListOf<Exposer>()
     private var rawData = observableListOf<TransferObject>()
 

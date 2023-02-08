@@ -1,0 +1,125 @@
+.Collection Layout Aggregation
+[plantuml,file="layout_aggregation.png"]
+----
+allowmixing
+
+() START
+() END
+together {
+    file "object-layout" <<BootStrap XML>> as OL #lightblue
+    class GridBs <<(T,tomato)TransferObject>> #lightgreen {}
+    OL . GridBs
+}
+together {
+    file "object-collection" <<JSON>> as OC #lightblue
+    class Collection <<(T,tomato)TransferObject>> #lightgreen {
+        id
+        memberType= Collection
+        value[] = data
+    }
+    'Collection .. OC
+}
+together {
+    file "object" <<JSON>> as O #lightblue
+    class TObject <<(T,tomato)TransferObject>> #lightgreen {
+        members[]
+    }
+    TObject .. O
+}
+file "collection-description" <<JSON>> as CD #lightblue
+
+together {
+    file "object-property" <<JSON>> as OP #lightblue
+    class ObjectProperty <<(T,tomato)TransferObject>> #lightgreen {
+        disabledReason
+    }
+    OP .u. ObjectProperty
+}
+together {
+    file "property-description" <<JSON>> as PD #lightblue
+    class PropertyDescription <<(T,tomato)TransferObject>> #lightgreen {
+        extensions.friendlyName
+    }
+    PD .u. PropertyDescription
+}
+
+' references between TransferObjects (xml/json)
+START --> OL : menu action \ninvoked by user
+OL --> OC : contains\nreference\nto
+OC --> CD : contains\ncollection\ntitle
+OC --> O : contains\nreference\nto
+O --> OP : contains\nreference\nto
+OP -> PD : contains\nreference\nto
+PD --> END
+
+' references between TO classes
+GridBs o-->"0.n" Collection
+Collection o--> TObject : first\nelement\nis\nrequired
+
+' object
+together {
+    class ObjectAggregator <<(A,orange)Aggregator>> #pink {
+        update()
+        handleGrid()
+    }
+    class ObjectDM <<(M,orange)DisplayModel>> #lightyellow {
+        layout
+        collectionDmMap
+        data: Exposer
+        readyToRender()
+    }
+    class ObjectLayout <<(L,orange)Layout>> #pink {
+        grid
+        readyToRender()
+    }
+    ObjectAggregator --> ObjectDM
+    ObjectDM --> ObjectLayout
+}
+ObjectAggregator ..> GridBs : handles
+
+'collection
+together {
+    class CollectionAggregator <<(A, coral)Aggregator>> #pink {
+        update()
+        handleCollection()
+        isStandAloneCollection()
+        isParentedCollection()
+    }
+    class CollectionDM <<(M,coral)DisplayModel>> #lightyellow {
+        layout
+        data[]: Exposer
+        readyToRender()
+    }
+    class CollectionLayout <<(L,coral)Layout>> #pink{
+        numberOfColumns
+        propertySpecificationMap
+        readyToRender()
+    }
+    CollectionAggregator --> CollectionDM
+    CollectionDM --> CollectionLayout
+}
+ObjectDM o-r-> CollectionDM
+
+' references between Layout and TO classes
+CollectionLayout ..> TObject : handles
+CollectionLayout ..> ObjectProperty : handles
+CollectionLayout ..> PropertyDescription : handles
+
+note left of CollectionLayout #gold
+* the number of columns
+is to be set from object/TObject
+* for each
+attribute/property/column
+get object-property
+*for each object-property,
+get the property-description
+(friendlyName)
+end note
+
+note right of CollectionAggregator #gold
+iterate over value[]
+and add data to DisplayModel
+end note
+
+
+----

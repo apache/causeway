@@ -25,7 +25,6 @@ import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -41,47 +40,57 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         displayModel = CollectionDM(actionTitle)
     }
 
+    var referrer = ""
+
     override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
         if (logEntry.state == EventState.DUPLICATE) {
             throw IllegalStateException("duplicates should not be propagated to handlers")
             //TODO this may not hold true for changed and deleted objects - object version required to deal with it?
         } else {
-            val referrer = logEntry.url
+            referrer = logEntry.url
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
-                is ResultList -> handleList(obj, referrer)
-                is TObject -> handleObject(obj, referrer)
-                is DomainType -> handleDomainType(obj, referrer)
-                is GridBs -> handleGrid(obj, referrer)
-                is Property -> handleProperty(obj, referrer)
-                is Collection -> handleCollection(obj, referrer)
+                is ResultList -> handleList(obj)
+                is TObject -> handleObject(obj)
+                is DomainType -> handleDomainType(obj)
+                //is GridBs -> Unit //In the case of CollectionDM, object-layout can be ignored
+                is Property -> handleProperty(obj)
+                is Collection -> handleCollection(obj)
                 is Icon -> handleIcon(obj)
                 else -> log(logEntry)
             }
 
-            if (parent == null) {
-                if (displayModel.readyToRender()) {
+            when {
+                isStandAloneCollection() && readyToRender() -> {
                     ViewManager.openCollectionView(this)
                 }
-            } else {
-                val le = LogEntry(ResourceSpecification(""))
-                // in case of a _parented_collection_ an empty LogEntry is passed on
-                parent.update(le, subType)
+
+                isParentedCollection() -> {
+                    // A LogEntry with an empty url is passed on to the parent AGGT
+                    // in order to decide, if the whole tree is ready to be rendered.
+                    val le = LogEntry(ResourceSpecification(""))
+                    parent!!.update(le, subType)
+                }
+
+                else -> Unit
             }
         }
     }
 
-    private fun handleGrid(grid: GridBs, referrer: String) {
-        val cdm = displayModel as CollectionDM
-        console.log("[CA.handleGrid] In the case of CollectionDM, object-layout can be ignored?")
-        console.log(grid)
-        console.log(cdm)
-        console.log(referrer)
-        //TODO("In the case of CollectionDM, object-layout can be ignored: " + vars)
+    private fun readyToRender(): Boolean {
+        return getDisplayModel().readyToRender()
     }
 
-    private fun handleList(resultList: ResultList, referrer: String) {
+    private fun getDisplayModel(): CollectionDM {
+        return displayModel as CollectionDM
+    }
+
+    private fun getLayout(): CollectionLayout {
+        return getDisplayModel().layout as CollectionLayout
+    }
+
+    private fun handleList(resultList: ResultList) {
         if (resultList.resulttype != ResultType.VOID.type) {
             val result = resultList.result!!
             result.value.forEach {
@@ -90,28 +99,30 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         }
     }
 
-    private fun handleObject(obj: TObject, referrer: String) {
+    private fun handleObject(obj: TObject) {
         displayModel.addData(obj, this, referrer)
+
+        getLayout().initColumns(obj)
+
         if (isStandAloneCollection()) {
             invokeLayoutLink(obj, this, referrer = referrer)
         }
         invokeIconLink(obj, this, referrer = referrer)
-        // set the number of columns
-        val numberOfColumns = obj.getProperties().size
-        val cdm = displayModel as CollectionDM
-        val cl = cdm.layout as CollectionLayout
-        cl.numberOfColumns = numberOfColumns
     }
 
     private fun isStandAloneCollection(): Boolean {
         return parent == null
     }
 
-    private fun handleIcon(obj: TransferObject?) {
-        (displayModel as CollectionDM).addIcon(obj)
+    private fun isParentedCollection(): Boolean {
+        return parent != null
     }
 
-    private fun handleDomainType(obj: DomainType, referrer: String) {
+    private fun handleIcon(obj: TransferObject?) {
+        getDisplayModel().addIcon(obj)
+    }
+
+    private fun handleDomainType(obj: DomainType) {
         obj.links.forEach {
             if (it.relation() == Relation.LAYOUT) {
                 invoke(it, this, referrer = referrer)
@@ -125,14 +136,19 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         }
     }
 
-    private fun handleProperty(property: Property, referrer: String) {
-        console.log("[CA.handleProperty]")
-        val dm = displayModel as CollectionDM
-        val layout = dm.layout!!
-        handleProperty(property, referrer, layout)
+    private fun handleProperty(property: Property) {
+        handleProperty(property, referrer, getLayout())
     }
 
-    private fun handleCollection(collection: Collection, referrer: String) {
+    private fun handleCollection(collection: Collection) {
+        console.log("[CA_handleCollection]")
+        if (isParentedCollection()) {
+            val cdm = getDisplayModel()
+            cdm.id = collection.id
+            // add displayModel to parent.displayModel
+            val parentDM = parent!!.getDisplayModel()
+            parentDM.collectionModelList.add(cdm)
+        }
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {
                 ResourceProxy().fetch(it, this, referrer = referrer)

@@ -25,13 +25,13 @@ import org.apache.causeway.client.kroviz.to.PropertyDescription
 abstract class BaseLayout {
 
     abstract fun addObjectProperty(
-        property: ObjectProperty,
+        objectProperty: ObjectProperty,
         aggregator: AggregatorWithLayout,
         referrer: String
     )
 
     abstract fun addPropertyDescription(
-        property: PropertyDescription,
+        propertyDescription: PropertyDescription,
         aggregator: AggregatorWithLayout,
         referrer: String
     )
