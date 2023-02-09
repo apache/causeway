@@ -49,6 +49,8 @@
 
   --color-theme-blue: var(--color-causeway-purple);
   --color-theme-green: var(--color-causeway-yellow);
+  
+  --color-dark-overlay: #0000002e; /* black with some opacity*/
 }
 
 body {
@@ -174,12 +176,11 @@ h6 {
 }
 
 #header #logo h1 {
-  font-size: 50px;
   margin: 0;
   padding: 0;
-  line-height: 1;
   font-family: "Android Insomnia", "Montserrat", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
+  margin-top: -0.5rem; /* vertical logo and text positioning fix */
 }
 
 #header #logo h1 a {
@@ -193,10 +194,6 @@ h6 {
   color: var(--color-causeway-cyan);
 }
 
-#header #logo h1 a img {
-  margin-top: 10px;
-}
-
 #header #logo h1 a span.brand {
   color: var(--color-causeway-purple);
 }
@@ -206,11 +203,8 @@ h6 {
 }
 
 #header #logo img {
-  padding: 0;
-  margin: 0;
-  margin-top: -5px;
-  margin-right: 10px;
   height: 48px;
+  margin-top: 1rem;
 }
 
 /*--------------------------------------------------------------
@@ -221,7 +215,7 @@ h6 {
   width: 100%;
   height: 50vh;
   position: relative;
-  background: url("../../img/home/intro-carousel/carousel-1.jpg") no-repeat;
+  background: url("../../img/home/intro-carousel/intro-carousel-1.jpg") no-repeat;
   background-size: cover;
 }
 
@@ -1214,7 +1208,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #call-to-action pre {
   color: wheat;
-  background-color: var(--color-causeway-blue);
+  background-color: var(--color-dark-overlay);
 }
 
 img.helloworld-copy,
