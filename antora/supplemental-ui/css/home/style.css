@@ -49,6 +49,8 @@
 
   --color-theme-blue: var(--color-causeway-purple);
   --color-theme-green: var(--color-causeway-yellow);
+  
+  --color-dark-overlay: #0000002e; /* black with some opacity*/
 }
 
 body {
@@ -201,6 +203,7 @@ h6 {
 
 #header #logo img {
   height: 48px;
+  margin-top: 1rem;
 }
 
 /*--------------------------------------------------------------
@@ -876,7 +879,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 
 #call-to-action {
-  background: var(--color-causeway-purple);
+  background: var(--color-dark-overlay);
   background-size: cover;
   padding: 40px 0;
 }
