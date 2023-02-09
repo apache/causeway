@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.layout.bs.col;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
@@ -236,11 +235,12 @@ implements HasDynamicallyVisibleContent {
         val ownerSpec = entityModel.getManagedObject().getSpecification();
 
         // collection layout data by collection id (the collection's member-id)
-        final Map<String, CollectionLayoutData> collectionLayoutById =
-                _NullSafe.stream(bsCol.getCollections())
-                .filter(collectionLayoutData -> collectionLayoutData.getMetadataError() == null)
-                .filter(collectionLayoutData -> !ownerSpec.getCollection(collectionLayoutData.getId()).isEmpty())
-                .collect(Collectors.toUnmodifiableMap(CollectionLayoutData::getId, UnaryOperator.identity()));
+        // preserving order, as order matters
+        val collectionLayoutById = new LinkedHashMap<String, CollectionLayoutData>();
+        _NullSafe.stream(bsCol.getCollections())
+            .filter(colLayoutData->colLayoutData.getMetadataError() == null)
+            .filter(colLayoutData->!ownerSpec.getCollection(colLayoutData.getId()).isEmpty())
+            .forEach(colLayoutData->collectionLayoutById.put(colLayoutData.getId(), colLayoutData));
 
         if(!collectionLayoutById.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
