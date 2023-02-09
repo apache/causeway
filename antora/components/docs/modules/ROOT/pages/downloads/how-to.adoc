@@ -73,21 +73,15 @@ Windows users can get binary md5 programs from these (and likely other) places:
 
 == Source Code
 
-The _Apache Causeway_ (official) sources,
-that correspond to the latest release(s)
-can be downloaded from:
-
-* https://downloads.apache.org/causeway/
-
-The project source code is also hosted on _github_.
-You can check it out using:
+The Apache Causeway source is hosted on github.
+You can download the Apache Causeway source code using:
 
 [source,bash]
 ----
 git clone https://github.com/apache/causeway.git
 ----
 
-Contributors can fork this repo using _github's_ tools and contribute patches/new features using pull requests.
+Contributors can fork this repo using github's tools and contribute patches/new features using pull requests.
 
 Committers can push to this repo directly, once their ASF account and github account have been linked.
 See link:https://gitbox.apache.org/setup/[gitbox setup] for more details on how to do this.
