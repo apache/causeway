@@ -193,10 +193,6 @@ h6 {
   color: var(--color-causeway-cyan);
 }
 
-#header #logo h1 a img {
-  margin-top: 10px;
-}
-
 #header #logo h1 a span.brand {
   color: var(--color-causeway-purple);
 }
@@ -206,10 +202,6 @@ h6 {
 }
 
 #header #logo img {
-  padding: 0;
-  margin: 0;
-  margin-top: -5px;
-  margin-right: 10px;
   height: 48px;
 }
 
