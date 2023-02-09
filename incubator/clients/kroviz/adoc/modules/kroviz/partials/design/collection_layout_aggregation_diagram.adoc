@@ -64,12 +64,13 @@ together {
     }
     class ObjectDM <<(M,orange)DisplayModel>> #lightyellow {
         layout
-        collectionDmMap
+        collectionModelList
         data: Exposer
         readyToRender()
     }
     class ObjectLayout <<(L,orange)Layout>> #pink {
         grid
+        collectionLayoutList
         readyToRender()
     }
     ObjectAggregator --> ObjectDM
@@ -86,19 +87,21 @@ together {
         isParentedCollection()
     }
     class CollectionDM <<(M,coral)DisplayModel>> #lightyellow {
+        id
         layout
         data[]: Exposer
         readyToRender()
     }
     class CollectionLayout <<(L,coral)Layout>> #pink{
         numberOfColumns
-        propertySpecificationMap
+        propertySpecificationList
         readyToRender()
     }
     CollectionAggregator --> CollectionDM
     CollectionDM --> CollectionLayout
 }
 ObjectDM o-r-> CollectionDM
+ObjectLayout o-> CollectionLayout
 
 ' references between Layout and TO classes
 CollectionLayout ..> TObject : handles

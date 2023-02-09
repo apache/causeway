@@ -42,11 +42,11 @@ class ColumnFactory {
     }
 
     fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
-        console.log("[CF_buildColumns]")
         val columns = mutableListOf<ColumnDefinition<Exposer>>()
         addColumnForObjectIcon(displayCollection, columns)
         addColumnsForProperties(displayCollection, columns)
         columns.add(columnForObjectMenu())
+        console.log("[CF_buildColumns]")
         console.log(columns)
         return columns
     }
@@ -103,18 +103,23 @@ class ColumnFactory {
     }
 
     private fun addColumnsForProperties(
-        displayCollection: CollectionDM,
+        collectionModel: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        val cl = displayCollection.layout as CollectionLayout
-        val colDescList = cl.getColumnDescriptions()
-        for (cd in colDescList) {
-            if (!cd.hidden) {
+        console.log("[CF_addColumnsForProperties]")
+        val clo = collectionModel.getLayout()
+        val propSpecList = clo.propertySpecificationList
+        if (propSpecList.size == 0) {
+            throw IllegalStateException()
+        }
+        propSpecList.forEach {
+            console.log(it)
+            if (!it.hidden) {
                 var colDef = ColumnDefinition<dynamic>(
-                    title = cd.name,
-                    field = cd.id,
+                    title = it.name,
+                    field = it.id,
                     headerFilter = Editor.INPUT)
-                if (cd.id == "object") {
+                if (it.id == "object") {
                     colDef = buildLink()
                 }
                 columns.add(colDef)

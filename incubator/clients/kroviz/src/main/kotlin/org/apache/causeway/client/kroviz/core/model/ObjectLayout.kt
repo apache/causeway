@@ -32,17 +32,14 @@ import org.apache.causeway.client.kroviz.to.bs.RowBs
 class ObjectLayout : BaseLayout() {
 
     var grid: GridBs? = null
-    private val collectionLayoutMap = mutableMapOf<String, CollectionLayout>()
+    private val collectionLayoutList = mutableListOf< CollectionLayout>()
 
     override fun readyToRender(): Boolean {
-        console.log("[OL_readyToRender]")
-//        val o = js(arrayOf(collectionLayoutMap.values))
-        console.log(collectionLayoutMap.keys)
-        var answer = when (grid) {
+        return when (grid) {
             null -> false
             else -> {
                 var answer = true
-                collectionLayoutMap.values.forEach {
+                collectionLayoutList.forEach {
                     if (!it.readyToRender()) {
                         answer = false
                     }
@@ -50,7 +47,6 @@ class ObjectLayout : BaseLayout() {
                 answer
             }
         }
-        return answer
     }
 
     override fun addObjectProperty(
@@ -58,7 +54,7 @@ class ObjectLayout : BaseLayout() {
         aggregator: AggregatorWithLayout,
         referrer: String
     ) {
-        console.log("[OL_addObjectProperty]")
+ //       console.log("[OL_addObjectProperty]")
 //        TODO("Not yet implemented")
     }
 

@@ -41,6 +41,10 @@ class PropertySpecification(member: Member) {
         id = member.id
         name = member.id // can be changed later via property-description
         hidden = false // can be changed later via ...
+        //FIXME
+        if (name == "sources" || name == "description" || name == "logicalTypeName") {
+            hidden = true
+        }
         disabled = member.disabledReason.isNotEmpty()
     }
 

@@ -141,13 +141,14 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
     }
 
     private fun handleCollection(collection: Collection) {
-        console.log("[CA_handleCollection]")
         if (isParentedCollection()) {
-            val cdm = getDisplayModel()
-            cdm.id = collection.id
+            //TODO is _id_ required in both CollectionDM and CollectionLayout?
+            val id = collection.id
+            getDisplayModel().id = id
+            getLayout().id = id
             // add displayModel to parent.displayModel
-            val parentDM = parent!!.getDisplayModel()
-            parentDM.collectionModelList.add(cdm)
+            val objectDM = parent!!.getDisplayModel()
+            objectDM.addCollectionModel(getDisplayModel())
         }
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {

@@ -239,7 +239,7 @@ object ViewManager {
         return SessionManager.getEventStore()
     }
 
-    fun countDialogs(): Int {
+    private fun countDialogs(): Int {
         return popups.size + 1
     }
 

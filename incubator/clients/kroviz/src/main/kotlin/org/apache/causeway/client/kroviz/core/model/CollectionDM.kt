@@ -33,7 +33,11 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     private var rawData = observableListOf<TransferObject>()
 
     override fun readyToRender(): Boolean {
-        return (layout as CollectionLayout).readyToRender()
+        return getLayout().readyToRender()
+    }
+
+    fun getLayout(): CollectionLayout {
+        return layout as CollectionLayout
     }
 
     override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {

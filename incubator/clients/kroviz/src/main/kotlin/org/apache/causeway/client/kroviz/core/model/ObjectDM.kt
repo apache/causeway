@@ -39,20 +39,33 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         dirty = value
     }
 
+    fun addCollectionModel(collectionModel: CollectionDM) {
+        val id = collectionModel.id
+        val foundModel = collectionModelList.firstOrNull() {
+            it.id == id
+        }
+        if (foundModel == null) {
+            collectionModelList.add(collectionModel)
+        }
+    }
+
     override fun addLayout(lt: Layout) {
         TODO("Not yet implemented")
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {
+        console.log("[ODM_getCollectionDisplayModelFor]")
+        console.log(id)
+        console.log(collectionModelList)
         return collectionModelList.find { it.id == id }!!
     }
 
     override fun readyToRender(): Boolean {
-        console.log("[ODM_readyToRender]")
         return when {
             data == null -> false
             isRendered -> false
             layout == null -> false
+            collectionModelList.size == 0 -> false
             else -> layout!!.readyToRender() //collectionsReadyToRender()
         }
     }

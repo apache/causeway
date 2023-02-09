@@ -32,19 +32,12 @@ import org.apache.causeway.client.kroviz.to.TObject
  * - hidden :       will the column be displayed or not
  */
 class CollectionLayout : BaseLayout() {
+    var id = ""
     private var numberOfColumns = 0
-    private val propertySpecificationList = mutableListOf<PropertySpecification>()
+    val propertySpecificationList = mutableListOf<PropertySpecification>()
 
     override fun readyToRender(): Boolean {
-        console.log("[CL_readyToRender]")
-        console.log(propertySpecificationList.size)
-        val isReady = isInitialized() && allPropertySpecificationsAreCreated()
-        if (isReady) {
-            propertySpecificationList.forEach {
-                console.log(it)
-            }
-        }
-        return isReady
+        return isInitialized() && allPropertySpecificationsAreCreated()
     }
 
     /**
@@ -68,7 +61,7 @@ class CollectionLayout : BaseLayout() {
     }
 
     private fun allPropertySpecificationsAreCreated(): Boolean {
-        return (numberOfColumns == propertySpecificationList.size)
+        return numberOfColumns == propertySpecificationList.size
     }
 
     override fun addObjectProperty(
@@ -96,10 +89,6 @@ class CollectionLayout : BaseLayout() {
         val ps: PropertySpecification = propertySpecificationList.firstOrNull { it.id == id }!!
         console.log(ps)
         ps.amendWith(propertyDescription)
-    }
-
-    fun getColumnDescriptions(): List<PropertySpecification> {
-        return propertySpecificationList
     }
 
 }
