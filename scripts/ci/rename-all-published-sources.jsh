@@ -212,10 +212,11 @@ class RenameProject {
                         .replace(fromLower, toLower)
                         .replace(fromUpper, toUpper)
                         .replace(fromTitle, toTitle)
-                        // restore XML namespace identifiers 
+                        // reflect reality: use currently valid XML namespace URIs
+                        // (that is, reverting replacements above) 
                         .replace(
-                                "https://" + fromLower + ".apache.org/applib/layout",
-                                "http://" + toLower + ".apache.org/applib/layout");
+                                "https://" + toLower + ".apache.org/applib/layout",
+                                "https://" + fromLower + ".apache.org/applib/layout");
                 newLines.add(newLine);
                 return line.equals(newLine)
                         ? 0
