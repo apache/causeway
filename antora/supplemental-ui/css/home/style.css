@@ -174,12 +174,10 @@ h6 {
 }
 
 #header #logo h1 {
-  font-size: 50px;
   margin: 0;
   padding: 0;
-  line-height: 1;
   font-family: "Android Insomnia", "Montserrat", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 #header #logo h1 a {
@@ -213,7 +211,7 @@ h6 {
   width: 100%;
   height: 50vh;
   position: relative;
-  background: url("../../img/home/intro-carousel/carousel-1.jpg") no-repeat;
+  background: url("../../img/home/intro-carousel/intro-carousel-1.jpg") no-repeat;
   background-size: cover;
 }
 
