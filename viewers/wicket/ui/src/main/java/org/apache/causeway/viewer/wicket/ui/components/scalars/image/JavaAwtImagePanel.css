@@ -16,12 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui;
-
-import org.apache.wicket.markup.html.IHeaderContributor;
-
-// TODO unused. Remove ?!
-public interface HeaderContributorProvider {
-
-    IHeaderContributor getHeaderContributor();
+ 
+ /* give BufferedImage(s) some space */
+.javaAwtImagePanel.image img {
+  margin: 4px;
+  padding: 4px;
+  border: 1px solid #00000018;
 }

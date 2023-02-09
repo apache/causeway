@@ -21,11 +21,14 @@ package org.apache.causeway.viewer.wicket.ui.util;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.commons.internal.base._Strings;
@@ -59,6 +62,13 @@ public class WktHeaderItems {
             final @NonNull String resourceName) {
         return JavaScriptReferenceHeaderItem.forReference(
                 new JavaScriptResourceReference(resourceLocation, resourceName));
+    }
+
+    public CssReferenceHeaderItem forCssReference(
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName) {
+        return CssHeaderItem.forReference(
+                new CssResourceReference(resourceLocation, resourceName));
     }
 
     @RequiredArgsConstructor
