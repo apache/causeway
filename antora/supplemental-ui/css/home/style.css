@@ -180,6 +180,7 @@ h6 {
   padding: 0;
   font-family: "Android Insomnia", "Montserrat", sans-serif;
   font-weight: 900;
+  margin-top: -0.5rem; /* vertical logo and text positioning fix */
 }
 
 #header #logo h1 a {
@@ -879,7 +880,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 
 #call-to-action {
-  background: var(--color-dark-overlay);
+  background: var(--color-causeway-purple);
   background-size: cover;
   padding: 40px 0;
 }
@@ -1207,7 +1208,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #call-to-action pre {
   color: wheat;
-  background-color: var(--color-causeway-blue);
+  background-color: var(--color-dark-overlay);
 }
 
 img.helloworld-copy,
