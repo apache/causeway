@@ -52,7 +52,7 @@ public class AuthorizationManager {
 
     private final Authorizor authorizor;
     private final ActionSemanticsResolver actionSemanticsResolver;
-    private final boolean allowActionsWithSafeSemanticsToBeInvokedWithOnlyViewingPermission;
+    private final boolean actionsWithSafeSemanticsRequireOnlyViewingPermission;
 
     @Inject
     public AuthorizationManager(
@@ -61,8 +61,8 @@ public class AuthorizationManager {
             final List<Authorizor> authorizors,
             final Optional<AuthorizorChooser> authorizorChooserIfAny) {
 
-        this.allowActionsWithSafeSemanticsToBeInvokedWithOnlyViewingPermission =
-                config.getSecurity().isAllowActionsWithSafeSemanticsToBeInvokedWithOnlyViewingPermission();
+        this.actionsWithSafeSemanticsRequireOnlyViewingPermission =
+                config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission();
         this.actionSemanticsResolver = actionSemanticsResolver;
 
         _Assert.assertTrue(_NullSafe.size(authorizors)>0, ()->
@@ -96,7 +96,7 @@ public class AuthorizationManager {
         if (authorizor.isUsable(authentication, identifier)) {
             return true;
         }
-        if (allowActionsWithSafeSemanticsToBeInvokedWithOnlyViewingPermission
+        if (actionsWithSafeSemanticsRequireOnlyViewingPermission
                 && isActionWithSafeSemantics(identifier)
                 && this.isVisible(authentication, identifier)) {
             return true;

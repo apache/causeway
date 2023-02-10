@@ -27,11 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -47,10 +46,10 @@ import lombok.val;
         classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class,
-                ActionInteractionTest_usingAllowSafeSemantics.AuthorizorDenyUse.class
+                ActionInteractionTest_notUsingAllowSafeSemantics.AuthorizorDenyUse.class
         },
         properties = {
-                "causeway.security.actionsWithSafeSemanticsRequireOnlyViewingPermission=TRUE",
+                "causeway.security.actionsWithSafeSemanticsRequireOnlyViewingPermission=FALSE",
                 "causeway.core.meta-model.introspector.mode=FULL",
         })
 @TestPropertySource({
@@ -59,7 +58,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstract {
+class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAbstract {
 
     @Service
     @Named("regressiontests.AuthorizorDenyUse")
@@ -82,7 +81,7 @@ class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstr
     @Test
     void assert_prereq() {
         val config = super.objectManager.getConfiguration();
-        assertTrue(config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission());
+        assertFalse(config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission());
     }
 
     @Test
@@ -90,9 +89,8 @@ class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstr
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "actSafely", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val actionMeta = managedAction.getAction();
-        assertEquals(SemanticsOf.SAFE, actionMeta.getSemantics());
+        val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
+        assertEquals("Not authorized to edit", veto.getReason());
     }
 
     @Test

@@ -63,6 +63,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
@@ -74,6 +75,8 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -118,8 +121,11 @@ public class CausewayConfiguration {
          * If set, allows <i>Actions</i> with SAFE Semantics to be invoked with only VIEWING permissions.
          * <p>
          * default: false
+         *
+         * @see org.apache.causeway.applib.annotation.Action#semantics()
+         * @see SemanticsOf
          */
-        private boolean allowActionsWithSafeSemanticsToBeInvokedWithOnlyViewingPermission = false;
+        private boolean actionsWithSafeSemanticsRequireOnlyViewingPermission = false;
 
         private final Shiro shiro = new Shiro();
         @Data
