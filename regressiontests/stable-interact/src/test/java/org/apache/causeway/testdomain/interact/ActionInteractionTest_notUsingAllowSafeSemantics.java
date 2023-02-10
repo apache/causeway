@@ -85,7 +85,7 @@ class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAb
     }
 
     @Test
-    void whenSafeAction_shouldAllowUse() {
+    void whenSafeAction_shouldDenyUse() {
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "actSafely", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
