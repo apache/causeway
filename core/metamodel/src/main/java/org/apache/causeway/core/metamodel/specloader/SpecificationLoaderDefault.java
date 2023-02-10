@@ -40,7 +40,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -73,6 +75,7 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.causeway.core.metamodel.specloader.specimpl.IntrospectionState;
@@ -81,6 +84,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
+import org.apache.causeway.core.security.authorization.manager.ActionSemanticsResolver;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -107,7 +111,10 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Log4j2
-public class SpecificationLoaderDefault implements SpecificationLoader {
+public class SpecificationLoaderDefault
+implements
+    SpecificationLoader,
+    ActionSemanticsResolver {
 
     private final CausewayConfiguration causewayConfiguration;
     private final CausewaySystemEnvironment causewaySystemEnvironment;
@@ -532,6 +539,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return validationFailures;
     }
 
+    // -- ACTION SEMANTICS RESOLVER
+
+    @Override
+    public Optional<SemanticsOf> getActionSemanticsOf(final Identifier identifier) {
+        if(!identifier.getType().isAction()) {
+            return Optional.empty();
+        }
+        return specForLogicalType(identifier.getLogicalType())
+            .flatMap(objSpec->objSpec.getAction(identifier.getMemberLogicalName()))
+            .map(ObjectAction::getSemantics);
+    }
 
     // -- HELPER
 

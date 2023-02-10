@@ -63,6 +63,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
@@ -115,6 +116,17 @@ public class CausewayConfiguration {
     private final Security security = new Security();
     @Data
     public static class Security {
+
+        /**
+         * If set, allows <i>Actions</i> with SAFE Semantics to be invoked with only VIEWING permissions.
+         * <p>
+         * default: false
+         *
+         * @see org.apache.causeway.applib.annotation.Action#semantics()
+         * @see SemanticsOf
+         */
+        private boolean actionsWithSafeSemanticsRequireOnlyViewingPermission = false;
+
         private final Shiro shiro = new Shiro();
         @Data
         public static class Shiro {
