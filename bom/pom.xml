@@ -2286,7 +2286,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0</version>    <!--bumped-->
+                    <version>3.1.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -3217,7 +3217,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugins>
                     <plugin>
                         <artifactId>maven-deploy-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.1.0</version>
                         <configuration>
                             <altDeploymentRepository>
                                 nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}
