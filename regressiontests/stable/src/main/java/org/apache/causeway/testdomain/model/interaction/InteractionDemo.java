@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 
@@ -102,6 +103,18 @@ public class InteractionDemo {
     @Collection
     public List<InteractionDemoItem> getItems() {
         return lazyItems.get();
+    }
+
+    // -- ACTIONS WITH VARIOUS SEMANTICS
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public InteractionDemo actSafely() {
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.NOT_SPECIFIED)
+    public InteractionDemo actUnsafely() {
+        return this;
     }
 
     // -- ASSOCIATED ACTION WITH CHOICES FROM BULK SELECT
