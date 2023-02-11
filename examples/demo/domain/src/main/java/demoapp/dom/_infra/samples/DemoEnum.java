@@ -18,8 +18,8 @@
  */
 package demoapp.dom._infra.samples;
 
-import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.util.Enums;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,11 +32,12 @@ public enum DemoEnum {
 
     final String symbol;
 
-    @Title
-    public String getTitle() {
+    //@Title
+    @ObjectSupport
+    public String title() {
         return String.format("%s %s",
                 symbol,
-                _Strings.asNaturalName2.apply(name()));
+                Enums.getFriendlyNameOf(name()));
     }
 
 }
