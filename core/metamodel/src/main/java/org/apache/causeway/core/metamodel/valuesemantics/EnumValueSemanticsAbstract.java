@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Provider;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -62,14 +61,6 @@ implements
     @Getter(onMethod_ = {@Override}) private final Class<T> correspondingClass;
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final int maxLength;
 
-    @Getter(lazy=true)
-    private final ObjectSpecification enumSpec =
-            Optional.ofNullable(specificationLoaderProvider)
-            .map(provider->provider.get())
-            .flatMap(specLoader->specLoader.specForType(correspondingClass))
-            .orElse(null);
-
-
     @Override
     public ValueType getSchemaValueType() {
         return ValueType.ENUM;
@@ -78,12 +69,10 @@ implements
     public static <T extends Enum<T>> EnumValueSemanticsAbstract<T> create(
             final Provider<SpecificationLoader> specificationLoaderProvider,
             final TranslationService translationService,
-            final IntrospectionPolicy introspectionPolicy,
             final Class<T> correspondingClass) {
         return new EnumValueSemanticsAbstract<>(
                 specificationLoaderProvider,
                 translationService,
-                introspectionPolicy,
                 correspondingClass){};
     }
 
@@ -92,14 +81,12 @@ implements
     protected EnumValueSemanticsAbstract(
             final Provider<SpecificationLoader> specificationLoaderProvider,
             final TranslationService translationService,
-            final IntrospectionPolicy introspectionPolicy,
             final Class<T> correspondingClass) {
         super();
-
+        this.specificationLoaderProvider = specificationLoaderProvider;
         this.translationService = translationService;
         this.correspondingClass = correspondingClass;
         this.maxLength = maxLengthFor(correspondingClass);
-        this.specificationLoaderProvider = specificationLoaderProvider;
     }
 
     // -- DEFAULTS PROVIDER
@@ -151,7 +138,7 @@ implements
 
     private String friendlyName(final Context context, final T objectAsEnum) {
 
-        val friendlyNameOfEnum = Optional.ofNullable(this.getEnumSpec())
+        val friendlyNameOfEnum = Optional.ofNullable(loadEnumSpec())
             .map(enumSpec->ManagedObject.value(enumSpec, objectAsEnum))
             .map(MmTitleUtil::titleOf)
             .orElseGet(()->Enums.getFriendlyNameOf(objectAsEnum.name()));
@@ -188,6 +175,13 @@ implements
         return maxLength();
     }
 
+    @Override
+    public Can<T> getExamples() {
+        return Stream.of(correspondingClass.getEnumConstants())
+                .limit(2)
+                .collect(Can.toCan());
+    }
+
     // -- HELPER
 
     private static <T extends Enum<T>> int maxLengthFor(final Class<T> adaptedClass) {
@@ -200,11 +194,14 @@ implements
         return max;
     }
 
-    @Override
-    public Can<T> getExamples() {
-        return Stream.of(correspondingClass.getEnumConstants())
-                .limit(2)
-                .collect(Can.toCan());
+    private ObjectSpecification loadEnumSpec() {
+        //TODO eventually add caching
+        if(true) return null;
+        //FIXME causes recursive call of lazy getter - specLoader is called too early
+        return Optional.ofNullable(specificationLoaderProvider)
+            .map(provider->provider.get())
+            .flatMap(specLoader->specLoader.specForType(correspondingClass))
+            .orElse(null);
     }
 
 }

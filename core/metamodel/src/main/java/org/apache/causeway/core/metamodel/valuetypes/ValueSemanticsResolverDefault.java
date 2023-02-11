@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -110,13 +109,8 @@ implements ValueSemanticsResolver {
     @SuppressWarnings("unchecked")
     private <T extends Enum<T>> ValueSemanticsProvider<T> defaultEnumSemantics(final Class<T> enumType) {
         return enumSemantics.computeIfAbsent(enumType, t->
-                EnumValueSemanticsAbstract
-                  .create(
-                          null, //specificationLoader.specForType(enumType).orElse(null),
-                          translationService,
-                          // in order to simplify matters, we just assume this for enums
-                          IntrospectionPolicy.ENCAPSULATION_ENABLED,
-                  enumType));
+            EnumValueSemanticsAbstract
+                .create(specificationLoaderProvider, translationService, enumType));
     }
 
 
