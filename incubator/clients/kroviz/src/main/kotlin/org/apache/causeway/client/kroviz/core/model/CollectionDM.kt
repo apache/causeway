@@ -20,8 +20,10 @@ package org.apache.causeway.client.kroviz.core.model
 
 import io.kvision.state.observableListOf
 import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
+import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
+import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     init {
@@ -36,15 +38,30 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         return getLayout().readyToRender()
     }
 
+    fun getTitle(): String {
+        return StringUtils.extractTitle(title)
+    }
+
     fun getLayout(): CollectionLayout {
         return layout as CollectionLayout
     }
 
     override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
+        //TODO is checking rawdata really needed?
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)
             data.add(exo.dynamise())  //if exposer is not dynamised, data access in Tabulator tables won't work
+        }
+        // for the first element, invoke ObjectProperty & PropertyDescription links
+        if (rawData.size == 1) {
+            val tObj = obj as TObject
+            val properties = tObj.getProperties()
+            properties.forEach {
+                val opLink = it.getInvokeLink()!!
+                ResourceProxy().fetch(opLink, aggregator, referrer = referrer!!)
+                //FIXME is PropertyDescription automatically invoked?
+            }
         }
     }
 

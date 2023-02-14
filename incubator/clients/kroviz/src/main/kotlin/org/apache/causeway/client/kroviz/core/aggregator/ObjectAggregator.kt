@@ -27,6 +27,7 @@ import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
+import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /** sequence of operations:
  * (0) Menu Action              User clicks BasicTypes.String -> handled by ActionDispatcher
@@ -57,6 +58,8 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         }
 
         if (getDisplayModel().readyToRender()) {
+            console.log("[OA_readyToRender]")
+            console.log(getDisplayModel())
             ViewManager.openObjectView(this)
         }
     }
@@ -114,6 +117,16 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             }
         }
     }
+
+    fun getTitle(): String {
+        var title: String = StringUtils.extractTitle(getDisplayModel().title)
+        if (title.isEmpty()) {
+            title = actionTitle
+        }
+        return title
+    }
+
+
 
     override fun reset(): ObjectAggregator {
         displayModel.reset()

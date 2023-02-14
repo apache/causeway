@@ -58,21 +58,12 @@ data class Property(
  * Wraps Property in order to distinguish from PropertyDescription
  */
 class ObjectProperty(val property: Property) {
-    val id: String
-    val memberType: String
-    val links: List<Link>
-    val value: Value?
-    val extensions: Extensions?
-    val disabledReason: String?
-
-    init {
-        id = property.id
-        memberType = property.memberType
-        links = property.links
-        value = property.value
-        extensions = property.extensions
-        disabledReason = property.disabledReason
-    }
+    val id: String = property.id
+    val memberType: String = property.memberType
+    val links: List<Link> = property.links
+    val value: Value? = property.value
+    val extensions: Extensions? = property.extensions
+    val disabledReason: String? = property.disabledReason
 
     fun getDescriptionLink(): Link? {
         return this.links.firstOrNull {
@@ -85,19 +76,11 @@ class ObjectProperty(val property: Property) {
  * Wraps Property in order to distinguish from ObjectProperty
  */
 class PropertyDescription(val property: Property) {
-    val id: String
-    val memberType: String
-    val links: List<Link>
-    val value: Value?
-    val optional: Boolean?
-    val extensions: Extensions?
+    val id: String = property.id
+    val memberType: String = property.memberType
+    val links: List<Link> = property.links
+    val value: Value? = property.value
+    val optional: Boolean? = property.optional
+    val extensions: Extensions? = property.extensions
 
-    init {
-        id = property.id
-        memberType = property.memberType
-        links = property.links
-        value = property.value
-        optional = property.optional
-        extensions = property.extensions
-    }
 }

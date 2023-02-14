@@ -54,9 +54,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {
-        console.log("[ODM_getCollectionDisplayModelFor]")
-        console.log(id)
-        console.log(collectionModelList)
         return collectionModelList.find { it.id == id }!!
     }
 
@@ -66,8 +63,16 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             isRendered -> false
             layout == null -> false
             collectionModelList.size == 0 -> false
-            else -> layout!!.readyToRender() //collectionsReadyToRender()
+            else -> layout!!.readyToRender() && areCollectionsReadyToRender()
         }
+    }
+
+    private fun areCollectionsReadyToRender(): Boolean {
+        collectionModelList.forEach {
+            if (!it.readyToRender())
+                return false
+        }
+        return true
     }
 
     override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {

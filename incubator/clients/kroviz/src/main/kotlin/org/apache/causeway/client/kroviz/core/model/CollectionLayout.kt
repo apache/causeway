@@ -33,11 +33,20 @@ import org.apache.causeway.client.kroviz.to.TObject
  */
 class CollectionLayout : BaseLayout() {
     var id = ""
-    private var numberOfColumns = 0
     val propertySpecificationList = mutableListOf<PropertySpecification>()
 
     override fun readyToRender(): Boolean {
-        return isInitialized() && allPropertySpecificationsAreCreated()
+        console.log("[CL_readyToRender]")
+        return isInitialized() && arePropertySpecificationsReadyToRender()
+    }
+
+    private fun arePropertySpecificationsReadyToRender():Boolean {
+        propertySpecificationList.forEach {
+            if (!it.readyToRender()) {
+                return false
+            }
+        }
+        return true
     }
 
     /**
@@ -48,7 +57,6 @@ class CollectionLayout : BaseLayout() {
         if (!isInitialized()) {
             // members contain all properties, regardless if hidden, disabled, etc.
             val members = obj.getProperties()
-            numberOfColumns = members.size
             members.forEach { m ->
                 val ps = PropertySpecification(m)
                 propertySpecificationList.add(ps)
@@ -56,12 +64,8 @@ class CollectionLayout : BaseLayout() {
         }
     }
 
-    fun isInitialized(): Boolean {
-        return numberOfColumns > 0
-    }
-
-    private fun allPropertySpecificationsAreCreated(): Boolean {
-        return numberOfColumns == propertySpecificationList.size
+    private fun isInitialized(): Boolean {
+        return propertySpecificationList.isNotEmpty() && propertySpecificationList.size > 0
     }
 
     override fun addObjectProperty(

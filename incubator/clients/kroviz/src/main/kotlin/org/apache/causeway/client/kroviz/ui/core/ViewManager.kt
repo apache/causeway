@@ -174,14 +174,10 @@ object ViewManager {
 
     fun openObjectView(aggregator: ObjectAggregator) {
         console.log("[VM_openObjectView]")
-        val dm = aggregator.displayModel as ObjectDM
-        console.log(dm)
-        var title: String = StringUtils.extractTitle(dm.title)
-        if (title.isEmpty()) {
-            title = aggregator.actionTitle
-        }
+        val dm = aggregator.getDisplayModel()
+//        console.log(dm)
         val panel = RoDisplay(dm)
-        add(title, panel, aggregator)
+        add(aggregator.getTitle(), panel, aggregator)
         dm.isRendered = true
         setNormalCursor()
     }

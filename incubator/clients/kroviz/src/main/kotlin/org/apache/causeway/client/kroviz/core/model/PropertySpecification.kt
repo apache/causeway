@@ -19,6 +19,7 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.Member
+import org.apache.causeway.client.kroviz.to.ObjectProperty
 import org.apache.causeway.client.kroviz.to.PropertyDescription
 
 /**
@@ -36,6 +37,8 @@ class PropertySpecification(member: Member) {
     var name = "" // aka: columnName, named, label, title
     var hidden = false
     var disabled = false
+    var isPropertyDescriptionProcessed = false
+    var isObjectPropertyProcessed = true //FIXME
 
     init {
         id = member.id
@@ -48,14 +51,24 @@ class PropertySpecification(member: Member) {
         disabled = member.disabledReason.isNotEmpty()
     }
 
+    fun amendWith(op: ObjectProperty) {
+        console.log("[PS_amendWith] ObjectProperty")
+        //TODO
+    }
+
     fun amendWith(pd: PropertyDescription) {
-        console.log("[PS_addPropertyDescription]")
+        console.log("[PS_amendWith] PropertyDescription")
         val ex = pd.extensions!!
         val fn = ex.getFriendlyName()
         if (fn.isNotEmpty()) {
             name = fn
         }
+        isPropertyDescriptionProcessed = true
         console.log(this)
+    }
+
+    fun readyToRender(): Boolean {
+        return isObjectPropertyProcessed && isPropertyDescriptionProcessed
     }
 
 }

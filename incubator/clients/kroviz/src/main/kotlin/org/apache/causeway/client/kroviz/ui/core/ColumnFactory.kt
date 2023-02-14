@@ -106,14 +106,13 @@ class ColumnFactory {
         collectionModel: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        console.log("[CF_addColumnsForProperties]")
         val clo = collectionModel.getLayout()
         val propSpecList = clo.propertySpecificationList
         if (propSpecList.size == 0) {
+            // without this, propSpecList is empty? problem with mutable list?
             throw IllegalStateException()
         }
         propSpecList.forEach {
-            console.log(it)
             if (!it.hidden) {
                 var colDef = ColumnDefinition<dynamic>(
                     title = it.name,

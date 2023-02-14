@@ -19,6 +19,7 @@
 package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
+import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.BaseLayout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.Constants
@@ -50,18 +51,20 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         invoke(l, aggregator, referrer = referrer)
     }
 
-
     protected fun handleProperty(property: Property, referrer: String, layout: BaseLayout) {
-        console.log("[AWL_handleProperty]")
         when {
-            property.isPropertyDescription() -> {
-                val pd = PropertyDescription(property)
-                layout.addPropertyDescription(pd, this, referrer)
-            }
-
             property.isObjectProperty() -> {
+                console.log("[AWL_handleProperty] objectProperty")
                 val op = ObjectProperty(property)
                 layout.addObjectProperty(op, this, referrer)
+                val pdLink = op.getDescriptionLink()!!
+                ResourceProxy().fetch(pdLink, this, referrer = referrer)
+            }
+
+            property.isPropertyDescription() -> {
+                console.log("[AWL_handleProperty] propertyDescription")
+                val pd = PropertyDescription(property)
+                layout.addPropertyDescription(pd, this, referrer)
             }
 
             else -> {
