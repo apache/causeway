@@ -18,13 +18,10 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.Link
-import org.apache.causeway.client.kroviz.to.ObjectProperty
-import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.bs.CollectionBs
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.to.bs.RowBs
@@ -47,24 +44,6 @@ class ObjectLayout : BaseLayout() {
                 answer
             }
         }
-    }
-
-    override fun addObjectProperty(
-        objectProperty: ObjectProperty,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    ) {
- //       console.log("[OL_addObjectProperty]")
-//        TODO("Not yet implemented")
-    }
-
-    override fun addPropertyDescription(
-        propertyDescription: PropertyDescription,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    ) {
-        console.log("[OL_addPropertyDescription]")
-//        TODO("Not yet implemented")
     }
 
     fun addGrid(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {

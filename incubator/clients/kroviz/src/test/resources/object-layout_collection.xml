@@ -1,0 +1,337 @@
+<bs:grid xmlns:cpt="http://causeway.apache.org/applib/layout/component"
+         xmlns:bs="http://causeway.apache.org/applib/layout/grid/bootstrap3"
+         xmlns:lnk="http://causeway.apache.org/applib/layout/links">
+    <bs:row>
+        <bs:col span="10" unreferencedActions="true">
+            <cpt:domainObject>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/element</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356</lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object"</lnk:type>
+                </cpt:link>
+            </cpt:domainObject>
+            <cpt:action id="actionReturning">
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/actionReturning
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action id="actionReturningCollection">
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/actionReturningCollection
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action cssClassFa="fa fa-fw fa-download" cssClassFaPosition="LEFT" id="downloadLayout">
+                <cpt:named>Download Layout</cpt:named>
+                <cpt:describedAs>Downloads the Xxx.layout... layout file effective/inferred for this object
+                </cpt:describedAs>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/downloadLayout
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action cssClassFa="fa fa-fw fa-mask" cssClassFaPosition="LEFT" id="impersonate">
+                <cpt:named>Impersonate</cpt:named>
+                <cpt:describedAs>Switch to another user account (for prototype/testing only)</cpt:describedAs>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/impersonate
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action cssClassFa="fa fa-fw fa-mask" cssClassFaPosition="LEFT" id="impersonateWithRoles">
+                <cpt:named>Impersonate With Roles</cpt:named>
+                <cpt:describedAs>Switch to another user account with specified roles (for prototype/testing only)
+                </cpt:describedAs>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/impersonateWithRoles
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action cssClassFa="fa fa-fw fa-bolt" cssClassFaPosition="LEFT" id="recentExecutions">
+                <cpt:named>Recent Executions</cpt:named>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/recentExecutions
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+            <cpt:action cssClassFa="fa fa-fw fa-bolt" cssClassFaPosition="LEFT" id="recentAuditTrailEntries">
+                <cpt:named>Recent Audit Trail Entries</cpt:named>
+                <cpt:link>
+                    <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                    <lnk:method>GET</lnk:method>
+                    <lnk:href>
+                        http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/recentAuditTrailEntries
+                    </lnk:href>
+                    <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                </cpt:link>
+            </cpt:action>
+        </bs:col>
+        <bs:col span="2">
+            <cpt:fieldSet name="" id="sources">
+                <cpt:property dateRenderAdjustDays="0" hidden="ALL_TABLES" id="sources" labelPosition="NONE">
+                    <cpt:named>Sources</cpt:named>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/sources
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="6">
+            <cpt:fieldSet name="Read Only Properties" id="read-only-properties">
+                <cpt:property dateRenderAdjustDays="0" id="readOnlyProperty" labelPosition="LEFT" typicalLength="25">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readOnlyProperty
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Editable Properties" id="editable-properties">
+                <cpt:property dateRenderAdjustDays="0" id="readWriteProperty" labelPosition="LEFT" typicalLength="25">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readWriteProperty
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Optional Properties" id="optional-properties">
+                <cpt:property dateRenderAdjustDays="0" id="readOnlyOptionalProperty" labelPosition="LEFT"
+                              typicalLength="25">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readOnlyOptionalProperty
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+                <cpt:property dateRenderAdjustDays="0" id="readWriteOptionalProperty" labelPosition="LEFT"
+                              typicalLength="25">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readWriteOptionalProperty
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Contributed by Mixins" id="contributed">
+                <cpt:property dateRenderAdjustDays="0" hidden="ALL_TABLES" id="mixinProperty" typicalLength="25">
+                    <cpt:named>Mixin Property</cpt:named>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/mixinProperty
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="@PropertyLayout(labelPosition=...)" id="label-positions">
+                <cpt:property dateRenderAdjustDays="0" hidden="ALL_TABLES" id="readOnlyPropertyDerivedLabelPositionLeft"
+                              labelPosition="LEFT" typicalLength="25">
+                    <cpt:describedAs>@PropertyLayout(labelPosition=LEFT)</cpt:describedAs>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readOnlyPropertyDerivedLabelPositionLeft
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+                <cpt:property dateRenderAdjustDays="0" hidden="ALL_TABLES" id="readOnlyPropertyDerivedLabelPositionTop"
+                              labelPosition="TOP" typicalLength="25">
+                    <cpt:describedAs>@PropertyLayout(labelPosition=TOP)</cpt:describedAs>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readOnlyPropertyDerivedLabelPositionTop
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+                <cpt:property dateRenderAdjustDays="0" hidden="ALL_TABLES"
+                              id="readOnlyPropertyDerivedLabelPositionRight" labelPosition="RIGHT" typicalLength="25">
+                    <cpt:describedAs>@PropertyLayout(labelPosition=RIGHT)</cpt:describedAs>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readOnlyPropertyDerivedLabelPositionRight
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+                <cpt:property dateRenderAdjustDays="0" hidden="ALL_TABLES" id="readOnlyPropertyDerivedLabelPositionNone"
+                              labelPosition="NONE" typicalLength="25">
+                    <cpt:describedAs>@PropertyLayout(labelPosition=NONE)</cpt:describedAs>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/readOnlyPropertyDerivedLabelPositionNone
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+        </bs:col>
+        <bs:col span="6">
+            <cpt:fieldSet name="Description" id="description">
+                <cpt:action id="clearHints" position="PANEL">
+                    <cpt:metadataError>No such action</cpt:metadataError>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/clearHints
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN">
+                    <cpt:metadataError>No such action</cpt:metadataError>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/downloadLayoutXml
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="rebuildMetamodel" position="PANEL">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/rebuildMetamodel
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/downloadMetamodelXml
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/inspectMetamodel
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="recentCommands" position="PANEL_DROPDOWN">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/recentCommands
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN">
+                    <cpt:metadataError>No such action</cpt:metadataError>
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/downloadJdoMetadata
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:action id="openRestApi" position="PANEL_DROPDOWN">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/action</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/actions/openRestApi
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-action"</lnk:type>
+                    </cpt:link>
+                </cpt:action>
+                <cpt:property dateRenderAdjustDays="0" id="description">
+                    <cpt:link>
+                        <lnk:rel>urn:org.restfulobjects:rels/property</lnk:rel>
+                        <lnk:method>GET</lnk:method>
+                        <lnk:href>
+                            http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/properties/description
+                        </lnk:href>
+                        <lnk:type>application/json;profile="urn:org.restfulobjects:repr-types/object-property"
+                        </lnk:type>
+                    </cpt:link>
+                </cpt:property>
+            </cpt:fieldSet>
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="12" unreferencedCollections="true"/>
+    </bs:row>
+</bs:grid>

@@ -82,7 +82,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         obj.getProperties().forEach { m ->
             val p = createPropertyFrom(m)
             val op = ObjectProperty(p)
-            layout?.addObjectProperty(op, aggregator!!, referrer!!)
+//FIXME            layout?.addObjectProperty(op, aggregator!!, referrer!!)
         }
     }
 

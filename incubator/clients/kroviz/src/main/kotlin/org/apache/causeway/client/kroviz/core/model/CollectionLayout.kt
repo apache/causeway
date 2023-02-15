@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
+import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.to.ObjectProperty
-import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
+import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 /**
- * For (parented) collections aggregate information for each column
+ * For collections aggregate information for each column
  * in order to display the table, namely:
  * - columnName :   column header/label
  * - id :           attribute to be used to retrieve the value of each cell (id)
@@ -33,16 +32,16 @@ import org.apache.causeway.client.kroviz.to.TObject
  */
 class CollectionLayout : BaseLayout() {
     var id = ""
-    val propertySpecificationList = mutableListOf<PropertySpecification>()
+    var propertySpecificationList = mutableListOf<PropertySpecification>()
 
     override fun readyToRender(): Boolean {
-        console.log("[CL_readyToRender]")
         return isInitialized() && arePropertySpecificationsReadyToRender()
     }
 
     private fun arePropertySpecificationsReadyToRender():Boolean {
         propertySpecificationList.forEach {
-            if (!it.readyToRender()) {
+            val ready = it.readyToRender()
+            if (!ready) {
                 return false
             }
         }
@@ -53,13 +52,15 @@ class CollectionLayout : BaseLayout() {
      * collection layout needs only to be initialized once with an object (pars pro toto, prototype)
      * obj acts as a kind prototype - we assume all elements in the collection have the same structure
      */
-    fun initColumns(obj: TObject) {
+    fun addObject(obj: TObject, aggregator: CollectionAggregator, referrer: String) {
         if (!isInitialized()) {
             // members contain all properties, regardless if hidden, disabled, etc.
             val members = obj.getProperties()
             members.forEach { m ->
                 val ps = PropertySpecification(m)
                 propertySpecificationList.add(ps)
+                val l = m.getInvokeLink()!!
+                ResourceProxy().fetch(l, aggregator, referrer = referrer)
             }
         }
     }
@@ -68,31 +69,15 @@ class CollectionLayout : BaseLayout() {
         return propertySpecificationList.isNotEmpty() && propertySpecificationList.size > 0
     }
 
-    override fun addObjectProperty(
-        objectProperty: ObjectProperty,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    ) {
-        console.log("[CL_addObjectProperty]")
-        val l = objectProperty.getDescriptionLink()!!
-        // FIXME NPE -> ISIS-2846 ?
-        //invoking DN links leads to an error
-        val isDn = l.href.contains("datanucleus") // Outdated?
-        if (!isDn) {
-            ResourceProxy().fetch(l, aggregator, referrer = referrer)
-        }
+    fun addPropertyDetails(propertyBs: PropertyBs) {
+        val id = propertyBs.id
+        val ps: PropertySpecification = propertySpecificationList.firstOrNull { it.id == id }!!
+        ps.amendWith(propertyBs)
     }
 
-    override fun addPropertyDescription(
-        propertyDescription: PropertyDescription,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    ) {
-        console.log("[CL_addPropertyDescription]")
-        val id = propertyDescription.id
-        val ps: PropertySpecification = propertySpecificationList.firstOrNull { it.id == id }!!
-        console.log(ps)
-        ps.amendWith(propertyDescription)
-    }
+    // FIXME NPE -> ISIS-2846 ?
+    //FIXME hidden etc is not contained in ObjectProperty, see GidBs for the collection.protoType
+    // e.g. http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/object-layout
+    // furthermore, the column header can be taken from there as well
 
 }

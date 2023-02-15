@@ -54,17 +54,13 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     protected fun handleProperty(property: Property, referrer: String, layout: BaseLayout) {
         when {
             property.isObjectProperty() -> {
-                console.log("[AWL_handleProperty] objectProperty")
                 val op = ObjectProperty(property)
-                layout.addObjectProperty(op, this, referrer)
                 val pdLink = op.getDescriptionLink()!!
                 ResourceProxy().fetch(pdLink, this, referrer = referrer)
             }
 
             property.isPropertyDescription() -> {
-                console.log("[AWL_handleProperty] propertyDescription")
-                val pd = PropertyDescription(property)
-                layout.addPropertyDescription(pd, this, referrer)
+                console.log("[AWL_handleProperty] PropertyDescription obsolete?")
             }
 
             else -> {

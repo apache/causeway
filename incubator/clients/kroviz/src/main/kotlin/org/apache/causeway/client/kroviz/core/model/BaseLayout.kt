@@ -18,23 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
-import org.apache.causeway.client.kroviz.to.ObjectProperty
-import org.apache.causeway.client.kroviz.to.PropertyDescription
-
 abstract class BaseLayout {
-
-    abstract fun addObjectProperty(
-        objectProperty: ObjectProperty,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    )
-
-    abstract fun addPropertyDescription(
-        propertyDescription: PropertyDescription,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    )
 
     abstract fun readyToRender(): Boolean
 

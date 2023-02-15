@@ -3,8 +3,8 @@
 ----
 allowmixing
 
-() START
-() END
+() START #green
+() END #red
 together {
     file "object-layout" <<BootStrap XML>> as OL #lightblue
     class GridBs <<(T,tomato)TransferObject>> #lightgreen {}
@@ -27,6 +27,7 @@ together {
     TObject .. O
 }
 file "collection-description" <<JSON>> as CD #lightblue
+file "object-layout" <<JSON>> as OLJ #lightblue
 
 together {
     file "object-property" <<JSON>> as OP #lightblue
@@ -48,9 +49,10 @@ START --> OL : menu action \ninvoked by user
 OL --> OC : contains\nreference\nto
 OC --> CD : contains\ncollection\ntitle
 OC --> O : contains\nreference\nto
+O --> OLJ
 O --> OP : contains\nreference\nto
 OP -> PD : contains\nreference\nto
-PD --> END
+PD -r-> END
 
 ' references between TO classes
 GridBs o-->"0.n" Collection
@@ -124,5 +126,11 @@ iterate over value[]
 and add data to DisplayModel
 end note
 
+legend left
+    <back:#lightblue> Description           </back>
+    <back:#lightgreen> Party, place, thing</back>
+    <back:#pink> Moment, Interval   </back>
+    <back:#lightyellow> Role                       </back>
+endlegend
 
 ----

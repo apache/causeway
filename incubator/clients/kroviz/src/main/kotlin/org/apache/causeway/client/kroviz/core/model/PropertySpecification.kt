@@ -19,8 +19,7 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.Member
-import org.apache.causeway.client.kroviz.to.ObjectProperty
-import org.apache.causeway.client.kroviz.to.PropertyDescription
+import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 /**
  * Properties have multiple aspects:
@@ -33,42 +32,31 @@ import org.apache.causeway.client.kroviz.to.PropertyDescription
  * All are required in order to be correctly displayed (in a table).
  */
 class PropertySpecification(member: Member) {
-    var id = ""
+    var id = member.id
     var name = "" // aka: columnName, named, label, title
-    var hidden = false
-    var disabled = false
-    var isPropertyDescriptionProcessed = false
-    var isObjectPropertyProcessed = true //FIXME
+    var hidden = true
+    var disabled = member.disabledReason.isNotEmpty()
+    var isAmendedFromBs = false
+    var typicalLength: Int = 10
 
-    init {
-        id = member.id
-        name = member.id // can be changed later via property-description
-        hidden = false // can be changed later via ...
-        //FIXME
-        if (name == "sources" || name == "description" || name == "logicalTypeName") {
-            hidden = true
+
+    fun amendWith(pbs: PropertyBs) {
+        console.log("[PS_amendWith] PropertyBs")
+        name = pbs.named
+        hidden = !(pbs.hidden != null && pbs.hidden.isNotEmpty())
+        if (pbs.typicalLength != null && pbs.typicalLength > 0) {
+            typicalLength = pbs.typicalLength.toInt()
         }
-        disabled = member.disabledReason.isNotEmpty()
-    }
-
-    fun amendWith(op: ObjectProperty) {
-        console.log("[PS_amendWith] ObjectProperty")
-        //TODO
-    }
-
-    fun amendWith(pd: PropertyDescription) {
-        console.log("[PS_amendWith] PropertyDescription")
-        val ex = pd.extensions!!
-        val fn = ex.getFriendlyName()
-        if (fn.isNotEmpty()) {
-            name = fn
-        }
-        isPropertyDescriptionProcessed = true
+        isAmendedFromBs = true
         console.log(this)
     }
 
     fun readyToRender(): Boolean {
-        return isObjectPropertyProcessed && isPropertyDescriptionProcessed
+        return when (id) {
+            "logicalTypeName" -> true
+            "objectIdentifier" -> true
+            else -> isAmendedFromBs
+        }
     }
 
 }

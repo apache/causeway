@@ -25,6 +25,8 @@ import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.to.*
+import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -54,7 +56,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
                 is ResultList -> handleList(obj)
                 is TObject -> handleObject(obj)
                 is DomainType -> handleDomainType(obj)
-                //is GridBs -> Unit //In the case of CollectionDM, object-layout can be ignored
+                is GridBs -> handleLayout(obj)
                 is Property -> handleProperty(obj)
                 is Collection -> handleCollection(obj)
                 is Icon -> handleIcon(obj)
@@ -99,15 +101,21 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         }
     }
 
-    private fun handleObject(obj: TObject) {
-        displayModel.addData(obj, this, referrer)
+    private fun handleLayout(grid: GridBs) {
+        getDisplayModel().setProtoTypeLayout(grid)
+    }
 
-        getLayout().initColumns(obj)
-
-        if (isStandAloneCollection()) {
-            invokeLayoutLink(obj, this, referrer = referrer)
+    private fun handleObject(tObj: TObject) {
+        val dm = getDisplayModel()
+        dm.addData(tObj)
+        if (!dm.hasProtoType()) {
+            dm.setProtoType(tObj)
+            invokeLayoutLink(tObj, this, referrer = referrer)
         }
-        invokeIconLink(obj, this, referrer = referrer)
+        //TODO fold layout into model
+        getLayout().addObject(tObj, this, referrer = referrer)
+
+        invokeIconLink(tObj, this, referrer = referrer)
     }
 
     private fun isStandAloneCollection(): Boolean {

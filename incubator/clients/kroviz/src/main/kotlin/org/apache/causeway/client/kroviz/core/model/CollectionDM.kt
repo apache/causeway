@@ -23,6 +23,7 @@ import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class CollectionDM(override val title: String) : DisplayModelWithLayout() {
@@ -33,6 +34,24 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     var id = ""
     var data = observableListOf<Exposer>()
     private var rawData = observableListOf<TransferObject>()
+    private var protoType: TObject? = null
+    private var protoTypeLayout: GridBs? = null
+
+    fun setProtoTypeLayout(grid: GridBs) {
+        protoTypeLayout = grid
+        val propertyList = grid.getPropertyList()
+        propertyList.forEach{
+            getLayout().addPropertyDetails(it)
+        }
+    }
+
+    fun hasProtoType(): Boolean {
+        return protoType != null
+    }
+
+    fun setProtoType(to:TransferObject){
+        protoType = to as TObject
+    }
 
     override fun readyToRender(): Boolean {
         return getLayout().readyToRender()
@@ -52,16 +71,6 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)
             data.add(exo.dynamise())  //if exposer is not dynamised, data access in Tabulator tables won't work
-        }
-        // for the first element, invoke ObjectProperty & PropertyDescription links
-        if (rawData.size == 1) {
-            val tObj = obj as TObject
-            val properties = tObj.getProperties()
-            properties.forEach {
-                val opLink = it.getInvokeLink()!!
-                ResourceProxy().fetch(opLink, aggregator, referrer = referrer!!)
-                //FIXME is PropertyDescription automatically invoked?
-            }
         }
     }
 
