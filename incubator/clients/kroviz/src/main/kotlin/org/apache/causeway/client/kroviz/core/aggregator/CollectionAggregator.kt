@@ -22,11 +22,11 @@ import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
+import org.apache.causeway.client.kroviz.core.model.BaseLayout
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.to.bs.GridBs
-import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -147,6 +147,26 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
     private fun handleProperty(property: Property) {
         handleProperty(property, referrer, getLayout())
     }
+
+    protected fun handleProperty(property: Property, referrer: String, layout: BaseLayout) {
+        when {
+            property.isObjectProperty() -> {
+                val op = ObjectProperty(property)
+                val pdLink = op.getDescriptionLink()!!
+                ResourceProxy().fetch(pdLink, this, referrer = referrer)
+            }
+
+            property.isPropertyDescription() -> {
+                val pd = PropertyDescription(property)
+                getLayout().addPropertyDescription(pd, this, referrer)
+            }
+
+            else -> {
+                TODO("handle 3rd type of property")
+            }
+        }
+    }
+
 
     private fun handleCollection(collection: Collection) {
         if (isParentedCollection()) {

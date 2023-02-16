@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
+import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
@@ -75,9 +77,14 @@ class CollectionLayout : BaseLayout() {
         ps.amendWith(propertyBs)
     }
 
-    // FIXME NPE -> ISIS-2846 ?
-    //FIXME hidden etc is not contained in ObjectProperty, see GidBs for the collection.protoType
-    // e.g. http://localhost:9090/restful/objects/demo.JavaLangStringEntity/356/object-layout
-    // furthermore, the column header can be taken from there as well
+    fun addPropertyDescription(
+        propertyDescription: PropertyDescription,
+        aggregator: AggregatorWithLayout,
+        referrer: String
+    ) {
+        val id = propertyDescription.id
+        val ps: PropertySpecification = propertySpecificationList.firstOrNull { it.id == id }!!
+        ps.amendWith(propertyDescription)
+    }
 
 }

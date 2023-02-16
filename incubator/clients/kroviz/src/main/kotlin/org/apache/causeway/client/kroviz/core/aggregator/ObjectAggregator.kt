@@ -103,7 +103,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleProperty(property: Property, referrer: String) {
-        handleProperty(property, referrer, getLayout()) //FIXME
+        handleProperty(property, referrer) //FIXME
     }
 
     private fun handleGrid(grid: GridBs, referrer: String) {

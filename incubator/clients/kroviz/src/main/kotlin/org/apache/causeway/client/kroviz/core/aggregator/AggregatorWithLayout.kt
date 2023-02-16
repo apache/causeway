@@ -51,22 +51,4 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         invoke(l, aggregator, referrer = referrer)
     }
 
-    protected fun handleProperty(property: Property, referrer: String, layout: BaseLayout) {
-        when {
-            property.isObjectProperty() -> {
-                val op = ObjectProperty(property)
-                val pdLink = op.getDescriptionLink()!!
-                ResourceProxy().fetch(pdLink, this, referrer = referrer)
-            }
-
-            property.isPropertyDescription() -> {
-                console.log("[AWL_handleProperty] PropertyDescription obsolete?")
-            }
-
-            else -> {
-                TODO("handle 3rd type of property")
-            }
-        }
-    }
-
 }

@@ -19,6 +19,7 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.Member
+import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 /**
@@ -37,13 +38,19 @@ class PropertySpecification(member: Member) {
     var hidden = true
     var disabled = member.disabledReason.isNotEmpty()
     var isAmendedFromBs = false
+    var isAmendedFromPropertyDescription = false
     var typicalLength: Int = 10
 
 
     fun amendWith(pbs: PropertyBs) {
         console.log("[PS_amendWith] PropertyBs")
+        console.log(pbs)
         name = pbs.named
         hidden = !(pbs.hidden != null && pbs.hidden.isNotEmpty())
+        //This is hacky
+        if (id == "sources") {
+            hidden = true
+        }
         if (pbs.typicalLength != null && pbs.typicalLength > 0) {
             typicalLength = pbs.typicalLength.toInt()
         }
@@ -51,11 +58,20 @@ class PropertySpecification(member: Member) {
         console.log(this)
     }
 
+    fun amendWith(pd: PropertyDescription) {
+        val ex = pd.extensions!!
+        val fn = ex.getFriendlyName()
+        if (fn.isNotEmpty()) {
+            name = fn
+        }
+        isAmendedFromPropertyDescription = true
+    }
+
     fun readyToRender(): Boolean {
         return when (id) {
             "logicalTypeName" -> true
             "objectIdentifier" -> true
-            else -> isAmendedFromBs
+            else -> isAmendedFromBs && isAmendedFromPropertyDescription
         }
     }
 
