@@ -19,7 +19,6 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import io.kvision.state.observableListOf
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.PropertyDescription
@@ -57,11 +56,11 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
             members.forEach { m ->
                 propertySpecificationHolder.addMember(m)
                 val l = m.getInvokeLink()!!
+                //TODO pull up to Aggregator
                 ResourceProxy().fetch(l, aggregator, referrer = referrer)
             }
         }
     }
-
 
     private fun addPropertyDetails(propertyBs: PropertyBs) {
         val id = propertyBs.id
@@ -69,11 +68,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         ps.amendWith(propertyBs)
     }
 
-    fun addPropertyDescription(
-        propertyDescription: PropertyDescription,
-        aggregator: AggregatorWithLayout,
-        referrer: String
-    ) {
+    fun addPropertyDescription(propertyDescription: PropertyDescription) {
         val id = propertyDescription.id
         val ps: PropertySpecification = propertySpecificationHolder.getPropertySpecification(id)
         ps.amendWith(propertyDescription)
@@ -96,7 +91,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         return StringUtils.extractTitle(title)
     }
 
-    override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
+    override fun addData(obj: TransferObject) {
         //TODO is checking rawdata really needed?
         if (!rawData.contains(obj)) {
             rawData.add(obj)

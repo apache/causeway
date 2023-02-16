@@ -45,7 +45,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
     }
 
     private fun handleProperty(obj: Property) {
-        displayModel.addData(obj, null, null)
+        displayModel.addData(obj)
     }
 
     private fun handleAction(obj: Action) {
@@ -57,7 +57,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         if (obj.isPrimitiveOrService()) {
             (displayModel as DiagramDM).decNumberOfClasses()
         } else {
-            displayModel.addData(obj, null, null)
+            displayModel.addData(obj)
             val propertyList = obj.members.filter {
                 it.value.isProperty()
             }

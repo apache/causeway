@@ -18,11 +18,9 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.to.DomainType
 import org.apache.causeway.client.kroviz.to.Property
 import org.apache.causeway.client.kroviz.to.TransferObject
-import react.dom.html.ReferrerPolicy
 
 class DiagramDM(override val title: String) : BaseDisplayModel() {
 
@@ -45,7 +43,7 @@ class DiagramDM(override val title: String) : BaseDisplayModel() {
                 //TODO && numberOfProperties == properties.size
     }
 
-    override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
+    override fun addData(obj: TransferObject) {
         when (obj) {
             is DomainType -> classes.add(obj)
             is Property -> properties.add(obj)

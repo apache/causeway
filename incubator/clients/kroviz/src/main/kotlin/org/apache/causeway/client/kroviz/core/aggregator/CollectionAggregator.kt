@@ -148,7 +148,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
 
             property.isPropertyDescription() -> {
                 val pd = PropertyDescription(property)
-                getDisplayModel().addPropertyDescription(pd, this, referrer)
+                getDisplayModel().addPropertyDescription(pd)
             }
 
             else -> {
