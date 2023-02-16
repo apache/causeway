@@ -34,7 +34,7 @@ class PropertyBs(node: Node) : XmlLayout() {
     lateinit var action: ActionBs
 
     init {
-        // TODO improve casting
+        // TODO improve casting, in PropertySpecification some extra check have to be performed
         val dn = node.asDynamic()
         hidden = dn.getAttribute("hidden").unsafeCast<String>()
         id = dn.getAttribute("id").unsafeCast<String>()

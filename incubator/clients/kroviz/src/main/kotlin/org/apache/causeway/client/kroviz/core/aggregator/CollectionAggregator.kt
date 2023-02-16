@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.to.*
@@ -106,8 +105,18 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
             dm.setProtoType(tObj)
             invokeLayoutLink(tObj, this, referrer = referrer)
         }
-        //TODO fold layout into model
-        getDisplayModel().addObject(tObj, this, referrer = referrer)
+
+        // collection layout needs only to be initialized once with an object (pars pro toto, prototype)
+        // obj acts as a kind prototype - we assume all elements in the collection have the same structure
+        val propertySpecificationHolder = getDisplayModel().propertySpecificationHolder
+        if (!propertySpecificationHolder.isInitialized()) {
+            val members = tObj.getProperties()
+            members.forEach { m ->
+                propertySpecificationHolder.addMember(m)
+                val l = m.getInvokeLink()!!
+                invoke(l, this, referrer = referrer)
+            }
+        }
 
         invokeIconLink(tObj, this, referrer = referrer)
     }
@@ -143,7 +152,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
             property.isObjectProperty() -> {
                 val op = ObjectProperty(property)
                 val pdLink = op.getDescriptionLink()!!
-                ResourceProxy().fetch(pdLink, this, referrer = referrer)
+                invoke(pdLink, this, referrer = referrer)
             }
 
             property.isPropertyDescription() -> {
@@ -157,23 +166,20 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         }
     }
 
-
     private fun handleCollection(collection: Collection) {
         if (isParentedCollection()) {
-            //TODO is _id_ required in both CollectionDM and CollectionLayout?
-            val id = collection.id
-            getDisplayModel().id = id
+            getDisplayModel().id = collection.id
             // add displayModel to parent.displayModel
             val objectDM = parent!!.getDisplayModel()
             objectDM.addCollectionModel(getDisplayModel())
         }
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {
-                ResourceProxy().fetch(it, this, referrer = referrer)
+                invoke(it, this, referrer = referrer)
             }
         }
         collection.value.forEach {
-            ResourceProxy().fetch(it, this, referrer = referrer)
+            invoke(it, this, referrer = referrer)
         }
     }
 

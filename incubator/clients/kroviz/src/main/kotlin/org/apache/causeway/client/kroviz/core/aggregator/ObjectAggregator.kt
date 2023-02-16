@@ -19,7 +19,6 @@
 package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
 import org.apache.causeway.client.kroviz.core.model.ObjectLayout
 import org.apache.causeway.client.kroviz.to.*
@@ -68,7 +67,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         if (obj.getProperties().size == 0) {
             invokeInstance(obj, referrer)
         } else {
-            displayModel.addData(obj, this, referrer)
+            displayModel.addData(obj)
         }
         invokeLayoutLink(obj, this, referrer = referrer)
     }
@@ -113,7 +112,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             ol.addGrid(grid, this, referrer = referrer)
             grid.getPropertyList().forEach {
                 val link = it.link!!
-                ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
+                invoke(link, this, subType = Constants.subTypeJson, referrer = referrer)
             }
         }
     }

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.to.*
 
 class SystemDM(override val title: String) : BaseDisplayModel() {
@@ -32,7 +31,7 @@ class SystemDM(override val title: String) : BaseDisplayModel() {
         return !isRendered
     }
 
-    override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
+    override fun addData(obj: TransferObject) {
         when (obj) {
             is User -> user = obj
             is Version -> version = obj

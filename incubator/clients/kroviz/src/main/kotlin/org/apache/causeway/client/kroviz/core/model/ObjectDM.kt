@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.layout.Layout
@@ -31,7 +30,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         layout = ObjectLayout()
     }
 
-    val collectionModelList = mutableListOf<CollectionDM>()
+    private val collectionModelList = mutableListOf<CollectionDM>()
     var data: Exposer? = null
     private var dirty: Boolean = false
 
@@ -41,7 +40,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
 
     fun addCollectionModel(collectionModel: CollectionDM) {
         val id = collectionModel.id
-        val foundModel = collectionModelList.firstOrNull() {
+        val foundModel = collectionModelList.firstOrNull {
             it.id == id
         }
         if (foundModel == null) {
@@ -75,7 +74,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         return true
     }
 
-    override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {
+    override fun addData(obj: TransferObject) {
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
@@ -102,7 +101,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
             val es = SessionManager.getEventStore()
-            //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
+            //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTing, it may fail
             val getLogEntry = es.findBy(reSpec)!!
             getLogEntry.setReload()
 

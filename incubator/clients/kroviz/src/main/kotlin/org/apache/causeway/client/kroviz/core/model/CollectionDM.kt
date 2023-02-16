@@ -19,8 +19,6 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import io.kvision.state.observableListOf
-import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
@@ -45,35 +43,17 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
-    /**
-     * collection layout needs only to be initialized once with an object (pars pro toto, prototype)
-     * obj acts as a kind prototype - we assume all elements in the collection have the same structure
-     */
-    fun addObject(obj: TObject, aggregator: CollectionAggregator, referrer: String) {
-        if (!propertySpecificationHolder.isInitialized()) {
-            // members contain all properties, regardless if hidden, disabled, etc.
-            val members = obj.getProperties()
-            members.forEach { m ->
-                propertySpecificationHolder.addMember(m)
-                val l = m.getInvokeLink()!!
-                //TODO pull up to Aggregator
-                ResourceProxy().fetch(l, aggregator, referrer = referrer)
-            }
-        }
-    }
-
     private fun addPropertyDetails(propertyBs: PropertyBs) {
         val id = propertyBs.id
-        val ps: PropertySpecification = propertySpecificationHolder.getPropertySpecification(id)
+        val ps = propertySpecificationHolder.getPropertySpecification(id)
         ps.amendWith(propertyBs)
     }
 
     fun addPropertyDescription(propertyDescription: PropertyDescription) {
         val id = propertyDescription.id
-        val ps: PropertySpecification = propertySpecificationHolder.getPropertySpecification(id)
+        val ps = propertySpecificationHolder.getPropertySpecification(id)
         ps.amendWith(propertyDescription)
     }
-
 
     fun hasProtoType(): Boolean {
         return protoType != null
