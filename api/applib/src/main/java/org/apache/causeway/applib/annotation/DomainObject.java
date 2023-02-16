@@ -173,12 +173,29 @@ public @interface DomainObject {
      * Typical examples are "act", "prop", "coll", "exec", "execute", "invoke",
      * "apply" and so on. The default name is `$$`.
      * </p>
+     *
+     * <p>
+     *     <b>NOTE</b>: it's more typical to instead use {@link Action}, {@link Property} or {@link Collection} as the
+     *     class-level annotation, indicating that the domain object is a mixin.  The mixin method name for these is,
+     *     respectively, "act", "prop" and "coll".
+     * </p>
      */
     String mixinMethod()
             default "$$";
 
     /**
      * The nature of this domain object.
+     *
+     * <p>
+     *     Most common are natures of {@link Nature#ENTITY} and {@link Nature#VIEW_MODEL}.  For mixins, rather than
+     *     use a nature of {@link Nature#MIXIN}, it's more typical to instead use {@link Action}, {@link Property} or
+     *     {@link Collection} as the class-level annotation, indicating that the domain object is a mixin.
+     *     The {@link #mixinMethod() mixin method name}  for these is, respectively, "act", "prop" and "coll".
+     * </p>
+     *
+     * <p>
+     *     The {@link Nature#BEAN} nature is for internally use, and should not normally be specified explicitly.
+     * </p>
      *
      * @see DomainService#nature()
      */
