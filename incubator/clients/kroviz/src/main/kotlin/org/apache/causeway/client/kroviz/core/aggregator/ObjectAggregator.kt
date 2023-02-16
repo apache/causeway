@@ -58,8 +58,6 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         }
 
         if (getDisplayModel().readyToRender()) {
-            console.log("[OA_readyToRender]")
-            console.log(getDisplayModel())
             ViewManager.openObjectView(this)
         }
     }
@@ -103,7 +101,9 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleProperty(property: Property, referrer: String) {
-        handleProperty(property, referrer) //FIXME
+        //(property, referrer) //FIXME
+        console.log("[OA_handleProperty] not handled")
+        console.log(property)
     }
 
     private fun handleGrid(grid: GridBs, referrer: String) {
@@ -125,8 +125,6 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         }
         return title
     }
-
-
 
     override fun reset(): ObjectAggregator {
         displayModel.reset()

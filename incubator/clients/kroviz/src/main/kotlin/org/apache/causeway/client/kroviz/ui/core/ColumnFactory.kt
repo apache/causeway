@@ -25,7 +25,6 @@ import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 
@@ -46,8 +45,6 @@ class ColumnFactory {
         addColumnForObjectIcon(displayCollection, columns)
         addColumnsForProperties(displayCollection, columns)
         columns.add(columnForObjectMenu())
-        console.log("[CF_buildColumns]")
-        console.log(columns)
         return columns
     }
 
@@ -106,7 +103,7 @@ class ColumnFactory {
         collectionModel: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        val clo = collectionModel.getLayout()
+        val clo = collectionModel.propertySpecificationHolder
         val propSpecList = clo.propertySpecificationList
         if (propSpecList.size == 0) {
             // without this, propSpecList is empty? problem with mutable list?
@@ -117,6 +114,7 @@ class ColumnFactory {
                 var colDef = ColumnDefinition<dynamic>(
                     title = it.name,
                     field = it.id,
+                    width = (it.typicalLength * 8).toString(),
                     headerFilter = Editor.INPUT)
                 if (it.id == "object") {
                     colDef = buildLink()

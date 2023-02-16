@@ -23,28 +23,22 @@ import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 /**
- * Properties have multiple aspects:
- *
- * - Member of a DomainObject
- * - Description (friendlyName, etc.)
- * - Layout (disabledReason, labelPosition, etc.)
- * - Visibility (hidden)
- *
- * All are required in order to be correctly displayed (in a table).
+ * Aggregate information for each column in order to display in a table, namely:
+ * - columnName :   column header/label
+ * - id :           attribute to be used to retrieve the value of each cell (id)
+ * - hidden :       will the column be displayed or not
  */
 class PropertySpecification(member: Member) {
     var id = member.id
     var name = "" // aka: columnName, named, label, title
     var hidden = true
     var disabled = member.disabledReason.isNotEmpty()
-    var isAmendedFromBs = false
-    var isAmendedFromPropertyDescription = false
+    private var isAmendedFromBs = false
+    private var isAmendedFromPropertyDescription = false
     var typicalLength: Int = 10
 
 
     fun amendWith(pbs: PropertyBs) {
-        console.log("[PS_amendWith] PropertyBs")
-        console.log(pbs)
         name = pbs.named
         hidden = !(pbs.hidden != null && pbs.hidden.isNotEmpty())
         //This is hacky
@@ -55,7 +49,6 @@ class PropertySpecification(member: Member) {
             typicalLength = pbs.typicalLength.toInt()
         }
         isAmendedFromBs = true
-        console.log(this)
     }
 
     fun amendWith(pd: PropertyDescription) {

@@ -20,16 +20,17 @@ package org.apache.causeway.client.kroviz.core.model
 
 import io.kvision.state.observableListOf
 import org.apache.causeway.client.kroviz.core.aggregator.AggregatorWithLayout
+import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
+import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
 import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class CollectionDM(override val title: String) : DisplayModelWithLayout() {
-    init {
-        layout = CollectionLayout()
-    }
+    val propertySpecificationHolder = PropertySpecificationHolder()
 
     var id = ""
     var data = observableListOf<Exposer>()
@@ -40,29 +41,59 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     fun setProtoTypeLayout(grid: GridBs) {
         protoTypeLayout = grid
         val propertyList = grid.getPropertyList()
-        propertyList.forEach{
-            getLayout().addPropertyDetails(it)
+        propertyList.forEach {
+            addPropertyDetails(it)
         }
     }
+
+    /**
+     * collection layout needs only to be initialized once with an object (pars pro toto, prototype)
+     * obj acts as a kind prototype - we assume all elements in the collection have the same structure
+     */
+    fun addObject(obj: TObject, aggregator: CollectionAggregator, referrer: String) {
+        if (!propertySpecificationHolder.isInitialized()) {
+            // members contain all properties, regardless if hidden, disabled, etc.
+            val members = obj.getProperties()
+            members.forEach { m ->
+                propertySpecificationHolder.addMember(m)
+                val l = m.getInvokeLink()!!
+                ResourceProxy().fetch(l, aggregator, referrer = referrer)
+            }
+        }
+    }
+
+
+    private fun addPropertyDetails(propertyBs: PropertyBs) {
+        val id = propertyBs.id
+        val ps: PropertySpecification = propertySpecificationHolder.getPropertySpecification(id)
+        ps.amendWith(propertyBs)
+    }
+
+    fun addPropertyDescription(
+        propertyDescription: PropertyDescription,
+        aggregator: AggregatorWithLayout,
+        referrer: String
+    ) {
+        val id = propertyDescription.id
+        val ps: PropertySpecification = propertySpecificationHolder.getPropertySpecification(id)
+        ps.amendWith(propertyDescription)
+    }
+
 
     fun hasProtoType(): Boolean {
         return protoType != null
     }
 
-    fun setProtoType(to:TransferObject){
+    fun setProtoType(to: TransferObject) {
         protoType = to as TObject
     }
 
     override fun readyToRender(): Boolean {
-        return getLayout().readyToRender()
+        return propertySpecificationHolder.readyToRender()
     }
 
     fun getTitle(): String {
         return StringUtils.extractTitle(title)
-    }
-
-    fun getLayout(): CollectionLayout {
-        return layout as CollectionLayout
     }
 
     override fun addData(obj: TransferObject, aggregator: AggregatorWithLayout?, referrer: String?) {

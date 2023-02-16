@@ -22,9 +22,7 @@ import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
-import org.apache.causeway.client.kroviz.core.model.BaseLayout
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.CollectionLayout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
@@ -57,7 +55,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
                 is TObject -> handleObject(obj)
                 is DomainType -> handleDomainType(obj)
                 is GridBs -> handleLayout(obj)
-                is Property -> handleProperty(obj)
+                is Property -> handleProperty(obj, referrer)
                 is Collection -> handleCollection(obj)
                 is Icon -> handleIcon(obj)
                 else -> log(logEntry)
@@ -88,10 +86,6 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         return displayModel as CollectionDM
     }
 
-    private fun getLayout(): CollectionLayout {
-        return getDisplayModel().layout as CollectionLayout
-    }
-
     private fun handleList(resultList: ResultList) {
         if (resultList.resulttype != ResultType.VOID.type) {
             val result = resultList.result!!
@@ -113,7 +107,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
             invokeLayoutLink(tObj, this, referrer = referrer)
         }
         //TODO fold layout into model
-        getLayout().addObject(tObj, this, referrer = referrer)
+        getDisplayModel().addObject(tObj, this, referrer = referrer)
 
         invokeIconLink(tObj, this, referrer = referrer)
     }
@@ -144,11 +138,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         }
     }
 
-    private fun handleProperty(property: Property) {
-        handleProperty(property, referrer, getLayout())
-    }
-
-    protected fun handleProperty(property: Property, referrer: String, layout: BaseLayout) {
+    private fun handleProperty(property: Property, referrer: String) {
         when {
             property.isObjectProperty() -> {
                 val op = ObjectProperty(property)
@@ -158,7 +148,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
 
             property.isPropertyDescription() -> {
                 val pd = PropertyDescription(property)
-                getLayout().addPropertyDescription(pd, this, referrer)
+                getDisplayModel().addPropertyDescription(pd, this, referrer)
             }
 
             else -> {
@@ -173,7 +163,6 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
             //TODO is _id_ required in both CollectionDM and CollectionLayout?
             val id = collection.id
             getDisplayModel().id = id
-            getLayout().id = id
             // add displayModel to parent.displayModel
             val objectDM = parent!!.getDisplayModel()
             objectDM.addCollectionModel(getDisplayModel())
