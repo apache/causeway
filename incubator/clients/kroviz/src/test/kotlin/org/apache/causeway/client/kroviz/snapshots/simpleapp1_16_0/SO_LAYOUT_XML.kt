@@ -23,9 +23,9 @@ import org.apache.causeway.client.kroviz.snapshots.Response
 object SO_LAYOUT_XML: Response() {
     override val url = "http://localhost:8080/restful/domain-types/simple.SimpleObject/layout"
     override val str = """
-<bs3:grid xmlns:cpt="http://causeway.apache.org/applib/layout/component"
-          xmlns:lnk="http://causeway.apache.org/applib/layout/links"
-          xmlns:bs3="http://causeway.apache.org/applib/layout/grid/bootstrap3">
+<bs3:grid xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+          xmlns:lnk="https://causeway.apache.org/applib/layout/links"
+          xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3">
     <script/>
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">

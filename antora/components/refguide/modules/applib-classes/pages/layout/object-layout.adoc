@@ -19,7 +19,7 @@ The component classes, though, are intended to be reusable across all grid syste
 
 The component classes, meanwhile, are broadly equivalent to the "layout" annotations (xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout], xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout], xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout] and xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout]
 
-All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://causeway.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://causeway.apache.org/applib/layout/grid/bootstrap3` XSD namespace).
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `https://causeway.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `https://causeway.apache.org/applib/layout/grid/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 It also allows the grid to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], as either XML or JSON.
 
@@ -51,7 +51,7 @@ In addition, the component package includes `Grid`, representing the top level c
 `Grid` itself is merely an interface, but it also defines the visitor pattern to make it easy for validate and normalize the grid layouts.
 The `GridAbstract` convenience superclass provides a partial implementation of this visitor pattern.
 
-The XSD for these classes is available at link:http://causeway.apache.org/applib/layout/component/component.xsd[].
+The XSD for these classes is available at link:https://causeway.apache.org/applib/layout/component/component.xsd[].
 
 
 == Bootstrap3 Grid
@@ -107,7 +107,7 @@ As you can probably guess, the `BS3Grid` is the top-level object (that is, it is
 All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.
 The xref:vw:ROOT:customisation.adoc#custom-css[application.css] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
 
-The XSD for these classes is available at link:http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd[].
+The XSD for these classes is available at link:https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd[].
 
 
 == Link
@@ -136,4 +136,4 @@ This is always "GET".
 <.> The (absolute) URL to access the Restful Objects resource.
 <.> The media type (`Accept` header) that will be returned by the URL.
 
-The XSD for these classes is available at link:http://causeway.apache.org/applib/layout/links/links.xsd[].
+The XSD for these classes is available at link:https://causeway.apache.org/applib/layout/links/links.xsd[].

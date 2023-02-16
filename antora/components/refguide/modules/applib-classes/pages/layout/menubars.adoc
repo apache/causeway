@@ -14,7 +14,7 @@ The component class `ServiceActionLayoutData` defines action metadata, being bro
 This is similar to the `ActionLayoutData` component class used for object layouts, but also captures the identity of the "owning" domain service.
 Service actions are grouped into menu sections.
 
-All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://causeway.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `https://causeway.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 It also allows the menu bars to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], as either XML or JSON.
 
@@ -65,4 +65,4 @@ This is similar to `ActionLayoutData` (of the xref:applib-classes:layout.adoc[ob
 
 The link classes reside in the `org.apache.causeway.applib.layout.links` package, and consist of just the `Link` class.
 
-The XSD for these classes is available at link:http://causeway.apache.org/applib/layout/links/links.xsd[].
+The XSD for these classes is available at link:https://causeway.apache.org/applib/layout/links/links.xsd[].
