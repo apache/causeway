@@ -24,6 +24,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -57,11 +58,14 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
 
     final TransactionService transactionService;
     final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
     public void onChanging(EntityPropertyChange entityPropertyChange) {
+        if (causewayConfiguration.getExtensions().getAuditTrail().getPersist().isDisabled()) {
+            return;
+        }
         auditTrailEntryRepository.createFor(entityPropertyChange);
-
     }
 
     @Override

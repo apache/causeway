@@ -75,8 +75,6 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -2860,9 +2858,86 @@ public class CausewayConfiguration {
     @Data
     public static class Extensions {
 
+        private final AuditTrail auditTrail = new AuditTrail();
+        @Data
+        public static class AuditTrail {
+
+            /**
+             * As per {@link AuditTrail#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the audit trail.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the audit trail.
+                 *
+                 * <p>
+                 *     One reason to use this option is if you wish to provide your own implementation that wraps
+                 *     or delegates to the default implementation of {@link EntityPropertyChangeSubscriber} that is
+                 *     provided by the <i>audittrail</i> extension.  Because entity property changes are published to
+                 *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+                 *     doing anything using this setting.
+                 * </p>
+                 */
+                DISABLED;
+
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link EntityPropertyChangeSubscriber} implementation provided by this extension (which
+             * persists property changes to the audit trail) is enabled or not.
+             */
+            @Getter @Setter
+            private PersistPolicy persist = PersistPolicy.ENABLED;
+        }
+
         private final CommandLog commandLog = new CommandLog();
         @Data
         public static class CommandLog {
+
+            /**
+             * As per {@link CommandLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the command log .  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the audit trail.
+                 *
+                 * <p>
+                 *     One reason to use this option is if you wish to provide your own implementation that wraps
+                 *     or delegates to the default implementation of {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber} that is
+                 *     provided by the <i>commandlog</i> extension.  Because commands are published to
+                 *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+                 *     doing anything using this setting.
+                 * </p>
+                 */
+                DISABLED;
+
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber} implementation
+             * provided by this extension (which persists commands to the command log) is enabled or not.
+             */
+            @Getter @Setter
+            private PersistPolicy persist = PersistPolicy.ENABLED;
 
             public enum PublishPolicy {
                 ALWAYS,
@@ -3062,6 +3137,47 @@ public class CausewayConfiguration {
             private List<String> exposedHeaders = listOf("Authorization");
 
 
+        }
+
+        private final ExecutionLog executionLog = new ExecutionLog();
+        @Data
+        public static class ExecutionLog {
+
+            /**
+             * As per {@link ExecutionLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the audit trail.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the audit trail.
+                 *
+                 * <p>
+                 *     One reason to use this option is if you wish to provide your own implementation that wraps
+                 *     or delegates to the default implementation of {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} that is
+                 *     provided by the <i>executionLog</i> extension.  Because executions are published to
+                 *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+                 *     doing anything using this setting.
+                 * </p>
+                 */
+                DISABLED;
+
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link EntityPropertyChangeSubscriber} implementation provided by this extension (which
+             * persists property changes to the audit trail) is enabled or not.
+             */
+            @Getter @Setter
+            private PersistPolicy persist = PersistPolicy.ENABLED;
         }
 
         private final ExecutionOutbox executionOutbox = new ExecutionOutbox();

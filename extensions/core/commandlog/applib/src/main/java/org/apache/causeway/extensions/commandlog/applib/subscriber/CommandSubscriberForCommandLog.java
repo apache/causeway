@@ -57,6 +57,10 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
+        if (causewayConfiguration.getExtensions().getCommandLog().getPersist().isDisabled()) {
+            return;
+        }
+
         // skip if no changes AND skipping is allowed
         if (causewayConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
                 && !command.isSystemStateChanged()) {

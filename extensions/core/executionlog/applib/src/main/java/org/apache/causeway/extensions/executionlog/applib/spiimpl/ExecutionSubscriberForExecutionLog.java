@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.executionlog.applib.spiimpl;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactn.Execution;
@@ -32,13 +33,18 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
-    final @Inject ExecutionLogEntryRepository repository;
+    final ExecutionLogEntryRepository repository;
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
     public void onExecution(Execution<?, ?> execution) {
+        if (causewayConfiguration.getExtensions().getExecutionLog().getPersist().isDisabled()) {
+            return;
+        }
+
         repository.createEntryAndPersist(execution);
     }
 
