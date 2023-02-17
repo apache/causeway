@@ -138,7 +138,73 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.
                   + "  FROM AuditTrailEntry e "
                   + " WHERE e.target = :target "
                   + "   AND e.propertyId = :propertyId "
-                  + " ORDER BY e.timestamp DESC ") // programmatic limit 0,30
+                  + " ORDER BY e.timestamp DESC "), // programmatic limit 0,30
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.timestamp >= :from "
+                    + "   AND e.timestamp <= :to "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_AFTER,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.timestamp >= :from "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.timestamp <= :to "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BETWEEN,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.target = :target "
+                    + "   AND e.timestamp >= :from "
+                    + "   AND e.timestamp <= :to "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_AFTER,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.target = :target "
+                    + "   AND e.timestamp >= :from "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BEFORE,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.target = :target "
+                    + "   AND e.timestamp >= :from "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_BY_USERNAME_AND_TARGET,
+            query = "SELECT e "
+                    + "  FROM AuditTrailEntry e "
+                    + " WHERE e.username = :username "
+                    + "   AND e.target = :target "
+                    + " ORDER BY e.timestamp DESC"),
+    @NamedQuery(
+            name = Nq.FIND_RECENT_BY_USERNAME,
+            query = "SELECT e "
+                  + "  FROM AuditTrailEntry e "
+                  + " WHERE e.username = :username "
+                  + " ORDER BY e.timestamp DESC ") // programmatic limit 0,100
 })
 @EntityListeners(CausewayEntityListener.class)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
