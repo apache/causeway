@@ -190,7 +190,7 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.
                     + "  FROM AuditTrailEntry e "
                     + " WHERE e.username = :username "
                     + "   AND e.target = :target "
-                    + "   AND e.timestamp >= :from "
+                    + "   AND e.timestamp <= :to "
                     + " ORDER BY e.timestamp DESC"),
     @NamedQuery(
             name = Nq.FIND_BY_USERNAME_AND_TARGET,
