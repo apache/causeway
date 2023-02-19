@@ -18,8 +18,6 @@
  *
  */
 
-
-
 @font-face {
     font-family: 'Android Insomnia';
     src: url('../font/android_insomnia.woff2') format('woff2'),
@@ -29,8 +27,6 @@
     font-style: normal;
     font-display: swap;
 }
-
-
 
 .content .hljs-meta {
     color: olivedrab;

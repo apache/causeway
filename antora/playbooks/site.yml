@@ -16,7 +16,7 @@
 #  under the License.
 
 site:
-  title: Apache Causeway
+  title: causeway
   url: https://causeway.apache.org/
   start_page: docs:ROOT:about.adoc
 
