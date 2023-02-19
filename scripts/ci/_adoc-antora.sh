@@ -48,19 +48,17 @@ if [ -z "$REVISION" ]; then
   export REVISION="SNAPSHOT"
 fi
 
-#if [ -z "$ANTORA_CMD" ]; then
-#  ANTORA_CMD=$(command -v antora 2>/dev/null)
-#  if [ -z "$ANTORA_CMD" ]; then
-#    ANTORA_CMD=$(npm bin)/antora
-#  fi
-#  if [ -z "$ANTORA_CMD" ]; then
-#    ANTORA_CMD=npm run antora
-#  fi
-#fi
+if [ -z "$ANTORA_CMD" ]; then
+  ANTORA_CMD=$(command -v antora 2>/dev/null)
+  if [ -z "$ANTORA_CMD" ]; then
+#    ANTORA_CMD=$(npm bin)/antora #fails with unknown command 'bin' on ubuntu ... our CI build env
+    ANTORA_CMD="npx antora"
+  fi
+fi
 
 echo "running antora ..."
 echo "$ANTORA_CMD --redirect-facility static --stacktrace $PLAYBOOK"
-npx antora --redirect-facility static --stacktrace $PLAYBOOK
+$ANTORA_CMD --redirect-facility static --stacktrace $PLAYBOOK
 
 # clean up
 rm $PLAYBOOK
