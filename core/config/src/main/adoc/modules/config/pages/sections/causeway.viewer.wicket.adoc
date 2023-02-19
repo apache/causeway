@@ -432,25 +432,6 @@ Although this is disabled by default (in other words the sign-up link is not sup
 
 
 |
-[[causeway.viewer.wicket.table.decoration.data-tables-net.options]]
-causeway.viewer.wicket.table. +
-decoration.data-tables-net.options
-
-| 
-| If specified, then the string is passed verbatim as the initialization options for the https://datatables.net table decoration (as defined by ``DomainObjectLayout#tableDecoration()`` or by ``CollectionLayout#tableDecoration()``).
-
-For example, a value of "info: false, pagingType: 'numbers'" will result in datatables.net being initialized using:
-
-....
-     $(document).ready(function () {       $('table.table-decoration').DataTable({         info: false, pagingType: 'numbers'       });     });     
-....
-
-thus switching off the info panel and using the simple 'numbers' paging type.
-
-@see https://datatables.net/examples/basic_init/index.html
-
-
-|
 [[causeway.viewer.wicket.themes.enabled]]
 causeway.viewer.wicket.themes. +
 enabled

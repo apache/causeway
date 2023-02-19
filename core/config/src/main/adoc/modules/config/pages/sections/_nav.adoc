@@ -16,5 +16,6 @@
 ** xref:refguide:config:sections/eclipselink.adoc[Eclipselink Configuration]
 ** xref:refguide:config:sections/resteasy.adoc[RestEasy Configuration]
 ** xref:refguide:config:sections/causeway.extensions.adoc[Extensions]
+** xref:refguide:config:sections/causeway.value-types.adoc[Value types]
 ** xref:refguide:config:sections/causeway.testing.adoc[Testing]
 ** xref:refguide:config:sections/Other.adoc[Other]

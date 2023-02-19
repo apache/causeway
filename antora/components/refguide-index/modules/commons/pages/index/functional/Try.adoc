@@ -13,6 +13,7 @@ Follows the *Railway Pattern* , that is, once failed, stays failed.
 .Try.java
 ----
 interface Try<T> {
+  Try<T> empty()     // <.>
   Try<T> call(Callable<T> callable)
   Try<Void> run(ThrowingRunnable runnable)
   Success<T> success(T value)
@@ -36,6 +37,11 @@ interface Try<T> {
 }
 ----
 
+<.> xref:#empty_[empty()]
++
+--
+success case with no value
+--
 <.> xref:#getValue_[getValue()]
 +
 --
@@ -108,6 +114,11 @@ If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/T
 --
 
 == Members
+
+[#empty_]
+=== empty()
+
+success case with no value
 
 [#getValue_]
 === getValue()

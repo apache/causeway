@@ -19,9 +19,9 @@ interface Can<T> {
   T getElseFail(int elementIndex)     // <.>
   int compareTo(Can<T> o)     // <.>
   Optional<T> getFirst()     // <.>
-  T getFirstOrFail()     // <.>
+  T getFirstElseFail()     // <.>
   Optional<T> getLast()     // <.>
-  T getLastOrFail()     // <.>
+  T getLastElseFail()     // <.>
   Can<T> empty()     // <.>
   Can<T> ofNullable(T element)     // <.>
   Can<T> ofSingleton(T element)     // <.>
@@ -87,13 +87,13 @@ Shortcut to _get(elementIndex).orElseThrow(...)_
 For convenience allows the argument to be _null_ treating _null_ equivalent to _Can#empty()_ .
 --
 <.> xref:#getFirst_[getFirst()]
-<.> xref:#getFirstOrFail_[getFirstOrFail()]
+<.> xref:#getFirstElseFail_[getFirstElseFail()]
 +
 --
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
 --
 <.> xref:#getLast_[getLast()]
-<.> xref:#getLastOrFail_[getLastOrFail()]
+<.> xref:#getLastElseFail_[getLastElseFail()]
 +
 --
 Shortcut for _getLast().orElseThrow(_Exceptions::noSuchElement)_
@@ -259,16 +259,16 @@ For convenience allows the argument to be _null_ treating _null_ equivalent to _
 [#getFirst_]
 === getFirst()
 
-[#getFirstOrFail_]
-=== getFirstOrFail()
+[#getFirstElseFail_]
+=== getFirstElseFail()
 
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
 
 [#getLast_]
 === getLast()
 
-[#getLastOrFail_]
-=== getLastOrFail()
+[#getLastElseFail_]
+=== getLastElseFail()
 
 Shortcut for _getLast().orElseThrow(_Exceptions::noSuchElement)_
 

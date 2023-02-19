@@ -18,8 +18,7 @@ See the xref:userguide:fun:overview.adoc#mixins[fundamentals user guide] for a d
 The framework provides a number of mixins that contributes to `java.lang.Object` (in other words, to every domain object):
 
 * core
-** xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
-** xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
+** xref:refguide:applib:index/mixins/layout/Object_downloadLayout.adoc[Object_downloadLayout]
 
 * Wicket viewer:
 ** xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc[Object_clearHints]

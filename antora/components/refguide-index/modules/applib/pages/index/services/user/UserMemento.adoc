@@ -22,7 +22,7 @@ class UserMemento {
   boolean isCurrentUser(String userName)     // <.>
   Stream<String> streamRoleNames()
   boolean hasRoleName(String roleName)
-  boolean isSystem()     // <.>
+  boolean hasSudoAccessAllRole()     // <.>
   UserMementoBuilder asBuilder()
   UserLocale asUserLocale()
 }
@@ -73,10 +73,10 @@ The roles associated with this user.
 --
 Determine if the specified name is this user.
 --
-<.> xref:#isSystem_[isSystem()]
+<.> xref:#hasSudoAccessAllRole_[hasSudoAccessAllRole()]
 +
 --
-Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] represent the _system user_ .
+Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] 's _UserMemento#getRoles() roles_ contains the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] 's _SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE_ role (meaning that security checks are disabled).
 --
 
 == Members
@@ -126,7 +126,7 @@ The roles associated with this user.
 
 Determine if the specified name is this user.
 
-[#isSystem_]
-=== isSystem()
+[#hasSudoAccessAllRole_]
+=== hasSudoAccessAllRole()
 
-Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] represent the _system user_ .
+Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] 's _UserMemento#getRoles() roles_ contains the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] 's _SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE_ role (meaning that security checks are disabled).

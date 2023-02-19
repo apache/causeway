@@ -11,8 +11,6 @@ The default implementation automatically caches the JAXB marshallers by target c
 .JaxbService.java
 ----
 interface JaxbService {
-  Object fromXml(JAXBContext jaxbContext, String xml)     // <.>
-  Object fromXml(JAXBContext jaxbContext, String xml, Map<String, Object> unmarshallerProperties)     // <.>
   T fromXml(Class<T> domainClass, String xml)     // <.>
   T fromXml(Class<T> domainClass, String xml, Map<String, Object> unmarshallerProperties)     // <.>
   String toXml(Object domainObject)     // <.>
@@ -21,16 +19,6 @@ interface JaxbService {
 }
 ----
 
-<.> xref:#fromXml_JAXBContext_String[fromXml(JAXBContext, String)]
-+
---
-unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ .
---
-<.> xref:#fromXml_JAXBContext_String_Map[fromXml(JAXBContext, String, Map)]
-+
---
-unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ and the additional properties.
---
 <.> xref:#fromXml_Class_String[fromXml(Class, String)]
 +
 --
@@ -58,16 +46,6 @@ Generates a map of each of the schemas referenced; the key is the schema namespa
 --
 
 == Members
-
-[#fromXml_JAXBContext_String]
-=== fromXml(JAXBContext, String)
-
-unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ .
-
-[#fromXml_JAXBContext_String_Map]
-=== fromXml(JAXBContext, String, Map)
-
-unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ and the additional properties.
 
 [#fromXml_Class_String]
 === fromXml(Class, String)

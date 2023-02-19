@@ -11,11 +11,6 @@ For example usage, seeCauseway addons' publishmq module(non-ASF)
 .JaxbUtil.java
 ----
 class JaxbUtil {
-  Try<T> fromXml(Reader reader, Class<T> dtoClass)
-  Try<T> fromXml(Class<?> contextClass, String resourceName, Class<T> dtoClass)
-  Try<String> toXml(Object dto)
-  void toXml(T dto, Writer writer)
-  JAXBContext jaxbContextFor(Class<?> dtoClass)
 }
 ----
 

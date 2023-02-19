@@ -11,6 +11,8 @@ enum BookmarkPolicy {
   AS_CHILD     // <.>
   NEVER     // <.>
   NOT_SPECIFIED     // <.>
+  boolean isRoot()
+  boolean isChild()
 }
 ----
 
