@@ -42,7 +42,10 @@
 		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
 		<maven-model-builder.version>3.9.0</maven-model-builder.version>
 		<picocli.version>4.7.1</picocli.version>
-		<structurizr.version>1.20.1</structurizr.version>
+		
+		<!-- structurizr-core 1.20+ needs structurizr-plantuml newer than 1.6.3,
+			which is not availabale as of yet (19-feb-2023) -->
+		<structurizr.version>1.19.0</structurizr.version> 
 		<structurizr-plantuml.version>1.6.3</structurizr-plantuml.version>
 		
 		<!-- override surefire defaults from bom, as this is not a Java module yet -->

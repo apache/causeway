@@ -135,7 +135,6 @@ _Process_
 _Automated Analysis_
 
 * link:https://sonarcloud.io/dashboard?id=apache_causeway[SonarCloud.io]
-* link:https://fisheye.apache.org/browse/~br=master/causeway-git/[ASF Fisheye]
 
 _Development_
 

@@ -130,7 +130,7 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/demo-wicket-jdo</image>
+								<image>docker.io/apache/causeway-app-demo-jdo</image>
 								<tags>
 									<tag>${env.REVISION}</tag>
 								</tags>

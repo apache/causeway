@@ -128,7 +128,7 @@
 								</ports>
 							</container>
 							<to>
-								<image>docker.io/apacheisis/demo-wicket-jpa</image>
+								<image>docker.io/apache/causeway-app-demo-jpa</image>
 								<tags>
 									<tag>${env.REVISION}</tag>
 								</tags>

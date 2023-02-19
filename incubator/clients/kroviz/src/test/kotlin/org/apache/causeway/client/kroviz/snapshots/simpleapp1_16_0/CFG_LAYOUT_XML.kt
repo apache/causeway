@@ -23,7 +23,7 @@ import org.apache.causeway.client.kroviz.snapshots.Response
 object CFG_LAYOUT_XML: Response() {
     override val url= "http://localhost:8080/restful/objects/causewayApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLmFwcE1hbmlmZXN0PC9rZXk-CiAgICA8dmFsdWU-ZG9tYWluYXBwLmFwcGxpY2F0aW9uLm1hbmlmZXN0LkRvbWFpbkFwcEFwcE1hbmlmZXN0PC92YWx1ZT4KPC9jb25maWd1cmF0aW9uUHJvcGVydHk-Cg==/object-layout"
     override val str = """
-<bs3:grid xmlns:cpt="http://causeway.apache.org/applib/layout/component" xmlns:lnk="http://causeway.apache.org/applib/layout/links" xmlns:bs3="http://causeway.apache.org/applib/layout/grid/bootstrap3">
+<bs3:grid xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3">
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject>
@@ -110,6 +110,6 @@ object CFG_LAYOUT_XML: Response() {
             <bs3:tabGroup unreferencedCollections="true"/>
         </bs3:col>
     </bs3:row>
-</bs3:grid> 
+</bs3:grid>
 """
 }
