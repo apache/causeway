@@ -46,7 +46,7 @@
         <project>
             <groupId>org.webjars.npm</groupId>
             <artifactId>pdfjs-dist</artifactId>
-            <version>2.16.105</version>
+            <version>3.3.122</version>
             <name>PDF.js</name>
             <licenses>
                 <license>
