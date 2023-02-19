@@ -53,6 +53,9 @@ if [ -z "$ANTORA_CMD" ]; then
   if [ -z "$ANTORA_CMD" ]; then
     ANTORA_CMD=$(npm bin)/antora
   fi
+  if [ -z "$ANTORA_CMD" ]; then
+    ANTORA_CMD=npm run antora
+  fi
 fi
 
 echo "running antora ..."
