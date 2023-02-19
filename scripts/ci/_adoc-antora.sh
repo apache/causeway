@@ -50,9 +50,9 @@ fi
 
 if [ -z "$ANTORA_CMD" ]; then
   ANTORA_CMD=$(command -v antora 2>/dev/null)
-  if [ -z "$ANTORA_CMD" ]; then
-    ANTORA_CMD=$(npm bin)/antora
-  fi
+#  if [ -z "$ANTORA_CMD" ]; then
+#    ANTORA_CMD=$(npm bin)/antora
+#  fi
   if [ -z "$ANTORA_CMD" ]; then
     ANTORA_CMD=npm run antora
   fi
