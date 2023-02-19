@@ -60,7 +60,7 @@ fi
 
 echo "running antora ..."
 echo "$ANTORA_CMD --redirect-facility static --stacktrace $PLAYBOOK"
-npm run antora --redirect-facility static --stacktrace $PLAYBOOK
+npx antora --redirect-facility static --stacktrace $PLAYBOOK
 
 # clean up
 rm $PLAYBOOK
