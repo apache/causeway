@@ -18,13 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import javax.inject.Provider;
+
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.util.Enums;
@@ -35,11 +37,13 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
-import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
-import org.apache.causeway.core.metamodel.methods.MethodFinder;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.common.v2.EnumDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
@@ -56,7 +60,7 @@ implements
     Renderer<T> {
 
     private final TranslationService translationService;
-    private final Method titleMethod;
+    private final Provider<SpecificationLoader> specificationLoaderProvider;
     @Getter(onMethod_ = {@Override}) private final Class<T> correspondingClass;
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final int maxLength;
 
@@ -66,41 +70,26 @@ implements
     }
 
     public static <T extends Enum<T>> EnumValueSemanticsAbstract<T> create(
+            final Provider<SpecificationLoader> specificationLoaderProvider,
             final TranslationService translationService,
-            final IntrospectionPolicy introspectionPolicy,
             final Class<T> correspondingClass) {
         return new EnumValueSemanticsAbstract<>(
+                specificationLoaderProvider,
                 translationService,
-                introspectionPolicy,
                 correspondingClass){};
     }
 
     // -- CONSTRUCTION
 
     protected EnumValueSemanticsAbstract(
+            final Provider<SpecificationLoader> specificationLoaderProvider,
             final TranslationService translationService,
-            final IntrospectionPolicy introspectionPolicy,
             final Class<T> correspondingClass) {
         super();
-
+        this.specificationLoaderProvider = specificationLoaderProvider;
         this.translationService = translationService;
         this.correspondingClass = correspondingClass;
         this.maxLength = maxLengthFor(correspondingClass);
-
-        val supportMethodEnum = ObjectSupportMethod.TITLE;
-
-        titleMethod =
-
-        MethodFinder
-        .objectSupport(
-                correspondingClass,
-                supportMethodEnum.getMethodNames(),
-                introspectionPolicy)
-        .withReturnTypeAnyOf(supportMethodEnum.getReturnTypeCategory().getReturnTypes())
-        .streamMethodsMatchingSignature(MethodFinder.NO_ARG)
-        .findFirst()
-        .orElse(null);
-
     }
 
     // -- DEFAULTS PROVIDER
@@ -150,31 +139,16 @@ implements
         return renderHtml(value, v->friendlyName(context, v));
     }
 
-    private String friendlyName(final Context context, final T object) {
-        if (titleMethod != null) {
-            // sadness: same as in TranslationFactory
-            val translationContext = TranslationContext.forMethod(titleMethod);
+    private String friendlyName(final Context context, final T objectAsEnum) {
 
-            try {
-                final Object returnValue = CanonicalInvoker.invoke(titleMethod, object);
-                if(returnValue instanceof String) {
-                    return (String) returnValue;
-                }
-                if(returnValue instanceof TranslatableString) {
-                    final TranslatableString ts = (TranslatableString) returnValue;
-                    return ts.translate(translationService, translationContext);
-                }
-                return null;
-            } catch (final RuntimeException ex) {
-                // fall through
-            }
-        }
+        val friendlyNameOfEnum = Optional.ofNullable(loadEnumSpec())
+            .map(enumSpec->ManagedObject.value(enumSpec, objectAsEnum))
+            .map(MmTitleUtil::titleOf)
+            .orElseGet(()->Enums.getFriendlyNameOf(objectAsEnum.name()));
 
-        // simply translate the enum constant's name
-        val objectAsEnum = object;
-        val translationContext = TranslationContext.forEnum(objectAsEnum);
-        final String friendlyNameOfEnum = Enums.getFriendlyNameOf(objectAsEnum.name());
-        return translationService.translate(translationContext, friendlyNameOfEnum);
+        return Optional.ofNullable(translationService)
+                .map(ts->ts.translate(TranslationContext.forEnum(objectAsEnum), friendlyNameOfEnum))
+                .orElse(friendlyNameOfEnum);
     }
 
     // -- PARSER
@@ -204,6 +178,13 @@ implements
         return maxLength();
     }
 
+    @Override
+    public Can<T> getExamples() {
+        return Stream.of(correspondingClass.getEnumConstants())
+                .limit(2)
+                .collect(Can.toCan());
+    }
+
     // -- HELPER
 
     private static <T extends Enum<T>> int maxLengthFor(final Class<T> adaptedClass) {
@@ -216,11 +197,37 @@ implements
         return max;
     }
 
-    @Override
-    public Can<T> getExamples() {
-        return Stream.of(correspondingClass.getEnumConstants())
-                .limit(2)
-                .collect(Can.toCan());
+    private AtomicBoolean isLoadingEnumSpec = new AtomicBoolean(false);
+    private AtomicReference<ObjectSpecification> enumSpecRef = new AtomicReference<>();
+
+    private ObjectSpecification loadEnumSpec() {
+
+        val cachedEnumSpec = enumSpecRef.get();
+        if(cachedEnumSpec!=null) {
+            return cachedEnumSpec;
+        }
+
+        if(isLoadingEnumSpec.get()) {
+            return null;
+        }
+
+        val enumSpec = Try.call(()->{
+            /* if not guarded by recursionDepth logic above,
+             * might causes recursive call of lazy getter */
+            return Optional.ofNullable(specificationLoaderProvider)
+                .map(provider->provider.get())
+                .flatMap(specLoader->specLoader.specForType(correspondingClass))
+                .orElse(null);
+
+        }).getValue().orElse(null);
+
+        isLoadingEnumSpec.set(false);
+
+        if(enumSpec!=null) {
+            enumSpecRef.set(enumSpec);
+        }
+
+        return enumSpec;
     }
 
 }

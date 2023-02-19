@@ -314,7 +314,8 @@ implements MetaModelContext {
     private ValueSemanticsResolver valueSemanticsResolver;
     private ValueSemanticsResolver getValueSemanticsResolver(){
         if(valueSemanticsResolver==null) {
-            valueSemanticsResolver = new ValueSemanticsResolverDefault(valueSemantics, getTranslationService());
+            valueSemanticsResolver = new ValueSemanticsResolverDefault(valueSemantics,
+                    getTranslationService(), this::getSpecificationLoader);
         }
         return valueSemanticsResolver;
     }

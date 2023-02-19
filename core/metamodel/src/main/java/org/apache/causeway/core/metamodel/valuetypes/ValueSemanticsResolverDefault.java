@@ -24,12 +24,12 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -39,6 +39,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
 import lombok.NonNull;
@@ -54,6 +55,7 @@ implements ValueSemanticsResolver {
     // managed by Spring
     private final List<ValueSemanticsProvider<?>> valueSemanticsProviders;
     private final TranslationService translationService;
+    private final Provider<SpecificationLoader> specificationLoaderProvider;
 
     @Override
     public boolean hasValueSemantics(final Class<?> valueType) {
@@ -107,12 +109,8 @@ implements ValueSemanticsResolver {
     @SuppressWarnings("unchecked")
     private <T extends Enum<T>> ValueSemanticsProvider<T> defaultEnumSemantics(final Class<T> enumType) {
         return enumSemantics.computeIfAbsent(enumType, t->
-                EnumValueSemanticsAbstract
-                  .create(
-                          translationService,
-                          // in order to simplify matters, we just assume this for enums
-                          IntrospectionPolicy.ENCAPSULATION_ENABLED,
-                  enumType));
+            EnumValueSemanticsAbstract
+                .create(specificationLoaderProvider, translationService, enumType));
     }
 
 

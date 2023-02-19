@@ -197,7 +197,7 @@ implements
         val instance = new SpecificationLoaderDefault(
                 programmingModel, causewayConfiguration, causewaySystemEnvironment,
                 serviceRegistry, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
-                ()->new ValueSemanticsResolverDefault(List.of(), null),
+                ()->new ValueSemanticsResolverDefault(List.of(), null, null),
                 classSubstitutorRegistry);
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
