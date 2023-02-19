@@ -28,7 +28,7 @@ git checkout {page-causewayrel}
 
 * make documentation updates, and commit changes
 
-* make sure the tooling is also built:
+* make sure the tooling is built:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -42,7 +42,15 @@ mvn -D module-tooling -D skip.essential install -DskipTests
 sh preview.sh
 ----
 +
-NOTE: this now runs `mvn clean install -pl core/config` automatically (unless suppressed with a flag)
+[NOTE]
+====
+This now runs updates the config properties automatically (unless suppressed by a flag)
+
+[source,bash,subs="attributes+"]
+----
+mvn clean install -pl core/config
+----
+====
 
 This updated website is written to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
