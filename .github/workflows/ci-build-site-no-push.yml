@@ -69,10 +69,10 @@ jobs:
       # because we have no privileges to install them globally with -g option
       run: npm i @antora/cli@^3.1.1 @antora/site-generator-default@^3.1.1  asciidoctor-kroki
 
-    - name: Print Antora Version
+    - name: List Versions of installed NPM Packages
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: $(npm bin)/antora version
+      run: npm list
 
     - name: Setup Groovy
       if: steps.revision.outputs.revision != 'skip'
