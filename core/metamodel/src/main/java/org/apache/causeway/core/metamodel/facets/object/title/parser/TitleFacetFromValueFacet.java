@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.title.parser;
 
 import java.util.function.BiConsumer;
 
+import org.apache.causeway.applib.util.Enums;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -59,6 +60,15 @@ implements TitleFacet {
         if (pojo == null) {
             return null;
         }
+
+        /* Enum values are treated special, that is, we honor @Title annotations
+         * and alternatively object-support method 'title()',
+         * by letting the SpecificationLoader introspect enum types and populate the meta-model
+         * with TitleFacets (that have higher priority than this one). */
+        if(renderRequest.getObject().getSpecification().getCorrespondingClass().isEnum()) {
+            return Enums.getFriendlyNameOf((Enum<?>)pojo);
+        }
+
 
         // support for qualified value semantics, requires a 'where' context, that is,
         // what property, collection, action return or action param this is to be rendered for ...

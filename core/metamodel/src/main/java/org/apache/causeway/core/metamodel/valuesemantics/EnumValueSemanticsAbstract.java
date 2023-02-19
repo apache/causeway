@@ -19,6 +19,8 @@
 package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -35,6 +37,7 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -194,14 +197,37 @@ implements
         return max;
     }
 
+    private AtomicBoolean isLoadingEnumSpec = new AtomicBoolean(false);
+    private AtomicReference<ObjectSpecification> enumSpecRef = new AtomicReference<>();
+
     private ObjectSpecification loadEnumSpec() {
-        //TODO eventually add caching
-        if(true) return null;
-        //FIXME causes recursive call of lazy getter - specLoader is called too early
-        return Optional.ofNullable(specificationLoaderProvider)
-            .map(provider->provider.get())
-            .flatMap(specLoader->specLoader.specForType(correspondingClass))
-            .orElse(null);
+
+        val cachedEnumSpec = enumSpecRef.get();
+        if(cachedEnumSpec!=null) {
+            return cachedEnumSpec;
+        }
+
+        if(isLoadingEnumSpec.get()) {
+            return null;
+        }
+
+        val enumSpec = Try.call(()->{
+            /* if not guarded by recursionDepth logic above,
+             * might causes recursive call of lazy getter */
+            return Optional.ofNullable(specificationLoaderProvider)
+                .map(provider->provider.get())
+                .flatMap(specLoader->specLoader.specForType(correspondingClass))
+                .orElse(null);
+
+        }).getValue().orElse(null);
+
+        isLoadingEnumSpec.set(false);
+
+        if(enumSpec!=null) {
+            enumSpecRef.set(enumSpec);
+        }
+
+        return enumSpec;
     }
 
 }
