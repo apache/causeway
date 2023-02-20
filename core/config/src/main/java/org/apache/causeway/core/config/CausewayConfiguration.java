@@ -2888,6 +2888,7 @@ public class CausewayConfiguration {
                  */
                 DISABLED;
 
+                public boolean isEnabled() { return this == ENABLED; }
                 public boolean isDisabled() { return this == DISABLED; }
             }
 
@@ -2929,6 +2930,7 @@ public class CausewayConfiguration {
                  */
                 DISABLED;
 
+                public boolean isEnabled() { return this == ENABLED; }
                 public boolean isDisabled() { return this == DISABLED; }
             }
 
@@ -3169,6 +3171,7 @@ public class CausewayConfiguration {
                  */
                 DISABLED;
 
+                public boolean isEnabled() { return this == ENABLED; }
                 public boolean isDisabled() { return this == DISABLED; }
             }
 
