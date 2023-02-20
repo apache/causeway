@@ -47,10 +47,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Named(EntityPropertyChangeSubscriberForAuditTrail.LOGICAL_TYPE_NAME)
-@Priority(PriorityPrecedence.LATE)
-@Qualifier("audittrail")
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityPropertyChangeSubscriberForAuditTrail implements EntityPropertyChangeSubscriber {
 
@@ -61,15 +61,16 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
     final CausewayConfiguration causewayConfiguration;
 
     @Override
+    public boolean isEnabled() {
+        return causewayConfiguration.getExtensions().getAuditTrail().getPersist().isEnabled();
+    }
+
+    @Override
     public void onChanging(EntityPropertyChange entityPropertyChange) {
-        if (causewayConfiguration.getExtensions().getAuditTrail().getPersist().isDisabled()) {
+        if (!isEnabled()) {
             return;
         }
         auditTrailEntryRepository.createFor(entityPropertyChange);
     }
 
-    @Override
-    public boolean isEnabled() {
-        return EntityPropertyChangeSubscriber.super.isEnabled();
-    }
 }

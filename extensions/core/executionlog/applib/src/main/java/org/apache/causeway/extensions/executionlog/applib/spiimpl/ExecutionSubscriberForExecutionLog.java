@@ -18,9 +18,15 @@
  */
 package org.apache.causeway.extensions.executionlog.applib.spiimpl;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactn.Execution;
@@ -28,20 +34,32 @@ import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
+@Named(ExecutionSubscriberForExecutionLog.LOGICAL_TYPE_NAME)
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
-    final ExecutionLogEntryRepository repository;
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionSubscriberForExecutionLog";
+
+    final ExecutionLogEntryRepository<? extends ExecutionLogEntry> repository;
     final CausewayConfiguration causewayConfiguration;
 
     @Override
+    public boolean isEnabled() {
+        return causewayConfiguration.getExtensions().getExecutionLog().getPersist().isEnabled();
+    }
+
+    @Override
     public void onExecution(Execution<?, ?> execution) {
-        if (causewayConfiguration.getExtensions().getExecutionLog().getPersist().isDisabled()) {
+        if (!isEnabled()) {
             return;
         }
 

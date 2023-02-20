@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.subscriber;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -45,19 +47,27 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
+@Named(CommandSubscriberForCommandLog.LOGICAL_TYPE_NAME)
+@Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
+@Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
+
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     final CausewayConfiguration causewayConfiguration;
 
     @Override
+    public boolean isEnabled() {
+        return causewayConfiguration.getExtensions().getCommandLog().getPersist().isEnabled();
+    }
+
+    @Override
     public void onCompleted(final Command command) {
 
-        if (causewayConfiguration.getExtensions().getCommandLog().getPersist().isDisabled()) {
+        if (!isEnabled()) {
             return;
         }
 
