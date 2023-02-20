@@ -18,21 +18,12 @@
  */
 package org.apache.causeway.commons.internal.base;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
-
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -48,47 +39,6 @@ import lombok.val;
  */
 public final class _With<T> {
 
-    private _With() { }
-
-    // -- OPTION IDIOMS
-
-    /**
-     * Equivalent to {@code Optional.ofNullable(obj).orElse(orElse);}
-     * @param obj (nullable)
-     * @param orElse (nullable)
-     * @return {@code obj!=null ? obj : orElse}
-     */
-    public static <X> X ifPresentElse(final @Nullable X obj, final @Nullable X orElse) {
-        return obj!=null ? obj : orElse;
-    }
-
-    /**
-     * Equivalent to {@code Optional.ofNullable(obj).orElseGet(elseGet);}
-     * @param obj (nullable)
-     * @param elseGet
-     * @return {@code obj!=null ? obj : elseGet.get()}
-     */
-    public static <X> X ifPresentElseGet(final @Nullable X obj, final Supplier<X> elseGet) {
-        return obj!=null ? obj : Objects.requireNonNull(elseGet, "elseGet").get();
-    }
-
-    /**
-     * Equivalent to {@code Optional.ofNullable(obj).orElseThrow(elseThrow);}
-     * @param obj (nullable)
-     * @param elseThrow
-     * @return {@code obj!=null ? obj : throw( elseThrow.get() )}
-     * @throws E
-     */
-    public static <X, E extends Exception> X ifPresentElseThrow(
-            final @Nullable X obj,
-            final Supplier<E> elseThrow)
-                    throws E {
-        if(obj!=null) {
-            return obj;
-        }
-        throw Objects.requireNonNull(elseThrow, "elseThrow").get();
-    }
-
     // -- CONSUMER IDIOMS
 
     /**
@@ -99,57 +49,6 @@ public final class _With<T> {
      */
     public static <X> X accept(final @Nullable X obj, final Consumer<X> consumer) {
         Objects.requireNonNull(consumer, "consumer").accept(obj);
-        return obj;
-    }
-
-    /**
-     * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present.
-     * @param obj (nullable)
-     * @param ifPresent
-     * @return {@code obj}
-     */
-    public static <X> X acceptIfPresent(final @Nullable X obj, final Consumer<X> ifPresent) {
-        if(obj!=null) {
-            Objects.requireNonNull(ifPresent, "ifPresent").accept(obj);
-        }
-        return obj;
-    }
-
-    /**
-     * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present,
-     * runs the specified {@code elseRun} otherwise.
-     * @param obj (nullable)
-     * @param ifPresent
-     * @param elseRun
-     * @return {@code obj}
-     */
-    public static <X> X acceptIfPresentElseRun(final @Nullable X obj, final Consumer<X> ifPresent, final Runnable elseRun) {
-        if(obj!=null) {
-            Objects.requireNonNull(ifPresent, "ifPresent").accept(obj);
-        } else {
-            Objects.requireNonNull(elseRun, "elseRun").run();
-        }
-        return obj;
-    }
-
-    /**
-     * Unary identity operator that passes {@code obj} to {@code ifPresent} if {@code obj} is present,
-     * throws the specified Exception provided by {@code elseThrow} otherwise.
-     * @param obj (nullable)
-     * @param ifPresent
-     * @param elseThrow
-     * @return {@code obj!=null ? obj : throw( elseThrow.get() ) }
-     * @throws E
-     */
-    public static <X, E extends Exception> X acceptIfPresentElseThrow(
-            final @Nullable X obj, final Consumer<X> ifPresent, final Supplier<E> elseThrow)
-                    throws E {
-
-        if(obj!=null) {
-            Objects.requireNonNull(ifPresent, "ifPresent").accept(obj);
-        } else {
-            throw Objects.requireNonNull(elseThrow, "elseThrow").get();
-        }
         return obj;
     }
 
@@ -175,36 +74,6 @@ public final class _With<T> {
      */
     public static <X, R> R mapIfPresentElse(final @Nullable X obj, final Function<X, R> mapper, final @Nullable R orElse) {
         return obj!=null ? Objects.requireNonNull(mapper, "mapper").apply(obj) : orElse;
-    }
-
-    /**
-     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseGet(elseGet);}
-     * @param obj (nullable)
-     * @param mapper
-     * @param elseGet
-     * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
-     */
-    public static <X, R> R mapIfPresentElseGet(final @Nullable X obj, final Function<X, R> mapper, final Supplier<R> elseGet) {
-        return obj!=null ? Objects.requireNonNull(mapper, "mapper").apply(obj) : Objects.requireNonNull(elseGet, "elseGet").get();
-    }
-
-    /**
-     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElseThrow(elseThrow);}
-     * @param obj (nullable)
-     * @param mapper
-     * @param elseThrow
-     * @return {@code obj!=null ? mapper.apply(obj) : throw( elseThrow.get() )}
-     * @throws E
-     */
-    public static <X, R, E extends Exception> R mapIfPresentElseThrow(
-            final @Nullable X obj,
-            final Function<X, R> mapper,
-            final Supplier<E> elseThrow)
-                    throws E {
-        if(obj!=null) {
-            return Objects.requireNonNull(mapper, "mapper").apply(obj);
-        }
-        throw Objects.requireNonNull(elseThrow, "elseThrow").get();
     }
 
     // -- PARAMETER NON-EMPTY CHECK(S)
@@ -237,87 +106,6 @@ public final class _With<T> {
      */
     public static <T> T create(final Supplier<T> factory, final Consumer<T> initializer) {
         return accept(factory.get(), initializer);
-    }
-
-    /**
-     * Allows for single line instantiation and initialization of an ArrayList.
-     * @param initializer
-     * @return a new ArrayList after calling the {@code initializer} on it
-     */
-    public static <X> ArrayList<X> arrayList(final Consumer<ArrayList<X>> initializer) {
-        return create(ArrayList::new, initializer);
-    }
-
-    /**
-     * Allows for single line instantiation and initialization of a HashSet.
-     * @param initializer
-     * @return a new HashSet after calling the {@code initializer} on it
-     */
-    public static <X> HashSet<X> hashSet(final Consumer<HashSet<X>> initializer) {
-        return create(HashSet::new, initializer);
-    }
-
-    /**
-     * Allows for single line instantiation and initialization of a TreeSet.
-     * @param initializer
-     * @return a new TreeSet after calling the {@code initializer} on it
-     */
-    public static <X> TreeSet<X> treeSet(final Consumer<TreeSet<X>> initializer) {
-        return create(TreeSet::new, initializer);
-    }
-
-    /**
-     * Allows for single line instantiation and initialization of a HashMap.
-     * @param initializer
-     * @return a new HashMap after calling the {@code initializer} on it
-     */
-    public static <K, V> HashMap<K, V> hashMap(final Consumer<HashMap<K, V>> initializer) {
-        return accept(new HashMap<K, V>(), initializer);
-    }
-
-    /**
-     * Allows for single line instantiation and initialization of a TreeMap.
-     * @param initializer
-     * @return a new TreeMap after calling the {@code initializer} on it
-     */
-    public static <K, V> TreeMap<K, V> treeMap(final Consumer<TreeMap<K, V>> initializer) {
-        return accept(new TreeMap<K, V>(), initializer);
-    }
-
-    /**
-     * Allows for single line instantiation and initialization of a StringBuilder.
-     * @param initializer
-     * @return a new StringBuilder after calling the {@code initializer} on it
-     */
-    public static StringBuilder stringBuilder(final Consumer<StringBuilder> initializer) {
-        return create(StringBuilder::new, initializer);
-    }
-
-    // -- EXCEPTION SWALLOW IDIOMS
-
-    /**
-     * Returns Optional of the callable's result after invocation. Any exception during
-     * invocation will result in an empty Optional.
-     */
-    public static <T> Optional<T> tryCall(final Callable<T> callable) {
-        try {
-            val result = callable.call();
-            return Optional.ofNullable(result);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Returns the callable's result after invocation. Any exception during
-     * invocation will result in the defaultValue being returned instead.
-     */
-    public static <T> T tryOrDefault(final Callable<T> callable, final T defaultValue) {
-        try {
-            return callable.call();
-        } catch (Exception e) {
-            return defaultValue;
-        }
     }
 
 }

@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.base._With;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
@@ -154,10 +154,15 @@ public interface CollectionFacet extends Facet {
                 return rawStream.collect(rawCollector);
             }
 
-            // array
+            // Array
             if (requiredType.isArray()) {
                 Class<?> elementType = requiredType.getComponentType();
                 return rawStream.collect(_Arrays.toArray(elementType));
+            }
+
+            // Can
+            if (Can.class.equals(requiredType)) {
+                return rawStream.collect(Can.toCan());
             }
 
             // not recognized
@@ -165,30 +170,29 @@ public interface CollectionFacet extends Facet {
 
         }
 
-
         // -- HELPER
 
-        private static final Map<Class<?>, Supplier<Collection<?>>> factoriesByType = _With.hashMap(
-                map-> {
+        private static final Map<Class<?>, Supplier<Collection<?>>> factoriesByType = Map.ofEntries(
+
                     // specific list implementations
-                    map.put(CopyOnWriteArrayList.class, _Lists::newConcurrentList);
-                    map.put(LinkedList.class, _Lists::newLinkedList);
-                    map.put(ArrayList.class, _Lists::newArrayList);
-                    map.put(AbstractList.class, _Lists::newArrayList);
+                Map.entry(CopyOnWriteArrayList.class, _Lists::newConcurrentList),
+                Map.entry(LinkedList.class, _Lists::newLinkedList),
+                Map.entry(ArrayList.class, _Lists::newArrayList),
+                Map.entry(AbstractList.class, _Lists::newArrayList),
 
                     // specific set implementations
-                    map.put(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet);
-                    map.put(LinkedHashSet.class, _Sets::newLinkedHashSet);
-                    map.put(HashSet.class, _Sets::newHashSet);
-                    map.put(TreeSet.class, _Sets::newTreeSet);
-                    map.put(AbstractSet.class, _Sets::newLinkedHashSet);
+                Map.entry(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet),
+                Map.entry(LinkedHashSet.class, _Sets::newLinkedHashSet),
+                Map.entry(HashSet.class, _Sets::newHashSet),
+                Map.entry(TreeSet.class, _Sets::newTreeSet),
+                Map.entry(AbstractSet.class, _Sets::newLinkedHashSet),
 
                     // interfaces
-                    map.put(List.class, _Lists::newArrayList);
-                    map.put(SortedSet.class, _Sets::newTreeSet);
-                    map.put(Set.class, _Sets::newLinkedHashSet);
-                    map.put(Collection.class, _Lists::newArrayList);
-                });
+                Map.entry(List.class, _Lists::newArrayList),
+                Map.entry(SortedSet.class, _Sets::newTreeSet),
+                Map.entry(Set.class, _Sets::newLinkedHashSet),
+                Map.entry(Collection.class, _Lists::newArrayList)
+                );
 
     }
 
