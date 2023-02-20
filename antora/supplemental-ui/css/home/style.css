@@ -49,7 +49,7 @@
 
   --color-theme-blue: var(--color-causeway-purple);
   --color-theme-green: var(--color-causeway-yellow);
-  
+
   --color-dark-overlay: #0000002e; /* black with some opacity*/
 }
 
@@ -258,6 +258,7 @@ h6 {
   text-decoration: underline;
 }
 
+#intro .intro-content .btn-docs,
 #intro .intro-content .btn-get-started,
 #intro .intro-content .btn-projects {
   font-family: "Raleway", sans-serif;
@@ -272,6 +273,16 @@ h6 {
   color: #fff;
 }
 
+#intro .intro-content .btn-docs {
+  background: var(--color-causeway-cyan);
+  border: 2px solid var(--color-causeway-cyan);
+}
+
+#intro .intro-content .btn-docs:hover {
+  background: none;
+  color: var(--color-causeway-cyan);
+}
+
 #intro .intro-content .btn-get-started {
   background: var(--color-theme-blue);
   border: 2px solid var(--color-theme-blue);
@@ -283,13 +294,13 @@ h6 {
 }
 
 #intro .intro-content .btn-projects {
-  background: var(--color-theme-green);
-  border: 2px solid var(--color-theme-green);
+  background: var(--color-causeway-yellow);
+  border: 2px solid var(--color-causeway-yellow);
 }
 
 #intro .intro-content .btn-projects:hover {
   background: none;
-  color: var(--color-theme-green);
+  color: var(--color-causeway-yellow);
 }
 
 #intro #intro-carousel {

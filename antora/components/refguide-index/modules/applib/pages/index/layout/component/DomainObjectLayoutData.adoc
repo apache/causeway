@@ -24,8 +24,8 @@ class DomainObjectLayoutData {
   void setNamed(String named)
   String getPlural()
   void setPlural(String plural)
-  TableDecoration getTableDecoration()
-  void setTableDecoration(TableDecoration tableDecoration)
+  Class<? extends TableDecorator> getTableDecorator()
+  void setTableDecorator(Class<? extends TableDecorator> tableDecorator)
   String getMetadataError()     // <.>
   void setMetadataError(String metadataError)
   DomainObjectLayoutDataOwner getOwner()     // <.>

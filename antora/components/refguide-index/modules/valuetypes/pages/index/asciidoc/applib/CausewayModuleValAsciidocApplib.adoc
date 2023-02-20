@@ -8,6 +8,7 @@
 ----
 class CausewayModuleValAsciidocApplib {
   public static final String NAMESPACE;
+  AdocToHtmlConverter createAdocToHtmlConverter(CausewayConfiguration config)
 }
 ----
 

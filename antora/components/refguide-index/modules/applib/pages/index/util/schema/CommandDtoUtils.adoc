@@ -8,13 +8,7 @@
 ----
 class CommandDtoUtils {
   void init()
-  JAXBContext getJaxbContext()
-  CommandDto fromXml(Reader reader)
-  CommandDto clone(CommandDto commandDto)
-  CommandDto fromXml(String xml)
-  CommandDto fromXml(Class<?> contextClass, String resourceName, Charset charset)
-  String toXml(CommandDto commandDto)
-  void toXml(CommandDto commandDto, Writer writer)
+  DtoMapper<CommandDto> dtoMapper()
   OidsDto targetsFor(CommandDto dto)
   ParamsDto parametersFor(ActionDto actionDto)
   PeriodDto timingsFor(CommandDto commandDto)

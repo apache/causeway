@@ -16,13 +16,26 @@ interface TreePath {
   TreePath append(int indexWithinSiblings)     // <.>
   TreePath getParentIfAny()     // <.>
   boolean isRoot()
+  IntStream streamPathElements()
+  String stringify(String delimiter)
+  Stream<TreePath> streamUpTheHierarchyStartingAtSelf()
   TreePath of(int... canonicalPath)
   TreePath root()
+  TreePath parse(String treePathStringified, String delimiter)     // <.>
 }
 ----
 
 <.> xref:#append_int[append(int)]
 <.> xref:#getParentIfAny_[getParentIfAny()]
++
+--
+Returns a TreePath instance that represents the parent path of this TreePath, if this is not the root.
+--
+<.> xref:#parse_String_String[parse(String, String)]
++
+--
+Parses stringified tree path of format _031_ ..., as returned by _TreePath#stringify(String)_ .
+--
 
 == Members
 
@@ -31,3 +44,12 @@ interface TreePath {
 
 [#getParentIfAny_]
 === getParentIfAny()
+
+Returns a TreePath instance that represents the parent path of this TreePath, if this is not the root.
+
+[#parse_String_String]
+=== parse(String, String)
+
+Parses stringified tree path of format _031_ ..., as returned by _TreePath#stringify(String)_ .
+
+For null or empty input the root is returned.

@@ -43,6 +43,18 @@ web-allow-remote-access
 Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
 
 
+|
+[[causeway.security.actions-with-safe-semantics-require-only-viewing-permission]]
+causeway.security. +
+actions-with-safe-semantics- +
+require-only-viewing-permission
+
+| 
+| If set, allows _Actions_ with SAFE Semantics to be invoked with only VIEWING permissions.
+
+default: false @see org.apache.causeway.applib.annotation.Action#semantics() @see SemanticsOf
+
+
 
 |===
 
