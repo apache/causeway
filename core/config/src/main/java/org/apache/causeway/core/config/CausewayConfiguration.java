@@ -53,6 +53,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -75,8 +77,6 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -763,7 +763,7 @@ public class CausewayConfiguration {
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.causeway.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber}s,
+                 * {@link CommandSubscriber}s,
                  * typically for auditing purposes.
                  *
                  * <p>
@@ -775,10 +775,10 @@ public class CausewayConfiguration {
 
                 /**
                  * The default for whether action invocations should be sent through to the
-                 * {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
+                 * {@link ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution) onExecution}
+                 *     The service's {@link ExecutionSubscriber#onExecution(Execution) onExecution}
                  *     method is called only once per transaction, with
                  *     {@link Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
@@ -945,7 +945,7 @@ public class CausewayConfiguration {
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.causeway.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber}s,
+                 * {@link CommandSubscriber}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -958,10 +958,10 @@ public class CausewayConfiguration {
 
                 /**
                  * The default for whether property edits should be sent through to the
-                 * {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
+                 * {@link ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 * The service's {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution)}  publish}
+                 * The service's {@link ExecutionSubscriber#onExecution(Execution)}  publish}
                  * method is called only once per transaction, with
                  * {@link Execution} collecting details of
                  * the identity of the target object, the property edited, and the new value of the property.
@@ -2860,9 +2860,88 @@ public class CausewayConfiguration {
     @Data
     public static class Extensions {
 
+        private final AuditTrail auditTrail = new AuditTrail();
+        @Data
+        public static class AuditTrail {
+
+            /**
+             * As per {@link AuditTrail#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the audit trail.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the audit trail.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link EntityPropertyChangeSubscriber} implementation provided by this extension (which
+             * persists property changes to the audit trail) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link EntityPropertyChangeSubscriber} that is
+             *     provided by the <i>audittrail</i> extension.  Because entity property changes are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            @Getter @Setter
+            private PersistPolicy persist = PersistPolicy.ENABLED;
+        }
+
         private final CommandLog commandLog = new CommandLog();
         @Data
         public static class CommandLog {
+
+            /**
+             * As per {@link CommandLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the command log .  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the command log.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link CommandSubscriber} implementation
+             * provided by this extension (which persists commands to the command log) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link CommandSubscriber} that is
+             *     provided by the <i>commandlog</i> extension.  Because commands are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            @Getter @Setter
+            private PersistPolicy persist = PersistPolicy.ENABLED;
 
             public enum PublishPolicy {
                 ALWAYS,
@@ -3064,6 +3143,48 @@ public class CausewayConfiguration {
 
         }
 
+        private final ExecutionLog executionLog = new ExecutionLog();
+        @Data
+        public static class ExecutionLog {
+
+            /**
+             * As per {@link ExecutionLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the execution log.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the execution log.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link ExecutionSubscriber} implementation
+             * provided by this extension (which persists executions to the execution log) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link ExecutionSubscriber} that is
+             *     provided by the <i>executionLog</i> extension.  Because executions are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            @Getter @Setter
+            private PersistPolicy persist = PersistPolicy.ENABLED;
+        }
+
         private final ExecutionOutbox executionOutbox = new ExecutionOutbox();
         @Valid
         @Data
@@ -3080,6 +3201,44 @@ public class CausewayConfiguration {
                 @Max(value = 1000)
                 private int maxPending = 100;
             }
+
+            /**
+             * As per {@link ExecutionLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the outbox.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the outbox.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link ExecutionSubscriber}
+             * implementation provided by this extension (which persists executions to the outbox) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the outbox implementation of {@link ExecutionSubscriber} that is
+             *     provided by the <i>executionOutbox</i> extension.  Because executions are published to
+             *     <i>all</i> subscribers on the class path, you can disable the outbox implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            @Getter @Setter
+            private ExecutionOutbox.PersistPolicy persist = ExecutionOutbox.PersistPolicy.ENABLED;
+
         }
 
         private final Secman secman = new Secman();

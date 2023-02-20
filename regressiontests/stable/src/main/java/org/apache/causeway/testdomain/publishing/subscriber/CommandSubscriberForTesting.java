@@ -22,8 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.command.Command;
@@ -31,15 +34,19 @@ import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Testing")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandSubscriberForTesting
 implements CommandSubscriber {
 
-    @Inject private KVStoreForTesting kvStore;
+    private final KVStoreForTesting kvStore;
 
     @PostConstruct
     public void init() {

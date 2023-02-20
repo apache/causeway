@@ -22,8 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
@@ -34,16 +37,21 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Testing")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class EntityPropertyChangeSubscriberForTesting
 implements EntityPropertyChangeSubscriber {
 
-    @Inject private KVStoreForTesting kvStore;
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    private final KVStoreForTesting kvStore;
+    private final SpecificationLoader specificationLoader;
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @PostConstruct
     public void init() {
