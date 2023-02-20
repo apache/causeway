@@ -172,7 +172,6 @@ public class _Files {
     /**
      * Creates the given directory if it does not already exist.
      * If directory is null acts as a no-op.
-     * @return
      * @throws IllegalArgumentException if any pre-existing file is in conflict
      */
     public static File makeDir(final @Nullable File directory) {
