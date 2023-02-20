@@ -13,14 +13,14 @@ have been replaced with `causeway` while keeping variants:
 * upper-case `ISIS` -> `CAUSEWAY`
 * or capital case `Isis` -> `Causeway`
 
-== XSDs
+=== XSDs
 
 The namespace and location of XSDs has changed:
 
 * from: `http://isis.apache.org/...`
-* to `https://causewaY.apache.org/...`
+* to `https://causeway.apache.org/...`
 
-Note that the scheme has changed also, from `http` to `https`.
+Note the change from `http` to `https`.
 
 == Configuration
 
