@@ -47,15 +47,15 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Bytes.BytesOperator;
 import org.apache.causeway.commons.internal.functions._Predicates;
+
 import static org.apache.causeway.commons.internal.base._NullSafe.size;
 import static org.apache.causeway.commons.internal.base._Strings_SplitIterator.splitIterator;
-import static org.apache.causeway.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.causeway.commons.internal.base._With.requiresNotEmpty;
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -72,9 +72,8 @@ import lombok.val;
  *
  * @since 2.0
  */
+@UtilityClass
 public final class _Strings {
-
-    private _Strings() {}
 
     // -- CONSTANTS
 
@@ -251,7 +250,7 @@ public final class _Strings {
      * @return null if the {@code input} is null
      */
     public static String trim(final @Nullable String input) {
-        return mapIfPresentElse(input, String::trim, null);
+        return mapIfPresentElseNull(input, String::trim);
     }
 
     /**
@@ -260,7 +259,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static String lower(final @Nullable String input) {
-        return mapIfPresentElse(input, String::toLowerCase, null);
+        return mapIfPresentElseNull(input, String::toLowerCase);
     }
 
     /**
@@ -269,7 +268,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static String upper(final @Nullable String input) {
-        return mapIfPresentElse(input, String::toUpperCase, null);
+        return mapIfPresentElseNull(input, String::toUpperCase);
     }
 
     /**
@@ -309,6 +308,23 @@ public final class _Strings {
     }
 
     // -- SPECIAL UNARY OPERATORS
+
+    /**
+     * String not-empty (nor null) guard.
+     * @param str target for the non-empty-check
+     * @param identifier to use for the exception message, when the non-empty-check fails
+     * @throws NullPointerException if {@code str} is {@code null}
+     * @throws IllegalArgumentException if {@code str} is 'empty'
+     */
+    public static String requireNonEmpty(final @Nullable String str, final String identifier) {
+        if (str == null) {
+            throw new NullPointerException(String.format("'%s' is required to be present (not null).", identifier));
+        }
+        if (str.length()==0) {
+            throw new IllegalArgumentException(String.format("'%s' is required to be present and not empty.", identifier));
+        }
+        return str;
+    }
 
     public static @Nullable String htmlEscape(final @Nullable String source) {
         return _Strings_HtmlEscaper.htmlEscape(source);
@@ -383,7 +399,7 @@ public final class _Strings {
     public static String combineWithDelimiter(
             final @Nullable String left, final @Nullable String right, final String delimiter) {
 
-        requiresNotEmpty(delimiter, "pathDelimiter");
+        requireNonEmpty(delimiter, "pathDelimiter");
 
         if (isNullOrEmpty(left) && isNullOrEmpty(right)) {
             return "";
@@ -595,7 +611,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static String condenseWhitespaces(final @Nullable String input, final @NonNull String replacement) {
-        return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
+        return mapIfPresentElseNull(input, __->input.replaceAll("\\s+", replacement));
     }
 
     /**
@@ -705,7 +721,9 @@ public final class _Strings {
      * @return null if {@code str} is null
      */
     public static final byte[] toBytes(final @Nullable String str, final @NonNull Charset charset) {
-        return mapIfPresentElse(str, __->str.getBytes(charset), null);
+        return Optional.ofNullable(str)
+                .map(s->s.getBytes(charset))
+                .orElse(null);
     }
 
     /**
@@ -715,7 +733,9 @@ public final class _Strings {
      * @return null if {@code bytes} is null
      */
     public static final String ofBytes(final @Nullable byte[] bytes, final @NonNull Charset charset) {
-        return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
+        return Optional.ofNullable(bytes)
+                .map(b->new String(b, charset))
+                .orElse(null);
     }
 
     /**
@@ -728,7 +748,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static final String convert(final @Nullable String input, final @NonNull BytesOperator converter, final @NonNull Charset charset) {
-        return mapIfPresentElse(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset), null);
+        return mapIfPresentElseNull(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset));
     }
 
     // -- UNARY OPERATOR COMPOSITION
@@ -878,6 +898,18 @@ public final class _Strings {
         return str == null || str.length() > maxLength
                     ? null
                     : str;
+    }
+
+    // -- HELPER
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElse(null);}
+     */
+    private static String mapIfPresentElseNull(
+            final @Nullable String obj, final @NonNull UnaryOperator<String> mapper) {
+        return obj!=null
+                ? mapper.apply(obj)
+                : null;
     }
 
 }
