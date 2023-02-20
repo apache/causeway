@@ -2879,14 +2879,6 @@ public class CausewayConfiguration {
                 ENABLED,
                 /**
                  * Do <i>NOT</i> persist to the audit trail.
-                 *
-                 * <p>
-                 *     One reason to use this option is if you wish to provide your own implementation that wraps
-                 *     or delegates to the default implementation of {@link EntityPropertyChangeSubscriber} that is
-                 *     provided by the <i>audittrail</i> extension.  Because entity property changes are published to
-                 *     <i>all</i> subscribers on the class path, you can disable the default implementation from
-                 *     doing anything using this setting.
-                 * </p>
                  */
                 DISABLED;
 
@@ -2897,6 +2889,14 @@ public class CausewayConfiguration {
             /**
              * Whether the {@link EntityPropertyChangeSubscriber} implementation provided by this extension (which
              * persists property changes to the audit trail) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link EntityPropertyChangeSubscriber} that is
+             *     provided by the <i>audittrail</i> extension.  Because entity property changes are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
              */
             @Getter @Setter
             private PersistPolicy persist = PersistPolicy.ENABLED;
@@ -2920,15 +2920,7 @@ public class CausewayConfiguration {
                  */
                 ENABLED,
                 /**
-                 * Do <i>NOT</i> persist to the audit trail.
-                 *
-                 * <p>
-                 *     One reason to use this option is if you wish to provide your own implementation that wraps
-                 *     or delegates to the default implementation of {@link CommandSubscriber} that is
-                 *     provided by the <i>commandlog</i> extension.  Because commands are published to
-                 *     <i>all</i> subscribers on the class path, you can disable the default implementation from
-                 *     doing anything using this setting.
-                 * </p>
+                 * Do <i>NOT</i> persist to the command log.
                  */
                 DISABLED;
 
@@ -2939,6 +2931,14 @@ public class CausewayConfiguration {
             /**
              * Whether the {@link CommandSubscriber} implementation
              * provided by this extension (which persists commands to the command log) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link CommandSubscriber} that is
+             *     provided by the <i>commandlog</i> extension.  Because commands are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
              */
             @Getter @Setter
             private PersistPolicy persist = PersistPolicy.ENABLED;
@@ -3157,19 +3157,11 @@ public class CausewayConfiguration {
              */
             public enum PersistPolicy {
                 /**
-                 * Persist to the audit trail.  This is the default.
+                 * Persist to the execution log.  This is the default.
                  */
                 ENABLED,
                 /**
-                 * Do <i>NOT</i> persist to the audit trail.
-                 *
-                 * <p>
-                 *     One reason to use this option is if you wish to provide your own implementation that wraps
-                 *     or delegates to the default implementation of {@link ExecutionSubscriber} that is
-                 *     provided by the <i>executionLog</i> extension.  Because executions are published to
-                 *     <i>all</i> subscribers on the class path, you can disable the default implementation from
-                 *     doing anything using this setting.
-                 * </p>
+                 * Do <i>NOT</i> persist to the execution log.
                  */
                 DISABLED;
 
@@ -3179,7 +3171,15 @@ public class CausewayConfiguration {
 
             /**
              * Whether the {@link ExecutionSubscriber} implementation
-             * provided by this extension (which persists property changes to the execution log) is enabled or not.
+             * provided by this extension (which persists executions to the execution log) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link ExecutionSubscriber} that is
+             *     provided by the <i>executionLog</i> extension.  Because executions are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
              */
             @Getter @Setter
             private PersistPolicy persist = PersistPolicy.ENABLED;
@@ -3212,19 +3212,11 @@ public class CausewayConfiguration {
              */
             public enum PersistPolicy {
                 /**
-                 * Persist to the audit trail.  This is the default.
+                 * Persist to the outbox.  This is the default.
                  */
                 ENABLED,
                 /**
-                 * Do <i>NOT</i> persist to the audit trail.
-                 *
-                 * <p>
-                 *     One reason to use this option is if you wish to provide your own implementation that wraps
-                 *     or delegates to the outbox implementation of {@link ExecutionSubscriber} that is
-                 *     provided by the <i>executionOutbox</i> extension.  Because executions are published to
-                 *     <i>all</i> subscribers on the class path, you can disable the outbox implementation from
-                 *     doing anything using this setting.
-                 * </p>
+                 * Do <i>NOT</i> persist to the outbox.
                  */
                 DISABLED;
 
@@ -3235,6 +3227,14 @@ public class CausewayConfiguration {
             /**
              * Whether the {@link ExecutionSubscriber}
              * implementation provided by this extension (which persists executions to the outbox) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the outbox implementation of {@link ExecutionSubscriber} that is
+             *     provided by the <i>executionOutbox</i> extension.  Because executions are published to
+             *     <i>all</i> subscribers on the class path, you can disable the outbox implementation from
+             *     doing anything using this setting.
+             * </p>
              */
             @Getter @Setter
             private ExecutionOutbox.PersistPolicy persist = ExecutionOutbox.PersistPolicy.ENABLED;
