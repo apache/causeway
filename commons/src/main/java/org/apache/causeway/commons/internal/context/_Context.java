@@ -21,13 +21,13 @@ package org.apache.causeway.commons.internal.context;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._With;
 import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.NonNull;
@@ -170,7 +170,9 @@ public final class _Context {
      * @param fallback non-null
      */
     public static <T> T getOrElse(final Class<? super T> type, final @NonNull Supplier<T> fallback) {
-        return _With.ifPresentElseGet(getIfAny(type), fallback);
+        return Optional
+                .ofNullable(_Casts.<T>uncheckedCast(getIfAny(type)))
+                .orElseGet(fallback);
     }
 
     /**
@@ -183,7 +185,9 @@ public final class _Context {
     public static <T, E extends Exception> T getElseThrow (
             final @NonNull Class<? super T> type,
             final @NonNull Supplier<E> onNotFound) throws E {
-        return _With.ifPresentElseThrow(getIfAny(type), onNotFound);
+        return Optional
+                .ofNullable(_Casts.<T>uncheckedCast(getIfAny(type)))
+                .orElseThrow(onNotFound);
     }
 
     /**
@@ -192,8 +196,10 @@ public final class _Context {
      * @param type non-null
      */
     public static <T> T getElseFail(final Class<? super T> type) {
-        return _With.ifPresentElseThrow(getIfAny(type), ()->
-        new NoSuchElementException(String.format("Could not resolve an instance of type '%s'", type.getName())));
+        return Optional
+                .ofNullable(_Casts.<T>uncheckedCast(getIfAny(type)))
+                .orElseThrow(()->new NoSuchElementException(
+                        String.format("Could not resolve an instance of type '%s'", type.getName())));
     }
 
 
