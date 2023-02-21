@@ -20,7 +20,7 @@ You can therefore easily check the documentation before raising a pull request (
 For details of authoring/updating the documents and website, see the xref:conguide:documentation:about.adoc[Contributors' Guide].
 
 Publishing is performed by copying the generated HTML to a different git repository (link:https://github.com/apache/causeway-site.git[causeway-site]).
-This is synced by ASF infrastructure over to link:http://causeway.apache.org[causeway.apache.org].
+This is synced by ASF infrastructure over to link:https://causeway.apache.org[causeway.apache.org].
 This can only be done by Apache Causeway committers, and is discussed below.
 
 == One-time setup

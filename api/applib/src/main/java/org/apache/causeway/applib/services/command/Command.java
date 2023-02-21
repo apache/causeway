@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * intention per (web) request, so a command is in effect interaction-scoped.
  *
  * <p>
- * Each Command holds a {@link CommandDto} (see Apache Causeway <a href="http://causeway.apache.org/schema/cmd/">cmd</a> schema)
+ * Each Command holds a {@link CommandDto} (see Apache Causeway <a href="https://causeway.apache.org/schema/cmd/">cmd</a> schema)
  * which reifies all the details in a serializable form.
  * </p>
  *

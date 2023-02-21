@@ -170,7 +170,7 @@ public final class XmlSchema {
             throw new IllegalArgumentException("XSD Document must have <xs:schema> element attached");
         }
 
-        // targetNamespace="http://causeway.apache.org/ns/app/<fully qualified class
+        // targetNamespace="https://causeway.apache.org/ns/app/<fully qualified class
         // name>
         xsSchemaElement.setAttribute("targetNamespace", getUri());
 
@@ -563,7 +563,7 @@ public final class XmlSchema {
      *
      * <pre>
      *     xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-     *     xsi:schemaLocation=&quot;http://causeway.apache.org/ns/app/sdm.common.fixture.schemes.ao.communications ddd.xsd&quot;
+     *     xsi:schemaLocation=&quot;https://causeway.apache.org/ns/app/sdm.common.fixture.schemes.ao.communications ddd.xsd&quot;
      * </pre>
      *
      * Assumes that the URI has been specified.
@@ -581,7 +581,7 @@ public final class XmlSchema {
         // xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         addNamespace(rootElement, XsMetaModel.W3_ORG_XSI_PREFIX, XsMetaModel.W3_ORG_XSI_URI);
 
-        // xsi:schemaLocation="http://causeway.apache.org/ns/app/<fully qualified
+        // xsi:schemaLocation="https://causeway.apache.org/ns/app/<fully qualified
         // class name>
         // sdm.common.fixture.schemes.ao.communications
         // sdm.common.fixture.schemes.ao.communications.AO11ConfirmAnimalRegistration.xsd"

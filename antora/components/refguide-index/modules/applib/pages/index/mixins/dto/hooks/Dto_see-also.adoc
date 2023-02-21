@@ -89,7 +89,7 @@ The package should also have a `package-info.java`; it is this that declares the
     namespace = "http://viewmodels.app.todoapp/todoitem/v1/Dto.xsd",    // <.>
     xmlns = {
         @javax.xml.bind.annotation.XmlNs(
-            namespaceURI = "http://causeway.apache.org/schema/common",
+            namespaceURI = "https://causeway.apache.org/schema/common",
             prefix = "com"
         )
     },
