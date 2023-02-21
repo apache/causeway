@@ -19,11 +19,10 @@
 package org.apache.causeway.tooling.c4.test;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.BasicPlantUMLWriter;
+import com.structurizr.export.plantuml.StructurizrPlantUMLExporter;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.SystemContextView;
@@ -81,13 +80,19 @@ class C4Test {
 
         // Now the view needs to be rendered.
 
-        val stringWriter = new StringWriter();
-        val plantUMLWriter = new BasicPlantUMLWriter();
-        plantUMLWriter.write(workspace, stringWriter);
+        val sb = new StringBuffer();
+        val plantUMLExporter = new StructurizrPlantUMLExporter();
+        plantUMLExporter.export(workspace).forEach(diagram->sb.append(diagram.getDefinition()));
+
+        System.err.println("---");
+        System.err.printf("%s%n", sb.toString());
+        System.err.println("---");
 
         _Text.assertTextEquals(
                 _Text.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8),
-                stringWriter.toString());
+                sb.toString());
+
+
     }
 
     /**

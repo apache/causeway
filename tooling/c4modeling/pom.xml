@@ -41,13 +41,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-plantuml</artifactId>
+		    <groupId>com.structurizr</groupId>
+		    <artifactId>structurizr-export</artifactId>
 		</dependency>
 
 	</dependencies>
