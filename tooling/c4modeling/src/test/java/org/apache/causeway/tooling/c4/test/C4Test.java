@@ -83,16 +83,13 @@ class C4Test {
         val sb = new StringBuffer();
         val plantUMLExporter = new StructurizrPlantUMLExporter();
         plantUMLExporter.export(workspace).forEach(diagram->sb.append(diagram.getDefinition()));
+        val plantUmlSource = sb.toString();
 
-        System.err.println("---");
-        System.err.printf("%s%n", sb.toString());
-        System.err.println("---");
+        dump(plantUmlSource);
 
         _Text.assertTextEquals(
                 _Text.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8),
-                sb.toString());
-
-
+                plantUmlSource);
     }
 
     /**
@@ -123,7 +120,7 @@ class C4Test {
 
         val plantUmlSource = c4.toPlantUML(contextView);
 
-        System.out.println(plantUmlSource); //debug
+        dump(plantUmlSource);
 
         _Text.assertTextEquals(
                 _Text.readLinesFromResource(this.getClass(), "baeldung-example-v2.puml", StandardCharsets.UTF_8),
@@ -131,5 +128,13 @@ class C4Test {
 
     }
 
+    // -- HELPER
+
+    // debug
+    private void dump(final String plantUmlSource){
+        // System.err.println("---");
+        // System.out.println(plantUmlSource);
+        // System.err.println("---");
+    }
 
 }
