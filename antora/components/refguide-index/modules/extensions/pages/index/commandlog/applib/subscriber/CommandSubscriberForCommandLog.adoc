@@ -9,6 +9,7 @@ Implementation of xref:refguide:applib:index/services/publishing/spi/CommandSubs
 .CommandSubscriberForCommandLog.java
 ----
 class CommandSubscriberForCommandLog {
+  boolean isEnabled()
   void onCompleted(Command command)
 }
 ----

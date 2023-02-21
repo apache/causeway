@@ -34,6 +34,6 @@
                 @jakarta.xml.bind.annotation.XmlNs(
                         namespaceURI = "https://causeway.apache.org/applib/layout/component", prefix = "cpt")
         }        // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
-        //, location = ..."http://causeway.apache.org/schema/metamodel/layout/common/common.xsd"
+        //, location = ..."https://causeway.apache.org/schema/metamodel/layout/common/common.xsd"
         )
 package org.apache.causeway.applib.layout.component;

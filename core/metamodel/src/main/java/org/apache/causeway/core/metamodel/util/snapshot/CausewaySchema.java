@@ -38,7 +38,7 @@ final class CausewaySchema {
      * The base of the namespace URI to use for application namespaces if none
      * explicitly supplied in the constructor.
      */
-    public static final String DEFAULT_URI_BASE = "http://causeway.apache.org/ns/app/";
+    public static final String DEFAULT_URI_BASE = "https://causeway.apache.org/ns/app/";
 
     /**
      * Enumeration of causeway:feature attribute representing a class
@@ -70,7 +70,7 @@ final class CausewaySchema {
      * The NamespaceManager will not allow any namespaces with this URI to be
      * added.
      */
-    public static final String NS_URI = "http://causeway.apache.org/ns/0.1/metamodel";
+    public static final String NS_URI = "https://causeway.apache.org/ns/0.1/metamodel";
 
     private final Helper helper;
 

@@ -34,7 +34,7 @@ import jakarta.inject.Named;
  * schema, that of the DTO itself.  The {@link Dto_downloadXsd} mixin uses this to return that single XSD,
  * rather than generating a ZIP of two schemas (the Causeway schema and the one for the DTO), as it would otherwise;
  * far more convenient when debugging and so on.  The Causeway schemas can always be
- * <a href="http://causeway.apache.org/schema">downloaded</a> from the Causeway website.
+ * <a href="https://causeway.apache.org/schema">downloaded</a> from the Causeway website.
  * </p>
  *
  * @since 1.0 {@index}
