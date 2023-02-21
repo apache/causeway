@@ -9,8 +9,8 @@ Implementation of the Causeway xref:refguide:applib:index/services/publishing/sp
 .EntityPropertyChangeSubscriberForAuditTrail.java
 ----
 class EntityPropertyChangeSubscriberForAuditTrail {
-  void onChanging(EntityPropertyChange entityPropertyChange)
   boolean isEnabled()
+  void onChanging(EntityPropertyChange entityPropertyChange)
 }
 ----
 

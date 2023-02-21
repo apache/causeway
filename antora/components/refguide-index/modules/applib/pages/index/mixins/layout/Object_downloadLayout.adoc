@@ -39,3 +39,5 @@ Defaults to the (simple) name of the domain object's class, with a `.layout` suf
 === default1Act()
 
 Default style is _LayoutExportStyle#MINIMAL_ .
+
+include::hooks/Object_downloadLayout_see-also.adoc[]
