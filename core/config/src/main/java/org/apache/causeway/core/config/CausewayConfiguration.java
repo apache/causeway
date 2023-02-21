@@ -53,8 +53,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
-import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -69,14 +67,18 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
+import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -88,7 +90,6 @@ import org.apache.causeway.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -2898,7 +2899,6 @@ public class CausewayConfiguration {
              *     doing anything using this setting.
              * </p>
              */
-            @Getter @Setter
             private PersistPolicy persist = PersistPolicy.ENABLED;
         }
 
@@ -2940,7 +2940,6 @@ public class CausewayConfiguration {
              *     doing anything using this setting.
              * </p>
              */
-            @Getter @Setter
             private PersistPolicy persist = PersistPolicy.ENABLED;
 
             public enum PublishPolicy {
@@ -2965,7 +2964,6 @@ public class CausewayConfiguration {
              *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
              * </p>
              */
-            @Getter @Setter
             private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
 
         }
@@ -3181,7 +3179,6 @@ public class CausewayConfiguration {
              *     doing anything using this setting.
              * </p>
              */
-            @Getter @Setter
             private PersistPolicy persist = PersistPolicy.ENABLED;
         }
 
@@ -3236,7 +3233,6 @@ public class CausewayConfiguration {
              *     doing anything using this setting.
              * </p>
              */
-            @Getter @Setter
             private ExecutionOutbox.PersistPolicy persist = ExecutionOutbox.PersistPolicy.ENABLED;
 
         }
@@ -3360,7 +3356,6 @@ public class CausewayConfiguration {
                          *
                          * @see NamespacePermissions#getSticky()
                          */
-                        @Getter @Setter
                         private List<String> additional = ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS;
 
                     }
@@ -3410,7 +3405,6 @@ public class CausewayConfiguration {
                  *     or Keycloak as the authenticator; users are always auto-created.
                  * </p>
                  */
-                @Getter @Setter
                 private AutoCreatePolicy autoCreatePolicy = AutoCreatePolicy.AUTO_CREATE_AS_LOCKED;
 
                 /**
