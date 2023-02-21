@@ -22,10 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.commons.collections.Can;
@@ -34,16 +37,21 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service @Log4j2
+@Service
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Testing")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class EntityPropertyChangeSubscriberForTesting
 implements EntityPropertyChangeSubscriber {
 
-    @Inject private KVStoreForTesting kvStore;
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    private final KVStoreForTesting kvStore;
+    private final SpecificationLoader specificationLoader;
+    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
     @PostConstruct
     public void init() {
@@ -80,14 +88,14 @@ implements EntityPropertyChangeSubscriber {
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<String> getPropertyChangeEntries(KVStoreForTesting kvStore) {
+    public static Can<String> getPropertyChangeEntries(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<String>) kvStore
                 .get(EntityPropertyChangeSubscriberForTesting.class, "propertyChangeEntries")
                 .orElse(null));
     }
 
-    public static void clearPropertyChangeEntries(KVStoreForTesting kvStore) {
+    public static void clearPropertyChangeEntries(final KVStoreForTesting kvStore) {
         kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
 

@@ -1,6 +1,8 @@
-@startuml(id=context)
+@startuml
+set separator none
 title Payment Terminal - System Context
-caption Payment Gateway Diagram
+
+top to bottom direction
 
 skinparam {
   shadowing false
@@ -9,25 +11,29 @@ skinparam {
   wrapWidth 200
   maxMessageSize 100
 }
+
 hide stereotype
-skinparam rectangle<<1>> {
+
+skinparam rectangle<<FraudDetector>> {
+  BackgroundColor #dddddd
+  FontColor #fffffe
+  BorderColor #9a9a9a
+}
+skinparam person<<Merchant>> {
   BackgroundColor #08427b
   FontColor #ffffff
   BorderColor #052e56
 }
-skinparam rectangle<<2>> {
+skinparam rectangle<<PaymentTerminal>> {
   BackgroundColor #dddddd
   FontColor #fffffe
   BorderColor #9a9a9a
 }
-skinparam rectangle<<3>> {
-  BackgroundColor #dddddd
-  FontColor #fffffe
-  BorderColor #9a9a9a
-}
-rectangle "==Merchant\n<size:10>[Person]</size>\n\nMerchant" <<1>> as 1
-rectangle "==Fraud Detector\n<size:10>[Software System]</size>\n\nFraud Detector" <<3>> as 3
-rectangle "==Payment Terminal\n<size:10>[Software System]</size>\n\nPayment Terminal" <<2>> as 2
-1 .[#707070,thickness=2].> 2 : "Makes payment"
-2 .[#707070,thickness=2].> 3 : "Obtains fraud score"
+
+person "==Merchant\n<size:10>[Person]</size>\n\nMerchant" <<Merchant>> as Merchant
+rectangle "==Payment Terminal\n<size:10>[Software System]</size>\n\nPayment Terminal" <<PaymentTerminal>> as PaymentTerminal
+rectangle "==Fraud Detector\n<size:10>[Software System]</size>\n\nFraud Detector" <<FraudDetector>> as FraudDetector
+
+Merchant .[#707070,thickness=2].> PaymentTerminal : "<color:#707070>Makes payment"
+PaymentTerminal .[#707070,thickness=2].> FraudDetector : "<color:#707070>Obtains fraud score"
 @enduml

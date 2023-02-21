@@ -19,11 +19,10 @@
 package org.apache.causeway.tooling.c4.test;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.BasicPlantUMLWriter;
+import com.structurizr.export.plantuml.StructurizrPlantUMLExporter;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.SystemContextView;
@@ -81,13 +80,16 @@ class C4Test {
 
         // Now the view needs to be rendered.
 
-        val stringWriter = new StringWriter();
-        val plantUMLWriter = new BasicPlantUMLWriter();
-        plantUMLWriter.write(workspace, stringWriter);
+        val sb = new StringBuffer();
+        val plantUMLExporter = new StructurizrPlantUMLExporter();
+        plantUMLExporter.export(workspace).forEach(diagram->sb.append(diagram.getDefinition()));
+        val plantUmlSource = sb.toString();
+
+        dump(plantUmlSource);
 
         _Text.assertTextEquals(
                 _Text.readLinesFromResource(this.getClass(), "baeldung-example-v1.puml", StandardCharsets.UTF_8),
-                stringWriter.toString());
+                plantUmlSource);
     }
 
     /**
@@ -118,7 +120,7 @@ class C4Test {
 
         val plantUmlSource = c4.toPlantUML(contextView);
 
-        System.out.println(plantUmlSource); //debug
+        dump(plantUmlSource);
 
         _Text.assertTextEquals(
                 _Text.readLinesFromResource(this.getClass(), "baeldung-example-v2.puml", StandardCharsets.UTF_8),
@@ -126,5 +128,13 @@ class C4Test {
 
     }
 
+    // -- HELPER
+
+    // debug
+    private void dump(final String plantUmlSource){
+        // System.err.println("---");
+        // System.out.println(plantUmlSource);
+        // System.err.println("---");
+    }
 
 }

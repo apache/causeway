@@ -38,20 +38,20 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
         semantics = SemanticsOf.SAFE,
-        domainEvent = HasUsername_open.ActionDomainEvent.class
+        domainEvent = HasUsername_associatedUser.ActionDomainEvent.class
 )
 @ActionLayout(
         associateWith = "user", // associate with a 'User' property (if any)
         sequence = "1"
 )
 @RequiredArgsConstructor
-public class HasUsername_open {
+public class HasUsername_associatedUser {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
 
     private final HasUsername target;
 
-    public static class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<HasUsername_open> {}
+    public static class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<HasUsername_associatedUser> {}
 
     @MemberSupport public ApplicationUser act() {
         if (target == null || target.getUsername() == null) {

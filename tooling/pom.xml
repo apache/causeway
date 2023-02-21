@@ -43,14 +43,11 @@
 		<maven-model-builder.version>3.9.0</maven-model-builder.version>
 		<picocli.version>4.7.1</picocli.version>
 		
-		<!-- structurizr-core 1.20+ needs structurizr-plantuml newer than 1.6.3,
-			which is not availabale as of yet (19-feb-2023) -->
-		<structurizr.version>1.19.0</structurizr.version> 
-		<structurizr-plantuml.version>1.6.3</structurizr-plantuml.version>
+		<!-- brings in structurizr-core as a transitive dependency -->
+		<structurizr-export.version>1.10.0</structurizr-export.version>
 		
 		<!-- override surefire defaults from bom, as this is not a Java module yet -->
 		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
-
 	</properties>
 
 	<build>
@@ -230,15 +227,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.structurizr</groupId>
-				<artifactId>structurizr-core</artifactId>
-				<version>${structurizr.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.structurizr</groupId>
-				<artifactId>structurizr-plantuml</artifactId>
-				<version>${structurizr-plantuml.version}</version>
+			    <groupId>com.structurizr</groupId>
+			    <artifactId>structurizr-export</artifactId>
+			    <version>${structurizr-export.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -295,7 +286,6 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>

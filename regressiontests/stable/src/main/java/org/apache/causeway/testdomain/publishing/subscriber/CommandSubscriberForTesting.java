@@ -22,24 +22,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Testing")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandSubscriberForTesting
 implements CommandSubscriber {
 
-    @Inject private KVStoreForTesting kvStore;
+    private final KVStoreForTesting kvStore;
 
     @PostConstruct
     public void init() {
@@ -47,7 +54,7 @@ implements CommandSubscriber {
     }
 
     @Override
-    public void onCompleted(Command command) {
+    public void onCompleted(final Command command) {
 
         @SuppressWarnings("unchecked")
         val publishedCommands =
@@ -62,13 +69,13 @@ implements CommandSubscriber {
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<Command> getPublishedCommands(KVStoreForTesting kvStore) {
+    public static Can<Command> getPublishedCommands(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "publishedCommands")
                 .orElse(null));
     }
 
-    public static void clearPublishedCommands(KVStoreForTesting kvStore) {
+    public static void clearPublishedCommands(final KVStoreForTesting kvStore) {
         kvStore.clear(CommandSubscriberForTesting.class);
     }
 

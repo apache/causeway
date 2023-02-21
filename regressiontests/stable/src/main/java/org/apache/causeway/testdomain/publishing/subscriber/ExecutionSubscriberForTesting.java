@@ -22,10 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.util.schema.MemberExecutionDtoUtils;
@@ -33,15 +36,19 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Testing")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class ExecutionSubscriberForTesting
 implements ExecutionSubscriber {
 
-    @Inject private KVStoreForTesting kvStore;
+    private final KVStoreForTesting kvStore;
 
     @PostConstruct
     public void init() {
