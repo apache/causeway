@@ -24,10 +24,11 @@ import org.apache.causeway.client.kroviz.to.DomainTypes
 import org.apache.causeway.client.kroviz.to.User
 import org.apache.causeway.client.kroviz.to.Version
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
+import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.utils.ImageUtils
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 
-class SystemAggregator() : BaseAggregator() {
+class SystemAggregator : BaseAggregator() {
 
     init {
         displayModel = SystemDM("not filled (yet)")
@@ -42,13 +43,13 @@ class SystemAggregator() : BaseAggregator() {
                 if (logEntry.blob != null) {
                     val icon = ImageUtils.extractIcon(logEntry)
                     val url = logEntry.url
-                    val isApplicationIcon = UrlUtils.isApplicationIcon(url)
-                    when (isApplicationIcon) {
+                    when (UrlUtils.isApplicationIcon(url)) {
                         url.contains("48") -> {
                             (displayModel as SystemDM).addSmallIcon(icon)
                             val iconUrl = icon.image.src
                             SessionManager.setApplicationIcon(iconUrl)
                         }
+
                         url.contains("256") -> (displayModel as SystemDM).addLargeIcon(icon)
                         else -> log(logEntry)
                     }
@@ -59,7 +60,7 @@ class SystemAggregator() : BaseAggregator() {
         }
 
         if (displayModel.readyToRender()) {
-//  TODO          UiManager.openObjectView(this)
+            ViewManager.openObjectView(this)
         }
     }
 

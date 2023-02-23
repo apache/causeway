@@ -35,7 +35,8 @@ import org.apache.causeway.client.kroviz.utils.StringUtils
  * (3) ???_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
+class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout() {
+    private var isContainedInParentCollection = false
 
     init {
         displayModel = ObjectDM(actionTitle)
@@ -43,7 +44,9 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
 
     override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
-        if (!logEntry.isUpdatedFromParentedCollection()) {
+        if (logEntry.isUpdatedFromParentedCollection()) {
+            isContainedInParentCollection = true
+        } else {
             val referrer = logEntry.url
             when (val obj = logEntry.getTransferObject()) {
                 is TObject -> handleObject(obj, referrer)
@@ -99,10 +102,15 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         return displayModel.getObject()
     }
 
-    private fun handleProperty(property: Property, referrer: String) {
-        //(property, referrer) //FIXME
-        console.log("[OA_handleProperty] not handled")
-        console.log(property)
+    private fun handleProperty(p: Property, referrer: String) {
+        val dm = getDisplayModel()
+        if (p.isPropertyDescription()) {
+            dm.addPropertyDescription(p)
+        } else {
+            dm.addProperty(p)
+            val pdl = p.getDescriptionLink() ?: return
+            invoke(pdl, this, referrer = referrer)
+        }
     }
 
     private fun handleGrid(grid: GridBs, referrer: String) {
@@ -131,7 +139,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     /**
-     * This is done in order to have the parent check, if it and it's children can be displayed
+     * This is done in order to have the parent check, if itself and it's children can be displayed
      */
     private fun LogEntry.isUpdatedFromParentedCollection(): Boolean {
         return this.url == ""

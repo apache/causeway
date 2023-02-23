@@ -50,7 +50,7 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
             }
             to is Restful -> {}
             else -> {
-                console.log(to)
+//                console.log(to)
 //                throw Throwable("[ActionDispatcher.update] ${to!!::class.simpleName}")
             }
         }

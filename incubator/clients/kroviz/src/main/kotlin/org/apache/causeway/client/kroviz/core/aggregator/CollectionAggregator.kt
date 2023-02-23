@@ -108,7 +108,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
 
         // collection layout needs only to be initialized once with an object (pars pro toto, prototype)
         // obj acts as a kind prototype - we assume all elements in the collection have the same structure
-        val propertySpecificationHolder = getDisplayModel().propertySpecificationHolder
+        val propertySpecificationHolder = getDisplayModel().columnSpecificationHolder
         if (!propertySpecificationHolder.isInitialized()) {
             val members = tObj.getProperties()
             members.forEach { m ->

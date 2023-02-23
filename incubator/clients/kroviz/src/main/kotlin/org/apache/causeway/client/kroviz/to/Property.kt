@@ -39,6 +39,12 @@ data class Property(
         return getType() == Represention.OBJECT_PROPERTY
     }
 
+    fun getDescriptionLink(): Link? {
+        return this.links.firstOrNull {
+            it.rel == Relation.DESCRIBED_BY.type
+        }
+    }
+
     fun isPropertyDescription(): Boolean {
         return getType() == Represention.PROPERTY_DESCRIPTION
     }

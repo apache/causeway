@@ -25,7 +25,7 @@ import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
-
+    val properties = ObjectSpecificationHolder()
     init {
         layout = ObjectLayout()
     }
@@ -53,7 +53,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {
-        return collectionModelList.find { it.id == id }!!
+        return collectionModelList.firstOrNull() { it.id == id }!!
     }
 
     override fun readyToRender(): Boolean {
@@ -61,10 +61,10 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             data == null -> false
             isRendered -> false
             layout == null -> false
-            collectionModelList.size == 0 -> false
             else -> layout!!.readyToRender() && areCollectionsReadyToRender()
         }
     }
+
 
     private fun areCollectionsReadyToRender(): Boolean {
         collectionModelList.forEach {
@@ -84,6 +84,15 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
 //FIXME            layout?.addObjectProperty(op, aggregator!!, referrer!!)
         }
     }
+
+    fun addPropertyDescription(p: Property) {
+        properties.addPropertyDescription(p)
+    }
+
+    fun addProperty(property: Property) {
+        properties.addProperty(property)
+    }
+
 
     fun addResult(resultObject: ResultObject) {
         val tObj = createObjectFrom(resultObject)

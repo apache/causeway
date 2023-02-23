@@ -27,7 +27,7 @@ import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class CollectionDM(override val title: String) : DisplayModelWithLayout() {
-    val propertySpecificationHolder = PropertySpecificationHolder()
+    val columnSpecificationHolder = ColumnSpecificationHolder()
 
     var id = ""
     var data = observableListOf<Exposer>()
@@ -45,13 +45,13 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
 
     private fun addPropertyDetails(propertyBs: PropertyBs) {
         val id = propertyBs.id
-        val ps = propertySpecificationHolder.getPropertySpecification(id)
+        val ps = columnSpecificationHolder.getPropertySpecification(id)
         ps.amendWith(propertyBs)
     }
 
     fun addPropertyDescription(propertyDescription: PropertyDescription) {
         val id = propertyDescription.id
-        val ps = propertySpecificationHolder.getPropertySpecification(id)
+        val ps = columnSpecificationHolder.getPropertySpecification(id)
         ps.amendWith(propertyDescription)
     }
 
@@ -64,7 +64,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return propertySpecificationHolder.readyToRender()
+        return columnSpecificationHolder.readyToRender()
     }
 
     fun getTitle(): String {

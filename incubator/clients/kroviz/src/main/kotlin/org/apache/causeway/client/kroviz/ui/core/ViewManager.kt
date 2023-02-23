@@ -29,6 +29,7 @@ import kotlinx.browser.window
 import org.apache.causeway.client.kroviz.App
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
+import org.apache.causeway.client.kroviz.core.aggregator.SystemAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.UndefinedDispatcher
 import org.apache.causeway.client.kroviz.core.event.EventStore
 import org.apache.causeway.client.kroviz.core.event.StatusPo
@@ -172,6 +173,14 @@ object ViewManager {
         setNormalCursor()
     }
 
+    fun openObjectView(aggregator: SystemAggregator) {
+        console.log("[VM_openObjectView]")
+        val dm = aggregator.displayModel
+/*        val panel = RoDisplay(dm)
+        add(aggregator.getTitle(), panel, aggregator)*/
+        dm.isRendered = true
+        setNormalCursor()
+    }
     fun openObjectView(aggregator: ObjectAggregator) {
         val dm = aggregator.getDisplayModel()
         val panel = RoDisplay(dm)
