@@ -53,7 +53,9 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {
-        return collectionModelList.firstOrNull() { it.id == id }!!
+        console.log("[ODM_getCollectionDisplayModelFor] answers null under some conditions")
+        console.log(collectionModelList)
+        return collectionModelList.firstOrNull { it.id == id }!!
     }
 
     override fun readyToRender(): Boolean {
@@ -78,11 +80,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
-        obj.getProperties().forEach { m ->
-            val p = createPropertyFrom(m)
-            val op = ObjectProperty(p)
-//FIXME            layout?.addObjectProperty(op, aggregator!!, referrer!!)
-        }
     }
 
     fun addPropertyDescription(p: Property) {
@@ -92,7 +89,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     fun addProperty(property: Property) {
         properties.addProperty(property)
     }
-
 
     fun addResult(resultObject: ResultObject) {
         val tObj = createObjectFrom(resultObject)
@@ -110,7 +106,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
             val es = SessionManager.getEventStore()
-            //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTing, it may fail
+            //WATCH OUT this is sequence dependent: GET and PUT share the same URL - if called after PUTing, it may fail
             val getLogEntry = es.findBy(reSpec)!!
             getLogEntry.setReload()
 
@@ -129,20 +125,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         if (dirty) {
             reset()
         }
-    }
-
-    private fun createPropertyFrom(m: Member): Property {
-        return Property(
-            id = m.id,
-            memberType = m.memberType,
-            links = m.links,
-            optional = m.optional,
-            title = m.id,
-            value = m.value,
-            extensions = m.extensions,
-            format = m.format,
-            disabledReason = m.disabledReason
-        )
     }
 
     private fun createObjectFrom(resultObject: ResultObject): TObject {

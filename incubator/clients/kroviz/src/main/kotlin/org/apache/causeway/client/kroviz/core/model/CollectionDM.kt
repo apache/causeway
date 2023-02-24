@@ -35,6 +35,12 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     private var protoType: TObject? = null
     private var protoTypeLayout: GridBs? = null
 
+    fun getTitle(): String {
+        if (title.isNotEmpty()) return StringUtils.extractTitle(title)
+        if (id.isNotEmpty()) return id.uppercase()
+        return "leer"
+    }
+
     fun setProtoTypeLayout(grid: GridBs) {
         protoTypeLayout = grid
         val propertyList = grid.getPropertyList()
@@ -64,11 +70,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return columnSpecificationHolder.readyToRender()
-    }
-
-    fun getTitle(): String {
-        return StringUtils.extractTitle(title)
+        return id.isNotEmpty() && columnSpecificationHolder.readyToRender()
     }
 
     override fun addData(obj: TransferObject) {

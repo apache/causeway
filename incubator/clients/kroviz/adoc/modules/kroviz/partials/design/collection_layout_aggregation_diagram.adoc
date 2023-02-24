@@ -78,7 +78,7 @@ together {
     ObjectAggregator --> ObjectDM
     ObjectDM --> ObjectLayout
 }
-ObjectAggregator ..> GridBs : handles
+ObjectDM <.. GridBs : added to
 
 'collection
 together {
@@ -90,41 +90,34 @@ together {
     }
     class CollectionDM <<(M,coral)DisplayModel>> #lightyellow {
         id
-        layout
         data[]: Exposer
         readyToRender()
+        addPropertyDescription()
     }
-    class CollectionLayout <<(L,coral)Layout>> #pink{
-        numberOfColumns
-        propertySpecificationList
+    class ColumnSpecificationHolder <<(L,coral)Layout>> #pink{
+        columnSpecificationList
+        readyToRender()
+    }
+    class ColumnSpecification <<(L,coral)Layout>> #pink{
+        id
+        name
+        hidden
+        disabled
+        amendWith(pbs: PropertyBs)
+        amendWith(pd: PropertyDescription)
         readyToRender()
     }
     CollectionAggregator --> CollectionDM
-    CollectionDM --> CollectionLayout
+    CollectionDM --> ColumnSpecificationHolder
+    ColumnSpecificationHolder o-r-> ColumnSpecification
 }
 ObjectDM o-r-> CollectionDM
-ObjectLayout o-> CollectionLayout
 
 ' references between Layout and TO classes
-CollectionLayout ..> TObject : handles
-CollectionLayout ..> ObjectProperty : handles
-CollectionLayout ..> PropertyDescription : handles
+ColumnSpecificationHolder <.. TObject : added to
+ColumnSpecificationHolder <.. ObjectProperty : added to
+ColumnSpecificationHolder <.. PropertyDescription : added to
 
-note left of CollectionLayout #gold
-* the number of columns
-is to be set from object/TObject
-* for each
-attribute/property/column
-get object-property
-*for each object-property,
-get the property-description
-(friendlyName)
-end note
-
-note right of CollectionAggregator #gold
-iterate over value[]
-and add data to DisplayModel
-end note
 
 legend left
     <back:#lightblue> Description           </back>

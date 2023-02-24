@@ -29,22 +29,9 @@ import org.apache.causeway.client.kroviz.to.bs.RowBs
 class ObjectLayout : BaseLayout() {
 
     var grid: GridBs? = null
-    //FIXME
-//    private val collectionLayoutList = mutableListOf< CollectionLayout>()
 
     override fun readyToRender(): Boolean {
-        return when (grid) {
-            null -> false
-            else -> {
-                var answer = true
- /*               collectionLayoutList.forEach {
-                    if (!it.readyToRender()) {
-                        answer = false
-                    }
-                }*/
-                answer
-            }
-        }
+        return grid != null
     }
 
     fun addGrid(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {

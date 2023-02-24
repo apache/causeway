@@ -19,12 +19,10 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.layout.PropertyLt
-import org.apache.causeway.client.kroviz.to.Extensions
 import org.apache.causeway.client.kroviz.to.Property
 
 @Deprecated("Rework/Rename")
 class ObjectSpecificationHolder {
-    val list = mutableListOf<ColumnProperties>()
     private var propertyDescriptionList = mutableListOf<Property>()
     private var propertyLayoutList = mutableListOf<PropertyLt>()
     var propertyList = mutableListOf<Property>()
@@ -40,30 +38,10 @@ class ObjectSpecificationHolder {
 
     fun addProperty(property: Property) {
         propertyList.add(property)
-        val id = property.id
-        val cp = findOrCreate(id)
-        cp.property = property
     }
 
     fun addPropertyDescription(description: Property) {
         propertyDescriptionList.add(description)
-        val id = description.id
-        val cp = findOrCreate(id)
-        val e: Extensions = description.extensions!!
-        cp.friendlyName = e.getFriendlyName()
-    }
-
-    private fun findOrCreate(id: String): ColumnProperties {
-        var cp = find(id)
-        if (cp == null) {
-            cp = ColumnProperties(id)
-            list.add(cp)
-        }
-        return cp
-    }
-
-    fun find(id: String): ColumnProperties? {
-        return list.find { it.key == id }
     }
 
 }

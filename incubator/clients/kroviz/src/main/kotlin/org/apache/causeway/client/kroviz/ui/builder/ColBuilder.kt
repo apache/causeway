@@ -70,10 +70,11 @@ class ColBuilder : UiBuilder() {
             val objectDM = dsp.displayModel
             val cdm = objectDM.getCollectionDisplayModelFor(id)
             if (cdm != null) {
-            val fsPanel = FieldsetPanel(legend = cdm.getTitle())
-            fsPanel.add(RoTable(cdm))
-            panel.add(fsPanel)
-            cdm.isRendered = true}
+                val fsPanel = FieldsetPanel(legend = cdm.getTitle())
+                fsPanel.add(RoTable(cdm))
+                panel.add(fsPanel)
+                cdm.isRendered = true
+            }
         }
         return panel
     }
