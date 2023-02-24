@@ -30,14 +30,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
-import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -243,10 +241,7 @@ public class RestEndpointService {
                 .build();
 
         val response = request.post(args);
-
-        val digest = client.digest(response, String.class)
-                .mapSuccess(stringifiedVal -> ValueDecomposition.destringify(ValueType.COMPOSITE, stringifiedVal))
-                .mapSuccess(valDecomposition->calSemantics.compose(valDecomposition));
+        val digest = client.digestValue(response, calSemantics);
 
         return digest;
     }
