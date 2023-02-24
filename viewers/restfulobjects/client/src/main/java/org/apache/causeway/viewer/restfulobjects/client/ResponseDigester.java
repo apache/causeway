@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +25,11 @@ import java.util.Optional;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
@@ -87,10 +83,9 @@ interface ResponseDigester {
         public <T> T readSingle(final Class<T> entityType, final Response response) {
             if(reprType.isValue()
                     || reprType.isValues()) {
-                val mapper = new ObjectMapper();
                 val jsonInput = response.readEntity(String.class);
-                val scalarValueDto = mapper.readValue(jsonInput, ScalarValueDtoV2.class);
-                return extractValue(scalarValueDto);
+                val scalarValueDto = new ObjectMapper().readValue(jsonInput, ScalarValueDtoV2.class);
+                return scalarValueDto.getValueAs(entityType);
             }
             return response.<T>readEntity(entityType);
         }
@@ -100,8 +95,8 @@ interface ResponseDigester {
         public <T> List<T> readList(final Class<T> entityType, final GenericType<List<T>> genericType, final Response response) {
             if(reprType.isValues()
                     || reprType.isValue()) {
-                val mapper = new ObjectMapper();
                 val jsonInput = response.readEntity(String.class);
+                val mapper = new ObjectMapper();
                 final List<ScalarValueDtoV2> scalarValueDtoList =
                         mapper.readValue(
                                 jsonInput,
@@ -110,17 +105,12 @@ interface ResponseDigester {
                 final List<T> resultList = new ArrayList<>(scalarValueDtoList.size());
                 for(val valueBody : scalarValueDtoList) {
                     // explicit loop, for simpler exception propagation
-                    resultList.add(extractValue(valueBody));
+                    resultList.add(valueBody.getValueAs(entityType));
                 }
                 return resultList;
 
             }
             return response.readEntity(genericType);
-        }
-
-        private <T> T extractValue(final ScalarValueDtoV2 scalarValueDto)
-                throws JsonParseException, JsonMappingException, IOException {
-            return _Casts.uncheckedCast(scalarValueDto.getValue());
         }
     }
 

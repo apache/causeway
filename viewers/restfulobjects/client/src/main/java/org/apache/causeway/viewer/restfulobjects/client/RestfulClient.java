@@ -30,6 +30,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -166,6 +168,15 @@ public class RestfulClient implements AutoCloseable {
             return Try.success(listDigest.getEntities());
         }
         return Try.failure(listDigest.getFailureCause());
+    }
+
+    /**
+     * For transport of {@link ValueDecomposition} over REST.
+     * @see ActionParameterListBuilder#addActionParameter(String, ValueDecomposition)
+     */
+    public <T> Try<T> digestValue(final Response response, final ValueSemanticsProvider<T> valSemantics) {
+        return digest(response, ValueDecomposition.class)
+                .mapSuccess(valDecomposition->valSemantics.compose(valDecomposition));
     }
 
     // -- UTILITY

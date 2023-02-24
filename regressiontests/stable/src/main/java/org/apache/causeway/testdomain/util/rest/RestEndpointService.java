@@ -34,6 +34,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -223,6 +225,23 @@ public class RestEndpointService {
 
         val response = request.post(args);
         val digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
+
+        return digest;
+    }
+
+    public Try<CalendarEvent> echoCalendarEvent(
+            final RestfulClient client, final CalendarEvent calendarEvent) {
+
+        val calSemantics = new CalendarEventSemantics();
+
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/echoCalendarEvent/invoke");
+        val args = client.arguments()
+                .addActionParameter("calendarEvent", calSemantics.decompose(calendarEvent))
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digestValue(response, calSemantics);
 
         return digest;
     }

@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Either.HasEither;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
@@ -50,7 +51,7 @@ implements
     }
 
     /**
-     * In support of JAXB de-serialization, 
+     * In support of JAXB de-serialization,
      * returns an unspecified type.
      * (Introduced for the CalendarEvent demo to work.)
      * @deprecated not sure why we are hitting this; remove eventually
@@ -74,6 +75,15 @@ implements
         return vType==ValueType.COMPOSITE
             ? ofComposite(CommonDtoUtils.getCompositeValueFromJson(json))
             : ofFundamental(CommonDtoUtils.getFundamentalValueFromJson(vType, json));
+    }
+
+    // for transport over REST
+    public String stringify() {
+        return _Strings.base64UrlEncodeZlibCompressed(toJson());
+    }
+    // for transport over REST
+    public static ValueDecomposition destringify(final ValueType vType, final String string) {
+        return fromJson(vType, _Strings.base64UrlDecodeZlibCompressed(string));
     }
 
 }
