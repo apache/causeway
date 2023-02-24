@@ -38,6 +38,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
@@ -93,10 +94,15 @@ public class JdoInventoryResource {
         return listBooks();
     }
 
-    @Action //TODO improve the REST client such that the param can be of type Book
+    @Action //XXX improve the REST client such that the param can be of type JdoBook?
     public JdoBook storeBook(final String newBook) throws JAXBException {
         val book = JdoBook.fromDto(BookDto.decode(newBook));
         return repository.persist(book);
+    }
+
+    @Action // echos given CalendarEvent (composite value type test)
+    public CalendarEvent echoCalendarEvent(final CalendarEvent calendarEvent) throws JAXBException {
+        return calendarEvent;
     }
 
     // -- NON - ENTITIES
