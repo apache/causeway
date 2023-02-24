@@ -37,12 +37,12 @@ import lombok.NonNull;
 @Data @NoArgsConstructor @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ScalarValueDtoV2 {
 
-   public static ScalarValueDtoV2 forNull(@NonNull Class<?> type) {
-       return new ScalarValueDtoV2(type.getSimpleName(), null);
+   public static ScalarValueDtoV2 forNull(final @NonNull Class<?> type) {
+       return new ScalarValueDtoV2(typeName(type), null);
    }
 
-   public static ScalarValueDtoV2 forValue(@NonNull Object value) {
-       return new ScalarValueDtoV2(value.getClass().getSimpleName(), value);
+   public static ScalarValueDtoV2 forValue(final @NonNull Object value) {
+       return new ScalarValueDtoV2(typeName(value.getClass()), value);
    }
 
    private String type;
@@ -51,6 +51,13 @@ public final class ScalarValueDtoV2 {
    @JsonIgnore
    public boolean isNull() {
        return value == null;
+   }
+
+   private static String typeName(final @NonNull Class<?> cls) {
+       return cls.isPrimitive()
+               || cls.getPackageName().startsWith("java.")
+               ? cls.getSimpleName()
+               : cls.getName();
    }
 
 }

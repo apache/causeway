@@ -155,7 +155,7 @@ public class RestfulClient implements AutoCloseable {
     public <T> Try<T> digest(final Response response, final Class<T> entityType) {
         final var digest = ResponseDigest.wrap(response, entityType);
         if(digest.isSuccess()) {
-            return Try.success(digest.getEntity().orElse(null));
+            return Try.call(()->digest.getEntity().orElse(null));
         }
         return Try.failure(digest.getFailureCause());
     }

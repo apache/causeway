@@ -179,6 +179,15 @@ class ResponseDigest<T> {
             failureCause = _Exceptions.unrecoverable(e, "failed to read JAX-RS response content");
         }
 
+        // guard against entity type mismatch
+        failureCause = entities.stream()
+            .filter(entity->!entityType.isAssignableFrom(entity.getClass()))
+            .map(entityOfWrongType->_Exceptions.unrecoverable("type mismatch when digesting REST response, expected: %s, got: %s",
+                    entityType,
+                    entityOfWrongType.getClass()))
+            .findAny()
+            .orElse(null);
+
         return this;
     }
 

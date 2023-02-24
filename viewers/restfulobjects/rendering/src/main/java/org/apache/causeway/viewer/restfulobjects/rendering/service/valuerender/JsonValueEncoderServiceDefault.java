@@ -34,7 +34,9 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -90,6 +92,16 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         val valueClass = spec.getCorrespondingClass();
         val valueSerializer =
                 Facets.valueSerializerElseFail(spec, valueClass);
+
+        // handle composite value types (requires a ValueSemanticsProvider for the valueClass to be registered with Spring)
+        if(spec.isCompositeValue()) {
+            _Assert.assertTrue(valueRepr.isString(), ()->"expected to receive a String originating from ValueDecomposition#stringify");
+            val valueFacet = spec.valueFacetElseFail();
+            val valSemantics = (ValueSemanticsProvider<?>)valueFacet.selectDefaultSemantics().orElseThrow();
+            val valDecomposition = ValueDecomposition.destringify(ValueType.COMPOSITE, valueRepr.asString());
+            val pojo = valSemantics.compose(valDecomposition);
+            return ManagedObject.value(spec, pojo);
+        }
 
         final JsonValueConverter jsonValueConverter = converterByClass
                 .get(ClassUtils.resolvePrimitiveIfNecessary(valueClass));

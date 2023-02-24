@@ -103,10 +103,10 @@ public class JsonParserHelper {
         if (objectSpec.isValue()) {
             try {
                 return jsonValueEncoder.asAdapter(objectSpec, argValueRepr, null);
-            }catch(IllegalArgumentException ex) {
+            } catch(IllegalArgumentException ex) {
                 argRepr.mapPutString("invalidReason", ex.getMessage());
                 throw ex;
-            }catch(Exception ex) {
+            } catch(Exception ex) {
                 StringBuilder buf = new StringBuilder("Failed to parse representation ");
                 try {
                     final String reprStr = argRepr.getString("value");
