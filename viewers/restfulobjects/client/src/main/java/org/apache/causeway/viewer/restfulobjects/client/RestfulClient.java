@@ -175,8 +175,7 @@ public class RestfulClient implements AutoCloseable {
      * @see ActionParameterListBuilder#addActionParameter(String, ValueDecomposition)
      */
     public <T> Try<T> digestValue(final Response response, final ValueSemanticsProvider<T> valSemantics) {
-        return digest(response, String.class)
-                .mapSuccess(stringifiedVal -> ValueDecomposition.destringify(valSemantics.getSchemaValueType(), stringifiedVal))
+        return digest(response, ValueDecomposition.class)
                 .mapSuccess(valDecomposition->valSemantics.compose(valDecomposition));
     }
 
