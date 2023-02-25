@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.causeway.tooling.javamodel.ast.AnyTypeDeclaration;
 import org.apache.causeway.tooling.javamodel.ast.CompilationUnits;
@@ -49,7 +49,7 @@ class AnalyzerTest {
         final Stream<String> sources = analyzerConfig.getSources(JAVA)
                 .stream()
                 .map(File::getAbsolutePath)
-                .map(sourceFile->_Files.toRelativePath(commonPath, sourceFile));
+                .map(sourceFile->FileUtils.toRelativePath(commonPath, sourceFile));
 
         ProjectSamples.assertHasApacheCausewayRuntimeSourceFiles(sources);
     }

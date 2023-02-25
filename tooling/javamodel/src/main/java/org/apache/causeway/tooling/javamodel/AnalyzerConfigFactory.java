@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 
 import guru.nidi.codeassert.config.AnalyzerConfig;
 import guru.nidi.codeassert.config.Language;
@@ -32,18 +32,18 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class AnalyzerConfigFactory {
 
-    public static Maven maven(File projDir, Language ... languages) {
+    public static Maven maven(final File projDir, final Language ... languages) {
         return new MavenExt(projDir, languages);
     }
 
-    public static Maven mavenTest(File projDir, Language ... languages) {
+    public static Maven mavenTest(final File projDir, final Language ... languages) {
         return new MavenExtTest(projDir, languages);
     }
 
     // -- HELPER
 
     private static class AnalyzerConfigExt extends AnalyzerConfig {
-        public AnalyzerConfigExt(EnumSet<Language> languages, List<Path> sources, List<Path> classes) {
+        public AnalyzerConfigExt(final EnumSet<Language> languages, final List<Path> sources, final List<Path> classes) {
             super(languages, sources, classes);
         }
     }
@@ -52,20 +52,20 @@ public class AnalyzerConfigFactory {
 
         private final File projDir;
 
-        public MavenExt(File projDir, Language ... languages) {
+        public MavenExt(final File projDir, final Language ... languages) {
             super(null, languages);
             this.projDir = projDir;
         }
 
         @Override
-        public AnalyzerConfig main(String... packages) {
+        public AnalyzerConfig main(final String... packages) {
             return new AnalyzerConfigExt(getLanguages(),
                     path(packages, canonicalPath("src/main/$language/")),
                     path(packages, canonicalPath("target/classes/")));
         }
 
-        protected String canonicalPath(String relPath) {
-            return _Files.canonicalPath(new File(projDir, relPath))
+        protected String canonicalPath(final String relPath) {
+            return FileUtils.canonicalPath(new File(projDir, relPath))
                     .orElse(relPath);
         }
 
@@ -73,12 +73,12 @@ public class AnalyzerConfigFactory {
 
     private static class MavenExtTest extends MavenExt {
 
-        public MavenExtTest(File projDir, Language[] languages) {
+        public MavenExtTest(final File projDir, final Language[] languages) {
             super(projDir, languages);
         }
 
         @Override
-        public AnalyzerConfig main(String... packages) {
+        public AnalyzerConfig main(final String... packages) {
             return new AnalyzerConfigExt(getLanguages(),
                     path(packages, canonicalPath("src/test/$language/")),
                     path(packages, canonicalPath("target/test-classes/")));

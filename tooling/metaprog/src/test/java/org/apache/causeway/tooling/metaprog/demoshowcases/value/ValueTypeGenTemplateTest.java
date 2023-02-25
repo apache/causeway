@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.functions._Predicates;
@@ -65,7 +65,7 @@ class ValueTypeGenTemplateTest {
         val demoDomainShowCase = new File(demoDomainRoot, config.getJavaPackage().replace('.', '/'));
 
         // list reference source files
-        val refShowcaseFiles = _Files.searchFiles(demoDomainShowCase, _Predicates.alwaysTrue(), file->
+        val refShowcaseFiles = FileUtils.searchFiles(demoDomainShowCase, _Predicates.alwaysTrue(), file->
                   file.getName().endsWith(".java")
                   || file.getName().endsWith(".xml")
                   || file.getName().endsWith(".adoc")
@@ -91,8 +91,8 @@ class ValueTypeGenTemplateTest {
     @BeforeAll
     static void setup() {
         outputRootDir = PERSIST
-                ? _Files.makeDir(new File("D:/tmp/valueTypes"))
-                : _Files.tempDir("casueway-tooling-showcases");
+                ? FileUtils.makeDir(new File("D:/tmp/valueTypes"))
+                : FileUtils.tempDir("casueway-tooling-showcases");
 
         log.info("tmp dir created in {}", outputRootDir);
     }
@@ -106,10 +106,10 @@ class ValueTypeGenTemplateTest {
             final Set<File> setB, final File rootB) {
         assertEquals(
                 Can.ofCollection(setA)
-                .map(_Files.realtiveFileName(rootA))
+                .map(FileUtils.realtiveFileName(rootA))
                 .sorted(Comparator.naturalOrder()),
                 Can.ofCollection(setB)
-                .map(_Files.realtiveFileName(rootB))
+                .map(FileUtils.realtiveFileName(rootB))
                 .sorted(Comparator.naturalOrder()));
     }
 
@@ -117,19 +117,19 @@ class ValueTypeGenTemplateTest {
     @SuppressWarnings("unused")
     private void copyFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
         generatedFiles.forEach(src->{
-            val dest = new File(destinationRoot, _Files.realtiveFileName(sourceRoot, src));
-            _Files.makeDir(dest.getParentFile());
-            _Files.copy(src, dest);
+            val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
+            FileUtils.makeDir(dest.getParentFile());
+            FileUtils.copy(src, dest);
         });
     }
 
     @SuppressWarnings("unused")
     private void copyMissingFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
         generatedFiles.forEach(src->{
-            val dest = new File(destinationRoot, _Files.realtiveFileName(sourceRoot, src));
+            val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             if(!dest.exists()) {
-                _Files.makeDir(dest.getParentFile());
-                _Files.copy(src, dest);
+                FileUtils.makeDir(dest.getParentFile());
+                FileUtils.copy(src, dest);
             }
         });
     }
