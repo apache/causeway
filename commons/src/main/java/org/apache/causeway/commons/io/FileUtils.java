@@ -36,6 +36,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -60,7 +62,7 @@ public class FileUtils {
      * @return either a successful or failed {@link Try} (non-null);
      *     if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
      */
-    public Try<Void> tryRead(final @Nullable File file, final @NonNull Consumer<InputStream> inputStreamConsumer) {
+    public Try<Void> tryRead(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
         return Try.run(()->{
             try(val inputStream = new FileInputStream(existingFileElseFail(file))){
                 inputStreamConsumer.accept(inputStream);
@@ -76,7 +78,7 @@ public class FileUtils {
      *      where in the success case, the Try is holding the returned value from the given {@link Function inputStreamMapper};
      *      if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
      */
-    public <T> Try<T> tryMap(final @Nullable File file, final @NonNull Function<InputStream, T> inputStreamMapper) {
+    public <T> Try<T> tryMap(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
         return Try.call(()->{
             try(val inputStream = new FileInputStream(existingFileElseFail(file))){
                 return inputStreamMapper.apply(inputStream);
