@@ -45,8 +45,8 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
-    override fun addLayout(grid: GridBs, aggregator: ObjectAggregator?, referrer: String?) {
-        layout = ObjectLayout(grid, aggregator!!, referrer!!)
+    fun addLayout(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {
+        layout = ObjectLayout(grid, aggregator, referrer!!)
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {

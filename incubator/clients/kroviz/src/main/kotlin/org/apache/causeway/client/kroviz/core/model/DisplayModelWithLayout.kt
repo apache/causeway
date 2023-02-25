@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.to.Icon
 import org.apache.causeway.client.kroviz.to.TransferObject
 import org.apache.causeway.client.kroviz.to.bs.GridBs
@@ -32,6 +31,6 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
         icon = obj as Icon
     }
 
-    open fun addLayout(grid: GridBs, aggregator: ObjectAggregator?, referrer: String?) {}
+    open fun addLayout(grid: GridBs, referrer: String?) {}
 
 }

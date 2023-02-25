@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.handler.LayoutHandler
 import org.apache.causeway.client.kroviz.handler.LayoutXmlHandler
 import org.apache.causeway.client.kroviz.handler.TObjectHandler
-import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.causeway.client.kroviz.to.TObject
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -34,38 +33,37 @@ class CollectionDMTest {
     fun testSimpleObject() {
         val ro0 = TObjectHandler().parse(SO_0.str) as TObject
         val ro1 = TObjectHandler().parse(SO_1.str) as TObject
-        val lt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
+        val grd = LayoutXmlHandler().parse(CFG_LAYOUT_XML.str) as GridBs
 
-        val dl = CollectionDM("test")
-        dl.addData(ro0)
-        dl.addData(ro1)
-        dl.addLayout(lt)
+        val cdm = CollectionDM("test")
+        cdm.addData(ro0)
+        cdm.addData(ro1)
+        cdm.setProtoTypeLayout(grd)
 
-        assertEquals(2, dl.data.size) //1
+        assertEquals(2, cdm.data.size) //1
     }
 
     @Test
     fun testConfiguration() {
         val ro0 = TObjectHandler().parse(CFG_1.str) as TObject
-        val lt = LayoutHandler().parse(CFG_LAYOUT_JSON.str) as Layout
-        // val grd = LayoutXmlHandler().parse(CFG_LAYOUT_XML.str) as Grid
+        val grd = LayoutXmlHandler().parse(CFG_LAYOUT_XML.str) as GridBs
 
         val dl = CollectionDM("test")
         dl.addData(ro0)
 
-        dl.addLayout(lt)
+        dl.setProtoTypeLayout(grd)
         assertEquals(1, dl.data.size) //1
     }
 
     //@Test
     fun testFixtureResult() {
         val ro0 = TObjectHandler().parse(FR_OBJECT.str) as TObject
-        val lt = LayoutXmlHandler().parse(FR_OBJECT_LAYOUT.str) as Layout
+        val grd = LayoutXmlHandler().parse(FR_OBJECT_LAYOUT.str) as GridBs
 
         val dl = CollectionDM("test")
         dl.addData(ro0)
 
-        dl.addLayout(lt)
+        dl.setProtoTypeLayout(grd)
         assertEquals(1, dl.data.size)
 
         assertNotNull(dl.layout)
