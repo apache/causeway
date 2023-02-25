@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
-import org.apache.causeway.client.kroviz.core.model.ObjectLayout
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
@@ -86,10 +85,6 @@ class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout()
         return displayModel as ObjectDM
     }
 
-    private fun getLayout(): ObjectLayout {
-        return getDisplayModel().layout as ObjectLayout
-    }
-
     private fun handleResultObject(resultObject: ResultObject) {
         getDisplayModel().addResult(resultObject)
     }
@@ -114,14 +109,10 @@ class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout()
     }
 
     private fun handleGrid(grid: GridBs, referrer: String) {
-        val ol = getLayout()
-        // for a yet unknown reason, handleGrid may be called twice, therefore we check if it's already set
-        if (ol.grid == null) {
-            ol.addGrid(grid, this, referrer = referrer)
-            grid.getPropertyList().forEach {
-                val link = it.link!!
-                invoke(link, this, subType = Constants.subTypeJson, referrer = referrer)
-            }
+        getDisplayModel().addLayout(grid, this, referrer)
+        grid.getPropertyList().forEach {
+            val link = it.link!!
+            invoke(link, this, subType = Constants.subTypeJson, referrer = referrer)
         }
     }
 

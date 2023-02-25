@@ -26,45 +26,41 @@ import org.apache.causeway.client.kroviz.to.bs.CollectionBs
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.to.bs.RowBs
 
-class ObjectLayout : BaseLayout() {
-
-    var grid: GridBs? = null
-
-    override fun readyToRender(): Boolean {
-        return grid != null
-    }
-
-    fun addGrid(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {
-        this.grid = grid
+class ObjectLayout(val grid: GridBs, val aggregator: ObjectAggregator, val referrer: String) : BaseLayout() {
+    init {
         grid.rows.forEach { r ->
-            initRow(r, aggregator, referrer = referrer!!)
+            initRow(r)
         }
     }
 
-    private fun initRow(r: RowBs, aggregator: ObjectAggregator, referrer: String) {
+    override fun readyToRender(): Boolean {
+        return true //TODO remove from protocol ?
+    }
+
+    private fun initRow(r: RowBs) {
         r.colList.forEach { c ->
             c.rowList.forEach { r2 ->
                 r2.colList.forEach { c2 ->
                     c2.collectionList.forEach { col ->
-                        initCollection(col, aggregator, referrer)
+                        initCollection(col)
                     }
                 }
             }
             c.tabGroupList.forEach { tg ->
                 tg.tabList.forEach { t ->
                     t.rowList.forEach { r3 ->
-                        initRow(r3, aggregator, referrer)
+                        initRow(r3)
                     }
                 }
             }
         }
     }
 
-    private fun initCollection(collection: CollectionBs, parent: ObjectAggregator, referrer: String) {
+    private fun initCollection(collection: CollectionBs) {
         val href = collection.linkList.first().href // we assume, linklist has always one element
         val l = Link(href = href)
-        val aggt = CollectionAggregator("", parent)
-        ResourceProxy().fetch(l, aggt, referrer = referrer)
+        val childAggt = CollectionAggregator("", aggregator)
+        ResourceProxy().fetch(l, childAggt, referrer = referrer)
     }
 
 }

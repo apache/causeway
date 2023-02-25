@@ -18,18 +18,15 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
-import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     val properties = ObjectSpecificationHolder()
-    init {
-        layout = ObjectLayout()
-    }
-
     private val collectionModelList = mutableListOf<CollectionDM>()
     var data: Exposer? = null
     private var dirty: Boolean = false
@@ -48,8 +45,8 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
-    override fun addLayout(lt: Layout) {
-        TODO("Not yet implemented")
+    override fun addLayout(grid: GridBs, aggregator: ObjectAggregator?, referrer: String?) {
+        layout = ObjectLayout(grid, aggregator!!, referrer!!)
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {
@@ -63,10 +60,9 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             data == null -> false
             isRendered -> false
             layout == null -> false
-            else -> layout!!.readyToRender() && areCollectionsReadyToRender()
+            else -> areCollectionsReadyToRender()
         }
     }
-
 
     private fun areCollectionsReadyToRender(): Boolean {
         collectionModelList.forEach {
