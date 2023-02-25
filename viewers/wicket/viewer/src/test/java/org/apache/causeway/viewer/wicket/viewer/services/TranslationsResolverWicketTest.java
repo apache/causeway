@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 
 import lombok.val;
 
@@ -36,7 +36,7 @@ class TranslationsResolverWicketTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        tempDir = _Files.tempDir("foo");
+        tempDir = FileUtils.tempDir("foo");
     }
 
     @Test

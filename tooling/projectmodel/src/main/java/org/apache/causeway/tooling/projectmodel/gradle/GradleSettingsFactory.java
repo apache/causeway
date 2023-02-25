@@ -20,7 +20,7 @@ package org.apache.causeway.tooling.projectmodel.gradle;
 
 import java.io.File;
 
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.tooling.projectmodel.ArtifactCoordinates;
@@ -39,7 +39,7 @@ public class GradleSettingsFactory {
 
     public static GradleSettings generateFromMaven(ProjectNode projTree, String rootProjectName) {
 
-        val rootPath = _Files.canonicalPath(projTree.getProjectDirectory())
+        val rootPath = FileUtils.canonicalPath(projTree.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
 
         val gradleSettings = new GradleSettings(rootProjectName);
@@ -65,10 +65,10 @@ public class GradleSettingsFactory {
     }
 
     private static String toCanonicalRelativePath(ProjectNode projModel, String rootPath) {
-        val canonicalProjDir = _Files.canonicalPath(projModel.getProjectDirectory())
+        val canonicalProjDir = FileUtils.canonicalPath(projModel.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve relative path"));
 
-        val relativePath = _Files.toRelativePath(rootPath, canonicalProjDir);
+        val relativePath = FileUtils.toRelativePath(rootPath, canonicalProjDir);
         return _Strings.prefix(relativePath.replace('\\', '/'), "/");
     }
 

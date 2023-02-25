@@ -23,8 +23,8 @@ import java.util.function.BiConsumer;
 
 import org.asciidoctor.ast.Document;
 
-import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
@@ -79,7 +79,7 @@ final class ProjectDocWriter {
             if(mode.includeIndex()) {
 
                 // delete all generated documents in the index
-                _Files.searchFiles(indexRootFolder, dir->true, file-> {
+                FileUtils.searchFiles(indexRootFolder, dir->true, file-> {
                     val fileName = file.getName();
                     val fileAbsolutePath = file.getAbsolutePath();
                     return fileName.endsWith(".adoc") &&
@@ -89,7 +89,7 @@ final class ProjectDocWriter {
                 .stream()
                 .peek(adocFile->log.debug("deleting file: {}", adocFile.getAbsolutePath()))
                 .peek(__->deleteCount.incAndGet())
-                .forEach(_Files::deleteFile);
+                .forEach(FileUtils::deleteFile);
 
                 // write document index
                 for(val unit : j2aContext.getUnitIndex().values()) {

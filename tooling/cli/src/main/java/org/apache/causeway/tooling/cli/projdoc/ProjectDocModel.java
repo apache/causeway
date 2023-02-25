@@ -43,10 +43,10 @@ import org.asciidoctor.ast.Document;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.graph._Graph;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.tooling.c4.C4;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
@@ -337,7 +337,7 @@ public class ProjectDocModel {
         cell(table, headRow, "Coordinates");
         cell(table, headRow, "Description");
 
-        val projRoot = _Files.canonicalPath(projTree.getProjectDirectory())
+        val projRoot = FileUtils.canonicalPath(projTree.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
 
         sectionModules
@@ -346,11 +346,11 @@ public class ProjectDocModel {
                         gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
                     }
 
-                    val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
+                    val projPath = FileUtils.canonicalPath(module.getProjectDirectory()).get();
                     val projRelativePath =
                             Optional.ofNullable(
                                     _Strings.emptyToNull(
-                                            _Files.toRelativePath(projRoot, projPath)))
+                                            FileUtils.toRelativePath(projRoot, projPath)))
                                     .orElse("/");
 
                     groupDiagram.collect(module);

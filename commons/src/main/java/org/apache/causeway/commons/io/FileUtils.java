@@ -16,12 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.internal.base;
+package org.apache.causeway.commons.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.LinkedHashSet;
@@ -33,13 +37,52 @@ import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-public class _Files {
+/**
+ * Utilities related to the <i>Java</i> {@link File} type.
+ *
+ * @since 2.0 {@index}
+ */
+@UtilityClass
+public class FileUtils {
+
+    /**
+     * Opens an {@link InputStream} for give {@link File}
+     * and passes it to given {@link Consumer} for consumption,
+     * then finally closes it.
+     * @return either a successful or failed {@link Try} (non-null);
+     *     if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
+     */
+    public Try<Void> tryRead(final @Nullable File file, final @NonNull Consumer<InputStream> inputStreamConsumer) {
+        return Try.run(()->{
+            try(val inputStream = new FileInputStream(existingFileElseFail(file))){
+                inputStreamConsumer.accept(inputStream);
+            }
+        });
+    }
+
+    /**
+     * Opens an {@link InputStream} for give {@link File}
+     * and passes it to given {@link Function} for applying (mapping),
+     * then finally closes it.
+     * @return either a successful or failed {@link Try} (non-null),
+     *      where in the success case, the Try is holding the returned value from the given {@link Function inputStreamMapper};
+     *      if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
+     */
+    public <T> Try<T> tryMap(final @Nullable File file, final @NonNull Function<InputStream, T> inputStreamMapper) {
+        return Try.call(()->{
+            try(val inputStream = new FileInputStream(existingFileElseFail(file))){
+                return inputStreamMapper.apply(inputStream);
+            }
+        });
+    }
 
     /**
      * Recursive file search, starting at {@code dir}, going deeper based on predicate
@@ -51,7 +94,7 @@ public class _Files {
      * @return set of matching files
      * @throws IOException
      */
-    public static Set<File> searchFiles(
+    public Set<File> searchFiles(
             final File dir,
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter) throws IOException {
@@ -70,7 +113,7 @@ public class _Files {
      * @param onFileFound
      * @throws IOException
      */
-    public static void searchFiles(
+    public void searchFiles(
             final File dir,
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter,
@@ -102,7 +145,7 @@ public class _Files {
      * is not {@code null} and the 'file I/O system' can handle this call without
      * throwing an exception.
      */
-    public static Optional<String> canonicalPath(@Nullable final File file) {
+    public Optional<String> canonicalPath(@Nullable final File file) {
         if(file==null) {
             return Optional.empty();
         }
@@ -120,7 +163,7 @@ public class _Files {
      * @return prefix removed from {@code absolutePath}, if {@code commonPath} appears to be a prefix
      * of {@code absolutePath}, otherwise returns the {@code absolutePath} unmodified.
      */
-    public static String toRelativePath(@NonNull final String commonPath, @NonNull final String absolutePath) {
+    public String toRelativePath(@NonNull final String commonPath, @NonNull final String absolutePath) {
         if(absolutePath.startsWith(commonPath)) {
             return absolutePath.substring(commonPath.length());
         }
@@ -132,7 +175,7 @@ public class _Files {
      * @param file - the file to be deleted (null-able)
      */
     @SneakyThrows
-    public static void deleteFile(@Nullable final File file) {
+    public void deleteFile(@Nullable final File file) {
         if(file==null
                 || !file.exists()
                 || file.isDirectory()) {
@@ -155,7 +198,7 @@ public class _Files {
      * Returns a temp directory with delete-on-exit policy.
      */
     @SneakyThrows
-    public static File tempDir(final String name) {
+    public File tempDir(final String name) {
         val tempDir =  Files.createTempDirectory(name).toFile();
         tempDir.deleteOnExit();
         return tempDir;
@@ -174,7 +217,7 @@ public class _Files {
      * If directory is null acts as a no-op.
      * @throws IllegalArgumentException if any pre-existing file is in conflict
      */
-    public static File makeDir(final @Nullable File directory) {
+    public File makeDir(final @Nullable File directory) {
         if(directory==null) {
             return directory; // no-op
         }
@@ -197,7 +240,7 @@ public class _Files {
     /**
      * Optionally given file, based on whether non-null and exists and is a file (not a directory).
      */
-    public static Optional<File> existingFile(final @Nullable File file) {
+    public Optional<File> existingFile(final @Nullable File file) {
         return file!=null
                 && file.isFile()
                 ? Optional.of(file)
@@ -205,13 +248,47 @@ public class _Files {
     }
 
     /**
+     * Guard given file against null, non-existence and not representing a file.
+     */
+    @SneakyThrows
+    public File existingFileElseFail(final @Nullable File file) {
+        if(file==null) {
+            throw new NoSuchFileException("<null>");
+        }
+        if(!file.exists()) {
+            throw new NoSuchFileException(file.getAbsolutePath());
+        }
+        if(!file.isFile()) {
+            throw new NoSuchFileException(file.getAbsolutePath());
+        }
+        return file;
+    }
+
+    /**
      * Optionally given file, based on whether non-null and exists and is a directory (not a file).
      */
-    public static Optional<File> existingDirectory(final @Nullable File file) {
+    public Optional<File> existingDirectory(final @Nullable File file) {
         return file!=null
                 && file.isDirectory()
                 ? Optional.of(file)
                 : Optional.empty();
+    }
+
+    /**
+     * Guard given file against null, non-existence and not representing a directory (not a file).
+     */
+    @SneakyThrows
+    public File existingDirectoryElseFail(final @Nullable File file) {
+        if(file==null) {
+            throw new NoSuchFileException("<null>");
+        }
+        if(!file.exists()) {
+            throw new NoSuchFileException(file.getAbsolutePath());
+        }
+        if(!file.isDirectory()) {
+            throw new NotDirectoryException(file.getAbsolutePath());
+        }
+        return file;
     }
 
     /**
@@ -220,7 +297,7 @@ public class _Files {
      * @param to
      */
     @SneakyThrows
-    public static void copy(final @NonNull File from, final @NonNull File to) {
+    public void copy(final @NonNull File from, final @NonNull File to) {
         Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 

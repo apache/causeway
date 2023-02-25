@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
@@ -165,11 +165,11 @@ public class ValueTypeGenTemplate {
                     .getAbsoluteFile();
         }
         private final File templateFile(final Config config) {
-            return _Files.existingFile(templateFile(config, config.templateVariant)) // existence is optional
+            return FileUtils.existingFile(templateFile(config, config.templateVariant)) // existence is optional
                     .orElseGet(()->{
                         // existence is mandatory
                         val defaultTemplateFile = templateFile(config, TemplateVariant.DEFAULT);
-                        return _Files.existingFile(defaultTemplateFile)
+                        return FileUtils.existingFile(defaultTemplateFile)
                                 .orElseThrow(()->_Exceptions.noSuchElement("template %s not found", defaultTemplateFile));
                     });
         }
@@ -262,7 +262,7 @@ public class ValueTypeGenTemplate {
             final Map<String, String> templateVars, final File template, final File genTarget) {
         val templateLines = _Text.readLinesFromFile(template, StandardCharsets.UTF_8);
 
-        _Files.makeDir(genTarget.getParentFile());
+        FileUtils.makeDir(genTarget.getParentFile());
 
         _Text.writeLinesToFile(templateLines
                 .map(line->templateProcessor(templateVars, line)),
