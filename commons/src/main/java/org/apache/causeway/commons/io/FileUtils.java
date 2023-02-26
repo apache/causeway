@@ -62,7 +62,7 @@ public class FileUtils {
      * @return either a successful or failed {@link Try} (non-null);
      *     if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
      */
-    public Try<Void> tryRead(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
+    public Try<Void> tryReadAndAccept(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
         return Try.run(()->{
             try(val inputStream = new FileInputStream(existingFileElseFail(file))){
                 inputStreamConsumer.accept(inputStream);
@@ -72,13 +72,13 @@ public class FileUtils {
 
     /**
      * Opens an {@link InputStream} for give {@link File}
-     * and passes it to given {@link Function} for applying (mapping),
+     * and passes it to given {@link Function} for applying,
      * then finally closes it.
      * @return either a successful or failed {@link Try} (non-null),
      *      where in the success case, the Try is holding the returned value from the given {@link Function inputStreamMapper};
      *      if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
      */
-    public <T> Try<T> tryMap(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
+    public <T> Try<T> tryReadAndApply(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
         return Try.call(()->{
             try(val inputStream = new FileInputStream(existingFileElseFail(file))){
                 return inputStreamMapper.apply(inputStream);
