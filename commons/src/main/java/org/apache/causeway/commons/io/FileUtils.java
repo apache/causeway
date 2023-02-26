@@ -57,31 +57,33 @@ public class FileUtils {
 
     /**
      * Opens an {@link InputStream} for give {@link File}
-     * and passes it to given {@link Consumer} for consumption,
+     * and passes it to given {@link Function} for application,
      * then finally closes it.
-     * @return either a successful or failed {@link Try} (non-null);
-     *     if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
+     * @return either a successful or failed {@link Try} (non-null),
+     *      where in the success case, the Try is holding the returned value from the given {@link Function inputStreamMapper};
+     *      if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
+     * @see DataSource#ofFile(File)
      */
-    public Try<Void> tryReadAndAccept(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
-        return Try.run(()->{
+    public <T> Try<T> tryReadAndApply(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
+        return Try.call(()->{
             try(val inputStream = new FileInputStream(existingFileElseFail(file))){
-                inputStreamConsumer.accept(inputStream);
+                return inputStreamMapper.apply(inputStream);
             }
         });
     }
 
     /**
      * Opens an {@link InputStream} for give {@link File}
-     * and passes it to given {@link Function} for applying,
+     * and passes it to given {@link Consumer} for consumption,
      * then finally closes it.
-     * @return either a successful or failed {@link Try} (non-null),
-     *      where in the success case, the Try is holding the returned value from the given {@link Function inputStreamMapper};
-     *      if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
+     * @return either a successful or failed {@link Try} (non-null);
+     *     if the file is null or not readable, the failure may hold a {@link NoSuchFileException} or other i/o related exceptions
+     * @see DataSource#ofFile(File)
      */
-    public <T> Try<T> tryReadAndApply(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
-        return Try.call(()->{
+    public Try<Void> tryReadAndAccept(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
+        return Try.run(()->{
             try(val inputStream = new FileInputStream(existingFileElseFail(file))){
-                return inputStreamMapper.apply(inputStream);
+                inputStreamConsumer.accept(inputStream);
             }
         });
     }

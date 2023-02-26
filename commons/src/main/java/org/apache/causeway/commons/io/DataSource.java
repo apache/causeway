@@ -24,11 +24,14 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.functional.ThrowingConsumer;
+import org.apache.causeway.commons.functional.ThrowingFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 
@@ -43,6 +46,27 @@ import lombok.NonNull;
 public interface DataSource {
 
     <T> Try<T> readAll(@NonNull Function<InputStream, Try<T>> consumingMapper);
+
+    /**
+     * Passes an {@link InputStream} to given {@link Function} for application.
+     * @return either a successful or failed {@link Try} (non-null),
+     *      where in the success case, the returned Try is holding the returned value from the given {@link Function inputStreamMapper};
+     *      if the InputStream is absent or not readable, the returned Try will hold the underlying {@link Exception}
+     */
+    default <T> Try<T> tryReadAndApply(final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
+        return readAll(inputStream->
+            Try.call(()->inputStreamMapper.apply(inputStream)));
+    }
+
+    /**
+     * Passes an {@link InputStream} to given {@link Consumer} for consumption.
+     * @return either a successful or failed {@link Try} (non-null);
+     *     if the InputStream is absent or not readable, the returned Try will hold the underlying {@link Exception}
+     */
+    default Try<Void> tryReadAndAccept(final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
+        return readAll(inputStream->
+            Try.run(()->inputStreamConsumer.accept(inputStream)));
+    }
 
     // -- FACTORIES
 
