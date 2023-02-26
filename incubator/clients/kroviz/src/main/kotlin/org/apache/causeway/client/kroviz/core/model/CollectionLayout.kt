@@ -20,11 +20,11 @@ package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.Member
 
-class ColumnSpecificationHolder {
-    var columnSpecificationList = mutableListOf<ColumnSpecification>()
+class CollectionLayout {
+    var propertyDetailsList = mutableListOf<PropertyDetails>()
 
-    fun getPropertySpecification(id: String): ColumnSpecification {
-        return columnSpecificationList.firstOrNull { it.id == id }!!
+    fun getPropertySpecification(id: String): PropertyDetails {
+        return propertyDetailsList.firstOrNull { it.id == id }!!
     }
 
     fun readyToRender(): Boolean {
@@ -32,7 +32,7 @@ class ColumnSpecificationHolder {
     }
 
     private fun arePropertySpecificationsReadyToRender(): Boolean {
-        columnSpecificationList.forEach {
+        propertyDetailsList.forEach {
             val ready = it.readyToRender()
             if (!ready) {
                 return false
@@ -42,12 +42,12 @@ class ColumnSpecificationHolder {
     }
 
     fun addMember(m: Member) {
-        val ps = ColumnSpecification(m)
-        columnSpecificationList.add(ps)
+        val ps = PropertyDetails(m)
+        propertyDetailsList.add(ps)
     }
 
     fun isInitialized(): Boolean {
-        return columnSpecificationList.isNotEmpty() && columnSpecificationList.size > 0
+        return propertyDetailsList.isNotEmpty() && propertyDetailsList.size > 0
     }
 
 }

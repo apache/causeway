@@ -102,13 +102,13 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
         val dm = getDisplayModel()
         dm.addData(tObj)
         if (!dm.hasProtoType()) {
+            // collection layout needs only to be initialized once with an object (pars pro toto, prototype)
+            // obj acts as a kind prototype - we assume all elements in the collection have the same structure
             dm.setProtoType(tObj)
             invokeLayoutLink(tObj, this, referrer = referrer)
         }
 
-        // collection layout needs only to be initialized once with an object (pars pro toto, prototype)
-        // obj acts as a kind prototype - we assume all elements in the collection have the same structure
-        val propertySpecificationHolder = getDisplayModel().columnSpecificationHolder
+        val propertySpecificationHolder = getDisplayModel().collectionLayout
         if (!propertySpecificationHolder.isInitialized()) {
             val members = tObj.getProperties()
             members.forEach { m ->

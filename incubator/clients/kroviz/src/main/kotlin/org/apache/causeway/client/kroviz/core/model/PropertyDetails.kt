@@ -28,7 +28,7 @@ import org.apache.causeway.client.kroviz.to.bs.PropertyBs
  * - id :           attribute to be used to retrieve the value of each cell (id)
  * - hidden :       will the column be displayed or not
  */
-class ColumnSpecification(member: Member) {
+class PropertyDetails(member: Member) {
     var id = member.id
     var name = "" // aka: columnName, named, label, title
     var hidden = true

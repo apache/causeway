@@ -19,9 +19,8 @@
 package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.core.model.BaseLayout
-import org.apache.causeway.client.kroviz.to.*
+import org.apache.causeway.client.kroviz.to.Represention
+import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.diagram.Tree
 

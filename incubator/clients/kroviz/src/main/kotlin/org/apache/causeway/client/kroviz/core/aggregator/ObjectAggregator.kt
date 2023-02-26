@@ -98,11 +98,7 @@ class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout()
     }
 
     private fun handleProperty(p: Property, referrer: String) {
-        val dm = getDisplayModel()
-        if (p.isPropertyDescription()) {
-            dm.addPropertyDescription(p)
-        } else {
-            dm.addProperty(p)
+        if (!p.isPropertyDescription()) {
             val pdl = p.getDescriptionLink() ?: return
             invoke(pdl, this, referrer = referrer)
         }

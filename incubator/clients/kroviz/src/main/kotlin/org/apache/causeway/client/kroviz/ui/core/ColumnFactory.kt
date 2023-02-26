@@ -103,8 +103,8 @@ class ColumnFactory {
         collectionModel: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        val clo = collectionModel.columnSpecificationHolder
-        val propSpecList = clo.columnSpecificationList
+        val clo = collectionModel.collectionLayout
+        val propSpecList = clo.propertyDetailsList
         if (propSpecList.size == 0) {
             // without this, propSpecList is empty? problem with mutable list?
             throw IllegalStateException()

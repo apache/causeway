@@ -26,7 +26,6 @@ import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
-    val properties = ObjectSpecificationHolder()
     private val collectionModelList = mutableListOf<CollectionDM>()
     var data: Exposer? = null
     private var dirty: Boolean = false
@@ -50,8 +49,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun getCollectionDisplayModelFor(id: String): CollectionDM {
-        console.log("[ODM_getCollectionDisplayModelFor] answers null under some conditions")
-        console.log(collectionModelList)
         return collectionModelList.firstOrNull { it.id == id }!!
     }
 
@@ -76,14 +73,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
-    }
-
-    fun addPropertyDescription(p: Property) {
-        properties.addPropertyDescription(p)
-    }
-
-    fun addProperty(property: Property) {
-        properties.addProperty(property)
     }
 
     fun addResult(resultObject: ResultObject) {
