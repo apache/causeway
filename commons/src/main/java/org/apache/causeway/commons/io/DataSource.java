@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.functional.ThrowingConsumer;
 import org.apache.causeway.commons.functional.ThrowingFunction;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
@@ -73,7 +74,7 @@ public interface DataSource {
     /**
      * Acts as a no-op.
      */
-    static DataSource none() {
+    static DataSource empty() {
         return new DataSource() {
             @Override public <T> Try<T> readAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return Try.empty();
@@ -81,6 +82,11 @@ public interface DataSource {
         };
     }
 
+    /**
+     * Creates a {@link DataSource} for given InputStream Supplier.
+     * @param inputStreamSupplier - required non-null
+     * @throws NullPointerException - if the single argument is null
+     */
     static DataSource ofInputStreamSupplier(final @NonNull Supplier<InputStream> inputStreamSupplier) {
         return new DataSource() {
             @Override public <T> Try<T> readAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
@@ -95,36 +101,57 @@ public interface DataSource {
         };
     }
 
+    /**
+     * Creates a {@link DataSource} for given resource path relative to {@link Class}.
+     * @param cls - required non-null
+     * @param resourcePath - required non-null
+     * @throws NullPointerException - if the any argument is null
+     */
     static DataSource ofResource(final @NonNull Class<?> cls, final @NonNull String resourcePath) {
-        return ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
+        return cls==null
+                ? empty()
+                : ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
     }
 
     /**
      * Creates a {@link DataSource} for given {@link File}.
-     * If <code>null</code> an 'empty' DataSource is returned.
+     * If <code>null</code>, an 'empty' DataSource is returned.
      */
     static DataSource ofFile(final @Nullable File file) {
-        if(file==null) {
-            return DataSource.none();
-        }
-        return ofInputStreamSupplier(
-                ()->Try.call(()->new FileInputStream(FileUtils.existingFileElseFail(file)))
-                    .ifFailureFail()
-                    .getValue().orElseThrow());
+        return file==null
+                ? empty()
+                : ofInputStreamSupplier(
+                    ()->Try.call(()->new FileInputStream(FileUtils.existingFileElseFail(file)))
+                        .ifFailureFail()
+                        .getValue().orElseThrow());
     }
 
+    /**
+     * Creates a {@link DataSource} for given {@link String}.
+     * If <code>null</code> or empty, an 'empty' DataSource is returned.
+     */
     static DataSource ofString(final @Nullable String string, final Charset charset) {
         return _Strings.isNullOrEmpty(string)
-                ? none()
+                ? empty()
                 : ofInputStreamSupplier(()->new ByteArrayInputStream(string.getBytes(charset)));
     }
 
+    /**
+     * Creates a {@link DataSource} for given {@link String}.
+     * If <code>null</code> or empty, an 'empty' DataSource is returned.
+     */
     static DataSource ofStringUtf8(final @Nullable String string) {
         return ofString(string, StandardCharsets.UTF_8);
     }
 
-    static DataSource ofBytes(final @NonNull byte[] bytes) {
-        return ofInputStreamSupplier(()->new ByteArrayInputStream(bytes));
+    /**
+     * Creates a {@link DataSource} for given byte array.
+     * If <code>null</code> or empty, an 'empty' DataSource is returned.
+     */
+    static DataSource ofBytes(final @Nullable byte[] bytes) {
+        return _NullSafe.isEmpty(bytes)
+                ? empty()
+                : ofInputStreamSupplier(()->new ByteArrayInputStream(bytes));
     }
 
 }
