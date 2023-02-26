@@ -22,10 +22,8 @@ import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
@@ -103,16 +101,22 @@ public interface Try<T> {
 
     /**
      * If this is a {@link Success}, peeks into the {@code value} wrapped in an {@link Optional}.
+     * <p>
+     * If given valueConsumer throws an exception, a failed {@link Try} is returned.
      */
-    Try<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer); //TODO use ThrowingConsumer instead
+    Try<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer);
     /**
      * If this is a {@link Success} with a present {@code value}, peeks into the {@code value}.
+     * <p>
+     * If given valueConsumer throws an exception, a failed {@link Try} is returned.
      */
     Try<T> ifSuccessAsNullable(final @NonNull ThrowingConsumer<T> valueConsumer);
     /**
      * If this is a {@link Failure}, peeks into the {@code failure}.
+     * <p>
+     * If given exceptionConsumer throws an exception, a failed {@link Try} is returned.
      */
-    Try<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer); //TODO use ThrowingConsumer instead
+    Try<T> ifFailure(final @NonNull ThrowingConsumer<Throwable> exceptionConsumer);
 
     // -- FAIL EARLY
 
@@ -127,11 +131,15 @@ public interface Try<T> {
      * Maps this {@link Try} to another if this is a {@link Success},
      * passing the {@code value} wrapped in an {@link Optional}.
      * Otherwise if this is a {@link Failure} acts as identity operator.
+     * <p>
+     * If given successMapper throws an exception, a failed {@link Try} is returned.
      */
     <R> Try<R> mapSuccess(@NonNull ThrowingFunction<Optional<T>, R> successMapper);
     /**
      * Maps this {@link Try} to another if this is a {@link Success}.
      * Otherwise if this is a {@link Failure} acts as identity operator.
+     * <p>
+     * If given successMapper throws an exception, a failed {@link Try} is returned.
      * @apiNote If preceded with a call to {@link #mapEmptyToFailure()},
      *      the success value - as passed over to the successMapper - is guaranteed non-null.
      */
@@ -139,11 +147,16 @@ public interface Try<T> {
     /**
      * Maps this {@link Try} to another if this is a {@link Failure}.
      * Otherwise if this is a {@link Success} acts as identity operator.
+     * <p>
+     * If given failureMapper throws an exception, a failed {@link Try} is returned
+     * (hiding the original failure).
      */
-    Try<T> mapFailure(@NonNull UnaryOperator<Throwable> failureMapper); //TODO use ThrowingFunction instead
+    Try<T> mapFailure(@NonNull ThrowingFunction<Throwable, Throwable> failureMapper);
     /**
      * Recovers from a failed {@link Try} if its a {@link Failure}.
      * Otherwise if this is a {@link Success} acts as identity operator.
+     * <p>
+     * If given recoveryMapper throws an exception, a failed {@link Try} is returned.
      */
     Try<T> mapFailureToSuccess(@NonNull ThrowingFunction<Throwable, T> recoveryMapper);
     /**
@@ -165,13 +178,12 @@ public interface Try<T> {
     /**
      * Either consumes the success or the failure.
      * <p>
-     * If any of the {@link Consumer} arguments throw exceptions, those are not catched by this {@link Try}.
-     * In other words: this method always acts as an identity operator
+     * If any of given failureConsumer or successConsumer throws an exception, a failed {@link Try} is returned.
      * @apiNote Order of arguments conforms to {@link #mapToEither(Function, Function)}
      */
     Try<T> accept(
-            final @NonNull Consumer<Throwable> failureConsumer,
-            final @NonNull Consumer<Optional<T>> successConsumer);
+            final @NonNull ThrowingConsumer<Throwable> failureConsumer,
+            final @NonNull ThrowingConsumer<Optional<T>> successConsumer);
 
     // -- FOLDING
 
@@ -247,18 +259,26 @@ public interface Try<T> {
         @Override public Optional<Throwable> getFailure() { return Optional.empty(); }
 
         @Override
-        public Success<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer) {
-            valueConsumer.accept(getValue());
-            return this;
+        public Try<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer) {
+            try {
+                valueConsumer.accept(getValue());
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
         @Override
         public Try<T> ifSuccessAsNullable(final @NonNull ThrowingConsumer<T> valueConsumer) {
-            valueConsumer.accept(getValue().orElse(null));
-            return this;
+            try {
+                valueConsumer.accept(getValue().orElse(null));
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override
-        public Success<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer) {
+        public Success<T> ifFailure(final @NonNull ThrowingConsumer<Throwable> exceptionConsumer) {
             return this;
         }
 
@@ -283,7 +303,7 @@ public interface Try<T> {
         }
 
         @Override
-        public Success<T> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper){
+        public Success<T> mapFailure(final @NonNull ThrowingFunction<Throwable, Throwable> failureMapper){
             return this;
         }
         @Override
@@ -324,10 +344,14 @@ public interface Try<T> {
 
         @Override
         public Try<T> accept(
-                final @NonNull Consumer<Throwable> failureConsumer,
-                final @NonNull Consumer<Optional<T>> successConsumer) {
-            successConsumer.accept(getValue());
-            return this;
+                final @NonNull ThrowingConsumer<Throwable> failureConsumer,
+                final @NonNull ThrowingConsumer<Optional<T>> successConsumer) {
+            try {
+                successConsumer.accept(getValue());
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override
@@ -362,7 +386,7 @@ public interface Try<T> {
         @Override public Optional<Throwable> getFailure() { return Optional.of(throwable); }
 
         @Override
-        public Failure<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer) {
+        public Failure<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer) {
             return this;
         }
         @Override
@@ -370,11 +394,14 @@ public interface Try<T> {
             return this;
         }
 
-
         @Override
-        public Failure<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer) {
-            exceptionConsumer.accept(throwable);
-            return this;
+        public Failure<T> ifFailure(final @NonNull ThrowingConsumer<Throwable> exceptionConsumer) {
+            try {
+                exceptionConsumer.accept(throwable);
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override @SneakyThrows
@@ -397,7 +424,7 @@ public interface Try<T> {
         }
 
         @Override
-        public Failure<T> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper){
+        public Failure<T> mapFailure(final @NonNull ThrowingFunction<Throwable, Throwable> failureMapper){
             try {
                 return new Failure<>(failureMapper.apply(throwable));
             } catch (Throwable e) {
@@ -436,10 +463,14 @@ public interface Try<T> {
 
         @Override
         public Try<T> accept(
-                final @NonNull Consumer<Throwable> failureConsumer,
-                final @NonNull Consumer<Optional<T>> successConsumer) {
-            failureConsumer.accept(throwable);
-            return this;
+                final @NonNull ThrowingConsumer<Throwable> failureConsumer,
+                final @NonNull ThrowingConsumer<Optional<T>> successConsumer) {
+            try {
+                failureConsumer.accept(throwable);
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override
