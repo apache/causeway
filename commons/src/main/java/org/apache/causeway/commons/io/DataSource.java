@@ -99,8 +99,18 @@ public interface DataSource {
         return ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
     }
 
-    static DataSource ofFile(final @NonNull File file) {
-        return ofInputStreamSupplier(()->Try.call(()->new FileInputStream(file)).ifFailureFail().getValue().orElseThrow());
+    /**
+     * Creates a {@link DataSource} for given {@link File}.
+     * If <code>null</code> an 'empty' DataSource is returned.
+     */
+    static DataSource ofFile(final @Nullable File file) {
+        if(file==null) {
+            return DataSource.none();
+        }
+        return ofInputStreamSupplier(
+                ()->Try.call(()->new FileInputStream(FileUtils.existingFileElseFail(file)))
+                    .ifFailureFail()
+                    .getValue().orElseThrow());
     }
 
     static DataSource ofString(final @Nullable String string, final Charset charset) {
