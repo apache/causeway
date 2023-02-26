@@ -29,9 +29,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
-import org.apache.causeway.commons.functional.ThrowingConsumer;
-import org.apache.causeway.commons.functional.ThrowingFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
