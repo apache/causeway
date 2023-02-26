@@ -96,7 +96,8 @@ public interface DataSource {
                     }
                 })
                 // unwrap the inner try
-                .mapSuccess(wrappedTry->wrappedTry.getValue().get());
+                .mapEmptyToFailure()
+                .mapSuccessAsNullable(wrappedTry->wrappedTry.valueAsNonNullElseFail());
             }
         };
     }
