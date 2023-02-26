@@ -106,9 +106,11 @@ public interface Try<T> {
      */
     Try<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer);
     /**
-     * If this is a {@link Success} with a present {@code value}, peeks into the {@code value}.
+     * If this is a {@link Success} peeks into the (null-able) {@code value}.
      * <p>
      * If given valueConsumer throws an exception, a failed {@link Try} is returned.
+     * @apiNote If preceded with a call to {@link #mapEmptyToFailure()},
+     *      the success value - as passed over to the valueConsumer - is guaranteed non-null.
      */
     Try<T> ifSuccessAsNullable(final @NonNull ThrowingConsumer<T> valueConsumer);
     /**
