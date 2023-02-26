@@ -176,7 +176,8 @@ public class RestfulClient implements AutoCloseable {
      */
     public <T> Try<T> digestValue(final Response response, final ValueSemanticsProvider<T> valSemantics) {
         return digest(response, ValueDecomposition.class)
-                .mapSuccess(valDecomposition->valSemantics.compose(valDecomposition));
+                .mapEmptyToFailure()
+                .mapSuccessAsNullable(valDecomposition->valSemantics.compose(valDecomposition));
     }
 
     // -- UTILITY

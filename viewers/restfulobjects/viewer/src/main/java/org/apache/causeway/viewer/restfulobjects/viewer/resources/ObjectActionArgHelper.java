@@ -59,13 +59,13 @@ public class ObjectActionArgHelper {
             val paramMeta = parameters.getElseFail(argIndex);
             val paramSpec = paramMeta.getElementType();
 
-            val tryArgument = (paramMeta.isOptional()
+            final Try<ManagedObject> tryArgument = (paramMeta.isOptional()
                     && argRepr == null)
                     ? Try.success(ManagedObject.empty(paramSpec))
                     : Try.call(()->
                         new JsonParserHelper(resourceContext, paramSpec)
                             .objectAdapterFor(argRepr))
-                        .mapSuccess(success->success!=null
+                        .mapSuccessAsNullable(success->success!=null
                                 ? success
                                 : ManagedObject.empty(paramSpec));
 
