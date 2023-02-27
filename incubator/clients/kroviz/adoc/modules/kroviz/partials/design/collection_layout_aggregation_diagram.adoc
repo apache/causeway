@@ -94,11 +94,11 @@ together {
         readyToRender()
         addPropertyDescription()
     }
-    class ColumnSpecificationHolder <<(L,coral)Layout>> #pink{
-        columnSpecificationList
+    class CollectionLayout <<(L,coral)Layout>> #pink{
+        PropertyDetailsList
         readyToRender()
     }
-    class ColumnSpecification <<(L,coral)Layout>> #pink{
+    class PropertyDetails <<(L,coral)Layout>> #pink{
         id
         name
         hidden
@@ -108,15 +108,15 @@ together {
         readyToRender()
     }
     CollectionAggregator --> CollectionDM
-    CollectionDM --> ColumnSpecificationHolder
-    ColumnSpecificationHolder o-r-> ColumnSpecification
+    CollectionDM --> CollectionLayout
+    CollectionLayout o-r-> PropertyDetails
 }
 ObjectDM o-r-> CollectionDM
 
 ' references between Layout and TO classes
-ColumnSpecificationHolder <.. TObject : added to
-ColumnSpecificationHolder <.. ObjectProperty : added to
-ColumnSpecificationHolder <.. PropertyDescription : added to
+CollectionLayout <.. TObject : added to
+CollectionLayout <.. ObjectProperty : added to
+CollectionLayout <.. PropertyDescription : added to
 
 
 legend left

@@ -37,16 +37,17 @@ class PropertyDetails(member: Member) {
     private var isAmendedFromPropertyDescription = false
     var typicalLength: Int = 10
 
-
     fun amendWith(pbs: PropertyBs) {
         name = pbs.named
+        //static analysis says pbs.hidden can't be null, but runtime proves the opposite
         hidden = !(pbs.hidden != null && pbs.hidden.isNotEmpty())
         //This is hacky
         if (id == "sources") {
             hidden = true
         }
+        //static analysis says pbs.typicalLength  can't be null, but runtime proves the opposite
         if (pbs.typicalLength != null && pbs.typicalLength > 0) {
-            typicalLength = pbs.typicalLength.toInt()
+            typicalLength = pbs.typicalLength
         }
         isAmendedFromBs = true
     }
