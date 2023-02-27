@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,17 +27,23 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
+import org.springframework.util.function.ThrowingSupplier;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Text;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * General purpose readable byte data source.
@@ -46,7 +53,7 @@ import lombok.NonNull;
 @FunctionalInterface
 public interface DataSource {
 
-    <T> Try<T> readAll(@NonNull Function<InputStream, Try<T>> consumingMapper);
+    <T> Try<T> tryReadAll(@NonNull Function<InputStream, Try<T>> consumingMapper);
 
     /**
      * Passes an {@link InputStream} to given {@link Function} for application.
@@ -55,7 +62,7 @@ public interface DataSource {
      *      if the InputStream is absent or not readable, the returned Try will hold the underlying {@link Exception}
      */
     default <T> Try<T> tryReadAndApply(final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
-        return readAll(inputStream->
+        return tryReadAll(inputStream->
             Try.call(()->inputStreamMapper.apply(inputStream)));
     }
 
@@ -65,8 +72,101 @@ public interface DataSource {
      *     if the InputStream is absent or not readable, the returned Try will hold the underlying {@link Exception}
      */
     default Try<Void> tryReadAndAccept(final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
-        return readAll(inputStream->
+        return tryReadAll(inputStream->
             Try.run(()->inputStreamConsumer.accept(inputStream)));
+    }
+
+    // -- READ AS BYTES
+
+    /**
+     * Reads from this DataSource into a String using given charset encoding.
+     * <p>
+     * If the underlying {@link InputStream} is null a success {@link Try} is returned, containing a null value.
+     */
+    default Try<byte[]> tryReadAsBytes() {
+        return tryReadAndApply(inputStream->_Bytes.of(inputStream));
+    }
+
+    /**
+     * Shortcut for {@code tryReadAsBytes().valueAsNonNullElseFail()}.
+     */
+    default byte[] bytes() {
+        return tryReadAsBytes()
+                .valueAsNonNullElseFail();
+    }
+
+    // -- READ AS STRING
+
+    /**
+     * Reads from this DataSource into a String using given charset encoding.
+     * <p>
+     * If the underlying {@link InputStream} is null a success {@link Try} is returned, containing a null value.
+     */
+    default Try<String> tryReadAsString(final @NonNull Charset charset) {
+        return tryReadAndApply(inputStream->_Strings.ofBytes(_Bytes.of(inputStream), charset));
+    }
+
+    /**
+     * Reads from this DataSource into a String using UTF-8 encoding.
+     * <p>
+     * If the underlying {@link InputStream} is null a success {@link Try} is returned, containing a null value.
+     */
+    default Try<String> tryReadAsStringUtf8() {
+        return tryReadAsString(StandardCharsets.UTF_8);
+    }
+
+    // -- READ LINES
+
+    /**
+     * Reads from this DataSource all lines using given charset encoding.
+     * <p>
+     * If the underlying {@link InputStream} is null a success {@link Try} is returned, containing a null value.
+     */
+    default Try<Can<String>> tryReadAsLines(final @NonNull Charset charset) {
+        return tryReadAndApply(inputStream->_Text.readLines(inputStream, charset));
+    }
+
+    /**
+     * Reads from this DataSource all lines using UTF-8 encoding.
+     * <p>
+     * If the underlying {@link InputStream} is null a success {@link Try} is returned, containing a null value.
+     */
+    default Try<Can<String>> tryReadAsLinesUtf8() {
+        return tryReadAsLines(StandardCharsets.UTF_8);
+    }
+
+    // -- IMAGE DATA
+
+    default Try<BufferedImage> tryReadAsImage() {
+        return tryReadAndApply(ImageIO::read);
+    }
+
+    // -- PIPE
+
+    /**
+     * Acts as a pipe, reading from this {@link DataSource} and writing to given {@link DataSink},
+     * using given bufferSize for the underlying byte data junks.
+     * @return a success or failed {@link Try}, based on whether the write was successful or not
+     */
+    default Try<Void> tryReadAndWrite(final @NonNull DataSink dataSink, final int bufferSize) {
+        return tryReadAndAccept(inputStream->{
+            dataSink.writeAll(os->{
+                val buffer = new byte[bufferSize]; int n;
+                while((n = inputStream.read(buffer)) > -1) {
+                    os.write(buffer, 0, n);
+                }
+            });
+        });
+    }
+
+    /**
+     * Acts as a pipe, reading from this {@link DataSource} and writing to given {@link DataSink},
+     * using given bufferSize for the underlying byte data junks.
+     * <p>
+     * Throws if the write failed.
+     */
+    default void pipe(final @NonNull DataSink dataSink, final int bufferSize) {
+        tryReadAndWrite(dataSink, bufferSize).ifFailureFail();
     }
 
     // -- FACTORIES
@@ -76,7 +176,7 @@ public interface DataSource {
      */
     static DataSource empty() {
         return new DataSource() {
-            @Override public <T> Try<T> readAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
+            @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return Try.empty();
             }
         };
@@ -87,9 +187,9 @@ public interface DataSource {
      * @param inputStreamSupplier - required non-null
      * @throws NullPointerException - if the single argument is null
      */
-    static DataSource ofInputStreamSupplier(final @NonNull Supplier<InputStream> inputStreamSupplier) {
+    static DataSource ofInputStreamSupplier(final @NonNull ThrowingSupplier<InputStream> inputStreamSupplier) {
         return new DataSource() {
-            @Override public <T> Try<T> readAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
+            @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return Try.call(()->{
                     try(final InputStream is = inputStreamSupplier.get()) {
                         return consumingMapper.apply(is);
@@ -114,6 +214,14 @@ public interface DataSource {
                 : ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
     }
 
+//    static DataSource ofTestResource(final Class<?> cls, final String path) {
+//        val prefix = "src/test/java/";
+//        val filePath = prefix + cls.getPackageName().replace('.', '/') + "/" + path;
+//        val file = new File(filePath);
+//        _Assert.assertTrue(file.exists(), ()->String.format("could not resolve resource '%s'", file.getAbsolutePath()));
+//        return ofFile(file);
+//    }
+
     /**
      * Creates a {@link DataSource} for given {@link File}.
      * If <code>null</code>, an 'empty' DataSource is returned.
@@ -123,8 +231,7 @@ public interface DataSource {
                 ? empty()
                 : ofInputStreamSupplier(
                     ()->Try.call(()->new FileInputStream(FileUtils.existingFileElseFail(file)))
-                        .ifFailureFail()
-                        .getValue().orElseThrow());
+                        .valueAsNonNullElseFail());
     }
 
     /**

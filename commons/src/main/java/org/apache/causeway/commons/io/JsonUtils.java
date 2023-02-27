@@ -86,7 +86,7 @@ public class JsonUtils {
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
             final JsonUtils.JsonCustomizer ... customizers) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             return Try.call(()->createMapper(customizers).readValue(is, mappedType));
         });
     }
@@ -99,7 +99,7 @@ public class JsonUtils {
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
             final JsonUtils.JsonCustomizer ... customizers) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             return Try.call(()->{
                 val mapper = createMapper(customizers);
                 val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);

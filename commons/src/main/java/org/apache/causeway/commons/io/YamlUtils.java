@@ -65,7 +65,7 @@ public class YamlUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             return Try.call(()->createMapper(mappedType).load(is));
         });
     }
