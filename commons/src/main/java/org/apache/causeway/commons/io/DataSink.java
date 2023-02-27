@@ -25,12 +25,13 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
+import org.apache.causeway.commons.functional.ThrowingConsumer;
+import org.apache.causeway.commons.functional.ThrowingSupplier;
 import org.apache.causeway.commons.functional.Try;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 
 /**
  * General purpose writable byte data sink.
@@ -41,10 +42,10 @@ import lombok.NonNull;
 public interface DataSink {
 
     /**
-     * Re-throws any {@link Exception} from the mapped {@link Try},
-     * when the Try is a failure case.
+     * Offers this {@link DataSink}'s {@link OutputStream} to the caller,
+     * so it can write data to it.
      */
-    void writeAll(@NonNull Function<OutputStream, Try<Void>> producingMapper);
+    void writeAll(@NonNull final ThrowingConsumer<OutputStream> outputStreamConsumer);
 
     // -- FACTORIES
 
@@ -55,36 +56,36 @@ public interface DataSink {
         return consumingMapper -> {};
     }
 
-    static DataSink ofOutputStreamSupplier(final @NonNull Supplier<OutputStream> outputStreamSupplier) {
-        return outputConsumer ->
-            Try.call(()->{
+    static DataSink ofOutputStreamSupplier(final @NonNull ThrowingSupplier<OutputStream> outputStreamSupplier) {
+        return new DataSink() {
+            @Override @SneakyThrows
+            public void writeAll(final @NonNull ThrowingConsumer<OutputStream> outputStreamConsumer) {
                 try(final OutputStream os = outputStreamSupplier.get()) {
-                    return outputConsumer.apply(os);
+                    outputStreamConsumer.accept(os);
                 }
-            })
-            .ifFailureFail() // throw if any Exception outside the call to 'outputConsumer.apply(os)'
-            // unwrap the inner Try<Void>
-            .getValue().orElseThrow()
-            .ifFailureFail(); // throw if any Exception within the call to 'outputConsumer.apply(os)'
+            }
+        };
+    }
+
+    static DataSink ofByteArrayConsumer(final @NonNull ThrowingConsumer<byte[]> byteArrayConsumer, final int initalBufferSize) {
+        return new DataSink() {
+            @Override @SneakyThrows
+            public void writeAll(final @NonNull ThrowingConsumer<OutputStream> outputStreamConsumer) {
+                try(final ByteArrayOutputStream bos = new ByteArrayOutputStream(initalBufferSize)) {
+                    outputStreamConsumer.accept(bos);
+                    byteArrayConsumer.accept(bos.toByteArray());
+                }
+            }
+        };
+    }
+
+    static DataSink ofByteArrayConsumer(final @NonNull ThrowingConsumer<byte[]> byteArrayConsumer) {
+        // using the default initalBufferSize from constructor ByteArrayOutputStream()
+        return ofByteArrayConsumer(byteArrayConsumer, 32);
     }
 
     static DataSink ofFile(final @NonNull File file) {
-        return ofOutputStreamSupplier(()->Try.call(()->new FileOutputStream(file)).ifFailureFail().getValue().orElseThrow());
-    }
-
-    static DataSink ofByteArrayConsumer(final @NonNull Consumer<byte[]> byteArrayConsumer) {
-        return outputConsumer ->
-            Try.call(()->{
-                try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-                    var innerTry = outputConsumer.apply(bos);
-                    byteArrayConsumer.accept(bos.toByteArray());
-                    return innerTry;
-                }
-            })
-            .ifFailureFail() // throw if any Exception outside the call to 'outputConsumer.apply(os)'
-            // unwrap the inner Try<Void>
-            .getValue().orElseThrow()
-            .ifFailureFail(); // throw if any Exception within the call to 'outputConsumer.apply(os)'
+        return ofOutputStreamSupplier(()->Try.call(()->new FileOutputStream(file)).valueAsNonNullElseFail());
     }
 
     static DataSink ofStringConsumer(final @NonNull Consumer<String> stringConsumer, final @NonNull Charset charset) {
@@ -99,6 +100,15 @@ public interface DataSink {
         return ofByteArrayConsumer(bytes->stringConsumer.append(new String(bytes, charset)));
     }
 
+    /**
+     * Example:
+     * <pre>
+     * var sb = new StringBuffer();
+     * var dataSink = DataSink.ofStringUtf8Consumer(sb);
+     * //... write to dataSink
+     * String result = sb.toString(); // read the buffer
+     * </pre>
+     */
     static DataSink ofStringUtf8Consumer(final @NonNull StringBuilder stringUtf8Consumer) {
         return ofStringConsumer(stringUtf8Consumer, StandardCharsets.UTF_8);
     }

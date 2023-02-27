@@ -192,7 +192,7 @@ public class JaxbUtils {
 
             @Override
             public T read(final DataSource source) {
-                return source.readAll((final InputStream is)->{
+                return source.tryReadAll((final InputStream is)->{
                     return Try.call(()->opts.unmarshal(jaxbContext, mappedType, is));
                 })
                 .ifFailureFail()
@@ -230,7 +230,7 @@ public class JaxbUtils {
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
             final JaxbUtils.JaxbCustomizer ... customizers) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             val opts = createOptions(customizers);
             return Try.call(()->opts.unmarshal(mappedType, is))
                     .mapFailure(cause->verboseException("unmarshalling XML", mappedType, cause));
