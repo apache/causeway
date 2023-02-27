@@ -23,7 +23,10 @@ import org.apache.causeway.client.kroviz.App
 import org.apache.causeway.client.kroviz.IntegrationTest
 import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
-import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.*
+import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL
+import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL_SERVICES
+import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
+import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.SO_LIST_ALL
 import org.apache.causeway.client.kroviz.to.Method
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.utils.XmlHelper
@@ -63,7 +66,8 @@ class EventStoreTest : IntegrationTest() {
         assertFalse(le1 === le2)  //4
     }
 
-    //@Test
+    @Ignore
+    @Test
     // sometimes fails with:
     // Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.
     fun testLayout() {
@@ -77,18 +81,12 @@ class EventStoreTest : IntegrationTest() {
             val soList = ResourceSpecification(SO_LIST_ALL.url)
             mockResponse(SO_LIST_ALL, obs)
 
-            val rsJson = ResourceSpecification(SO_LAYOUT_JSON.url)
-            mockResponse(SO_LAYOUT_JSON, obs)
-
             val rsXml = ResourceSpecification(SO_LAYOUT_XML.url, Constants.subTypeXml)
             mockResponse(SO_LAYOUT_XML, obs)
 
             // then
             val soListLe = es.findBy(soList)!!
             assertEquals(Constants.subTypeJson, soListLe.subType) // 1
-
-            val leJson = es.findBy(rsJson)!!
-            assertEquals(Constants.subTypeJson, leJson.subType) // 2
 
             val leXml = es.findBy(rsXml)!!
             assertEquals(Constants.subTypeXml, leXml.subType) // 3

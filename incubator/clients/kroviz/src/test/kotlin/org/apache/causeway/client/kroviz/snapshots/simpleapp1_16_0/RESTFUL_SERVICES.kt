@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0
 
 import org.apache.causeway.client.kroviz.snapshots.Response
 
-// ResultListList.kt
 object RESTFUL_SERVICES : Response() {
     override val url = "http://localhost:8080/restful/services"
     override val str = """

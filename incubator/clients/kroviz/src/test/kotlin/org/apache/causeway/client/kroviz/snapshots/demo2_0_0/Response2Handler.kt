@@ -27,25 +27,19 @@ object Response2Handler {
 //            ACTIONS_STRINGS_INVOKE to TObjectHandler(),    // commented out due to issues with object-icon
             ACTIONS_WHEREINTHEWORLD_INVOKE to TObjectHandler(),
             ACTIONS_TEXT_INVOKE to TObjectHandler(),
-            ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),
             OBJECT_COLLECTION to CollectionHandler(),
             DOMAIN_TYPES_PROPERTY to PropertyHandler(),
             FILE_NODE to DomainTypeHandler(),
             HTTP_ERROR_405 to HttpErrorHandler(),
             HTTP_ERROR_500 to HttpErrorHandler(),
             MENUBARS to MenuBarsHandler(),
-            OBJECT_LAYOUT to LayoutHandler(),
             PRIMITIVES to TObjectHandler(),
             PROPERTY to PropertyHandler(),
             PROPERTY_DESCRIPTION to PropertyHandler(),
             RESTFUL to RestfulHandler(),
             RESTFUL_DOMAIN_TYPES to DomainTypesHandler(),
-            TAB_OBJECT_LAYOUT to LayoutHandler(),
             TAB_LAYOUT_XML to LayoutXmlHandler(),
             TEMPORALS to TObjectHandler(),
-            TEXT_LAYOUT to LayoutHandler(),
-            TOOLTIP_OBJECT_LAYOUT to LayoutHandler(),
-            TUPLE_OBJECT_LAYOUT to LayoutHandler(),
     )
 
 }

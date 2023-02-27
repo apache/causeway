@@ -21,7 +21,6 @@ package org.apache.causeway.client.causeway.snapshots.demo2_0_0
 
 import org.apache.causeway.client.kroviz.snapshots.Response
 
-
 object OBJECT_COLLECTION2: Response(){
     override val url = "http://localhost:8080/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/collections/entities"
     override val str = """
