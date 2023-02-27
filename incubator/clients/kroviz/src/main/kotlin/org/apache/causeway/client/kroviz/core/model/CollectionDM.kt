@@ -24,9 +24,8 @@ import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
 import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
-import org.apache.causeway.client.kroviz.utils.StringUtils
 
-class CollectionDM(override val title: String) : DisplayModelWithLayout() {
+class CollectionDM(override var title: String) : DisplayModelWithLayout() {
     val collectionLayout = CollectionLayout()
 
     var id = ""
@@ -36,9 +35,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     private var protoTypeLayout: GridBs? = null
 
     fun getTitle(): String {
-        if (title.isNotEmpty()) return StringUtils.extractTitle(title)
-        if (id.isNotEmpty()) return id.uppercase()
-        return "leer"
+        return title
     }
 
     fun setProtoTypeLayout(grid: GridBs) {
@@ -70,7 +67,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return id.isNotEmpty() && collectionLayout.readyToRender()
+        return collectionLayout.readyToRender()
     }
 
     override fun addData(obj: TransferObject) {

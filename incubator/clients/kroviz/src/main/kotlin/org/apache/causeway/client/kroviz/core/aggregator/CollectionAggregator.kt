@@ -178,6 +178,10 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
                 invoke(it, this, referrer = referrer)
             }
         }
+        if (collection.isCollectionDescription()) {
+            val title = collection.extensions.getFriendlyName()
+            getDisplayModel().title = title
+        }
         collection.value.forEach {
             invoke(it, this, referrer = referrer)
         }

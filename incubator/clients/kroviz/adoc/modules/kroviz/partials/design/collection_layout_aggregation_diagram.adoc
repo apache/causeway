@@ -52,7 +52,7 @@ OC --> O : contains\nreference\nto
 O --> OLJ
 O --> OP : contains\nreference\nto
 OP -> PD : contains\nreference\nto
-PD -r-> END
+PD --> END
 
 ' references between TO classes
 GridBs o-->"0.n" Collection
@@ -78,7 +78,7 @@ together {
     ObjectAggregator --> ObjectDM
     ObjectDM --> ObjectLayout
 }
-ObjectDM <.. GridBs : added to
+ObjectLayout <.r. GridBs : added to
 
 'collection
 together {
@@ -109,17 +109,17 @@ together {
     }
     CollectionAggregator --> CollectionDM
     CollectionDM --> CollectionLayout
-    CollectionLayout o-r-> PropertyDetails
+    CollectionLayout o--> PropertyDetails
 }
-ObjectDM o-r-> CollectionDM
+ObjectDM o-> CollectionDM
 
 ' references between Layout and TO classes
 CollectionLayout <.. TObject : added to
 CollectionLayout <.. ObjectProperty : added to
-CollectionLayout <.. PropertyDescription : added to
+PropertyDetails <.. PropertyDescription : added to
 
 
-legend left
+legend top right
     <back:#lightblue> Description           </back>
     <back:#lightgreen> Party, place, thing</back>
     <back:#pink> Moment, Interval   </back>
