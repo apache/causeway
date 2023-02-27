@@ -31,6 +31,7 @@ import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecu
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 
@@ -50,15 +51,13 @@ import lombok.val;
     paged = 5,
     sequence = "3"
 )
+@RequiredArgsConstructor
 public class HasUsername_recentExecutionsByUser {
 
     public static class CollectionDomainEvent
             extends CausewayModuleExtExecutionLogApplib.CollectionDomainEvent<HasUsername_recentExecutionsByUser, ExecutionLogEntry> { }
 
     private final HasUsername hasUsername;
-    public HasUsername_recentExecutionsByUser(final HasUsername hasUsername) {
-        this.hasUsername = hasUsername;
-    }
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
         val username = hasUsername.getUsername();
