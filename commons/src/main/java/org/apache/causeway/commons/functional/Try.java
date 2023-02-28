@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
@@ -169,19 +168,21 @@ public interface Try<T> {
     /**
      * Maps this {@link Try} to {@link Either}
      * using according mapping function {@code successMapper} or {@code failureMapper}.
+     * <p>
+     * Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
      * @apiNote It is a common functional programming convention, to map the success value <i>right</i>.
      */
     <L, R> Either<L, R> mapToEither(
-            final @NonNull Function<Throwable, L> failureMapper,
-            final @NonNull Function<Optional<T>, R> successMapper);
+            final @NonNull ThrowingFunction<Throwable, L> failureMapper,
+            final @NonNull ThrowingFunction<Optional<T>, R> successMapper);
 
     // -- ACCEPT
 
     /**
      * Either consumes the success or the failure.
      * <p>
-     * If any of given failureConsumer or successConsumer throws an exception, a failed {@link Try} is returned.
-     * @apiNote Order of arguments conforms to {@link #mapToEither(Function, Function)}
+     * However, if any of given failureConsumer or successConsumer throws an exception, a failed {@link Try} is returned.
+     * @apiNote Order of arguments conforms to {@link #mapToEither(ThrowingFunction, ThrowingFunction)}
      */
     Try<T> accept(
             final @NonNull ThrowingConsumer<Throwable> failureConsumer,
@@ -192,11 +193,13 @@ public interface Try<T> {
     /**
      * Maps the contained {@code value} or {@code failure} to a new value of type {@code R}
      * using according mapping function {@code successMapper} or {@code failureMapper}.
-     * @apiNote Order of arguments conforms to {@link #mapToEither(Function, Function)}
+     * <p>
+     * Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
+     * @apiNote Order of arguments conforms to {@link #mapToEither(ThrowingFunction, ThrowingFunction)}
      */
     <R> R fold(
-            final @NonNull Function<Throwable, R> failureMapper,
-            final @NonNull Function<Optional<T>, R> successMapper);
+            final @NonNull ThrowingFunction<Throwable, R> failureMapper,
+            final @NonNull ThrowingFunction<Optional<T>, R> successMapper);
 
     // -- CONCATENATION
 
@@ -358,15 +361,15 @@ public interface Try<T> {
 
         @Override
         public <R> R fold(
-                final @NonNull Function<Throwable, R> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+                final @NonNull ThrowingFunction<Throwable, R> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return successMapper.apply(getValue());
         }
 
         @Override
         public <L, R> Either<L, R> mapToEither(
-                final @NonNull Function<Throwable, L> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+                final @NonNull ThrowingFunction<Throwable, L> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return Either.right(successMapper.apply(getValue()));
         }
 
@@ -477,15 +480,15 @@ public interface Try<T> {
 
         @Override
         public <R> R fold(
-                final @NonNull Function<Throwable, R> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+                final @NonNull ThrowingFunction<Throwable, R> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return failureMapper.apply(throwable);
         }
 
         @Override
         public <L, R> Either<L, R> mapToEither(
-                final @NonNull Function<Throwable, L> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+                final @NonNull ThrowingFunction<Throwable, L> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return Either.left(failureMapper.apply(throwable));
         }
 

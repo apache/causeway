@@ -20,7 +20,6 @@ package org.apache.causeway.commons.functional;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
@@ -85,36 +84,41 @@ public interface Railway<F, S> {
     // -- PEEKING
 
     /**
-     * Peeks into the contained {@code success} if this is a {@link Success}.
+     * If this is a {@link Success}, peeks into the contained {@code success}.
+     * @apiNote Any exceptions thrown by given successConsumer are propagated without catching.
      */
-    Railway<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer);
+    Railway<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer);
     /**
-     * Peeks into the contained {@code failure} if this is a {@link Failure}.
+     * If this is a {@link Failure}, peeks into the contained {@code failure}.
+     * @apiNote Any exceptions thrown by given failureConsumer are propagated without catching.
      */
-    Railway<F, S> ifFailure(final @NonNull Consumer<F> failureConsumer);
+    Railway<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer);
 
     // -- MAPPING
 
     /**
-     * Maps this {@link Railway} to another if this is a {@link Success}.
+     * If this is a {@link Success}, maps this {@link Railway} to another (success).
      * Otherwise if this is a {@link Failure} acts as identity operator.
+     * @apiNote Any exceptions thrown by given successMapper are propagated without catching.
      */
-    <R> Railway<F, R> mapSuccess(final @NonNull Function<S, R> successMapper);
+    <R> Railway<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper);
     /**
      * Maps this {@link Railway} to another if this is a {@link Failure}.
      * Otherwise if this is a {@link Success} acts as identity operator.
+     * @apiNote Any exceptions thrown by given failureMapper are propagated without catching.
      */
-    <R> Railway<R, S> mapFailure(final @NonNull Function<F, R> failureMapper);
+    <R> Railway<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper);
 
     // -- FOLDING
 
     /**
-     * Maps the contained {@code success} or {@code failure} to a new value of type {@code R}
-     * using according mapping function {@code successMapper} or {@code failureMapper}.
+     * Maps the contained {@code failure} or {@code success} to a new value of type {@code R}
+     * using according mapping function {@code failureMapper} or {@code successMapper}.
+     * @apiNote Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
      */
     <R> R fold(
-            final @NonNull Function<F, R> failureMapper,
-            final @NonNull Function<S, R> successMapper);
+            final @NonNull ThrowingFunction<F, R> failureMapper,
+            final @NonNull ThrowingFunction<S, R> successMapper);
 
     // -- CHAINING
 
@@ -126,8 +130,9 @@ public interface Railway<F, S> {
      * the chainingFunction is not executed.
      * <p>
      * In other words: if once failed stays failed
+     * @apiNote Any exceptions thrown by given chainingFunction are propagated without catching.
      */
-    Railway<F, S> chain(@NonNull Function<S, Railway<F, S>> chainingFunction);
+    Railway<F, S> chain(@NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction);
 
     // -- SUCCESS
 
@@ -145,35 +150,35 @@ public interface Railway<F, S> {
         @Override public Optional<F> getFailure() { return Optional.empty(); }
 
         @Override
-        public Success<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer) {
+        public Success<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer) {
             successConsumer.accept(success);
             return this;
         }
 
         @Override
-        public Success<F, S> ifFailure(final @NonNull Consumer<F> failureConsumer) {
+        public Success<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer) {
             return this;
         }
 
         @Override
-        public <R> Success<F, R> mapSuccess(final @NonNull Function<S, R> successMapper) {
+        public <R> Success<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper) {
             return Railway.success(successMapper.apply(success));
         }
 
         @Override
-        public <R> Success<R, S> mapFailure(final @NonNull Function<F, R> failureMapper) {
+        public <R> Success<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper) {
             return Railway.success(success);
         }
 
         @Override
         public <R> R fold(
-                final @NonNull Function<F, R> failureMapper,
-                final @NonNull Function<S, R> successMapper) {
+                final @NonNull ThrowingFunction<F, R> failureMapper,
+                final @NonNull ThrowingFunction<S, R> successMapper) {
             return successMapper.apply(success);
         }
 
         @Override
-        public Railway<F, S> chain(final @NonNull Function<S, Railway<F, S>> chainingFunction){
+        public Railway<F, S> chain(final @NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction){
             return chainingFunction.apply(success);
         }
 
@@ -195,35 +200,35 @@ public interface Railway<F, S> {
         @Override public Optional<F> getFailure() { return Optional.of(failure); }
 
         @Override
-        public Failure<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer) {
+        public Failure<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer) {
             return this;
         }
 
         @Override
-        public Failure<F, S> ifFailure(final @NonNull Consumer<F> failureConsumer) {
+        public Failure<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer) {
             failureConsumer.accept(failure);
             return this;
         }
 
         @Override
-        public <R> Failure<F, R> mapSuccess(final @NonNull Function<S, R> successMapper) {
+        public <R> Failure<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper) {
             return Railway.failure(failure);
         }
 
         @Override
-        public <R> Failure<R, S> mapFailure(final @NonNull Function<F, R> failureMapper) {
+        public <R> Failure<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper) {
             return Railway.failure(failureMapper.apply(failure));
         }
 
         @Override
         public <R> R fold(
-                final @NonNull Function<F, R> failureMapper,
-                final @NonNull Function<S, R> successMapper) {
+                final @NonNull ThrowingFunction<F, R> failureMapper,
+                final @NonNull ThrowingFunction<S, R> successMapper) {
             return failureMapper.apply(failure);
         }
 
         @Override
-        public Railway<F, S> chain(final @NonNull Function<S, Railway<F, S>> chainingFunction){
+        public Railway<F, S> chain(final @NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction){
             return this;
         }
 
@@ -242,23 +247,23 @@ public interface Railway<F, S> {
         @Override default Optional<S> getSuccess() { return getRailway().getSuccess(); }
         @Override default Optional<F> getFailure() { return getRailway().getFailure(); }
 
-        @Override default Railway<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer) {
+        @Override default Railway<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer) {
             return getRailway().ifSuccess(successConsumer); }
-        @Override default Railway<F, S> ifFailure(final @NonNull Consumer<F> failureConsumer) {
+        @Override default Railway<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer) {
             return getRailway().ifFailure(failureConsumer); }
 
-        @Override default <R> Railway<F, R> mapSuccess(final @NonNull Function<S, R> successMapper) {
+        @Override default <R> Railway<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper) {
             return getRailway().mapSuccess(successMapper); }
-        @Override default <R> Railway<R, S> mapFailure(final @NonNull Function<F, R> failureMapper) {
+        @Override default <R> Railway<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper) {
             return getRailway().mapFailure(failureMapper); }
 
         @Override default <R> R fold(
-                final @NonNull Function<F, R> failureMapper,
-                final @NonNull Function<S, R> successMapper) {
+                final @NonNull ThrowingFunction<F, R> failureMapper,
+                final @NonNull ThrowingFunction<S, R> successMapper) {
             return getRailway().fold(failureMapper, successMapper);
         }
 
-        @Override default public Railway<F, S> chain(final @NonNull Function<S, Railway<F, S>> chainingFunction){
+        @Override default public Railway<F, S> chain(final @NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction){
             return getRailway().chain(chainingFunction);
         }
     }

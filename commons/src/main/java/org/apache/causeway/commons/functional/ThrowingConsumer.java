@@ -25,11 +25,11 @@ import java.util.function.Consumer;
  * A {@link Consumer} that allows invocation of code that throws a checked
  * {@link Exception}.
  *
- * @since 2.x [@index}
  * @param <T> the type of the input to the operation
  * @apiNote this is a clone from <i>Spring's</i>
- *     org.springframework.util.function.ThrowingConsumer (as was introduced with <i>Spring Framework v6</i>),
+ *     org.springframework.util.function.ThrowingConsumer (as was introduced with <i>Spring Framework v6</i>);
  *     with version 3, the latter is used as a replacement and this interface is removed
+ * @since 2.x {@index}
  */
 @FunctionalInterface
 public interface ThrowingConsumer<T> extends Consumer<T> {
