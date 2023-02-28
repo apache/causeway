@@ -73,7 +73,7 @@ class RestServiceTest {
     @Test
     void httpSessionInfo() {
         val digest = restService.getHttpSessionInfo(restfulClient)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         val httpSessionInfo = digest.getValue().orElseThrow();
 
@@ -86,7 +86,7 @@ class RestServiceTest {
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
         val digest = restService.getRecommendedBookOfTheWeek(restfulClient)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         val bookOfTheWeek = digest.getValue().orElseThrow();
 
@@ -100,7 +100,7 @@ class RestServiceTest {
                 "REST Author", "REST ISBN", "REST Publisher");
 
         val digest = restService.storeBook(restfulClient, newBook)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         val storedBook = digest.getValue().orElseThrow();
 
@@ -111,7 +111,7 @@ class RestServiceTest {
     @Test
     void multipleBooks_viaRestEndpoint() throws JAXBException {
         val digest = restService.getMultipleBooks(restfulClient)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
@@ -124,7 +124,7 @@ class RestServiceTest {
     @Test
     void bookOfTheWeek_asDto_viaRestEndpoint() {
         val digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         val bookOfTheWeek = digest.getValue().orElseThrow();
 
@@ -135,7 +135,7 @@ class RestServiceTest {
     @Test
     void multipleBooks_asDto_viaRestEndpoint() throws JAXBException {
         val digest = restService.getMultipleBooksAsDto(restfulClient)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         val multipleBooks = digest.getValue().orElseThrow();
 
@@ -149,7 +149,7 @@ class RestServiceTest {
     @Test
     void inventoryAsJaxbVm_viaRestEndpoint() {
         val digest = restService.getInventoryAsJaxbVm(restfulClient)
-                .ifFailure(Assertions::fail);
+                .ifFailureFail();
 
         final JdoInventoryJaxbVm inventoryAsJaxbVm = digest.getValue().orElseThrow();
 
