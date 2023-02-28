@@ -52,10 +52,16 @@ class RestfulClient {
   ActionParameterListBuilder arguments()
   Try<T> digest(Response response, Class<T> entityType)
   Try<Can<T>> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType)
+  Try<T> digestValue(Response response, ValueSemanticsProvider<T> valSemantics)     // <.>
   URI uri(String path)     // <.>
 }
 ----
 
+<.> xref:#digestValue_Response_ValueSemanticsProvider[digestValue(Response, ValueSemanticsProvider)]
++
+--
+For transport of _ValueDecomposition_ over REST.
+--
 <.> xref:#uri_String[uri(String)]
 +
 --
@@ -63,6 +69,11 @@ Returns an _URI_ constructed from this client's base path plus given relative _p
 --
 
 == Members
+
+[#digestValue_Response_ValueSemanticsProvider]
+=== digestValue(Response, ValueSemanticsProvider)
+
+For transport of _ValueDecomposition_ over REST.
 
 [#uri_String]
 === uri(String)

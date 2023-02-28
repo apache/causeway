@@ -20,6 +20,7 @@ package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +31,9 @@ import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
 
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContextFactory;
 import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
@@ -41,7 +44,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
@@ -57,33 +59,19 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Utilities to convert from and to JAXB-XML format.
+ * @implNote instead of using {@link JAXBContext#newInstance(Class...)},
+ *      which does lookup the JaxbContextFactory on each call,
+ *      and which - depending on system-properties - could change during the lifetime of an application,
+ *      we rather utilize the org.glassfish.jaxb.runtime.v2.JAXBContextFactory directly.
  *
  * @since 2.0 {@index}
  */
 @UtilityClass
 public class JaxbUtils {
 
-    /** uses given context factory as the new platform default */
-    public void setDefaultJAXBContextFactory(final Class<?> jaxbContextFactoryClass, final boolean force) {
-        if(force
-                || System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)==null) {
-            if(jaxbContextFactoryClass!=null) {
-                System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, jaxbContextFactoryClass.getName());
-            } else {
-                System.clearProperty(JAXBContext.JAXB_CONTEXT_FACTORY);
-            }
-        }
-    }
-
-    /** uses MOXy */
-    public void useMoxy() {
-        //setDefaultJAXBContextFactory(org.eclipse.persistence.jaxb.JAXBContextFactory.class, true);
-    }
-
-    /** clears the system property override */
-    public static void usePlatformDefault() {
-        setDefaultJAXBContextFactory(null, true);
-    }
+    private final static jakarta.xml.bind.JAXBContextFactory JAXB_CONTEXT_FACTORY =
+            new org.glassfish.jaxb.runtime.v2.JAXBContextFactory();
+    private final static Map<String,Object> JAXB_CONTEXT_FACTORY_PROPS = Collections.<String,Object>emptyMap();
 
     @Data @Builder
     public static class JaxbOptions {
@@ -250,7 +238,7 @@ public class JaxbUtils {
         if(pojo==null) return;
         val opts = createOptions(customizers);
         try {
-            sink.writeAll(os->Try.run(()->opts.marshal(pojo, os)));
+            sink.writeAll(os->opts.marshal(pojo, os));
         } catch (Exception cause) {
             throw verboseException("marshalling domain object to XML", pojo.getClass(), cause);
         }
@@ -265,9 +253,9 @@ public class JaxbUtils {
             final @Nullable T pojo,
             final JaxbUtils.JaxbCustomizer ... customizers) {
         if(pojo==null) return null;
-        val sh = _Lists.<String>newArrayList(1);
-        write(pojo, DataSink.ofStringUtf8Consumer(sh::add), customizers);
-        return sh.stream().findFirst().orElse(null);
+        val sb = new StringBuilder();
+        write(pojo, DataSink.ofStringUtf8Consumer(sb), customizers);
+        return sb.toString();
     }
 
     // -- CUSTOMIZERS
@@ -302,13 +290,45 @@ public class JaxbUtils {
     @SneakyThrows
     private static <T> JAXBContext contextOf(final Class<?> ... classesToBeBound) {
         try {
-            return JAXBContext.newInstance(classesToBeBound);
+            return JAXB_CONTEXT_FACTORY.createContext(open(classesToBeBound), JAXB_CONTEXT_FACTORY_PROPS);
         } catch (Exception e) {
             val msg = String.format("obtaining JAXBContext for classes (to be bound) {%s}", _NullSafe.stream(classesToBeBound)
                     .map(Class::getName)
                     .collect(Collectors.joining(", ")));
             throw verboseException(msg, classesToBeBound[0], e); // assuming we have at least one argument
         }
+    }
+
+    /**
+     * Clone of org.glassfish.jaxb.runtime.v2.MUtils.open(Class[]).
+     * @param classes used to resolve module for {@linkplain Module#addOpens(String, Module)}
+     * @throws JAXBException if any of a classes package is not open to our module.
+     */
+    private static Class<?>[] open(final Class<?>[] classes) throws JAXBException {
+        final Module coreModule = JAXB_CONTEXT_FACTORY.getClass().getModule();
+        final Module rtModule = JAXBContextFactory.class.getModule();
+        if (rtModule == coreModule || !rtModule.isNamed()) {
+            //we're either in a bundle or on the classpath
+            return classes;
+        }
+        for (Class<?> cls : classes) {
+            Class<?> jaxbClass = cls.isArray() ? cls.getComponentType() : cls;
+            final Module classModule = jaxbClass.getModule();
+            //no need for unnamed and java.base types
+            if (!classModule.isNamed() || "java.base".equals(classModule.getName())) {
+                continue;
+            }
+            final String packageName = jaxbClass.getPackageName();
+
+            if (classModule.isOpen(packageName, rtModule)) {
+                classModule.addOpens(packageName, coreModule);
+            } else {
+                throw new JAXBException(java.text.MessageFormat.format(
+                        "Package {0} with class {1} defined in a module {2} must be open to at least {3} module.",
+                        packageName, jaxbClass.getName(), classModule.getName(), rtModule.getName()));
+            }
+        }
+        return classes;
     }
 
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
@@ -353,8 +373,5 @@ public class JaxbUtils {
         return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(cause.getClass().getName());
         /*sonar-ignore-off*/
     }
-
-
-
 
 }

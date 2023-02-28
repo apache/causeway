@@ -9,37 +9,56 @@ General purpose writable byte data sink.
 .DataSink.java
 ----
 interface DataSink {
-  void writeAll(Function<OutputStream, Try<Void>> producingMapper)     // <.>
+  void writeAll(ThrowingConsumer<OutputStream> outputStreamConsumer)     // <.>
   DataSink none()     // <.>
-  DataSink ofOutputStreamSupplier(Supplier<OutputStream> outputStreamSupplier)
+  DataSink ofOutputStreamSupplier(ThrowingSupplier<OutputStream> outputStreamSupplier)
+  DataSink ofByteArrayConsumer(ThrowingConsumer<byte[]> byteArrayConsumer, int initalBufferSize)
+  DataSink ofByteArrayConsumer(ThrowingConsumer<byte[]> byteArrayConsumer)
   DataSink ofFile(File file)
-  DataSink ofByteArrayConsumer(Consumer<byte[]> byteArrayConsumer)
   DataSink ofStringConsumer(Consumer<String> stringConsumer, Charset charset)
   DataSink ofStringUtf8Consumer(Consumer<String> stringUtf8Consumer)
   DataSink ofStringConsumer(StringBuilder stringConsumer, Charset charset)
-  DataSink ofStringUtf8Consumer(StringBuilder stringUtf8Consumer)
+  DataSink ofStringUtf8Consumer(StringBuilder stringUtf8Consumer)     // <.>
 }
 ----
 
-<.> xref:#writeAll_Function[writeAll(Function)]
+<.> xref:#writeAll_ThrowingConsumer[writeAll(ThrowingConsumer)]
 +
 --
-Re-throws any _Exception_ from the mapped xref:refguide:commons:index/functional/Try.adoc[Try] , when the Try is a failure case.
+Offers this xref:refguide:commons:index/io/DataSink.adoc[DataSink] 's _OutputStream_ to the caller, so it can write data to it.
 --
 <.> xref:#none_[none()]
 +
 --
 Acts as a no-op.
 --
+<.> xref:#ofStringUtf8Consumer_StringBuilder[ofStringUtf8Consumer(StringBuilder)]
++
+--
+Example:
+--
 
 == Members
 
-[#writeAll_Function]
-=== writeAll(Function)
+[#writeAll_ThrowingConsumer]
+=== writeAll(ThrowingConsumer)
 
-Re-throws any _Exception_ from the mapped xref:refguide:commons:index/functional/Try.adoc[Try] , when the Try is a failure case.
+Offers this xref:refguide:commons:index/io/DataSink.adoc[DataSink] 's _OutputStream_ to the caller, so it can write data to it.
 
 [#none_]
 === none()
 
 Acts as a no-op.
+
+[#ofStringUtf8Consumer_StringBuilder]
+=== ofStringUtf8Consumer(StringBuilder)
+
+Example:
+
+----
+
+var sb = new StringBuffer();
+var dataSink = DataSink.ofStringUtf8Consumer(sb);
+//... write to dataSink
+String result = sb.toString(); // read the buffer
+----

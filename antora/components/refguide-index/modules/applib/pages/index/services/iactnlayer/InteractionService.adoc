@@ -7,7 +7,7 @@ This service is used internally by the framework itself, for example when a view
 
 You could think of this as analogous to an `HttpRequest` , or a JPA `EntityManager` or JDO `PersistenceManager` .
 
-There are two main APIs exposed. One is to _#openInteraction(InteractionContext) open_ a new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , to be _#closeInteractionLayers() closed later_ . The other is to execute a _Callable_ or _ThrowingRunnable runnable_ within the duration of an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , wrapping up automatically. This is what is used by _org.apache.causeway.applib.services.sudo.SudoService_ , for example.
+There are two main APIs exposed. One is to _#openInteraction(InteractionContext) open_ a new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , to be _#closeInteractionLayers() closed later_ . The other is to execute a _Callable_ or xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable] within the duration of an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , wrapping up automatically. This is what is used by _org.apache.causeway.applib.services.sudo.SudoService_ , for example.
 
 == API
 
