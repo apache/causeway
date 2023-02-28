@@ -15,7 +15,20 @@ class ActionParameterListBuilder {
   ActionParameterListBuilder addActionParameter(String parameterName, double parameterValue)
   ActionParameterListBuilder addActionParameter(String parameterName, float parameterValue)
   ActionParameterListBuilder addActionParameter(String parameterName, boolean parameterValue)
+  ActionParameterListBuilder addActionParameter(String parameterName, ValueDecomposition decomposition)     // <.>
   Entity<String> build()
 }
 ----
 
+<.> xref:#addActionParameter_String_ValueDecomposition[addActionParameter(String, ValueDecomposition)]
++
+--
+For transport of _ValueDecomposition_ over REST.
+--
+
+== Members
+
+[#addActionParameter_String_ValueDecomposition]
+=== addActionParameter(String, ValueDecomposition)
+
+For transport of _ValueDecomposition_ over REST.

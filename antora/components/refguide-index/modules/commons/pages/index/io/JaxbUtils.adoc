@@ -9,9 +9,6 @@ Utilities to convert from and to JAXB-XML format.
 .JaxbUtils.java
 ----
 class JaxbUtils {
-  void setDefaultJAXBContextFactory(Class<?> jaxbContextFactoryClass, boolean force)     // <.>
-  void useMoxy()     // <.>
-  void usePlatformDefault()     // <.>
   DtoMapper<T> mapperFor(Class<T> mappedType, JaxbUtils.JaxbCustomizer... customizers)
   Try<T> tryRead(Class<T> mappedType, String stringUtf8, JaxbUtils.JaxbCustomizer... customizers)     // <.>
   Try<T> tryRead(Class<T> mappedType, DataSource source, JaxbUtils.JaxbCustomizer... customizers)     // <.>
@@ -22,21 +19,6 @@ class JaxbUtils {
 }
 ----
 
-<.> xref:#setDefaultJAXBContextFactory_Class_boolean[setDefaultJAXBContextFactory(Class, boolean)]
-+
---
-uses given factory as default
---
-<.> xref:#useMoxy_[useMoxy()]
-+
---
-uses MOXy
---
-<.> xref:#usePlatformDefault_[usePlatformDefault()]
-+
---
-clears the system property override
---
 <.> xref:#tryRead_Class_String_JaxbUtils_JaxbCustomizer[tryRead(Class, String, JaxbUtils_JaxbCustomizer)]
 +
 --
@@ -64,21 +46,6 @@ not cached
 --
 
 == Members
-
-[#setDefaultJAXBContextFactory_Class_boolean]
-=== setDefaultJAXBContextFactory(Class, boolean)
-
-uses given factory as default
-
-[#useMoxy_]
-=== useMoxy()
-
-uses MOXy
-
-[#usePlatformDefault_]
-=== usePlatformDefault()
-
-clears the system property override
 
 [#tryRead_Class_String_JaxbUtils_JaxbCustomizer]
 === tryRead(Class, String, JaxbUtils_JaxbCustomizer)
