@@ -32,6 +32,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 
 import lombok.RequiredArgsConstructor;
@@ -84,10 +85,15 @@ interface ResponseDigester {
             if(reprType.isValue()
                     || reprType.isValues()) {
                 val jsonInput = response.readEntity(String.class);
-                val scalarValueDto = new ObjectMapper().readValue(jsonInput, ScalarValueDtoV2.class);
+                val scalarValueDto = JsonUtils.tryRead(ScalarValueDtoV2.class, jsonInput)
+                        .valueAsNonNullElseFail();
                 return scalarValueDto.getValueAs(entityType);
             }
-            return response.<T>readEntity(entityType);
+            //does not work ...
+            //mapper.registerModule(new JaxbAnnotationModule());
+            //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            //return mapper.readValue(jsonInput, entityType);
+            return response.<T>readEntity(entityType); // uses RestEasy, which uses MOXy
         }
 
         @SneakyThrows
