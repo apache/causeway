@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:lnk="http://isis.apache.org/applib/layout/links"
+           xmlns:tns="http://isis.apache.org/applib/layout/component"
+           elementFormDefault="qualified"
+           targetNamespace="http://isis.apache.org/applib/layout/component"
+           version="1.0">
+
+  <xs:import
+          namespace="http://isis.apache.org/applib/layout/links"
+          schemaLocation="../links/links.xsd"/>
+
+  <xs:element name="action" type="tns:action"/>
+
+  <xs:element name="collection" type="tns:collection"/>
+
+  <xs:element name="domainObject" type="tns:domainObject"/>
+
+  <xs:element name="fieldSet" type="tns:fieldSet"/>
+
+  <xs:element name="serviceAction" type="tns:serviceAction"/>
+
+  <xs:element name="property" type="tns:property"/>
+
+  <xs:complexType name="domainObject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="plural" type="xs:string"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
+    </xs:sequence>
+    <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="cssClassFa" type="xs:string"/>
+    <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="tableDecoration" type="tns:tableDecoration"/>
+  </xs:complexType>
+
+  <xs:complexType name="action">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
+    </xs:sequence>
+    <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="cssClassFa" type="xs:string"/>
+    <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
+    <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="position" type="tns:position"/>
+    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
+    <xs:attribute name="redirect" type="tns:redirect"/>
+  </xs:complexType>
+
+  <xs:complexType name="serviceAction">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
+    </xs:sequence>
+    <xs:attribute name="objectType" type="xs:string" use="required"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="cssClassFa" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="fieldSet">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:property"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="unreferencedActions" type="xs:boolean"/>
+    <xs:attribute name="unreferencedProperties" type="xs:boolean"/>
+  </xs:complexType>
+
+  <xs:complexType name="property">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
+    </xs:sequence>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="labelPosition" type="tns:labelPosition"/>
+    <xs:attribute name="multiLine" type="xs:int"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
+    <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
+    <xs:attribute name="typicalLength" type="xs:int"/>
+    <xs:attribute name="repainting" type="xs:boolean"/>
+  </xs:complexType>
+
+  <xs:complexType name="collection">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="sortedBy" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+      <xs:element minOccurs="0" name="link" type="lnk:link"/>
+    </xs:sequence>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="defaultView" type="xs:string"/>
+    <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="paged" type="xs:int"/>
+    <xs:attribute name="tableDecoration" type="tns:tableDecoration"/>
+  </xs:complexType>
+
+
+  <xs:simpleType name="bookmarkPolicy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AS_ROOT"/>
+      <xs:enumeration value="AS_CHILD"/>
+      <xs:enumeration value="NEVER"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="cssClassFaPosition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LEFT"/>
+      <xs:enumeration value="RIGHT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="where">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EVERYWHERE"/>
+      <xs:enumeration value="ANYWHERE"/>
+      <xs:enumeration value="OBJECT_FORMS"/>
+      <xs:enumeration value="REFERENCES_PARENT"/>
+      <xs:enumeration value="PARENTED_TABLES"/>
+      <xs:enumeration value="STANDALONE_TABLES"/>
+      <xs:enumeration value="ALL_TABLES"/>
+      <xs:enumeration value="ALL_EXCEPT_STANDALONE_TABLES"/>
+      <xs:enumeration value="NOWHERE"/>
+      <xs:enumeration value="NOT_SPECIFIED"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="position">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BELOW"/>
+      <xs:enumeration value="RIGHT"/>
+      <xs:enumeration value="PANEL"/>
+      <xs:enumeration value="PANEL_DROPDOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="promptStyle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AS_CONFIGURED"/>
+      <xs:enumeration value="DIALOG"/>
+      <xs:enumeration value="DIALOG_SIDEBAR"/>
+      <xs:enumeration value="DIALOG_MODAL"/>
+      <xs:enumeration value="INLINE"/>
+      <xs:enumeration value="INLINE_AS_IF_EDIT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="redirect">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AS_CONFIGURED"/>
+      <xs:enumeration value="EVEN_IF_SAME"/>
+      <xs:enumeration value="ONLY_IF_DIFFERS"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="labelPosition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DEFAULT"/>
+      <xs:enumeration value="LEFT"/>
+      <xs:enumeration value="RIGHT"/>
+      <xs:enumeration value="TOP"/>
+      <xs:enumeration value="NONE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tableDecoration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NONE"/>
+      <xs:enumeration value="DATATABLES_NET"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="repainting">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="REPAINT"/>
+      <xs:enumeration value="NO_REPAINT"/>
+      <xs:enumeration value="NOT_SPECIFIED"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
