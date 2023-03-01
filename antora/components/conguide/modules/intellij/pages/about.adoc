@@ -10,13 +10,17 @@ Additional configuration of IntelliJ for contributors (and committers).
 
 == Prepare for Build
 
-The project/artifact `causeway-core-privileged` is required to be an _automatic module_
-in the _Java Platform Module System_ (JPMS) sense. (It has unrestricted access to the class-path
-but not the module-path.)
+The project/artifact `causeway-core-privileged` is required to be an _automatic module_ in the _Java Platform Module System_ (JPMS) sense.
+(In other words, it has unrestricted access to the class-path but not the module-path.)
 
-WARNING: As of time of writing, _IntelliJ IDEA_ does *not* support automatic module name resolution
-for projects that are also *opened* in the IDE. Instead it will resolve such module names
-only from *ignored* projects, that previously had been built and installed via _Maven_ to the
-local repository. (Typically `~/.m2/repository`).
+However, at the time of writing, _IntelliJ IDEA_ does *not* support automatic module name resolution for projects that are also *opened* in the IDE.
+Instead it will resolve such module names only from *ignored* projects, that previously had been built and installed via _Maven_ to the local repository (typically `~/.m2/repository`).
 
+What this means in practice is that you should:
 
+* build the framework once outside of the IDE, using Maven
+* in the IDE, open the project from the top-level `pom.xml`
+* immediately ignore the `causeway-core-privileged` module (to force the IDE to resolve from the local repository, as described above).
+
+Although not mandatory, you might also find it worth ignoring the `causeway-schema` module.
+That's because this module uses a Maven plugin to generate code from XSDs, and sometimes the IDE might overwrite/remove these generated files.
