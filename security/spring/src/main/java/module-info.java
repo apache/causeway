@@ -39,5 +39,4 @@ module org.apache.causeway.security.spring {
     requires spring.security.core;
     requires spring.security.web;
     requires spring.web;
-    requires javax.servlet.api;
 }
