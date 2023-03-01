@@ -159,7 +159,6 @@ open module org.apache.causeway.core.metamodel {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
-    requires org.apache.causeway.core.privileged;
 
 //JUnit testing stuff, not required as long this module is an 'open' one
 //    opens org.apache.causeway.core.metamodel.services to spring.core;

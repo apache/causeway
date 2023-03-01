@@ -25,5 +25,4 @@ module org.apache.causeway.core.codegen.bytebuddy {
     requires org.objenesis;
     requires spring.context;
     requires spring.core;
-    requires org.apache.causeway.core.privileged;
 }

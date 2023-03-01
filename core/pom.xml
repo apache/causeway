@@ -274,8 +274,6 @@
 
 		<module>../supplemental-model</module>
 
-		<module>privileged</module>
-
 		<module>../commons</module>
 
 		<module>../api/schema</module>
