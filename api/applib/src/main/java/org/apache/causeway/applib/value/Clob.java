@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.value;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -42,6 +41,7 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -98,7 +98,7 @@ public final class Clob implements NamedWithMimeType {
     /**
      * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Clob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
@@ -115,27 +115,33 @@ public final class Clob implements NamedWithMimeType {
     }
 
     /**
-     * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and content from {@code file},
+     * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and content from {@code dataSource},
      * wrapped with a {@link Try}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Clob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
      * For more fine-grained control use one of the {@link Clob} constructors directly.
      * @param name - may or may not include the desired filename extension
      * @param mimeType
-     * @param file - the file to be opened for reading
-     * @param charset - {@link Charset} to use for reading given file
+     * @param dataSource - the {@link DataSource} to be opened for reading
+     * @param charset - {@link Charset} to use for reading from given {@link DataSource}
      * @return new {@link Clob}
+     */
+    public static Try<Clob> tryRead(final String name, final CommonMimeType mimeType, final DataSource dataSource,
+            final @NonNull Charset charset) {
+        return dataSource.tryReadAsString(charset)
+                .mapSuccess(string->Clob.of(name, mimeType, string.orElse(null)));
+    }
+
+    /**
+     * Shortcut for {@code tryRead(name, mimeType, DataSource.ofFile(file), charset)}
+     * @see #tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, DataSource, Charset)
      */
     public static Try<Clob> tryRead(final String name, final CommonMimeType mimeType, final File file,
             final @NonNull Charset charset) {
-        return Try.call(()->{
-            try(val fis = new FileInputStream(file)){
-                return Clob.of(name, mimeType, _Strings.read(fis, charset));
-            }
-        });
+        return tryRead(name, mimeType, DataSource.ofFile(file), charset);
     }
 
     /**

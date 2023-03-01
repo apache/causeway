@@ -134,7 +134,7 @@ module org.apache.causeway.applib {
     requires transitive java.xml;
     requires transitive java.inject;
     requires lombok;
-    requires org.apache.causeway.commons;
+    requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
     requires org.apache.logging.log4j;
     requires transitive org.joda.time;
