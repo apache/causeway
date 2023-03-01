@@ -277,7 +277,7 @@ public final class Blob implements NamedWithMimeType {
                 }
                 return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
             })
-            .orElse(Blob.of("blob_unzip_failed", resultingMimeType, new byte[0]))
+            .orElseThrow()
         )
         .mapEmptyToFailure()
         .valueAsNonNullElseFail();
