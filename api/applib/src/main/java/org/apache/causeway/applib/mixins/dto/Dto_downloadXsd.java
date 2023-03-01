@@ -31,10 +31,10 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.io.ZipUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -103,17 +103,15 @@ public class Dto_downloadXsd {
             return Clob.of(fileName, CommonMimeType.XSD, xmlString);
         }
 
-        val zipWriter = ZipWriter.newInstance();
+        val zipBuilder = ZipUtils.zipEntryBuilder();
 
         for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
             val namespaceUri = entry.getKey();
             val schemaText = entry.getValue();
-            zipWriter.nextEntry(zipEntryNameFor(namespaceUri), outputStream->{
-                outputStream.writeCharactersUtf8(schemaText);
-            });
+            zipBuilder.addAsUtf8(zipEntryNameFor(namespaceUri), schemaText);
         }
 
-        return Blob.of(fileName, CommonMimeType.ZIP, zipWriter.toBytes());
+        return Blob.of(fileName, CommonMimeType.ZIP, zipBuilder.toBytes());
 
     }
 

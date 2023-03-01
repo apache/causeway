@@ -35,10 +35,10 @@ import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
-import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -96,7 +96,7 @@ public class LayoutServiceDefault implements LayoutService {
                         !spec.isAbstract()
                         && (spec.isEntity() || spec.isViewModel()));
 
-        val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
+        val zipBuilder = ZipUtils.zipEntryBuilder();
 
         for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
@@ -106,15 +106,12 @@ public class LayoutServiceDefault implements LayoutService {
                     failure->
                         log.warn("failed to generate layout file for {}", domainClass),
                     contentIfAny->{
-                        contentIfAny.ifPresent(contentString->{
-                            zipWriter.nextEntry(zipEntryNameFor(objectSpec, format), writer->
-                                writer.writeCharactersUtf8(contentString)
-                            );
-                        });
+                        contentIfAny.ifPresent(contentString->
+                            zipBuilder.addAsUtf8(zipEntryNameFor(objectSpec, format), contentString));
                     });
         }
 
-        return zipWriter.toBytes();
+        return zipBuilder.toBytes();
     }
 
     // -- HELPER

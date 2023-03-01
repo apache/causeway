@@ -24,13 +24,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
@@ -38,6 +45,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -88,7 +96,28 @@ public class ZipUtils {
                 return Try.failure(e);
             }
         }
+
+        public static ZipEntryDataSource of(
+                final @NonNull ZipEntry zipEntry,
+                final @Nullable byte[] bytes) {
+            return new ZipEntryDataSource(zipEntry, _NullSafe.toNonNull(bytes));
+        }
+
+        public static ZipEntryDataSource of(
+                final @NonNull ZipEntry zipEntry,
+                final @NonNull DataSource dataSource) {
+            return of(zipEntry, dataSource.bytes());
+        }
+
+        @SneakyThrows
+        void writeTo(
+                final ZipOutputStream zipOutputStream) {
+            zipOutputStream.putNextEntry(zipEntry());
+            zipOutputStream.closeEntry();
+        }
     }
+
+    // -- READING
 
     /**
      * Returns a {@link Stream} of {@link ZipEntryDataSource}, buffered in memory,
@@ -97,8 +126,8 @@ public class ZipUtils {
      *      but doing so, regardless of what is actually consumed later from the returned {@link Stream}.
      */
     public Stream<ZipEntryDataSource> streamZipEntries(
-            final DataSource zippedSource,
-            final ZipOptions zipOptions) {
+            final @NonNull DataSource zippedSource,
+            final @NonNull ZipOptions zipOptions) {
 
         val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
 
@@ -129,8 +158,87 @@ public class ZipUtils {
      * @see #streamZipEntries(DataSource, ZipOptions)
      */
     public Stream<ZipEntryDataSource> streamZipEntries(
-            final DataSource zippedSource) {
+            final @NonNull DataSource zippedSource) {
         return streamZipEntries(zippedSource, ZipOptions.builder().build());
+    }
+
+    // -- WRITING
+
+    public static byte[] zipToBytes(final @NonNull Stream<ZipEntryDataSource> entryStream) {
+        val buffer = DataPeer.inMemory(16*1024); // 16k default
+        writeTo(entryStream, buffer);
+        return buffer.bytes();
+    }
+
+    @SneakyThrows
+    public static void writeTo(final @NonNull Stream<ZipEntryDataSource> entryStream, final @NonNull DataSink dataSink) {
+        dataSink.writeAll(os->{
+            try(val zos = new ZipOutputStream(os)) {
+                entryStream.forEach(entry->entry.writeTo(zos));
+            }
+        });
+    }
+
+    // -- ENTRY BUILDER
+
+    public static class EntryBuilder {
+
+        private final List<ZipEntryDataSource> entries = new ArrayList<>();
+
+        public EntryBuilder add(final @NonNull ZipEntryDataSource zipEntryDataSource){
+            entries.add(zipEntryDataSource);
+            return this;
+        }
+
+        // -- SHORTCUTS
+
+        public EntryBuilder add(final @NonNull String entryName, final @Nullable byte[] bytes){
+            return add(ZipEntryDataSource.of(new ZipEntry(entryName), bytes));
+        }
+
+        public EntryBuilder add(final @NonNull String entryName, final @NonNull DataSource dataSource){
+            return add(entryName, dataSource.bytes());
+        }
+
+        public EntryBuilder add(final @NonNull String entryName, final @Nullable String string, final @NonNull Charset charset){
+            return add(entryName, _Strings.toBytes(string, charset));
+        }
+
+        public EntryBuilder addAsUtf8(final @NonNull String entryName, final @Nullable String string){
+            return add(entryName, _Strings.toBytes(string, StandardCharsets.UTF_8));
+        }
+
+        // -- TERMINALS
+
+        public Stream<ZipEntryDataSource> stream(){
+            return entries.stream();
+        }
+
+        public void writeTo(final DataSink dataSink) {
+            ZipUtils.writeTo(stream(), dataSink);
+        }
+
+        public byte[] toBytes() {
+            return ZipUtils.zipToBytes(stream());
+        }
+
+    }
+
+    /**
+     * typical example:
+     * <pre>{@code
+     * var builder = ZipUtils.zipEntryBuilder();
+     * for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
+     *     var namespaceUri = entry.getKey();
+     *     var schemaText = entry.getValue();
+     *     builder.addAsUtf8(zipEntryNameFor(namespaceUri), schemaText);
+     * }
+     * return Blob.of(fileName, CommonMimeType.ZIP, builder.toBytes());
+     * }
+     * <pre>
+     */
+    public EntryBuilder zipEntryBuilder() {
+        return new EntryBuilder();
     }
 
 }

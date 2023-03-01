@@ -38,7 +38,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
-import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -255,9 +254,9 @@ public final class Blob implements NamedWithMimeType {
     public Blob zip(final @Nullable String zipEntryNameIfAny) {
         val zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
             .orElseGet(this::getName);
-        val zipWriter = ZipWriter.newInstance();
-        zipWriter.nextEntry(zipEntryName, outputStream->outputStream.writeBytes(getBytes()));
-        return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
+        val zipBuilder = ZipUtils.zipEntryBuilder();
+        zipBuilder.add(zipEntryName, getBytes());
+        return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipBuilder.toBytes());
     }
 
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {

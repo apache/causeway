@@ -11,6 +11,9 @@ Utilities to zip and unzip data.
 class ZipUtils {
   Stream<ZipEntryDataSource> streamZipEntries(DataSource zippedSource, ZipOptions zipOptions)     // <.>
   Stream<ZipEntryDataSource> streamZipEntries(DataSource zippedSource)     // <.>
+  byte[] zipToBytes(Stream<ZipEntryDataSource> entryStream)
+  void writeTo(Stream<ZipEntryDataSource> entryStream, DataSink dataSink)
+  EntryBuilder zipEntryBuilder()     // <.>
 }
 ----
 
@@ -24,6 +27,11 @@ Returns a _Stream_ of _ZipEntryDataSource_ , buffered in memory, which allows co
 --
 Shortcut for _streamZipEntries(zippedSource, ZipOptions.builder().build())_
 --
+<.> xref:#zipEntryBuilder_[zipEntryBuilder()]
++
+--
+typical example:
+--
 
 == Members
 
@@ -36,3 +44,22 @@ Returns a _Stream_ of _ZipEntryDataSource_ , buffered in memory, which allows co
 === streamZipEntries(DataSource)
 
 Shortcut for _streamZipEntries(zippedSource, ZipOptions.builder().build())_
+
+[#zipEntryBuilder_]
+=== zipEntryBuilder()
+
+typical example:
+
+----
+ _var builder = ZipUtils.zipEntryBuilder();
+for (Map.Entry entry : schemaMap.entrySet()) {
+    var namespaceUri = entry.getKey();
+    var schemaText = entry.getValue();
+    builder.addAsUtf8(zipEntryNameFor(namespaceUri), schemaText);_ 
+return Blob.of(fileName, CommonMimeType.ZIP, builder.toBytes());
+}
+
+----
+
+----
+----
