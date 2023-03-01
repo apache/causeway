@@ -71,12 +71,10 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
     }
 
     override fun addData(obj: TransferObject) {
-        //TODO is checking rawdata really needed?
-        if (!rawData.contains(obj)) {
-            rawData.add(obj)
-            val exo = Exposer(obj as TObject)
-            data.add(exo.dynamise())  //if exposer is not dynamised, data access in Tabulator tables won't work
-        }
+        rawData.add(obj)
+        val exo = Exposer(obj as TObject)
+        //if exposer is not dynamised, data access in Tabulator tables won't work
+        data.add(exo.dynamise() as Exposer)
     }
 
     override fun reset() {
