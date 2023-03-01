@@ -124,7 +124,7 @@ module org.apache.causeway.applib {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires lombok;
-    requires org.apache.causeway.commons;
+    requires transitive org.apache.causeway.commons;
     requires org.apache.logging.log4j;
     requires spring.tx;
     requires transitive jakarta.activation;

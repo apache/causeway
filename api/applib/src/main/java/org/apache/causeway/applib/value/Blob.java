@@ -21,7 +21,6 @@ package org.apache.causeway.applib.value;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +50,7 @@ import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.image._Images;
+import org.apache.causeway.commons.io.DataSource;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -103,7 +103,7 @@ public final class Blob implements NamedWithMimeType {
     /**
      * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Blob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
@@ -120,25 +120,30 @@ public final class Blob implements NamedWithMimeType {
     }
 
     /**
-     * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and content from {@code file},
+     * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and content from {@code dataSource},
      * wrapped with a {@link Try}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Blob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
-     * For more fine-grained control use one of the {@link Blob} constructors directly.
+     * For more fine-grained control use one of the {@link Blob} factories directly.
      * @param name - may or may not include the desired filename extension
      * @param mimeType
-     * @param file - the file to be opened for reading
+     * @param dataSource - the {@link DataSource} to be opened for reading
      * @return new {@link Blob}
      */
+    public static Try<Blob> tryRead(final String name, final CommonMimeType mimeType, final DataSource dataSource) {
+        return dataSource.tryReadAsBytes()
+                .mapSuccess(bytes->Blob.of(name, mimeType, bytes.orElse(null)));
+    }
+
+    /**
+     * Shortcut for {@code tryRead(name, mimeType, DataSource.ofFile(file))}
+     * @see #tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, DataSource)
+     */
     public static Try<Blob> tryRead(final String name, final CommonMimeType mimeType, final File file) {
-        return Try.call(()->{
-            try(val fis = new FileInputStream(file)){
-                return Blob.of(name, mimeType, _Bytes.ofKeepOpen(fis));
-            }
-        });
+        return tryRead(name, mimeType, DataSource.ofFile(file));
     }
 
      // --
