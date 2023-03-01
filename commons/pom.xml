@@ -103,11 +103,6 @@
         </dependency>
 		
 		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-privileged</artifactId>
-		</dependency>
-		
-		<dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
         </dependency>

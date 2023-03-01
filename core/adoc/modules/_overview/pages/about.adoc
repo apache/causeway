@@ -1345,7 +1345,6 @@ jakarta.annotation:jakarta.annotation-api:jar:<managed> +
 jakarta.enterprise:jakarta.enterprise.cdi-api:jar:2.0.2 +
 jakarta.inject:jakarta.inject-api:jar:<managed> +
 jakarta.transaction:jakarta.transaction-api:jar:<managed> +
-org.apache.causeway.core:causeway-core-privileged:jar:<managed> +
 org.codehaus.woodstox:stax2-api:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.moxy:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.sdo:jar:<managed> +
@@ -1430,11 +1429,6 @@ skinparam rectangle<<Core.ApacheCausewayCoreMetaModel>> {
   FontColor #fffffe
   BorderColor #2e6295
 }
-skinparam rectangle<<Core.ApacheCausewayCorePrivileged>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
 skinparam rectangle<<Core.ApacheCausewayCoreRuntime>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -1465,7 +1459,6 @@ package "Core\n[Software System]" <<Core>> {
   skinparam PackageBorderColor<<Core>> #9a9a9a
   skinparam PackageFontColor<<Core>> #9a9a9a
 
-  rectangle "==Apache Causeway Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreRuntime>> as Core.ApacheCausewayCoreRuntime
   rectangle "==Apache Causeway Core - Runtime Services\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreRuntimeServices>> as Core.ApacheCausewayCoreRuntimeServices
   rectangle "==Apache Causeway Core - Security\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreSecurity>> as Core.ApacheCausewayCoreSecurity
   rectangle "==Apache Causeway Core - Transaction\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreTransaction>> as Core.ApacheCausewayCoreTransaction
@@ -1478,7 +1471,7 @@ package "Core\n[Software System]" <<Core>> {
   rectangle "==Apache Causeway Core - Interaction\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreInteraction>> as Core.ApacheCausewayCoreInteraction
   rectangle "==Apache Causeway Core - Internal Test Support\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreInternalTestSupport>> as Core.ApacheCausewayCoreInternalTestSupport
   rectangle "==Apache Causeway Core - MetaModel\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreMetaModel>> as Core.ApacheCausewayCoreMetaModel
-  rectangle "==Apache Causeway Core - Privileged\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCorePrivileged>> as Core.ApacheCausewayCorePrivileged
+  rectangle "==Apache Causeway Core - Runtime\n<size:10>[Container: packaging: jar]</size>" <<Core.ApacheCausewayCoreRuntime>> as Core.ApacheCausewayCoreRuntime
 }
 
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayApiAppLib : "<color:#707070>"
@@ -1487,7 +1480,6 @@ Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreConfigur
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreInteraction : "<color:#707070>"
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreInternalTestSupport : "<color:#707070>"
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreMetaModel : "<color:#707070>"
-Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCorePrivileged : "<color:#707070>"
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreRuntime : "<color:#707070>"
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreRuntimeServices : "<color:#707070>"
 Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayCoreSecurity : "<color:#707070>"
@@ -1757,18 +1749,6 @@ org.apache.causeway.core:causeway-core-security:jar:<managed> +
 ****
 xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject], xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/metamodel/MetaModelAnnotator.adoc[MetaModelAnnotator], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
 ****
-
-|Apache Causeway Core - Privileged
-[source,yaml]
-----
-Group: org.apache.causeway.core
-Artifact: causeway-core-privileged
-Type: jar
-Directory: /core/privileged
-----
-|Installs as an automatic module with unrestricted access to the class-path (not module-path).
-In the context of the Java platform module system, allows for reflective access to all classes
-on the class-path. Classes on the module-path need to 'opens' to this module.
 
 |Apache Causeway Core - Runtime
 [source,yaml]
