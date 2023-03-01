@@ -19,9 +19,13 @@
 package org.apache.causeway.core.codegen.bytebuddy.services;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 
-import org.apache.causeway.core.privileged._Privileged;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 
@@ -35,24 +39,58 @@ class ClassLoadingStrategyAdvisor {
     final MethodHandle privateLookupMethodHandle;
 
     ClassLoadingStrategyAdvisor() {
-        // JDK 9+ required
-        if (!ClassInjector.UsingLookup.isAvailable()) {
-            throw new IllegalStateException("No code generation strategy available");
-        }
-        this.privateLookupMethodHandle = _Privileged.createPrivateLookupMethodHandle();
+        this.privateLookupMethodHandle = createPrivateLookupMethodHandle();
     }
 
     public ClassLoadingStrategy<ClassLoader> getSuitableStrategy(final Class<?> targetClass) {
         try {
-            final Object privateLookup = _Privileged
-                    .invokeLookup(privateLookupMethodHandle, targetClass);
+            final Object privateLookup = invokeLookup(privateLookupMethodHandle, targetClass);
             return ClassLoadingStrategy.UsingLookup.of(privateLookup);
         } catch (Throwable e) {
-            throw new IllegalStateException(
-                    String.format("Failed to utilize code generation strategy on class '%s'",
-                            targetClass.getName())
-                    , e);
+            throw _Exceptions.illegalState(e,
+                    "Failed to utilize code generation strategy on class '%s'",
+                    targetClass.getName());
         }
+    }
+
+    // -- HELPER
+
+    @SneakyThrows
+    private static Object invokeLookup(final @NonNull MethodHandle mh, final Class<?> targetClass) {
+        return mh.invoke(reads(targetClass), MethodHandles.lookup());
+    }
+
+    private static MethodHandle createPrivateLookupMethodHandle() {
+        // JDK 9+ required
+        if (!ClassInjector.UsingLookup.isAvailable()) {
+            throw new IllegalStateException("No code generation strategy available");
+        }
+        try {
+            final Method privateLookupIn = java.lang.invoke.MethodHandles.class
+                    .getMethod("privateLookupIn",
+                        Class.class,
+                        java.lang.invoke.MethodHandles.Lookup.class);
+            return MethodHandles.publicLookup().unreflect(privateLookupIn);
+        } catch (Throwable e) {
+            throw _Exceptions.illegalState(e,
+                    "MethodHandles.privateLookupIn(...) is not available");
+        }
+    }
+
+    private static Class<?> reads(final Class<?> cls) {
+        final Class<?> otherClass = cls.isArray() ? cls.getComponentType() : cls;
+        final Module otherModule = otherClass.getModule();
+        //no need for unnamed and java.base types
+        if (!otherModule.isNamed()
+                || "java.base".equals(otherModule.getName())) {
+            return cls;
+        }
+        thisModule().addReads(otherModule);
+        return cls;
+    }
+
+    private static Module thisModule() {
+        return ClassLoadingStrategyAdvisor.class.getModule();
     }
 
 }
