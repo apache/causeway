@@ -22,6 +22,7 @@ class Clob {
   Clob(String name, String mimeTypeBase, CharSequence chars)
   Clob(String name, MimeType mimeType, CharSequence chars)
   Clob of(String name, CommonMimeType mimeType, CharSequence content)     // <.>
+  Try<Clob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource, Charset charset)     // <.>
   Try<Clob> tryRead(String name, CommonMimeType mimeType, File file, Charset charset)     // <.>
   Try<Clob> tryReadUtf8(String name, CommonMimeType mimeType, File file)     // <.>
   String getName()
@@ -44,10 +45,15 @@ class Clob {
 --
 Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 --
+<.> xref:#tryRead_String_CommonMimeType_DataSource_Charset[tryRead(String, CommonMimeType, DataSource, Charset)]
++
+--
+Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and content from _dataSource_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+--
 <.> xref:#tryRead_String_CommonMimeType_File_Charset[tryRead(String, CommonMimeType, File, Charset)]
 +
 --
-Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file), charset)_
 --
 <.> xref:#tryReadUtf8_String_CommonMimeType_File[tryReadUtf8(String, CommonMimeType, File)]
 +
@@ -82,18 +88,23 @@ Shortcut for _#writeTo(File, Charset)_ using _StandardCharsets#UTF_8_ .
 
 Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
+_name_ may or may not include the desired filename extension, as it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
+
+For more fine-grained control use one of the xref:refguide:applib:index/value/Clob.adoc[Clob] constructors directly.
+
+[#tryRead_String_CommonMimeType_DataSource_Charset]
+=== tryRead(String, CommonMimeType, DataSource, Charset)
+
+Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and content from _dataSource_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+_name_ may or may not include the desired filename extension, as it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
 
 For more fine-grained control use one of the xref:refguide:applib:index/value/Clob.adoc[Clob] constructors directly.
 
 [#tryRead_String_CommonMimeType_File_Charset]
 === tryRead(String, CommonMimeType, File, Charset)
 
-Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
-
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
-
-For more fine-grained control use one of the xref:refguide:applib:index/value/Clob.adoc[Clob] constructors directly.
+Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file), charset)_
 
 [#tryReadUtf8_String_CommonMimeType_File]
 === tryReadUtf8(String, CommonMimeType, File)

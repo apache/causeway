@@ -19,6 +19,7 @@ class Blob {
   Blob(String name, String mimeTypeBase, byte[] bytes)
   Blob(String name, MimeType mimeType, byte[] bytes)
   Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
+  Try<Blob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, File file)     // <.>
   String getName()
   MimeType getMimeType()
@@ -26,9 +27,9 @@ class Blob {
   Clob toClob(Charset charset)     // <.>
   void writeBytesTo(OutputStream os)     // <.>
   void writeTo(File file)     // <.>
-  void consume(Consumer<InputStream> consumer)     // <.>
-  R digest(Function<InputStream, R> digester)     // <.>
-  Blob zip()
+  DataSource asDataSource()     // <.>
+  Blob zip()     // <.>
+  Blob zip(String zipEntryNameIfAny)     // <.>
   Blob unZip(CommonMimeType resultingMimeType)
   boolean equals(Object o)
   int hashCode()
@@ -42,10 +43,15 @@ class Blob {
 --
 Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 --
+<.> xref:#tryRead_String_CommonMimeType_DataSource[tryRead(String, CommonMimeType, DataSource)]
++
+--
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and content from _dataSource_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+--
 <.> xref:#tryRead_String_CommonMimeType_File[tryRead(String, CommonMimeType, File)]
 +
 --
-Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
 --
 <.> xref:#toClob_Charset[toClob(Charset)]
 +
@@ -62,15 +68,20 @@ Does not close the OutputStream.
 --
 Writes this xref:refguide:applib:index/value/Blob.adoc[Blob] to the file represented by the specified `File` object.
 --
-<.> xref:#consume_Consumer[consume(Consumer)]
+<.> xref:#asDataSource_[asDataSource()]
 +
 --
-The _InputStream_ involved is closed after consumption.
+Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] for underlying byte array.
 --
-<.> xref:#digest_Function[digest(Function)]
+<.> xref:#zip_[zip()]
 +
 --
-The _InputStream_ involved is closed after digestion.
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] that has this Blob's underlying byte array zipped into a zip-entry using this Blob's name.
+--
+<.> xref:#zip_String[zip(String)]
++
+--
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] that has this Blob's underlying byte array zipped into a zip-entry with given zip-entry name.
 --
 <.> xref:#asImage_[asImage()]
 
@@ -81,18 +92,23 @@ The _InputStream_ involved is closed after digestion.
 
 Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
+_name_ may or may not include the desired filename extension, as it is guaranteed, that the resulting xref:refguide:applib:index/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
 
 For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] constructors directly.
+
+[#tryRead_String_CommonMimeType_DataSource]
+=== tryRead(String, CommonMimeType, DataSource)
+
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and content from _dataSource_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+_name_ may or may not include the desired filename extension, as it is guaranteed, that the resulting xref:refguide:applib:index/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
+
+For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] factories directly.
 
 [#tryRead_String_CommonMimeType_File]
 === tryRead(String, CommonMimeType, File)
 
-Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and content from _file_ , wrapped with a xref:refguide:commons:index/functional/Try.adoc[Try] .
-
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
-
-For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] constructors directly.
+Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
 
 [#toClob_Charset]
 === toClob(Charset)
@@ -111,15 +127,20 @@ Writes this xref:refguide:applib:index/value/Blob.adoc[Blob] to the file represe
 
 If the file exists but is a directory rather than a regular file, does not exist but cannot be created, or cannot be opened for any other reason then a `FileNotFoundException` is thrown.
 
-[#consume_Consumer]
-=== consume(Consumer)
+[#asDataSource_]
+=== asDataSource()
 
-The _InputStream_ involved is closed after consumption.
+Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] for underlying byte array.
 
-[#digest_Function]
-=== digest(Function)
+[#zip_]
+=== zip()
 
-The _InputStream_ involved is closed after digestion.
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] that has this Blob's underlying byte array zipped into a zip-entry using this Blob's name.
+
+[#zip_String]
+=== zip(String)
+
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] that has this Blob's underlying byte array zipped into a zip-entry with given zip-entry name.
 
 [#asImage_]
 === asImage()
