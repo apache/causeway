@@ -39,6 +39,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableCollection;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -53,9 +55,8 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
  * @since 2.0
  *
  */
+@UtilityClass
 public final class _NullSafe {
-
-    private _NullSafe(){}
 
     // -- STREAM CREATION
 
@@ -65,7 +66,7 @@ public final class _NullSafe {
      * @param array
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable  T[] array) {
+    public <T> Stream<T> stream(final @Nullable  T[] array) {
         return array!=null
                 ? Stream.of(array)
                 : Stream.empty();
@@ -78,7 +79,7 @@ public final class _NullSafe {
      * @param nullable
      * @return non-null stream object
      */
-    public static <T> Stream<T> streamNullable(final @Nullable T nullable) {
+    public <T> Stream<T> streamNullable(final @Nullable T nullable) {
         return nullable != null
                 ? Stream.of(nullable)
                 : Stream.empty();
@@ -90,7 +91,7 @@ public final class _NullSafe {
      * @param can
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable Can<T> can){
+    public <T> Stream<T> stream(final @Nullable Can<T> can){
         return can!=null
                 ? can.stream()
                 : Stream.empty();
@@ -102,7 +103,7 @@ public final class _NullSafe {
      * @param coll
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable Collection<T> coll){
+    public <T> Stream<T> stream(final @Nullable Collection<T> coll){
         return coll!=null
                 ? coll.stream()
                 : Stream.empty();
@@ -114,7 +115,7 @@ public final class _NullSafe {
      * @param iterable
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable Iterable<T> iterable){
+    public <T> Stream<T> stream(final @Nullable Iterable<T> iterable){
         if(iterable instanceof Collection) {
             return ((Collection<T>) iterable).stream();
         }
@@ -132,7 +133,7 @@ public final class _NullSafe {
      * @param iterator
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable Iterator<T> iterator){
+    public <T> Stream<T> stream(final @Nullable Iterator<T> iterator){
         return iterator!=null
                 ? StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED),
@@ -146,7 +147,7 @@ public final class _NullSafe {
      * @param stream
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable Stream<T> stream) {
+    public <T> Stream<T> stream(final @Nullable Stream<T> stream) {
         return stream!=null
                 ? stream
                 : Stream.empty();
@@ -158,14 +159,14 @@ public final class _NullSafe {
      * @param enumeration
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final @Nullable Enumeration<T> enumeration){
+    public <T> Stream<T> stream(final @Nullable Enumeration<T> enumeration){
         return enumeration!=null
                 ? StreamSupport.stream(toSpliterator(enumeration), /*parallel*/false)
                 : Stream.empty();
     }
 
     // not public, used internally for stream(Enumeration) only
-    private static <T> Spliterator<T> toSpliterator(final Enumeration<T> e){
+    private <T> Spliterator<T> toSpliterator(final Enumeration<T> e){
         return new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
             @Override
             public boolean tryAdvance(final Consumer<? super T> action) {
@@ -184,7 +185,7 @@ public final class _NullSafe {
         };
     }
 
-    public static Stream<?> streamAutodetect(final @Nullable Object pojo) {
+    public Stream<?> streamAutodetect(final @Nullable Object pojo) {
         if(pojo==null) {
             return Stream.empty();
         }
@@ -217,35 +218,35 @@ public final class _NullSafe {
 
     // not null-safe, but for performance reasons not checked (private anyway) ...
 
-    private static Stream<Boolean> primitiveStream(final boolean[] array) {
+    private Stream<Boolean> primitiveStream(final boolean[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Byte> primitiveStream(final byte[] array) {
+    private Stream<Byte> primitiveStream(final byte[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Character> primitiveStream(final char[] array) {
+    private Stream<Character> primitiveStream(final char[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Float> primitiveStream(final float[] array) {
+    private Stream<Float> primitiveStream(final float[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Double> primitiveStream(final double[] array) {
+    private Stream<Double> primitiveStream(final double[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Short> primitiveStream(final short[] array) {
+    private Stream<Short> primitiveStream(final short[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Integer> primitiveStream(final int[] array) {
+    private Stream<Integer> primitiveStream(final int[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
-    private static Stream<Long> primitiveStream(final long[] array) {
+    private Stream<Long> primitiveStream(final long[] array) {
         return IntStream.range(0, array.length).mapToObj(s -> array[s]);
     }
 
@@ -259,7 +260,7 @@ public final class _NullSafe {
      *
      * @apiNote we keep this, arguably provides better code readability than {@code Objects#nonNull}
      */
-    public static boolean isPresent(final @Nullable Object x) {
+    public boolean isPresent(final @Nullable Object x) {
         return x!=null;
     }
 
@@ -270,48 +271,61 @@ public final class _NullSafe {
      *
      * @apiNote we keep this, arguably provides better code readability than {@code Objects#isNull}
      */
-    public static boolean isAbsent(final @Nullable Object x) {
+    public boolean isAbsent(final @Nullable Object x) {
         return x==null;
     }
 
     // -- EMTPY CHECKS
 
-    public static boolean isEmpty(final @Nullable String x) { return x==null || x.length() == 0; }
-    public static boolean isEmpty(final @Nullable Can<?> x) { return x==null || x.size() == 0; }
-    public static boolean isEmpty(final @Nullable Collection<?> x) { return x==null || x.size() == 0; }
-    public static boolean isEmpty(final @Nullable Map<?,?> x) { return x==null || x.size() == 0; }
-    public static boolean isEmpty(final @Nullable boolean[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable byte[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable char[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable double[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable float[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable int[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable long[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable short[] array){ return array==null || array.length == 0;}
-    public static <T> boolean isEmpty(final @Nullable T[] array){ return array==null || array.length == 0;}
-    public static boolean isEmpty(final @Nullable EnumSet<?> enumSet){ return enumSet==null || enumSet.size() == 0;}
-    public static boolean isEmpty(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet==null || enumSet.size() == 0;}
+    public boolean isEmpty(final @Nullable String x) { return x==null || x.length() == 0; }
+    public boolean isEmpty(final @Nullable Can<?> x) { return x==null || x.size() == 0; }
+    public boolean isEmpty(final @Nullable Collection<?> x) { return x==null || x.size() == 0; }
+    public boolean isEmpty(final @Nullable Map<?,?> x) { return x==null || x.size() == 0; }
+    public boolean isEmpty(final @Nullable boolean[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable byte[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable char[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable double[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable float[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable int[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable long[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable short[] array){ return array==null || array.length == 0;}
+    public <T> boolean isEmpty(final @Nullable T[] array){ return array==null || array.length == 0;}
+    public boolean isEmpty(final @Nullable EnumSet<?> enumSet){ return enumSet==null || enumSet.size() == 0;}
+    public boolean isEmpty(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet==null || enumSet.size() == 0;}
 
     // -- SIZE/LENGTH CHECKS
 
-    public static int size(final @Nullable String x){ return x!=null ? x.length() : 0; }
-    public static int size(final @Nullable Collection<?> x){ return x!=null ? x.size() : 0; }
-    public static int size(final @Nullable Map<?,?> x){ return x!=null ? x.size() : 0; }
-    public static int size(final @Nullable boolean[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable byte[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable char[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable double[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable float[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable int[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable long[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable short[] array){ return array!=null ? array.length : 0; }
-    public static <T> int size(final @Nullable T[] array){ return array!=null ? array.length : 0; }
-    public static int size(final @Nullable EnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
-    public static int size(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
+    public int size(final @Nullable String x){ return x!=null ? x.length() : 0; }
+    public int size(final @Nullable Collection<?> x){ return x!=null ? x.size() : 0; }
+    public int size(final @Nullable Map<?,?> x){ return x!=null ? x.size() : 0; }
+    public int size(final @Nullable boolean[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable byte[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable char[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable double[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable float[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable int[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable long[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable short[] array){ return array!=null ? array.length : 0; }
+    public <T> int size(final @Nullable T[] array){ return array!=null ? array.length : 0; }
+    public int size(final @Nullable EnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
+    public int size(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
+
+    // -- NON-NULL VARIANTS
+
+    public String asNonNull(final @Nullable String x){ return x!=null ? x : ""; }
+    public boolean[] asNonNull(final @Nullable boolean[] array){ return array!=null ? array : new boolean[0]; }
+    public byte[] asNonNull(final @Nullable byte[] array){ return array!=null ? array : new byte[0]; }
+    public char[] asNonNull(final @Nullable char[] array){ return array!=null ? array : new char[0]; }
+    public double[] asNonNull(final @Nullable double[] array){ return array!=null ? array : new double[0]; }
+    public float[] asNonNull(final @Nullable float[] array){ return array!=null ? array : new float[0]; }
+    public int[] asNonNull(final @Nullable int[] array){ return array!=null ? array : new int[0]; }
+    public long[] asNonNull(final @Nullable long[] array){ return array!=null ? array : new long[0]; }
+    public short[] asNonNull(final @Nullable short[] array){ return array!=null ? array : new short[0]; }
+    public <T> T[] asNonNull(final @Nullable T[] array){ return array!=null ? array : _Casts.uncheckedCast(new Object[0]); }
 
     // -- TO STRING
 
-    public static String toString(final @Nullable Object obj) {
+    public String toString(final @Nullable Object obj) {
         return obj!=null
                 ? obj.toString()
                 : null;
@@ -327,7 +341,7 @@ public final class _NullSafe {
      * @return (null-able)
      */
     @Nullable
-    public static final <K,V> V getOrDefault(
+    public final <K,V> V getOrDefault(
             final @Nullable Map<K, V> map,
             final @Nullable K key,
             final @Nullable V defaultValue) {
@@ -344,12 +358,10 @@ public final class _NullSafe {
      * @param <V>
      * @param map
      */
-    public static <K, V> Set<Map.Entry<K, V>> entrySet(final @Nullable Map<K, V> map) {
+    public <K, V> Set<Map.Entry<K, V>> entrySet(final @Nullable Map<K, V> map) {
         return map==null
                 ? Collections.emptySet()
                 : map.entrySet();
     }
-
-
 
 }
