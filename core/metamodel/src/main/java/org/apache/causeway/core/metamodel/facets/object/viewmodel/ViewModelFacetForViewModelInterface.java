@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.causeway.core.privileged._Privileged;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -147,9 +146,7 @@ extends ViewModelFacetAbstract {
                 + "this can only happen, if we try to deserialize an abstract type");
 
         val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
-
-        val viewmodelPojo = _Privileged
-                .newInstance(constructorAnyArgs, resolvedArgs);
+        val viewmodelPojo = constructorAnyArgs.newInstance(resolvedArgs);
         return viewmodelPojo;
     }
 
