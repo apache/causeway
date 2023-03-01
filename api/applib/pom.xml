@@ -80,13 +80,13 @@
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-schema</artifactId>
         </dependency>
-        
+
      	<!-- provides @Digits -->
 		<dependency>
 		    <groupId>jakarta.validation</groupId>
 		    <artifactId>jakarta.validation-api</artifactId>
 	    </dependency>
-	    
+
 	    <!-- provides @Column -->
 	    <dependency>
 		    <groupId>jakarta.persistence</groupId>
