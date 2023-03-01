@@ -312,16 +312,16 @@ public final class _NullSafe {
 
     // -- NON-NULL VARIANTS
 
-    public String asNonNull(final @Nullable String x){ return x!=null ? x : ""; }
-    public boolean[] asNonNull(final @Nullable boolean[] array){ return array!=null ? array : new boolean[0]; }
-    public byte[] asNonNull(final @Nullable byte[] array){ return array!=null ? array : new byte[0]; }
-    public char[] asNonNull(final @Nullable char[] array){ return array!=null ? array : new char[0]; }
-    public double[] asNonNull(final @Nullable double[] array){ return array!=null ? array : new double[0]; }
-    public float[] asNonNull(final @Nullable float[] array){ return array!=null ? array : new float[0]; }
-    public int[] asNonNull(final @Nullable int[] array){ return array!=null ? array : new int[0]; }
-    public long[] asNonNull(final @Nullable long[] array){ return array!=null ? array : new long[0]; }
-    public short[] asNonNull(final @Nullable short[] array){ return array!=null ? array : new short[0]; }
-    public <T> T[] asNonNull(final @Nullable T[] array){ return array!=null ? array : _Casts.uncheckedCast(new Object[0]); }
+    public String toNonNull(final @Nullable String x){ return x!=null ? x : ""; }
+    public boolean[] toNonNull(final @Nullable boolean[] array){ return array!=null ? array : new boolean[0]; }
+    public byte[] toNonNull(final @Nullable byte[] array){ return array!=null ? array : new byte[0]; }
+    public char[] toNonNull(final @Nullable char[] array){ return array!=null ? array : new char[0]; }
+    public double[] toNonNull(final @Nullable double[] array){ return array!=null ? array : new double[0]; }
+    public float[] toNonNull(final @Nullable float[] array){ return array!=null ? array : new float[0]; }
+    public int[] toNonNull(final @Nullable int[] array){ return array!=null ? array : new int[0]; }
+    public long[] toNonNull(final @Nullable long[] array){ return array!=null ? array : new long[0]; }
+    public short[] toNonNull(final @Nullable short[] array){ return array!=null ? array : new short[0]; }
+    public <T> T[] toNonNull(final @Nullable T[] array){ return array!=null ? array : _Casts.uncheckedCast(new Object[0]); }
 
     // -- TO STRING
 

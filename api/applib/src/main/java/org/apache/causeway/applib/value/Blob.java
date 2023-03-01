@@ -238,7 +238,7 @@ public final class Blob implements NamedWithMimeType {
      * @see DataSource
      */
     public DataSource asDataSource() {
-        return DataSource.ofBytes(_NullSafe.asNonNull(getBytes()));
+        return DataSource.ofBytes(_NullSafe.toNonNull(getBytes()));
     }
 
     /**
