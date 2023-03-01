@@ -32,9 +32,9 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJdoMetamodel;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
@@ -85,17 +85,15 @@ public class JdoMetamodelMenu {
 
         val pmFactory = getPersistenceManagerFactory();
 
-        val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of jdo metamodels");
+        val zipBuilder = ZipUtils.zipEntryBuilder();
 
         pmFactory.getManagedClasses().stream()
         .filter(jdoFacetContext::isPersistenceEnhanced)
         .map(Class::getName)
         .map(pmFactory::getMetadata)
-        .forEach(metadata->{
-            val xmlString = metadata.toString();
-            zipWriter.nextEntry(zipEntryNameFor(metadata), writer->writer.writeCharactersUtf8(xmlString));
-        });
-        return zipWriter.toBytes();
+        .forEach(metadata->
+            zipBuilder.addAsUtf8(zipEntryNameFor(metadata), metadata.toString()));
+        return zipBuilder.toBytes();
     }
 
     private String zipEntryNameFor(final TypeMetadata metadata) {
