@@ -21,7 +21,6 @@ package org.apache.causeway.applib.value;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -39,15 +38,14 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
-import org.apache.causeway.applib.util.ZipReader;
 import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.image._Images;
 import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.ZipUtils;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -263,24 +261,14 @@ public final class Blob implements NamedWithMimeType {
     }
 
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
-        return asDataSource().tryReadAndApply(is->
-            ZipReader.digest(is, (zipEntry, zipInputStream)->{
-                if(zipEntry.isDirectory()) {
-                    return (Blob)null; // continue
-                }
-                final byte[] unzippedBytes;
-                try {
-                    unzippedBytes = _Bytes.of(zipInputStream);
-                } catch (IOException e) {
-                    throw _Exceptions
-                        .unrecoverable(e, "failed to read zip entry %s", zipEntry.getName());
-                }
-                return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
-            })
-            .orElseThrow()
-        )
-        .mapEmptyToFailure()
-        .valueAsNonNullElseFail();
+        return ZipUtils.streamZipEntries(asDataSource())
+                .map(zipEntryDataSource->Blob.of(
+                        zipEntryDataSource.zipEntry().getName(),
+                        resultingMimeType,
+                        zipEntryDataSource.bytes()))
+                .findFirst() // assuming first entry is the one we want
+                .orElseThrow(()->_Exceptions
+                      .unrecoverable("failed to unzip blob, no entry found %s", getName()));
     }
 
     // -- OBJECT CONTRACT
