@@ -19,18 +19,14 @@
 package org.apache.causeway.applib.value;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
@@ -47,6 +43,7 @@ import org.apache.causeway.applib.util.ZipReader;
 import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.image._Images;
@@ -237,44 +234,36 @@ public final class Blob implements NamedWithMimeType {
     }
 
     /**
-     * The {@link InputStream} involved is closed after consumption.
-     * @param consumer
-     * @throws IOException
+     * Returns a new {@link DataSource} for underlying byte array.
+     * @see DataSource
      */
-    public void consume(final @NonNull Consumer<InputStream> consumer) throws IOException {
-     // null to empty
-        val bytes = Optional.ofNullable(getBytes())
-                .orElse(new byte[0]);
-        try(val bis = new ByteArrayInputStream(bytes)) {
-            consumer.accept(bis);
-        }
+    public DataSource asDataSource() {
+        return DataSource.ofBytes(_NullSafe.toNonNull(getBytes()));
     }
 
     /**
-     * The {@link InputStream} involved is closed after digestion.
-     * @param <R>
-     * @param digester
-     * @throws IOException
+     * Returns a new {@link Blob} that has this Blob's underlying byte array
+     * zipped into a zip-entry using this Blob's name.
      */
-    public <R> R digest(final @NonNull Function<InputStream, R> digester) throws IOException {
-        // null to empty
-        val bytes = Optional.ofNullable(getBytes())
-                .orElse(new byte[0]);
-        try(val bis = new ByteArrayInputStream(bytes)) {
-            return digester.apply(bis);
-        }
+    public Blob zip() {
+        return zip(getName());
     }
 
-    public Blob zip() {
+    /**
+     * Returns a new {@link Blob} that has this Blob's underlying byte array
+     * zipped into a zip-entry with given zip-entry name.
+     * @param zipEntryNameIfAny - if null or empty this Blob's name is used
+     */
+    public Blob zip(final @Nullable String zipEntryNameIfAny) {
+        val zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
+            .orElseGet(this::getName);
         val zipWriter = ZipWriter.newInstance();
-        zipWriter.nextEntry(getName(), outputStream->outputStream.writeBytes(getBytes()));
+        zipWriter.nextEntry(zipEntryName, outputStream->outputStream.writeBytes(getBytes()));
         return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
     }
 
-    @SneakyThrows
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
-
-        return digest(is->
+        return asDataSource().tryReadAndApply(is->
             ZipReader.digest(is, (zipEntry, zipInputStream)->{
                 if(zipEntry.isDirectory()) {
                     return (Blob)null; // continue
@@ -288,9 +277,10 @@ public final class Blob implements NamedWithMimeType {
                 }
                 return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
             })
-
+            .orElseThrow()
         )
-        .orElse(Blob.of("blob_unzip_failed", resultingMimeType, new byte[0]));
+        .mapEmptyToFailure()
+        .valueAsNonNullElseFail();
     }
 
     // -- OBJECT CONTRACT
