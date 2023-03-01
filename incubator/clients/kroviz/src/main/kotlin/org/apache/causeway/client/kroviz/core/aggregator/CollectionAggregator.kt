@@ -167,11 +167,10 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
     }
 
     private fun handleCollection(collection: Collection) {
-        if (isParentedCollection()) {
-            getDisplayModel().id = collection.id
-            // add displayModel to parent.displayModel
-            val objectDM = parent!!.getDisplayModel()
-            objectDM.addCollectionModel(getDisplayModel())
+        if (parent != null) {
+            val cdm = getDisplayModel()
+            cdm.id = collection.id
+            parent.getDisplayModel().addCollectionModel(cdm)
         }
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {
