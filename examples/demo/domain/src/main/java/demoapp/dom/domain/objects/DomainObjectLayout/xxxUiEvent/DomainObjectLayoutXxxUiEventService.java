@@ -59,7 +59,7 @@ public class DomainObjectLayoutXxxUiEventService {
     @EventListener
     void onLayoutUiEvent(final DomainObjectLayoutXxxUiEventVm.LayoutUiEvent layoutUiEvent) {
         val in = layoutUiEvent.getLayout();
-        val out = "alternative";
+        val out = "alternative2";
         layoutUiEvent.setLayout(out);
         log.info("layoutUiEvent: {}->{}", in, out);
     }

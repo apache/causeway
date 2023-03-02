@@ -60,6 +60,10 @@ public class DomainObjectLayoutXxxUiEventVm implements HasAsciiDocDescription {
         return "DomainObjectLayout#xxxUiEvent (should be overwritten by ui-title-event-listener)";
     }
 
+    @ObjectSupport public String layout() {
+        return "alternative1"; // should be overwritten by ui-layout-event-listener
+    }
+
     //TODO[CAUSEWAY-3309]
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
