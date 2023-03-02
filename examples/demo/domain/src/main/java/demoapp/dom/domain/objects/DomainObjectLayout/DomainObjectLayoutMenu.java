@@ -100,8 +100,9 @@ public class DomainObjectLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-desktop",
-        describedAs = "Class of the UI events emitted to allow subscribers to specify title, icon etc")
-    public DomainObjectLayoutXxxUiEventVm xxxUiEvent(){
+        describedAs = "Class of the UI events emitted to allow subscribers to specify "
+                + "title, icon, style and layout")
+    public DomainObjectLayoutXxxUiEventVm uiEvents(){
         return factoryService.viewModel(new DomainObjectLayoutXxxUiEventVm());
     }
 

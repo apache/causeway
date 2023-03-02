@@ -2,5 +2,5 @@
 
 The `describedAs` attribute ...
 
-TODO[ISIS-3309]
+TODO[CAUSEWAY-3309]
 Description of the property, shown as a tooltip
