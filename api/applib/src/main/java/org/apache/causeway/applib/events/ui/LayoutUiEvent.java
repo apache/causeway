@@ -99,6 +99,8 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * For subscribers to call to provide a layout for this object.
      */
-    public void setLayout(final String layout) { }
+    public void setLayout(final String layout) {
+        this.layout = layout;
+    }
 
 }

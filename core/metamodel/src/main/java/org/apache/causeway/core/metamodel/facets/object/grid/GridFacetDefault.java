@@ -107,7 +107,8 @@ implements GridFacet {
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "";
         }
-        return _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
+        val layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
+        return layoutName;
     }
 
     private boolean hasLayoutFacet() {
