@@ -36,7 +36,6 @@ import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayo
 import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.plural.DomainObjectLayoutPluralVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventVm;
 
@@ -90,13 +89,6 @@ public class DomainObjectLayoutMenu {
         describedAs = "Number of domain objects per page in collections")
     public DomainObjectLayoutPagedVm paged(){
         return factoryService.viewModel(new DomainObjectLayoutPagedVm());
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature",
-        describedAs = "Overrides plural form for the domain object's type, eg for irregular plurals")
-    public DomainObjectLayoutPluralVm plural(){
-        return factoryService.viewModel(new DomainObjectLayoutPluralVm());
     }
 
     @Action(semantics = SemanticsOf.SAFE)

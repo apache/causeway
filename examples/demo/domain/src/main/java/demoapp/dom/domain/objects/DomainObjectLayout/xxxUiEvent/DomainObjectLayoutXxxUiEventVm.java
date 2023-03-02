@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -42,10 +43,21 @@ import lombok.Setter;
 @Named("demo.DomainObjectLayoutXxxUiEventVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(
+        titleUiEvent = DomainObjectLayoutXxxUiEventVm.TitleUiEvent.class,
+        iconUiEvent = DomainObjectLayoutXxxUiEventVm.IconUiEvent.class,
+        cssClassUiEvent = DomainObjectLayoutXxxUiEventVm.CssClassUiEvent.class,
+        layoutUiEvent = DomainObjectLayoutXxxUiEventVm.LayoutUiEvent.class
+        )
 public class DomainObjectLayoutXxxUiEventVm implements HasAsciiDocDescription {
 
+    public static class TitleUiEvent extends org.apache.causeway.applib.events.ui.TitleUiEvent<DomainObjectLayoutXxxUiEventVm> { }
+    public static class IconUiEvent extends org.apache.causeway.applib.events.ui.IconUiEvent<DomainObjectLayoutXxxUiEventVm> { }
+    public static class CssClassUiEvent extends org.apache.causeway.applib.events.ui.CssClassUiEvent<DomainObjectLayoutXxxUiEventVm> { }
+    public static class LayoutUiEvent extends org.apache.causeway.applib.events.ui.LayoutUiEvent<DomainObjectLayoutXxxUiEventVm> { }
+
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#xxxUiEvent";
+        return "DomainObjectLayout#xxxUiEvent (should be overwritten by ui-title-event-listener)";
     }
 
     //TODO[CAUSEWAY-3309]
