@@ -232,30 +232,6 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     @Getter
     private Throwable exception;
 
-    /**
-     * Whether this command resulted in a change of state to the system.
-     *
-     * <p>
-     *     This can be used as a hint to decide whether to persist the command
-     *     to a datastore, for example for auditing (though
-     *     {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} is
-     *     an alternative for that use case) or so that it can be retrieved
-     *     and replayed on another system, eg for regression testing.
-     * </p>
-     *
-     * <p>
-     *     Note that this flag will only be accurate if the <i>Audit Trail</i> extension (or equivalent) is configured
-     *     to actually set it.
-     * </p>
-     *
-     * <p>
-     *     See also the <code>causeway.extensions.command-log.publish-policy</code> configuration property, that controls
-     *     whether the <i>Command Log</i> extension checks this flag or not.
-     * </p>
-     *
-     */
-    @Getter
-    private boolean systemStateChanged;
 
     public static enum CommandPublishingPhase {
         /** initial state: do not publish (yet) */
@@ -340,18 +316,6 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
         public void setResult(final Try<Bookmark> resultBookmark) {
             Command.this.result = resultBookmark.getValue().orElse(null);
             Command.this.exception = resultBookmark.getFailure().orElse(null);
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         *
-         * <p>
-         * Hint that this {@link Command} has resulted in a change of state to the system.
-         * Implementations can use this to persist the command, for example.
-         * </p>
-         */
-        public void setSystemStateChanged(final boolean systemStateChanged) {
-            Command.this.systemStateChanged = systemStateChanged;
         }
 
         /**

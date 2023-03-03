@@ -2942,30 +2942,6 @@ public class CausewayConfiguration {
              */
             private PersistPolicy persist = PersistPolicy.ENABLED;
 
-            public enum PublishPolicy {
-                ALWAYS,
-                ONLY_IF_SYSTEM_CHANGED,
-                ;
-                public boolean isAlways() { return this == ALWAYS; }
-                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
-
-            }
-            /**
-             * Whether commands should be published always, or only if a change in the system's state has been detected.
-             *
-             * <p>
-             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
-             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
-             * changed.
-             * </p>
-             *
-             * <p>
-             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
-             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
-             * </p>
-             */
-            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
-
         }
 
         private final CommandReplay commandReplay = new CommandReplay();
