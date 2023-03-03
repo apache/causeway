@@ -60,6 +60,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
         <minimalJavaBuildVersion>11</minimalJavaBuildVersion>
         <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
 
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
@@ -783,7 +785,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<!-- org.apache.causeway.extensions (docgen) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
@@ -2132,6 +2134,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         </dependencies>
     </dependencyManagement>
+
     <repositories>
         <!-- breaks dependabot run: timeout due to repo not accessible
         <repository>
@@ -2231,14 +2234,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <configuration>
 						<showDeprecation>true</showDeprecation>
 						<showWarnings>true</showWarnings>
-						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
-						<annotationProcessorPaths>
-							<path>
-								<groupId>org.projectlombok</groupId>
-								<artifactId>lombok</artifactId>
-								<version>${lombok.version}</version>
-							</path>
-						</annotationProcessorPaths>
+						<parameters>true</parameters>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -3040,6 +3036,36 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-maven-plugin</artifactId>
 						<inherited>true</inherited>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>causeway-app-lombok</id>
+			<activation>
+				<file>
+					<exists>${basedir}/lombok.processor</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven-compiler-plugin.version}</version>
+						<configuration>
+							<showDeprecation>true</showDeprecation>
+							<showWarnings>true</showWarnings>
+							<parameters>true</parameters>
+							<annotationProcessorPaths>
+								<!-- this is a workaround, should be picked up implicitly but yet not, for some reason -->
+								<annotationProcessorPath>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+									<version>${lombok.version}</version>
+								</annotationProcessorPath>
+							</annotationProcessorPaths>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>

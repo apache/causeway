@@ -128,7 +128,7 @@ public class AppManifest {
 }
 ----
 
-Next configure authenticationStrategy and permissenResolver for realms, and add the userId:
+Next configure authenticationStrategy and permissionResolver for realms, and add the userId:
 
 [source,ini]
 .shiro.ini

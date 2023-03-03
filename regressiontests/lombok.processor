@@ -1,0 +1,8 @@
+The presence of this file activates a profile (defined in bom/pom.xml) that configures maven-compiler-plugin to run the lombok annotation processor.
+
+This is a workaround; the compiler ought to pick up all available processors on the classpath anyway; unknown why it does not, but is probably a badly formed pom.xml somewhere causing dependencies to be ignored.
+
+The one place where this file is _not_ required is with the JDO modules that declare @PersistenceCapable entities.
+Such modules need both lombok AND the DN annotation processor (datanucleus-jdo-query) that generates the Qxxx query classes.
+For some reason, with these JDO modules, the default behaviour (picking up all available processors) does seem to work.
+

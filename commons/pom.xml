@@ -51,6 +51,28 @@
 				</excludes>
 			</resource>
 		</resources>
+<!--
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+					<parameters>true</parameters>
+					<annotationProcessorPaths>
+						&lt;!&ndash; this is a workaround, should be picked up implicitly but yet not, for some reason &ndash;&gt;
+						<annotationProcessorPath>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</annotationProcessorPath>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+		</plugins>
+-->
 	</build>
 
 	<dependencies>
@@ -71,7 +93,7 @@
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.sdo</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<!-- provides @Inject, @Qualifier, -->
 		    <groupId>jakarta.inject</groupId>
@@ -107,12 +129,13 @@
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
         </dependency>
-		
+
+
 		<dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
         </dependency>
-		
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -210,6 +233,15 @@
 			<scope>test</scope>
 		</dependency>
 
-    </dependencies>
+		<!-- provided -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
 
 </project>
