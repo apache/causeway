@@ -36,7 +36,6 @@ import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayo
 import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.plural.DomainObjectLayoutPluralVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventVm;
 
@@ -93,13 +92,6 @@ public class DomainObjectLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature",
-        describedAs = "Overrides plural form for the domain object's type, eg for irregular plurals")
-    public DomainObjectLayoutPluralVm plural(){
-        return factoryService.viewModel(new DomainObjectLayoutPluralVm());
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-table-columns",
         describedAs = "Allows to specify a custom client side table renderer.")
     public DomainObjectLayoutTableDecoratorVm tableDecorator(){
@@ -108,8 +100,9 @@ public class DomainObjectLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-desktop",
-        describedAs = "Class of the UI events emitted to allow subscribers to specify title, icon etc")
-    public DomainObjectLayoutXxxUiEventVm xxxUiEvent(){
+        describedAs = "Class of the UI events emitted to allow subscribers to specify "
+                + "title, icon, style and layout")
+    public DomainObjectLayoutXxxUiEventVm uiEvents(){
         return factoryService.viewModel(new DomainObjectLayoutXxxUiEventVm());
     }
 

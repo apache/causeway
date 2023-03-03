@@ -26,7 +26,7 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+			<cpt:fieldSet name="Alternative Layout selected via Object-Support-Method" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >
