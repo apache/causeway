@@ -22,19 +22,40 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.having.HasEnabling;
 
 /**
- * Part of the <i>Publishing SPI</i>. A component to receive {@link Command}s 
+ * Part of the <i>Publishing SPI</i>. A component to receive {@link Command}s
  * (with publishing enabled) that just completed.
- *  
+ *
  * @since 2.0 {@index}
  */
 public interface CommandSubscriber extends HasEnabling {
 
     /**
-     * Notifies that the command has completed.
+     * Notifies that the command will be published, and has transitioned to {@link org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#READY}.
      *
      * <p>
      *     This is an opportunity for implementations to process the command,
-     *     for example to persist a representation of it.
+     *     for example to persist an initial representation of it.
+     * </p>
+     */
+    void onReady(Command command);
+
+    /**
+     * Notifies that the command has started to execute, and has transitioned to {@link org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#STARTED}.
+     *
+     * <p>
+     *     This is an opportunity for implementations to process the command,
+     *     for example to update any persisted representation of it.
+     * </p>
+     */
+    void onStarted(Command command);
+
+
+    /**
+     * Notifies that the command has completed and has transitioned to {@link org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#COMPLETED}
+     *
+     * <p>
+     *     This is an opportunity for implementations to process the command,
+     *     for example to update any persisted representations of it.
      * </p>
      */
     void onCompleted(Command command);

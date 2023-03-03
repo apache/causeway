@@ -65,16 +65,52 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void complete(final @NonNull Command command) {
+    public void ready(@NonNull Command command) {
 
-        val handle = _Xray.enterCommandPublishing(
+        val handle = _Xray.enterCommandReadyPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
                 ()->getCannotPublishReason(command));
 
         if(canPublish(command)) {
-            log.debug("about to PUBLISH command: {} to {}", command, enabledSubscribers);
+            log.debug("about to PUBLISH command {}: {} to {}", "ready", command, enabledSubscribers);
+            enabledSubscribers.forEach(subscriber -> subscriber.onReady(command));
+            command.updater().setPublishingPhase(CommandPublishingPhase.READY);
+        }
+
+        _Xray.exitPublishing(handle);
+    }
+
+    @Override
+    public void start(@NonNull Command command) {
+
+        val handle = _Xray.enterCommandStartedPublishing(
+                interactionServiceProvider.get(),
+                command,
+                enabledSubscribers,
+                ()->getCannotPublishReason(command));
+
+        if(canPublish(command)) {
+            log.debug("about to PUBLISH command {}: {} to {}", "started", command, enabledSubscribers);
+            enabledSubscribers.forEach(subscriber -> subscriber.onStarted(command));
+            command.updater().setPublishingPhase(CommandPublishingPhase.STARTED);
+        }
+
+        _Xray.exitPublishing(handle);
+    }
+
+    @Override
+    public void complete(final @NonNull Command command) {
+
+        val handle = _Xray.enterCommandCompletedPublishing(
+                interactionServiceProvider.get(),
+                command,
+                enabledSubscribers,
+                ()->getCannotPublishReason(command));
+
+        if(canPublish(command)) {
+            log.debug("about to PUBLISH command {}: {} to {}", "completed", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
             command.updater().setPublishingPhase(CommandPublishingPhase.COMPLETED); // one shot
         }

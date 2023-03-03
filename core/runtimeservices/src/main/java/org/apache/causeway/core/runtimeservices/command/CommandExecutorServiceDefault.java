@@ -38,7 +38,6 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.command.CommandOutcomeHandler;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
@@ -82,10 +81,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final SudoService sudoService;
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
-    @Inject final InteractionLayerTracker iInteractionLayerTracker;
+    @Inject final InteractionLayerTracker interactionLayerTracker;
     @Inject final SchemaValueMarshaller valueMarshaller;
 
-    @Inject @Getter final InteractionService interactionService;
     @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override
@@ -123,7 +121,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = iInteractionLayerTracker.currentInteractionElseFail();
+        val interaction = interactionLayerTracker.currentInteractionElseFail();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
             command.updater().setCommandDto(dto);
@@ -171,7 +169,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private void copyStartedAtFromInteractionExecution(
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = iInteractionLayerTracker.currentInteractionElseFail();
+        val interaction = interactionLayerTracker.currentInteractionElseFail();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.session;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -374,6 +373,7 @@ implements
     }
 
     private void preInteractionClosed(final CausewayInteraction interaction) {
+
         completeAndPublishCurrentCommand();
 
         RuntimeException flushException = null;
@@ -441,7 +441,7 @@ implements
             // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
 
             val priorInteractionExecution = interaction.getPriorExecution();
-            final Timestamp completedAt =
+            val completedAt =
                     priorInteractionExecution != null
                     ?
                         // copy over from the most recent (which will be the top-level) interaction

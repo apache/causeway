@@ -236,18 +236,28 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     public static enum CommandPublishingPhase {
         /** initial state: do not publish (yet) */
         ONHOLD,
-        /** publishing is enabled */
+        /**
+         * publishing is enabled, and the command will be executed.
+         */
         READY,
-        /** publishing has completed */
+        /**
+         * The command has started to be executed.
+         */
+        STARTED,
+        /**
+         * The command has completed its execution.
+         */
         COMPLETED;
         public boolean isOnhold() {return this==ONHOLD;}
         public boolean isReady() {return this==READY;}
+        public boolean isStarted() {return this==STARTED;}
         public boolean isCompleted() {return this==COMPLETED;}
     }
 
     /**
      * Whether this command has been enabled for publishing,
-     * that is {@link CommandSubscriber}s will be notified when this Command completes.
+     * that is {@link CommandSubscriber}s will be notified when this Command becomes {@link CommandPublishingPhase#READY ready},
+     * has {@link CommandPublishingPhase#STARTED started}, and when it {@link CommandPublishingPhase#COMPLETED completes}.
      */
     @Getter private CommandPublishingPhase publishingPhase = CommandPublishingPhase.ONHOLD;
 
