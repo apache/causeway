@@ -42,6 +42,7 @@ import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -141,6 +142,22 @@ public interface DataSource {
 
     default Try<BufferedImage> tryReadAsImage() {
         return tryReadAndApply(ImageIO::read);
+    }
+
+    // -- HASHING
+
+    default Try<HashUtils.Hash> tryHash(final @NonNull HashAlgorithm hashAlgorithm) {
+        return HashUtils.tryDigest(hashAlgorithm, this, 4*1024); // 4k default
+    }
+
+    default Try<HashUtils.Hash> tryMd5() {
+        return tryHash(HashAlgorithm.MD5);
+    }
+
+    default String md5Hex() {
+        return tryMd5()
+                .valueAsNonNullElseFail()
+                .asHexString();
     }
 
     // -- PIPE
