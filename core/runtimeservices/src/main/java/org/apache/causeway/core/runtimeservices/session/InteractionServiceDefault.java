@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.command.Command;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
@@ -454,6 +455,7 @@ implements
                          clockService.getClock().nowAsJavaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
+            command.updater().setPublishingPhase(Command.CommandPublishingPhase.COMPLETED);
         }
 
         commandPublisherProvider.get().complete(command);

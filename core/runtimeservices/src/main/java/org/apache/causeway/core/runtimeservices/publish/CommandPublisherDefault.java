@@ -73,10 +73,9 @@ public class CommandPublisherDefault implements CommandPublisher {
                 enabledSubscribers,
                 ()->getCannotPublishReason(command));
 
-        if(canPublish(command)) {
+        if(canPublish(command) && command.getPublishingPhase().isReady()) {
             log.debug("about to PUBLISH command {}: {} to {}", "ready", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onReady(command));
-            command.updater().setPublishingPhase(CommandPublishingPhase.READY);
         }
 
         _Xray.exitPublishing(handle);
@@ -91,10 +90,9 @@ public class CommandPublisherDefault implements CommandPublisher {
                 enabledSubscribers,
                 ()->getCannotPublishReason(command));
 
-        if(canPublish(command)) {
+        if(canPublish(command) && command.getPublishingPhase().isStarted()) {
             log.debug("about to PUBLISH command {}: {} to {}", "started", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onStarted(command));
-            command.updater().setPublishingPhase(CommandPublishingPhase.STARTED);
         }
 
         _Xray.exitPublishing(handle);
@@ -109,10 +107,9 @@ public class CommandPublisherDefault implements CommandPublisher {
                 enabledSubscribers,
                 ()->getCannotPublishReason(command));
 
-        if(canPublish(command)) {
+        if(canPublish(command) && command.getPublishingPhase().isCompleted()) {
             log.debug("about to PUBLISH command {}: {} to {}", "completed", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
-            command.updater().setPublishingPhase(CommandPublishingPhase.COMPLETED); // one shot
         }
 
         _Xray.exitPublishing(handle);
@@ -122,7 +119,6 @@ public class CommandPublisherDefault implements CommandPublisher {
 
     private boolean canPublish(final Command command) {
         return enabledSubscribers.isNotEmpty()
-                && command.getPublishingPhase().isReady()
                 && command.getLogicalMemberIdentifier() != null; // eg null when seed fixtures
     }
 

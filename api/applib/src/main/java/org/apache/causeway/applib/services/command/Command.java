@@ -248,7 +248,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          * The command has completed its execution.
          */
         COMPLETED;
-        public boolean isOnhold() {return this==ONHOLD;}
+        public boolean isOnHold() {return this==ONHOLD;}
         public boolean isReady() {return this==READY;}
         public boolean isStarted() {return this==STARTED;}
         public boolean isCompleted() {return this==COMPLETED;}
