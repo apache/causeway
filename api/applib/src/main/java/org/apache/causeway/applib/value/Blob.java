@@ -44,6 +44,8 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.image._Images;
 import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.HashUtils;
+import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 import org.apache.causeway.commons.io.ZipUtils;
 
 import lombok.NonNull;
@@ -268,6 +270,22 @@ public final class Blob implements NamedWithMimeType {
                 .findFirst() // assuming first entry is the one we want
                 .orElseThrow(()->_Exceptions
                       .unrecoverable("failed to unzip blob, no entry found %s", getName()));
+    }
+
+    // -- HASHING
+
+    public Try<HashUtils.Hash> tryHash(final @NonNull HashAlgorithm hashAlgorithm) {
+        return HashUtils.tryDigest(hashAlgorithm, bytes, 4*1024); // 4k default
+    }
+
+    public Try<HashUtils.Hash> tryMd5() {
+        return tryHash(HashAlgorithm.MD5);
+    }
+
+    public String md5Hex() {
+        return tryMd5()
+                .valueAsNonNullElseFail()
+                .asHexString();
     }
 
     // -- OBJECT CONTRACT

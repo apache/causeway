@@ -141,29 +141,55 @@ public final class _Bytes {
 
     // -- TO AND FROM HEX DUMP
 
+    // -- TO AND FROM HEX DUMP
+
     /**
-     * Converts given byte array into a space separated list of 2 character fixed length hex numbers.
+     * Converts given byte array into a delimiter separated list of 2 character fixed length hex numbers.
      * @apiNote future extensions may support pretty printing, but for now the resulting string is just a single line
-     * @see #ofHexDump(String)
+     * @see #ofHexDump(String, String)
      */
-    public static String hexDump(final @Nullable byte[] bytes) {
+    public static String hexDump(final @Nullable byte[] bytes, final @Nullable String delimiter) {
         if(bytes==null) {
             return "";
         }
-        return _Bytes.streamAsInts(bytes).mapToObj(Integer::toHexString).collect(Collectors.joining(" "));
+        return _Bytes.streamAsInts(bytes).mapToObj(Integer::toHexString)
+                .collect(Collectors.joining(_Strings.nullToEmpty(delimiter)));
     }
 
     /**
-     * Converts given space separated list of 2 character fixed length hex numbers into a byte array.
-     * @see #hexDump(byte[])
+     * Shortcut for {@code hexDump(bytes, " ")} using space as delimiter.
+     * @see #hexDump(byte[], String)
      */
-    public static byte[] ofHexDump(final @Nullable String hexDump) {
+    public static String hexDump(final @Nullable byte[] bytes) {
+        return hexDump(bytes, " ");
+    }
+
+    /**
+     * Converts given delimiter separated list of 2 character fixed length hex numbers into a byte array.
+     * @see #hexDump(byte[], String)
+     */
+    public static byte[] ofHexDump(final @Nullable String hexDump, final @Nullable String delimiter) {
         if(hexDump==null) {
             return new byte[0];
         }
-        final IntStream intStream = _Strings.splitThenStream(hexDump, " ")
+        final int delimLen = _NullSafe.size(delimiter);
+        final int stride = 2 + delimLen;
+
+        final IntStream intStream = IntStream.range(0, (hexDump.length() + delimLen)/stride)
+            .mapToObj(i->{
+                final int start = i * stride;
+                return hexDump.substring(start, start + 2);
+            })
             .mapToInt(hex->Integer.parseUnsignedInt(hex, 16));
         return ofIntStream(intStream);
+    }
+
+    /**
+     * Shortcut for {@code ofHexDump(hexDump, " ")} using space as delimiter.
+     * @see #ofHexDump(String, String)
+     */
+    public static byte[] ofHexDump(final @Nullable String hexDump) {
+        return ofHexDump(hexDump, " ");
     }
 
     // -- PREPEND/APPEND
