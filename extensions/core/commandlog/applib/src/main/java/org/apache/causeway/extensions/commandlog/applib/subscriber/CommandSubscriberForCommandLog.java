@@ -71,12 +71,6 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             return;
         }
 
-        // skip if no changes AND skipping is allowed
-        if (causewayConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
-                && !command.isSystemStateChanged()) {
-            return;
-        }
-
         val existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandLogEntryIfAny.isPresent()) {

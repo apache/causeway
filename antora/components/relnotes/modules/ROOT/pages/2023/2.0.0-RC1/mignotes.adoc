@@ -6,8 +6,8 @@
 This page will be added to as development progresses.
 
 == Project Rename
-Any occurrences of `isis` within source code, including configuration resources,
-have been replaced with `causeway` while keeping variants:
+
+Any occurrences of `isis` within source code, including configuration resources, have been replaced with `causeway` while keeping variants:
 
 * lower-case `isis` -> `causeway`
 * upper-case `ISIS` -> `CAUSEWAY`
@@ -92,8 +92,7 @@ Adjust the locations in your `.layout.xml` files accordingly:
 
 The following configuration properties have been changed:
 
-[cols="2a,3a", options="header"]
-
+[cols="2m,3m", options="header"]
 |===
 
 | previously
@@ -115,6 +114,13 @@ The following configuration properties have been changed:
 | causeway.viewer.*common*.credit
 
 |===
+
+The following configuration properties have been removed (with no replacement):
+
+* `causeway.extensions.command-log.publish-policy`
++
+As a result, commands for actions that do _not_ change state (eg queries) are now also persisted.
+
 
 == Maven Artifacts
 

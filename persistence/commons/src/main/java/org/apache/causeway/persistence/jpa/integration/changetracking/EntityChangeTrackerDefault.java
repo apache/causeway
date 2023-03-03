@@ -270,7 +270,6 @@ implements
         val alreadySet = persistentChangesEncountered.getAndSet(true);
         if(!alreadySet) {
             val command = currentInteraction().getCommand();
-            command.updater().setSystemStateChanged(true);
         }
     }
 
