@@ -34,7 +34,7 @@ import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
  * @since 2.0 {@index}
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = {ElementType.METHOD, ElementType.FIELD})
+@Target(value = {ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 public @interface PdfJsViewer {
 
     /** The page (number) to render,

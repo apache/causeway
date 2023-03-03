@@ -46,6 +46,13 @@
             <artifactId>causeway-core-metamodel</artifactId>
         </dependency>
 
+        <!-- testing -->
+        <dependency>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-integtestsupport-applib</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
