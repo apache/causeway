@@ -27,7 +27,6 @@ import javax.inject.Singleton;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.Config;
-import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -35,14 +34,14 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.approvaltests.Approvals;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 
@@ -61,7 +60,20 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
         @Bean
         @Singleton
         public PlatformTransactionManager platformTransactionManager() {
-            return new PlatformTransactionManagerNoop();
+            return new PlatformTransactionManager() {
+                @Override
+                public void rollback(final TransactionStatus status) throws TransactionException {
+                }
+
+                @Override
+                public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
+                    return null;
+                }
+
+                @Override
+                public void commit(final TransactionStatus status) throws TransactionException {
+                }
+            };
         }
     }
 

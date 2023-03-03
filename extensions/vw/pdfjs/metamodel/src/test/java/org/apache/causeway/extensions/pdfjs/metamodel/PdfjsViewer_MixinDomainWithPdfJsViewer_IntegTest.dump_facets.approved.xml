@@ -189,6 +189,9 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet" fqcn="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotation">
             <mml:attr name="facet" value="PdfJsViewerFacetFromAnnotation"/>
+            <mml:attr name="initialHeight" value="1000"/>
+            <mml:attr name="initialPage" value="2"/>
+            <mml:attr name="initialScale" value="_0_75"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
         </mml:facets>
@@ -1098,6 +1101,9 @@
           </mml:facet>
           <mml:facet id="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet" fqcn="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotation">
             <mml:attr name="facet" value="PdfJsViewerFacetFromAnnotation"/>
+            <mml:attr name="initialHeight" value="1000"/>
+            <mml:attr name="initialPage" value="2"/>
+            <mml:attr name="initialScale" value="_0_75"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
         </mml:facets>

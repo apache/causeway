@@ -7,9 +7,10 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
+import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 
 @Property
-@PdfJsViewer
+@PdfJsViewer(initialScale = Scale._0_75, initialHeight = 1000, initialPageNum = 2)
 @RequiredArgsConstructor
 public class SomeViewModel_pdf {
 
