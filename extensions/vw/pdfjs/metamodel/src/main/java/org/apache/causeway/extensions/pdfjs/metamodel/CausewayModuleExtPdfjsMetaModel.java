@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel;
 
+import org.apache.causeway.extensions.pdfjs.applib.CausewayModuleExtPdfjsApplib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -25,6 +26,9 @@ import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFrom
 
 @Configuration
 @Import({
+        // modules
+        CausewayModuleExtPdfjsApplib.class,
+
         // @Component's
         PdfJsViewerFacetFromAnnotationFactory.Register.class
 })
