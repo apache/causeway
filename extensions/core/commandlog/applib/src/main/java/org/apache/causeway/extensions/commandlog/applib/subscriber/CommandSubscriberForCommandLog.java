@@ -71,6 +71,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     @Override
     public void onReady(Command command) {
+
         if (!isEnabled()) {
             return;
         }
@@ -82,7 +83,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             val commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
-                    // this isn't expected to happen ... we just log the fact if it does
+                    // this isn't really expected to happen ... we just log the fact if it does
                     if(log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
@@ -110,16 +111,15 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     @Override
     public void onStarted(Command command) {
+
         if (!isEnabled()) {
             return;
         }
 
-        val existingCommandLogEntryIfAny =
-                commandLogEntryRepository.findByInteractionId(command.getInteractionId());
-        existingCommandLogEntryIfAny.ifPresent(commandLogEntry -> {
-            commandLogEntry.setStartedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-        });
-
+        commandLogEntryRepository.findByInteractionId(command.getInteractionId())
+            .ifPresent(commandLogEntry -> {
+                commandLogEntry.sync(command);
+            });
     }
 
     @Override
@@ -129,51 +129,10 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             return;
         }
 
-        val existingCommandLogEntryIfAny =
-                commandLogEntryRepository.findByInteractionId(command.getInteractionId());
-
-        val onlyIfSystemChanged = causewayConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged();
-        if (onlyIfSystemChanged && !command.isSystemStateChanged()) {
-
-            // we don't need the CommandLogEntry after all.
-            existingCommandLogEntryIfAny.ifPresent(repositoryService::remove);
-
-        } else {
-
-            existingCommandLogEntryIfAny.ifPresent(commandLogEntry -> {
-                CommandDto commandDto = commandLogEntry.getCommandDto();
-                commandLogEntry
-                        .setResult(null);
+        commandLogEntryRepository.findByInteractionId(command.getInteractionId())
+            .ifPresent(commandLogEntry -> {
+                commandLogEntry.sync(command);
             });
-            if(existingCommandLogEntryIfAny.isPresent()) {
-                val commandLogEntry = existingCommandLogEntryIfAny.get();
-                switch (commandLogEntry.getExecuteIn()) {
-                    case FOREGROUND:
-                        // this isn't expected to happen ... we just log the fact if it does
-                        if(log.isWarnEnabled()) {
-                            val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
-
-                            val existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
-                                    .getValue().orElse("Dto to Xml failure");
-                            val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
-                                    .getValue().orElse("Dto to Xml failure");
-
-                            log.warn("existing: \n{}", existingCommandDtoXml);
-                            log.warn("proposed: \n{}", commandDtoXml);
-                        }
-                        break;
-                    case BACKGROUND:
-                        // this is expected behaviour; the command was already persisted when initially scheduled; we don't
-                        // need to do anything else.
-                        break;
-                }
-            } else {
-                val parentInteractionId = command.getParentInteractionId();
-                commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
-            }
-
-        }
-
     }
 
 }

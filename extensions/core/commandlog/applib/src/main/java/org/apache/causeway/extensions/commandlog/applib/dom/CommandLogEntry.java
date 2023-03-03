@@ -141,7 +141,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
 
     @Programmatic
-    public void init(final Command command) {
+    public void sync(final Command command) {
 
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
