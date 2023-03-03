@@ -30,6 +30,7 @@ import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.core.io.Resource;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -43,6 +44,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -203,24 +205,45 @@ public interface DataSource {
     }
 
     /**
-     * Creates a {@link DataSource} for given resource path relative to {@link Class}.
-     * @param cls - required non-null
-     * @param resourcePath - required non-null
-     * @throws NullPointerException - if the any argument is null
+     * Creates a {@link DataSource} for given {@link InputStream} eagerly.
+     * That is, it reads the InputStream into a byte array,
+     * which can be later read from repeatedly.
+     * <p>
+     * If reading from given {@link InputStream} throws any exception, it is propagated without catching.
      */
-    static DataSource ofResource(final @NonNull Class<?> cls, final @NonNull String resourcePath) {
+    @SneakyThrows
+    static DataSource ofInputStreamEagerly(final @Nullable InputStream inputStream) {
+        return ofBytes(_Bytes.of(inputStream));
+    }
+
+    /**
+     * Creates a {@link DataSource} for given resource path relative to {@link Class}.
+     * <p>
+     * If any of the args is null (or empty), returns an 'empty' {@link DataSource}.
+     * @apiNote may silently fail if this module cannot read resources from the calling module;
+     *      a workaround is to use {@code DataSource.ofInputStreamEagerly(cls.getResourceAsStream(resourcePath))}
+     *      at the call site
+     */
+    static DataSource ofResource(final @Nullable Class<?> cls, final @Nullable String resourcePath) {
         return cls==null
+                || _Strings.isNullOrEmpty(resourcePath)
                 ? empty()
                 : ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
     }
 
-//    static DataSource ofTestResource(final Class<?> cls, final String path) {
-//        val prefix = "src/test/java/";
-//        val filePath = prefix + cls.getPackageName().replace('.', '/') + "/" + path;
-//        val file = new File(filePath);
-//        _Assert.assertTrue(file.exists(), ()->String.format("could not resolve resource '%s'", file.getAbsolutePath()));
-//        return ofFile(file);
-//    }
+    /**
+     * Creates a {@link DataSource} for given Spring {@link Resource}.
+     * <p>
+     * If the single argument is null, returns an 'empty' {@link DataSource}.
+     * @apiNote may silently fail if this module cannot read resources from the calling module;
+     *      a workaround is to use {@code DataSource.ofInputStreamEagerly(springResource.getInputStream())}
+     *      at the call site
+     */
+    static DataSource ofSpringResource(final @Nullable Resource springResource) {
+        return springResource==null
+                ? empty()
+                : ofInputStreamSupplier(springResource::getInputStream);
+    }
 
     /**
      * Creates a {@link DataSource} for given {@link File}.
