@@ -72,6 +72,7 @@ public class HashUtils {
     public static enum HashAlgorithm {
         MD5(()->MessageDigest.getInstance("MD5")),
         SHA1(()->MessageDigest.getInstance("SHA-1")),
+        SHA256(()->MessageDigest.getInstance("SHA-256"))
         ;
 
         @Getter(value = AccessLevel.PRIVATE)
