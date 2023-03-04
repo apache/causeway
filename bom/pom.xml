@@ -2234,10 +2234,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<showWarnings>true</showWarnings>
 						<parameters>true</parameters>
 						<annotationProcessorPaths>
-								<!-- this is a workaround, lombok's annotation processor should be picked up implicitly, but yet is not. 
+								<!-- this is a workaround 
 					
-								Details:
-								This is a workaround; the compiler ought to pick up all available processors on the classpath. 
+								Details: The maven compiler plugin ought to pick up all available processors on the classpath.
+								In effect Lombok's annotation processor should be picked up implicitly, but yet is not 
 								
 								Also Note: Presence of file 'logging-dn-enhance.properties' activates a profile (defined blow),
 								that configures maven-compiler-plugin to run all annotation processors required 
